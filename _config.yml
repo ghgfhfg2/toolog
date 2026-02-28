@@ -1,0 +1,27 @@
+title: Toolog
+description: 개발 웹툴과 실전 가이드를 다루는 블로그
+url: "https://ghgfhfg2.github.io"
+baseurl: "/toolog"
+lang: ko-KR
+timezone: Asia/Seoul
+
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+markdown: kramdown
+kramdown:
+  input: GFM
+
+permalink: /:categories/:title/
+future: false
+show_drafts: false
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "toolog"
