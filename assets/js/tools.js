@@ -97,15 +97,58 @@
     const run = document.getElementById(runId);
     const canvas = document.getElementById(canvasId);
     const link = document.getElementById(linkId);
+    const lock = document.getElementById('ir-lock');
+    const preset = document.getElementById('ir-preset');
+    const result = document.getElementById('ir-result');
     if (!f || !run || !canvas || !link) return;
     let img = null;
+    let ratio = 1;
+    let originBytes = 0;
+
+    const updateResult = (width, height, outBytes = 0) => {
+      if (!result) return;
+      if (!outBytes) {
+        result.textContent = `원본: ${img?.width || 0}×${img?.height || 0}px / ${formatNum(originBytes)} bytes`;
+      } else {
+        result.textContent = `원본: ${img?.width || 0}×${img?.height || 0}px → 결과: ${width}×${height}px / ${formatNum(outBytes)} bytes`;
+      }
+    };
+
     f.addEventListener('change', () => {
       const file = f.files?.[0]; if (!file) return;
+      originBytes = file.size || 0;
       const u = URL.createObjectURL(file);
       const i = new Image();
-      i.onload = () => { img = i; if (w) w.value = i.width; if (h) h.value = i.height; URL.revokeObjectURL(u); };
+      i.onload = () => {
+        img = i;
+        ratio = i.width / i.height;
+        if (w) w.value = i.width;
+        if (h) h.value = i.height;
+        updateResult(i.width, i.height);
+        URL.revokeObjectURL(u);
+      };
       i.src = u;
     });
+
+    preset?.addEventListener('change', () => {
+      if (!preset.value || preset.value === 'custom') return;
+      const [pw, ph] = preset.value.split('x').map(Number);
+      if (w) w.value = pw;
+      if (h) h.value = ph;
+    });
+
+    w?.addEventListener('input', () => {
+      if (!img || !lock?.checked) return;
+      const width = Number(w.value || img.width);
+      if (h) h.value = Math.max(1, Math.round(width / ratio));
+    });
+
+    h?.addEventListener('input', () => {
+      if (!img || !lock?.checked) return;
+      const height = Number(h.value || img.height);
+      if (w) w.value = Math.max(1, Math.round(height * ratio));
+    });
+
     run.addEventListener('click', () => {
       if (!img) return;
       const width = Number(w?.value || img.width);
@@ -114,6 +157,8 @@
       canvas.getContext('2d').drawImage(img, 0, 0, width, height);
       const data = canvas.toDataURL(mime, quality);
       link.href = data;
+      const outBytes = Math.floor((data.length * 3) / 4);
+      updateResult(width, height, outBytes);
     });
   };
 
