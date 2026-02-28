@@ -1,15 +1,18 @@
 title: Toolog
-description: 개발 웹툴과 실전 가이드를 다루는 블로그
-url: "https://ghgfhfg2.github.io"
-baseurl: "/toolog"
+description: 개발자를 위한 실전 웹툴 제작·활용 아카이브
+url: "https://toolog.sooyadev.com"
+baseurl: ""
 lang: ko-KR
 timezone: Asia/Seoul
 
+# 테마
 theme: minima
+
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
 
+# 작성/출력 설정
 markdown: kramdown
 kramdown:
   input: GFM
@@ -17,6 +20,14 @@ kramdown:
 permalink: /:categories/:title/
 future: false
 show_drafts: false
+
+# Minima
+minima:
+  skin: auto
+  social_links: []
+
+header_pages:
+  - about.md
 
 defaults:
   - scope:

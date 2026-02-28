@@ -1,0 +1,88 @@
+:root {
+  --bg: #0b1020;
+  --bg-soft: #131a2e;
+  --card: #101729;
+  --text: #e7ecff;
+  --muted: #9ea9c7;
+  --primary: #7c93ff;
+  --border: #24304f;
+}
+
+body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: radial-gradient(circle at 20% 0%, #172447 0%, var(--bg) 45%);
+  color: var(--text);
+}
+
+.site-header,
+.site-footer {
+  background: rgba(11, 16, 32, 0.82);
+  border-color: var(--border);
+  backdrop-filter: blur(8px);
+}
+
+.site-title,
+.page-link,
+.post-link,
+a { color: #c9d4ff; }
+a:hover { color: #ffffff; text-decoration: none; }
+
+.wrapper { max-width: 1060px; }
+
+.hero {
+  margin-top: 1.8rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: linear-gradient(160deg, rgba(124, 147, 255, 0.18), rgba(16, 23, 41, 0.78));
+  padding: 2.5rem 2rem;
+}
+
+.hero__eyebrow { color: #b6c4ff; letter-spacing: .08em; font-weight: 700; margin-bottom: .8rem; }
+.hero__title { font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1.15; margin: 0 0 .9rem; }
+.hero__desc { color: var(--muted); max-width: 640px; margin-bottom: 1.2rem; }
+
+.hero__cta-wrap { display: flex; gap: .7rem; flex-wrap: wrap; }
+.hero__cta {
+  display: inline-block;
+  padding: .62rem .95rem;
+  border-radius: 10px;
+  background: var(--primary);
+  color: white;
+  font-weight: 700;
+}
+.hero__cta--ghost { background: transparent; border: 1px solid var(--border); color: #d7e0ff; }
+
+.site-section { margin-top: 2rem; }
+.site-section--compact { margin-top: 1.2rem; }
+.section-title { font-size: 1.25rem; margin-bottom: 1rem; }
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: .8rem;
+}
+.feature-card,
+.post-card {
+  border: 1px solid var(--border);
+  background: rgba(16, 23, 41, 0.82);
+  border-radius: 14px;
+  padding: 1rem;
+}
+.feature-card h3 { margin: 0 0 .45rem; font-size: 1rem; }
+.feature-card p { margin: 0; color: var(--muted); font-size: .95rem; }
+
+.post-list-modern {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: .8rem;
+}
+.post-card__title { display: block; font-weight: 700; margin-bottom: .35rem; }
+.post-card__meta { margin: 0 0 .35rem; color: var(--muted); font-size: .85rem; }
+.post-card__desc { margin: 0; color: #c7d1ee; font-size: .93rem; }
+
+.post-content code,
+.highlight { border-radius: 10px; }
+
+@media (max-width: 640px) {
+  .hero { padding: 1.4rem 1rem; }
+}
