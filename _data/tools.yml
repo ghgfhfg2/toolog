@@ -61,11 +61,3 @@
   url: /tools/timezone-converter/
   thumbnail: /assets/thumbs/timezone-converter.svg
 
-- id: dev-log-starter
-  title: "Tool 제작기: 시작 가이드"
-  category: t-log
-  category_label: 개발자 로그
-  badge: T-Log
-  description: 새 툴을 기획·제작·배포하는 기본 워크플로우.
-  url: /tools/t-log-starter/
-  thumbnail: /assets/thumbs/t-log.svg
