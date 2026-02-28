@@ -85,13 +85,22 @@ layout: default
       {% when 'png-compressor' %}
         <div class="tool-ui">
           <input id="pc-file" type="file" accept="image/png,image/jpeg,image/webp" />
+          <div class="tool-row">
+            <label>출력 포맷</label>
+            <select id="pc-format">
+              <option value="image/webp">WebP (권장)</option>
+              <option value="image/jpeg">JPEG</option>
+              <option value="image/png">PNG (무손실)</option>
+            </select>
+          </div>
           <div class="tool-row-grid">
             <label>품질</label>
             <input id="pc-quality" type="range" min="0.4" max="1" step="0.05" value="0.8" />
             <button id="pc-run" type="button">압축 실행</button>
           </div>
+          <p class="tool-result" id="pc-result">원본/압축 결과가 여기에 표시됩니다.</p>
           <canvas id="pc-canvas"></canvas>
-          <a id="pc-download" class="open-link" download="compressed.jpg">다운로드</a>
+          <a id="pc-download" class="open-link" download="compressed.webp">다운로드</a>
         </div>
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>

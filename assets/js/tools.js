@@ -122,23 +122,46 @@
   if (slug === 'png-compressor') {
     const file = document.getElementById('pc-file');
     const q = document.getElementById('pc-quality');
+    const format = document.getElementById('pc-format');
     const run = document.getElementById('pc-run');
     const canvas = document.getElementById('pc-canvas');
     const link = document.getElementById('pc-download');
+    const result = document.getElementById('pc-result');
     let img = null;
+    let originSize = 0;
+
+    const extByMime = (mime) => {
+      if (mime === 'image/jpeg') return 'jpg';
+      if (mime === 'image/png') return 'png';
+      return 'webp';
+    };
+
     file?.addEventListener('change', () => {
       const f = file.files?.[0]; if (!f) return;
+      originSize = f.size || 0;
       const u = URL.createObjectURL(f);
       const i = new Image();
       i.onload = () => { img = i; URL.revokeObjectURL(u); };
       i.src = u;
+      if (result) result.textContent = `원본 크기: ${formatNum(originSize)} bytes`;
     });
+
     run?.addEventListener('click', () => {
       if (!img) return;
+      const mime = format?.value || 'image/webp';
+      const quality = Number(q.value || 0.8);
       canvas.width = img.width; canvas.height = img.height;
       canvas.getContext('2d').drawImage(img, 0, 0);
-      const data = canvas.toDataURL('image/jpeg', Number(q.value || 0.8));
+
+      const data = canvas.toDataURL(mime, quality);
       link.href = data;
+      link.download = `compressed.${extByMime(mime)}`;
+
+      const compressedBytes = Math.floor((data.length * 3) / 4);
+      const ratio = originSize ? ((1 - compressedBytes / originSize) * 100) : 0;
+      if (result) {
+        result.textContent = `원본: ${formatNum(originSize)} bytes → 압축: ${formatNum(compressedBytes)} bytes (약 ${ratio.toFixed(1)}% 절감)`;
+      }
     });
   }
 })();
