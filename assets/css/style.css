@@ -27,7 +27,7 @@ body {
 a { color: #c9d4ff; }
 a:hover { color: #ffffff; text-decoration: none; }
 
-.wrapper { max-width: 1060px; }
+.wrapper { max-width: 1120px; }
 
 .hero {
   margin-top: 1.8rem;
@@ -54,15 +54,15 @@ a:hover { color: #ffffff; text-decoration: none; }
 
 .site-section { margin-top: 2rem; }
 .site-section--compact { margin-top: 1.2rem; }
-.section-title { font-size: 1.25rem; margin-bottom: 1rem; }
+.section-title { font-size: 1.25rem; margin-bottom: .2rem; }
+.section-sub { margin: 0 0 1rem; color: var(--muted); font-size: .95rem; }
 
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: .8rem;
 }
-.feature-card,
-.post-card {
+.feature-card {
   border: 1px solid var(--border);
   background: rgba(16, 23, 41, 0.82);
   border-radius: 14px;
@@ -71,14 +71,70 @@ a:hover { color: #ffffff; text-decoration: none; }
 .feature-card h3 { margin: 0 0 .45rem; font-size: 1rem; }
 .feature-card p { margin: 0; color: var(--muted); font-size: .95rem; }
 
-.post-list-modern {
+.tool-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: .8rem;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1rem;
 }
-.post-card__title { display: block; font-weight: 700; margin-bottom: .35rem; }
-.post-card__meta { margin: 0 0 .35rem; color: var(--muted); font-size: .85rem; }
-.post-card__desc { margin: 0; color: #c7d1ee; font-size: .93rem; }
+
+.tool-card {
+  border: 1px solid var(--border);
+  background: rgba(16, 23, 41, 0.82);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform .15s ease, border-color .15s ease;
+}
+.tool-card:hover {
+  transform: translateY(-2px);
+  border-color: #3f5488;
+}
+
+.tool-card__thumb {
+  display: block;
+  aspect-ratio: 16/10;
+  background: #121a31;
+}
+.tool-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.tool-card__placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #24335e, #152142);
+  color: #dbe4ff;
+  font-weight: 700;
+  text-align: center;
+  padding: .8rem;
+}
+
+.tool-card__body { padding: .8rem .9rem 1rem; }
+.tool-card__title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-weight: 700;
+  margin-bottom: .35rem;
+}
+.tool-card__desc {
+  margin: 0 0 .45rem;
+  color: #c7d1ee;
+  font-size: .92rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tool-card__meta {
+  margin: 0;
+  color: var(--muted);
+  font-size: .82rem;
+}
 
 .post-content code,
 .highlight { border-radius: 10px; }

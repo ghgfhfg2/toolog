@@ -7,7 +7,7 @@ layout: default
     <h1 class="hero__title">일상에서 바로 쓰는<br/>실용 웹툴 모음</h1>
     <p class="hero__desc">계산, 변환, 포맷 정리, 텍스트 처리처럼 누구나 자주 쓰는 도구를 쉽고 빠르게 제공합니다.</p>
     <div class="hero__cta-wrap">
-      <a class="hero__cta" href="#latest">최신 툴 보기</a>
+      <a class="hero__cta" href="#latest">툴 둘러보기</a>
       <a class="hero__cta hero__cta--ghost" href="/about/">운영 원칙</a>
     </div>
   </div>
@@ -16,35 +16,51 @@ layout: default
 <section class="site-section site-section--compact">
   <div class="feature-grid">
     <article class="feature-card">
-      <h3>누구나 바로 사용</h3>
-      <p>설치 없이 브라우저에서 바로 실행되는 도구를 우선으로 제공합니다.</p>
+      <h3>한눈에 찾기</h3>
+      <p>카드형 썸네일로 필요한 툴을 빠르게 찾을 수 있습니다.</p>
     </article>
     <article class="feature-card">
-      <h3>짧고 명확한 안내</h3>
-      <p>복잡한 설명 대신 빠르게 이해하고 쓸 수 있도록 핵심만 정리합니다.</p>
+      <h3>바로 사용</h3>
+      <p>설치 없이 바로 실행 가능한 실용 도구를 우선으로 제공합니다.</p>
     </article>
     <article class="feature-card">
-      <h3>검색 친화 구조</h3>
-      <p>필요한 순간 바로 찾을 수 있도록 주제·키워드 중심으로 정리합니다.</p>
+      <h3>명확한 안내</h3>
+      <p>복잡한 설명 없이 핵심만 정리해 처음 써도 어렵지 않습니다.</p>
     </article>
   </div>
 </section>
 
 <section id="latest" class="site-section">
-  <h2 class="section-title">최신 발행글</h2>
+  <div class="section-head">
+    <h2 class="section-title">툴 갤러리</h2>
+    <p class="section-sub">io 게임 목록처럼 카드를 눌러 바로 상세로 이동할 수 있어요.</p>
+  </div>
+
   {%- if site.posts.size > 0 -%}
-    <div class="post-list-modern">
-      {%- for post in site.posts limit: 12 -%}
-      <article class="post-card">
-        <a class="post-card__title" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
-        <p class="post-card__meta">{{ post.date | date: "%Y-%m-%d" }} · {{ post.categories | join: ", " }}</p>
-        {%- if post.description -%}
-          <p class="post-card__desc">{{ post.description }}</p>
-        {%- endif -%}
+    <div class="tool-grid">
+      {%- for post in site.posts limit: 24 -%}
+      <article class="tool-card">
+        <a class="tool-card__thumb" href="{{ post.url | relative_url }}" aria-label="{{ post.title | escape }}">
+          {%- if post.thumbnail -%}
+            <img src="{{ post.thumbnail | relative_url }}" alt="{{ post.title | escape }} 썸네일" loading="lazy" />
+          {%- else -%}
+            <div class="tool-card__placeholder">
+              <span>{{ post.title | truncate: 16 }}</span>
+            </div>
+          {%- endif -%}
+        </a>
+
+        <div class="tool-card__body">
+          <a class="tool-card__title" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+          {%- if post.description -%}
+            <p class="tool-card__desc">{{ post.description }}</p>
+          {%- endif -%}
+          <p class="tool-card__meta">{{ post.categories | join: " · " }}</p>
+        </div>
       </article>
       {%- endfor -%}
     </div>
   {%- else -%}
-    <p>아직 발행된 툴이 없습니다. 승인 후 순차적으로 공개됩니다.</p>
+    <p>아직 공개된 툴이 없습니다. 승인된 툴부터 카드 형태로 순차 공개됩니다.</p>
   {%- endif -%}
 </section>
