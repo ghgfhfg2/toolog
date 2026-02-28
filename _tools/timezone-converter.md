@@ -1,6 +1,6 @@
 ---
 title: 시간대 변환기 | 국가별 시차 계산 및 회의 시간 변환
-description: 시간대 변환기로 기준 시간대를 대상 시간대로 정확히 변환하세요. 글로벌 회의 일정 조율과 시차 커뮤니케이션 오류를 줄일 수 있습니다.
+description: 시간대 변환기로 기준 시간대를 대상 시간대로 정확히 바꾸세요. 글로벌 회의 일정 조율 시 시차 오류를 줄이고 커뮤니케이션 실수를 예방할 수 있습니다.
 category: data
 category_label: 데이터/계산
 thumbnail: /assets/thumbs/timezone-converter.svg

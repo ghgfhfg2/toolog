@@ -3,7 +3,7 @@
   category: image
   category_label: 이미지/그래픽
   badge: Hot
-  description: 품질 저하를 최소화하면서 PNG 용량을 줄여요.
+  description: PNG/JPEG/WebP로 변환해 이미지 용량을 빠르게 줄여요.
   url: /tools/png-compressor/
   thumbnail: /assets/thumbs/png-compressor.svg
 
@@ -12,7 +12,7 @@
   category: image
   category_label: 이미지/그래픽
   badge: New
-  description: 인스타, 블로그, 쇼핑몰 규격에 맞게 바로 리사이즈.
+  description: 인스타·블로그·OG 규격으로 사진 크기를 정확히 맞춰요.
   url: /tools/image-resizer/
   thumbnail: /assets/thumbs/image-resizer.svg
 
@@ -21,7 +21,7 @@
   category: text
   category_label: 텍스트/편집
   badge: Popular
-  description: 공백 포함/제외 글자수, 바이트 수를 즉시 확인.
+  description: 공백 포함/제외, 단어 수, 바이트를 한 번에 확인해요.
   url: /tools/text-counter/
   thumbnail: /assets/thumbs/text-counter.svg
 
@@ -30,7 +30,7 @@
   category: text
   category_label: 텍스트/편집
   badge: Update
-  description: UPPER, lower, Title, camel/snake 케이스로 변환.
+  description: UPPER/lower/Title/camel/snake 케이스를 즉시 변환해요.
   url: /tools/case-converter/
   thumbnail: /assets/thumbs/case-converter.svg
 
@@ -39,7 +39,7 @@
   category: data
   category_label: 데이터/계산
   badge: Hot
-  description: 공급가/합계/부가세를 상황에 맞게 빠르게 계산.
+  description: 공급가/합계 기준 VAT 10%를 빠르고 정확하게 계산해요.
   url: /tools/vat-calculator/
   thumbnail: /assets/thumbs/vat-calculator.svg
 
@@ -48,7 +48,7 @@
   category: data
   category_label: 데이터/계산
   badge: New
-  description: 길이·무게·온도 단위를 한 번에 변환.
+  description: 길이·무게·온도 단위를 한 화면에서 정확히 변환해요.
   url: /tools/unit-converter/
   thumbnail: /assets/thumbs/unit-converter.svg
 
@@ -57,7 +57,6 @@
   category: data
   category_label: 데이터/계산
   badge: New
-  description: 국가별 시간을 비교해 회의 시간을 맞춰요.
+  description: 국가별 시차를 계산해 회의 시간을 정확히 맞춰요.
   url: /tools/timezone-converter/
   thumbnail: /assets/thumbs/timezone-converter.svg
-

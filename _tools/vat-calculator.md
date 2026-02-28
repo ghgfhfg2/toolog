@@ -1,6 +1,6 @@
 ---
 title: 부가세 계산기 | 공급가·합계 기준 VAT 10% 자동 계산
-description: 부가세 계산기로 공급가 기준/합계 기준 VAT 10%를 빠르게 계산하세요. 견적서, 세금계산서, 정산 업무 실수를 줄이는 데 유용합니다.
+description: 부가세 계산기로 공급가/합계 기준 VAT 10%를 즉시 계산하세요. 견적서·세금계산서·정산 금액을 빠르고 정확하게 확인할 수 있습니다.
 category: data
 category_label: 데이터/계산
 thumbnail: /assets/thumbs/vat-calculator.svg

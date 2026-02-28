@@ -1,6 +1,6 @@
 ---
 title: 대소문자 변환기 | UPPER/lower/Title/camel/snake 자동 변환
-description: 대소문자 변환기로 UPPER, lower, Title, camelCase, snake_case를 한 번에 바꾸세요. 코드·문서·데이터 포맷 통일에 유용합니다.
+description: 대소문자 변환기로 UPPER/lower/Title/camelCase/snake_case를 즉시 변환하세요. 코드·문서 필드명을 빠르게 통일하고 반복 작업을 줄일 수 있습니다.
 category: text
 category_label: 텍스트/편집
 thumbnail: /assets/thumbs/case-converter.svg

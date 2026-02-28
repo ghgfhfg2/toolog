@@ -1,6 +1,6 @@
 ---
 title: 글자수 계산기 | 공백 포함·제외, 바이트 수 확인
-description: 글자수 계산기로 공백 포함/제외 글자수, 단어 수, UTF-8 바이트를 즉시 확인하세요. 자기소개서·SNS·원고 분량 체크에 유용합니다.
+description: 글자수 계산기로 공백 포함/제외, 단어 수, UTF-8 바이트를 즉시 확인하세요. 제출 제한(자소서·SNS·원고) 초과를 미리 방지할 수 있습니다.
 category: text
 category_label: 텍스트/편집
 thumbnail: /assets/thumbs/text-counter.svg
