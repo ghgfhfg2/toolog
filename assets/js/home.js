@@ -1,52 +1,40 @@
 (() => {
-  const nav = document.getElementById('sideNav');
-  const searchInput = document.getElementById('toolSearch');
-  const cards = Array.from(document.querySelectorAll('#toolGrid .tool-card'));
-  const emptyState = document.getElementById('emptyState');
-  const themeToggle = document.getElementById('themeToggle');
+  const grid = document.getElementById('toolGrid');
+  const chips = Array.from(document.querySelectorAll('#chipBar .chip'));
+  const search = document.getElementById('toolSearch');
+  const empty = document.getElementById('emptyState');
+  if (!grid) return;
 
-  if (!cards.length) return;
+  const cards = Array.from(grid.querySelectorAll('.tool-card'));
+  let category = 'all';
 
-  let activeCategory = 'all';
+  const normalize = (s) => (s || '').toLowerCase().trim();
 
-  const normalize = (v) => (v || '').toLowerCase().trim();
-
-  const applyFilter = () => {
-    const q = normalize(searchInput?.value);
-    let shown = 0;
+  const render = () => {
+    const q = normalize(search?.value);
+    let visible = 0;
 
     cards.forEach((card) => {
-      const cat = card.dataset.category;
+      const byCategory = category === 'all' || card.dataset.category === category;
       const hay = `${card.dataset.title} ${card.dataset.description}`;
-      const byCategory = activeCategory === 'all' || cat === activeCategory;
-      const bySearch = !q || hay.includes(q);
-      const visible = byCategory && bySearch;
-      card.hidden = !visible;
-      if (visible) shown += 1;
+      const byQuery = !q || hay.includes(q);
+      const show = byCategory && byQuery;
+      card.hidden = !show;
+      if (show) visible += 1;
     });
 
-    if (emptyState) emptyState.hidden = shown > 0;
+    if (empty) empty.hidden = visible > 0;
   };
 
-  nav?.addEventListener('click', (e) => {
-    const btn = e.target.closest('.nav-item');
-    if (!btn) return;
-    activeCategory = btn.dataset.filter || 'all';
-    nav.querySelectorAll('.nav-item').forEach((x) => x.classList.remove('is-active'));
-    btn.classList.add('is-active');
-    applyFilter();
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      chips.forEach((x) => x.classList.remove('is-active'));
+      chip.classList.add('is-active');
+      category = chip.dataset.filter || 'all';
+      render();
+    });
   });
 
-  searchInput?.addEventListener('input', applyFilter);
-
-  themeToggle?.addEventListener('click', () => {
-    document.body.classList.toggle('light-theme');
-    localStorage.setItem('toolog-theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
-  });
-
-  if (localStorage.getItem('toolog-theme') === 'light') {
-    document.body.classList.add('light-theme');
-  }
-
-  applyFilter();
+  search?.addEventListener('input', render);
+  render();
 })();
