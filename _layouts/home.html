@@ -1,39 +1,10 @@
 ---
 layout: default
 ---
-<section class="hero">
-  <div class="hero__inner">
-    <p class="hero__eyebrow">TOOLOG</p>
-    <h1 class="hero__title">일상에서 바로 쓰는<br/>실용 웹툴 모음</h1>
-    <p class="hero__desc">계산, 변환, 포맷 정리, 텍스트 처리처럼 누구나 자주 쓰는 도구를 쉽고 빠르게 제공합니다.</p>
-    <div class="hero__cta-wrap">
-      <a class="hero__cta" href="#latest">툴 둘러보기</a>
-      <a class="hero__cta hero__cta--ghost" href="/about/">운영 원칙</a>
-    </div>
-  </div>
-</section>
-
-<section class="site-section site-section--compact">
-  <div class="feature-grid">
-    <article class="feature-card">
-      <h3>한눈에 찾기</h3>
-      <p>카드형 썸네일로 필요한 툴을 빠르게 찾을 수 있습니다.</p>
-    </article>
-    <article class="feature-card">
-      <h3>바로 사용</h3>
-      <p>설치 없이 바로 실행 가능한 실용 도구를 우선으로 제공합니다.</p>
-    </article>
-    <article class="feature-card">
-      <h3>명확한 안내</h3>
-      <p>복잡한 설명 없이 핵심만 정리해 처음 써도 어렵지 않습니다.</p>
-    </article>
-  </div>
-</section>
-
-<section id="latest" class="site-section">
-  <div class="section-head">
+<section id="latest" class="site-section site-section--first">
+  <div class="section-head section-head--tight">
     <h2 class="section-title">툴 갤러리</h2>
-    <p class="section-sub">io 게임 목록처럼 카드를 눌러 바로 상세로 이동할 수 있어요.</p>
+    <p class="section-sub">필요한 도구를 카드로 바로 선택해서 사용할 수 있어요.</p>
   </div>
 
   {%- if site.posts.size > 0 -%}
@@ -63,4 +34,12 @@ layout: default
   {%- else -%}
     <p>아직 공개된 툴이 없습니다. 승인된 툴부터 카드 형태로 순차 공개됩니다.</p>
   {%- endif -%}
+</section>
+
+<section class="hero hero--compact">
+  <div class="hero__inner">
+    <p class="hero__eyebrow">TOOLOG</p>
+    <h1 class="hero__title">일상에서 바로 쓰는 실용 웹툴 모음</h1>
+    <p class="hero__desc">계산, 변환, 포맷 정리, 텍스트 처리처럼 누구나 자주 쓰는 도구를 쉽고 빠르게 제공합니다.</p>
+  </div>
 </section>
