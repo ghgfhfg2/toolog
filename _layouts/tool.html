@@ -13,15 +13,89 @@ layout: default
   </header>
 
   <section class="tool-page__run">
-    {% if page.embed_url %}
-      <iframe src="{{ page.embed_url }}" title="{{ page.title }}" loading="lazy"></iframe>
-    {% elsif page.tool_html %}
-      {{ page.tool_html }}
-    {% else %}
-      <div class="tool-placeholder">
-        <p>이 도구는 현재 제작 중입니다. 곧 바로 실행 가능한 형태로 업데이트됩니다.</p>
-      </div>
-    {% endif %}
+    {% case page.tool_key %}
+      {% when 'text-counter' %}
+        <div class="tool-ui">
+          <textarea id="tc-input" placeholder="텍스트를 입력하세요"></textarea>
+          <div class="tool-stats">
+            <div><strong id="tc-chars">0</strong><span>글자수(공백포함)</span></div>
+            <div><strong id="tc-no-spaces">0</strong><span>글자수(공백제외)</span></div>
+            <div><strong id="tc-words">0</strong><span>단어수</span></div>
+            <div><strong id="tc-bytes">0</strong><span>바이트(UTF-8)</span></div>
+          </div>
+        </div>
+      {% when 'vat-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row">
+            <label>기준</label>
+            <select id="vat-mode"><option value="supply">공급가 기준</option><option value="total">합계 기준</option></select>
+          </div>
+          <div class="tool-row">
+            <label>금액(원)</label>
+            <input id="vat-amount" type="number" min="0" step="1" placeholder="예: 11000" />
+          </div>
+          <div class="tool-stats">
+            <div><strong id="vat-supply">0</strong><span>공급가</span></div>
+            <div><strong id="vat-tax">0</strong><span>부가세</span></div>
+            <div><strong id="vat-total">0</strong><span>합계</span></div>
+          </div>
+        </div>
+      {% when 'unit-converter' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid">
+            <input id="uc-value" type="number" step="any" value="1" />
+            <select id="uc-from"><option value="m">m</option><option value="cm">cm</option><option value="km">km</option><option value="inch">inch</option><option value="ft">ft</option></select>
+            <span>→</span>
+            <select id="uc-to"><option value="cm">cm</option><option value="m">m</option><option value="km">km</option><option value="inch">inch</option><option value="ft">ft</option></select>
+          </div>
+          <p class="tool-result" id="uc-result">결과: 100 cm</p>
+        </div>
+      {% when 'timezone-converter' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid tz-grid">
+            <select id="tz-from"><option value="Asia/Seoul">서울 (KST)</option><option value="America/New_York">뉴욕 (EST/EDT)</option><option value="Europe/London">런던</option><option value="Asia/Tokyo">도쿄</option></select>
+            <input id="tz-datetime" type="datetime-local" />
+            <select id="tz-to"><option value="America/Los_Angeles">로스앤젤레스</option><option value="Asia/Seoul">서울</option><option value="Europe/Paris">파리</option><option value="Asia/Singapore">싱가포르</option></select>
+          </div>
+          <p class="tool-result" id="tz-result">결과 시간이 여기에 표시됩니다.</p>
+        </div>
+      {% when 'case-converter' %}
+        <div class="tool-ui">
+          <textarea id="cc-input" placeholder="변환할 텍스트 입력"></textarea>
+          <div class="tool-row-grid cc-grid">
+            <button type="button" data-mode="upper">UPPER</button>
+            <button type="button" data-mode="lower">lower</button>
+            <button type="button" data-mode="title">Title</button>
+            <button type="button" data-mode="camel">camelCase</button>
+            <button type="button" data-mode="snake">snake_case</button>
+          </div>
+          <textarea id="cc-output" placeholder="결과" readonly></textarea>
+        </div>
+      {% when 'image-resizer' %}
+        <div class="tool-ui">
+          <input id="ir-file" type="file" accept="image/*" />
+          <div class="tool-row-grid">
+            <input id="ir-width" type="number" min="1" placeholder="width" />
+            <input id="ir-height" type="number" min="1" placeholder="height" />
+            <button id="ir-run" type="button">리사이즈</button>
+          </div>
+          <canvas id="ir-canvas"></canvas>
+          <a id="ir-download" class="open-link" download="resized-image.png">다운로드</a>
+        </div>
+      {% when 'png-compressor' %}
+        <div class="tool-ui">
+          <input id="pc-file" type="file" accept="image/png,image/jpeg,image/webp" />
+          <div class="tool-row-grid">
+            <label>품질</label>
+            <input id="pc-quality" type="range" min="0.4" max="1" step="0.05" value="0.8" />
+            <button id="pc-run" type="button">압축 실행</button>
+          </div>
+          <canvas id="pc-canvas"></canvas>
+          <a id="pc-download" class="open-link" download="compressed.jpg">다운로드</a>
+        </div>
+      {% else %}
+      <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
+    {% endcase %}
   </section>
 
   <section class="tool-page__content">
@@ -29,6 +103,7 @@ layout: default
   </section>
 </article>
 
+<script src="{{ '/assets/js/tools.js' | relative_url }}" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

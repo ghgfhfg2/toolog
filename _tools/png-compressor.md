@@ -4,6 +4,7 @@ description: 품질 저하를 최소화하면서 PNG 용량을 줄여요.
 category: image
 category_label: 이미지/그래픽
 thumbnail: /assets/thumbs/png-compressor.svg
+tool_key: png-compressor
 ---
 
 ## 문제
