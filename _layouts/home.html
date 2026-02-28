@@ -1,50 +1,57 @@
 ---
 layout: default
 ---
-<section class="portal-head">
-  <h1>TOOLOG</h1>
-  <p>바로 쓰는 웹툴을 썸네일로 탐색하세요</p>
+<section class="portal-hero">
+  <div class="portal-hero__bg"></div>
+  <div class="portal-hero__content">
+    <p class="portal-hero__eyebrow">TOOLOG</p>
+    <h1>요즘 필요한 웹툴,<br/>카드로 빠르게 찾기</h1>
+    <p>복잡한 글보다 먼저, 바로 쓸 수 있는 실용 도구를 한 화면에서 탐색하세요.</p>
+  </div>
 </section>
 
-<section class="chip-row">
-  <a href="#" class="chip chip--active">전체</a>
-  <a href="#" class="chip">계산</a>
-  <a href="#" class="chip">변환</a>
-  <a href="#" class="chip">텍스트</a>
-  <a href="#" class="chip">날짜/시간</a>
-  <a href="#" class="chip">생활</a>
+<section class="toolbar">
+  <div class="toolbar__chips" id="categoryChips">
+    <button class="chip is-active" type="button" data-filter="all">전체</button>
+    {%- assign sorted_categories = site.categories | sort -%}
+    {%- for category in sorted_categories -%}
+      <button class="chip" type="button" data-filter="{{ category[0] | slugify }}">{{ category[0] }}</button>
+    {%- endfor -%}
+  </div>
 </section>
 
-<section id="latest" class="site-section site-section--first">
+<section class="tool-section">
   {%- if site.posts.size > 0 -%}
-    <div class="tool-grid tool-grid--portal">
-      {%- for post in site.posts limit: 30 -%}
-      <article class="tool-card tool-card--portal">
+    <div class="tool-grid" id="toolGrid">
+      {%- for post in site.posts limit: 60 -%}
+      {%- assign post_categories = post.categories | join: ' ' | slugify -%}
+      <article class="tool-card" data-categories="{{ post_categories }}">
         <a class="tool-card__thumb" href="{{ post.url | relative_url }}" aria-label="{{ post.title | escape }}">
           {%- if post.thumbnail -%}
             <img src="{{ post.thumbnail | relative_url }}" alt="{{ post.title | escape }} 썸네일" loading="lazy" />
           {%- else -%}
-            <div class="tool-card__placeholder">
-              <span>{{ post.title | truncate: 18 }}</span>
+            <div class="tool-card__fallback">
+              <span>{{ post.title | slice: 0, 1 }}</span>
             </div>
           {%- endif -%}
-          <span class="tool-card__badge">WEB TOOL</span>
+          <span class="tool-card__badge">TOOL</span>
         </a>
 
         <div class="tool-card__body">
           <a class="tool-card__title" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
-          {%- if post.description -%}
-            <p class="tool-card__desc">{{ post.description }}</p>
-          {%- endif -%}
-          <div class="tool-card__foot">
+          <p class="tool-card__desc">{{ post.description | default: "누구나 바로 쓸 수 있는 실용 웹툴 상세 안내" }}</p>
+          <div class="tool-card__bottom">
             <p class="tool-card__meta">{{ post.categories | join: " · " }}</p>
-            <a class="tool-card__go" href="{{ post.url | relative_url }}">바로가기</a>
+            <a class="tool-card__cta" href="{{ post.url | relative_url }}">열기</a>
           </div>
         </div>
       </article>
       {%- endfor -%}
     </div>
+    <p id="emptyState" class="empty-state" hidden>해당 카테고리에 맞는 툴이 아직 없습니다.</p>
   {%- else -%}
-    <p>아직 공개된 툴이 없습니다. 승인된 툴부터 카드 형태로 순차 공개됩니다.</p>
+    <p class="empty-state">아직 공개된 툴이 없습니다. 첫 툴을 업로드해보세요.</p>
   {%- endif -%}
 </section>
+
+<script src="{{ '/assets/js/home.js' | relative_url }}" defer></script>
