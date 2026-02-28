@@ -6,6 +6,13 @@ category_label: 이미지/그래픽
 thumbnail: /assets/thumbs/png-compressor.svg
 tool_key: png-compressor
 keywords: [png 압축기, 이미지 용량 줄이기, webp 변환, jpeg 변환, 이미지 최적화]
+faq:
+  - q: PNG를 꼭 PNG로 저장해야 하나요?
+    a: 아니요. 사진은 WebP/JPEG가 일반적으로 더 작은 용량을 제공합니다.
+  - q: 품질 값은 어느 정도가 적당한가요?
+    a: 보통 0.7~0.85 구간에서 화질과 용량의 균형이 좋습니다.
+  - q: 업로드한 원본 파일이 서버에 저장되나요?
+    a: 아니요. 현재 도구는 브라우저 내에서 처리하고 결과 파일만 다운로드합니다.
 ---
 
 ## PNG 압축기, 이런 분에게 필요해요

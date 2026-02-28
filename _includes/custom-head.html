@@ -2,3 +2,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+{% if page.keywords %}
+<meta name="keywords" content="{{ page.keywords | join: ', ' }}">
+{% endif %}
+{% if page.thumbnail %}
+<meta property="og:image" content="{{ page.thumbnail | absolute_url }}">
+<meta name="twitter:image" content="{{ page.thumbnail | absolute_url }}">
+{% endif %}
+<meta name="robots" content="index,follow,max-image-preview:large">
