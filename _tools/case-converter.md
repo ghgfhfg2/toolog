@@ -6,6 +6,7 @@ category_label: 텍스트/편집
 thumbnail: /assets/thumbs/case-converter.svg
 tool_key: case-converter
 keywords: [대소문자 변환기, camelCase 변환, snake_case 변환, 텍스트 포맷 정리]
+related_tools: [text-counter, unit-converter]
 faq:
   - q: camelCase와 snake_case는 언제 쓰나요?
     a: camelCase는 자바스크립트 변수명, snake_case는 DB 컬럼/백엔드 필드에서 자주 사용됩니다.

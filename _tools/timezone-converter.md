@@ -6,6 +6,7 @@ category_label: 데이터/계산
 thumbnail: /assets/thumbs/timezone-converter.svg
 tool_key: timezone-converter
 keywords: [시간대 변환기, 시차 계산, 회의 시간 변환, KST EST 변환]
+related_tools: [vat-calculator, unit-converter]
 faq:
   - q: 서머타임(DST)도 반영되나요?
     a: 브라우저의 IANA 타임존 데이터를 기반으로 계산하므로 해당 기간의 DST가 반영됩니다.

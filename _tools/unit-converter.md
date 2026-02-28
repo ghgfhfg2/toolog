@@ -6,6 +6,7 @@ category_label: 데이터/계산
 thumbnail: /assets/thumbs/unit-converter.svg
 tool_key: unit-converter
 keywords: [단위 변환기, 길이 변환, 무게 변환, 온도 변환, lb kg 변환]
+related_tools: [vat-calculator, timezone-converter]
 faq:
   - q: 어떤 단위를 지원하나요?
     a: 길이(m, cm, km, inch, ft), 무게(kg, g, lb, oz), 온도(℃, ℉, K)를 지원합니다.

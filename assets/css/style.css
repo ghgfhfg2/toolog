@@ -219,6 +219,41 @@ a:hover { color: #fff; text-decoration: none; }
   background: #111827;
 }
 
+.tool-page__related {
+  margin-top: .9rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1rem;
+  background: #111827;
+}
+.tool-page__related h2 {
+  margin: 0 0 .7rem;
+  font-size: 1rem;
+}
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .6rem;
+}
+.related-card {
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: .7rem;
+  background: #1f2937;
+}
+.related-card strong {
+  display: block;
+  font-size: .86rem;
+  margin-bottom: .2rem;
+}
+.related-card span {
+  display: block;
+  color: var(--muted);
+  font-size: .76rem;
+  line-height: 1.35;
+}
+
 .tool-ui { display: grid; gap: .7rem; }
 .tool-ui textarea,
 .tool-ui input,
@@ -262,6 +297,7 @@ a:hover { color: #fff; text-decoration: none; }
   .cc-grid { grid-template-columns: 1fr 1fr; }
   .tool-stats { grid-template-columns: 1fr 1fr; }
   .tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .related-grid { grid-template-columns: 1fr; }
   .discover__head { padding: 0 14px; }
   .discover__controls { padding: 0 14px; }
   .tool-grid { padding: 0 14px; }

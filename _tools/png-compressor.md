@@ -6,6 +6,7 @@ category_label: 이미지/그래픽
 thumbnail: /assets/thumbs/png-compressor.svg
 tool_key: png-compressor
 keywords: [png 압축기, 이미지 용량 줄이기, webp 변환, jpeg 변환, 이미지 최적화]
+related_tools: [image-resizer, text-counter]
 faq:
   - q: PNG를 꼭 PNG로 저장해야 하나요?
     a: 아니요. 사진은 WebP/JPEG가 일반적으로 더 작은 용량을 제공합니다.

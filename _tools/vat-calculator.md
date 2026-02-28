@@ -6,6 +6,7 @@ category_label: 데이터/계산
 thumbnail: /assets/thumbs/vat-calculator.svg
 tool_key: vat-calculator
 keywords: [부가세 계산기, vat 계산기, 공급가 계산, 합계 기준 부가세]
+related_tools: [unit-converter, timezone-converter]
 faq:
   - q: 공급가 기준과 합계 기준은 뭐가 다른가요?
     a: 공급가 기준은 세전 금액에서 VAT를 더하고, 합계 기준은 총액에서 공급가와 VAT를 역산합니다.

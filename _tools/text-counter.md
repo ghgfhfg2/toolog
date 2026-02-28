@@ -6,6 +6,7 @@ category_label: 텍스트/편집
 thumbnail: /assets/thumbs/text-counter.svg
 tool_key: text-counter
 keywords: [글자수 계산기, 바이트 계산기, 공백 제외 글자수, 원고 분량 체크]
+related_tools: [case-converter, png-compressor]
 faq:
   - q: 공백 제외 글자수는 어떻게 계산되나요?
     a: 입력 텍스트에서 띄어쓰기·줄바꿈 등 공백 문자를 제거한 뒤 글자 수를 계산합니다.

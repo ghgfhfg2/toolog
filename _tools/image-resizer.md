@@ -6,6 +6,7 @@ category_label: 이미지/그래픽
 thumbnail: /assets/thumbs/image-resizer.svg
 tool_key: image-resizer
 keywords: [이미지 리사이저, 사진 크기 조절, 이미지 사이즈 변경, 인스타 이미지 크기, og 이미지 크기]
+related_tools: [png-compressor, text-counter]
 faq:
   - q: 리사이즈하면 화질이 무조건 떨어지나요?
     a: 해상도를 줄이면 디테일이 일부 줄 수 있지만, 목적 규격에 맞추면 품질 손실을 최소화할 수 있습니다.
