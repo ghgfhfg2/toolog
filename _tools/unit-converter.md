@@ -34,6 +34,11 @@ faq:
 - 파운드(lb) 수치를 kg로 변환해 발주 자료 작성
 - 화씨(℉) 날씨 데이터를 섭씨(℃)로 환산
 
+## 내부/외부 참고 링크
+- 비율/수치 텍스트 검증: [글자수 계산기]({{ '/tools/text-counter/' | relative_url }})
+- 글로벌 일정 대응: [시간대 변환기]({{ '/tools/timezone-converter/' | relative_url }})
+- 단위 표준 참고: [NIST SI Units](https://www.nist.gov/pml/owm/metric-si/si-units)
+
 ## FAQ
 ### 어떤 단위를 지원하나요?
 길이, 무게, 온도의 핵심 단위를 기본 지원합니다.

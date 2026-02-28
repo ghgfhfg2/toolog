@@ -43,8 +43,10 @@ faq:
 ### 제목/헤더 표기 정리
 upper/lower/title 규칙이 섞인 문서를 빠르게 일관화할 수 있습니다.
 
-## 내부 링크
+## 내부/외부 참고 링크
 - 분량/바이트 점검: [글자수 계산기]({{ '/tools/text-counter/' | relative_url }})
+- 수치/단위 문서 정리: [단위 변환기]({{ '/tools/unit-converter/' | relative_url }})
+- 케이스 스타일 참고: [MDN - Lexical grammar](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar)
 
 ## FAQ
 ### camelCase와 snake_case는 언제 쓰나요?

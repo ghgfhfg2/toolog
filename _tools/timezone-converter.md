@@ -33,6 +33,11 @@ faq:
 - 공지 문구에는 시간과 함께 타임존 표기를 반드시 포함하세요.
 - DST 전환 주간에는 최종 시간을 한 번 더 확인하세요.
 
+## 내부/외부 참고 링크
+- 일정 안내 문구 길이 점검: [글자수 계산기]({{ '/tools/text-counter/' | relative_url }})
+- 회의 비용/정산 계산: [부가세 계산기]({{ '/tools/vat-calculator/' | relative_url }})
+- 타임존 데이터 참고: [IANA Time Zone Database](https://www.iana.org/time-zones)
+
 ## FAQ
 ### 서머타임도 반영되나요?
 네, 브라우저 타임존 데이터에 따라 변환됩니다.

@@ -47,8 +47,10 @@ faq:
 ### 로컬라이징 작업
 시스템 입력 제한이 바이트 기준일 때 UTF-8 바이트 수를 함께 검토합니다.
 
-## 내부 링크
+## 내부/외부 참고 링크
 - 문장/표기 정리: [대소문자 변환기]({{ '/tools/case-converter/' | relative_url }})
+- 게시용 이미지 최적화: [PNG 압축기]({{ '/tools/png-compressor/' | relative_url }})
+- UTF-8 참고: [Unicode UTF-8](https://www.unicode.org/versions/Unicode15.0.0/ch03.pdf)
 
 ## FAQ
 ### 공백 제외 글자수는 어떻게 계산되나요?

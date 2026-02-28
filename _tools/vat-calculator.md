@@ -38,6 +38,11 @@ faq:
 - 결제 내역 정리 시 VAT 분리
 - 거래처와 금액 근거 공유
 
+## 내부/외부 참고 링크
+- 숫자 입력 전 검산: [단위 변환기]({{ '/tools/unit-converter/' | relative_url }})
+- 해외 거래 일정 조율: [시간대 변환기]({{ '/tools/timezone-converter/' | relative_url }})
+- 정책 참고: [국세청 부가가치세 안내](https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2228&cntntsId=7754)
+
 ## FAQ
 ### 공급가 기준과 합계 기준은 뭐가 다른가요?
 기준이 되는 입력값이 다릅니다. 공급가 입력인지 총액 입력인지 먼저 확인하세요.
