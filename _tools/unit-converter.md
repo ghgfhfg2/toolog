@@ -1,5 +1,5 @@
 ---
-title: 단위 변환기 | 길이·무게·온도 단위 변환 (m/kg/℃ 등)
+title: 단위 변환기 | 길이·무게·온도 변환
 description: 단위 변환기로 길이·무게·온도 단위를 즉시 변환하세요. m/cm/km, kg/lb/oz, ℃/℉/K를 한 화면에서 정확하게 계산할 수 있습니다.
 category: data
 category_label: 데이터/계산

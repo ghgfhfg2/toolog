@@ -1,5 +1,5 @@
 ---
-title: PNG 압축기 | 이미지 용량 줄이기 (WebP/JPEG 변환 지원)
+title: PNG 압축기 | WebP·JPEG 변환으로 용량 줄이기
 description: PNG 압축기로 이미지 용량을 빠르게 줄이고, WebP/JPEG 변환까지 한 번에 처리하세요. 원본 대비 절감률도 바로 확인할 수 있습니다.
 category: image
 category_label: 이미지/그래픽
