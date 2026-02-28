@@ -4,8 +4,8 @@ layout: default
 <section class="discover">
   <header class="discover__head">
     <div>
-      <h1>Toolog</h1>
-      <p>실용 웹툴을 앱 카드처럼 빠르게 탐색하고 바로 실행하세요.</p>
+      <h1>Toolog | 실용 웹툴 모음</h1>
+      <p>이미지·텍스트·계산 웹툴을 카드로 빠르게 찾고 바로 실행하세요.</p>
     </div>
     <div class="discover__count">{{ site.data.tools | size }} tools</div>
   </header>
@@ -25,7 +25,7 @@ layout: default
     <article class="tool-card" data-category="{{ tool.category }}" data-title="{{ tool.title | downcase }}" data-description="{{ tool.description | downcase }}">
       <a class="tool-thumb-wrap" href="{{ tool.url | relative_url }}" aria-label="{{ tool.title }}">
         {% if tool.thumbnail %}
-        <img class="tool-thumbnail" src="{{ tool.thumbnail | relative_url }}" alt="{{ tool.title }}" loading="lazy" />
+        <img class="tool-thumbnail" src="{{ tool.thumbnail | relative_url }}" alt="{{ tool.title }} 웹툴 썸네일" loading="lazy" />
         {% else %}
         <div class="tool-thumbnail tool-thumbnail--fallback">{{ tool.title | slice: 0, 1 }}</div>
         {% endif %}
