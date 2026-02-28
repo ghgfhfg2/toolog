@@ -16,8 +16,7 @@ faq:
 ---
 
 ## 시간대 변환기, 왜 필요한가요?
-`한국 미국 시차`, `회의 시간 변환`, `KST to PST` 같은 검색은
-글로벌 협업에서 시간 혼선을 줄이기 위한 목적이 큽니다.
+**시간대 변환기**는 `한국 미국 시차`, `회의 시간 변환`, `KST to PST`처럼 글로벌 일정 오차를 줄이려는 검색 의도에 맞춰 설계되었습니다.
 
 ## 사용 방법
 1. 기준 시간대(예: 서울)를 선택합니다.
@@ -34,8 +33,8 @@ faq:
 - DST 전환 주간에는 최종 시간을 한 번 더 확인하세요.
 
 ## 내부/외부 참고 링크
-- 일정 안내 문구 길이 점검: [글자수 계산기]({{ '/tools/text-counter/' | relative_url }})
-- 회의 비용/정산 계산: [부가세 계산기]({{ '/tools/vat-calculator/' | relative_url }})
+- 일정 안내 문구 길이 점검: [글자수 계산기(공백 제외/바이트)]({{ '/tools/text-counter/' | relative_url }})
+- 회의 비용/정산 계산: [부가세 계산기(VAT 10%)]({{ '/tools/vat-calculator/' | relative_url }})
 - 타임존 데이터 참고: [IANA Time Zone Database](https://www.iana.org/time-zones)
 
 ## FAQ

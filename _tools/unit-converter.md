@@ -16,8 +16,7 @@ faq:
 ---
 
 ## 단위 변환기, 어떤 상황에서 쓰나요?
-`lb to kg`, `inch cm 변환`, `화씨 섭씨 변환` 같은 검색은
-해외 스펙/문서 해석 과정에서 발생하는 **단위 불일치 문제 해결**이 목적입니다.
+**단위 변환기**는 `lb to kg`, `inch cm 변환`, `화씨 섭씨 변환`처럼 단위 불일치 문제를 즉시 해결하려는 검색 의도에 맞는 도구입니다.
 
 ## 지원 범위
 - 길이: m, cm, km, inch, ft
@@ -35,8 +34,8 @@ faq:
 - 화씨(℉) 날씨 데이터를 섭씨(℃)로 환산
 
 ## 내부/외부 참고 링크
-- 비율/수치 텍스트 검증: [글자수 계산기]({{ '/tools/text-counter/' | relative_url }})
-- 글로벌 일정 대응: [시간대 변환기]({{ '/tools/timezone-converter/' | relative_url }})
+- 비율/수치 텍스트 검증: [글자수 계산기(공백 제외/바이트)]({{ '/tools/text-counter/' | relative_url }})
+- 글로벌 일정 대응: [시간대 변환기(국가별 시차 계산)]({{ '/tools/timezone-converter/' | relative_url }})
 - 단위 표준 참고: [NIST SI Units](https://www.nist.gov/pml/owm/metric-si/si-units)
 
 ## FAQ

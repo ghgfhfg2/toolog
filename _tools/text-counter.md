@@ -16,8 +16,7 @@ faq:
 ---
 
 ## 글자수 계산기, 어떤 검색 의도에 맞는 도구인가요?
-`글자수 계산기`, `공백 제외 글자수`, `바이트 계산기`처럼
-**제출 분량 검증**이 필요한 사용자를 위한 도구입니다.
+**글자수 계산기**는 `공백 제외 글자수`, `바이트 계산기`를 빠르게 확인하려는 검색 의도에 맞춰 설계된 도구입니다.
 
 첫 작성 단계에서 분량을 바로 확인하면 제출 직전 수정 시간을 크게 줄일 수 있습니다.
 
@@ -48,8 +47,8 @@ faq:
 시스템 입력 제한이 바이트 기준일 때 UTF-8 바이트 수를 함께 검토합니다.
 
 ## 내부/외부 참고 링크
-- 문장/표기 정리: [대소문자 변환기]({{ '/tools/case-converter/' | relative_url }})
-- 게시용 이미지 최적화: [PNG 압축기]({{ '/tools/png-compressor/' | relative_url }})
+- 문장/표기 정리: [대소문자 변환기(camelCase/snake_case)]({{ '/tools/case-converter/' | relative_url }})
+- 게시용 이미지 최적화: [PNG 압축기(이미지 용량 줄이기)]({{ '/tools/png-compressor/' | relative_url }})
 - UTF-8 참고: [Unicode UTF-8](https://www.unicode.org/versions/Unicode15.0.0/ch03.pdf)
 
 ## FAQ

@@ -16,8 +16,7 @@ faq:
 ---
 
 ## 부가세 계산기, 검색 의도에 맞춘 설명
-`부가세 계산기`, `공급가 계산`, `합계 부가세 역산`처럼
-실무형 계산이 필요한 사용자를 위한 페이지입니다.
+**부가세 계산기**는 `공급가 계산`, `합계 부가세 역산`처럼 실무형 금액 검증이 필요한 검색 의도에 최적화된 페이지입니다.
 
 ## 지원 계산 방식
 - 공급가 기준: 공급가 입력 → VAT/합계 계산
@@ -39,8 +38,8 @@ faq:
 - 거래처와 금액 근거 공유
 
 ## 내부/외부 참고 링크
-- 숫자 입력 전 검산: [단위 변환기]({{ '/tools/unit-converter/' | relative_url }})
-- 해외 거래 일정 조율: [시간대 변환기]({{ '/tools/timezone-converter/' | relative_url }})
+- 숫자 입력 전 검산: [단위 변환기(길이·무게·온도)]({{ '/tools/unit-converter/' | relative_url }})
+- 해외 거래 일정 조율: [시간대 변환기(국가별 시차 계산)]({{ '/tools/timezone-converter/' | relative_url }})
 - 정책 참고: [국세청 부가가치세 안내](https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2228&cntntsId=7754)
 
 ## FAQ

@@ -16,8 +16,7 @@ faq:
 ---
 
 ## 대소문자 변환기, 왜 필요한가요?
-`camelCase 변환`, `snake_case 변환`, `대소문자 변환기` 검색 사용자는
-대부분 **반복적인 포맷 정리 시간을 줄이려는 의도**가 있습니다.
+**대소문자 변환기**는 `camelCase 변환`, `snake_case 변환`처럼 반복적인 포맷 정리를 빠르게 끝내려는 검색 의도에 맞는 도구입니다.
 
 ## 지원 케이스
 - UPPER
@@ -44,8 +43,8 @@ faq:
 upper/lower/title 규칙이 섞인 문서를 빠르게 일관화할 수 있습니다.
 
 ## 내부/외부 참고 링크
-- 분량/바이트 점검: [글자수 계산기]({{ '/tools/text-counter/' | relative_url }})
-- 수치/단위 문서 정리: [단위 변환기]({{ '/tools/unit-converter/' | relative_url }})
+- 분량/바이트 점검: [글자수 계산기(공백 제외/바이트)]({{ '/tools/text-counter/' | relative_url }})
+- 수치/단위 문서 정리: [단위 변환기(길이·무게·온도)]({{ '/tools/unit-converter/' | relative_url }})
 - 케이스 스타일 참고: [MDN - Lexical grammar](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar)
 
 ## FAQ
