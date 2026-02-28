@@ -62,7 +62,7 @@
   thumbnail: /assets/thumbs/timezone-converter.svg
 
 - id: dev-log-starter
-  title: Tool 제작기: 시작 가이드
+  title: "Tool 제작기: 시작 가이드"
   category: t-log
   category_label: 개발자 로그
   badge: T-Log
