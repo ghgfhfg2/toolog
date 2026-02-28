@@ -53,9 +53,11 @@ a:hover { color: #ffffff; text-decoration: none; }
 .hero__cta--ghost { background: transparent; border: 1px solid var(--border); color: #d7e0ff; }
 
 .site-section { margin-top: 2rem; }
+.site-section--first { margin-top: 1rem; }
 .site-section--compact { margin-top: 1.2rem; }
 .section-title { font-size: 1.25rem; margin-bottom: .2rem; }
 .section-sub { margin: 0 0 1rem; color: var(--muted); font-size: .95rem; }
+.section-head--tight { margin-bottom: .5rem; }
 
 .feature-grid {
   display: grid;
