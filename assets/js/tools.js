@@ -41,18 +41,59 @@
   }
 
   if (slug === 'unit-converter') {
+    const type = document.getElementById('uc-type');
     const value = document.getElementById('uc-value');
     const from = document.getElementById('uc-from');
     const to = document.getElementById('uc-to');
     const out = document.getElementById('uc-result');
-    const toM = { m:1, cm:0.01, km:1000, inch:0.0254, ft:0.3048 };
-    const run = () => {
-      const v = Number(value.value || 0);
-      const m = v * toM[from.value];
-      const result = m / toM[to.value];
-      out.textContent = `결과: ${result.toLocaleString('ko-KR', { maximumFractionDigits: 6 })} ${to.value}`;
+
+    const maps = {
+      length: { m:1, cm:0.01, km:1000, inch:0.0254, ft:0.3048 },
+      weight: { kg:1, g:0.001, lb:0.45359237, oz:0.028349523125 },
+      temperature: { c: 'c', f: 'f', k: 'k' }
     };
-    [value, from, to].forEach(el => el.addEventListener('input', run)); run();
+
+    const labels = {
+      length: [['m','m'],['cm','cm'],['km','km'],['inch','inch'],['ft','ft']],
+      weight: [['kg','kg'],['g','g'],['lb','lb'],['oz','oz']],
+      temperature: [['c','℃'],['f','℉'],['k','K']]
+    };
+
+    const fillUnits = () => {
+      const t = type.value || 'length';
+      const opts = labels[t] || labels.length;
+      from.innerHTML = opts.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
+      to.innerHTML = opts.map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
+      if (opts.length > 1) to.selectedIndex = 1;
+      run();
+    };
+
+    const convertTemp = (v, f, t) => {
+      let c = v;
+      if (f === 'f') c = (v - 32) * 5 / 9;
+      if (f === 'k') c = v - 273.15;
+      if (t === 'f') return c * 9 / 5 + 32;
+      if (t === 'k') return c + 273.15;
+      return c;
+    };
+
+    const run = () => {
+      const t = type.value || 'length';
+      const v = Number(value.value || 0);
+      let result = 0;
+      if (t === 'temperature') {
+        result = convertTemp(v, from.value, to.value);
+      } else {
+        const map = maps[t];
+        const base = v * (map[from.value] || 1);
+        result = base / (map[to.value] || 1);
+      }
+      out.textContent = `결과: ${result.toLocaleString('ko-KR', { maximumFractionDigits: 6 })} ${to.options[to.selectedIndex]?.text || ''}`;
+    };
+
+    [type, value, from, to].forEach(el => el?.addEventListener('input', run));
+    type?.addEventListener('change', fillUnits);
+    fillUnits();
   }
 
   if (slug === 'timezone-converter') {
@@ -60,17 +101,57 @@
     const to = document.getElementById('tz-to');
     const dt = document.getElementById('tz-datetime');
     const out = document.getElementById('tz-result');
+
     if (dt && !dt.value) {
       const n = new Date();
-      dt.value = new Date(n.getTime()-n.getTimezoneOffset()*60000).toISOString().slice(0,16);
+      dt.value = new Date(n.getTime() - n.getTimezoneOffset() * 60000).toISOString().slice(0,16);
     }
+
+    const getParts = (date, timeZone) => {
+      const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone,
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: false
+      }).formatToParts(date);
+      const map = {};
+      parts.forEach(p => { if (p.type !== 'literal') map[p.type] = p.value; });
+      return map;
+    };
+
+    const zonedToUtc = (dateStr, timeZone) => {
+      const [d, t] = dateStr.split('T');
+      if (!d || !t) return null;
+      const [Y, M, D] = d.split('-').map(Number);
+      const [h, m] = t.split(':').map(Number);
+      let utc = Date.UTC(Y, M - 1, D, h, m, 0);
+
+      for (let i = 0; i < 3; i++) {
+        const parts = getParts(new Date(utc), timeZone);
+        const asUTC = Date.UTC(
+          Number(parts.year), Number(parts.month) - 1, Number(parts.day),
+          Number(parts.hour), Number(parts.minute), Number(parts.second || 0)
+        );
+        const target = Date.UTC(Y, M - 1, D, h, m, 0);
+        utc += target - asUTC;
+      }
+      return new Date(utc);
+    };
+
     const run = () => {
       if (!dt.value) return;
-      const local = new Date(dt.value);
-      const text = new Intl.DateTimeFormat('ko-KR', { dateStyle:'full', timeStyle:'short', timeZone: to.value }).format(local);
-      out.textContent = `${to.options[to.selectedIndex].text}: ${text}`;
+      const utcDate = zonedToUtc(dt.value, from.value);
+      if (!utcDate) return;
+      const text = new Intl.DateTimeFormat('ko-KR', {
+        dateStyle: 'full',
+        timeStyle: 'short',
+        timeZone: to.value
+      }).format(utcDate);
+      out.textContent = `${from.options[from.selectedIndex].text} 기준 → ${to.options[to.selectedIndex].text}: ${text}`;
     };
-    [from,to,dt].forEach(el => el.addEventListener('input', run)); run();
+
+    [from, to, dt].forEach(el => el.addEventListener('input', run));
+    run();
   }
 
   if (slug === 'case-converter') {

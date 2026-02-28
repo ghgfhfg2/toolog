@@ -41,13 +41,21 @@ layout: default
         </div>
       {% when 'unit-converter' %}
         <div class="tool-ui">
+          <div class="tool-row">
+            <label>변환 타입</label>
+            <select id="uc-type">
+              <option value="length">길이</option>
+              <option value="weight">무게</option>
+              <option value="temperature">온도</option>
+            </select>
+          </div>
           <div class="tool-row-grid">
             <input id="uc-value" type="number" step="any" value="1" />
-            <select id="uc-from"><option value="m">m</option><option value="cm">cm</option><option value="km">km</option><option value="inch">inch</option><option value="ft">ft</option></select>
+            <select id="uc-from"></select>
             <span>→</span>
-            <select id="uc-to"><option value="cm">cm</option><option value="m">m</option><option value="km">km</option><option value="inch">inch</option><option value="ft">ft</option></select>
+            <select id="uc-to"></select>
           </div>
-          <p class="tool-result" id="uc-result">결과: 100 cm</p>
+          <p class="tool-result" id="uc-result">결과가 여기에 표시됩니다.</p>
         </div>
       {% when 'timezone-converter' %}
         <div class="tool-ui">
