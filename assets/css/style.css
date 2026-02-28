@@ -144,3 +144,83 @@ a:hover { color: #ffffff; text-decoration: none; }
 @media (max-width: 640px) {
   .hero { padding: 1.4rem 1rem; }
 }
+
+.portal-head {
+  margin-top: 1rem;
+  margin-bottom: .8rem;
+}
+.portal-head h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  letter-spacing: .02em;
+}
+.portal-head p {
+  margin: .2rem 0 0;
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+.chip-row {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+  margin-bottom: .8rem;
+}
+.chip {
+  display: inline-block;
+  padding: .35rem .75rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(16,23,41,.9);
+  color: #dbe4ff;
+  font-size: .85rem;
+  font-weight: 600;
+}
+.chip--active {
+  background: #4d67d6;
+  border-color: #6179df;
+  color: #fff;
+}
+
+.tool-grid--portal {
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: .8rem;
+}
+.tool-card--portal {
+  border-radius: 12px;
+}
+.tool-card--portal .tool-card__thumb {
+  position: relative;
+}
+.tool-card__badge {
+  position: absolute;
+  left: .5rem;
+  top: .5rem;
+  font-size: .68rem;
+  font-weight: 800;
+  background: rgba(9, 14, 29, .78);
+  border: 1px solid #324266;
+  color: #e9eeff;
+  border-radius: 999px;
+  padding: .2rem .45rem;
+}
+
+.tool-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+}
+.tool-card__go {
+  border: 1px solid #3b4f84;
+  border-radius: 8px;
+  padding: .22rem .5rem;
+  font-size: .78rem;
+  color: #e8edff;
+  background: #1a2442;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .portal-head h1 { font-size: 1.45rem; }
+}
