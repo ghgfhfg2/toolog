@@ -5,7 +5,7 @@
   badge: Hot
   description: 품질 저하를 최소화하면서 PNG 용량을 줄여요.
   url: /tools/png-compressor/
-  thumbnail: /assets/thumbs/png-compressor.jpg
+  thumbnail: /assets/thumbs/png-compressor.svg
 
 - id: image-resizer
   title: 이미지 리사이저
@@ -14,7 +14,7 @@
   badge: New
   description: 인스타, 블로그, 쇼핑몰 규격에 맞게 바로 리사이즈.
   url: /tools/image-resizer/
-  thumbnail: /assets/thumbs/image-resizer.jpg
+  thumbnail: /assets/thumbs/image-resizer.svg
 
 - id: text-counter
   title: 글자수 계산기
@@ -23,7 +23,7 @@
   badge: Popular
   description: 공백 포함/제외 글자수, 바이트 수를 즉시 확인.
   url: /tools/text-counter/
-  thumbnail: /assets/thumbs/text-counter.jpg
+  thumbnail: /assets/thumbs/text-counter.svg
 
 - id: case-converter
   title: 대소문자 변환기
@@ -32,7 +32,7 @@
   badge: Update
   description: UPPER, lower, Title, camel/snake 케이스로 변환.
   url: /tools/case-converter/
-  thumbnail: /assets/thumbs/case-converter.jpg
+  thumbnail: /assets/thumbs/case-converter.svg
 
 - id: vat-calculator
   title: 부가세 계산기
@@ -41,7 +41,7 @@
   badge: Hot
   description: 공급가/합계/부가세를 상황에 맞게 빠르게 계산.
   url: /tools/vat-calculator/
-  thumbnail: /assets/thumbs/vat-calculator.jpg
+  thumbnail: /assets/thumbs/vat-calculator.svg
 
 - id: unit-converter
   title: 단위 변환기
@@ -50,7 +50,7 @@
   badge: New
   description: 길이·무게·온도 단위를 한 번에 변환.
   url: /tools/unit-converter/
-  thumbnail: /assets/thumbs/unit-converter.jpg
+  thumbnail: /assets/thumbs/unit-converter.svg
 
 - id: timezone-converter
   title: 시간대 변환기
@@ -59,7 +59,7 @@
   badge: New
   description: 국가별 시간을 비교해 회의 시간을 맞춰요.
   url: /tools/timezone-converter/
-  thumbnail: /assets/thumbs/timezone-converter.jpg
+  thumbnail: /assets/thumbs/timezone-converter.svg
 
 - id: dev-log-starter
   title: Tool 제작기: 시작 가이드
@@ -67,5 +67,5 @@
   category_label: 개발자 로그
   badge: T-Log
   description: 새 툴을 기획·제작·배포하는 기본 워크플로우.
-  url: /t-log/
-  thumbnail: /assets/thumbs/t-log.jpg
+  url: /tools/t-log-starter/
+  thumbnail: /assets/thumbs/t-log.svg

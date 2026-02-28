@@ -19,6 +19,11 @@ permalink: /:categories/:title/
 future: false
 show_drafts: false
 
+collections:
+  tools:
+    output: true
+    permalink: /tools/:name/
+
 minima:
   skin: auto
   social_links: []
@@ -33,4 +38,10 @@ defaults:
       type: "posts"
     values:
       layout: "post"
+      author: "toolog"
+  - scope:
+      path: ""
+      type: "tools"
+    values:
+      layout: "tool"
       author: "toolog"
