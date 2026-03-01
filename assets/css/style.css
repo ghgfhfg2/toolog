@@ -190,6 +190,28 @@ a:hover { color: #fff; text-decoration: none; }
   color: var(--muted);
 }
 
+.published-posts {
+  margin: 1rem 20px 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: .9rem;
+  background: #111827;
+}
+.published-posts h2 {
+  margin: 0 0 .6rem;
+  font-size: .95rem;
+}
+.published-posts ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+.published-posts li {
+  margin: .25rem 0;
+  color: var(--muted);
+}
+.published-posts a { color: var(--text); }
+.published-posts small { margin-left: .35rem; color: var(--muted); }
+
 /* Tool detail */
 .tool-page { margin-top: 1rem; }
 .tool-page__head {
