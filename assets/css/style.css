@@ -535,7 +535,7 @@ a:hover { color: #fff; text-decoration: none; }
 /* Font-change: sticky input */
 .font-change-ui #fc-input {
   position: sticky;
-  top: 66px;
+  top: 8px;
   z-index: 30;
   background: #0f172a;
   border-color: #334155;

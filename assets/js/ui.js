@@ -11,7 +11,7 @@
     });
 
     const onScroll = () => {
-      if (window.scrollY > 320) btn.classList.add('show');
+      if (window.scrollY > 120) btn.classList.add('show');
       else btn.classList.remove('show');
     };
 
