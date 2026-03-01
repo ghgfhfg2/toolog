@@ -350,8 +350,15 @@
         canvas.height = t.h;
         const ctx = canvas.getContext('2d');
         drawFrame(ctx, img, t.w, t.h, fit.value || 'cover', bg?.value || '#0f172a');
-
         const dataUrl = canvas.toDataURL('image/png');
+
+        // 미리보기는 항상 contain으로 보여서 잘리지 않게 표시
+        const previewCanvas = document.createElement('canvas');
+        previewCanvas.width = t.w;
+        previewCanvas.height = t.h;
+        const pctx = previewCanvas.getContext('2d');
+        drawFrame(pctx, img, t.w, t.h, 'contain', bg?.value || '#0f172a');
+        const previewUrl = previewCanvas.toDataURL('image/png');
 
         const link = document.createElement('a');
         link.className = 'open-link';
@@ -366,7 +373,7 @@
         preview.className = 'ytk-preview';
         const previewImg = document.createElement('img');
         previewImg.className = 'ytk-preview-img';
-        previewImg.src = dataUrl;
+        previewImg.src = previewUrl;
         previewImg.alt = `${t.label} 미리보기`;
         preview.appendChild(previewImg);
 
