@@ -402,15 +402,63 @@
         return ch;
       }).join('');
 
+    const upsideMap = {
+      a:'ɐ',b:'q',c:'ɔ',d:'p',e:'ǝ',f:'ɟ',g:'ƃ',h:'ɥ',i:'ᴉ',j:'ɾ',k:'ʞ',l:'l',m:'ɯ',n:'u',o:'o',p:'d',q:'b',r:'ɹ',s:'s',t:'ʇ',u:'n',v:'ʌ',w:'ʍ',x:'x',y:'ʎ',z:'z',
+      A:'∀',B:'𐐒',C:'Ɔ',D:'◖',E:'Ǝ',F:'Ⅎ',G:'⅁',H:'H',I:'I',J:'ſ',K:'⋊',L:'˥',M:'W',N:'N',O:'O',P:'Ԁ',Q:'Ό',R:'ᴚ',S:'S',T:'⊥',U:'∩',V:'Λ',W:'M',X:'X',Y:'⅄',Z:'Z',
+      '1':'⇂','2':'ᄅ','3':'Ɛ','4':'ㄣ','5':'ϛ','6':'9','7':'ㄥ','8':'8','9':'6','0':'0'
+    };
+
     const fontMap = [
       { key: 'normal', label: 'Normal', convert: (s) => s },
-      { key: 'bold', label: 'Bold', convert: (s) => mapByOffset(s, 0x1D400, 0x1D41A, 0x1D7CE) },
-      { key: 'italic', label: 'Italic', convert: (s) => mapByOffset(s, 0x1D434, 0x1D44E) },
-      { key: 'bold-italic', label: 'Bold Italic', convert: (s) => mapByOffset(s, 0x1D468, 0x1D482) },
-      { key: 'monospace', label: 'Monospace', convert: (s) => mapByOffset(s, 0x1D670, 0x1D68A, 0x1D7F6) },
-      { key: 'bubble', label: 'Bubble', convert: (s) => enclosed(s, 0x24B6, 0x24D0, ['⓪','①','②','③','④','⑤','⑥','⑦','⑧','⑨']) },
+
+      // Serif
+      { key: 'bold', label: 'Bold (Serif)', convert: (s) => mapByOffset(s, 0x1D400, 0x1D41A, 0x1D7CE) },
+      { key: 'italic', label: 'Italic (Serif)', convert: (s) => mapByOffset(s, 0x1D434, 0x1D44E) },
+      { key: 'bold-italic', label: 'Bold Italic (Serif)', convert: (s) => mapByOffset(s, 0x1D468, 0x1D482) },
+
+      // Sans-serif
+      { key: 'sans', label: 'Sans', convert: (s) => mapByOffset(s, 0x1D5A0, 0x1D5BA, 0x1D7E2) },
+      { key: 'sans-bold', label: 'Sans Bold', convert: (s) => mapByOffset(s, 0x1D5D4, 0x1D5EE, 0x1D7EC) },
+      { key: 'sans-italic', label: 'Sans Italic', convert: (s) => mapByOffset(s, 0x1D608, 0x1D622) },
+      { key: 'sans-bold-italic', label: 'Sans Bold Italic', convert: (s) => mapByOffset(s, 0x1D63C, 0x1D656) },
+
+      // Script / Fraktur
+      { key: 'script', label: 'Script', convert: (s) => mapByOffset(s, 0x1D49C, 0x1D4B6) },
+      { key: 'script-bold', label: 'Script Bold', convert: (s) => mapByOffset(s, 0x1D4D0, 0x1D4EA) },
+      { key: 'fraktur', label: 'Fraktur', convert: (s) => mapByOffset(s, 0x1D504, 0x1D51E) },
+      { key: 'fraktur-bold', label: 'Fraktur Bold', convert: (s) => mapByOffset(s, 0x1D56C, 0x1D586) },
+
+      // Special
       { key: 'double-struck', label: 'Double Struck', convert: (s) => mapByOffset(s, 0x1D538, 0x1D552, 0x1D7D8) },
-      { key: 'small-caps', label: 'Small Caps 느낌', convert: (s) => s.replace(/[a-z]/g, (c) => ({a:'ᴀ',b:'ʙ',c:'ᴄ',d:'ᴅ',e:'ᴇ',f:'ꜰ',g:'ɢ',h:'ʜ',i:'ɪ',j:'ᴊ',k:'ᴋ',l:'ʟ',m:'ᴍ',n:'ɴ',o:'ᴏ',p:'ᴘ',q:'ǫ',r:'ʀ',s:'s',t:'ᴛ',u:'ᴜ',v:'ᴠ',w:'ᴡ',x:'x',y:'ʏ',z:'ᴢ'}[c] || c)) }
+      { key: 'monospace', label: 'Monospace', convert: (s) => mapByOffset(s, 0x1D670, 0x1D68A, 0x1D7F6) },
+      { key: 'small-caps', label: 'Small Caps', convert: (s) => s.replace(/[a-z]/g, (c) => ({a:'ᴀ',b:'ʙ',c:'ᴄ',d:'ᴅ',e:'ᴇ',f:'ꜰ',g:'ɢ',h:'ʜ',i:'ɪ',j:'ᴊ',k:'ᴋ',l:'ʟ',m:'ᴍ',n:'ɴ',o:'ᴏ',p:'ᴘ',q:'ǫ',r:'ʀ',s:'s',t:'ᴛ',u:'ᴜ',v:'ᴠ',w:'ᴡ',x:'x',y:'ʏ',z:'ᴢ'}[c] || c)) },
+
+      // Decoration
+      { key: 'circled', label: 'Circled', convert: (s) => enclosed(s, 0x24B6, 0x24D0, ['⓪','①','②','③','④','⑤','⑥','⑦','⑧','⑨']) },
+      { key: 'circled-negative', label: 'Circled Negative', convert: (s) => Array.from(s).map((ch) => {
+        const c = ch.codePointAt(0);
+        if (c >= 65 && c <= 90) return String.fromCodePoint(0x1F150 + (c - 65));
+        return ch;
+      }).join('') },
+      { key: 'squared', label: 'Squared', convert: (s) => Array.from(s).map((ch) => {
+        const c = ch.codePointAt(0);
+        if (c >= 65 && c <= 90) return String.fromCodePoint(0x1F130 + (c - 65));
+        return ch;
+      }).join('') },
+      { key: 'squared-negative', label: 'Squared Negative', convert: (s) => Array.from(s).map((ch) => {
+        const c = ch.codePointAt(0);
+        if (c >= 65 && c <= 90) return String.fromCodePoint(0x1F170 + (c - 65));
+        return ch;
+      }).join('') },
+      { key: 'parenthesized', label: 'Parenthesized', convert: (s) => Array.from(s).map((ch) => {
+        const c = ch.codePointAt(0);
+        if (c >= 97 && c <= 122) return String.fromCodePoint(0x249C + (c - 97));
+        return ch;
+      }).join('') },
+
+      // Other transforms
+      { key: 'full-width', label: 'Full-width', convert: (s) => mapByOffset(s, 0xFF21, 0xFF41, 0xFF10) },
+      { key: 'upside-down', label: 'Upside Down', convert: (s) => Array.from(s).reverse().map((c) => upsideMap[c] || c).join('') }
     ];
 
     const copyText = async (text) => {
