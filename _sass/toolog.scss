@@ -447,13 +447,16 @@ a:hover { color: #fff; text-decoration: none; }
   margin-bottom: .35rem;
 }
 .font-preview-body {
-  display: flex;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
   gap: .5rem;
 }
-.font-copy-btn {
-  width: auto;
+.tool-ui .font-copy-btn {
+  width: auto !important;
   min-width: 40px;
+  flex: 0 0 auto;
+  align-self: start;
   border: 1px solid #3b82f6;
   background: rgba(59,130,246,.14);
   color: #dbeafe;
@@ -465,7 +468,7 @@ a:hover { color: #fff; text-decoration: none; }
   cursor: pointer;
   margin-top: .08rem;
 }
-.font-copy-btn:hover {
+.tool-ui .font-copy-btn:hover {
   background: rgba(59,130,246,.24);
 }
 .font-preview-text {
@@ -474,7 +477,7 @@ a:hover { color: #fff; text-decoration: none; }
   line-height: 1.45;
   word-break: break-word;
   letter-spacing: .01em;
-  flex: 1;
+  min-width: 0;
 }
 .copy-toast {
   position: fixed;
