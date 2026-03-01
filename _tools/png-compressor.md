@@ -44,6 +44,7 @@ faq:
 
 - 관련 참고: [Google PageSpeed Insights](https://pagespeed.web.dev/)
 - 내부 도구 연결: [이미지 리사이저]({{ '/tools/image-resizer/' | relative_url }})
+- 내부 도구 연결: [텍스트 카운터]({{ '/tools/text-counter/' | relative_url }})로 업로드 전 본문/캡션 글자수까지 함께 점검할 수 있습니다.
 
 ## 자주 묻는 질문(FAQ)
 ### Q. PNG를 꼭 PNG로만 저장해야 하나요?

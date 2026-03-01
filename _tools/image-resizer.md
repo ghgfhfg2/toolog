@@ -45,6 +45,7 @@ faq:
 이미지 사이즈를 적절히 맞추면 불필요한 리소스 로딩을 줄일 수 있어 페이지 속도와 UX 개선에 도움이 됩니다.
 
 - 관련 참고: [Google Search Central - 이미지 SEO](https://developers.google.com/search/docs/appearance/google-images)
+- 내부 도구 연결: [PNG 압축기]({{ '/tools/png-compressor/' | relative_url }})로 후처리하면 업로드 성능을 더 끌어올릴 수 있습니다.
 
 ## 요약
 이미지 리사이저는 업로드 실패·비율 깨짐·로딩 지연을 줄이는 기본 도구입니다.

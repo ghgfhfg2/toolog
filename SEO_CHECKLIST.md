@@ -1,3 +1,10 @@
+---
+layout: page
+title: SEO 체크리스트
+robots: noindex,nofollow
+sitemap: false
+---
+
 # SEO 체크리스트 (Toolog)
 
 ## 1) 배포/인덱싱 기본

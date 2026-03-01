@@ -1,3 +1,10 @@
+---
+layout: page
+title: Search Console 빠른 등록 가이드
+robots: noindex,nofollow
+sitemap: false
+---
+
 # Search Console 빠른 등록 가이드
 
 ## 1) 사이트 등록

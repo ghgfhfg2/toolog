@@ -9,4 +9,8 @@
 <meta property="og:image" content="{{ page.thumbnail | absolute_url }}">
 <meta name="twitter:image" content="{{ page.thumbnail | absolute_url }}">
 {% endif %}
+{% if page.robots %}
+<meta name="robots" content="{{ page.robots }}">
+{% else %}
 <meta name="robots" content="index,follow,max-image-preview:large">
+{% endif %}
