@@ -351,17 +351,27 @@
         const ctx = canvas.getContext('2d');
         drawFrame(ctx, img, t.w, t.h, fit.value || 'cover', bg?.value || '#0f172a');
 
+        const dataUrl = canvas.toDataURL('image/png');
+
         const link = document.createElement('a');
         link.className = 'open-link';
         link.textContent = `${t.label} 다운로드`;
         link.download = `${t.key}-${t.w}x${t.h}.png`;
-        link.href = canvas.toDataURL('image/png');
+        link.href = dataUrl;
 
         const title = document.createElement('strong');
         title.textContent = `${t.label} (${t.w}x${t.h})`;
 
+        const preview = document.createElement('div');
+        preview.className = 'ytk-preview';
+        const previewImg = document.createElement('img');
+        previewImg.className = 'ytk-preview-img';
+        previewImg.src = dataUrl;
+        previewImg.alt = `${t.label} 미리보기`;
+        preview.appendChild(previewImg);
+
         card.appendChild(title);
-        card.appendChild(canvas);
+        card.appendChild(preview);
         card.appendChild(link);
         wrap.appendChild(card);
 

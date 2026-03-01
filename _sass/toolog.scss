@@ -412,11 +412,27 @@ a:hover { color: #fff; text-decoration: none; }
   margin-bottom: .4rem;
   font-size: .82rem;
 }
-.ytk-card canvas {
+#ytk-run,
+#ytk-download-all {
+  cursor: pointer;
+}
+
+.ytk-preview {
   width: 100%;
+  aspect-ratio: 16 / 10;
   border: 1px solid var(--line);
   border-radius: 8px;
   margin-bottom: .45rem;
+  background: #0a1120;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.ytk-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .font-change-controls {
