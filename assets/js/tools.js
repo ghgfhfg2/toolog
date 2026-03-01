@@ -440,16 +440,36 @@
       list.innerHTML = '';
       fontMap.forEach((font) => {
         const out = font.convert(value || 'Hello Font');
-        const item = document.createElement('button');
-        item.type = 'button';
+
+        const item = document.createElement('div');
         item.className = 'font-preview-item';
-        item.innerHTML = `<strong>${font.label}</strong><span>${out}</span>`;
-        item.addEventListener('click', async () => {
+
+        const head = document.createElement('div');
+        head.className = 'font-preview-head';
+
+        const label = document.createElement('strong');
+        label.textContent = font.label;
+
+        const copyBtn = document.createElement('button');
+        copyBtn.type = 'button';
+        copyBtn.className = 'font-copy-btn';
+        copyBtn.textContent = '복사';
+
+        const text = document.createElement('span');
+        text.className = 'font-preview-text';
+        text.textContent = out;
+
+        copyBtn.addEventListener('click', async () => {
           await copyText(out);
           item.classList.add('copied');
           setTimeout(() => item.classList.remove('copied'), 650);
           showToast();
         });
+
+        head.appendChild(label);
+        head.appendChild(copyBtn);
+        item.appendChild(head);
+        item.appendChild(text);
         list.appendChild(item);
       });
     };
