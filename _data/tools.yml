@@ -25,6 +25,15 @@
   url: /tools/youtube-image-kit/
   thumbnail: /assets/thumbs/youtube-image-kit.svg
 
+- id: image-upscaler
+  title: 이미지 업스케일러
+  category: image
+  category_label: 이미지/그래픽
+  badge: New
+  description: 작은 이미지를 화질 손실을 줄여 2x·3x·4x로 확대해요.
+  url: /tools/image-upscaler/
+  thumbnail: /assets/thumbs/image-upscaler.svg
+
 - id: font-change
   title: 폰트 변환기
   category: text

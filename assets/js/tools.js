@@ -563,6 +563,109 @@
     render();
   }
 
+  if (slug === 'image-upscaler') {
+    const file = document.getElementById('iu-file');
+    const scaleSel = document.getElementById('iu-scale');
+    const run = document.getElementById('iu-run');
+    const sharp = document.getElementById('iu-sharp');
+    const canvas = document.getElementById('iu-canvas');
+    const link = document.getElementById('iu-download');
+    const result = document.getElementById('iu-result');
+
+    let img = null;
+    let originBytes = 0;
+
+    file?.addEventListener('change', () => {
+      const f = file.files?.[0];
+      if (!f) return;
+      originBytes = f.size || 0;
+      const u = URL.createObjectURL(f);
+      const i = new Image();
+      i.onload = () => {
+        img = i;
+        URL.revokeObjectURL(u);
+        if (result) result.textContent = `원본: ${i.width}x${i.height}px / ${formatNum(originBytes)} bytes`;
+      };
+      i.src = u;
+    });
+
+    const applySharpen = (ctx, w, h) => {
+      const src = ctx.getImageData(0, 0, w, h);
+      const out = ctx.createImageData(w, h);
+      const d = src.data;
+      const o = out.data;
+      const k = [0, -1, 0, -1, 5, -1, 0, -1, 0];
+      for (let y = 1; y < h - 1; y++) {
+        for (let x = 1; x < w - 1; x++) {
+          for (let c = 0; c < 3; c++) {
+            let sum = 0;
+            let ki = 0;
+            for (let ky = -1; ky <= 1; ky++) {
+              for (let kx = -1; kx <= 1; kx++) {
+                const idx = ((y + ky) * w + (x + kx)) * 4 + c;
+                sum += d[idx] * k[ki++];
+              }
+            }
+            const oi = (y * w + x) * 4 + c;
+            o[oi] = Math.max(0, Math.min(255, sum));
+          }
+          const aIdx = (y * w + x) * 4 + 3;
+          o[aIdx] = d[aIdx];
+        }
+      }
+      ctx.putImageData(out, 0, 0);
+    };
+
+    run?.addEventListener('click', () => {
+      if (!img) return;
+      const scale = Number(scaleSel?.value || 2);
+      const w = Math.max(1, Math.round(img.width * scale));
+      const h = Math.max(1, Math.round(img.height * scale));
+      canvas.width = w;
+      canvas.height = h;
+
+      const ctx = canvas.getContext('2d');
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+
+      const stepCanvas = document.createElement('canvas');
+      const stepCtx = stepCanvas.getContext('2d');
+      stepCanvas.width = img.width;
+      stepCanvas.height = img.height;
+      stepCtx.drawImage(img, 0, 0);
+
+      // 다단계 업스케일로 품질 저하 완화
+      let cw = img.width;
+      let ch = img.height;
+      while (cw * 2 < w && ch * 2 < h) {
+        const nw = Math.min(w, Math.round(cw * 2));
+        const nh = Math.min(h, Math.round(ch * 2));
+        const temp = document.createElement('canvas');
+        temp.width = nw;
+        temp.height = nh;
+        const tctx = temp.getContext('2d');
+        tctx.imageSmoothingEnabled = true;
+        tctx.imageSmoothingQuality = 'high';
+        tctx.drawImage(stepCanvas, 0, 0, cw, ch, 0, 0, nw, nh);
+        stepCanvas.width = nw;
+        stepCanvas.height = nh;
+        stepCtx.clearRect(0, 0, nw, nh);
+        stepCtx.drawImage(temp, 0, 0);
+        cw = nw;
+        ch = nh;
+      }
+
+      ctx.drawImage(stepCanvas, 0, 0, cw, ch, 0, 0, w, h);
+      if (sharp?.checked) applySharpen(ctx, w, h);
+
+      const data = canvas.toDataURL('image/png');
+      link.href = data;
+      const outBytes = Math.floor((data.length * 3) / 4);
+      const ratio = originBytes ? ((outBytes / originBytes) * 100).toFixed(1) : '0';
+      if (result) result.textContent = `결과: ${w}x${h}px / ${formatNum(outBytes)} bytes (원본 대비 ${ratio}%)`;
+    });
+  }
+
   if (slug === 'font-change') {
     const input = document.getElementById('fc-input');
     const list = document.getElementById('fc-list');

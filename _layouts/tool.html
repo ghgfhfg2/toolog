@@ -136,6 +136,22 @@ layout: default
           <button id="ytk-download-all" type="button">전체 다운로드</button>
           <div id="ytk-list" class="ytk-grid"></div>
         </div>
+      {% when 'image-upscaler' %}
+        <div class="tool-ui">
+          <input id="iu-file" type="file" accept="image/*" />
+          <div class="tool-row-grid pct-grid">
+            <select id="iu-scale">
+              <option value="2">2x 업스케일</option>
+              <option value="3">3x 업스케일</option>
+              <option value="4">4x 업스케일</option>
+            </select>
+            <button id="iu-run" type="button">화질 보정 업스케일</button>
+          </div>
+          <label class="tool-check"><input id="iu-sharp" type="checkbox" checked /> 선명도 보정(가벼운 샤픈)</label>
+          <p class="tool-result" id="iu-result">작은 이미지를 선택한 뒤 업스케일을 실행하세요.</p>
+          <canvas id="iu-canvas"></canvas>
+          <a id="iu-download" class="open-link" download="upscaled-image.png">다운로드</a>
+        </div>
       {% when 'font-change' %}
         <div class="tool-ui font-change-ui">
           <textarea id="fc-input" maxlength="500" placeholder="텍스트를 입력하세요"></textarea>
