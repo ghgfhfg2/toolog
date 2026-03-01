@@ -238,21 +238,42 @@ layout: default
       {% when 'loan-calculator' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
-            <input id="loan-amount" type="number" min="0" step="10000" placeholder="대출금액(원)" />
-            <input id="loan-rate" type="number" min="0" step="0.01" placeholder="연이율(%)" />
+            <div>
+              <label for="loan-amount">대출금액(원)</label>
+              <input id="loan-amount" type="number" min="0" step="10000" placeholder="예: 100000000" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="loan-rate">연이율(%)</label>
+              <input id="loan-rate" type="number" min="0" step="0.01" placeholder="예: 4.2" inputmode="decimal" />
+            </div>
           </div>
           <div class="tool-row-grid pct-grid">
-            <input id="loan-years" type="number" min="1" step="1" placeholder="상환기간(년)" />
-            <select id="loan-type">
-              <option value="equal-payment">원리금균등상환</option>
-              <option value="equal-principal">원금균등상환</option>
-            </select>
+            <div>
+              <label for="loan-years">상환기간(년)</label>
+              <input id="loan-years" type="number" min="1" step="1" placeholder="예: 30" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="loan-type">상환방식</label>
+              <select id="loan-type">
+                <option value="equal-payment">원리금균등상환</option>
+                <option value="equal-principal">원금균등상환</option>
+              </select>
+            </div>
+          </div>
+          <div class="tool-row-grid pct-actions">
+            <button id="loan-copy" type="button">결과 복사</button>
+            <button id="loan-reset" type="button">초기화</button>
           </div>
           <div class="tool-stats">
             <div><strong id="loan-monthly">-</strong><span>월 납입액(첫 달)</span></div>
             <div><strong id="loan-total-interest">-</strong><span>총 이자</span></div>
             <div><strong id="loan-total-payment">-</strong><span>총 상환액</span></div>
             <div><strong id="loan-month-count">-</strong><span>총 납입 횟수</span></div>
+          </div>
+          <div class="tool-compare" id="loan-compare" aria-live="polite">
+            <p><strong>상환방식 비교</strong></p>
+            <p class="tool-result" id="loan-compare-payment">원리금균등: - / 원금균등(첫 달): -</p>
+            <p class="tool-result" id="loan-compare-interest">총 이자 차이: -</p>
           </div>
           <p class="tool-result" id="loan-help">금액·이율·기간을 입력하면 월 납입액과 총 이자를 계산합니다.</p>
         </div>

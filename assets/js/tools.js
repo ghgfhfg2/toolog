@@ -829,36 +829,25 @@
     const rate = document.getElementById('loan-rate');
     const years = document.getElementById('loan-years');
     const type = document.getElementById('loan-type');
+    const copyBtn = document.getElementById('loan-copy');
+    const resetBtn = document.getElementById('loan-reset');
     const monthly = document.getElementById('loan-monthly');
     const totalInterest = document.getElementById('loan-total-interest');
     const totalPayment = document.getElementById('loan-total-payment');
     const monthCount = document.getElementById('loan-month-count');
+    const comparePayment = document.getElementById('loan-compare-payment');
+    const compareInterest = document.getElementById('loan-compare-interest');
     const help = document.getElementById('loan-help');
 
-    if (!amount || !rate || !years || !type || !monthly || !totalInterest || !totalPayment || !monthCount || !help) return;
+    if (!amount || !rate || !years || !type || !monthly || !totalInterest || !totalPayment || !monthCount || !comparePayment || !compareInterest || !help) return;
 
     const fmtKRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
 
-    const render = () => {
-      const principal = Number(amount.value || 0);
-      const annualRate = Number(rate.value || 0);
-      const yearTerm = Number(years.value || 0);
-      const n = Math.round(yearTerm * 12);
-
-      if (!(principal > 0) || !(yearTerm > 0) || n <= 0 || annualRate < 0) {
-        monthly.textContent = '-';
-        totalInterest.textContent = '-';
-        totalPayment.textContent = '-';
-        monthCount.textContent = '-';
-        help.textContent = '대출금액·연이율·상환기간을 올바르게 입력하세요.';
-        return;
-      }
-
-      const r = annualRate / 100 / 12;
+    const calcPlan = ({ principal, n, r, mode }) => {
       let firstMonthly = 0;
       let total = 0;
 
-      if (type.value === 'equal-principal') {
+      if (mode === 'equal-principal') {
         const principalPerMonth = principal / n;
         let remaining = principal;
         for (let i = 0; i < n; i++) {
@@ -877,15 +866,82 @@
         total = firstMonthly * n;
       }
 
-      const interestSum = Math.max(0, total - principal);
-      monthly.textContent = fmtKRW(firstMonthly);
-      totalInterest.textContent = fmtKRW(interestSum);
-      totalPayment.textContent = fmtKRW(total);
+      return {
+        firstMonthly,
+        total,
+        interest: Math.max(0, total - principal)
+      };
+    };
+
+    const setInvalid = () => {
+      monthly.textContent = '-';
+      totalInterest.textContent = '-';
+      totalPayment.textContent = '-';
+      monthCount.textContent = '-';
+      comparePayment.textContent = '원리금균등: - / 원금균등(첫 달): -';
+      compareInterest.textContent = '총 이자 차이: -';
+      help.textContent = '대출금액·연이율·상환기간을 올바르게 입력하세요.';
+    };
+
+    const render = () => {
+      const principal = Number(amount.value || 0);
+      const annualRate = Number(rate.value || 0);
+      const yearTerm = Number(years.value || 0);
+      const n = Math.round(yearTerm * 12);
+
+      if (!(principal > 0) || !(yearTerm > 0) || n <= 0 || annualRate < 0) {
+        setInvalid();
+        return;
+      }
+
+      const r = annualRate / 100 / 12;
+      const equalPayment = calcPlan({ principal, n, r, mode: 'equal-payment' });
+      const equalPrincipal = calcPlan({ principal, n, r, mode: 'equal-principal' });
+      const selected = type.value === 'equal-principal' ? equalPrincipal : equalPayment;
+
+      monthly.textContent = fmtKRW(selected.firstMonthly);
+      totalInterest.textContent = fmtKRW(selected.interest);
+      totalPayment.textContent = fmtKRW(selected.total);
       monthCount.textContent = `${n.toLocaleString('ko-KR')}회`;
+
+      comparePayment.textContent = `원리금균등: ${fmtKRW(equalPayment.firstMonthly)} / 원금균등(첫 달): ${fmtKRW(equalPrincipal.firstMonthly)}`;
+
+      const diffInterest = equalPrincipal.interest - equalPayment.interest;
+      if (Math.abs(diffInterest) < 1) {
+        compareInterest.textContent = '총 이자 차이: 거의 없음';
+      } else if (diffInterest < 0) {
+        compareInterest.textContent = `총 이자 차이: 원금균등이 ${fmtKRW(Math.abs(diffInterest))} 더 적음`;
+      } else {
+        compareInterest.textContent = `총 이자 차이: 원리금균등이 ${fmtKRW(Math.abs(diffInterest))} 더 적음`;
+      }
+
       help.textContent = `${type.options[type.selectedIndex].text} 기준 추정값입니다. 실제 대출은 수수료·우대금리·중도상환 여부에 따라 달라질 수 있습니다.`;
     };
 
     [amount, rate, years, type].forEach((el) => el.addEventListener('input', render));
+
+    resetBtn?.addEventListener('click', () => {
+      amount.value = 100000000;
+      rate.value = 4.2;
+      years.value = 30;
+      type.value = 'equal-payment';
+      render();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      const text = [
+        `대출 계산 결과 (${type.options[type.selectedIndex].text})`,
+        `월 납입액(첫 달): ${monthly.textContent}`,
+        `총 이자: ${totalInterest.textContent}`,
+        `총 상환액: ${totalPayment.textContent}`,
+        comparePayment.textContent,
+        compareInterest.textContent
+      ].join(' | ');
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
 
     if (!amount.value) amount.value = 100000000;
     if (!rate.value) rate.value = 4.2;
