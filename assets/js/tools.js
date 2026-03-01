@@ -547,8 +547,8 @@
           showToast();
         });
 
-        body.appendChild(copyBtn);
         body.appendChild(text);
+        body.appendChild(copyBtn);
         item.appendChild(label);
         item.appendChild(body);
         list.appendChild(item);
