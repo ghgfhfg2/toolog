@@ -444,11 +444,11 @@
         const item = document.createElement('div');
         item.className = 'font-preview-item';
 
-        const head = document.createElement('div');
-        head.className = 'font-preview-head';
-
         const label = document.createElement('strong');
         label.textContent = font.label;
+
+        const body = document.createElement('div');
+        body.className = 'font-preview-body';
 
         const copyBtn = document.createElement('button');
         copyBtn.type = 'button';
@@ -466,10 +466,10 @@
           showToast();
         });
 
-        head.appendChild(label);
-        head.appendChild(copyBtn);
-        item.appendChild(head);
-        item.appendChild(text);
+        body.appendChild(copyBtn);
+        body.appendChild(text);
+        item.appendChild(label);
+        item.appendChild(body);
         list.appendChild(item);
       });
     };
