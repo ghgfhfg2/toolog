@@ -430,6 +430,7 @@ a:hover { color: #fff; text-decoration: none; }
   color: var(--text);
   border-radius: 10px;
   padding: .7rem .75rem;
+  cursor: pointer;
   transition: border-color .12s ease, background .12s ease;
 }
 .font-preview-item:hover {
@@ -447,28 +448,7 @@ a:hover { color: #fff; text-decoration: none; }
   margin-bottom: .35rem;
 }
 .font-preview-body {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: .55rem;
-}
-.tool-ui .font-copy-btn {
-  width: auto !important;
-  min-width: 56px;
-  flex: 0 0 auto;
-  align-self: center;
-  border: 1px solid #3b82f6;
-  background: rgba(59,130,246,.18);
-  color: #dbeafe;
-  border-radius: 8px;
-  padding: .26rem .62rem;
-  font-size: .78rem;
-  font-weight: 700;
-  line-height: 1.35;
-  cursor: pointer;
-}
-.tool-ui .font-copy-btn:hover {
-  background: rgba(59,130,246,.28);
+  display: block;
 }
 .font-preview-text {
   display: block;
@@ -477,7 +457,6 @@ a:hover { color: #fff; text-decoration: none; }
   word-break: break-word;
   letter-spacing: .01em;
   min-width: 0;
-  padding-right: .15rem;
 }
 .copy-toast {
   position: fixed;

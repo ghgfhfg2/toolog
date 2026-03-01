@@ -531,16 +531,11 @@
         const body = document.createElement('div');
         body.className = 'font-preview-body';
 
-        const copyBtn = document.createElement('button');
-        copyBtn.type = 'button';
-        copyBtn.className = 'font-copy-btn';
-        copyBtn.textContent = '복사';
-
         const text = document.createElement('span');
         text.className = 'font-preview-text';
         text.textContent = out;
 
-        copyBtn.addEventListener('click', async () => {
+        item.addEventListener('click', async () => {
           await copyText(out);
           item.classList.add('copied');
           setTimeout(() => item.classList.remove('copied'), 650);
@@ -548,7 +543,6 @@
         });
 
         body.appendChild(text);
-        body.appendChild(copyBtn);
         item.appendChild(label);
         item.appendChild(body);
         list.appendChild(item);
