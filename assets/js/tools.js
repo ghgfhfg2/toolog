@@ -377,4 +377,88 @@
       }
     });
   }
+
+  if (slug === 'font-change') {
+    const input = document.getElementById('fc-input');
+    const list = document.getElementById('fc-list');
+    const toast = document.getElementById('fc-toast');
+    if (!input || !list) return;
+
+    const mapByOffset = (str, startUpper, startLower, startDigit = null) =>
+      Array.from(str).map((ch) => {
+        const code = ch.codePointAt(0);
+        if (code >= 65 && code <= 90) return String.fromCodePoint(startUpper + (code - 65));
+        if (code >= 97 && code <= 122) return String.fromCodePoint(startLower + (code - 97));
+        if (startDigit !== null && code >= 48 && code <= 57) return String.fromCodePoint(startDigit + (code - 48));
+        return ch;
+      }).join('');
+
+    const enclosed = (str, upperBase, lowerBase, digitMap = null) =>
+      Array.from(str).map((ch) => {
+        const code = ch.codePointAt(0);
+        if (code >= 65 && code <= 90) return String.fromCodePoint(upperBase + (code - 65));
+        if (code >= 97 && code <= 122) return String.fromCodePoint(lowerBase + (code - 97));
+        if (digitMap && code >= 48 && code <= 57) return digitMap[code - 48] || ch;
+        return ch;
+      }).join('');
+
+    const fontMap = [
+      { key: 'normal', label: 'Normal', convert: (s) => s },
+      { key: 'bold', label: 'Bold', convert: (s) => mapByOffset(s, 0x1D400, 0x1D41A, 0x1D7CE) },
+      { key: 'italic', label: 'Italic', convert: (s) => mapByOffset(s, 0x1D434, 0x1D44E) },
+      { key: 'bold-italic', label: 'Bold Italic', convert: (s) => mapByOffset(s, 0x1D468, 0x1D482) },
+      { key: 'monospace', label: 'Monospace', convert: (s) => mapByOffset(s, 0x1D670, 0x1D68A, 0x1D7F6) },
+      { key: 'bubble', label: 'Bubble', convert: (s) => enclosed(s, 0x24B6, 0x24D0, ['⓪','①','②','③','④','⑤','⑥','⑦','⑧','⑨']) },
+      { key: 'double-struck', label: 'Double Struck', convert: (s) => mapByOffset(s, 0x1D538, 0x1D552, 0x1D7D8) },
+      { key: 'small-caps', label: 'Small Caps 느낌', convert: (s) => s.replace(/[a-z]/g, (c) => ({a:'ᴀ',b:'ʙ',c:'ᴄ',d:'ᴅ',e:'ᴇ',f:'ꜰ',g:'ɢ',h:'ʜ',i:'ɪ',j:'ᴊ',k:'ᴋ',l:'ʟ',m:'ᴍ',n:'ɴ',o:'ᴏ',p:'ᴘ',q:'ǫ',r:'ʀ',s:'s',t:'ᴛ',u:'ᴜ',v:'ᴠ',w:'ᴡ',x:'x',y:'ʏ',z:'ᴢ'}[c] || c)) }
+    ];
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (e) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    let t;
+    const showToast = () => {
+      if (!toast) return;
+      toast.classList.add('show');
+      clearTimeout(t);
+      t = setTimeout(() => toast.classList.remove('show'), 800);
+    };
+
+    const render = () => {
+      const value = (input.value || '').slice(0, 500);
+      list.innerHTML = '';
+      fontMap.forEach((font) => {
+        const out = font.convert(value || 'Hello Font');
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = 'font-preview-item';
+        item.innerHTML = `<strong>${font.label}</strong><span>${out}</span>`;
+        item.addEventListener('click', async () => {
+          await copyText(out);
+          item.classList.add('copied');
+          setTimeout(() => item.classList.remove('copied'), 650);
+          showToast();
+        });
+        list.appendChild(item);
+      });
+    };
+
+    let timer;
+    input.addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = setTimeout(render, 80);
+    });
+    render();
+  }
 })();

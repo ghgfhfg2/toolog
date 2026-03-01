@@ -25,6 +25,15 @@
   url: /tools/youtube-image-kit/
   thumbnail: /assets/thumbs/youtube-image-kit.svg
 
+- id: font-change
+  title: 폰트 변환기
+  category: text
+  category_label: 텍스트/편집
+  badge: New
+  description: 입력하면 다양한 유니코드 폰트로 실시간 변환하고 클릭 복사해요.
+  url: /tools/font-change/
+  thumbnail: /assets/thumbs/font-change.svg
+
 - id: text-counter
   title: 글자수 계산기
   category: text

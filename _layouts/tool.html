@@ -136,6 +136,13 @@ layout: default
           <button id="ytk-download-all" type="button">전체 다운로드</button>
           <div id="ytk-list" class="ytk-grid"></div>
         </div>
+      {% when 'font-change' %}
+        <div class="tool-ui font-change-ui">
+          <textarea id="fc-input" maxlength="500" placeholder="텍스트를 입력하세요"></textarea>
+          <p class="tool-result">입력 즉시 모든 스타일이 변환됩니다. 원하는 블록을 클릭하면 자동 복사됩니다.</p>
+          <div id="fc-list" class="font-preview-list"></div>
+          <div id="fc-toast" class="copy-toast" aria-live="polite">복사되었습니다</div>
+        </div>
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
     {% endcase %}
