@@ -568,6 +568,7 @@
     const scaleSel = document.getElementById('iu-scale');
     const run = document.getElementById('iu-run');
     const sharp = document.getElementById('iu-sharp');
+    const denoise = document.getElementById('iu-denoise');
     const canvas = document.getElementById('iu-canvas');
     const link = document.getElementById('iu-download');
     const result = document.getElementById('iu-result');
@@ -616,6 +617,33 @@
       ctx.putImageData(out, 0, 0);
     };
 
+    const applyDenoise = (ctx, w, h) => {
+      const src = ctx.getImageData(0, 0, w, h);
+      const out = ctx.createImageData(w, h);
+      const d = src.data;
+      const o = out.data;
+      for (let y = 1; y < h - 1; y++) {
+        for (let x = 1; x < w - 1; x++) {
+          for (let c = 0; c < 3; c++) {
+            let sum = 0;
+            let count = 0;
+            for (let ky = -1; ky <= 1; ky++) {
+              for (let kx = -1; kx <= 1; kx++) {
+                const idx = ((y + ky) * w + (x + kx)) * 4 + c;
+                sum += d[idx];
+                count++;
+              }
+            }
+            const oi = (y * w + x) * 4 + c;
+            o[oi] = Math.round(sum / count);
+          }
+          const aIdx = (y * w + x) * 4 + 3;
+          o[aIdx] = d[aIdx];
+        }
+      }
+      ctx.putImageData(out, 0, 0);
+    };
+
     run?.addEventListener('click', () => {
       if (!img) return;
       const scale = Number(scaleSel?.value || 2);
@@ -656,13 +684,19 @@
       }
 
       ctx.drawImage(stepCanvas, 0, 0, cw, ch, 0, 0, w, h);
+      if (denoise?.checked) applyDenoise(ctx, w, h);
       if (sharp?.checked) applySharpen(ctx, w, h);
 
       const data = canvas.toDataURL('image/png');
       link.href = data;
       const outBytes = Math.floor((data.length * 3) / 4);
       const ratio = originBytes ? ((outBytes / originBytes) * 100).toFixed(1) : '0';
-      if (result) result.textContent = `결과: ${w}x${h}px / ${formatNum(outBytes)} bytes (원본 대비 ${ratio}%)`;
+      const mode = [
+        scale === 1 ? '1x 보정' : `${scale}x 업스케일`,
+        denoise?.checked ? '노이즈 감소 ON' : '노이즈 감소 OFF',
+        sharp?.checked ? '샤픈 ON' : '샤픈 OFF'
+      ].join(' · ');
+      if (result) result.textContent = `결과: ${w}x${h}px / ${formatNum(outBytes)} bytes (원본 대비 ${ratio}%) · ${mode}`;
     });
   }
 
