@@ -486,7 +486,18 @@
     const input = document.getElementById('fc-input');
     const list = document.getElementById('fc-list');
     const toast = document.getElementById('fc-toast');
+    const showFavBtn = document.getElementById('fc-show-fav');
+    const clearFavBtn = document.getElementById('fc-clear-fav');
     if (!input || !list) return;
+
+    const favStoreKey = 'toolog-font-favorites-v1';
+    let favorites = new Set();
+    let onlyFav = false;
+
+    try {
+      const saved = JSON.parse(localStorage.getItem(favStoreKey) || '[]');
+      if (Array.isArray(saved)) favorites = new Set(saved);
+    } catch (_) {}
 
     const mapByOffset = (str, startUpper, startLower, startDigit = null) =>
       Array.from(str).map((ch) => {
@@ -621,6 +632,8 @@
       }
     };
 
+    const saveFav = () => localStorage.setItem(favStoreKey, JSON.stringify(Array.from(favorites)));
+
     let t;
     const showToast = () => {
       if (!toast) return;
@@ -629,14 +642,32 @@
       t = setTimeout(() => toast.classList.remove('show'), 800);
     };
 
+    const updateFavBtnText = () => {
+      if (!showFavBtn) return;
+      showFavBtn.textContent = `★ 즐겨찾기만 보기: ${onlyFav ? 'ON' : 'OFF'}`;
+    };
+
     const render = () => {
       const value = (input.value || '').slice(0, 500);
       list.innerHTML = '';
-      fontMap.forEach((font) => {
+      const targets = onlyFav ? fontMap.filter((f) => favorites.has(f.key)) : fontMap;
+
+      if (!targets.length) {
+        list.innerHTML = '<div class="empty-state">즐겨찾기된 폰트가 없습니다.</div>';
+        return;
+      }
+
+      targets.forEach((font) => {
         const out = font.convert(value || 'Hello Font');
 
         const item = document.createElement('div');
         item.className = 'font-preview-item';
+
+        const favBtn = document.createElement('button');
+        favBtn.type = 'button';
+        favBtn.className = `font-fav-btn ${favorites.has(font.key) ? 'active' : ''}`;
+        favBtn.textContent = favorites.has(font.key) ? '★' : '☆';
+        favBtn.title = '즐겨찾기';
 
         const body = document.createElement('div');
         body.className = 'font-preview-body';
@@ -644,6 +675,14 @@
         const text = document.createElement('span');
         text.className = 'font-preview-text';
         text.textContent = out;
+
+        favBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (favorites.has(font.key)) favorites.delete(font.key);
+          else favorites.add(font.key);
+          saveFav();
+          render();
+        });
 
         item.addEventListener('click', async () => {
           await copyText(out);
@@ -653,6 +692,7 @@
         });
 
         body.appendChild(text);
+        item.appendChild(favBtn);
         item.appendChild(body);
         list.appendChild(item);
       });
@@ -663,6 +703,20 @@
       clearTimeout(timer);
       timer = setTimeout(render, 80);
     });
+
+    showFavBtn?.addEventListener('click', () => {
+      onlyFav = !onlyFav;
+      updateFavBtnText();
+      render();
+    });
+
+    clearFavBtn?.addEventListener('click', () => {
+      favorites.clear();
+      saveFav();
+      render();
+    });
+
+    updateFavBtnText();
     render();
   }
 })();

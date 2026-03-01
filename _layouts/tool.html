@@ -139,7 +139,11 @@ layout: default
       {% when 'font-change' %}
         <div class="tool-ui font-change-ui">
           <textarea id="fc-input" maxlength="500" placeholder="텍스트를 입력하세요"></textarea>
-          <p class="tool-result">입력 즉시 모든 스타일이 변환됩니다. 원하는 폰트 항목을 클릭하면 바로 복사됩니다.</p>
+          <div class="font-change-controls">
+            <button id="fc-show-fav" type="button">★ 즐겨찾기만 보기: OFF</button>
+            <button id="fc-clear-fav" type="button">즐겨찾기 초기화</button>
+          </div>
+          <p class="tool-result">입력 즉시 모든 스타일이 변환됩니다. 항목 클릭 시 복사되고, ★로 즐겨찾기 저장됩니다.</p>
           <div id="fc-list" class="font-preview-list"></div>
           <div id="fc-toast" class="copy-toast" aria-live="polite">복사되었습니다</div>
         </div>

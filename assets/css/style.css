@@ -420,11 +420,21 @@ a:hover { color: #fff; text-decoration: none; }
   margin-bottom: .45rem;
 }
 
+.font-change-controls {
+  display: flex;
+  gap: .45rem;
+  flex-wrap: wrap;
+}
+.font-change-controls button {
+  width: auto;
+}
+
 .font-preview-list {
   display: grid;
   gap: .55rem;
 }
 .font-preview-item {
+  position: relative;
   text-align: left;
   border: 1px solid var(--line);
   background: #10192c;
@@ -442,14 +452,26 @@ a:hover { color: #fff; text-decoration: none; }
   border-color: #22c55e;
   box-shadow: 0 0 0 2px rgba(34,197,94,.2);
 }
-.font-preview-item strong {
-  display: block;
-  font-size: .8rem;
-  color: #93c5fd;
-  margin-bottom: .35rem;
+.font-fav-btn {
+  position: absolute;
+  right: .45rem;
+  top: .45rem;
+  width: auto !important;
+  border: 1px solid #475569;
+  background: rgba(15,23,42,.7);
+  color: #cbd5e1;
+  border-radius: 6px;
+  font-size: .72rem;
+  padding: .08rem .34rem;
+  cursor: pointer;
+}
+.font-fav-btn.active {
+  color: #facc15;
+  border-color: #ca8a04;
 }
 .font-preview-body {
   display: block;
+  padding-right: 2rem;
 }
 .font-preview-text {
   display: block;
