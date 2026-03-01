@@ -487,12 +487,14 @@
     const list = document.getElementById('fc-list');
     const toast = document.getElementById('fc-toast');
     const showFavBtn = document.getElementById('fc-show-fav');
+    const showAllBtn = document.getElementById('fc-show-all');
     const clearFavBtn = document.getElementById('fc-clear-fav');
     if (!input || !list) return;
 
     const favStoreKey = 'toolog-font-favorites-v1';
     let favorites = new Set();
     let onlyFav = false;
+    let showAll = false;
 
     try {
       const saved = JSON.parse(localStorage.getItem(favStoreKey) || '[]');
@@ -675,6 +677,13 @@
       { key: 'alt-box', label: 'Alt Box', convert: (s) => s.replace(/[asxcASXC]/g, (c) => ({a:'卂',s:'丂',x:'乂',c:'匚',A:'卂',S:'丂',X:'乂',C:'匚'}[c] || c)) }
     ];
 
+    const safeKeys = new Set([
+      'normal','bold','italic','bold-italic','sans','sans-bold','sans-italic','sans-bold-italic',
+      'script-bold','fraktur-bold','double-struck','monospace','small-caps','small-caps-strict',
+      'circled','parenthesized','full-width','upside-down','strike-through','underline','slash','crossed',
+      'overline','underline-overline','long-strike','double-slash','superscript','subscript','thai-comb-1a5a','wing-only','mini-bottom-align','bottom-mix'
+    ]);
+
     const copyText = async (text) => {
       try {
         await navigator.clipboard.writeText(text);
@@ -699,15 +708,16 @@
       t = setTimeout(() => toast.classList.remove('show'), 800);
     };
 
-    const updateFavBtnText = () => {
-      if (!showFavBtn) return;
-      showFavBtn.textContent = `★ 즐겨찾기만 보기: ${onlyFav ? 'ON' : 'OFF'}`;
+    const updateButtonsText = () => {
+      if (showFavBtn) showFavBtn.textContent = `★ 즐겨찾기만 보기: ${onlyFav ? 'ON' : 'OFF'}`;
+      if (showAllBtn) showAllBtn.textContent = `확장 폰트 보기: ${showAll ? 'ON' : 'OFF'}`;
     };
 
     const render = () => {
       const value = (input.value || '').slice(0, 500);
       list.innerHTML = '';
-      const targets = onlyFav ? fontMap.filter((f) => favorites.has(f.key)) : fontMap;
+      let targets = showAll ? fontMap : fontMap.filter((f) => safeKeys.has(f.key));
+      if (onlyFav) targets = targets.filter((f) => favorites.has(f.key));
 
       if (!targets.length) {
         list.innerHTML = '<div class="empty-state">즐겨찾기된 폰트가 없습니다.</div>';
@@ -763,7 +773,13 @@
 
     showFavBtn?.addEventListener('click', () => {
       onlyFav = !onlyFav;
-      updateFavBtnText();
+      updateButtonsText();
+      render();
+    });
+
+    showAllBtn?.addEventListener('click', () => {
+      showAll = !showAll;
+      updateButtonsText();
       render();
     });
 
@@ -773,7 +789,7 @@
       render();
     });
 
-    updateFavBtnText();
+    updateButtonsText();
     render();
   }
 })();
