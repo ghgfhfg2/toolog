@@ -394,7 +394,21 @@ a:hover { color: #fff; text-decoration: none; }
 .tool-stats > div { border: 1px solid var(--line); border-radius: 10px; padding: .65rem; background: #1f2937; }
 .tool-stats strong { display:block; font-size: 1.05rem; }
 .tool-stats span { font-size: .78rem; color: var(--muted); }
-#ir-canvas,#pc-canvas,#iu-canvas { width: 100%; max-height: 420px; border: 1px solid var(--line); border-radius: 10px; background: #0b1222; }
+#ir-canvas,#pc-canvas,#iu-canvas {
+  display: block;
+  width: 100% !important;
+  max-width: 100%;
+  height: auto !important;
+  max-height: 420px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #0b1222;
+  object-fit: contain;
+}
+
+.tool-page__run {
+  overflow: hidden;
+}
 
 .ytk-grid {
   display: grid;
