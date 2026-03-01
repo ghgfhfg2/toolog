@@ -352,12 +352,12 @@
         drawFrame(ctx, img, t.w, t.h, fit.value || 'cover', bg?.value || '#0f172a');
         const dataUrl = canvas.toDataURL('image/png');
 
-        // 미리보기는 항상 contain으로 보여서 잘리지 않게 표시
+        // 미리보기는 카드 높이에 꽉 차도록 렌더링
         const previewCanvas = document.createElement('canvas');
         previewCanvas.width = t.w;
         previewCanvas.height = t.h;
         const pctx = previewCanvas.getContext('2d');
-        drawFrame(pctx, img, t.w, t.h, 'contain', bg?.value || '#0f172a');
+        drawFrame(pctx, img, t.w, t.h, fit.value || 'cover', bg?.value || '#0f172a');
         const previewUrl = previewCanvas.toDataURL('image/png');
 
         const link = document.createElement('a');
