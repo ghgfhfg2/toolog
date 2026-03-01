@@ -143,6 +143,41 @@ layout: default
           <div id="fc-list" class="font-preview-list"></div>
           <div id="fc-toast" class="copy-toast" aria-live="polite">복사되었습니다</div>
         </div>
+      {% when 'percent-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row">
+            <label>계산 유형</label>
+            <select id="pct-mode">
+              <option value="percent-of">A의 B% 계산</option>
+              <option value="ratio">A는 B의 몇 %인지</option>
+              <option value="change">증감률 계산</option>
+            </select>
+          </div>
+
+          <div id="pct-fields-percent-of" class="tool-row-grid pct-grid">
+            <input id="pct-base" type="number" step="any" placeholder="기준값 A (예: 250000)" />
+            <input id="pct-rate" type="number" step="any" placeholder="비율 B% (예: 12)" />
+          </div>
+
+          <div id="pct-fields-ratio" class="tool-row-grid pct-grid" hidden>
+            <input id="pct-part" type="number" step="any" placeholder="부분값 A" />
+            <input id="pct-whole" type="number" step="any" placeholder="전체값 B" />
+          </div>
+
+          <div id="pct-fields-change" class="tool-row-grid pct-grid" hidden>
+            <input id="pct-old" type="number" step="any" placeholder="이전값" />
+            <input id="pct-new" type="number" step="any" placeholder="현재값" />
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="pct-result-main">0</strong><span>주요 결과</span></div>
+            <div><strong id="pct-result-sub">0</strong><span>보조 결과</span></div>
+            <div><strong id="pct-result-diff">0</strong><span>차이값</span></div>
+            <div><strong id="pct-result-type">-</strong><span>판정</span></div>
+          </div>
+
+          <p class="tool-result" id="pct-help">A의 B%를 즉시 계산합니다.</p>
+        </div>
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
     {% endcase %}

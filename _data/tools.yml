@@ -78,3 +78,12 @@
   description: 국가별 시차를 계산해 회의 시간을 정확히 맞춰요.
   url: /tools/timezone-converter/
   thumbnail: /assets/thumbs/timezone-converter.svg
+
+- id: percent-calculator
+  title: 퍼센트 계산기
+  category: data
+  category_label: 데이터/계산
+  badge: New
+  description: 비율·증감률·백분율 계산을 한 화면에서 빠르게 처리해요.
+  url: /tools/percent-calculator/
+  thumbnail: /assets/thumbs/percent-calculator.svg

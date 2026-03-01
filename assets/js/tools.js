@@ -378,6 +378,110 @@
     });
   }
 
+  if (slug === 'percent-calculator') {
+    const mode = document.getElementById('pct-mode');
+    const fields = {
+      'percent-of': document.getElementById('pct-fields-percent-of'),
+      ratio: document.getElementById('pct-fields-ratio'),
+      change: document.getElementById('pct-fields-change')
+    };
+
+    const inputs = {
+      base: document.getElementById('pct-base'),
+      rate: document.getElementById('pct-rate'),
+      part: document.getElementById('pct-part'),
+      whole: document.getElementById('pct-whole'),
+      old: document.getElementById('pct-old'),
+      now: document.getElementById('pct-new')
+    };
+
+    const main = document.getElementById('pct-result-main');
+    const sub = document.getElementById('pct-result-sub');
+    const diff = document.getElementById('pct-result-diff');
+    const type = document.getElementById('pct-result-type');
+    const help = document.getElementById('pct-help');
+
+    if (!mode || !main || !sub || !diff || !type || !help) return;
+
+    const fmt = (v, max = 4) => {
+      if (!Number.isFinite(v)) return '-';
+      return v.toLocaleString('ko-KR', { maximumFractionDigits: max });
+    };
+
+    const showByMode = () => {
+      Object.entries(fields).forEach(([k, el]) => {
+        if (el) el.hidden = k !== mode.value;
+      });
+    };
+
+    const render = () => {
+      const currentMode = mode.value || 'percent-of';
+      showByMode();
+
+      if (currentMode === 'percent-of') {
+        const base = Number(inputs.base?.value || 0);
+        const rate = Number(inputs.rate?.value || 0);
+        const result = base * (rate / 100);
+
+        main.textContent = `${fmt(result)} `;
+        sub.textContent = `${fmt(rate)}%`;
+        diff.textContent = `${fmt(base - result)} `;
+        type.textContent = result === 0 ? '0%' : (result > 0 ? '양수 결과' : '음수 결과');
+        help.textContent = `${fmt(base)}의 ${fmt(rate)}% = ${fmt(result)}`;
+      }
+
+      if (currentMode === 'ratio') {
+        const part = Number(inputs.part?.value || 0);
+        const whole = Number(inputs.whole?.value || 0);
+
+        if (whole === 0) {
+          main.textContent = '-';
+          sub.textContent = '-';
+          diff.textContent = '-';
+          type.textContent = '계산 불가';
+          help.textContent = '전체값(B)이 0이면 백분율을 계산할 수 없습니다.';
+          return;
+        }
+
+        const ratio = (part / whole) * 100;
+        const remain = whole - part;
+
+        main.textContent = `${fmt(ratio)}%`;
+        sub.textContent = `${fmt(part)} / ${fmt(whole)}`;
+        diff.textContent = `${fmt(remain)} `;
+        type.textContent = ratio > 100 ? '100% 초과' : '정상 범위';
+        help.textContent = `${fmt(part)}는 ${fmt(whole)}의 ${fmt(ratio)}%입니다.`;
+      }
+
+      if (currentMode === 'change') {
+        const oldVal = Number(inputs.old?.value || 0);
+        const newVal = Number(inputs.now?.value || 0);
+
+        if (oldVal === 0) {
+          main.textContent = '-';
+          sub.textContent = '-';
+          diff.textContent = `${fmt(newVal - oldVal)}`;
+          type.textContent = '계산 불가';
+          help.textContent = '이전값이 0이면 증감률(%)을 계산할 수 없습니다.';
+          return;
+        }
+
+        const delta = newVal - oldVal;
+        const rate = (delta / oldVal) * 100;
+
+        main.textContent = `${fmt(rate)}%`;
+        sub.textContent = `${fmt(oldVal)} → ${fmt(newVal)}`;
+        diff.textContent = `${fmt(delta)} `;
+        type.textContent = delta > 0 ? '증가' : (delta < 0 ? '감소' : '변화 없음');
+        help.textContent = `이전값 ${fmt(oldVal)} 대비 ${fmt(newVal)}는 ${fmt(rate)}% ${delta > 0 ? '증가' : (delta < 0 ? '감소' : '변화 없음')}입니다.`;
+      }
+    };
+
+    mode.addEventListener('change', render);
+    Object.values(inputs).forEach((input) => input?.addEventListener('input', render));
+    render();
+  }
+
   if (slug === 'font-change') {
     const input = document.getElementById('fc-input');
     const list = document.getElementById('fc-list');

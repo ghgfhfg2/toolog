@@ -376,6 +376,7 @@ a:hover { color: #fff; text-decoration: none; }
 .tool-ui textarea { min-height: 120px; resize: vertical; }
 .tool-row { display: grid; gap: .4rem; }
 .tool-row-grid { display: grid; gap: .5rem; grid-template-columns: 1fr 1fr auto 1fr; align-items: center; }
+.pct-grid { grid-template-columns: 1fr 1fr; }
 .tz-grid { grid-template-columns: 1fr 1fr 1fr; }
 .cc-grid { grid-template-columns: repeat(5, 1fr); }
 .tool-check {

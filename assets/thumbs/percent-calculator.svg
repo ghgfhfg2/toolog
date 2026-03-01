@@ -1,0 +1,33 @@
+<svg width="800" height="500" viewBox="0 0 800 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="800" y2="500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#1E3A8A"/>
+    </linearGradient>
+    <linearGradient id="card" x1="180" y1="110" x2="620" y2="390" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1E293B"/>
+      <stop offset="1" stop-color="#0B1222"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="500" rx="26" fill="url(#bg)"/>
+  <circle cx="112" cy="78" r="78" fill="#38BDF8" fill-opacity="0.14"/>
+  <circle cx="706" cy="430" r="106" fill="#60A5FA" fill-opacity="0.16"/>
+
+  <rect x="180" y="105" width="440" height="290" rx="24" fill="url(#card)" stroke="#334155" stroke-width="2"/>
+  <rect x="215" y="145" width="180" height="34" rx="10" fill="#0F172A" stroke="#334155"/>
+  <rect x="405" y="145" width="180" height="34" rx="10" fill="#0F172A" stroke="#334155"/>
+
+  <text x="245" y="168" fill="#93C5FD" font-family="Pretendard, Arial, sans-serif" font-size="20" font-weight="700">A</text>
+  <text x="438" y="168" fill="#93C5FD" font-family="Pretendard, Arial, sans-serif" font-size="20" font-weight="700">B%</text>
+
+  <rect x="215" y="197" width="370" height="44" rx="12" fill="#111827" stroke="#334155"/>
+  <text x="237" y="225" fill="#E2E8F0" font-family="Pretendard, Arial, sans-serif" font-size="22" font-weight="800">RESULT: 12,500</text>
+
+  <line x1="287" y1="310" x2="513" y2="180" stroke="#60A5FA" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="287" cy="310" r="14" fill="#38BDF8"/>
+  <circle cx="513" cy="180" r="14" fill="#22C55E"/>
+
+  <text x="325" y="360" fill="#BFDBFE" font-family="Pretendard, Arial, sans-serif" font-size="64" font-weight="900">%</text>
+  <text x="36" y="462" fill="#E2E8F0" font-family="Pretendard, Arial, sans-serif" font-size="34" font-weight="800">TOOLOG · Percent Calculator</text>
+</svg>
