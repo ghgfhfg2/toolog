@@ -508,6 +508,15 @@
         return ch;
       }).join('');
 
+    const mapByAlphabet = (str, upperAlphabet, lowerAlphabet, digitAlphabet = null) =>
+      Array.from(str).map((ch) => {
+        const code = ch.codePointAt(0);
+        if (code >= 65 && code <= 90) return upperAlphabet[code - 65] || ch;
+        if (code >= 97 && code <= 122) return lowerAlphabet[code - 97] || ch;
+        if (digitAlphabet && code >= 48 && code <= 57) return digitAlphabet[code - 48] || ch;
+        return ch;
+      }).join('');
+
     const enclosed = (str, upperBase, lowerBase, digitMap = null) =>
       Array.from(str).map((ch) => {
         const code = ch.codePointAt(0);
@@ -538,13 +547,26 @@
       { key: 'sans-bold-italic', label: 'Sans Bold Italic', convert: (s) => mapByOffset(s, 0x1D63C, 0x1D656) },
 
       // Script / Fraktur
-      { key: 'script', label: 'Script', convert: (s) => mapByOffset(s, 0x1D49C, 0x1D4B6) },
+      { key: 'script', label: 'Script', convert: (s) => mapByAlphabet(
+        s,
+        ['𝒜','ℬ','𝒞','𝒟','ℰ','ℱ','𝒢','ℋ','ℐ','𝒥','𝒦','ℒ','ℳ','𝒩','𝒪','𝒫','𝒬','ℛ','𝒮','𝒯','𝒰','𝒱','𝒲','𝒳','𝒴','𝒵'],
+        ['𝒶','𝒷','𝒸','𝒹','ℯ','𝒻','ℊ','𝒽','𝒾','𝒿','𝓀','𝓁','𝓂','𝓃','ℴ','𝓅','𝓆','𝓇','𝓈','𝓉','𝓊','𝓋','𝓌','𝓍','𝓎','𝓏']
+      ) },
       { key: 'script-bold', label: 'Script Bold', convert: (s) => mapByOffset(s, 0x1D4D0, 0x1D4EA) },
-      { key: 'fraktur', label: 'Fraktur', convert: (s) => mapByOffset(s, 0x1D504, 0x1D51E) },
+      { key: 'fraktur', label: 'Fraktur', convert: (s) => mapByAlphabet(
+        s,
+        ['𝔄','𝔅','ℭ','𝔇','𝔈','𝔉','𝔊','ℌ','ℑ','𝔍','𝔎','𝔏','𝔐','𝔑','𝔒','𝔓','𝔔','ℜ','𝔖','𝔗','𝔘','𝔙','𝔚','𝔛','𝔜','ℨ'],
+        ['𝔞','𝔟','𝔠','𝔡','𝔢','𝔣','𝔤','𝔥','𝔦','𝔧','𝔨','𝔩','𝔪','𝔫','𝔬','𝔭','𝔮','𝔯','𝔰','𝔱','𝔲','𝔳','𝔴','𝔵','𝔶','𝔷']
+      ) },
       { key: 'fraktur-bold', label: 'Fraktur Bold', convert: (s) => mapByOffset(s, 0x1D56C, 0x1D586) },
 
       // Special
-      { key: 'double-struck', label: 'Double Struck', convert: (s) => mapByOffset(s, 0x1D538, 0x1D552, 0x1D7D8) },
+      { key: 'double-struck', label: 'Double Struck', convert: (s) => mapByAlphabet(
+        s,
+        ['𝔸','𝔹','ℂ','𝔻','𝔼','𝔽','𝔾','ℍ','𝕀','𝕁','𝕂','𝕃','𝕄','ℕ','𝕆','ℙ','ℚ','ℝ','𝕊','𝕋','𝕌','𝕍','𝕎','𝕏','𝕐','ℤ'],
+        ['𝕒','𝕓','𝕔','𝕕','𝕖','𝕗','𝕘','𝕙','𝕚','𝕛','𝕜','𝕝','𝕞','𝕟','𝕠','𝕡','𝕢','𝕣','𝕤','𝕥','𝕦','𝕧','𝕨','𝕩','𝕪','𝕫'],
+        ['𝟘','𝟙','𝟚','𝟛','𝟜','𝟝','𝟞','𝟟','𝟠','𝟡']
+      ) },
       { key: 'monospace', label: 'Monospace', convert: (s) => mapByOffset(s, 0x1D670, 0x1D68A, 0x1D7F6) },
       { key: 'small-caps', label: 'Small Caps', convert: (s) => s.replace(/[a-z]/g, (c) => ({a:'ᴀ',b:'ʙ',c:'ᴄ',d:'ᴅ',e:'ᴇ',f:'ꜰ',g:'ɢ',h:'ʜ',i:'ɪ',j:'ᴊ',k:'ᴋ',l:'ʟ',m:'ᴍ',n:'ɴ',o:'ᴏ',p:'ᴘ',q:'ǫ',r:'ʀ',s:'s',t:'ᴛ',u:'ᴜ',v:'ᴠ',w:'ᴡ',x:'x',y:'ʏ',z:'ᴢ'}[c] || c)) },
       { key: 'small-caps-strict', label: 'Small Caps (Strict)', convert: (s) => {
