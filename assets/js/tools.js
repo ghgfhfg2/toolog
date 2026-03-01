@@ -706,6 +706,7 @@
     const businessOnly = document.getElementById('dday-business-only');
     const label = document.getElementById('dday-label');
     const days = document.getElementById('dday-days');
+    const daysLabel = document.getElementById('dday-days-label');
     const inclusive = document.getElementById('dday-inclusive');
     const business = document.getElementById('dday-business');
     const help = document.getElementById('dday-help');
@@ -726,12 +727,15 @@
     const countBusinessDaysInclusive = (a, b) => {
       const startDate = a <= b ? a : b;
       const endDate = a <= b ? b : a;
-      let count = 0;
-      const cursor = new Date(startDate);
-      while (cursor <= endDate) {
-        const day = cursor.getDay();
+      const totalDays = dayDiff(startDate, endDate) + 1;
+      const fullWeeks = Math.floor(totalDays / 7);
+      const remainder = totalDays % 7;
+
+      let count = fullWeeks * 5;
+      const startDay = startDate.getDay();
+      for (let i = 0; i < remainder; i++) {
+        const day = (startDay + i) % 7;
         if (day !== 0 && day !== 6) count++;
-        cursor.setDate(cursor.getDate() + 1);
       }
       return count;
     };
@@ -758,6 +762,7 @@
       if (!s || !e) {
         label.textContent = '-';
         days.textContent = '-';
+        if (daysLabel) daysLabel.textContent = '달력일 차이';
         inclusive.textContent = '-';
         business.textContent = '-';
         help.textContent = '기준일과 목표일을 선택하면 결과가 계산됩니다.';
@@ -766,13 +771,16 @@
 
       const diff = dayDiff(s, e);
       const absDiff = Math.abs(diff);
-      const calendarText = `${absDiff.toLocaleString('ko-KR')}일`;
       const inclusiveDays = absDiff + 1;
       const weekdayCount = countBusinessDaysInclusive(s, e);
+      const businessDiff = Math.max(weekdayCount - 1, 0);
+      const useBusiness = !!businessOnly?.checked;
 
-      const dLabel = diff > 0 ? `D-${absDiff}` : (diff < 0 ? `D+${absDiff}` : 'D-day');
+      const shownDiff = useBusiness ? businessDiff : absDiff;
+      const dLabel = shownDiff === 0 ? 'D-day' : (diff > 0 ? `D-${shownDiff}` : `D+${shownDiff}`);
       label.textContent = dLabel;
-      days.textContent = calendarText;
+      days.textContent = `${shownDiff.toLocaleString('ko-KR')}일`;
+      if (daysLabel) daysLabel.textContent = useBusiness ? '업무일 차이' : '달력일 차이';
       inclusive.textContent = `${inclusiveDays.toLocaleString('ko-KR')}일`;
       business.textContent = `${weekdayCount.toLocaleString('ko-KR')}일`;
 
@@ -780,14 +788,12 @@
       const endWeek = new Intl.DateTimeFormat('ko-KR', { weekday: 'short' }).format(e);
 
       const diffText = diff > 0
-        ? `목표일까지 ${absDiff.toLocaleString('ko-KR')}일 남았습니다.`
-        : (diff < 0 ? `목표일이 ${absDiff.toLocaleString('ko-KR')}일 지났습니다.` : '오늘이 목표일입니다.');
+        ? `목표일까지 ${shownDiff.toLocaleString('ko-KR')}${useBusiness ? '업무일' : '일'} 남았습니다.`
+        : (diff < 0
+          ? `목표일이 ${shownDiff.toLocaleString('ko-KR')}${useBusiness ? '업무일' : '일'} 지났습니다.`
+          : '오늘이 목표일입니다.');
 
       help.textContent = `${start.value}(${startWeek}) → ${end.value}(${endWeek}) · ${diffText}`;
-
-      if (businessOnly?.checked) {
-        days.textContent = `${weekdayCount.toLocaleString('ko-KR')}일`;
-      }
     };
 
     const today = new Date();
@@ -807,7 +813,8 @@
     });
 
     copyBtn?.addEventListener('click', async () => {
-      const text = `D-day ${label.textContent} | 달력일 차이 ${days.textContent} | 포함 일수 ${inclusive.textContent} | 업무일 ${business.textContent}`;
+      const metricLabel = daysLabel?.textContent || '달력일 차이';
+      const text = `D-day ${label.textContent} | ${metricLabel} ${days.textContent} | 포함 일수 ${inclusive.textContent} | 업무일 ${business.textContent}`;
       await copyText(text);
       const old = copyBtn.textContent;
       copyBtn.textContent = '복사됨';

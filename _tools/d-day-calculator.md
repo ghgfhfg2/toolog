@@ -5,6 +5,9 @@ category: calculator
 category_label: 일정/생산성
 thumbnail: /assets/thumbs/d-day-calculator.svg
 tool_key: d-day-calculator
+image:
+  path: /assets/thumbs/d-day-calculator.svg
+  alt: 디데이 계산기 결과 카드 예시 썸네일
 keywords: [디데이 계산기, 날짜 계산기, 날짜 차이 계산, 기념일 계산, 남은 일수 계산]
 related_tools: [timezone-converter, percent-calculator]
 faq:
