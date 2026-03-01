@@ -206,6 +206,35 @@ layout: default
 
           <p class="tool-result" id="pct-help">값을 입력하면 결과가 즉시 계산됩니다.</p>
         </div>
+      {% when 'd-day-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="dday-start">기준일</label>
+              <input id="dday-start" type="date" />
+            </div>
+            <div>
+              <label for="dday-end">목표일</label>
+              <input id="dday-end" type="date" />
+            </div>
+          </div>
+
+          <label class="tool-check"><input id="dday-business-only" type="checkbox" /> 주말 제외(업무일 기준)</label>
+
+          <div class="tool-stats">
+            <div><strong id="dday-label">-</strong><span>D-day</span></div>
+            <div><strong id="dday-days">-</strong><span>달력일 차이</span></div>
+            <div><strong id="dday-inclusive">-</strong><span>포함 일수</span></div>
+            <div><strong id="dday-business">-</strong><span>업무일(평일)</span></div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="dday-swap" type="button">날짜 바꾸기</button>
+            <button id="dday-copy" type="button">결과 복사</button>
+          </div>
+
+          <p class="tool-result" id="dday-help">기준일과 목표일을 선택하면 결과가 계산됩니다.</p>
+        </div>
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
     {% endcase %}

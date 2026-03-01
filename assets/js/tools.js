@@ -700,6 +700,123 @@
     });
   }
 
+  if (slug === 'd-day-calculator') {
+    const start = document.getElementById('dday-start');
+    const end = document.getElementById('dday-end');
+    const businessOnly = document.getElementById('dday-business-only');
+    const label = document.getElementById('dday-label');
+    const days = document.getElementById('dday-days');
+    const inclusive = document.getElementById('dday-inclusive');
+    const business = document.getElementById('dday-business');
+    const help = document.getElementById('dday-help');
+    const swapBtn = document.getElementById('dday-swap');
+    const copyBtn = document.getElementById('dday-copy');
+
+    if (!start || !end || !label || !days || !inclusive || !business || !help) return;
+
+    const toLocalDateOnly = (v) => {
+      if (!v) return null;
+      const [y, m, d] = v.split('-').map(Number);
+      if (!y || !m || !d) return null;
+      return new Date(y, m - 1, d);
+    };
+
+    const dayDiff = (a, b) => Math.round((b.getTime() - a.getTime()) / 86400000);
+
+    const countBusinessDaysInclusive = (a, b) => {
+      const startDate = a <= b ? a : b;
+      const endDate = a <= b ? b : a;
+      let count = 0;
+      const cursor = new Date(startDate);
+      while (cursor <= endDate) {
+        const day = cursor.getDay();
+        if (day !== 0 && day !== 6) count++;
+        cursor.setDate(cursor.getDate() + 1);
+      }
+      return count;
+    };
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const render = () => {
+      const s = toLocalDateOnly(start.value);
+      const e = toLocalDateOnly(end.value);
+
+      if (!s || !e) {
+        label.textContent = '-';
+        days.textContent = '-';
+        inclusive.textContent = '-';
+        business.textContent = '-';
+        help.textContent = '기준일과 목표일을 선택하면 결과가 계산됩니다.';
+        return;
+      }
+
+      const diff = dayDiff(s, e);
+      const absDiff = Math.abs(diff);
+      const calendarText = `${absDiff.toLocaleString('ko-KR')}일`;
+      const inclusiveDays = absDiff + 1;
+      const weekdayCount = countBusinessDaysInclusive(s, e);
+
+      const dLabel = diff > 0 ? `D-${absDiff}` : (diff < 0 ? `D+${absDiff}` : 'D-day');
+      label.textContent = dLabel;
+      days.textContent = calendarText;
+      inclusive.textContent = `${inclusiveDays.toLocaleString('ko-KR')}일`;
+      business.textContent = `${weekdayCount.toLocaleString('ko-KR')}일`;
+
+      const startWeek = new Intl.DateTimeFormat('ko-KR', { weekday: 'short' }).format(s);
+      const endWeek = new Intl.DateTimeFormat('ko-KR', { weekday: 'short' }).format(e);
+
+      const diffText = diff > 0
+        ? `목표일까지 ${absDiff.toLocaleString('ko-KR')}일 남았습니다.`
+        : (diff < 0 ? `목표일이 ${absDiff.toLocaleString('ko-KR')}일 지났습니다.` : '오늘이 목표일입니다.');
+
+      help.textContent = `${start.value}(${startWeek}) → ${end.value}(${endWeek}) · ${diffText}`;
+
+      if (businessOnly?.checked) {
+        days.textContent = `${weekdayCount.toLocaleString('ko-KR')}일`;
+      }
+    };
+
+    const today = new Date();
+    const nextWeek = new Date(today);
+    nextWeek.setDate(today.getDate() + 7);
+    const toISO = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    if (!start.value) start.value = toISO(today);
+    if (!end.value) end.value = toISO(nextWeek);
+
+    [start, end, businessOnly].forEach((el) => el?.addEventListener('input', render));
+
+    swapBtn?.addEventListener('click', () => {
+      const temp = start.value;
+      start.value = end.value;
+      end.value = temp;
+      render();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      const text = `D-day ${label.textContent} | 달력일 차이 ${days.textContent} | 포함 일수 ${inclusive.textContent} | 업무일 ${business.textContent}`;
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    render();
+  }
+
   if (slug === 'font-change') {
     const input = document.getElementById('fc-input');
     const list = document.getElementById('fc-list');

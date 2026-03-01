@@ -96,3 +96,12 @@
   description: 비율·증감률·백분율 계산을 한 화면에서 빠르게 처리해요.
   url: /tools/percent-calculator/
   thumbnail: /assets/thumbs/percent-calculator.svg
+
+- id: d-day-calculator
+  title: 디데이 계산기
+  category: data
+  category_label: 일정/생산성
+  badge: New
+  description: 목표일까지 남은 일수·경과일·업무일을 한 번에 계산해요.
+  url: /tools/d-day-calculator/
+  thumbnail: /assets/thumbs/d-day-calculator.svg
