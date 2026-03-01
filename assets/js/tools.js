@@ -534,9 +534,6 @@
         const item = document.createElement('div');
         item.className = 'font-preview-item';
 
-        const label = document.createElement('strong');
-        label.textContent = font.label;
-
         const body = document.createElement('div');
         body.className = 'font-preview-body';
 
@@ -552,7 +549,6 @@
         });
 
         body.appendChild(text);
-        item.appendChild(label);
         item.appendChild(body);
         list.appendChild(item);
       });
