@@ -135,7 +135,8 @@ layout: default
     <h2>함께 쓰면 좋은 도구</h2>
     <div class="related-grid">
       {% for rel in site.tools %}
-        {% if page.related_tools contains rel.tool_key %}
+        {% assign rel_key = rel.tool_key %}
+        {% if page.related_tools contains rel_key %}
         <a class="related-card" href="{{ rel.url | relative_url }}">
           <strong>{{ rel.title }}</strong>
           <span>{{ rel.description }}</span>
