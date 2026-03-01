@@ -94,7 +94,15 @@ a:hover { color: #fff; text-decoration: none; }
 .highlight .na, .highlight .nx, .highlight .nb { color: #79c0ff !important; }
 .highlight .mi, .highlight .mf, .highlight .m { color: #f2cc60 !important; }
 .highlight .c, .highlight .c1, .highlight .cm { color: #8b949e !important; }
-.highlight .o, .highlight .p { color: #c9d1d9 !important; }
+.highlight .o, .highlight .p { color: #dbe4ee !important; }
+
+/* HTML/XML 태그 가독성 보정 */
+.highlight .nt { color: #7ee787 !important; font-weight: 600; }
+.highlight .nl { color: #79c0ff !important; }
+.highlight .nc { color: #ffa657 !important; }
+.highlight .err { color: #ffd1dc !important; background: rgba(255, 99, 132, 0.16) !important; }
+.highlight .w { color: #c9d1d9 !important; }
+
 
 .post-content code,
 .tool-page__content code {
