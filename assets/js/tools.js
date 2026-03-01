@@ -824,6 +824,76 @@
     render();
   }
 
+  if (slug === 'loan-calculator') {
+    const amount = document.getElementById('loan-amount');
+    const rate = document.getElementById('loan-rate');
+    const years = document.getElementById('loan-years');
+    const type = document.getElementById('loan-type');
+    const monthly = document.getElementById('loan-monthly');
+    const totalInterest = document.getElementById('loan-total-interest');
+    const totalPayment = document.getElementById('loan-total-payment');
+    const monthCount = document.getElementById('loan-month-count');
+    const help = document.getElementById('loan-help');
+
+    if (!amount || !rate || !years || !type || !monthly || !totalInterest || !totalPayment || !monthCount || !help) return;
+
+    const fmtKRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
+
+    const render = () => {
+      const principal = Number(amount.value || 0);
+      const annualRate = Number(rate.value || 0);
+      const yearTerm = Number(years.value || 0);
+      const n = Math.round(yearTerm * 12);
+
+      if (!(principal > 0) || !(yearTerm > 0) || n <= 0 || annualRate < 0) {
+        monthly.textContent = '-';
+        totalInterest.textContent = '-';
+        totalPayment.textContent = '-';
+        monthCount.textContent = '-';
+        help.textContent = '대출금액·연이율·상환기간을 올바르게 입력하세요.';
+        return;
+      }
+
+      const r = annualRate / 100 / 12;
+      let firstMonthly = 0;
+      let total = 0;
+
+      if (type.value === 'equal-principal') {
+        const principalPerMonth = principal / n;
+        let remaining = principal;
+        for (let i = 0; i < n; i++) {
+          const interest = remaining * r;
+          const pay = principalPerMonth + interest;
+          if (i === 0) firstMonthly = pay;
+          total += pay;
+          remaining -= principalPerMonth;
+        }
+      } else {
+        if (r === 0) {
+          firstMonthly = principal / n;
+        } else {
+          firstMonthly = principal * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+        }
+        total = firstMonthly * n;
+      }
+
+      const interestSum = Math.max(0, total - principal);
+      monthly.textContent = fmtKRW(firstMonthly);
+      totalInterest.textContent = fmtKRW(interestSum);
+      totalPayment.textContent = fmtKRW(total);
+      monthCount.textContent = `${n.toLocaleString('ko-KR')}회`;
+      help.textContent = `${type.options[type.selectedIndex].text} 기준 추정값입니다. 실제 대출은 수수료·우대금리·중도상환 여부에 따라 달라질 수 있습니다.`;
+    };
+
+    [amount, rate, years, type].forEach((el) => el.addEventListener('input', render));
+
+    if (!amount.value) amount.value = 100000000;
+    if (!rate.value) rate.value = 4.2;
+    if (!years.value) years.value = 30;
+
+    render();
+  }
+
   if (slug === 'font-change') {
     const input = document.getElementById('fc-input');
     const list = document.getElementById('fc-list');
