@@ -36,6 +36,49 @@ body {
 a { color: #dbe3f0; }
 a:hover { color: #fff; text-decoration: none; }
 
+/* Readability fixes for code/content contrast */
+.post-content,
+.tool-page__content {
+  color: #e5e7eb;
+}
+
+.post-content pre,
+.post-content .highlight,
+.tool-page__content pre,
+.tool-page__content .highlight {
+  background: #0b1220 !important;
+  color: #e6edf3 !important;
+  border: 1px solid #253046;
+  border-radius: 10px;
+  padding: .85rem;
+  overflow-x: auto;
+}
+
+.post-content pre code,
+.post-content .highlight code,
+.tool-page__content pre code,
+.tool-page__content .highlight code {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+.post-content code,
+.tool-page__content code {
+  background: rgba(59, 130, 246, 0.14);
+  color: #dbeafe;
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  border-radius: 6px;
+  padding: .08rem .35rem;
+}
+
+.post-content blockquote,
+.tool-page__content blockquote {
+  border-left: 3px solid #3b82f6;
+  color: #cbd5e1;
+  margin-left: 0;
+  padding-left: .8rem;
+}
+
 .discover { padding: 1rem 0 1.4rem; }
 
 .discover__head {
