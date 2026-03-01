@@ -290,4 +290,91 @@
       }
     });
   }
+
+  if (slug === 'youtube-image-kit') {
+    const file = document.getElementById('ytk-file');
+    const fit = document.getElementById('ytk-fit');
+    const bg = document.getElementById('ytk-bg');
+    const run = document.getElementById('ytk-run');
+    const wrap = document.getElementById('ytk-list');
+    const result = document.getElementById('ytk-result');
+    const allBtn = document.getElementById('ytk-download-all');
+
+    const targets = [
+      { key: 'thumbnail', label: '유튜브 썸네일', w: 1280, h: 720 },
+      { key: 'shorts-cover', label: '쇼츠 커버', w: 1080, h: 1920 },
+      { key: 'channel-banner', label: '채널 배너', w: 2560, h: 1440 },
+      { key: 'channel-icon', label: '채널 아이콘', w: 800, h: 800 },
+      { key: 'watermark', label: '워터마크', w: 150, h: 150 }
+    ];
+
+    let img = null;
+    let renders = [];
+
+    const drawFrame = (ctx, image, w, h, mode, bgColor) => {
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, w, h);
+      const scale = mode === 'cover'
+        ? Math.max(w / image.width, h / image.height)
+        : Math.min(w / image.width, h / image.height);
+      const dw = image.width * scale;
+      const dh = image.height * scale;
+      const dx = (w - dw) / 2;
+      const dy = (h - dh) / 2;
+      ctx.drawImage(image, dx, dy, dw, dh);
+    };
+
+    file?.addEventListener('change', () => {
+      const f = file.files?.[0];
+      if (!f) return;
+      const u = URL.createObjectURL(f);
+      const i = new Image();
+      i.onload = () => {
+        img = i;
+        URL.revokeObjectURL(u);
+        if (result) result.textContent = `원본: ${i.width}x${i.height}px · 생성 준비 완료`;
+      };
+      i.src = u;
+    });
+
+    run?.addEventListener('click', () => {
+      if (!img || !wrap) return;
+      wrap.innerHTML = '';
+      renders = [];
+      targets.forEach((t) => {
+        const card = document.createElement('div');
+        card.className = 'ytk-card';
+
+        const canvas = document.createElement('canvas');
+        canvas.width = t.w;
+        canvas.height = t.h;
+        const ctx = canvas.getContext('2d');
+        drawFrame(ctx, img, t.w, t.h, fit.value || 'cover', bg?.value || '#0f172a');
+
+        const link = document.createElement('a');
+        link.className = 'open-link';
+        link.textContent = `${t.label} 다운로드`;
+        link.download = `${t.key}-${t.w}x${t.h}.png`;
+        link.href = canvas.toDataURL('image/png');
+
+        const title = document.createElement('strong');
+        title.textContent = `${t.label} (${t.w}x${t.h})`;
+
+        card.appendChild(title);
+        card.appendChild(canvas);
+        card.appendChild(link);
+        wrap.appendChild(card);
+
+        renders.push(link);
+      });
+      if (result) result.textContent = `${targets.length}개 출력 이미지를 생성했습니다.`;
+    });
+
+    allBtn?.addEventListener('click', async () => {
+      for (const a of renders) {
+        a.click();
+        await new Promise((r) => setTimeout(r, 180));
+      }
+    });
+  }
 })();

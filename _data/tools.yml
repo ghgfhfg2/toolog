@@ -16,6 +16,15 @@
   url: /tools/image-resizer/
   thumbnail: /assets/thumbs/image-resizer.svg
 
+- id: youtube-image-kit
+  title: 유튜브 이미지 세트 메이커
+  category: image
+  category_label: 이미지/그래픽
+  badge: New
+  description: 이미지 1장으로 썸네일·쇼츠·배너·아이콘·워터마크를 한 번에 만들어요.
+  url: /tools/youtube-image-kit/
+  thumbnail: /assets/thumbs/youtube-image-kit.svg
+
 - id: text-counter
   title: 글자수 계산기
   category: text
