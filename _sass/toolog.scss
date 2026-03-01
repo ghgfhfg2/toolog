@@ -54,6 +54,31 @@ a:hover { color: #fff; text-decoration: none; }
   overflow-x: auto;
 }
 
+/* Rouge table-based highlight 가독성 보정 */
+.post-content .highlight table,
+.post-content .highlight tr,
+.post-content .highlight td,
+.tool-page__content .highlight table,
+.tool-page__content .highlight tr,
+.tool-page__content .highlight td {
+  border: 0 !important;
+  background: transparent !important;
+}
+.post-content .highlight td,
+.tool-page__content .highlight td {
+  padding: 0 !important;
+}
+.post-content .highlight .rouge-gutter,
+.tool-page__content .highlight .rouge-gutter {
+  user-select: none;
+  opacity: .45;
+  padding-right: .8rem !important;
+}
+.post-content .highlight .rouge-code,
+.tool-page__content .highlight .rouge-code {
+  padding-left: .2rem !important;
+}
+
 .post-content pre code,
 .post-content .highlight code,
 .tool-page__content pre code,
@@ -61,6 +86,15 @@ a:hover { color: #fff; text-decoration: none; }
   background: transparent !important;
   color: inherit !important;
 }
+
+/* 토큰 색 대비 강화 */
+.highlight .k { color: #ff7ab8 !important; }
+.highlight .kd, .highlight .kr, .highlight .kt { color: #ff7ab8 !important; }
+.highlight .s, .highlight .s1, .highlight .s2 { color: #9be9a8 !important; }
+.highlight .na, .highlight .nx, .highlight .nb { color: #79c0ff !important; }
+.highlight .mi, .highlight .mf, .highlight .m { color: #f2cc60 !important; }
+.highlight .c, .highlight .c1, .highlight .cm { color: #8b949e !important; }
+.highlight .o, .highlight .p { color: #c9d1d9 !important; }
 
 .post-content code,
 .tool-page__content code {
