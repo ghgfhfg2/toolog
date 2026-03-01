@@ -8,7 +8,9 @@
 {% endif %}
 {% if page.thumbnail %}
 <meta property="og:image" content="{{ page.thumbnail | absolute_url }}">
+<meta property="og:image:alt" content="{{ page.title }} 대표 이미지">
 <meta name="twitter:image" content="{{ page.thumbnail | absolute_url }}">
+<meta name="twitter:image:alt" content="{{ page.title }} 대표 이미지">
 {% endif %}
 {% if page.robots %}
 <meta name="robots" content="{{ page.robots }}">

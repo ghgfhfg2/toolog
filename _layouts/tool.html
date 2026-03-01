@@ -175,13 +175,18 @@ layout: default
           </div>
 
           <div class="tool-stats">
-            <div><strong id="pct-result-main">0</strong><span>주요 결과</span></div>
-            <div><strong id="pct-result-sub">0</strong><span>보조 결과</span></div>
-            <div><strong id="pct-result-diff">0</strong><span>차이값</span></div>
-            <div><strong id="pct-result-type">-</strong><span>판정</span></div>
+            <div><strong id="pct-result-main">-</strong><span>주요 결과</span></div>
+            <div><strong id="pct-result-sub">-</strong><span>보조 결과</span></div>
+            <div><strong id="pct-result-diff">-</strong><span>차이값</span></div>
+            <div><strong id="pct-result-type">입력 대기</strong><span>판정</span></div>
           </div>
 
-          <p class="tool-result" id="pct-help">A의 B%를 즉시 계산합니다.</p>
+          <div class="tool-row-grid pct-actions">
+            <button id="pct-copy" type="button">결과 복사</button>
+            <button id="pct-reset" type="button">초기화</button>
+          </div>
+
+          <p class="tool-result" id="pct-help">값을 입력하면 결과가 즉시 계산됩니다.</p>
         </div>
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>

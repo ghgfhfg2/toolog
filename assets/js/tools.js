@@ -400,12 +400,29 @@
     const diff = document.getElementById('pct-result-diff');
     const type = document.getElementById('pct-result-type');
     const help = document.getElementById('pct-help');
+    const copyBtn = document.getElementById('pct-copy');
+    const resetBtn = document.getElementById('pct-reset');
 
     if (!mode || !main || !sub || !diff || !type || !help) return;
 
-    const fmt = (v, max = 4) => {
+    const fmt = (v, max = 6) => {
       if (!Number.isFinite(v)) return '-';
       return v.toLocaleString('ko-KR', { maximumFractionDigits: max });
+    };
+
+    const parseRequired = (el) => {
+      const raw = (el?.value || '').trim();
+      if (raw === '') return null;
+      const n = Number(raw);
+      return Number.isFinite(n) ? n : null;
+    };
+
+    const setIdle = (msg = '필수 값을 입력하면 결과가 계산됩니다.') => {
+      main.textContent = '-';
+      sub.textContent = '-';
+      diff.textContent = '-';
+      type.textContent = '입력 대기';
+      help.textContent = msg;
     };
 
     const showByMode = () => {
@@ -414,25 +431,51 @@
       });
     };
 
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
     const render = () => {
       const currentMode = mode.value || 'percent-of';
       showByMode();
 
       if (currentMode === 'percent-of') {
-        const base = Number(inputs.base?.value || 0);
-        const rate = Number(inputs.rate?.value || 0);
-        const result = base * (rate / 100);
+        const base = parseRequired(inputs.base);
+        const rate = parseRequired(inputs.rate);
+        if (base === null || rate === null) {
+          setIdle('기준값 A와 비율 B를 입력하세요.');
+          return;
+        }
 
-        main.textContent = `${fmt(result)} `;
+        const result = base * (rate / 100);
+        const remain = base - result;
+
+        main.textContent = fmt(result);
         sub.textContent = `${fmt(rate)}%`;
-        diff.textContent = `${fmt(base - result)} `;
+        diff.textContent = fmt(remain);
         type.textContent = result === 0 ? '0%' : (result > 0 ? '양수 결과' : '음수 결과');
         help.textContent = `${fmt(base)}의 ${fmt(rate)}% = ${fmt(result)}`;
+        return;
       }
 
       if (currentMode === 'ratio') {
-        const part = Number(inputs.part?.value || 0);
-        const whole = Number(inputs.whole?.value || 0);
+        const part = parseRequired(inputs.part);
+        const whole = parseRequired(inputs.whole);
+        if (part === null || whole === null) {
+          setIdle('부분값 A와 전체값 B를 입력하세요.');
+          return;
+        }
 
         if (whole === 0) {
           main.textContent = '-';
@@ -448,19 +491,24 @@
 
         main.textContent = `${fmt(ratio)}%`;
         sub.textContent = `${fmt(part)} / ${fmt(whole)}`;
-        diff.textContent = `${fmt(remain)} `;
+        diff.textContent = fmt(remain);
         type.textContent = ratio > 100 ? '100% 초과' : '정상 범위';
         help.textContent = `${fmt(part)}는 ${fmt(whole)}의 ${fmt(ratio)}%입니다.`;
+        return;
       }
 
       if (currentMode === 'change') {
-        const oldVal = Number(inputs.old?.value || 0);
-        const newVal = Number(inputs.now?.value || 0);
+        const oldVal = parseRequired(inputs.old);
+        const newVal = parseRequired(inputs.now);
+        if (oldVal === null || newVal === null) {
+          setIdle('이전값과 현재값을 입력하세요.');
+          return;
+        }
 
         if (oldVal === 0) {
           main.textContent = '-';
           sub.textContent = '-';
-          diff.textContent = `${fmt(newVal - oldVal)}`;
+          diff.textContent = fmt(newVal - oldVal);
           type.textContent = '계산 불가';
           help.textContent = '이전값이 0이면 증감률(%)을 계산할 수 없습니다.';
           return;
@@ -468,14 +516,30 @@
 
         const delta = newVal - oldVal;
         const rate = (delta / oldVal) * 100;
+        const trend = delta > 0 ? '증가' : (delta < 0 ? '감소' : '변화 없음');
 
         main.textContent = `${fmt(rate)}%`;
         sub.textContent = `${fmt(oldVal)} → ${fmt(newVal)}`;
-        diff.textContent = `${fmt(delta)} `;
-        type.textContent = delta > 0 ? '증가' : (delta < 0 ? '감소' : '변화 없음');
-        help.textContent = `이전값 ${fmt(oldVal)} 대비 ${fmt(newVal)}는 ${fmt(rate)}% ${delta > 0 ? '증가' : (delta < 0 ? '감소' : '변화 없음')}입니다.`;
+        diff.textContent = fmt(delta);
+        type.textContent = trend;
+        help.textContent = `이전값 ${fmt(oldVal)} 대비 ${fmt(newVal)}는 ${fmt(rate)}% ${trend}입니다.`;
       }
     };
+
+    copyBtn?.addEventListener('click', async () => {
+      const text = `주요 결과: ${main.textContent} | 보조 결과: ${sub.textContent} | 차이값: ${diff.textContent} | 판정: ${type.textContent}`;
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      Object.values(inputs).forEach((input) => { if (input) input.value = ''; });
+      mode.value = 'percent-of';
+      showByMode();
+      setIdle('값을 입력하면 결과가 즉시 계산됩니다.');
+    });
 
     mode.addEventListener('change', render);
     Object.values(inputs).forEach((input) => input?.addEventListener('input', render));
