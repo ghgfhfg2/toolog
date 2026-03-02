@@ -1074,6 +1074,143 @@
     render();
   }
 
+  if (slug === 'discount-calculator') {
+    const mode = document.getElementById('dc-mode');
+    const listPrice = document.getElementById('dc-list-price');
+    const discountRate = document.getElementById('dc-discount-rate');
+    const coupon = document.getElementById('dc-coupon');
+    const quantity = document.getElementById('dc-quantity');
+    const shipping = document.getElementById('dc-shipping');
+    const targetPrice = document.getElementById('dc-target-price');
+    const forwardFields = document.getElementById('dc-forward-fields');
+    const forwardFields2 = document.getElementById('dc-forward-fields-2');
+    const reverseFields = document.getElementById('dc-reverse-fields');
+
+    const discountAmount = document.getElementById('dc-discount-amount');
+    const unitPrice = document.getElementById('dc-unit-price');
+    const finalTotal = document.getElementById('dc-final-total');
+    const effectiveRate = document.getElementById('dc-effective-rate');
+    const help = document.getElementById('dc-help');
+
+    const copyBtn = document.getElementById('dc-copy');
+    const resetBtn = document.getElementById('dc-reset');
+
+    if (!mode || !listPrice || !discountRate || !coupon || !quantity || !shipping || !targetPrice || !discountAmount || !unitPrice || !finalTotal || !effectiveRate || !help) return;
+
+    const fmtKRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
+    const fmtPct = (v) => `${v.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}%`;
+    const n = (el, fallback = 0) => {
+      const num = Number(el?.value || fallback);
+      return Number.isFinite(num) ? num : fallback;
+    };
+
+    const setModeUI = () => {
+      const isForward = (mode.value || 'forward') === 'forward';
+      if (forwardFields) forwardFields.hidden = !isForward;
+      if (forwardFields2) forwardFields2.hidden = !isForward;
+      if (reverseFields) reverseFields.hidden = isForward;
+      discountRate.disabled = !isForward;
+      targetPrice.disabled = isForward;
+    };
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const render = () => {
+      setModeUI();
+      const price = Math.max(0, n(listPrice));
+      const q = Math.max(1, Math.floor(n(quantity, 1)));
+      const ship = Math.max(0, n(shipping));
+
+      if (price <= 0) {
+        discountAmount.textContent = '-';
+        unitPrice.textContent = '-';
+        finalTotal.textContent = '-';
+        effectiveRate.textContent = '-';
+        help.textContent = '정가를 0원보다 크게 입력하세요.';
+        return;
+      }
+
+      if ((mode.value || 'forward') === 'forward') {
+        let rate = n(discountRate);
+        if (rate < 0 || rate > 100) {
+          help.textContent = '할인율은 0%~100% 범위에서 입력하세요.';
+          return;
+        }
+
+        const couponAmount = Math.max(0, n(coupon));
+        const discounted = price * (1 - rate / 100);
+        const unit = Math.max(0, discounted - couponAmount);
+        const totalBeforeShipping = unit * q;
+        const total = Math.max(0, totalBeforeShipping + ship);
+
+        const totalList = price * q + ship;
+        const effRate = totalList > 0 ? ((totalList - total) / totalList) * 100 : 0;
+
+        discountAmount.textContent = fmtKRW(price - discounted);
+        unitPrice.textContent = fmtKRW(unit);
+        finalTotal.textContent = fmtKRW(total);
+        effectiveRate.textContent = fmtPct(Math.max(0, effRate));
+        help.textContent = `${fmtKRW(price)} 상품 ${q}개 기준, 쿠폰/배송비까지 반영한 최종 결제금액입니다.`;
+      } else {
+        const target = Math.max(0, n(targetPrice));
+        if (target > price) {
+          discountAmount.textContent = fmtKRW(0);
+          unitPrice.textContent = fmtKRW(target);
+          finalTotal.textContent = fmtKRW(target);
+          effectiveRate.textContent = fmtPct(0);
+          help.textContent = '목표 판매가가 정가보다 높아 할인율은 0%로 표시됩니다.';
+          return;
+        }
+
+        const needRate = price === 0 ? 0 : ((price - target) / price) * 100;
+        discountAmount.textContent = fmtKRW(price - target);
+        unitPrice.textContent = fmtKRW(target);
+        finalTotal.textContent = fmtKRW(target);
+        effectiveRate.textContent = fmtPct(Math.max(0, needRate));
+        help.textContent = `정가 ${fmtKRW(price)}를 목표가 ${fmtKRW(target)}로 맞추려면 약 ${fmtPct(needRate)} 할인이 필요합니다.`;
+      }
+    };
+
+    [mode, listPrice, discountRate, coupon, quantity, shipping, targetPrice].forEach((el) => el?.addEventListener('input', render));
+
+    copyBtn?.addEventListener('click', async () => {
+      const text = `할인 계산 결과 | 할인 금액: ${discountAmount.textContent} | 할인 후 단가: ${unitPrice.textContent} | 최종 결제금액: ${finalTotal.textContent} | 실질 할인율: ${effectiveRate.textContent}`;
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      mode.value = 'forward';
+      listPrice.value = 59000;
+      discountRate.value = 20;
+      coupon.value = 3000;
+      quantity.value = 1;
+      shipping.value = 0;
+      targetPrice.value = 45000;
+      render();
+    });
+
+    if (!listPrice.value) listPrice.value = 59000;
+    if (!discountRate.value) discountRate.value = 20;
+    if (!quantity.value) quantity.value = 1;
+    render();
+  }
+
   if (slug === 'font-change') {
     const input = document.getElementById('fc-input');
     const list = document.getElementById('fc-list');
