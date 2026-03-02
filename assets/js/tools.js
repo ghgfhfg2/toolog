@@ -840,6 +840,12 @@
 
     if (!height || !weight || !bmiValue || !bmiCategory || !bmiNormal || !bmiBmr || !help) return;
 
+    const RANGE = {
+      height: { min: 50, max: 260 },
+      weight: { min: 10, max: 400 },
+      age: { min: 1, max: 120 }
+    };
+
     const classify = (bmi) => {
       if (bmi < 18.5) return '저체중';
       if (bmi < 23) return '정상';
@@ -886,7 +892,12 @@
 
       if (!(h > 0) || !(w > 0)) {
         setIdle('키(cm)와 몸무게(kg)를 입력하세요.');
-        return;
+        return false;
+      }
+
+      if (h < RANGE.height.min || h > RANGE.height.max || w < RANGE.weight.min || w > RANGE.weight.max) {
+        setIdle(`입력 범위를 확인하세요 (키 ${RANGE.height.min}~${RANGE.height.max}cm, 몸무게 ${RANGE.weight.min}~${RANGE.weight.max}kg).`);
+        return false;
       }
 
       const m = h / 100;
@@ -894,13 +905,17 @@
       const normalMin = 18.5 * m * m;
       const normalMax = 22.9 * m * m;
       const category = classify(bmi);
-      const bmr = calcBmr({ w, h, a, sx });
+      const hasValidAge = !age?.value || (a >= RANGE.age.min && a <= RANGE.age.max);
+      const bmr = hasValidAge ? calcBmr({ w, h, a, sx }) : null;
 
       bmiValue.textContent = bmi.toLocaleString('ko-KR', { maximumFractionDigits: 2 });
       bmiCategory.textContent = category;
       bmiNormal.textContent = `${normalMin.toLocaleString('ko-KR', { maximumFractionDigits: 1 })}kg ~ ${normalMax.toLocaleString('ko-KR', { maximumFractionDigits: 1 })}kg`;
-      bmiBmr.textContent = Number.isFinite(bmr) ? `${Math.round(bmr).toLocaleString('ko-KR')} kcal` : '나이/성별 입력 시 계산';
+      bmiBmr.textContent = Number.isFinite(bmr)
+        ? `${Math.round(bmr).toLocaleString('ko-KR')} kcal`
+        : (hasValidAge ? '나이/성별 입력 시 계산' : `나이는 ${RANGE.age.min}~${RANGE.age.max}세 범위로 입력하세요`);
       help.textContent = `BMI ${bmi.toFixed(2)} (${category}). 성인 기준 참고값이며 진단을 대체하지 않습니다.`;
+      return true;
     };
 
     [height, weight, age, sex].forEach((el) => el?.addEventListener('input', render));
@@ -914,6 +929,13 @@
     });
 
     copyBtn?.addEventListener('click', async () => {
+      if (!render() || bmiValue.textContent === '-') {
+        const old = copyBtn.textContent;
+        copyBtn.textContent = '입력 확인';
+        setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+        return;
+      }
+
       const text = `BMI ${bmiValue.textContent} (${bmiCategory.textContent}) | 정상 체중 범위 ${bmiNormal.textContent} | BMR ${bmiBmr.textContent}`;
       await copyText(text);
       const old = copyBtn.textContent;
