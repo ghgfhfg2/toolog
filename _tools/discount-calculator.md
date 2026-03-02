@@ -4,6 +4,9 @@ description: 할인 계산기로 정가 대비 할인 금액, 쿠폰 적용가, 
 category: calculator
 category_label: 계산/금융
 thumbnail: /assets/thumbs/discount-calculator.svg
+image:
+  path: /assets/thumbs/discount-calculator.svg
+  alt: 할인 계산기 화면 예시 썸네일
 tool_key: discount-calculator
 keywords: [할인 계산기, 할인율 계산, 쿠폰 계산기, 최종 결제금액 계산, 세일 계산]
 related_tools: [percent-calculator, vat-calculator, loan-calculator]
@@ -46,7 +49,7 @@ faq:
 ## 실전 예시
 ### 쇼핑몰 결제 금액 계산
 정가 59,000원 상품을 20% 할인하고 3,000원 쿠폰 적용, 배송비 2,500원, 수량 2개라면  
-최종 결제금액은 `96,900원`으로 계산됩니다.
+최종 결제금액은 `90,900원`으로 계산됩니다.
 
 ### 목표 판매가 맞추기
 정가 120,000원 상품을 99,000원에 팔고 싶다면,  

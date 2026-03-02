@@ -1128,6 +1128,14 @@
       }
     };
 
+    const setOutput = ({ discount = '-', unit = '-', total = '-', rate = '-', message = '' } = {}) => {
+      discountAmount.textContent = discount;
+      unitPrice.textContent = unit;
+      finalTotal.textContent = total;
+      effectiveRate.textContent = rate;
+      help.textContent = message;
+    };
+
     const render = () => {
       setModeUI();
       const price = Math.max(0, n(listPrice));
@@ -1135,18 +1143,14 @@
       const ship = Math.max(0, n(shipping));
 
       if (price <= 0) {
-        discountAmount.textContent = '-';
-        unitPrice.textContent = '-';
-        finalTotal.textContent = '-';
-        effectiveRate.textContent = '-';
-        help.textContent = '정가를 0원보다 크게 입력하세요.';
+        setOutput({ message: '정가를 0원보다 크게 입력하세요.' });
         return;
       }
 
       if ((mode.value || 'forward') === 'forward') {
-        let rate = n(discountRate);
+        const rate = n(discountRate);
         if (rate < 0 || rate > 100) {
-          help.textContent = '할인율은 0%~100% 범위에서 입력하세요.';
+          setOutput({ message: '할인율은 0%~100% 범위에서 입력하세요.' });
           return;
         }
 
@@ -1171,7 +1175,7 @@
           unitPrice.textContent = fmtKRW(target);
           finalTotal.textContent = fmtKRW(target);
           effectiveRate.textContent = fmtPct(0);
-          help.textContent = '목표 판매가가 정가보다 높아 할인율은 0%로 표시됩니다.';
+          help.textContent = '목표 판매가(1개 기준)가 정가보다 높아 할인율은 0%로 표시됩니다.';
           return;
         }
 
@@ -1180,7 +1184,7 @@
         unitPrice.textContent = fmtKRW(target);
         finalTotal.textContent = fmtKRW(target);
         effectiveRate.textContent = fmtPct(Math.max(0, needRate));
-        help.textContent = `정가 ${fmtKRW(price)}를 목표가 ${fmtKRW(target)}로 맞추려면 약 ${fmtPct(needRate)} 할인이 필요합니다.`;
+        help.textContent = `정가 ${fmtKRW(price)}(1개)를 목표가 ${fmtKRW(target)}로 맞추려면 약 ${fmtPct(needRate)} 할인이 필요합니다.`;
       }
     };
 
