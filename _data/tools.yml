@@ -114,3 +114,12 @@
   description: 키·몸무게로 BMI와 정상 체중 범위, 선택 입력 시 BMR까지 계산해요.
   url: /tools/bmi-calculator/
   thumbnail: /assets/thumbs/bmi-calculator.svg
+
+- id: age-calculator
+  title: 만나이 계산기
+  category: data
+  category_label: 생활/계산
+  badge: New
+  description: 만 나이·세는나이·총 개월 수·다음 생일 D-day를 한 번에 계산해요.
+  url: /tools/age-calculator/
+  thumbnail: /assets/thumbs/age-calculator.svg

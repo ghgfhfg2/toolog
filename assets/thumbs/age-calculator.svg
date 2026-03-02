@@ -1,0 +1,24 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="32" fill="#0f172a"/>
+  <rect x="80" y="70" width="1040" height="490" rx="24" fill="#111827" stroke="#334155"/>
+  <text x="130" y="165" fill="#e2e8f0" font-size="56" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">만나이 계산기</text>
+  <text x="130" y="220" fill="#94a3b8" font-size="30" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">만 나이 · 세는나이 · 생일 D-day</text>
+
+  <rect x="130" y="270" width="420" height="78" rx="12" fill="#1e293b"/>
+  <text x="155" y="320" fill="#cbd5e1" font-size="28" font-family="monospace">1995-10-12</text>
+
+  <rect x="570" y="270" width="420" height="78" rx="12" fill="#1e293b"/>
+  <text x="595" y="320" fill="#cbd5e1" font-size="28" font-family="monospace">2026-03-03</text>
+
+  <rect x="130" y="380" width="250" height="120" rx="14" fill="#1d4ed8"/>
+  <text x="155" y="430" fill="#dbeafe" font-size="24" font-family="Pretendard, sans-serif">만 나이</text>
+  <text x="155" y="475" fill="white" font-size="42" font-family="Pretendard, sans-serif" font-weight="700">30세</text>
+
+  <rect x="405" y="380" width="250" height="120" rx="14" fill="#0f766e"/>
+  <text x="430" y="430" fill="#ccfbf1" font-size="24" font-family="Pretendard, sans-serif">세는나이</text>
+  <text x="430" y="475" fill="white" font-size="42" font-family="Pretendard, sans-serif" font-weight="700">32세</text>
+
+  <rect x="680" y="380" width="310" height="120" rx="14" fill="#7c3aed"/>
+  <text x="705" y="430" fill="#ede9fe" font-size="24" font-family="Pretendard, sans-serif">다음 생일</text>
+  <text x="705" y="475" fill="white" font-size="34" font-family="Pretendard, sans-serif" font-weight="700">D-223</text>
+</svg>

@@ -1215,6 +1215,125 @@
     render();
   }
 
+  if (slug === 'age-calculator') {
+    const birth = document.getElementById('age-birth-date');
+    const target = document.getElementById('age-target-date');
+    const koreanMode = document.getElementById('age-korean-mode');
+    const international = document.getElementById('age-international');
+    const korean = document.getElementById('age-korean');
+    const months = document.getElementById('age-months');
+    const days = document.getElementById('age-days');
+    const nextBirthday = document.getElementById('age-next-birthday');
+    const copyBtn = document.getElementById('age-copy');
+    const resetBtn = document.getElementById('age-reset');
+
+    if (!birth || !target || !international || !korean || !months || !days || !nextBirthday) return;
+
+    const toDate = (value) => {
+      if (!value) return null;
+      const [y, m, d] = value.split('-').map(Number);
+      if (!y || !m || !d) return null;
+      return new Date(y, m - 1, d);
+    };
+
+    const dayDiff = (a, b) => Math.floor((b.getTime() - a.getTime()) / 86400000);
+
+    const getFullAge = (b, t) => {
+      let age = t.getFullYear() - b.getFullYear();
+      const monthDiff = t.getMonth() - b.getMonth();
+      const beforeBirthday = monthDiff < 0 || (monthDiff === 0 && t.getDate() < b.getDate());
+      if (beforeBirthday) age -= 1;
+      return Math.max(0, age);
+    };
+
+    const getMonthSpan = (b, t) => {
+      let m = (t.getFullYear() - b.getFullYear()) * 12 + (t.getMonth() - b.getMonth());
+      if (t.getDate() < b.getDate()) m -= 1;
+      return Math.max(0, m);
+    };
+
+    const getNextBirthday = (b, t) => {
+      const year = t.getFullYear();
+      let candidate = new Date(year, b.getMonth(), b.getDate());
+      if (candidate < t) candidate = new Date(year + 1, b.getMonth(), b.getDate());
+      return candidate;
+    };
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const setIdle = (msg) => {
+      international.textContent = '-';
+      korean.textContent = '-';
+      months.textContent = '-';
+      days.textContent = '-';
+      nextBirthday.textContent = msg;
+    };
+
+    const render = () => {
+      const b = toDate(birth.value);
+      const t = toDate(target.value);
+      if (!b || !t) {
+        setIdle('생년월일과 기준일을 입력하세요.');
+        return;
+      }
+      if (b > t) {
+        setIdle('생년월일은 기준일보다 늦을 수 없습니다.');
+        return;
+      }
+
+      const fullAge = getFullAge(b, t);
+      const koreanAge = t.getFullYear() - b.getFullYear() + 1;
+      const totalMonths = getMonthSpan(b, t);
+      const totalDays = dayDiff(b, t);
+      const upcomingBirthday = getNextBirthday(b, t);
+      const daysLeft = dayDiff(t, upcomingBirthday);
+
+      international.textContent = `${fullAge}세`;
+      korean.textContent = koreanMode?.checked ? `${koreanAge}세` : '숨김';
+      months.textContent = `${totalMonths.toLocaleString('ko-KR')}개월`;
+      days.textContent = `${totalDays.toLocaleString('ko-KR')}일`;
+
+      const birthdayText = `${upcomingBirthday.getFullYear()}-${String(upcomingBirthday.getMonth() + 1).padStart(2, '0')}-${String(upcomingBirthday.getDate()).padStart(2, '0')}`;
+      nextBirthday.textContent = `다음 생일: ${birthdayText} (D-${daysLeft.toLocaleString('ko-KR')})`;
+    };
+
+    const today = new Date();
+    const toISO = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    if (!target.value) target.value = toISO(today);
+
+    [birth, target, koreanMode].forEach((el) => el?.addEventListener('input', render));
+
+    resetBtn?.addEventListener('click', () => {
+      target.value = toISO(new Date());
+      render();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (international.textContent === '-') return;
+      const text = `나이 계산 결과 | 만 나이 ${international.textContent} | 세는나이 ${korean.textContent} | 총 ${months.textContent} / ${days.textContent} | ${nextBirthday.textContent}`;
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    setIdle('생년월일을 입력하면 나이 계산 결과가 표시됩니다.');
+    render();
+  }
+
   if (slug === 'font-change') {
     const input = document.getElementById('fc-input');
     const list = document.getElementById('fc-list');
