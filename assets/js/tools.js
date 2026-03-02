@@ -824,6 +824,108 @@
     render();
   }
 
+
+  if (slug === 'bmi-calculator') {
+    const height = document.getElementById('bmi-height');
+    const weight = document.getElementById('bmi-weight');
+    const age = document.getElementById('bmi-age');
+    const sex = document.getElementById('bmi-sex');
+    const copyBtn = document.getElementById('bmi-copy');
+    const resetBtn = document.getElementById('bmi-reset');
+    const bmiValue = document.getElementById('bmi-value');
+    const bmiCategory = document.getElementById('bmi-category');
+    const bmiNormal = document.getElementById('bmi-normal');
+    const bmiBmr = document.getElementById('bmi-bmr');
+    const help = document.getElementById('bmi-help');
+
+    if (!height || !weight || !bmiValue || !bmiCategory || !bmiNormal || !bmiBmr || !help) return;
+
+    const classify = (bmi) => {
+      if (bmi < 18.5) return '저체중';
+      if (bmi < 23) return '정상';
+      if (bmi < 25) return '과체중';
+      if (bmi < 30) return '비만';
+      return '고도비만';
+    };
+
+    const calcBmr = ({ w, h, a, sx }) => {
+      if (!(a > 0) || !sx) return null;
+      if (sx === 'male') return 10 * w + 6.25 * h - 5 * a + 5;
+      if (sx === 'female') return 10 * w + 6.25 * h - 5 * a - 161;
+      return null;
+    };
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const setIdle = (msg = '키와 몸무게를 입력하면 BMI를 계산합니다.') => {
+      bmiValue.textContent = '-';
+      bmiCategory.textContent = '입력 대기';
+      bmiNormal.textContent = '-';
+      bmiBmr.textContent = '-';
+      help.textContent = msg;
+    };
+
+    const render = () => {
+      const h = Number(height.value || 0);
+      const w = Number(weight.value || 0);
+      const a = Number(age?.value || 0);
+      const sx = sex?.value || '';
+
+      if (!(h > 0) || !(w > 0)) {
+        setIdle('키(cm)와 몸무게(kg)를 입력하세요.');
+        return;
+      }
+
+      const m = h / 100;
+      const bmi = w / (m * m);
+      const normalMin = 18.5 * m * m;
+      const normalMax = 22.9 * m * m;
+      const category = classify(bmi);
+      const bmr = calcBmr({ w, h, a, sx });
+
+      bmiValue.textContent = bmi.toLocaleString('ko-KR', { maximumFractionDigits: 2 });
+      bmiCategory.textContent = category;
+      bmiNormal.textContent = `${normalMin.toLocaleString('ko-KR', { maximumFractionDigits: 1 })}kg ~ ${normalMax.toLocaleString('ko-KR', { maximumFractionDigits: 1 })}kg`;
+      bmiBmr.textContent = Number.isFinite(bmr) ? `${Math.round(bmr).toLocaleString('ko-KR')} kcal` : '나이/성별 입력 시 계산';
+      help.textContent = `BMI ${bmi.toFixed(2)} (${category}). 성인 기준 참고값이며 진단을 대체하지 않습니다.`;
+    };
+
+    [height, weight, age, sex].forEach((el) => el?.addEventListener('input', render));
+
+    resetBtn?.addEventListener('click', () => {
+      height.value = 170;
+      weight.value = 65;
+      if (age) age.value = '';
+      if (sex) sex.value = '';
+      render();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      const text = `BMI ${bmiValue.textContent} (${bmiCategory.textContent}) | 정상 체중 범위 ${bmiNormal.textContent} | BMR ${bmiBmr.textContent}`;
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    if (!height.value) height.value = 170;
+    if (!weight.value) weight.value = 65;
+    render();
+  }
+
   if (slug === 'loan-calculator') {
     const amount = document.getElementById('loan-amount');
     const rate = document.getElementById('loan-rate');

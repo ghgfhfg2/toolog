@@ -235,6 +235,44 @@ layout: default
 
           <p class="tool-result" id="dday-help">기준일과 목표일을 선택하면 결과가 계산됩니다.</p>
         </div>
+      {% when 'bmi-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="bmi-height">키(cm)</label>
+              <input id="bmi-height" type="number" min="50" max="260" step="0.1" placeholder="예: 170" inputmode="decimal" />
+            </div>
+            <div>
+              <label for="bmi-weight">몸무게(kg)</label>
+              <input id="bmi-weight" type="number" min="10" max="400" step="0.1" placeholder="예: 65" inputmode="decimal" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="bmi-age">나이(선택)</label>
+              <input id="bmi-age" type="number" min="1" max="120" step="1" placeholder="예: 30" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="bmi-sex">성별(선택)</label>
+              <select id="bmi-sex">
+                <option value="">선택 안 함</option>
+                <option value="male">남성</option>
+                <option value="female">여성</option>
+              </select>
+            </div>
+          </div>
+          <div class="tool-row-grid pct-actions">
+            <button id="bmi-copy" type="button">결과 복사</button>
+            <button id="bmi-reset" type="button">초기화</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="bmi-value">-</strong><span>BMI</span></div>
+            <div><strong id="bmi-category">입력 대기</strong><span>체중 분류</span></div>
+            <div><strong id="bmi-normal">-</strong><span>정상 체중 범위</span></div>
+            <div><strong id="bmi-bmr">-</strong><span>기초대사량(BMR)</span></div>
+          </div>
+          <p class="tool-result" id="bmi-help">키와 몸무게를 입력하면 BMI와 정상 체중 범위를 계산합니다.</p>
+        </div>
       {% when 'loan-calculator' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
