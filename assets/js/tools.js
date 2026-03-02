@@ -1233,10 +1233,13 @@
       if (!value) return null;
       const [y, m, d] = value.split('-').map(Number);
       if (!y || !m || !d) return null;
-      return new Date(y, m - 1, d);
+      const parsed = new Date(y, m - 1, d, 12, 0, 0, 0);
+      const isValid = parsed.getFullYear() === y && parsed.getMonth() === (m - 1) && parsed.getDate() === d;
+      return isValid ? parsed : null;
     };
 
-    const dayDiff = (a, b) => Math.floor((b.getTime() - a.getTime()) / 86400000);
+    const toUTCDate = (d) => Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+    const dayDiff = (a, b) => Math.floor((toUTCDate(b) - toUTCDate(a)) / 86400000);
 
     const getFullAge = (b, t) => {
       let age = t.getFullYear() - b.getFullYear();
@@ -1254,8 +1257,15 @@
 
     const getNextBirthday = (b, t) => {
       const year = t.getFullYear();
-      let candidate = new Date(year, b.getMonth(), b.getDate());
-      if (candidate < t) candidate = new Date(year + 1, b.getMonth(), b.getDate());
+      const month = b.getMonth();
+      const day = b.getDate();
+      const safeDate = (y) => {
+        const lastDay = new Date(y, month + 1, 0).getDate();
+        return new Date(y, month, Math.min(day, lastDay), 12, 0, 0, 0);
+      };
+
+      let candidate = safeDate(year);
+      if (dayDiff(t, candidate) < 0) candidate = safeDate(year + 1);
       return candidate;
     };
 
@@ -1307,7 +1317,8 @@
       days.textContent = `${totalDays.toLocaleString('ko-KR')}일`;
 
       const birthdayText = `${upcomingBirthday.getFullYear()}-${String(upcomingBirthday.getMonth() + 1).padStart(2, '0')}-${String(upcomingBirthday.getDate()).padStart(2, '0')}`;
-      nextBirthday.textContent = `다음 생일: ${birthdayText} (D-${daysLeft.toLocaleString('ko-KR')})`;
+      const ddayText = daysLeft === 0 ? 'D-day' : `D-${daysLeft.toLocaleString('ko-KR')}`;
+      nextBirthday.textContent = `다음 생일: ${birthdayText} (${ddayText})`;
     };
 
     const today = new Date();
@@ -1322,7 +1333,12 @@
     });
 
     copyBtn?.addEventListener('click', async () => {
-      if (international.textContent === '-') return;
+      if (international.textContent === '-') {
+        const old = copyBtn.textContent;
+        copyBtn.textContent = '입력 확인';
+        setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+        return;
+      }
       const text = `나이 계산 결과 | 만 나이 ${international.textContent} | 세는나이 ${korean.textContent} | 총 ${months.textContent} / ${days.textContent} | ${nextBirthday.textContent}`;
       await copyText(text);
       const old = copyBtn.textContent;
