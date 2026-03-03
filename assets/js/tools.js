@@ -1135,10 +1135,10 @@
       const monthsPerPeriod = 12 / n;
 
       for (let month = 1; month <= totalMonths; month++) {
-        balance += mAdd;
         if (month % monthsPerPeriod === 0) {
           balance *= (1 + periodicRate);
         }
+        balance += mAdd;
       }
 
       const totalContrib = p0 + (mAdd * totalMonths);
@@ -1154,7 +1154,10 @@
       help.textContent = `${y}년 후 예상 자산은 ${fmtKRW(balance)}이며, 원금 대비 수익률은 약 ${annualized.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}%입니다.`;
     };
 
-    [initial, monthly, rate, years, compound, inflation].forEach((el) => el?.addEventListener('input', render));
+    [initial, monthly, rate, years, compound, inflation].forEach((el) => {
+      el?.addEventListener('input', render);
+      el?.addEventListener('change', render);
+    });
 
     copyBtn?.addEventListener('click', async () => {
       const text = `복리 계산 결과 | 만기 자산 ${final.textContent} | 총 원금 ${contrib.textContent} | 예상 수익 ${interest.textContent} | 실질가치 ${real.textContent}`;
