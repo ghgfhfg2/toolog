@@ -1529,9 +1529,8 @@
 
     const render = () => {
       const grossAnnual = Number(annual.value || 0);
-      const nonTaxMonthly = Math.max(0, Number(nonTax.value || 0));
-      const depCount = Math.max(0, Math.floor(Number(dependent.value || 0)));
-      const childCount = Math.max(0, Math.floor(Number(children.value || 0)));
+      const depCount = Math.min(20, Math.max(0, Math.floor(Number(dependent.value || 0))));
+      const childCount = Math.min(10, Math.max(0, Math.floor(Number(children.value || 0))));
 
       if (!(grossAnnual > 0)) {
         setIdle('연봉(세전)을 입력하면 예상 실수령액을 계산합니다.');
@@ -1539,6 +1538,11 @@
       }
 
       const grossMonthly = grossAnnual / 12;
+      const nonTaxMonthlyRaw = Math.max(0, Number(nonTax.value || 0));
+      const nonTaxMonthly = Math.min(nonTaxMonthlyRaw, grossMonthly);
+      if (Number(dependent.value || 0) !== depCount) dependent.value = depCount;
+      if (Number(children.value || 0) !== childCount) children.value = childCount;
+      if (nonTaxMonthlyRaw !== nonTaxMonthly) nonTax.value = Math.round(nonTaxMonthly);
       const pensionBase = Math.min(grossMonthly, 6170000);
       const pension = pensionBase * 0.045;
       const health = grossMonthly * 0.03545;
@@ -1566,7 +1570,8 @@
       netYear.textContent = KRW(annualNet);
       taxMonth.textContent = KRW(monthlyTax);
       insuranceMonth.textContent = KRW(monthlyInsurance);
-      summary.textContent = `공제율 약 ${effectiveRate.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}% 기준 추정치입니다. 회사별 비과세·수당·정산에 따라 실제 수령액은 달라질 수 있습니다.`;
+      const cappedNonTax = nonTaxMonthlyRaw > nonTaxMonthly;
+      summary.textContent = `공제율 약 ${effectiveRate.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}% 기준 추정치입니다.${cappedNonTax ? ' 비과세 월급은 월 총급여를 넘지 않도록 자동 보정했습니다.' : ''} 회사별 비과세·수당·정산에 따라 실제 수령액은 달라질 수 있습니다.`;
     };
 
     [annual, nonTax, dependent, children].forEach((el) => el?.addEventListener('input', render));
