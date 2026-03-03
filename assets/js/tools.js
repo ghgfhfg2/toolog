@@ -1655,7 +1655,7 @@
     const render = () => {
       const s = toDate(start.value);
       const e = toDate(end.value);
-      const m = Number(monthly.value || 0);
+      const m = Math.max(0, Number(monthly.value || 0));
       const b = Math.max(0, Number(annualBonus.value || 0));
 
       if (!s || !e) {
@@ -1676,12 +1676,15 @@
       const annualizedWage = (m * 12) + b;
       const avgDailyWage = annualizedWage / 365;
       const severance = avgDailyWage * 30 * years;
+      const isEligible = days >= 365;
 
       serviceDays.textContent = `${days.toLocaleString('ko-KR')}일`;
       serviceYears.textContent = `${years.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}년`;
       dailyWage.textContent = fmtKRW(avgDailyWage);
       amount.textContent = fmtKRW(severance);
-      help.textContent = '법정 평균임금의 간편 추정 방식(연 환산)으로 계산한 참고값입니다. 실제 퇴직금은 최근 3개월 임금·상여 반영 방식에 따라 달라질 수 있습니다.';
+      help.textContent = isEligible
+        ? '법정 평균임금의 간편 추정 방식(연 환산)으로 계산한 참고값입니다. 실제 퇴직금은 최근 3개월 임금·상여 반영 방식에 따라 달라질 수 있습니다.'
+        : '재직기간이 1년 미만으로 보입니다. 계산은 가능하지만 법적 지급 요건 충족 여부를 반드시 확인하세요.';
     };
 
     const toISO = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);

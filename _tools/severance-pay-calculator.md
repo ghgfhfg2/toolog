@@ -1,6 +1,6 @@
 ---
 title: 퇴직금 계산기 | 입사일·퇴사일·월급으로 예상 퇴직금 계산
-description: 입사일, 퇴사일, 월급(세전), 상여금을 입력하면 재직일수·계속근로연수·1일 평균임금과 예상 퇴직금을 즉시 계산합니다.
+description: 입사일·퇴사일·월급(세전)·상여금을 입력하면 재직일수, 1일 평균임금, 예상 퇴직금을 즉시 계산하고 1년 미만 근무 여부도 함께 확인합니다.
 category: calculator
 category_label: 금융/비즈니스
 thumbnail: /assets/thumbs/severance-pay-calculator.svg
@@ -8,8 +8,8 @@ tool_key: severance-pay-calculator
 image:
   path: /assets/thumbs/severance-pay-calculator.svg
   alt: 퇴직금 계산기 결과 카드 썸네일
-keywords: [퇴직금 계산기, 퇴직금 계산, 예상 퇴직금, 재직기간 계산, 평균임금 계산]
-related_tools: [salary-calculator, percent-calculator]
+keywords: [퇴직금 계산기, 퇴직금 계산, 예상 퇴직금, 재직기간 계산, 평균임금 계산, 1년 미만 퇴직금, 퇴직금 지급요건]
+related_tools: [salary-calculator, percent-calculator, loan-calculator]
 faq:
   - q: 이 계산기는 법적 퇴직금과 완전히 같나요?
     a: 아닙니다. 간편 추정용입니다. 실제 퇴직금은 최근 3개월 임금총액, 상여금 반영 방식, 회사 규정, 중간정산 이력 등에 따라 달라질 수 있습니다.
@@ -17,6 +17,8 @@ faq:
     a: 네. 본 도구는 입사일과 퇴사일을 모두 포함한 재직일수 기준으로 계산합니다.
   - q: 상여금을 입력하지 않으면 어떻게 계산되나요?
     a: 상여금 0원으로 간주하고 월급 기준으로만 평균임금을 추정합니다.
+  - q: 월급은 세전/세후 중 무엇을 넣어야 하나요?
+    a: 일반적으로 세전 기준으로 입력하는 것이 좋습니다. 실제 산정 시에는 회사의 임금 항목 반영 방식에 따라 결과가 달라질 수 있습니다.
   - q: 1년 미만 근무도 계산할 수 있나요?
     a: 계산은 가능하지만, 법적 지급 요건(통상 1년 이상 근무) 충족 여부는 별도로 확인해야 합니다.
 ---

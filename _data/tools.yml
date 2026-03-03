@@ -138,6 +138,6 @@
   category: calculator
   category_label: 금융/비즈니스
   badge: New
-  description: 입사일·퇴사일·월급 입력으로 재직일수와 예상 퇴직금을 빠르게 계산해요.
+  description: 입사일·퇴사일·월급·상여금 입력으로 재직일수와 예상 퇴직금, 1년 요건 여부를 빠르게 확인해요.
   url: /tools/severance-pay-calculator/
   thumbnail: /assets/thumbs/severance-pay-calculator.svg
