@@ -36,6 +36,30 @@ body {
 a { color: #dbe3f0; }
 a:hover { color: #fff; text-decoration: none; }
 
+/* Header nav: disable hamburger menu and keep links visible on mobile */
+.site-nav .nav-trigger,
+.site-nav .menu-icon {
+  display: none !important;
+}
+@media (max-width: 600px) {
+  .site-nav {
+    position: static;
+    border: 0;
+    background: transparent;
+  }
+  .site-nav .trigger {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: .65rem;
+    padding-bottom: .2rem;
+  }
+  .site-nav .page-link {
+    margin-left: 0 !important;
+    padding: 0;
+    font-size: .92rem;
+  }
+}
+
 /* Readability fixes for code/content contrast */
 .post-content,
 .tool-page__content {
