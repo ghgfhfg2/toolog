@@ -1601,6 +1601,125 @@
     render();
   }
 
+  if (slug === 'severance-pay-calculator') {
+    const start = document.getElementById('sev-start');
+    const end = document.getElementById('sev-end');
+    const monthly = document.getElementById('sev-monthly');
+    const annualBonus = document.getElementById('sev-annual-bonus');
+    const serviceDays = document.getElementById('sev-service-days');
+    const serviceYears = document.getElementById('sev-service-years');
+    const dailyWage = document.getElementById('sev-daily-wage');
+    const amount = document.getElementById('sev-amount');
+    const help = document.getElementById('sev-help');
+    const copyBtn = document.getElementById('sev-copy');
+    const resetBtn = document.getElementById('sev-reset');
+
+    if (!start || !end || !monthly || !annualBonus || !serviceDays || !serviceYears || !dailyWage || !amount || !help) return;
+
+    const fmtKRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
+
+    const toDate = (value) => {
+      if (!value) return null;
+      const [y, m, d] = value.split('-').map(Number);
+      if (!y || !m || !d) return null;
+      const date = new Date(y, m - 1, d, 12, 0, 0, 0);
+      const valid = date.getFullYear() === y && date.getMonth() === (m - 1) && date.getDate() === d;
+      return valid ? date : null;
+    };
+
+    const dayDiff = (a, b) => Math.floor((Date.UTC(b.getFullYear(), b.getMonth(), b.getDate()) - Date.UTC(a.getFullYear(), a.getMonth(), a.getDate())) / 86400000);
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const setIdle = (msg) => {
+      serviceDays.textContent = '-';
+      serviceYears.textContent = '-';
+      dailyWage.textContent = '-';
+      amount.textContent = '-';
+      help.textContent = msg;
+    };
+
+    const render = () => {
+      const s = toDate(start.value);
+      const e = toDate(end.value);
+      const m = Number(monthly.value || 0);
+      const b = Math.max(0, Number(annualBonus.value || 0));
+
+      if (!s || !e) {
+        setIdle('입사일과 퇴사일을 선택하세요.');
+        return;
+      }
+      if (e < s) {
+        setIdle('퇴사일은 입사일보다 빠를 수 없습니다.');
+        return;
+      }
+      if (!(m > 0)) {
+        setIdle('최근 월급(세전)을 입력하세요.');
+        return;
+      }
+
+      const days = dayDiff(s, e) + 1;
+      const years = days / 365;
+      const annualizedWage = (m * 12) + b;
+      const avgDailyWage = annualizedWage / 365;
+      const severance = avgDailyWage * 30 * years;
+
+      serviceDays.textContent = `${days.toLocaleString('ko-KR')}일`;
+      serviceYears.textContent = `${years.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}년`;
+      dailyWage.textContent = fmtKRW(avgDailyWage);
+      amount.textContent = fmtKRW(severance);
+      help.textContent = '법정 평균임금의 간편 추정 방식(연 환산)으로 계산한 참고값입니다. 실제 퇴직금은 최근 3개월 임금·상여 반영 방식에 따라 달라질 수 있습니다.';
+    };
+
+    const toISO = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    const today = new Date();
+    const sampleStart = new Date(today);
+    sampleStart.setFullYear(sampleStart.getFullYear() - 3);
+
+    if (!start.value) start.value = toISO(sampleStart);
+    if (!end.value) end.value = toISO(today);
+
+    [start, end, monthly, annualBonus].forEach((el) => el?.addEventListener('input', render));
+
+    resetBtn?.addEventListener('click', () => {
+      start.value = toISO(sampleStart);
+      end.value = toISO(today);
+      monthly.value = 3200000;
+      annualBonus.value = 0;
+      render();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (amount.textContent === '-') {
+        const old = copyBtn.textContent;
+        copyBtn.textContent = '입력 확인';
+        setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+        return;
+      }
+      const text = `퇴직금 계산 결과 | 재직일수 ${serviceDays.textContent} | 계속근로연수 ${serviceYears.textContent} | 1일 평균임금 ${dailyWage.textContent} | 예상 퇴직금 ${amount.textContent}`;
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    if (!monthly.value) monthly.value = 3200000;
+    render();
+  }
+
   if (slug === 'font-change') {
     const input = document.getElementById('fc-input');
     const list = document.getElementById('fc-list');

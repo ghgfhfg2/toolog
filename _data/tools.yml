@@ -132,3 +132,12 @@
   description: 연봉과 비과세·가족 정보를 넣으면 월/연 실수령액과 세금·4대보험 공제를 빠르게 계산해요.
   url: /tools/salary-calculator/
   thumbnail: /assets/thumbs/salary-calculator.svg
+
+- id: severance-pay-calculator
+  title: 퇴직금 계산기
+  category: calculator
+  category_label: 금융/비즈니스
+  badge: New
+  description: 입사일·퇴사일·월급 입력으로 재직일수와 예상 퇴직금을 빠르게 계산해요.
+  url: /tools/severance-pay-calculator/
+  thumbnail: /assets/thumbs/severance-pay-calculator.svg

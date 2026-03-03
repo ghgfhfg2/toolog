@@ -483,6 +483,40 @@ layout: default
           </div>
           <p class="tool-result" id="sal-summary">연봉과 공제 조건을 입력하면 예상 실수령액을 계산합니다.</p>
         </div>
+      {% when 'severance-pay-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="sev-start">입사일</label>
+              <input id="sev-start" type="date" />
+            </div>
+            <div>
+              <label for="sev-end">퇴사일</label>
+              <input id="sev-end" type="date" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="sev-monthly">최근 월급(세전, 원)</label>
+              <input id="sev-monthly" type="number" min="0" step="10000" placeholder="예: 3200000" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="sev-annual-bonus">연간 상여금(선택, 원)</label>
+              <input id="sev-annual-bonus" type="number" min="0" step="10000" placeholder="예: 6000000" inputmode="numeric" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-actions">
+            <button id="sev-copy" type="button">결과 복사</button>
+            <button id="sev-reset" type="button">예시값 채우기</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="sev-service-days">-</strong><span>재직일수</span></div>
+            <div><strong id="sev-service-years">-</strong><span>계속근로연수</span></div>
+            <div><strong id="sev-daily-wage">-</strong><span>추정 1일 평균임금</span></div>
+            <div><strong id="sev-amount">-</strong><span>예상 퇴직금</span></div>
+          </div>
+          <p class="tool-result" id="sev-help">입사일·퇴사일·월급을 입력하면 예상 퇴직금을 계산합니다.</p>
+        </div>
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
     {% endcase %}
