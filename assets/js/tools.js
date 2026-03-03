@@ -1460,6 +1460,142 @@
     render();
   }
 
+  if (slug === 'salary-calculator') {
+    const annual = document.getElementById('sal-annual');
+    const nonTax = document.getElementById('sal-nontax');
+    const dependent = document.getElementById('sal-dependent');
+    const children = document.getElementById('sal-children');
+    const netMonth = document.getElementById('sal-net-month');
+    const netYear = document.getElementById('sal-net-year');
+    const taxMonth = document.getElementById('sal-tax-month');
+    const insuranceMonth = document.getElementById('sal-insurance-month');
+    const summary = document.getElementById('sal-summary');
+    const copyBtn = document.getElementById('sal-copy');
+    const resetBtn = document.getElementById('sal-reset');
+
+    if (!annual || !nonTax || !dependent || !children || !netMonth || !netYear || !taxMonth || !insuranceMonth || !summary) return;
+
+    const KRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
+
+    const earnedIncomeDeduction = (gross) => {
+      if (gross <= 5000000) return gross * 0.7;
+      if (gross <= 15000000) return 3500000 + (gross - 5000000) * 0.4;
+      if (gross <= 45000000) return 7500000 + (gross - 15000000) * 0.15;
+      if (gross <= 100000000) return 12000000 + (gross - 45000000) * 0.05;
+      return 14750000 + (gross - 100000000) * 0.02;
+    };
+
+    const calcIncomeTax = (base) => {
+      if (base <= 12000000) return base * 0.06;
+      if (base <= 46000000) return base * 0.15 - 1080000;
+      if (base <= 88000000) return base * 0.24 - 5220000;
+      if (base <= 150000000) return base * 0.35 - 14900000;
+      if (base <= 300000000) return base * 0.38 - 19400000;
+      if (base <= 500000000) return base * 0.4 - 25400000;
+      if (base <= 1000000000) return base * 0.42 - 35400000;
+      return base * 0.45 - 65400000;
+    };
+
+    const calcChildCredit = (n) => {
+      const c = Math.max(0, Math.floor(n));
+      if (c <= 0) return 0;
+      if (c === 1) return 150000;
+      if (c === 2) return 300000;
+      return 300000 + (c - 2) * 300000;
+    };
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const setIdle = (msg) => {
+      netMonth.textContent = '-';
+      netYear.textContent = '-';
+      taxMonth.textContent = '-';
+      insuranceMonth.textContent = '-';
+      summary.textContent = msg;
+    };
+
+    const render = () => {
+      const grossAnnual = Number(annual.value || 0);
+      const nonTaxMonthly = Math.max(0, Number(nonTax.value || 0));
+      const depCount = Math.max(0, Math.floor(Number(dependent.value || 0)));
+      const childCount = Math.max(0, Math.floor(Number(children.value || 0)));
+
+      if (!(grossAnnual > 0)) {
+        setIdle('연봉(세전)을 입력하면 예상 실수령액을 계산합니다.');
+        return;
+      }
+
+      const grossMonthly = grossAnnual / 12;
+      const pensionBase = Math.min(grossMonthly, 6170000);
+      const pension = pensionBase * 0.045;
+      const health = grossMonthly * 0.03545;
+      const longCare = health * 0.1295;
+      const employment = grossMonthly * 0.009;
+      const monthlyInsurance = pension + health + longCare + employment;
+      const annualInsurance = monthlyInsurance * 12;
+
+      const annualTaxableGross = Math.max(0, grossAnnual - (nonTaxMonthly * 12));
+      const earnDed = earnedIncomeDeduction(annualTaxableGross);
+      const earnIncome = Math.max(0, annualTaxableGross - earnDed);
+      const personalDed = (1 + depCount + childCount) * 1500000;
+      const taxBase = Math.max(0, earnIncome - personalDed - annualInsurance);
+
+      let annualIncomeTax = Math.max(0, calcIncomeTax(taxBase));
+      annualIncomeTax = Math.max(0, annualIncomeTax - calcChildCredit(childCount));
+      const annualLocalTax = annualIncomeTax * 0.1;
+      const monthlyTax = (annualIncomeTax + annualLocalTax) / 12;
+
+      const monthlyNet = Math.max(0, grossMonthly - monthlyInsurance - monthlyTax);
+      const annualNet = monthlyNet * 12;
+      const effectiveRate = grossAnnual > 0 ? ((grossAnnual - annualNet) / grossAnnual) * 100 : 0;
+
+      netMonth.textContent = KRW(monthlyNet);
+      netYear.textContent = KRW(annualNet);
+      taxMonth.textContent = KRW(monthlyTax);
+      insuranceMonth.textContent = KRW(monthlyInsurance);
+      summary.textContent = `공제율 약 ${effectiveRate.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}% 기준 추정치입니다. 회사별 비과세·수당·정산에 따라 실제 수령액은 달라질 수 있습니다.`;
+    };
+
+    [annual, nonTax, dependent, children].forEach((el) => el?.addEventListener('input', render));
+
+    copyBtn?.addEventListener('click', async () => {
+      if (netMonth.textContent === '-') {
+        setIdle('연봉을 먼저 입력하세요.');
+        return;
+      }
+      const text = `실수령액 계산 결과 | 월 ${netMonth.textContent} | 연 ${netYear.textContent} | 소득세+지방세(월) ${taxMonth.textContent} | 4대보험(월) ${insuranceMonth.textContent}`;
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      annual.value = 50000000;
+      nonTax.value = 200000;
+      dependent.value = 0;
+      children.value = 0;
+      render();
+    });
+
+    if (!annual.value) annual.value = 50000000;
+    if (!nonTax.value) nonTax.value = 200000;
+    render();
+  }
+
   if (slug === 'font-change') {
     const input = document.getElementById('fc-input');
     const list = document.getElementById('fc-list');

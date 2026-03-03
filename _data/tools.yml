@@ -123,3 +123,12 @@
   description: 만 나이·세는나이·총 개월 수·다음 생일 D-day를 한 번에 계산해요.
   url: /tools/age-calculator/
   thumbnail: /assets/thumbs/age-calculator.svg
+
+- id: salary-calculator
+  title: 연봉 실수령액 계산기
+  category: calculator
+  category_label: 금융/비즈니스
+  badge: New
+  description: 연봉과 비과세·가족 정보를 넣으면 월/연 실수령액과 세금·4대보험 공제를 빠르게 계산해요.
+  url: /tools/salary-calculator/
+  thumbnail: /assets/thumbs/salary-calculator.svg

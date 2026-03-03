@@ -449,6 +449,40 @@ layout: default
           </div>
           <p class="tool-result" id="age-next-birthday" role="status" aria-live="polite">생년월일을 입력하면 다음 생일까지 남은 기간을 계산합니다.</p>
         </div>
+      {% when 'salary-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="sal-annual">연봉(세전, 원)</label>
+              <input id="sal-annual" type="number" min="0" step="100000" placeholder="예: 50000000" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="sal-nontax">비과세 월급(원, 선택)</label>
+              <input id="sal-nontax" type="number" min="0" step="10000" placeholder="예: 200000" inputmode="numeric" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="sal-dependent">부양가족 수(본인 제외)</label>
+              <input id="sal-dependent" type="number" min="0" max="20" step="1" placeholder="예: 1" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="sal-children">자녀 수</label>
+              <input id="sal-children" type="number" min="0" max="10" step="1" placeholder="예: 1" inputmode="numeric" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-actions">
+            <button id="sal-copy" type="button">결과 복사</button>
+            <button id="sal-reset" type="button">초기화</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="sal-net-month">-</strong><span>예상 실수령액(월)</span></div>
+            <div><strong id="sal-net-year">-</strong><span>예상 실수령액(연)</span></div>
+            <div><strong id="sal-tax-month">-</strong><span>소득세+지방세(월)</span></div>
+            <div><strong id="sal-insurance-month">-</strong><span>4대보험(월)</span></div>
+          </div>
+          <p class="tool-result" id="sal-summary">연봉과 공제 조건을 입력하면 예상 실수령액을 계산합니다.</p>
+        </div>
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
     {% endcase %}
