@@ -1074,6 +1074,113 @@
     render();
   }
 
+  if (slug === 'compound-interest-calculator') {
+    const initial = document.getElementById('ci-initial');
+    const monthly = document.getElementById('ci-monthly');
+    const rate = document.getElementById('ci-rate');
+    const years = document.getElementById('ci-years');
+    const compound = document.getElementById('ci-compound');
+    const inflation = document.getElementById('ci-inflation');
+    const final = document.getElementById('ci-final');
+    const contrib = document.getElementById('ci-contrib');
+    const interest = document.getElementById('ci-interest');
+    const real = document.getElementById('ci-real');
+    const help = document.getElementById('ci-help');
+    const copyBtn = document.getElementById('ci-copy');
+    const resetBtn = document.getElementById('ci-reset');
+
+    if (!initial || !monthly || !rate || !years || !compound || !inflation || !final || !contrib || !interest || !real || !help) return;
+
+    const fmtKRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
+
+    const setIdle = (msg) => {
+      final.textContent = '-';
+      contrib.textContent = '-';
+      interest.textContent = '-';
+      real.textContent = '-';
+      help.textContent = msg;
+    };
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const render = () => {
+      const p0 = Math.max(0, Number(initial.value || 0));
+      const mAdd = Math.max(0, Number(monthly.value || 0));
+      const rAnnual = Number(rate.value || 0);
+      const y = Math.floor(Number(years.value || 0));
+      const n = Math.max(1, Number(compound.value || 12));
+      const inf = Math.max(0, Number(inflation.value || 0));
+
+      if (!(y > 0) || !Number.isFinite(rAnnual) || rAnnual < 0 || rAnnual > 100) {
+        setIdle('투자 기간(1년 이상)과 연 수익률(0~100%)을 입력하세요.');
+        return;
+      }
+
+      let balance = p0;
+      const periodicRate = rAnnual / 100 / n;
+      const totalMonths = y * 12;
+      const monthsPerPeriod = 12 / n;
+
+      for (let month = 1; month <= totalMonths; month++) {
+        balance += mAdd;
+        if (month % monthsPerPeriod === 0) {
+          balance *= (1 + periodicRate);
+        }
+      }
+
+      const totalContrib = p0 + (mAdd * totalMonths);
+      const earned = balance - totalContrib;
+      const realValue = balance / Math.pow(1 + inf / 100, y);
+
+      final.textContent = fmtKRW(balance);
+      contrib.textContent = fmtKRW(totalContrib);
+      interest.textContent = fmtKRW(earned);
+      real.textContent = inf > 0 ? fmtKRW(realValue) : '인플레이션 미입력';
+
+      const annualized = totalContrib > 0 ? ((balance / totalContrib - 1) * 100) : 0;
+      help.textContent = `${y}년 후 예상 자산은 ${fmtKRW(balance)}이며, 원금 대비 수익률은 약 ${annualized.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}%입니다.`;
+    };
+
+    [initial, monthly, rate, years, compound, inflation].forEach((el) => el?.addEventListener('input', render));
+
+    copyBtn?.addEventListener('click', async () => {
+      const text = `복리 계산 결과 | 만기 자산 ${final.textContent} | 총 원금 ${contrib.textContent} | 예상 수익 ${interest.textContent} | 실질가치 ${real.textContent}`;
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      initial.value = 1000000;
+      monthly.value = 300000;
+      rate.value = 7;
+      years.value = 10;
+      compound.value = 12;
+      inflation.value = 2.5;
+      render();
+    });
+
+    if (!initial.value) initial.value = 1000000;
+    if (!monthly.value) monthly.value = 300000;
+    if (!rate.value) rate.value = 7;
+    if (!years.value) years.value = 10;
+    render();
+  }
+
   if (slug === 'discount-calculator') {
     const mode = document.getElementById('dc-mode');
     const listPrice = document.getElementById('dc-list-price');
