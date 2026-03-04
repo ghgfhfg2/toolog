@@ -1927,11 +1927,13 @@
       }
 
       const denominator = tp - ap;
-      const numerator = cq * (cp - tp);
+      const numerator = totalCost - (tp * totalQty);
 
       if (numerator <= 0) {
         needQtyOut.textContent = '0주';
-        help.textContent = '현재 보유 상태로 이미 목표 평단을 만족합니다.';
+        help.textContent = aq > 0
+          ? '현재 입력된 추가 매수 계획까지 반영하면 이미 목표 평단을 만족합니다.'
+          : '현재 보유 상태로 이미 목표 평단을 만족합니다.';
         return;
       }
 
@@ -1943,7 +1945,9 @@
 
       const need = Math.ceil(numerator / denominator);
       needQtyOut.textContent = fmtQty(need);
-      help.textContent = `목표 평단 ${fmtKRW(tp)}를 맞추려면 현재 조건에서 최소 ${fmtQty(need)} 추가 매수가 필요합니다.`;
+      help.textContent = aq > 0
+        ? `현재 계획(${fmtQty(aq)}) 이후에도 목표 평단 ${fmtKRW(tp)}를 맞추려면 최소 ${fmtQty(need)}를 같은 가격에 더 매수해야 합니다.`
+        : `목표 평단 ${fmtKRW(tp)}를 맞추려면 현재 조건에서 최소 ${fmtQty(need)} 추가 매수가 필요합니다.`;
     };
 
     [currentQty, currentPrice, addQty, addPrice, targetPrice].forEach((el) => el?.addEventListener('input', render));
