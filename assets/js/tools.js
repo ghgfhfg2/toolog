@@ -2050,8 +2050,12 @@
       // 유지 칼로리 기준 매크로: 단백질 1.8g/kg, 지방 0.8g/kg, 나머지 탄수화물
       const proteinG = Math.max(0, w * 1.8);
       const fatG = Math.max(0, w * 0.8);
-      const remainKcal = Math.max(0, tdee - (proteinG * 4 + fatG * 9));
+      const macroBaseKcal = (proteinG * 4 + fatG * 9);
+      const remainKcal = Math.max(0, tdee - macroBaseKcal);
       const carbG = remainKcal / 4;
+
+      const weeklyCutKg = ((tdee - cutModerate) * 7) / 7700;
+      const weeklyBulkKg = ((bulkLean - tdee) * 7) / 7700;
 
       outBmr.textContent = fmtKcal(bmr);
       outMaintain.textContent = fmtKcal(tdee);
@@ -2062,7 +2066,11 @@
       outFat.textContent = `지방: ${fmtGram(fatG)} (약 ${(fatG * 9).toLocaleString('ko-KR', { maximumFractionDigits: 0 })}kcal)`;
       outCarb.textContent = `탄수화물: ${fmtGram(carbG)} (약 ${(carbG * 4).toLocaleString('ko-KR', { maximumFractionDigits: 0 })}kcal)`;
 
-      help.textContent = '계산값은 추정치입니다. 2~3주 체중/허리둘레 변화에 맞춰 100~200kcal 단위로 조정하세요.';
+      const activityLabel = activity.options[activity.selectedIndex]?.text || '선택 활동량';
+      const macroNotice = macroBaseKcal > tdee
+        ? ' 현재 입력에서는 단백질/지방 최소치만으로 유지 칼로리를 거의 채워 탄수화물 권장량이 낮게 표시될 수 있습니다.'
+        : '';
+      help.textContent = `${activityLabel} 기준 추정치입니다. 보수 감량은 주당 약 ${weeklyCutKg.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}kg, 린 증량은 주당 약 ${weeklyBulkKg.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}kg 변화를 목표로 합니다. 2~3주 체중/허리둘레 변화에 맞춰 100~200kcal 단위로 조정하세요.${macroNotice}`;
     };
 
     [sex, age, height, weight, activity].forEach((el) => el?.addEventListener('input', render));
