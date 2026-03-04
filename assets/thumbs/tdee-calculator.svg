@@ -1,0 +1,15 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#0F172A"/>
+  <rect x="60" y="60" width="1080" height="510" rx="28" fill="#111827" stroke="#334155" stroke-width="2"/>
+  <text x="110" y="170" fill="#E2E8F0" font-size="56" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">칼로리 계산기 (TDEE)</text>
+  <text x="110" y="230" fill="#94A3B8" font-size="30" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">유지 · 감량 · 증량 하루 권장 칼로리</text>
+  <rect x="110" y="280" width="980" height="220" rx="18" fill="#1E293B"/>
+  <text x="150" y="345" fill="#38BDF8" font-size="34" font-family="monospace">BMR</text>
+  <text x="150" y="395" fill="#F8FAFC" font-size="44" font-family="monospace">1,648 kcal</text>
+  <text x="470" y="345" fill="#22C55E" font-size="34" font-family="monospace">TDEE</text>
+  <text x="470" y="395" fill="#F8FAFC" font-size="44" font-family="monospace">2,554 kcal</text>
+  <text x="790" y="345" fill="#F59E0B" font-size="34" font-family="monospace">CUT / BULK</text>
+  <text x="790" y="395" fill="#F8FAFC" font-size="36" font-family="monospace">2,170 / 2,860</text>
+  <circle cx="1030" cy="140" r="44" fill="#2563EB"/>
+  <text x="995" y="152" fill="white" font-size="28" font-family="monospace" font-weight="700">NEW</text>
+</svg>

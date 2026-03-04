@@ -1977,6 +1977,130 @@
     render();
   }
 
+
+  if (slug === 'tdee-calculator') {
+    const sex = document.getElementById('tdee-sex');
+    const age = document.getElementById('tdee-age');
+    const height = document.getElementById('tdee-height');
+    const weight = document.getElementById('tdee-weight');
+    const activity = document.getElementById('tdee-activity');
+    const outBmr = document.getElementById('tdee-bmr');
+    const outMaintain = document.getElementById('tdee-maintain');
+    const outCut = document.getElementById('tdee-cut');
+    const outBulk = document.getElementById('tdee-bulk');
+    const outProtein = document.getElementById('tdee-protein');
+    const outFat = document.getElementById('tdee-fat');
+    const outCarb = document.getElementById('tdee-carb');
+    const help = document.getElementById('tdee-help');
+    const copyBtn = document.getElementById('tdee-copy');
+    const resetBtn = document.getElementById('tdee-reset');
+
+    if (!sex || !age || !height || !weight || !activity || !outBmr || !outMaintain || !outCut || !outBulk || !outProtein || !outFat || !outCarb || !help) return;
+
+    const fmtKcal = (v) => `${Math.round(v).toLocaleString('ko-KR')}kcal`;
+    const fmtGram = (v) => `${Math.round(v).toLocaleString('ko-KR')}g`;
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const setIdle = (msg = '값을 입력하면 BMR/TDEE와 목표별 칼로리가 계산됩니다.') => {
+      outBmr.textContent = '-';
+      outMaintain.textContent = '-';
+      outCut.textContent = '-';
+      outBulk.textContent = '-';
+      outProtein.textContent = '단백질: -';
+      outFat.textContent = '지방: -';
+      outCarb.textContent = '탄수화물: -';
+      help.textContent = msg;
+    };
+
+    const render = () => {
+      const a = Number(age.value || 0);
+      const h = Number(height.value || 0);
+      const w = Number(weight.value || 0);
+      const af = Number(activity.value || 1.2);
+
+      if (!(a >= 10 && a <= 100) || !(h >= 120 && h <= 230) || !(w >= 25 && w <= 250)) {
+        setIdle('나이(10~100), 키(120~230), 몸무게(25~250) 범위를 확인해 주세요.');
+        return;
+      }
+
+      const bmr = sex.value === 'female'
+        ? (10 * w + 6.25 * h - 5 * a - 161)
+        : (10 * w + 6.25 * h - 5 * a + 5);
+      const tdee = bmr * af;
+
+      const cutModerate = tdee * 0.85;
+      const cutAggressive = tdee * 0.8;
+      const bulkLean = tdee * 1.06;
+      const bulkAggressive = tdee * 1.12;
+
+      // 유지 칼로리 기준 매크로: 단백질 1.8g/kg, 지방 0.8g/kg, 나머지 탄수화물
+      const proteinG = Math.max(0, w * 1.8);
+      const fatG = Math.max(0, w * 0.8);
+      const remainKcal = Math.max(0, tdee - (proteinG * 4 + fatG * 9));
+      const carbG = remainKcal / 4;
+
+      outBmr.textContent = fmtKcal(bmr);
+      outMaintain.textContent = fmtKcal(tdee);
+      outCut.textContent = `${fmtKcal(cutModerate)} / ${fmtKcal(cutAggressive)}`;
+      outBulk.textContent = `${fmtKcal(bulkLean)} / ${fmtKcal(bulkAggressive)}`;
+
+      outProtein.textContent = `단백질: ${fmtGram(proteinG)} (약 ${(proteinG * 4).toLocaleString('ko-KR', { maximumFractionDigits: 0 })}kcal)`;
+      outFat.textContent = `지방: ${fmtGram(fatG)} (약 ${(fatG * 9).toLocaleString('ko-KR', { maximumFractionDigits: 0 })}kcal)`;
+      outCarb.textContent = `탄수화물: ${fmtGram(carbG)} (약 ${(carbG * 4).toLocaleString('ko-KR', { maximumFractionDigits: 0 })}kcal)`;
+
+      help.textContent = '계산값은 추정치입니다. 2~3주 체중/허리둘레 변화에 맞춰 100~200kcal 단위로 조정하세요.';
+    };
+
+    [sex, age, height, weight, activity].forEach((el) => el?.addEventListener('input', render));
+
+    resetBtn?.addEventListener('click', () => {
+      sex.value = 'male';
+      age.value = 30;
+      height.value = 170;
+      weight.value = 68;
+      activity.value = '1.55';
+      render();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (outBmr.textContent === '-') return;
+      const text = [
+        `칼로리 계산 결과`,
+        `BMR ${outBmr.textContent}`,
+        `유지(TDEE) ${outMaintain.textContent}`,
+        `감량 ${outCut.textContent}`,
+        `증량 ${outBulk.textContent}`,
+        outProtein.textContent,
+        outFat.textContent,
+        outCarb.textContent
+      ].join(' | ');
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    if (!age.value) age.value = 30;
+    if (!height.value) height.value = 170;
+    if (!weight.value) weight.value = 68;
+    if (!activity.value) activity.value = '1.55';
+    render();
+  }
+
   if (slug === 'font-change') {
     const input = document.getElementById('fc-input');
     const list = document.getElementById('fc-list');

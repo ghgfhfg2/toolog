@@ -159,3 +159,13 @@
   description: 현재 보유 평단과 추가 매수 계획을 넣어 새 평단가와 목표 평단 달성 필요 수량을 계산해요.
   url: /tools/stock-average-calculator/
   thumbnail: /assets/thumbs/stock-average-calculator.svg
+
+- id: tdee-calculator
+  title: 칼로리 계산기 (TDEE)
+  category: data
+  category_label: 건강/피트니스
+  badge: New
+  description: BMR·TDEE와 감량/유지/증량 하루 권장 칼로리를 빠르게 계산해요.
+  url: /tools/tdee-calculator/
+  thumbnail: /assets/thumbs/tdee-calculator.svg
+
