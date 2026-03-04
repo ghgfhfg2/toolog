@@ -35,17 +35,21 @@ Jekyll에서는 `_includes/seo/canonical.html` 같은 공통 파일로 관리하
 
 아래 예시는 canonical을 절대 URL로 고정하고, `index.html` 표현을 정리하는 패턴입니다.
 
+{% raw %}
 ```liquid
 {%- assign canonical_path = page.url | replace:'index.html','' -%}
 {%- assign canonical_url = canonical_path | absolute_url -%}
 <link rel="canonical" href="{{ canonical_url }}">
 ```
+{% endraw %}
 
 레이아웃에서는 직접 URL을 조합하지 말고 include만 호출합니다.
 
+{% raw %}
 ```liquid
 {%- include seo/canonical.html -%}
 ```
+{% endraw %}
 
 배포 후에는 아래 두 가지를 함께 확인합니다.
 
