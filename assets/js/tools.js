@@ -719,6 +719,7 @@
 
     const fmt = (v, max = 4) => Number(v).toLocaleString('ko-KR', { maximumFractionDigits: max });
     const fmtKRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
+    const fmtEok = (v) => `${fmt(v / 100000000, 2)}억원`;
 
     const setIdle = (msg) => {
       outM2.textContent = '-';
@@ -746,9 +747,15 @@
     const render = (source = 'm2') => {
       const m2Raw = Number(m2Input.value || 0);
       const pRaw = Number(pyeongInput.value || 0);
-      const price = Math.max(0, Number(priceInput.value || 0));
+      const priceRaw = Number(priceInput.value || 0);
+      const price = Number.isFinite(priceRaw) ? Math.max(0, priceRaw) : 0;
 
-      if ((m2Raw <= 0 && pRaw <= 0) || (!Number.isFinite(m2Raw) && !Number.isFinite(pRaw))) {
+      if (!Number.isFinite(m2Raw) || !Number.isFinite(pRaw)) {
+        setIdle('숫자 형식으로 입력해 주세요.');
+        return;
+      }
+
+      if (m2Raw <= 0 && pRaw <= 0) {
         setIdle('㎡ 또는 평 중 하나를 0보다 크게 입력하세요.');
         return;
       }
@@ -779,9 +786,12 @@
 
       if (price > 0) {
         const per = price / p;
+        const per10k = per / 10000;
         outPricePer.textContent = fmtKRW(per);
-        outPricePer10k.textContent = `${fmt(per / 10000, 1)}만원`;
-        help.textContent = `입력 면적 ${fmt(m2, 2)}㎡(약 ${fmt(p, 2)}평) 기준 평당가는 ${fmt(per / 10000, 1)}만원입니다.`;
+        outPricePer10k.textContent = per >= 100000000
+          ? `${fmt(per10k, 1)}만원 (${fmtEok(per)})`
+          : `${fmt(per10k, 1)}만원`;
+        help.textContent = `입력 면적 ${fmt(m2, 2)}㎡(약 ${fmt(p, 2)}평) 기준 평당가는 ${fmt(per10k, 1)}만원${per >= 100000000 ? ` (${fmtEok(per)})` : ''}입니다.`;
       } else {
         outPricePer.textContent = '-';
         outPricePer10k.textContent = '-';
