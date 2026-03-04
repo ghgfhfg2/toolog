@@ -97,6 +97,15 @@
   url: /tools/percent-calculator/
   thumbnail: /assets/thumbs/percent-calculator.svg
 
+- id: pyeong-calculator
+  title: 평수 계산기
+  category: data
+  category_label: 부동산/생활
+  badge: New
+  description: ㎡↔평 변환과 평당가 계산을 한 번에 처리해요.
+  url: /tools/pyeong-calculator/
+  thumbnail: /assets/thumbs/pyeong-calculator.svg
+
 - id: d-day-calculator
   title: 디데이 계산기
   category: data

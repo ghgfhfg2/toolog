@@ -206,6 +206,40 @@ layout: default
 
           <p class="tool-result" id="pct-help">값을 입력하면 결과가 즉시 계산됩니다.</p>
         </div>
+      {% when 'pyeong-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="py-m2">면적(㎡)</label>
+              <input id="py-m2" type="number" min="0" step="0.01" placeholder="예: 84" inputmode="decimal" />
+            </div>
+            <div>
+              <label for="py-pyeong">면적(평)</label>
+              <input id="py-pyeong" type="number" min="0" step="0.01" placeholder="예: 25.41" inputmode="decimal" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="py-price">총액(원, 선택)</label>
+              <input id="py-price" type="number" min="0" step="10000" placeholder="예: 900000000" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="py-copy" type="button">결과 복사</button>
+            <button id="py-reset" type="button">초기화</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="py-out-m2">-</strong><span>제곱미터(㎡)</span></div>
+            <div><strong id="py-out-pyeong">-</strong><span>평</span></div>
+            <div><strong id="py-price-per">-</strong><span>평당가</span></div>
+            <div><strong id="py-price-per-10k">-</strong><span>평당가(만원)</span></div>
+          </div>
+
+          <p class="tool-result" id="py-help">㎡ 또는 평 중 하나를 입력하면 자동으로 변환됩니다.</p>
+        </div>
       {% when 'd-day-calculator' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">

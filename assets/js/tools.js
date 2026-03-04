@@ -700,6 +700,122 @@
     });
   }
 
+  if (slug === 'pyeong-calculator') {
+    const FACTOR = 3.305785;
+    const m2Input = document.getElementById('py-m2');
+    const pyeongInput = document.getElementById('py-pyeong');
+    const priceInput = document.getElementById('py-price');
+    const outM2 = document.getElementById('py-out-m2');
+    const outPyeong = document.getElementById('py-out-pyeong');
+    const outPricePer = document.getElementById('py-price-per');
+    const outPricePer10k = document.getElementById('py-price-per-10k');
+    const help = document.getElementById('py-help');
+    const copyBtn = document.getElementById('py-copy');
+    const resetBtn = document.getElementById('py-reset');
+
+    if (!m2Input || !pyeongInput || !priceInput || !outM2 || !outPyeong || !outPricePer || !outPricePer10k || !help) return;
+
+    let lock = false;
+
+    const fmt = (v, max = 4) => Number(v).toLocaleString('ko-KR', { maximumFractionDigits: max });
+    const fmtKRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
+
+    const setIdle = (msg) => {
+      outM2.textContent = '-';
+      outPyeong.textContent = '-';
+      outPricePer.textContent = '-';
+      outPricePer10k.textContent = '-';
+      help.textContent = msg;
+    };
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const render = (source = 'm2') => {
+      const m2Raw = Number(m2Input.value || 0);
+      const pRaw = Number(pyeongInput.value || 0);
+      const price = Math.max(0, Number(priceInput.value || 0));
+
+      if ((m2Raw <= 0 && pRaw <= 0) || (!Number.isFinite(m2Raw) && !Number.isFinite(pRaw))) {
+        setIdle('㎡ 또는 평 중 하나를 0보다 크게 입력하세요.');
+        return;
+      }
+
+      let m2 = 0;
+      let p = 0;
+
+      if (source === 'pyeong') {
+        p = Math.max(0, pRaw);
+        m2 = p * FACTOR;
+      } else {
+        m2 = Math.max(0, m2Raw);
+        p = m2 / FACTOR;
+      }
+
+      if (!(m2 > 0) || !(p > 0)) {
+        setIdle('면적은 0보다 커야 합니다.');
+        return;
+      }
+
+      lock = true;
+      m2Input.value = m2 ? m2.toFixed(2).replace(/\.00$/, '') : '';
+      pyeongInput.value = p ? p.toFixed(2).replace(/\.00$/, '') : '';
+      lock = false;
+
+      outM2.textContent = `${fmt(m2, 2)}㎡`;
+      outPyeong.textContent = `${fmt(p, 2)}평`;
+
+      if (price > 0) {
+        const per = price / p;
+        outPricePer.textContent = fmtKRW(per);
+        outPricePer10k.textContent = `${fmt(per / 10000, 1)}만원`;
+        help.textContent = `입력 면적 ${fmt(m2, 2)}㎡(약 ${fmt(p, 2)}평) 기준 평당가는 ${fmt(per / 10000, 1)}만원입니다.`;
+      } else {
+        outPricePer.textContent = '-';
+        outPricePer10k.textContent = '-';
+        help.textContent = `면적 ${fmt(m2, 2)}㎡ = 약 ${fmt(p, 2)}평`; 
+      }
+    };
+
+    m2Input.addEventListener('input', () => { if (!lock) render('m2'); });
+    pyeongInput.addEventListener('input', () => { if (!lock) render('pyeong'); });
+    priceInput.addEventListener('input', () => {
+      if (Number(m2Input.value || 0) > 0) render('m2');
+      else if (Number(pyeongInput.value || 0) > 0) render('pyeong');
+      else setIdle('㎡ 또는 평 중 하나를 먼저 입력하세요.');
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (outM2.textContent === '-') return;
+      const text = `평수 계산 결과 | ${outM2.textContent} | ${outPyeong.textContent} | 평당가 ${outPricePer.textContent} (${outPricePer10k.textContent})`;
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      m2Input.value = '';
+      pyeongInput.value = '';
+      priceInput.value = '';
+      setIdle('㎡ 또는 평 중 하나를 입력하면 자동으로 변환됩니다.');
+    });
+
+    setIdle('㎡ 또는 평 중 하나를 입력하면 자동으로 변환됩니다.');
+  }
+
   if (slug === 'd-day-calculator') {
     const start = document.getElementById('dday-start');
     const end = document.getElementById('dday-end');
