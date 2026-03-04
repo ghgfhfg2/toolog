@@ -150,3 +150,12 @@
   description: 입사일·퇴사일·월급·상여금 입력으로 재직일수와 예상 퇴직금, 1년 요건 여부를 빠르게 확인해요.
   url: /tools/severance-pay-calculator/
   thumbnail: /assets/thumbs/severance-pay-calculator.svg
+
+- id: stock-average-calculator
+  title: 물타기 계산기
+  category: calculator
+  category_label: 투자/금융
+  badge: New
+  description: 현재 보유 평단과 추가 매수 계획을 넣어 새 평단가와 목표 평단 달성 필요 수량을 계산해요.
+  url: /tools/stock-average-calculator/
+  thumbnail: /assets/thumbs/stock-average-calculator.svg

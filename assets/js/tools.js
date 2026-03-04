@@ -1849,6 +1849,130 @@
     render();
   }
 
+  if (slug === 'stock-average-calculator') {
+    const currentQty = document.getElementById('sa-current-qty');
+    const currentPrice = document.getElementById('sa-current-price');
+    const addQty = document.getElementById('sa-add-qty');
+    const addPrice = document.getElementById('sa-add-price');
+    const targetPrice = document.getElementById('sa-target-price');
+    const newAvg = document.getElementById('sa-new-avg');
+    const totalQtyOut = document.getElementById('sa-total-qty');
+    const totalCostOut = document.getElementById('sa-total-cost');
+    const needQtyOut = document.getElementById('sa-need-qty');
+    const help = document.getElementById('sa-help');
+    const copyBtn = document.getElementById('sa-copy');
+    const resetBtn = document.getElementById('sa-reset');
+
+    if (!currentQty || !currentPrice || !addQty || !addPrice || !newAvg || !totalQtyOut || !totalCostOut || !needQtyOut || !help) return;
+
+    const fmtKRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
+    const fmtQty = (v) => `${Math.round(v).toLocaleString('ko-KR')}주`;
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const setIdle = (msg) => {
+      newAvg.textContent = '-';
+      totalQtyOut.textContent = '-';
+      totalCostOut.textContent = '-';
+      needQtyOut.textContent = '-';
+      help.textContent = msg;
+    };
+
+    const render = () => {
+      const cq = Math.max(0, Number(currentQty.value || 0));
+      const cp = Math.max(0, Number(currentPrice.value || 0));
+      const aq = Math.max(0, Number(addQty.value || 0));
+      const ap = Math.max(0, Number(addPrice.value || 0));
+      const tpRaw = targetPrice?.value || '';
+      const tp = tpRaw === '' ? null : Math.max(0, Number(tpRaw));
+
+      if (!(cq > 0) || !(cp > 0)) {
+        setIdle('현재 보유 수량과 평단가를 먼저 입력하세요.');
+        return;
+      }
+
+      const baseCost = cq * cp;
+      const addCost = aq * ap;
+      const totalQty = cq + aq;
+      const totalCost = baseCost + addCost;
+      const avg = totalQty > 0 ? totalCost / totalQty : 0;
+
+      newAvg.textContent = fmtKRW(avg);
+      totalQtyOut.textContent = fmtQty(totalQty);
+      totalCostOut.textContent = fmtKRW(totalCost);
+
+      if (tp === null || !Number.isFinite(tp)) {
+        needQtyOut.textContent = '-';
+        help.textContent = `추가 매수 반영 시 새 평단가는 ${fmtKRW(avg)}입니다.`;
+        return;
+      }
+
+      if (tp >= cp && aq === 0) {
+        needQtyOut.textContent = '0주';
+        help.textContent = '현재 평단가가 이미 목표 평단 이하입니다.';
+        return;
+      }
+
+      const denominator = tp - ap;
+      const numerator = cq * (cp - tp);
+
+      if (numerator <= 0) {
+        needQtyOut.textContent = '0주';
+        help.textContent = '현재 보유 상태로 이미 목표 평단을 만족합니다.';
+        return;
+      }
+
+      if (denominator <= 0) {
+        needQtyOut.textContent = '달성 불가';
+        help.textContent = '추가 매수가가 목표 평단 이상이면 같은 가격의 추가 매수만으로 목표 평단을 만들 수 없습니다.';
+        return;
+      }
+
+      const need = Math.ceil(numerator / denominator);
+      needQtyOut.textContent = fmtQty(need);
+      help.textContent = `목표 평단 ${fmtKRW(tp)}를 맞추려면 현재 조건에서 최소 ${fmtQty(need)} 추가 매수가 필요합니다.`;
+    };
+
+    [currentQty, currentPrice, addQty, addPrice, targetPrice].forEach((el) => el?.addEventListener('input', render));
+
+    copyBtn?.addEventListener('click', async () => {
+      if (newAvg.textContent === '-') return;
+      const text = `물타기 계산 결과 | 새 평단가 ${newAvg.textContent} | 총 보유 ${totalQtyOut.textContent} | 총 매수금액 ${totalCostOut.textContent} | 목표 평단 필요수량 ${needQtyOut.textContent}`;
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      currentQty.value = 100;
+      currentPrice.value = 50000;
+      addQty.value = 100;
+      addPrice.value = 40000;
+      if (targetPrice) targetPrice.value = 43000;
+      render();
+    });
+
+    if (!currentQty.value) currentQty.value = 100;
+    if (!currentPrice.value) currentPrice.value = 50000;
+    if (!addQty.value) addQty.value = 100;
+    if (!addPrice.value) addPrice.value = 40000;
+    render();
+  }
+
   if (slug === 'font-change') {
     const input = document.getElementById('fc-input');
     const list = document.getElementById('fc-list');
