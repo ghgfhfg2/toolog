@@ -1266,6 +1266,7 @@
 
     const calcPlan = ({ principal, n, r, mode }) => {
       let firstMonthly = 0;
+      let lastMonthly = 0;
       let total = 0;
 
       if (mode === 'equal-principal') {
@@ -1275,20 +1276,24 @@
           const interest = remaining * r;
           const pay = principalPerMonth + interest;
           if (i === 0) firstMonthly = pay;
+          if (i === n - 1) lastMonthly = pay;
           total += pay;
           remaining -= principalPerMonth;
         }
       } else {
         if (r === 0) {
           firstMonthly = principal / n;
+          lastMonthly = firstMonthly;
         } else {
           firstMonthly = principal * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+          lastMonthly = firstMonthly;
         }
         total = firstMonthly * n;
       }
 
       return {
         firstMonthly,
+        lastMonthly,
         total,
         interest: Math.max(0, total - principal)
       };
@@ -1299,7 +1304,7 @@
       totalInterest.textContent = '-';
       totalPayment.textContent = '-';
       monthCount.textContent = '-';
-      comparePayment.textContent = '원리금균등: - / 원금균등(첫 달): -';
+      comparePayment.textContent = '원리금균등: - / 원금균등: 첫 달 - → 마지막 -';
       compareInterest.textContent = '총 이자 차이: -';
       help.textContent = '대출금액·연이율·상환기간을 올바르게 입력하세요.';
     };
@@ -1325,7 +1330,7 @@
       totalPayment.textContent = fmtKRW(selected.total);
       monthCount.textContent = `${n.toLocaleString('ko-KR')}회`;
 
-      comparePayment.textContent = `원리금균등: ${fmtKRW(equalPayment.firstMonthly)} / 원금균등(첫 달): ${fmtKRW(equalPrincipal.firstMonthly)}`;
+      comparePayment.textContent = `원리금균등: ${fmtKRW(equalPayment.firstMonthly)} / 원금균등: 첫 달 ${fmtKRW(equalPrincipal.firstMonthly)} → 마지막 ${fmtKRW(equalPrincipal.lastMonthly)}`;
 
       const diffInterest = equalPrincipal.interest - equalPayment.interest;
       if (Math.abs(diffInterest) < 1) {
