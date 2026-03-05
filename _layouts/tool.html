@@ -711,6 +711,17 @@ layout: default
             </div>
           </div>
 
+          <div id="bf-rent-helper" class="tool-row-grid pct-grid" hidden>
+            <div>
+              <label for="bf-deposit">보증금(원)</label>
+              <input id="bf-deposit" type="number" min="0" step="10000" placeholder="예: 50000000" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="bf-monthly-rent">월세(원)</label>
+              <input id="bf-monthly-rent" type="number" min="0" step="10000" placeholder="예: 800000" inputmode="numeric" />
+            </div>
+          </div>
+
           <div class="tool-row-grid pct-actions">
             <button id="bf-copy" type="button">결과 복사</button>
             <button id="bf-reset" type="button">초기화</button>
@@ -723,7 +734,7 @@ layout: default
             <div><strong id="bf-vat">-</strong><span>부가세 포함(참고)</span></div>
           </div>
 
-          <p class="tool-result" id="bf-help">주택 기준 상한 요율표(2021.10 개정)에 따라 계산합니다. 실제 협의보수는 상한 이내에서 결정됩니다.</p>
+          <p class="tool-result" id="bf-help">주택 기준 상한 요율표(2021.10 개정)에 따라 계산합니다. 임대차에서 보증금/월세를 입력하면 환산금액(보증금 + 월세×100)도 바로 채울 수 있습니다.</p>
         </div>
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>

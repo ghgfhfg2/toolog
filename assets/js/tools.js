@@ -2284,6 +2284,9 @@
   if (slug === 'brokerage-fee-calculator') {
     const type = document.getElementById('bf-type');
     const amount = document.getElementById('bf-amount');
+    const deposit = document.getElementById('bf-deposit');
+    const monthlyRent = document.getElementById('bf-monthly-rent');
+    const rentHelper = document.getElementById('bf-rent-helper');
     const rateEl = document.getElementById('bf-rate');
     const limitEl = document.getElementById('bf-limit');
     const feeEl = document.getElementById('bf-fee');
@@ -2315,7 +2318,17 @@
 
     const resolveRow = (t, v) => (tables[t] || tables.sale).find((r) => v <= r.max) || tables.sale[tables.sale.length - 1];
 
+    const syncRentConvertedAmount = () => {
+      if ((type?.value || 'sale') !== 'rent' || !amount) return;
+      const d = Math.max(0, Number(deposit?.value || 0));
+      const m = Math.max(0, Number(monthlyRent?.value || 0));
+      if (!(d > 0 || m > 0)) return;
+      amount.value = String(Math.round(d + (m * 100)));
+    };
+
     const run = () => {
+      if (rentHelper) rentHelper.hidden = (type?.value || 'sale') !== 'rent';
+
       const v = Number(amount?.value || 0);
       if (!v || v <= 0) {
         rateEl.textContent = '-';
@@ -2338,12 +2351,19 @@
 
       if (help) {
         const typeLabel = (type?.value || 'sale') === 'sale' ? '매매' : '임대차';
-        help.textContent = `주택 ${typeLabel} 상한 요율 기준 계산값입니다. 실제 중개보수는 공인중개사와 상한 이내 협의로 결정됩니다.`;
+        const rentHint = (type?.value || 'sale') === 'rent' ? ' (환산금액: 보증금 + 월세×100)' : '';
+        help.textContent = `주택 ${typeLabel} 상한 요율 기준 계산값입니다${rentHint}. 실제 중개보수는 공인중개사와 상한 이내 협의로 결정됩니다.`;
       }
     };
 
-    [type, amount].forEach((el) => el?.addEventListener('input', run));
-    type?.addEventListener('change', run);
+    [type, amount, deposit, monthlyRent].forEach((el) => el?.addEventListener('input', () => {
+      syncRentConvertedAmount();
+      run();
+    }));
+    type?.addEventListener('change', () => {
+      syncRentConvertedAmount();
+      run();
+    });
 
     copyBtn?.addEventListener('click', async () => {
       const text = `거래유형: ${type?.selectedOptions?.[0]?.text || '-'}
@@ -2370,6 +2390,8 @@
     resetBtn?.addEventListener('click', () => {
       if (type) type.value = 'sale';
       if (amount) amount.value = '';
+      if (deposit) deposit.value = '';
+      if (monthlyRent) monthlyRent.value = '';
       run();
     });
 
