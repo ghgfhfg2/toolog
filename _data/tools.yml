@@ -1,3 +1,12 @@
+- id: password-generator
+  title: 비밀번호 생성기
+  category: security
+  category_label: 보안/계정
+  badge: New
+  description: 길이·문자조합·가독성 옵션으로 강력한 랜덤 비밀번호를 생성해요.
+  url: /tools/password-generator/
+  thumbnail: /assets/thumbs/password-generator.svg
+
 - id: png-compressor
   title: PNG 압축기
   category: image

@@ -700,6 +700,158 @@
     });
   }
 
+  if (slug === 'password-generator') {
+    const lenInput = document.getElementById('pw-length');
+    const countInput = document.getElementById('pw-count');
+    const upper = document.getElementById('pw-upper');
+    const lower = document.getElementById('pw-lower');
+    const number = document.getElementById('pw-number');
+    const symbol = document.getElementById('pw-symbol');
+    const excludeSimilar = document.getElementById('pw-exclude-similar');
+    const runBtn = document.getElementById('pw-run');
+    const copyAllBtn = document.getElementById('pw-copy-all');
+    const output = document.getElementById('pw-output');
+    const strength = document.getElementById('pw-strength');
+    const poolOut = document.getElementById('pw-pool');
+    const combosOut = document.getElementById('pw-combos');
+    const bitsOut = document.getElementById('pw-bits');
+    const help = document.getElementById('pw-help');
+
+    if (!lenInput || !countInput || !upper || !lower || !number || !symbol || !runBtn || !copyAllBtn || !output || !strength || !poolOut || !combosOut || !bitsOut || !help) return;
+
+    const SETS = {
+      upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+      lower: 'abcdefghijklmnopqrstuvwxyz',
+      number: '0123456789',
+      symbol: '!@#$%^&*()_+-=[]{}|;:,.<>?/~'
+    };
+    const SIMILAR = new Set(['O', '0', 'o', 'I', 'l', '1']);
+
+    const pick = (str) => {
+      const arr = new Uint32Array(1);
+      crypto.getRandomValues(arr);
+      return str[arr[0] % str.length];
+    };
+
+    const shuffle = (arr) => {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const rand = new Uint32Array(1);
+        crypto.getRandomValues(rand);
+        const j = rand[0] % (i + 1);
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    };
+
+    const toScientific = (v) => {
+      if (!Number.isFinite(v) || v <= 0) return '-';
+      if (v < 1e6) return Math.round(v).toLocaleString('ko-KR');
+      const exp = Math.floor(Math.log10(v));
+      const mantissa = (v / Math.pow(10, exp)).toFixed(2);
+      return `${mantissa}e+${exp}`;
+    };
+
+    const buildSet = () => {
+      const chosen = [];
+      if (upper.checked) chosen.push({ key: 'upper', chars: SETS.upper });
+      if (lower.checked) chosen.push({ key: 'lower', chars: SETS.lower });
+      if (number.checked) chosen.push({ key: 'number', chars: SETS.number });
+      if (symbol.checked) chosen.push({ key: 'symbol', chars: SETS.symbol });
+
+      const removeSimilar = excludeSimilar.checked;
+      const normalized = chosen.map((set) => {
+        if (!removeSimilar) return set;
+        return { ...set, chars: Array.from(set.chars).filter((ch) => !SIMILAR.has(ch)).join('') };
+      }).filter((set) => set.chars.length > 0);
+
+      const pool = normalized.map((s) => s.chars).join('');
+      return { normalized, pool };
+    };
+
+    const scoreLabel = (bits) => {
+      if (bits < 40) return '낮음';
+      if (bits < 60) return '보통';
+      if (bits < 80) return '강함';
+      return '매우 강함';
+    };
+
+    const renderStats = (poolSize, len) => {
+      if (!(poolSize > 0) || !(len > 0)) {
+        strength.textContent = '-';
+        poolOut.textContent = '-';
+        combosOut.textContent = '-';
+        bitsOut.textContent = '-';
+        return;
+      }
+      const bits = len * Math.log2(poolSize);
+      const combos = Math.pow(poolSize, len);
+      strength.textContent = scoreLabel(bits);
+      poolOut.textContent = `${poolSize.toLocaleString('ko-KR')}자`;
+      combosOut.textContent = toScientific(combos);
+      bitsOut.textContent = `${bits.toLocaleString('ko-KR', { maximumFractionDigits: 1 })} bit`;
+    };
+
+    const generate = () => {
+      const length = Math.max(4, Math.min(128, Math.floor(Number(lenInput.value || 16))));
+      const count = Math.max(1, Math.min(20, Math.floor(Number(countInput.value || 5))));
+      lenInput.value = length;
+      countInput.value = count;
+
+      const { normalized, pool } = buildSet();
+      if (!normalized.length || !pool.length) {
+        output.value = '';
+        renderStats(0, length);
+        help.textContent = '최소 1개 문자 유형을 선택해 주세요.';
+        return;
+      }
+
+      renderStats(pool.length, length);
+
+      const list = [];
+      for (let i = 0; i < count; i++) {
+        const chars = [];
+        normalized.forEach((set) => chars.push(pick(set.chars)));
+        while (chars.length < length) chars.push(pick(pool));
+        list.push(shuffle(chars).join(''));
+      }
+
+      output.value = list.join('\n');
+      help.textContent = `길이 ${length}, ${count}개 생성 완료. 각 비밀번호는 선택한 모든 문자 유형을 최소 1개 이상 포함합니다.`;
+    };
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    runBtn.addEventListener('click', generate);
+    [lenInput, countInput, upper, lower, number, symbol, excludeSimilar].forEach((el) => el.addEventListener('input', () => {
+      const { pool } = buildSet();
+      const length = Math.max(4, Math.min(128, Math.floor(Number(lenInput.value || 16))));
+      renderStats(pool.length, length);
+    }));
+
+    copyAllBtn.addEventListener('click', async () => {
+      if (!output.value.trim()) return;
+      await copyText(output.value.trim());
+      const old = copyAllBtn.textContent;
+      copyAllBtn.textContent = '복사됨';
+      setTimeout(() => { copyAllBtn.textContent = old || '전체 복사'; }, 900);
+    });
+
+    generate();
+  }
+
   if (slug === 'pyeong-calculator') {
     const FACTOR = 3.305785;
     const m2Input = document.getElementById('py-m2');
