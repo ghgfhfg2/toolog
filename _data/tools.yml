@@ -1,3 +1,12 @@
+- id: loan-calculator
+  title: 대출 이자 계산기
+  category: calculator
+  category_label: 금융/비즈니스
+  badge: New
+  description: 대출금액·금리·기간으로 월 납입액, 총 이자, 상환방식을 한 번에 비교해요.
+  url: /tools/loan-calculator/
+  thumbnail: /assets/thumbs/loan-calculator.svg
+
 - id: brokerage-fee-calculator
   title: 부동산 중개수수료 계산기
   category: calculator
