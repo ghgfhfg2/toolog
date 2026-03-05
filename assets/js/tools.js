@@ -725,7 +725,7 @@
       number: '0123456789',
       symbol: '!@#$%^&*()_+-=[]{}|;:,.<>?/~'
     };
-    const SIMILAR = new Set(['O', '0', 'o', 'I', 'l', '1']);
+    const SIMILAR = new Set(['O', '0', 'o', 'I', 'l', '1', 'B', '8', 'S', '5', 'Z', '2']);
 
     const pick = (str) => {
       const arr = new Uint32Array(1);
@@ -743,11 +743,11 @@
       return arr;
     };
 
-    const toScientific = (v) => {
-      if (!Number.isFinite(v) || v <= 0) return '-';
-      if (v < 1e6) return Math.round(v).toLocaleString('ko-KR');
-      const exp = Math.floor(Math.log10(v));
-      const mantissa = (v / Math.pow(10, exp)).toFixed(2);
+    const toScientificFromLog10 = (log10Value) => {
+      if (!Number.isFinite(log10Value)) return '-';
+      if (log10Value < 6) return Math.round(10 ** log10Value).toLocaleString('ko-KR');
+      const exp = Math.floor(log10Value);
+      const mantissa = (10 ** (log10Value - exp)).toFixed(2);
       return `${mantissa}e+${exp}`;
     };
 
@@ -784,10 +784,10 @@
         return;
       }
       const bits = len * Math.log2(poolSize);
-      const combos = Math.pow(poolSize, len);
+      const log10Combos = len * Math.log10(poolSize);
       strength.textContent = scoreLabel(bits);
       poolOut.textContent = `${poolSize.toLocaleString('ko-KR')}자`;
-      combosOut.textContent = toScientific(combos);
+      combosOut.textContent = toScientificFromLog10(log10Combos);
       bitsOut.textContent = `${bits.toLocaleString('ko-KR', { maximumFractionDigits: 1 })} bit`;
     };
 
@@ -805,18 +805,37 @@
         return;
       }
 
+      if (length < normalized.length) {
+        output.value = '';
+        renderStats(pool.length, length);
+        help.textContent = `현재 길이(${length})로는 선택한 문자 유형 ${normalized.length}개를 모두 포함할 수 없습니다.`;
+        return;
+      }
+
       renderStats(pool.length, length);
 
       const list = [];
-      for (let i = 0; i < count; i++) {
+      const seen = new Set();
+      let attempts = 0;
+      const maxAttempts = Math.max(200, count * 30);
+
+      while (list.length < count && attempts < maxAttempts) {
+        attempts += 1;
         const chars = [];
         normalized.forEach((set) => chars.push(pick(set.chars)));
         while (chars.length < length) chars.push(pick(pool));
-        list.push(shuffle(chars).join(''));
+        const candidate = shuffle(chars).join('');
+        if (seen.has(candidate)) continue;
+        seen.add(candidate);
+        list.push(candidate);
       }
 
       output.value = list.join('\n');
-      help.textContent = `길이 ${length}, ${count}개 생성 완료. 각 비밀번호는 선택한 모든 문자 유형을 최소 1개 이상 포함합니다.`;
+      if (list.length === count) {
+        help.textContent = `길이 ${length}, ${count}개 생성 완료. 각 비밀번호는 선택한 모든 문자 유형을 최소 1개 이상 포함합니다.`;
+      } else {
+        help.textContent = `중복 없는 비밀번호 ${list.length}개를 생성했습니다. (요청 ${count}개, 문자풀/길이 조합 제한)`;
+      }
     };
 
     const copyText = async (text) => {
