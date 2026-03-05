@@ -695,6 +695,36 @@ layout: default
 
           <p class="tool-result" id="tdee-help">값을 입력하면 BMR/TDEE와 목표별 칼로리가 계산됩니다.</p>
         </div>
+      {% when 'brokerage-fee-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="bf-type">거래 유형</label>
+              <select id="bf-type">
+                <option value="sale">주택 매매</option>
+                <option value="rent">주택 임대차(전세/월세 환산)</option>
+              </select>
+            </div>
+            <div>
+              <label for="bf-amount">거래금액(원)</label>
+              <input id="bf-amount" type="number" min="0" step="10000" placeholder="예: 650000000" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="bf-copy" type="button">결과 복사</button>
+            <button id="bf-reset" type="button">초기화</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="bf-rate">-</strong><span>적용 상한 요율</span></div>
+            <div><strong id="bf-limit">-</strong><span>상한액</span></div>
+            <div><strong id="bf-fee">-</strong><span>예상 중개보수(한도)</span></div>
+            <div><strong id="bf-vat">-</strong><span>부가세 포함(참고)</span></div>
+          </div>
+
+          <p class="tool-result" id="bf-help">주택 기준 상한 요율표(2021.10 개정)에 따라 계산합니다. 실제 협의보수는 상한 이내에서 결정됩니다.</p>
+        </div>
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
     {% endcase %}

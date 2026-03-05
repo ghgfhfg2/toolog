@@ -1,3 +1,12 @@
+- id: brokerage-fee-calculator
+  title: 부동산 중개수수료 계산기
+  category: calculator
+  category_label: 부동산/금융
+  badge: New
+  description: 주택 매매·전월세 거래금액 기준 법정 상한 요율로 중개보수 한도를 빠르게 계산해요.
+  url: /tools/brokerage-fee-calculator/
+  thumbnail: /assets/thumbs/brokerage-fee-calculator.svg
+
 - id: password-generator
   title: 비밀번호 생성기
   category: security

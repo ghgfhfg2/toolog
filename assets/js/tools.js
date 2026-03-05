@@ -2280,6 +2280,102 @@
     render();
   }
 
+
+  if (slug === 'brokerage-fee-calculator') {
+    const type = document.getElementById('bf-type');
+    const amount = document.getElementById('bf-amount');
+    const rateEl = document.getElementById('bf-rate');
+    const limitEl = document.getElementById('bf-limit');
+    const feeEl = document.getElementById('bf-fee');
+    const vatEl = document.getElementById('bf-vat');
+    const help = document.getElementById('bf-help');
+    const copyBtn = document.getElementById('bf-copy');
+    const resetBtn = document.getElementById('bf-reset');
+
+    const KRW = (n) => `${Math.round(n || 0).toLocaleString('ko-KR')}원`;
+
+    const tables = {
+      sale: [
+        { max: 50000000, rate: 0.006, cap: 250000 },
+        { max: 200000000, rate: 0.005, cap: 800000 },
+        { max: 900000000, rate: 0.004, cap: null },
+        { max: 1200000000, rate: 0.005, cap: null },
+        { max: 1500000000, rate: 0.006, cap: null },
+        { max: Infinity, rate: 0.007, cap: null }
+      ],
+      rent: [
+        { max: 50000000, rate: 0.005, cap: 200000 },
+        { max: 100000000, rate: 0.004, cap: 300000 },
+        { max: 600000000, rate: 0.003, cap: null },
+        { max: 1200000000, rate: 0.004, cap: null },
+        { max: 1500000000, rate: 0.005, cap: null },
+        { max: Infinity, rate: 0.006, cap: null }
+      ]
+    };
+
+    const resolveRow = (t, v) => (tables[t] || tables.sale).find((r) => v <= r.max) || tables.sale[tables.sale.length - 1];
+
+    const run = () => {
+      const v = Number(amount?.value || 0);
+      if (!v || v <= 0) {
+        rateEl.textContent = '-';
+        limitEl.textContent = '-';
+        feeEl.textContent = '-';
+        vatEl.textContent = '-';
+        if (help) help.textContent = '거래 유형과 거래금액을 입력하면 중개보수 상한을 계산합니다.';
+        return;
+      }
+
+      const row = resolveRow(type?.value || 'sale', v);
+      const raw = v * row.rate;
+      const capped = row.cap ? Math.min(raw, row.cap) : raw;
+      const vatIncluded = capped * 1.1;
+
+      rateEl.textContent = `${(row.rate * 100).toFixed(1)}%`;
+      limitEl.textContent = row.cap ? KRW(row.cap) : '법정 정액 상한 없음';
+      feeEl.textContent = KRW(capped);
+      vatEl.textContent = KRW(vatIncluded);
+
+      if (help) {
+        const typeLabel = (type?.value || 'sale') === 'sale' ? '매매' : '임대차';
+        help.textContent = `주택 ${typeLabel} 상한 요율 기준 계산값입니다. 실제 중개보수는 공인중개사와 상한 이내 협의로 결정됩니다.`;
+      }
+    };
+
+    [type, amount].forEach((el) => el?.addEventListener('input', run));
+    type?.addEventListener('change', run);
+
+    copyBtn?.addEventListener('click', async () => {
+      const text = `거래유형: ${type?.selectedOptions?.[0]?.text || '-'}
+거래금액: ${KRW(Number(amount?.value || 0))}
+적용 상한 요율: ${rateEl.textContent}
+예상 중개보수(한도): ${feeEl.textContent}
+부가세 포함(참고): ${vatEl.textContent}`;
+      try {
+        await navigator.clipboard.writeText(text);
+        if (help) help.textContent = '결과를 클립보드에 복사했습니다.';
+      } catch {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        if (help) help.textContent = '결과를 복사했습니다.';
+      }
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      if (type) type.value = 'sale';
+      if (amount) amount.value = '';
+      run();
+    });
+
+    run();
+  }
+
   if (slug === 'font-change') {
     const input = document.getElementById('fc-input');
     const list = document.getElementById('fc-list');
