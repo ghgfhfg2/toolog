@@ -2445,17 +2445,25 @@
       help.textContent = msg;
     };
 
+    const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
+
     const render = () => {
       const j = Math.max(0, Number(jeonse.value || 0));
       const wd = Math.max(0, Number(wolseDeposit.value || 0));
       const wr = Math.max(0, Number(wolseRent.value || 0));
-      const r = Math.max(0, Number(rate.value || 0));
-      const m = Math.max(1, Math.floor(Number(months.value || 0)));
+      const rRaw = Number(rate.value || 0);
+      const mRaw = Number(months.value || 0);
 
-      if (!(j > 0) || !(m > 0)) {
+      if (!(j > 0) || !(mRaw > 0)) {
         setIdle('전세 보증금과 거주기간을 입력하세요.');
         return;
       }
+
+      const r = Number.isFinite(rRaw) ? clamp(rRaw, 0, 30) : 0;
+      const m = Number.isFinite(mRaw) ? clamp(Math.floor(mRaw), 1, 120) : 1;
+
+      if (rRaw !== r) rate.value = r;
+      if (mRaw !== m) months.value = m;
 
       const annualRate = r / 100;
       const monthRate = annualRate / 12;
