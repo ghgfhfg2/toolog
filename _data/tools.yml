@@ -1,3 +1,12 @@
+- id: jeonse-vs-wolse-calculator
+  title: 전세 vs 월세 계산기
+  category: calculator
+  category_label: 부동산/금융
+  badge: New
+  description: 전세·월세 보증금과 수익률·거주기간을 넣으면 총 주거비와 손익분기 월세를 비교해요.
+  url: /tools/jeonse-vs-wolse-calculator/
+  thumbnail: /assets/thumbs/jeonse-vs-wolse-calculator.svg
+
 - id: loan-calculator
   title: 대출 이자 계산기
   category: calculator

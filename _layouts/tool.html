@@ -707,6 +707,51 @@ layout: default
 
           <p class="tool-result" id="tdee-help">값을 입력하면 BMR/TDEE와 목표별 칼로리가 계산됩니다.</p>
         </div>
+      {% when 'jeonse-vs-wolse-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="jv-jeonse">전세 보증금(원)</label>
+              <input id="jv-jeonse" type="number" min="0" step="10000" placeholder="예: 400000000" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="jv-wolse-deposit">월세 보증금(원)</label>
+              <input id="jv-wolse-deposit" type="number" min="0" step="10000" placeholder="예: 50000000" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="jv-wolse-rent">월세(원)</label>
+              <input id="jv-wolse-rent" type="number" min="0" step="10000" placeholder="예: 1100000" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="jv-rate">기대 수익률(연 %)</label>
+              <input id="jv-rate" type="number" min="0" max="30" step="0.01" placeholder="예: 3.5" inputmode="decimal" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="jv-months">거주기간(개월)</label>
+              <input id="jv-months" type="number" min="1" max="120" step="1" placeholder="예: 24" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="jv-copy" type="button">결과 복사</button>
+            <button id="jv-reset" type="button">초기화</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="jv-jeonse-cost">-</strong><span>전세 총 주거비(기회비용)</span></div>
+            <div><strong id="jv-wolse-cost">-</strong><span>월세 총 주거비</span></div>
+            <div><strong id="jv-monthly-gap">-</strong><span>월 기준 비용 차이</span></div>
+            <div><strong id="jv-break-even">-</strong><span>손익분기 월세</span></div>
+          </div>
+
+          <p class="tool-result" id="jv-help">보증금/월세/수익률/거주기간을 입력하면 전세와 월세를 같은 기준으로 비교합니다.</p>
+        </div>
       {% when 'brokerage-fee-calculator' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">

@@ -2403,6 +2403,115 @@
     run();
   }
 
+
+  if (slug === 'jeonse-vs-wolse-calculator') {
+    const jeonse = document.getElementById('jv-jeonse');
+    const wolseDeposit = document.getElementById('jv-wolse-deposit');
+    const wolseRent = document.getElementById('jv-wolse-rent');
+    const rate = document.getElementById('jv-rate');
+    const months = document.getElementById('jv-months');
+    const jeonseCostEl = document.getElementById('jv-jeonse-cost');
+    const wolseCostEl = document.getElementById('jv-wolse-cost');
+    const monthlyGapEl = document.getElementById('jv-monthly-gap');
+    const breakEvenEl = document.getElementById('jv-break-even');
+    const help = document.getElementById('jv-help');
+    const copyBtn = document.getElementById('jv-copy');
+    const resetBtn = document.getElementById('jv-reset');
+
+    if (!jeonse || !wolseDeposit || !wolseRent || !rate || !months || !jeonseCostEl || !wolseCostEl || !monthlyGapEl || !breakEvenEl || !help) return;
+
+    const KRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const setIdle = (msg) => {
+      jeonseCostEl.textContent = '-';
+      wolseCostEl.textContent = '-';
+      monthlyGapEl.textContent = '-';
+      breakEvenEl.textContent = '-';
+      help.textContent = msg;
+    };
+
+    const render = () => {
+      const j = Math.max(0, Number(jeonse.value || 0));
+      const wd = Math.max(0, Number(wolseDeposit.value || 0));
+      const wr = Math.max(0, Number(wolseRent.value || 0));
+      const r = Math.max(0, Number(rate.value || 0));
+      const m = Math.max(1, Math.floor(Number(months.value || 0)));
+
+      if (!(j > 0) || !(m > 0)) {
+        setIdle('전세 보증금과 거주기간을 입력하세요.');
+        return;
+      }
+
+      const annualRate = r / 100;
+      const monthRate = annualRate / 12;
+
+      const jeonseCost = j * annualRate * (m / 12);
+      const wolseOpportunity = wd * annualRate * (m / 12);
+      const wolseCost = wolseOpportunity + (wr * m);
+
+      const monthlyJeonse = jeonseCost / m;
+      const monthlyWolse = wolseCost / m;
+      const gapMonthly = monthlyWolse - monthlyJeonse;
+
+      const breakEvenMonthlyRent = Math.max(0, (j - wd) * monthRate);
+
+      jeonseCostEl.textContent = KRW(jeonseCost);
+      wolseCostEl.textContent = KRW(wolseCost);
+      monthlyGapEl.textContent = `${KRW(Math.abs(gapMonthly))} (${gapMonthly > 0 ? '전세 유리' : gapMonthly < 0 ? '월세 유리' : '거의 동일'})`;
+      breakEvenEl.textContent = KRW(breakEvenMonthlyRent);
+
+      if (gapMonthly > 0) {
+        help.textContent = `입력 조건에서는 전세의 월 환산 주거비가 약 ${KRW(Math.abs(gapMonthly))} 더 낮습니다.`;
+      } else if (gapMonthly < 0) {
+        help.textContent = `입력 조건에서는 월세의 월 환산 주거비가 약 ${KRW(Math.abs(gapMonthly))} 더 낮습니다.`;
+      } else {
+        help.textContent = '입력 조건에서 전세와 월세의 월 환산 주거비가 거의 같습니다.';
+      }
+    };
+
+    [jeonse, wolseDeposit, wolseRent, rate, months].forEach((el) => el?.addEventListener('input', render));
+
+    copyBtn?.addEventListener('click', async () => {
+      if (jeonseCostEl.textContent === '-') return;
+      const text = `전세 vs 월세 비교 | 전세 총 주거비 ${jeonseCostEl.textContent} | 월세 총 주거비 ${wolseCostEl.textContent} | 월 기준 비용 차이 ${monthlyGapEl.textContent} | 손익분기 월세 ${breakEvenEl.textContent}`;
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      jeonse.value = 400000000;
+      wolseDeposit.value = 50000000;
+      wolseRent.value = 1100000;
+      rate.value = 3.5;
+      months.value = 24;
+      render();
+    });
+
+    if (!jeonse.value) jeonse.value = 400000000;
+    if (!wolseDeposit.value) wolseDeposit.value = 50000000;
+    if (!wolseRent.value) wolseRent.value = 1100000;
+    if (!rate.value) rate.value = 3.5;
+    if (!months.value) months.value = 24;
+    render();
+  }
+
   if (slug === 'blog-banned-word-checker') {
     const input = document.getElementById('bw-input');
     const summary = document.getElementById('bw-summary');
