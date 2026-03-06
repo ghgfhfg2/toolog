@@ -16,6 +16,15 @@
   url: /tools/loan-calculator/
   thumbnail: /assets/thumbs/loan-calculator.svg
 
+- id: compound-interest-calculator
+  title: 복리 계산기
+  category: calculator
+  category_label: 투자/금융
+  badge: Popular
+  description: 초기금·월 적립금·수익률·기간으로 만기 자산, 총 원금, 예상 수익, 물가 반영 가치를 계산해요.
+  url: /tools/compound-interest-calculator/
+  thumbnail: /assets/thumbs/compound-interest-calculator.svg
+
 - id: brokerage-fee-calculator
   title: 부동산 중개수수료 계산기
   category: calculator
