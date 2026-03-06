@@ -1418,18 +1418,31 @@
       }
     };
 
-    const render = () => {
-      const p0 = Math.max(0, Number(initial.value || 0));
-      const mAdd = Math.max(0, Number(monthly.value || 0));
-      const rAnnual = Number(rate.value || 0);
-      const y = Math.floor(Number(years.value || 0));
-      const n = Math.max(1, Number(compound.value || 12));
-      const inf = Math.max(0, Number(inflation.value || 0));
+    const clamp = (num, min, max) => Math.min(max, Math.max(min, num));
 
-      if (!(y > 0) || !Number.isFinite(rAnnual) || rAnnual < 0 || rAnnual > 100) {
-        setIdle('투자 기간(1년 이상)과 연 수익률(0~100%)을 입력하세요.');
+    const render = () => {
+      const p0 = clamp(Number(initial.value || 0), 0, 1000000000000);
+      const mAdd = clamp(Number(monthly.value || 0), 0, 100000000000);
+      const rAnnual = clamp(Number(rate.value || 0), 0, 100);
+      const y = Math.floor(clamp(Number(years.value || 0), 1, 100));
+      const n = Math.max(1, Number(compound.value || 12));
+      const inf = clamp(Number(inflation.value || 0), 0, 50);
+
+      if (!Number.isFinite(p0) || !Number.isFinite(mAdd) || !Number.isFinite(rAnnual) || !Number.isFinite(y) || !Number.isFinite(inf)) {
+        setIdle('숫자만 입력해 주세요.');
         return;
       }
+
+      if (!(y > 0)) {
+        setIdle('투자 기간(1년 이상)을 입력하세요.');
+        return;
+      }
+
+      if (Number(initial.value || 0) !== p0) initial.value = p0;
+      if (Number(monthly.value || 0) !== mAdd) monthly.value = mAdd;
+      if (Number(rate.value || 0) !== rAnnual) rate.value = rAnnual;
+      if (Number(years.value || 0) !== y) years.value = y;
+      if (Number(inflation.value || 0) !== inf) inflation.value = inf;
 
       let balance = p0;
       const periodicRate = rAnnual / 100 / n;
