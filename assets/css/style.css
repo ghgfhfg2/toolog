@@ -585,6 +585,10 @@ a:hover { color: #fff; text-decoration: none; }
   transform: translateX(-50%) translateY(-3px);
 }
 
+#bw-input {
+  min-height: 260px;
+}
+
 .bw-list {
   display: grid;
   gap: .5rem;
