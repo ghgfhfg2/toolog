@@ -2414,12 +2414,26 @@
     if (!input || !list) return;
 
     const rules = [
-      { cat: '스팸/홍보', tag: 'spam', re: /(대출|도박|성인물|카지노|바카라|급전|무료상담)/gi },
-      { cat: '과장/광고성', tag: 'claim', re: /(무조건|100%|완치|즉시효과|평생보장|절대손해없음)/gi },
-      { cat: '어뷰징 패턴', tag: 'abuse', re: /(최저가\s*최저가|강추\s*강추|후기\s*후기)/gi },
-      { cat: '연락처/아이디', tag: 'link', re: /(\b01[0-9][-\s]?[0-9]{3,4}[-\s]?[0-9]{4}\b|카카오톡\s*ID|오픈채팅|텔레그램\s*@?\w+)/gi },
-      { cat: '외부 링크', tag: 'link', re: /(https?:\/\/[^\s]+|www\.[^\s]+)/gi }
+      { cat: '스팸/홍보 키워드', tag: 'spam', re: /(대출|도박|성인물|카지노|바카라|급전|무료체험|최저가|특가|당일지급|고수익|부업문의|재택알바)/gi },
+      { cat: '의학·법률·금융 과장 표현', tag: 'claim', re: /(무조건|100%|완치|치료|암\s*예방|직빵|평생보장|절대\s*손해\s*없음|보장수익)/gi },
+      { cat: '어뷰징 의심 패턴', tag: 'spam', re: /(강추\s*강추|최저가\s*최저가|후기\s*후기|추천\s*추천)/gi },
+      { cat: '연락처/아이디 유도', tag: 'link', re: /(\b01[0-9][-\s]?[0-9]{3,4}[-\s]?[0-9]{4}\b|카카오톡\s*ID|카톡\s*아이디|오픈채팅|텔레그램\s*@?\w+)/gi },
+      { cat: '외부 링크/단축 URL', tag: 'link', re: /(https?:\/\/[^\s]+|www\.[^\s]+|bit\.ly\/[^\s]+|tinyurl\.com\/[^\s]+)/gi }
     ];
+
+    const repetitionCheck = (text) => {
+      const words = (text.match(/[가-힣A-Za-z]{2,}/g) || []).map((w) => w.toLowerCase());
+      const count = {};
+      words.forEach((w) => { count[w] = (count[w] || 0) + 1; });
+      const top = Object.entries(count).sort((a,b) => b[1]-a[1]).slice(0, 5);
+      const bad = top.filter(([, n]) => n >= 5);
+      return { bad, top };
+    };
+
+    const hashtagCheck = (text) => {
+      const tags = text.match(/#[^\s#]+/g) || [];
+      return { tags, over: tags.length >= 8 };
+    };
 
     const render = () => {
       const text = input.value || '';
@@ -2430,7 +2444,7 @@
         const matches = text.match(rule.re) || [];
         if (!matches.length) return;
         total += matches.length;
-        if (rule.tag === 'spam' || rule.tag === 'abuse') spam += matches.length;
+        if (rule.tag === 'spam') spam += matches.length;
         if (rule.tag === 'claim') claim += matches.length;
         if (rule.tag === 'link') link += matches.length;
 
@@ -2440,6 +2454,27 @@
         item.innerHTML = `<strong>${rule.cat}<span class="bw-tag">${matches.length}건</span></strong><p>${uniq}</p>`;
         list.appendChild(item);
       });
+
+      const rep = repetitionCheck(text);
+      if (rep.bad.length) {
+        const item = document.createElement('div');
+        item.className = 'bw-item';
+        const view = rep.bad.map(([w,n]) => `${w}(${n}회)`).join(', ');
+        item.innerHTML = `<strong>과도한 키워드 반복<span class="bw-tag">${rep.bad.length}개</span></strong><p>${view}</p>`;
+        list.appendChild(item);
+        total += rep.bad.length;
+        spam += rep.bad.length;
+      }
+
+      const hs = hashtagCheck(text);
+      if (hs.over) {
+        const item = document.createElement('div');
+        item.className = 'bw-item';
+        item.innerHTML = `<strong>해시태그 남발<span class="bw-tag">${hs.tags.length}개</span></strong><p>해시태그 수가 많습니다. 본문 맥락과 직접 관련된 태그만 최소화하세요.</p>`;
+        list.appendChild(item);
+        total += hs.tags.length;
+        spam += hs.tags.length;
+      }
 
       if (!total) {
         list.innerHTML = '<div class="empty-state">현재 기준으로 감지된 금칙/주의 패턴이 없습니다.</div>';
@@ -2451,9 +2486,11 @@
       linkEl.textContent = String(link);
 
       if (summary) {
-        summary.textContent = total
-          ? `총 ${total}건 감지되었습니다. 문맥에 맞게 자연스럽게 수정하세요.`
-          : '감지 항목이 없습니다. 그래도 문맥/정보가치 중심으로 최종 검수하세요.';
+        if (!text.trim()) summary.textContent = '텍스트를 입력하면 금칙/주의 패턴을 실시간 점검합니다.';
+        else if (total >= 15) summary.textContent = `위험도 높음: 총 ${total}건 감지. 스팸성/과장 표현을 적극 수정하세요.`;
+        else if (total >= 6) summary.textContent = `주의 필요: 총 ${total}건 감지. 반복 키워드·링크·표현을 정리하세요.`;
+        else if (total > 0) summary.textContent = `경미한 주의: ${total}건 감지. 문맥 중심으로 자연스럽게 다듬으세요.`;
+        else summary.textContent = '감지 항목이 없습니다. 그래도 문맥/정보가치 중심으로 최종 검수하세요.';
       }
     };
 

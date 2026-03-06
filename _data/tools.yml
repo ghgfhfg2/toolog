@@ -71,7 +71,7 @@
   thumbnail: /assets/thumbs/font-change.svg
 
 - id: blog-banned-word-checker
-  title: 블로그 금칙어 계산기
+  title: 금칙어 검사기
   category: text
   category_label: 텍스트/편집
   badge: New
