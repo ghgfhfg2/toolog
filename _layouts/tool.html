@@ -154,6 +154,18 @@ layout: default
           <canvas id="iu-canvas"></canvas>
           <a id="iu-download" class="open-link" download="upscaled-image.png">다운로드</a>
         </div>
+      {% when 'blog-banned-word-checker' %}
+        <div class="tool-ui">
+          <textarea id="bw-input" maxlength="5000" placeholder="검사할 글을 붙여넣으세요"></textarea>
+          <p class="tool-result" id="bw-summary">텍스트를 입력하면 금칙어/주의 패턴을 즉시 검사합니다.</p>
+          <div class="tool-stats">
+            <div><strong id="bw-total">0</strong><span>검출 수</span></div>
+            <div><strong id="bw-spam">0</strong><span>스팸/홍보</span></div>
+            <div><strong id="bw-claim">0</strong><span>과장/광고성</span></div>
+            <div><strong id="bw-link">0</strong><span>링크/연락처</span></div>
+          </div>
+          <div id="bw-list" class="bw-list"></div>
+        </div>
       {% when 'font-change' %}
         <div class="tool-ui font-change-ui">
           <textarea id="fc-input" maxlength="500" placeholder="텍스트를 입력하세요"></textarea>

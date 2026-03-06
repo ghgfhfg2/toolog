@@ -2403,6 +2403,68 @@
     run();
   }
 
+  if (slug === 'blog-banned-word-checker') {
+    const input = document.getElementById('bw-input');
+    const summary = document.getElementById('bw-summary');
+    const list = document.getElementById('bw-list');
+    const totalEl = document.getElementById('bw-total');
+    const spamEl = document.getElementById('bw-spam');
+    const claimEl = document.getElementById('bw-claim');
+    const linkEl = document.getElementById('bw-link');
+    if (!input || !list) return;
+
+    const rules = [
+      { cat: '스팸/홍보', tag: 'spam', re: /(대출|도박|성인물|카지노|바카라|급전|무료상담)/gi },
+      { cat: '과장/광고성', tag: 'claim', re: /(무조건|100%|완치|즉시효과|평생보장|절대손해없음)/gi },
+      { cat: '어뷰징 패턴', tag: 'abuse', re: /(최저가\s*최저가|강추\s*강추|후기\s*후기)/gi },
+      { cat: '연락처/아이디', tag: 'link', re: /(\b01[0-9][-\s]?[0-9]{3,4}[-\s]?[0-9]{4}\b|카카오톡\s*ID|오픈채팅|텔레그램\s*@?\w+)/gi },
+      { cat: '외부 링크', tag: 'link', re: /(https?:\/\/[^\s]+|www\.[^\s]+)/gi }
+    ];
+
+    const render = () => {
+      const text = input.value || '';
+      list.innerHTML = '';
+      let total = 0, spam = 0, claim = 0, link = 0;
+
+      rules.forEach((rule) => {
+        const matches = text.match(rule.re) || [];
+        if (!matches.length) return;
+        total += matches.length;
+        if (rule.tag === 'spam' || rule.tag === 'abuse') spam += matches.length;
+        if (rule.tag === 'claim') claim += matches.length;
+        if (rule.tag === 'link') link += matches.length;
+
+        const item = document.createElement('div');
+        item.className = 'bw-item';
+        const uniq = Array.from(new Set(matches.map((m) => m.trim()))).slice(0, 8).join(', ');
+        item.innerHTML = `<strong>${rule.cat}<span class="bw-tag">${matches.length}건</span></strong><p>${uniq}</p>`;
+        list.appendChild(item);
+      });
+
+      if (!total) {
+        list.innerHTML = '<div class="empty-state">현재 기준으로 감지된 금칙/주의 패턴이 없습니다.</div>';
+      }
+
+      totalEl.textContent = String(total);
+      spamEl.textContent = String(spam);
+      claimEl.textContent = String(claim);
+      linkEl.textContent = String(link);
+
+      if (summary) {
+        summary.textContent = total
+          ? `총 ${total}건 감지되었습니다. 문맥에 맞게 자연스럽게 수정하세요.`
+          : '감지 항목이 없습니다. 그래도 문맥/정보가치 중심으로 최종 검수하세요.';
+      }
+    };
+
+    let timer;
+    input.addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = setTimeout(render, 80);
+    });
+    render();
+  }
+
   if (slug === 'font-change') {
     const input = document.getElementById('fc-input');
     const list = document.getElementById('fc-list');

@@ -585,6 +585,32 @@ a:hover { color: #fff; text-decoration: none; }
   transform: translateX(-50%) translateY(-3px);
 }
 
+.bw-list {
+  display: grid;
+  gap: .5rem;
+}
+.bw-item {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #10192c;
+  padding: .6rem .7rem;
+}
+.bw-item strong { font-size: .83rem; }
+.bw-item p {
+  margin: .2rem 0 0;
+  color: var(--muted);
+  font-size: .82rem;
+  line-height: 1.4;
+}
+.bw-tag {
+  display: inline-block;
+  margin-left: .35rem;
+  font-size: .68rem;
+  border: 1px solid #475569;
+  border-radius: 999px;
+  padding: .05rem .35rem;
+  color: #cbd5e1;
+}
 /* Global: back-to-top button */
 .to-top-btn {
   position: fixed;
