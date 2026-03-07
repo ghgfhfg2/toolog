@@ -228,20 +228,40 @@
 
 - id: case-converter
   title: 대소문자 변환기
+  title_en: Case Converter
+  title_ja: 大文字/小文字変換ツール
   category: text
   category_label: 텍스트/편집
+  category_label_en: Text/Editing
+  category_label_ja: テキスト/編集
   badge: Update
+  badge_en: Update
+  badge_ja: 更新
   description: UPPER/lower/Title/camel/snake 케이스를 즉시 변환해요.
+  description_en: Instantly convert text between UPPERCASE, lowercase, Title Case, camelCase, and snake_case.
+  description_ja: UPPERCASE・lowercase・Title Case・camelCase・snake_case をすぐに相互変換できます。
   url: /tools/case-converter/
+  url_en: /en/tools/case-converter/
+  url_ja: /ja/tools/case-converter/
   thumbnail: /assets/thumbs/case-converter.svg
 
 - id: json-merge
   title: JSON 합치기
+  title_en: JSON Merge
+  title_ja: JSON結合
   category: data
   category_label: 데이터/계산
+  category_label_en: Data/Utilities
+  category_label_ja: データ/ユーティリティ
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 여러 JSON 파일을 한 번에 업로드해 하나의 JSON으로 병합하고 다운로드해요.
+  description_en: Upload multiple JSON files, merge them into one output, and download the result in your browser.
+  description_ja: 複数のJSONファイルをアップロードし、1つに結合してブラウザでダウンロードできます。
   url: /tools/json-merge/
+  url_en: /en/tools/json-merge/
+  url_ja: /ja/tools/json-merge/
   thumbnail: /assets/thumbs/json-merge.svg
 
 - id: vat-calculator
@@ -284,29 +304,59 @@
 
 - id: timezone-converter
   title: 시간대 변환기
+  title_en: Timezone Converter
+  title_ja: 時間帯変換ツール
   category: data
   category_label: 데이터/계산
+  category_label_en: Data/Utilities
+  category_label_ja: データ/計算
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 국가별 시차를 계산해 회의 시간을 정확히 맞춰요.
+  description_en: Convert dates and times across global time zones to schedule meetings accurately.
+  description_ja: 各国の時差を計算し、会議日時を正確に調整できます。
   url: /tools/timezone-converter/
+  url_en: /en/tools/timezone-converter/
+  url_ja: /ja/tools/timezone-converter/
   thumbnail: /assets/thumbs/timezone-converter.svg
 
 - id: percent-calculator
   title: 퍼센트 계산기
+  title_en: Percent Calculator
+  title_ja: パーセント計算機
   category: data
   category_label: 데이터/계산
+  category_label_en: Data/Math
+  category_label_ja: データ/計算
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 비율·증감률·백분율 계산을 한 화면에서 빠르게 처리해요.
+  description_en: Calculate percentages, ratios, and increase/decrease rates quickly in one place.
+  description_ja: 割合・比率・増減率を1つの画面で素早く計算できます。
   url: /tools/percent-calculator/
+  url_en: /en/tools/percent-calculator/
+  url_ja: /ja/tools/percent-calculator/
   thumbnail: /assets/thumbs/percent-calculator.svg
 
 - id: pyeong-calculator
   title: 평수 계산기
+  title_en: Pyeong Calculator
+  title_ja: 坪数計算機
   category: data
   category_label: 부동산/생활
+  category_label_en: Real Estate
+  category_label_ja: 不動産
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: ㎡↔평 변환과 평당가 계산을 한 번에 처리해요.
+  description_en: Convert m² and pyeong both ways and estimate price per pyeong for property comparison.
+  description_ja: ㎡↔坪を相互変換し、坪単価もまとめて計算できます。
   url: /tools/pyeong-calculator/
+  url_en: /en/tools/pyeong-calculator/
+  url_ja: /ja/tools/pyeong-calculator/
   thumbnail: /assets/thumbs/pyeong-calculator.svg
 
 - id: d-day-calculator
