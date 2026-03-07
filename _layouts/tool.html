@@ -601,80 +601,80 @@ layout: default
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="sev-start">입사일</label>
+              <label for="sev-start">{% if page.lang == 'en' %}Start date{% elsif page.lang == 'ja' %}入社日{% else %}입사일{% endif %}</label>
               <input id="sev-start" type="date" />
             </div>
             <div>
-              <label for="sev-end">퇴사일</label>
+              <label for="sev-end">{% if page.lang == 'en' %}End date{% elsif page.lang == 'ja' %}退職日{% else %}퇴사일{% endif %}</label>
               <input id="sev-end" type="date" />
             </div>
           </div>
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="sev-monthly">최근 월급(세전, 원)</label>
-              <input id="sev-monthly" type="number" min="0" step="10000" placeholder="예: 3200000" inputmode="numeric" />
+              <label for="sev-monthly">{% if page.lang == 'en' %}Recent monthly pay (gross){% elsif page.lang == 'ja' %}直近の月給（額面）{% else %}최근 월급(세전, 원){% endif %}</label>
+              <input id="sev-monthly" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 3200000{% elsif page.lang == 'ja' %}例: 3200000{% else %}예: 3200000{% endif %}" inputmode="numeric" />
             </div>
             <div>
-              <label for="sev-annual-bonus">연간 상여금(선택, 원)</label>
-              <input id="sev-annual-bonus" type="number" min="0" step="10000" placeholder="예: 6000000" inputmode="numeric" />
+              <label for="sev-annual-bonus">{% if page.lang == 'en' %}Annual bonus (optional){% elsif page.lang == 'ja' %}年間賞与（任意）{% else %}연간 상여금(선택, 원){% endif %}</label>
+              <input id="sev-annual-bonus" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 6000000{% elsif page.lang == 'ja' %}例: 6000000{% else %}예: 6000000{% endif %}" inputmode="numeric" />
             </div>
           </div>
           <div class="tool-row-grid pct-actions">
-            <button id="sev-copy" type="button">결과 복사</button>
-            <button id="sev-reset" type="button">예시값 채우기</button>
+            <button id="sev-copy" type="button">{% if page.lang == 'en' %}Copy results{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="sev-reset" type="button">{% if page.lang == 'en' %}Fill sample values{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시값 채우기{% endif %}</button>
           </div>
           <div class="tool-stats">
-            <div><strong id="sev-service-days">-</strong><span>재직일수</span></div>
-            <div><strong id="sev-service-years">-</strong><span>계속근로연수</span></div>
-            <div><strong id="sev-daily-wage">-</strong><span>추정 1일 평균임금</span></div>
-            <div><strong id="sev-amount">-</strong><span>예상 퇴직금</span></div>
+            <div><strong id="sev-service-days">-</strong><span>{% if page.lang == 'en' %}Service days{% elsif page.lang == 'ja' %}勤続日数{% else %}재직일수{% endif %}</span></div>
+            <div><strong id="sev-service-years">-</strong><span>{% if page.lang == 'en' %}Years of service{% elsif page.lang == 'ja' %}勤続年数{% else %}계속근로연수{% endif %}</span></div>
+            <div><strong id="sev-daily-wage">-</strong><span>{% if page.lang == 'en' %}Estimated average daily wage{% elsif page.lang == 'ja' %}推定1日平均賃金{% else %}추정 1일 평균임금{% endif %}</span></div>
+            <div><strong id="sev-amount">-</strong><span>{% if page.lang == 'en' %}Estimated severance pay{% elsif page.lang == 'ja' %}退職金見込み{% else %}예상 퇴직금{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="sev-help">입사일·퇴사일·월급을 입력하면 예상 퇴직금을 계산합니다.</p>
+          <p class="tool-result" id="sev-help">{% if page.lang == 'en' %}Enter start date, end date, and monthly pay to estimate severance pay.{% elsif page.lang == 'ja' %}入社日・退職日・月給を入力すると、退職金見込みを計算します。{% else %}입사일·퇴사일·월급을 입력하면 예상 퇴직금을 계산합니다.{% endif %}</p>
         </div>
       {% when 'stock-average-calculator' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="sa-current-qty">현재 보유 수량(주)</label>
-              <input id="sa-current-qty" type="number" min="0" step="1" placeholder="예: 100" inputmode="numeric" />
+              <label for="sa-current-qty">{% if page.lang == 'en' %}Current holdings (shares){% elsif page.lang == 'ja' %}現在の保有株数{% else %}현재 보유 수량(주){% endif %}</label>
+              <input id="sa-current-qty" type="number" min="0" step="1" placeholder="{% if page.lang == 'en' %}e.g. 100{% elsif page.lang == 'ja' %}例: 100{% else %}예: 100{% endif %}" inputmode="numeric" />
             </div>
             <div>
-              <label for="sa-current-price">현재 평단가(원)</label>
-              <input id="sa-current-price" type="number" min="0" step="1" placeholder="예: 50000" inputmode="numeric" />
-            </div>
-          </div>
-
-          <div class="tool-row-grid pct-grid">
-            <div>
-              <label for="sa-add-qty">추가 매수 수량(주)</label>
-              <input id="sa-add-qty" type="number" min="0" step="1" placeholder="예: 100" inputmode="numeric" />
-            </div>
-            <div>
-              <label for="sa-add-price">추가 매수가(원)</label>
-              <input id="sa-add-price" type="number" min="0" step="1" placeholder="예: 40000" inputmode="numeric" />
+              <label for="sa-current-price">{% if page.lang == 'en' %}Current average price{% elsif page.lang == 'ja' %}現在の平均取得単価{% else %}현재 평단가(원){% endif %}</label>
+              <input id="sa-current-price" type="number" min="0" step="1" placeholder="{% if page.lang == 'en' %}e.g. 50000{% elsif page.lang == 'ja' %}例: 50000{% else %}예: 50000{% endif %}" inputmode="numeric" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="sa-target-price">목표 평단가(원, 선택)</label>
-              <input id="sa-target-price" type="number" min="0" step="1" placeholder="예: 43000" inputmode="numeric" />
+              <label for="sa-add-qty">{% if page.lang == 'en' %}Additional buy quantity (shares){% elsif page.lang == 'ja' %}追加購入株数{% else %}추가 매수 수량(주){% endif %}</label>
+              <input id="sa-add-qty" type="number" min="0" step="1" placeholder="{% if page.lang == 'en' %}e.g. 100{% elsif page.lang == 'ja' %}例: 100{% else %}예: 100{% endif %}" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="sa-add-price">{% if page.lang == 'en' %}Additional buy price{% elsif page.lang == 'ja' %}追加購入単価{% else %}추가 매수가(원){% endif %}</label>
+              <input id="sa-add-price" type="number" min="0" step="1" placeholder="{% if page.lang == 'en' %}e.g. 40000{% elsif page.lang == 'ja' %}例: 40000{% else %}예: 40000{% endif %}" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="sa-target-price">{% if page.lang == 'en' %}Target average price (optional){% elsif page.lang == 'ja' %}目標平均単価（任意）{% else %}목표 평단가(원, 선택){% endif %}</label>
+              <input id="sa-target-price" type="number" min="0" step="1" placeholder="{% if page.lang == 'en' %}e.g. 43000{% elsif page.lang == 'ja' %}例: 43000{% else %}예: 43000{% endif %}" inputmode="numeric" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="sa-copy" type="button">결과 복사</button>
-            <button id="sa-reset" type="button">초기화</button>
+            <button id="sa-copy" type="button">{% if page.lang == 'en' %}Copy results{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="sa-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
 
           <div class="tool-stats">
-            <div><strong id="sa-new-avg">-</strong><span>새 평단가</span></div>
-            <div><strong id="sa-total-qty">-</strong><span>총 보유 수량</span></div>
-            <div><strong id="sa-total-cost">-</strong><span>총 매수금액</span></div>
-            <div><strong id="sa-need-qty">-</strong><span>목표 평단까지 남은 추가수량</span></div>
+            <div><strong id="sa-new-avg">-</strong><span>{% if page.lang == 'en' %}New average price{% elsif page.lang == 'ja' %}新しい平均取得単価{% else %}새 평단가{% endif %}</span></div>
+            <div><strong id="sa-total-qty">-</strong><span>{% if page.lang == 'en' %}Total shares{% elsif page.lang == 'ja' %}総保有株数{% else %}총 보유 수량{% endif %}</span></div>
+            <div><strong id="sa-total-cost">-</strong><span>{% if page.lang == 'en' %}Total invested amount{% elsif page.lang == 'ja' %}総購入金額{% else %}총 매수금액{% endif %}</span></div>
+            <div><strong id="sa-need-qty">-</strong><span>{% if page.lang == 'en' %}Additional shares needed for target{% elsif page.lang == 'ja' %}目標単価までに必要な追加株数{% else %}목표 평단까지 남은 추가수량{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="sa-help">보유 수량/평단가와 추가 매수 계획을 입력하면 새 평단가를 계산합니다.</p>
+          <p class="tool-result" id="sa-help">{% if page.lang == 'en' %}Enter holding and add-buy plan to calculate your new average price.{% elsif page.lang == 'ja' %}保有状況と追加購入計画を入力すると、新しい平均取得単価を計算します。{% else %}보유 수량/평단가와 추가 매수 계획을 입력하면 새 평단가를 계산합니다.{% endif %}</p>
         </div>
       {% when 'tdee-calculator' %}
         <div class="tool-ui">
