@@ -3101,6 +3101,145 @@
   }
 
 
+  if (slug === 'tip-calculator') {
+    const subtotalEl = document.getElementById('tip-subtotal');
+    const taxEl = document.getElementById('tip-tax');
+    const serviceEl = document.getElementById('tip-service');
+    const peopleEl = document.getElementById('tip-people');
+    const baseModeEl = document.getElementById('tip-base-mode');
+    const tipModeEl = document.getElementById('tip-mode');
+    const tipRateEl = document.getElementById('tip-rate');
+    const tipFixedEl = document.getElementById('tip-fixed');
+    const tipRateWrap = document.getElementById('tip-rate-wrap');
+    const tipFixedWrap = document.getElementById('tip-fixed-wrap');
+
+    const outTip = document.getElementById('tip-tip-amount');
+    const outTotal = document.getElementById('tip-total');
+    const outPer = document.getElementById('tip-per-person');
+    const outBase = document.getElementById('tip-base-amount');
+    const help = document.getElementById('tip-help');
+    const copyBtn = document.getElementById('tip-copy');
+    const resetBtn = document.getElementById('tip-reset');
+
+    if (!subtotalEl || !taxEl || !serviceEl || !peopleEl || !baseModeEl || !tipModeEl || !tipRateEl || !tipFixedEl || !outTip || !outTotal || !outPer || !outBase || !help) return;
+
+    const text = {
+      ko: {
+        noInput: '결제 금액을 입력하면 결과가 계산됩니다.',
+        summary: (tip, total, per, people) => `팁 ${tip}, 총 ${total}, ${people}인 기준 1인당 ${per}`,
+        copy: '팁 계산 결과',
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        noInput: 'Enter bill values to calculate results.',
+        summary: (tip, total, per, people) => `Tip ${tip}, total ${total}, ${per} per person (${people} people)`,
+        copy: 'Tip calculation',
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        noInput: '金額を入力すると結果を計算します。',
+        summary: (tip, total, per, people) => `チップ ${tip}、合計 ${total}、${people}人で1人あたり ${per}`,
+        copy: 'チップ計算結果',
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    }[pageLang] || {
+      noInput: '결제 금액을 입력하면 결과가 계산됩니다.',
+      summary: (tip, total, per, people) => `팁 ${tip}, 총 ${total}, ${people}인 기준 1인당 ${per}`,
+      copy: '팁 계산 결과',
+      copied: '복사됨',
+      copyDefault: '결과 복사'
+    };
+
+    const fmtMoney = (v) => {
+      const n = Number(v || 0);
+      if (pageLang === 'en') return `$${n.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}`;
+      if (pageLang === 'ja') return `${n.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}円`;
+      return `${n.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}원`;
+    };
+
+    const parse = (el) => Math.max(0, Number(el?.value || 0));
+
+    const copyText = async (v) => {
+      try { await navigator.clipboard.writeText(v); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = v; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const syncMode = () => {
+      const fixed = (tipModeEl.value || 'percent') === 'fixed';
+      if (tipRateWrap) tipRateWrap.hidden = fixed;
+      if (tipFixedWrap) tipFixedWrap.hidden = !fixed;
+    };
+
+    const render = () => {
+      syncMode();
+      const subtotal = parse(subtotalEl);
+      const tax = parse(taxEl);
+      const service = parse(serviceEl);
+      const people = Math.max(1, Math.floor(Number(peopleEl.value || 1)));
+      peopleEl.value = people;
+
+      if (subtotal <= 0 && tax <= 0 && service <= 0) {
+        outTip.textContent = '-';
+        outTotal.textContent = '-';
+        outPer.textContent = '-';
+        outBase.textContent = '-';
+        help.textContent = text.noInput;
+        return;
+      }
+
+      const billTotal = subtotal + tax + service;
+      const tipBase = (baseModeEl.value || 'subtotal') === 'total' ? billTotal : subtotal;
+      const tipAmount = (tipModeEl.value || 'percent') === 'fixed'
+        ? parse(tipFixedEl)
+        : tipBase * (Math.max(0, Number(tipRateEl.value || 0)) / 100);
+
+      const total = billTotal + tipAmount;
+      const per = total / people;
+
+      outTip.textContent = fmtMoney(tipAmount);
+      outTotal.textContent = fmtMoney(total);
+      outPer.textContent = fmtMoney(per);
+      outBase.textContent = fmtMoney(tipBase);
+      help.textContent = text.summary(fmtMoney(tipAmount), fmtMoney(total), fmtMoney(per), people.toLocaleString(numberLocale));
+    };
+
+    [subtotalEl, taxEl, serviceEl, peopleEl, baseModeEl, tipModeEl, tipRateEl, tipFixedEl].forEach((el) => el?.addEventListener('input', render));
+
+    copyBtn?.addEventListener('click', async () => {
+      if (outTotal.textContent === '-') return;
+      const msg = `${text.copy} | tip ${outTip.textContent} | total ${outTotal.textContent} | per person ${outPer.textContent} | tip base ${outBase.textContent}`;
+      await copyText(msg);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = text.copied;
+      setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      subtotalEl.value = 100;
+      taxEl.value = 10;
+      serviceEl.value = 0;
+      peopleEl.value = 2;
+      baseModeEl.value = 'subtotal';
+      tipModeEl.value = 'percent';
+      tipRateEl.value = 15;
+      tipFixedEl.value = '';
+      render();
+    });
+
+    if (!subtotalEl.value) subtotalEl.value = 100;
+    if (!taxEl.value) taxEl.value = 10;
+    if (!peopleEl.value) peopleEl.value = 2;
+    if (!tipRateEl.value) tipRateEl.value = 15;
+    render();
+  }
+
   if (slug === 'blog-banned-word-checker') {
     const input = document.getElementById('bw-input');
     const summary = document.getElementById('bw-summary');

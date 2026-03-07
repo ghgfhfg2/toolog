@@ -282,3 +282,22 @@
   url: /tools/tdee-calculator/
   thumbnail: /assets/thumbs/tdee-calculator.svg
 
+- id: tip-calculator
+  title: 팁 계산기
+  title_en: Tip Calculator
+  title_ja: チップ計算機
+  category: calculator
+  category_label: 계산/생활
+  category_label_en: Calculator/Lifestyle
+  category_label_ja: 計算/ライフスタイル
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 팁 금액, 총 결제금액, 1인당 분할 금액을 퍼센트/직접입력 방식으로 빠르게 계산해요.
+  description_en: Calculate tip amount, total bill, and per-person split with percentage or fixed-tip modes.
+  description_ja: 割合指定・固定額指定でチップ額、合計支払額、1人あたり金額を素早く計算します。
+  url: /tools/tip-calculator/
+  url_en: /en/tools/tip-calculator/
+  url_ja: /ja/tools/tip-calculator/
+  thumbnail: /assets/thumbs/tip-calculator.svg
+
