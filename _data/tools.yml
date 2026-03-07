@@ -17,6 +17,25 @@
   url_ja: /ja/tools/jeonse-vs-wolse-calculator/
   thumbnail: /assets/thumbs/jeonse-vs-wolse-calculator.svg
 
+- id: discount-calculator
+  title: 할인 계산기
+  title_en: Discount Calculator
+  title_ja: 割引計算機
+  category: calculator
+  category_label: 쇼핑/금융
+  category_label_en: Shopping/Finance
+  category_label_ja: ショッピング/金融
+  badge: Hot
+  badge_en: Hot
+  badge_ja: 注目
+  description: 할인율·쿠폰·수량·배송비를 반영해 최종 결제금액과 실질 할인율을 빠르게 계산해요.
+  description_en: Calculate final payable amount and effective discount using discount rate, coupon, quantity, and shipping.
+  description_ja: 割引率・クーポン・数量・送料を反映して、最終支払額と実質割引率を素早く計算します。
+  url: /tools/discount-calculator/
+  url_en: /en/tools/discount-calculator/
+  url_ja: /ja/tools/discount-calculator/
+  thumbnail: /assets/thumbs/discount-calculator.svg
+
 - id: loan-calculator
   title: 대출 이자 계산기
   title_en: Loan Calculator
