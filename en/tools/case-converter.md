@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Case Converter | UPPER, lower, Title, camelCase, snake_case
-description: Convert text across common naming styles for code and docs: UPPERCASE, lowercase, Title Case, camelCase, and snake_case.
+description: "Convert text across common naming styles for code and docs: UPPERCASE, lowercase, Title Case, camelCase, and snake_case."
 lang: en
 permalink: /en/tools/case-converter/
 canonical_url: /en/tools/case-converter/

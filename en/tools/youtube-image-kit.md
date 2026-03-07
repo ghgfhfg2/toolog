@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: YouTube Image Kit Maker | Auto-Create Thumbnail, Shorts, Banner, and Icon
-description: Upload one image and generate a full YouTube asset set automatically: thumbnail, Shorts cover, channel banner, icon, and watermark.
+description: "Upload one image and generate a full YouTube asset set automatically: thumbnail, Shorts cover, channel banner, icon, and watermark."
 lang: en
 permalink: /en/tools/youtube-image-kit/
 canonical_url: /en/tools/youtube-image-kit/
