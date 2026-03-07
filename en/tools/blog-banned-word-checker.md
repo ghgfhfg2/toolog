@@ -35,5 +35,5 @@ Search ranking can be harmed by repetitive spam wording, forced marketing tone, 
 3. Rewrite naturally with clearer context and useful information.
 
 ## Related tools
-- Length and byte check: [Text Counter]({{ '/tools/text-counter/' | relative_url }})
-- Cleanup text style: [Case Converter]({{ '/tools/case-converter/' | relative_url }})
+- Length and byte check: [Text Counter]({{ '/en/tools/text-counter/' | relative_url }})
+- Cleanup text style: [Case Converter]({{ '/en/tools/case-converter/' | relative_url }})

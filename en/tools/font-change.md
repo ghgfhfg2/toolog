@@ -30,5 +30,5 @@ For social bios, channel names, and captions, fast preview + copy saves time. Ty
 - Mobile-friendly interaction
 
 ## Related tools
-- Check platform limits: [Text Counter]({{ '/tools/text-counter/' | relative_url }})
-- Format letter case quickly: [Case Converter]({{ '/tools/case-converter/' | relative_url }})
+- Check platform limits: [Text Counter]({{ '/en/tools/text-counter/' | relative_url }})
+- Format letter case quickly: [Case Converter]({{ '/en/tools/case-converter/' | relative_url }})

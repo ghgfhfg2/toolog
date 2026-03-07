@@ -3757,16 +3757,77 @@
     const linkEl = document.getElementById('bw-link');
     if (!input || !list) return;
 
+    const bwI18n = {
+      ko: {
+        catSpamPromo: '스팸/홍보 키워드',
+        catOverclaim: '의학·법률·금융 과장 표현',
+        catAbuse: '어뷰징 의심 패턴',
+        catContact: '연락처/아이디 유도',
+        catLinks: '외부 링크/단축 URL',
+        catRepeat: '과도한 키워드 반복',
+        catHashtag: '해시태그 남발',
+        countHit: '건',
+        countItem: '개',
+        countTimes: '회',
+        hashtagDetail: '해시태그 수가 많습니다. 본문 맥락과 직접 관련된 태그만 최소화하세요.',
+        emptyState: '현재 기준으로 감지된 금칙/주의 패턴이 없습니다.',
+        idle: '텍스트를 입력하면 금칙/주의 패턴을 실시간 점검합니다.',
+        highRisk: (n) => `위험도 높음: 총 ${n}건 감지. 스팸성/과장 표현을 적극 수정하세요.`,
+        caution: (n) => `주의 필요: 총 ${n}건 감지. 반복 키워드·링크·표현을 정리하세요.`,
+        mild: (n) => `경미한 주의: ${n}건 감지. 문맥 중심으로 자연스럽게 다듬으세요.`,
+        clean: '감지 항목이 없습니다. 그래도 문맥/정보가치 중심으로 최종 검수하세요.'
+      },
+      en: {
+        catSpamPromo: 'Spam/promo keywords',
+        catOverclaim: 'Overclaim wording (medical/legal/finance)',
+        catAbuse: 'Potential abuse patterns',
+        catContact: 'Contact/ID solicitation',
+        catLinks: 'External links / short URLs',
+        catRepeat: 'Excessive keyword repetition',
+        catHashtag: 'Hashtag stuffing',
+        countHit: ' hits',
+        countItem: ' items',
+        countTimes: ' times',
+        hashtagDetail: 'Too many hashtags detected. Keep only tags that are directly relevant to the content.',
+        emptyState: 'No banned/risky pattern detected with the current rules.',
+        idle: 'Paste text to scan banned/risky patterns in real time.',
+        highRisk: (n) => `High risk: ${n} hits detected. Rewrite spammy or overclaim wording aggressively.`,
+        caution: (n) => `Needs attention: ${n} hits detected. Clean repetitive keywords, links, and tone.`,
+        mild: (n) => `Mild caution: ${n} hit(s) detected. Smooth out wording with context-first edits.`,
+        clean: 'No detected issue. Still run a final review for context and information value.'
+      },
+      ja: {
+        catSpamPromo: 'スパム/宣伝キーワード',
+        catOverclaim: '医療・法律・金融の誇大表現',
+        catAbuse: '不正利用が疑われる反復パターン',
+        catContact: '連絡先/IDへの誘導',
+        catLinks: '外部リンク/短縮URL',
+        catRepeat: 'キーワードの過剰反復',
+        catHashtag: 'ハッシュタグ過多',
+        countHit: '件',
+        countItem: '個',
+        countTimes: '回',
+        hashtagDetail: 'ハッシュタグが多すぎます。本文と直接関係するタグだけに絞ってください。',
+        emptyState: '現在の基準では禁止語/注意パターンは検出されませんでした。',
+        idle: 'テキストを入力すると、禁止語/注意パターンをリアルタイムで点検します。',
+        highRisk: (n) => `高リスク: 合計${n}件を検出。スパム的・誇大な表現を積極的に修正してください。`,
+        caution: (n) => `要注意: 合計${n}件を検出。反復キーワード・リンク・表現を整理してください。`,
+        mild: (n) => `軽度注意: ${n}件を検出。文脈を意識して自然な表現に整えてください。`,
+        clean: '検出項目はありません。最終的に文脈と情報価値の観点で見直してください。'
+      }
+    };
+    const t = bwI18n[pageLang] || bwI18n.ko;
+
     const rules = [
-      { cat: '스팸/홍보 키워드', tag: 'spam', re: /(대출|도박|성인물|카지노|바카라|급전|무료체험|최저가|특가|당일지급|고수익|부업문의|재택알바)/gi },
-      { cat: '의학·법률·금융 과장 표현', tag: 'claim', re: /(무조건|100%|완치|치료|암\s*예방|직빵|평생보장|절대\s*손해\s*없음|보장수익)/gi },
-      { cat: '어뷰징 의심 패턴', tag: 'spam', re: /(강추\s*강추|최저가\s*최저가|후기\s*후기|추천\s*추천)/gi },
-      { cat: '연락처/아이디 유도', tag: 'link', re: /(\b01[0-9][-\s]?[0-9]{3,4}[-\s]?[0-9]{4}\b|카카오톡\s*ID|카톡\s*아이디|오픈채팅|텔레그램\s*@?\w+)/gi },
-      { cat: '외부 링크/단축 URL', tag: 'link', re: /(https?:\/\/[^\s]+|www\.[^\s]+|bit\.ly\/[^\s]+|tinyurl\.com\/[^\s]+)/gi }
+      { cat: t.catSpamPromo, tag: 'spam', re: /(대출|도박|성인물|카지노|바카라|급전|무료체험|최저가|특가|당일지급|고수익|부업문의|재택알바|loan|casino|gambling|adult\s?content|free\s?trial|guaranteed\s?profit|side\s?hustle|副業|無料体験|最安値|即日支給|高収益)/gi },
+      { cat: t.catOverclaim, tag: 'claim', re: /(무조건|100%|완치|치료|암\s*예방|직빵|평생보장|절대\s*손해\s*없음|보장수익|guaranteed|cure|always|no\s?risk|risk[-\s]?free|絶対|完治|必ず|ノーリスク)/gi },
+      { cat: t.catAbuse, tag: 'spam', re: /(강추\s*강추|최저가\s*최저가|후기\s*후기|추천\s*추천|best\s*best|must\s*buy\s*must\s*buy|おすすめ\s*おすすめ)/gi },
+      { cat: t.catContact, tag: 'link', re: /(01[0-9][-\s]?[0-9]{3,4}[-\s]?[0-9]{4}|카카오톡\s*ID|카톡\s*아이디|오픈채팅|텔레그램\s*@?\w+|kakao\s?talk\s?id|line\s?id|telegram\s*@?\w+|open\s?chat|連絡先|オープンチャット|テレグラム\s*@?\w+)/gi },
+      { cat: t.catLinks, tag: 'link', re: /(https?:\/\/[^\s]+|www\.[^\s]+|bit\.ly\/[^\s]+|tinyurl\.com\/[^\s]+)/gi }
     ];
 
     const repetitionCheck = (text) => {
-      const words = (text.match(/[가-힣A-Za-z]{2,}/g) || []).map((w) => w.toLowerCase());
+      const words = (text.match(/[가-힣A-Za-zぁ-んァ-ン一-龥]{2,}/g) || []).map((w) => w.toLowerCase());
       const count = {};
       words.forEach((w) => { count[w] = (count[w] || 0) + 1; });
       const top = Object.entries(count).sort((a,b) => b[1]-a[1]).slice(0, 5);
@@ -3795,7 +3856,7 @@
         const item = document.createElement('div');
         item.className = 'bw-item';
         const uniq = Array.from(new Set(matches.map((m) => m.trim()))).slice(0, 8).join(', ');
-        item.innerHTML = `<strong>${rule.cat}<span class="bw-tag">${matches.length}건</span></strong><p>${uniq}</p>`;
+        item.innerHTML = `<strong>${rule.cat}<span class="bw-tag">${matches.length}${t.countHit}</span></strong><p>${uniq}</p>`;
         list.appendChild(item);
       });
 
@@ -3803,8 +3864,8 @@
       if (rep.bad.length) {
         const item = document.createElement('div');
         item.className = 'bw-item';
-        const view = rep.bad.map(([w,n]) => `${w}(${n}회)`).join(', ');
-        item.innerHTML = `<strong>과도한 키워드 반복<span class="bw-tag">${rep.bad.length}개</span></strong><p>${view}</p>`;
+        const view = rep.bad.map(([w,n]) => `${w}(${n}${t.countTimes})`).join(', ');
+        item.innerHTML = `<strong>${t.catRepeat}<span class="bw-tag">${rep.bad.length}${t.countItem}</span></strong><p>${view}</p>`;
         list.appendChild(item);
         total += rep.bad.length;
         spam += rep.bad.length;
@@ -3814,14 +3875,14 @@
       if (hs.over) {
         const item = document.createElement('div');
         item.className = 'bw-item';
-        item.innerHTML = `<strong>해시태그 남발<span class="bw-tag">${hs.tags.length}개</span></strong><p>해시태그 수가 많습니다. 본문 맥락과 직접 관련된 태그만 최소화하세요.</p>`;
+        item.innerHTML = `<strong>${t.catHashtag}<span class="bw-tag">${hs.tags.length}${t.countItem}</span></strong><p>${t.hashtagDetail}</p>`;
         list.appendChild(item);
         total += hs.tags.length;
         spam += hs.tags.length;
       }
 
       if (!total) {
-        list.innerHTML = '<div class="empty-state">현재 기준으로 감지된 금칙/주의 패턴이 없습니다.</div>';
+        list.innerHTML = `<div class="empty-state">${t.emptyState}</div>`;
       }
 
       totalEl.textContent = String(total);
@@ -3830,11 +3891,11 @@
       linkEl.textContent = String(link);
 
       if (summary) {
-        if (!text.trim()) summary.textContent = '텍스트를 입력하면 금칙/주의 패턴을 실시간 점검합니다.';
-        else if (total >= 15) summary.textContent = `위험도 높음: 총 ${total}건 감지. 스팸성/과장 표현을 적극 수정하세요.`;
-        else if (total >= 6) summary.textContent = `주의 필요: 총 ${total}건 감지. 반복 키워드·링크·표현을 정리하세요.`;
-        else if (total > 0) summary.textContent = `경미한 주의: ${total}건 감지. 문맥 중심으로 자연스럽게 다듬으세요.`;
-        else summary.textContent = '감지 항목이 없습니다. 그래도 문맥/정보가치 중심으로 최종 검수하세요.';
+        if (!text.trim()) summary.textContent = t.idle;
+        else if (total >= 15) summary.textContent = t.highRisk(total);
+        else if (total >= 6) summary.textContent = t.caution(total);
+        else if (total > 0) summary.textContent = t.mild(total);
+        else summary.textContent = t.clean;
       }
     };
 
@@ -4283,8 +4344,16 @@
     };
 
     const updateButtonsText = () => {
-      if (showFavBtn) showFavBtn.textContent = `★ 즐겨찾기만 보기: ${onlyFav ? 'ON' : 'OFF'}`;
-      if (showAllBtn) showAllBtn.textContent = `확장 폰트 보기: ${showAll ? 'ON' : 'OFF'}`;
+      if (showFavBtn) showFavBtn.textContent = (pageLang === 'en')
+        ? `★ Favorites only: ${onlyFav ? 'ON' : 'OFF'}`
+        : (pageLang === 'ja')
+          ? `★ お気に入りのみ: ${onlyFav ? 'ON' : 'OFF'}`
+          : `★ 즐겨찾기만 보기: ${onlyFav ? 'ON' : 'OFF'}`;
+      if (showAllBtn) showAllBtn.textContent = (pageLang === 'en')
+        ? `Show extended styles: ${showAll ? 'ON' : 'OFF'}`
+        : (pageLang === 'ja')
+          ? `拡張スタイル表示: ${showAll ? 'ON' : 'OFF'}`
+          : `확장 폰트 보기: ${showAll ? 'ON' : 'OFF'}`;
     };
 
     const render = () => {
@@ -4294,7 +4363,7 @@
       if (onlyFav) targets = targets.filter((f) => favorites.has(f.key));
 
       if (!targets.length) {
-        list.innerHTML = '<div class="empty-state">즐겨찾기된 폰트가 없습니다.</div>';
+        list.innerHTML = `<div class="empty-state">${pageLang === 'en' ? 'No favorite styles yet.' : (pageLang === 'ja' ? 'お気に入り登録されたスタイルがありません。' : '즐겨찾기된 폰트가 없습니다.')}</div>`;
         return;
       }
 
@@ -4308,7 +4377,7 @@
         favBtn.type = 'button';
         favBtn.className = `font-fav-btn ${favorites.has(font.key) ? 'active' : ''}`;
         favBtn.textContent = favorites.has(font.key) ? '★' : '☆';
-        favBtn.title = '즐겨찾기';
+        favBtn.title = pageLang === 'en' ? 'Favorite' : (pageLang === 'ja' ? 'お気に入り' : '즐겨찾기');
 
         const body = document.createElement('div');
         body.className = 'font-preview-body';
