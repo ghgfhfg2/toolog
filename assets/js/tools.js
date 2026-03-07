@@ -2416,6 +2416,105 @@
     run();
   }
 
+  if (slug === 'weekly-holiday-pay-calculator') {
+    const hourly = document.getElementById('whp-hourly');
+    const hours = document.getElementById('whp-hours');
+    const days = document.getElementById('whp-days');
+    const perfect = document.getElementById('whp-perfect');
+    const eligibleEl = document.getElementById('whp-eligible');
+    const paidHoursEl = document.getElementById('whp-hours-paid');
+    const weeklyEl = document.getElementById('whp-weekly');
+    const monthlyEl = document.getElementById('whp-monthly');
+    const help = document.getElementById('whp-help');
+    const copyBtn = document.getElementById('whp-copy');
+    const resetBtn = document.getElementById('whp-reset');
+
+    if (!hourly || !hours || !days || !perfect || !eligibleEl || !paidHoursEl || !weeklyEl || !monthlyEl || !help) return;
+
+    const KRW = (n) => `${Math.round(n || 0).toLocaleString('ko-KR')}원`;
+    const HOURS = (n) => `${Number(n || 0).toLocaleString('ko-KR', { maximumFractionDigits: 2 })}시간`;
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const setIdle = (msg) => {
+      eligibleEl.textContent = '-';
+      paidHoursEl.textContent = '-';
+      weeklyEl.textContent = '-';
+      monthlyEl.textContent = '-';
+      help.textContent = msg;
+    };
+
+    const render = () => {
+      const wage = Math.max(0, Number(hourly.value || 0));
+      const weekHours = Math.max(0, Number(hours.value || 0));
+      const weekDays = Math.max(1, Math.floor(Number(days.value || 0)));
+      const isPerfect = !!perfect.checked;
+
+      if (!(wage > 0) || !(weekHours > 0) || !(weekDays > 0)) {
+        setIdle('시급·주 소정근로시간·근무일수를 입력하세요.');
+        return;
+      }
+
+      const eligibleByHour = weekHours >= 15;
+      const eligible = eligibleByHour && isPerfect;
+      const rawPaidHours = weekHours / weekDays;
+      const paidHours = Math.min(8, rawPaidHours);
+      const weeklyPay = eligible ? (paidHours * wage) : 0;
+      const monthlyPay = weeklyPay * 4.345;
+
+      eligibleEl.textContent = eligible ? '대상' : '비대상';
+      paidHoursEl.textContent = HOURS(eligible ? paidHours : 0);
+      weeklyEl.textContent = KRW(weeklyPay);
+      monthlyEl.textContent = KRW(monthlyPay);
+
+      if (!eligibleByHour) {
+        help.textContent = '주 15시간 미만이면 일반적으로 주휴수당 대상이 아닙니다.';
+      } else if (!isPerfect) {
+        help.textContent = '개근 조건을 충족하지 않으면 해당 주 주휴수당이 제한될 수 있습니다.';
+      } else {
+        const capNotice = rawPaidHours > 8 ? ' (주휴시간 상한 8시간 적용)' : '';
+        help.textContent = `입력 기준 예상 주휴수당은 주 ${KRW(weeklyPay)}, 월 환산 ${KRW(monthlyPay)}입니다.${capNotice}`;
+      }
+    };
+
+    [hourly, hours, days, perfect].forEach((el) => el?.addEventListener('input', render));
+
+    copyBtn?.addEventListener('click', async () => {
+      if (eligibleEl.textContent === '-') return;
+      const text = `주휴수당 계산 결과 | 대상 여부 ${eligibleEl.textContent} | 주휴시간 ${paidHoursEl.textContent} | 주 ${weeklyEl.textContent} | 월 환산 ${monthlyEl.textContent}`;
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      hourly.value = 10030;
+      hours.value = 20;
+      days.value = 5;
+      perfect.checked = true;
+      render();
+    });
+
+    if (!hourly.value) hourly.value = 10030;
+    if (!hours.value) hours.value = 20;
+    if (!days.value) days.value = 5;
+    render();
+  }
+
 
   if (slug === 'jeonse-vs-wolse-calculator') {
     const jeonse = document.getElementById('jv-jeonse');

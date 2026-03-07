@@ -823,6 +823,43 @@ layout: default
 
           <p class="tool-result" id="bf-help">주택 기준 상한 요율표(2021.10 개정)에 따라 계산합니다. 임대차에서 보증금/월세를 입력하면 환산금액(보증금 + 월세×100)도 바로 채울 수 있습니다.</p>
         </div>
+      {% when 'weekly-holiday-pay-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="whp-hourly">시급(원)</label>
+              <input id="whp-hourly" type="number" min="0" step="10" placeholder="예: 10030" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="whp-hours">주 소정근로시간</label>
+              <input id="whp-hours" type="number" min="0" max="80" step="0.1" placeholder="예: 20" inputmode="decimal" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="whp-days">주 소정근무일수</label>
+              <input id="whp-days" type="number" min="1" max="7" step="1" placeholder="예: 5" inputmode="numeric" />
+            </div>
+            <div>
+              <label class="tool-check"><input id="whp-perfect" type="checkbox" checked /> 소정근무일 개근</label>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="whp-copy" type="button">결과 복사</button>
+            <button id="whp-reset" type="button">초기화</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="whp-eligible">-</strong><span>주휴수당 대상 여부</span></div>
+            <div><strong id="whp-hours-paid">-</strong><span>주휴시간</span></div>
+            <div><strong id="whp-weekly">-</strong><span>주휴수당(주)</span></div>
+            <div><strong id="whp-monthly">-</strong><span>주휴수당(월 환산)</span></div>
+          </div>
+
+          <p class="tool-result" id="whp-help">시급/주근로시간/근무일수를 입력하면 주휴수당 대상 여부와 예상 금액을 계산합니다.</p>
+        </div>
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
     {% endcase %}
