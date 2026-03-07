@@ -41,5 +41,5 @@ alternate_urls:
 - 前月比・前年同月比の確認
 
 ## 関連ツール
-- 税込み/税抜き計算: [VAT計算機]({{ '/tools/vat-calculator/' | relative_url }})
-- 単位変換: [単位変換ツール]({{ '/tools/unit-converter/' | relative_url }})
+- 税込み/税抜き計算: [VAT計算機]({{ '/ja/tools/vat-calculator/' | relative_url }})
+- 単位変換: [単位変換ツール]({{ '/ja/tools/unit-converter/' | relative_url }})

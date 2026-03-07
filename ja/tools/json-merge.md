@@ -39,5 +39,5 @@ alternate_urls:
 - 大容量ファイルはブラウザメモリ使用量が増える場合があります。
 
 ## 関連ツール
-- 文字数確認: [文字数カウンター]({{ '/tools/text-counter/' | relative_url }})
-- キー形式整理: [大文字小文字変換]({{ '/tools/case-converter/' | relative_url }})
+- 文字数確認: [文字数カウンター]({{ '/ja/tools/text-counter/' | relative_url }})
+- キー形式整理: [大文字小文字変換]({{ '/ja/tools/case-converter/' | relative_url }})

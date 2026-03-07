@@ -39,5 +39,5 @@ Examples: paged API exports, chunked logs, or batch output files.
 - Very large files can increase browser memory usage.
 
 ## Related tools
-- Text length check: [Text Counter]({{ '/tools/text-counter/' | relative_url }})
-- Key/style cleanup: [Case Converter]({{ '/tools/case-converter/' | relative_url }})
+- Text length check: [Text Counter]({{ '/en/tools/text-counter/' | relative_url }})
+- Key/style cleanup: [Case Converter]({{ '/en/tools/case-converter/' | relative_url }})

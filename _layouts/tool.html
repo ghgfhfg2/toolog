@@ -171,30 +171,30 @@ layout: default
           <input id="jm-files" type="file" accept="application/json,.json" multiple />
 
           <div class="tool-row">
-            <label for="jm-mode">병합 방식</label>
+            <label for="jm-mode">{% if page.lang == 'en' %}Merge mode{% elsif page.lang == 'ja' %}マージ方式{% else %}병합 방식{% endif %}</label>
             <select id="jm-mode">
-              <option value="auto">자동(권장)</option>
-              <option value="array-concat">배열 이어붙이기</option>
-              <option value="object-merge">객체 키 병합(뒤 파일 우선)</option>
-              <option value="wrap-array">파일별 루트를 배열로 감싸기</option>
+              <option value="auto">{% if page.lang == 'en' %}Auto (recommended){% elsif page.lang == 'ja' %}自動（推奨）{% else %}자동(권장){% endif %}</option>
+              <option value="array-concat">{% if page.lang == 'en' %}Concatenate arrays{% elsif page.lang == 'ja' %}配列を連結{% else %}배열 이어붙이기{% endif %}</option>
+              <option value="object-merge">{% if page.lang == 'en' %}Merge object keys (later files win){% elsif page.lang == 'ja' %}オブジェクトキー統合（後のファイル優先）{% else %}객체 키 병합(뒤 파일 우선){% endif %}</option>
+              <option value="wrap-array">{% if page.lang == 'en' %}Wrap file roots into array{% elsif page.lang == 'ja' %}各ファイルのルートを配列で包む{% else %}파일별 루트를 배열로 감싸기{% endif %}</option>
             </select>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="jm-run" type="button">JSON 합치기</button>
-            <button id="jm-copy" type="button">결과 복사</button>
+            <button id="jm-run" type="button">{% if page.lang == 'en' %}Merge JSON{% elsif page.lang == 'ja' %}JSONをマージ{% else %}JSON 합치기{% endif %}</button>
+            <button id="jm-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
           </div>
 
           <div class="tool-stats">
-            <div><strong id="jm-file-count">0</strong><span>업로드 파일 수</span></div>
-            <div><strong id="jm-item-count">-</strong><span>병합 결과 항목 수</span></div>
-            <div><strong id="jm-conflict-count">-</strong><span>중복 키(객체 모드)</span></div>
-            <div><strong id="jm-size">-</strong><span>결과 용량(bytes)</span></div>
+            <div><strong id="jm-file-count">0</strong><span>{% if page.lang == 'en' %}Uploaded files{% elsif page.lang == 'ja' %}アップロードファイル数{% else %}업로드 파일 수{% endif %}</span></div>
+            <div><strong id="jm-item-count">-</strong><span>{% if page.lang == 'en' %}Merged item count{% elsif page.lang == 'ja' %}マージ結果の項目数{% else %}병합 결과 항목 수{% endif %}</span></div>
+            <div><strong id="jm-conflict-count">-</strong><span>{% if page.lang == 'en' %}Duplicate keys (object mode){% elsif page.lang == 'ja' %}重複キー（オブジェクトモード）{% else %}중복 키(객체 모드){% endif %}</span></div>
+            <div><strong id="jm-size">-</strong><span>{% if page.lang == 'en' %}Output size (bytes){% elsif page.lang == 'ja' %}結果サイズ（bytes）{% else %}결과 용량(bytes){% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="jm-help">같은 양식의 JSON 파일 여러 개를 한 번에 업로드해 병합하고 다운로드할 수 있습니다.</p>
-          <textarea id="jm-output" rows="10" readonly placeholder="병합 결과 JSON 미리보기가 여기에 표시됩니다."></textarea>
-          <a id="jm-download" class="open-link" download="merged.json">merged.json 다운로드</a>
+          <p class="tool-result" id="jm-help">{% if page.lang == 'en' %}Upload multiple JSON files with similar format and merge/download them at once.{% elsif page.lang == 'ja' %}同じ形式のJSONファイルを複数アップロードし、一括でマージしてダウンロードできます。{% else %}같은 양식의 JSON 파일 여러 개를 한 번에 업로드해 병합하고 다운로드할 수 있습니다.{% endif %}</p>
+          <textarea id="jm-output" rows="10" readonly placeholder="{% if page.lang == 'en' %}Merged JSON preview appears here.{% elsif page.lang == 'ja' %}マージ後のJSONプレビューがここに表示されます。{% else %}병합 결과 JSON 미리보기가 여기에 표시됩니다.{% endif %}"></textarea>
+          <a id="jm-download" class="open-link" download="merged.json">{% if page.lang == 'en' %}Download merged.json{% elsif page.lang == 'ja' %}merged.json をダウンロード{% else %}merged.json 다운로드{% endif %}</a>
         </div>
       {% when 'font-change' %}
         <div class="tool-ui font-change-ui">
@@ -211,42 +211,42 @@ layout: default
       {% when 'percent-calculator' %}
         <div class="tool-ui">
           <div class="tool-row">
-            <label>계산 유형</label>
+            <label>{% if page.lang == 'en' %}Calculation type{% elsif page.lang == 'ja' %}計算タイプ{% else %}계산 유형{% endif %}</label>
             <select id="pct-mode">
-              <option value="percent-of">A의 B% 계산</option>
-              <option value="ratio">A는 B의 몇 %인지</option>
-              <option value="change">증감률 계산</option>
+              <option value="percent-of">{% if page.lang == 'en' %}A% of B{% elsif page.lang == 'ja' %}AのB%を計算{% else %}A의 B% 계산{% endif %}</option>
+              <option value="ratio">{% if page.lang == 'en' %}A is what percent of B{% elsif page.lang == 'ja' %}AはBの何%か{% else %}A는 B의 몇 %인지{% endif %}</option>
+              <option value="change">{% if page.lang == 'en' %}Rate of change{% elsif page.lang == 'ja' %}増減率を計算{% else %}증감률 계산{% endif %}</option>
             </select>
           </div>
 
           <div id="pct-fields-percent-of" class="tool-row-grid pct-grid">
-            <input id="pct-base" type="number" step="any" placeholder="기준값 A (예: 250000)" />
-            <input id="pct-rate" type="number" step="any" placeholder="비율 B% (예: 12)" />
+            <input id="pct-base" type="number" step="any" placeholder="{% if page.lang == 'en' %}Base value A (e.g., 250000){% elsif page.lang == 'ja' %}基準値A（例: 250000）{% else %}기준값 A (예: 250000){% endif %}" />
+            <input id="pct-rate" type="number" step="any" placeholder="{% if page.lang == 'en' %}Rate B% (e.g., 12){% elsif page.lang == 'ja' %}比率B%（例: 12）{% else %}비율 B% (예: 12){% endif %}" />
           </div>
 
           <div id="pct-fields-ratio" class="tool-row-grid pct-grid" hidden>
-            <input id="pct-part" type="number" step="any" placeholder="부분값 A" />
-            <input id="pct-whole" type="number" step="any" placeholder="전체값 B" />
+            <input id="pct-part" type="number" step="any" placeholder="{% if page.lang == 'en' %}Part value A{% elsif page.lang == 'ja' %}部分値A{% else %}부분값 A{% endif %}" />
+            <input id="pct-whole" type="number" step="any" placeholder="{% if page.lang == 'en' %}Whole value B{% elsif page.lang == 'ja' %}全体値B{% else %}전체값 B{% endif %}" />
           </div>
 
           <div id="pct-fields-change" class="tool-row-grid pct-grid" hidden>
-            <input id="pct-old" type="number" step="any" placeholder="이전값" />
-            <input id="pct-new" type="number" step="any" placeholder="현재값" />
+            <input id="pct-old" type="number" step="any" placeholder="{% if page.lang == 'en' %}Previous value{% elsif page.lang == 'ja' %}前の値{% else %}이전값{% endif %}" />
+            <input id="pct-new" type="number" step="any" placeholder="{% if page.lang == 'en' %}Current value{% elsif page.lang == 'ja' %}現在値{% else %}현재값{% endif %}" />
           </div>
 
           <div class="tool-stats">
-            <div><strong id="pct-result-main">-</strong><span>주요 결과</span></div>
-            <div><strong id="pct-result-sub">-</strong><span>보조 결과</span></div>
-            <div><strong id="pct-result-diff">-</strong><span>차이값</span></div>
-            <div><strong id="pct-result-type">입력 대기</strong><span>판정</span></div>
+            <div><strong id="pct-result-main">-</strong><span>{% if page.lang == 'en' %}Main result{% elsif page.lang == 'ja' %}主要結果{% else %}주요 결과{% endif %}</span></div>
+            <div><strong id="pct-result-sub">-</strong><span>{% if page.lang == 'en' %}Secondary result{% elsif page.lang == 'ja' %}補助結果{% else %}보조 결과{% endif %}</span></div>
+            <div><strong id="pct-result-diff">-</strong><span>{% if page.lang == 'en' %}Difference{% elsif page.lang == 'ja' %}差分{% else %}차이값{% endif %}</span></div>
+            <div><strong id="pct-result-type">{% if page.lang == 'en' %}Waiting for input{% elsif page.lang == 'ja' %}入力待ち{% else %}입력 대기{% endif %}</strong><span>{% if page.lang == 'en' %}Status{% elsif page.lang == 'ja' %}判定{% else %}판정{% endif %}</span></div>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="pct-copy" type="button">결과 복사</button>
-            <button id="pct-reset" type="button">초기화</button>
+            <button id="pct-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="pct-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
 
-          <p class="tool-result" id="pct-help">값을 입력하면 결과가 즉시 계산됩니다.</p>
+          <p class="tool-result" id="pct-help">{% if page.lang == 'en' %}Enter values to calculate instantly.{% elsif page.lang == 'ja' %}値を入力すると即時計算します。{% else %}값을 입력하면 결과가 즉시 계산됩니다.{% endif %}</p>
         </div>
       {% when 'password-generator' %}
         <div class="tool-ui">
@@ -324,30 +324,30 @@ layout: default
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="dday-start">기준일</label>
+              <label for="dday-start">{% if page.lang == 'en' %}Start date{% elsif page.lang == 'ja' %}基準日{% else %}기준일{% endif %}</label>
               <input id="dday-start" type="date" />
             </div>
             <div>
-              <label for="dday-end">목표일</label>
+              <label for="dday-end">{% if page.lang == 'en' %}Target date{% elsif page.lang == 'ja' %}目標日{% else %}목표일{% endif %}</label>
               <input id="dday-end" type="date" />
             </div>
           </div>
 
-          <label class="tool-check"><input id="dday-business-only" type="checkbox" /> 주말 제외(업무일 기준)</label>
+          <label class="tool-check"><input id="dday-business-only" type="checkbox" /> {% if page.lang == 'en' %}Exclude weekends (business-day mode){% elsif page.lang == 'ja' %}週末を除外（営業日基準）{% else %}주말 제외(업무일 기준){% endif %}</label>
 
           <div class="tool-stats">
             <div><strong id="dday-label">-</strong><span>D-day</span></div>
-            <div><strong id="dday-days">-</strong><span id="dday-days-label">달력일 차이</span></div>
-            <div><strong id="dday-inclusive">-</strong><span>포함 일수</span></div>
-            <div><strong id="dday-business">-</strong><span>업무일(평일)</span></div>
+            <div><strong id="dday-days">-</strong><span id="dday-days-label">{% if page.lang == 'en' %}Calendar-day difference{% elsif page.lang == 'ja' %}暦日差{% else %}달력일 차이{% endif %}</span></div>
+            <div><strong id="dday-inclusive">-</strong><span>{% if page.lang == 'en' %}Inclusive day count{% elsif page.lang == 'ja' %}両端含む日数{% else %}포함 일수{% endif %}</span></div>
+            <div><strong id="dday-business">-</strong><span>{% if page.lang == 'en' %}Business days (weekdays){% elsif page.lang == 'ja' %}営業日（平日）{% else %}업무일(평일){% endif %}</span></div>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="dday-swap" type="button">날짜 바꾸기</button>
-            <button id="dday-copy" type="button">결과 복사</button>
+            <button id="dday-swap" type="button">{% if page.lang == 'en' %}Swap dates{% elsif page.lang == 'ja' %}日付を入れ替え{% else %}날짜 바꾸기{% endif %}</button>
+            <button id="dday-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
           </div>
 
-          <p class="tool-result" id="dday-help">기준일과 목표일을 선택하면 결과가 계산됩니다.</p>
+          <p class="tool-result" id="dday-help">{% if page.lang == 'en' %}Select start and target dates to calculate the result.{% elsif page.lang == 'ja' %}基準日と目標日を選ぶと結果を計算します。{% else %}기준일과 목표일을 선택하면 결과가 계산됩니다.{% endif %}</p>
         </div>
       {% when 'bmi-calculator' %}
         <div class="tool-ui">

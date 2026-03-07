@@ -522,9 +522,85 @@
 
     if (!mode || !main || !sub || !diff || !type || !help) return;
 
+    const pctI18n = {
+      ko: {
+        idleDefault: '필수 값을 입력하면 결과가 계산됩니다.',
+        idleInput: '입력 대기',
+        idlePercentOf: '기준값 A와 비율 B를 입력하세요.',
+        idleRatio: '부분값 A와 전체값 B를 입력하세요.',
+        idleChange: '이전값과 현재값을 입력하세요.',
+        cannotCalc: '계산 불가',
+        positive: '양수 결과',
+        negative: '음수 결과',
+        over100: '100% 초과',
+        normalRange: '정상 범위',
+        increase: '증가',
+        decrease: '감소',
+        unchanged: '변화 없음',
+        msgWholeZero: '전체값(B)이 0이면 백분율을 계산할 수 없습니다.',
+        msgOldZero: '이전값이 0이면 증감률(%)을 계산할 수 없습니다.',
+        msgPercentOf: (base, rate, result) => `${base}의 ${rate}% = ${result}`,
+        msgRatio: (part, whole, ratio) => `${part}는 ${whole}의 ${ratio}%입니다.`,
+        msgChange: (oldVal, nowVal, rate, trend) => `이전값 ${oldVal} 대비 ${nowVal}는 ${rate}% ${trend}입니다.`,
+        copyText: (main, sub, diff, type) => `주요 결과: ${main} | 보조 결과: ${sub} | 차이값: ${diff} | 판정: ${type}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사',
+        resetMsg: '값을 입력하면 결과가 즉시 계산됩니다.'
+      },
+      en: {
+        idleDefault: 'Results appear after entering required values.',
+        idleInput: 'Waiting for input',
+        idlePercentOf: 'Enter base value A and rate B.',
+        idleRatio: 'Enter part value A and whole value B.',
+        idleChange: 'Enter previous and current values.',
+        cannotCalc: 'Cannot calculate',
+        positive: 'Positive result',
+        negative: 'Negative result',
+        over100: 'Over 100%',
+        normalRange: 'Normal range',
+        increase: 'Increase',
+        decrease: 'Decrease',
+        unchanged: 'No change',
+        msgWholeZero: 'Cannot calculate percentage when whole value (B) is 0.',
+        msgOldZero: 'Cannot calculate change rate (%) when previous value is 0.',
+        msgPercentOf: (base, rate, result) => `${rate}% of ${base} = ${result}`,
+        msgRatio: (part, whole, ratio) => `${part} is ${ratio}% of ${whole}.`,
+        msgChange: (oldVal, nowVal, rate, trend) => `From ${oldVal} to ${nowVal}: ${rate}% ${trend.toLowerCase()}.`,
+        copyText: (main, sub, diff, type) => `Main result: ${main} | Secondary result: ${sub} | Difference: ${diff} | Status: ${type}`,
+        copied: 'Copied',
+        copyDefault: 'Copy result',
+        resetMsg: 'Results are calculated instantly after input.'
+      },
+      ja: {
+        idleDefault: '必須項目を入力すると結果を計算します。',
+        idleInput: '入力待ち',
+        idlePercentOf: '基準値Aと比率Bを入力してください。',
+        idleRatio: '部分値Aと全体値Bを入力してください。',
+        idleChange: '前の値と現在値を入力してください。',
+        cannotCalc: '計算不可',
+        positive: '正の結果',
+        negative: '負の結果',
+        over100: '100%超え',
+        normalRange: '通常範囲',
+        increase: '増加',
+        decrease: '減少',
+        unchanged: '変化なし',
+        msgWholeZero: '全体値(B)が0の場合、割合を計算できません。',
+        msgOldZero: '前の値が0の場合、増減率(%)を計算できません。',
+        msgPercentOf: (base, rate, result) => `${base}の${rate}% = ${result}`,
+        msgRatio: (part, whole, ratio) => `${part}は${whole}の${ratio}%です。`,
+        msgChange: (oldVal, nowVal, rate, trend) => `${oldVal}から${nowVal}への変化は${rate}%（${trend}）です。`,
+        copyText: (main, sub, diff, type) => `主要結果: ${main} | 補助結果: ${sub} | 差分: ${diff} | 判定: ${type}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー',
+        resetMsg: '値を入力すると即時計算します。'
+      }
+    };
+    const pctText = pctI18n[pageLang] || pctI18n.ko;
+
     const fmt = (v, max = 6) => {
       if (!Number.isFinite(v)) return '-';
-      return v.toLocaleString('ko-KR', { maximumFractionDigits: max });
+      return v.toLocaleString(numberLocale, { maximumFractionDigits: max });
     };
 
     const parseRequired = (el) => {
@@ -534,11 +610,11 @@
       return Number.isFinite(n) ? n : null;
     };
 
-    const setIdle = (msg = '필수 값을 입력하면 결과가 계산됩니다.') => {
+    const setIdle = (msg = pctText.idleDefault) => {
       main.textContent = '-';
       sub.textContent = '-';
       diff.textContent = '-';
-      type.textContent = '입력 대기';
+      type.textContent = pctText.idleInput;
       help.textContent = msg;
     };
 
@@ -571,7 +647,7 @@
         const base = parseRequired(inputs.base);
         const rate = parseRequired(inputs.rate);
         if (base === null || rate === null) {
-          setIdle('기준값 A와 비율 B를 입력하세요.');
+          setIdle(pctText.idlePercentOf);
           return;
         }
 
@@ -581,8 +657,8 @@
         main.textContent = fmt(result);
         sub.textContent = `${fmt(rate)}%`;
         diff.textContent = fmt(remain);
-        type.textContent = result === 0 ? '0%' : (result > 0 ? '양수 결과' : '음수 결과');
-        help.textContent = `${fmt(base)}의 ${fmt(rate)}% = ${fmt(result)}`;
+        type.textContent = result === 0 ? '0%' : (result > 0 ? pctText.positive : pctText.negative);
+        help.textContent = pctText.msgPercentOf(fmt(base), fmt(rate), fmt(result));
         return;
       }
 
@@ -590,7 +666,7 @@
         const part = parseRequired(inputs.part);
         const whole = parseRequired(inputs.whole);
         if (part === null || whole === null) {
-          setIdle('부분값 A와 전체값 B를 입력하세요.');
+          setIdle(pctText.idleRatio);
           return;
         }
 
@@ -598,8 +674,8 @@
           main.textContent = '-';
           sub.textContent = '-';
           diff.textContent = '-';
-          type.textContent = '계산 불가';
-          help.textContent = '전체값(B)이 0이면 백분율을 계산할 수 없습니다.';
+          type.textContent = pctText.cannotCalc;
+          help.textContent = pctText.msgWholeZero;
           return;
         }
 
@@ -609,8 +685,8 @@
         main.textContent = `${fmt(ratio)}%`;
         sub.textContent = `${fmt(part)} / ${fmt(whole)}`;
         diff.textContent = fmt(remain);
-        type.textContent = ratio > 100 ? '100% 초과' : '정상 범위';
-        help.textContent = `${fmt(part)}는 ${fmt(whole)}의 ${fmt(ratio)}%입니다.`;
+        type.textContent = ratio > 100 ? pctText.over100 : pctText.normalRange;
+        help.textContent = pctText.msgRatio(fmt(part), fmt(whole), fmt(ratio));
         return;
       }
 
@@ -618,7 +694,7 @@
         const oldVal = parseRequired(inputs.old);
         const newVal = parseRequired(inputs.now);
         if (oldVal === null || newVal === null) {
-          setIdle('이전값과 현재값을 입력하세요.');
+          setIdle(pctText.idleChange);
           return;
         }
 
@@ -626,36 +702,36 @@
           main.textContent = '-';
           sub.textContent = '-';
           diff.textContent = fmt(newVal - oldVal);
-          type.textContent = '계산 불가';
-          help.textContent = '이전값이 0이면 증감률(%)을 계산할 수 없습니다.';
+          type.textContent = pctText.cannotCalc;
+          help.textContent = pctText.msgOldZero;
           return;
         }
 
         const delta = newVal - oldVal;
         const rate = (delta / oldVal) * 100;
-        const trend = delta > 0 ? '증가' : (delta < 0 ? '감소' : '변화 없음');
+        const trend = delta > 0 ? pctText.increase : (delta < 0 ? pctText.decrease : pctText.unchanged);
 
         main.textContent = `${fmt(rate)}%`;
         sub.textContent = `${fmt(oldVal)} → ${fmt(newVal)}`;
         diff.textContent = fmt(delta);
         type.textContent = trend;
-        help.textContent = `이전값 ${fmt(oldVal)} 대비 ${fmt(newVal)}는 ${fmt(rate)}% ${trend}입니다.`;
+        help.textContent = pctText.msgChange(fmt(oldVal), fmt(newVal), fmt(rate), trend);
       }
     };
 
     copyBtn?.addEventListener('click', async () => {
-      const text = `주요 결과: ${main.textContent} | 보조 결과: ${sub.textContent} | 차이값: ${diff.textContent} | 판정: ${type.textContent}`;
+      const text = pctText.copyText(main.textContent, sub.textContent, diff.textContent, type.textContent);
       await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = pctText.copied;
+      setTimeout(() => { copyBtn.textContent = old || pctText.copyDefault; }, 900);
     });
 
     resetBtn?.addEventListener('click', () => {
       Object.values(inputs).forEach((input) => { if (input) input.value = ''; });
       mode.value = 'percent-of';
       showByMode();
-      setIdle('값을 입력하면 결과가 즉시 계산됩니다.');
+      setIdle(pctText.resetMsg);
     });
 
     mode.addEventListener('change', render);
@@ -1112,6 +1188,52 @@
 
     if (!start || !end || !label || !days || !inclusive || !business || !help) return;
 
+    const ddayI18n = {
+      ko: {
+        calendarDiff: '달력일 차이',
+        businessDiff: '업무일 차이',
+        needDates: '기준일과 목표일을 선택하면 결과가 계산됩니다.',
+        left: (n, useBusiness) => `목표일까지 ${n}${useBusiness ? '업무일' : '일'} 남았습니다.`,
+        passed: (n, useBusiness) => `목표일이 ${n}${useBusiness ? '업무일' : '일'} 지났습니다.`,
+        today: '오늘이 목표일입니다.',
+        fromBase: '기준',
+        toTarget: '→',
+        copyMetric: '달력일 차이',
+        copyText: (label, metricLabel, daysText, inclusive, business) => `D-day ${label} | ${metricLabel} ${daysText} | 포함 일수 ${inclusive} | 업무일 ${business}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        calendarDiff: 'Calendar-day difference',
+        businessDiff: 'Business-day difference',
+        needDates: 'Select start and target dates to calculate.',
+        left: (n, useBusiness) => `${n} ${useBusiness ? 'business day(s)' : 'day(s)'} left until target date.`,
+        passed: (n, useBusiness) => `${n} ${useBusiness ? 'business day(s)' : 'day(s)'} passed since target date.`,
+        today: 'Today is the target date.',
+        fromBase: 'Start',
+        toTarget: '→',
+        copyMetric: 'Calendar-day difference',
+        copyText: (label, metricLabel, daysText, inclusive, business) => `D-day ${label} | ${metricLabel} ${daysText} | Inclusive days ${inclusive} | Business days ${business}`,
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        calendarDiff: '暦日差',
+        businessDiff: '営業日差',
+        needDates: '基準日と目標日を選ぶと計算します。',
+        left: (n, useBusiness) => `目標日まであと${n}${useBusiness ? '営業日' : '日'}です。`,
+        passed: (n, useBusiness) => `目標日を${n}${useBusiness ? '営業日' : '日'}過ぎています。`,
+        today: '今日は目標日です。',
+        fromBase: '基準',
+        toTarget: '→',
+        copyMetric: '暦日差',
+        copyText: (label, metricLabel, daysText, inclusive, business) => `D-day ${label} | ${metricLabel} ${daysText} | 両端含む日数 ${inclusive} | 営業日 ${business}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    };
+    const ddayText = ddayI18n[pageLang] || ddayI18n.ko;
+
     const toLocalDateOnly = (v) => {
       if (!v) return null;
       const [y, m, d] = v.split('-').map(Number);
@@ -1159,10 +1281,10 @@
       if (!s || !e) {
         label.textContent = '-';
         days.textContent = '-';
-        if (daysLabel) daysLabel.textContent = '달력일 차이';
+        if (daysLabel) daysLabel.textContent = ddayText.calendarDiff;
         inclusive.textContent = '-';
         business.textContent = '-';
-        help.textContent = '기준일과 목표일을 선택하면 결과가 계산됩니다.';
+        help.textContent = ddayText.needDates;
         return;
       }
 
@@ -1176,21 +1298,26 @@
       const shownDiff = useBusiness ? businessDiff : absDiff;
       const dLabel = shownDiff === 0 ? 'D-day' : (diff > 0 ? `D-${shownDiff}` : `D+${shownDiff}`);
       label.textContent = dLabel;
-      days.textContent = `${shownDiff.toLocaleString('ko-KR')}일`;
-      if (daysLabel) daysLabel.textContent = useBusiness ? '업무일 차이' : '달력일 차이';
-      inclusive.textContent = `${inclusiveDays.toLocaleString('ko-KR')}일`;
-      business.textContent = `${weekdayCount.toLocaleString('ko-KR')}일`;
+      days.textContent = `${shownDiff.toLocaleString(numberLocale)}${pageLang === 'en' ? ' days' : '日'}`;
+      if (pageLang === 'ko') days.textContent = `${shownDiff.toLocaleString(numberLocale)}일`;
+      if (daysLabel) daysLabel.textContent = useBusiness ? ddayText.businessDiff : ddayText.calendarDiff;
+      inclusive.textContent = `${inclusiveDays.toLocaleString(numberLocale)}${pageLang === 'en' ? ' days' : '日'}`;
+      business.textContent = `${weekdayCount.toLocaleString(numberLocale)}${pageLang === 'en' ? ' days' : '日'}`;
+      if (pageLang === 'ko') {
+        inclusive.textContent = `${inclusiveDays.toLocaleString(numberLocale)}일`;
+        business.textContent = `${weekdayCount.toLocaleString(numberLocale)}일`;
+      }
 
-      const startWeek = new Intl.DateTimeFormat('ko-KR', { weekday: 'short' }).format(s);
-      const endWeek = new Intl.DateTimeFormat('ko-KR', { weekday: 'short' }).format(e);
+      const startWeek = new Intl.DateTimeFormat(pageLang === 'en' ? 'en-US' : (pageLang === 'ja' ? 'ja-JP' : 'ko-KR'), { weekday: 'short' }).format(s);
+      const endWeek = new Intl.DateTimeFormat(pageLang === 'en' ? 'en-US' : (pageLang === 'ja' ? 'ja-JP' : 'ko-KR'), { weekday: 'short' }).format(e);
 
       const diffText = diff > 0
-        ? `목표일까지 ${shownDiff.toLocaleString('ko-KR')}${useBusiness ? '업무일' : '일'} 남았습니다.`
+        ? ddayText.left(shownDiff.toLocaleString(numberLocale), useBusiness)
         : (diff < 0
-          ? `목표일이 ${shownDiff.toLocaleString('ko-KR')}${useBusiness ? '업무일' : '일'} 지났습니다.`
-          : '오늘이 목표일입니다.');
+          ? ddayText.passed(shownDiff.toLocaleString(numberLocale), useBusiness)
+          : ddayText.today);
 
-      help.textContent = `${start.value}(${startWeek}) → ${end.value}(${endWeek}) · ${diffText}`;
+      help.textContent = `${start.value}(${startWeek}) ${ddayText.toTarget} ${end.value}(${endWeek}) · ${diffText}`;
     };
 
     const today = new Date();
@@ -1210,12 +1337,12 @@
     });
 
     copyBtn?.addEventListener('click', async () => {
-      const metricLabel = daysLabel?.textContent || '달력일 차이';
-      const text = `D-day ${label.textContent} | ${metricLabel} ${days.textContent} | 포함 일수 ${inclusive.textContent} | 업무일 ${business.textContent}`;
+      const metricLabel = daysLabel?.textContent || ddayText.copyMetric;
+      const text = ddayText.copyText(label.textContent, metricLabel, days.textContent, inclusive.textContent, business.textContent);
       await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = ddayText.copied;
+      setTimeout(() => { copyBtn.textContent = old || ddayText.copyDefault; }, 900);
     });
 
     render();
@@ -3558,7 +3685,59 @@
 
     if (!filesInput || !modeSel || !runBtn || !copyBtn || !output || !download || !help || !fileCount || !itemCount || !conflictCount || !sizeOut) return;
 
-    const fmt = (n) => Number(n || 0).toLocaleString('ko-KR');
+    const jmI18n = {
+      ko: {
+        readFail: (name) => `파일 읽기 실패: ${name}`,
+        parseFail: (name) => `JSON 파싱 실패: ${name}`,
+        needFiles: '먼저 JSON 파일을 1개 이상 선택하세요.',
+        mergeDone: (count, mode) => `${count}개 파일 병합 완료 (${mode}). 다운로드 버튼으로 저장하세요.`,
+        mergeError: '병합 중 오류가 발생했습니다.',
+        noCopy: '복사할 병합 결과가 없습니다. 먼저 JSON 합치기를 실행하세요.',
+        copied: '복사됨',
+        copyDefault: '결과 복사',
+        modeLabelMap: {
+          'array-concat': '배열 이어붙이기',
+          'object-merge': '객체 키 병합',
+          'object-array-concat': '객체 내 공통 배열 자동 이어붙이기',
+          'wrap-array': '파일별 루트 배열 감싸기'
+        }
+      },
+      en: {
+        readFail: (name) => `Failed to read file: ${name}`,
+        parseFail: (name) => `JSON parse failed: ${name}`,
+        needFiles: 'Select at least one JSON file first.',
+        mergeDone: (count, mode) => `Merged ${count} file(s) (${mode}). Use the download button to save.`,
+        mergeError: 'An error occurred while merging.',
+        noCopy: 'No merged result to copy. Run JSON merge first.',
+        copied: 'Copied',
+        copyDefault: 'Copy result',
+        modeLabelMap: {
+          'array-concat': 'Concatenate arrays',
+          'object-merge': 'Merge object keys',
+          'object-array-concat': 'Auto-concatenate common array in objects',
+          'wrap-array': 'Wrap file roots into array'
+        }
+      },
+      ja: {
+        readFail: (name) => `ファイルの読み込みに失敗しました: ${name}`,
+        parseFail: (name) => `JSONの解析に失敗しました: ${name}`,
+        needFiles: '先にJSONファイルを1つ以上選択してください。',
+        mergeDone: (count, mode) => `${count}個のファイルをマージしました（${mode}）。ダウンロードで保存してください。`,
+        mergeError: 'マージ中にエラーが発生しました。',
+        noCopy: 'コピーするマージ結果がありません。先にJSONマージを実行してください。',
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー',
+        modeLabelMap: {
+          'array-concat': '配列を連結',
+          'object-merge': 'オブジェクトキー統合',
+          'object-array-concat': 'オブジェクト内の共通配列を自動連結',
+          'wrap-array': '各ファイルのルートを配列で包む'
+        }
+      }
+    };
+    const jmText = jmI18n[pageLang] || jmI18n.ko;
+
+    const fmt = (n) => Number(n || 0).toLocaleString(numberLocale);
 
     const copyText = async (text) => {
       try {
@@ -3578,7 +3757,7 @@
     const readText = (file) => new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(String(reader.result || ''));
-      reader.onerror = () => reject(new Error(`파일 읽기 실패: ${file.name}`));
+      reader.onerror = () => reject(new Error(jmText.readFail(file.name)));
       reader.readAsText(file, 'utf-8');
     });
 
@@ -3608,7 +3787,7 @@
     runBtn.addEventListener('click', async () => {
       const files = Array.from(filesInput.files || []);
       if (!files.length) {
-        help.textContent = '먼저 JSON 파일을 1개 이상 선택하세요.';
+        help.textContent = jmText.needFiles;
         return;
       }
 
@@ -3618,7 +3797,7 @@
           try {
             return JSON.parse(txt);
           } catch (_) {
-            throw new Error(`JSON 파싱 실패: ${files[idx].name}`);
+            throw new Error(jmText.parseFail(files[idx].name));
           }
         });
 
@@ -3667,32 +3846,26 @@
         itemCount.textContent = fmt(getCount(merged));
         conflictCount.textContent = fmt(conflicts);
         sizeOut.textContent = fmt(new TextEncoder().encode(pretty).length);
-        const modeLabelMap = {
-          'array-concat': '배열 이어붙이기',
-          'object-merge': '객체 키 병합',
-          'object-array-concat': '객체 내 공통 배열 자동 이어붙이기',
-          'wrap-array': '파일별 루트 배열 감싸기'
-        };
-        help.textContent = `${files.length}개 파일 병합 완료 (${modeLabelMap[mode] || mode}). 다운로드 버튼으로 저장하세요.`;
+        help.textContent = jmText.mergeDone(files.length, jmText.modeLabelMap[mode] || mode);
       } catch (err) {
         output.value = '';
         itemCount.textContent = '-';
         conflictCount.textContent = '-';
         sizeOut.textContent = '-';
-        help.textContent = err?.message || '병합 중 오류가 발생했습니다.';
+        help.textContent = err?.message || jmText.mergeError;
       }
     });
 
     copyBtn.addEventListener('click', async () => {
       const text = output.value || '';
       if (!text.trim()) {
-        help.textContent = '복사할 병합 결과가 없습니다. 먼저 JSON 합치기를 실행하세요.';
+        help.textContent = jmText.noCopy;
         return;
       }
       await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = jmText.copied;
+      setTimeout(() => { copyBtn.textContent = old || jmText.copyDefault; }, 900);
     });
   }
 

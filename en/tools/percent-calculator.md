@@ -41,5 +41,5 @@ This tool covers three common cases in one place:
 - Month-over-month growth rate
 
 ## Related tools
-- Tax split and total: [VAT Calculator]({{ '/tools/vat-calculator/' | relative_url }})
-- Convert units first: [Unit Converter]({{ '/tools/unit-converter/' | relative_url }})
+- Tax split and total: [VAT Calculator]({{ '/en/tools/vat-calculator/' | relative_url }})
+- Convert units first: [Unit Converter]({{ '/en/tools/unit-converter/' | relative_url }})
