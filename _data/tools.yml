@@ -115,6 +115,15 @@
   url: /tools/case-converter/
   thumbnail: /assets/thumbs/case-converter.svg
 
+- id: json-merge
+  title: JSON 합치기
+  category: data
+  category_label: 데이터/계산
+  badge: New
+  description: 여러 JSON 파일을 한 번에 업로드해 하나의 JSON으로 병합하고 다운로드해요.
+  url: /tools/json-merge/
+  thumbnail: /assets/thumbs/json-merge.svg
+
 - id: vat-calculator
   title: 부가세 계산기
   category: data

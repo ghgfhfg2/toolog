@@ -166,6 +166,36 @@ layout: default
           </div>
           <div id="bw-list" class="bw-list"></div>
         </div>
+      {% when 'json-merge' %}
+        <div class="tool-ui">
+          <input id="jm-files" type="file" accept="application/json,.json" multiple />
+
+          <div class="tool-row">
+            <label for="jm-mode">병합 방식</label>
+            <select id="jm-mode">
+              <option value="auto">자동(권장)</option>
+              <option value="array-concat">배열 이어붙이기</option>
+              <option value="object-merge">객체 키 병합(뒤 파일 우선)</option>
+              <option value="wrap-array">파일별 루트를 배열로 감싸기</option>
+            </select>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="jm-run" type="button">JSON 합치기</button>
+            <button id="jm-copy" type="button">결과 복사</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="jm-file-count">0</strong><span>업로드 파일 수</span></div>
+            <div><strong id="jm-item-count">-</strong><span>병합 결과 항목 수</span></div>
+            <div><strong id="jm-conflict-count">-</strong><span>중복 키(객체 모드)</span></div>
+            <div><strong id="jm-size">-</strong><span>결과 용량(bytes)</span></div>
+          </div>
+
+          <p class="tool-result" id="jm-help">같은 양식의 JSON 파일 여러 개를 한 번에 업로드해 병합하고 다운로드할 수 있습니다.</p>
+          <textarea id="jm-output" rows="10" readonly placeholder="병합 결과 JSON 미리보기가 여기에 표시됩니다."></textarea>
+          <a id="jm-download" class="open-link" download="merged.json">merged.json 다운로드</a>
+        </div>
       {% when 'font-change' %}
         <div class="tool-ui font-change-ui">
           <textarea id="fc-input" maxlength="500" placeholder="텍스트를 입력하세요"></textarea>

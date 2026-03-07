@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="JSON 합치기 썸네일">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1020"/>
+      <stop offset="100%" stop-color="#1f2937"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <rect x="90" y="110" width="290" height="390" rx="24" fill="url(#card)" stroke="#334155"/>
+  <rect x="455" y="110" width="290" height="390" rx="24" fill="url(#card)" stroke="#334155"/>
+  <rect x="820" y="110" width="290" height="390" rx="24" fill="url(#card)" stroke="#334155"/>
+
+  <text x="140" y="190" fill="#93c5fd" font-size="44" font-family="Inter,Arial,sans-serif">{...}</text>
+  <text x="505" y="190" fill="#93c5fd" font-size="44" font-family="Inter,Arial,sans-serif">{...}</text>
+
+  <path d="M750 300 H810" stroke="#38bdf8" stroke-width="8" stroke-linecap="round"/>
+  <path d="M795 282 L818 300 L795 318" fill="none" stroke="#38bdf8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <text x="860" y="190" fill="#86efac" font-size="44" font-family="Inter,Arial,sans-serif">[{...}]</text>
+
+  <text x="90" y="570" fill="#e2e8f0" font-size="54" font-weight="700" font-family="Inter,Arial,sans-serif">JSON 합치기</text>
+  <text x="440" y="570" fill="#94a3b8" font-size="30" font-family="Inter,Arial,sans-serif">Merge multiple files into one</text>
+</svg>

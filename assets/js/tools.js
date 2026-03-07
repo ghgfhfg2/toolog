@@ -2632,6 +2632,133 @@
     render();
   }
 
+  if (slug === 'json-merge') {
+    const filesInput = document.getElementById('jm-files');
+    const modeSel = document.getElementById('jm-mode');
+    const runBtn = document.getElementById('jm-run');
+    const copyBtn = document.getElementById('jm-copy');
+    const output = document.getElementById('jm-output');
+    const download = document.getElementById('jm-download');
+    const help = document.getElementById('jm-help');
+    const fileCount = document.getElementById('jm-file-count');
+    const itemCount = document.getElementById('jm-item-count');
+    const conflictCount = document.getElementById('jm-conflict-count');
+    const sizeOut = document.getElementById('jm-size');
+
+    if (!filesInput || !modeSel || !runBtn || !copyBtn || !output || !download || !help || !fileCount || !itemCount || !conflictCount || !sizeOut) return;
+
+    const fmt = (n) => Number(n || 0).toLocaleString('ko-KR');
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const readText = (file) => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ''));
+      reader.onerror = () => reject(new Error(`파일 읽기 실패: ${file.name}`));
+      reader.readAsText(file, 'utf-8');
+    });
+
+    const detectMode = (roots) => {
+      if (roots.every((v) => Array.isArray(v))) return 'array-concat';
+      if (roots.every((v) => v && typeof v === 'object' && !Array.isArray(v))) return 'object-merge';
+      return 'wrap-array';
+    };
+
+    const getCount = (value) => {
+      if (Array.isArray(value)) return value.length;
+      if (value && typeof value === 'object') return Object.keys(value).length;
+      return 1;
+    };
+
+    filesInput.addEventListener('change', () => {
+      fileCount.textContent = fmt(filesInput.files?.length || 0);
+    });
+
+    runBtn.addEventListener('click', async () => {
+      const files = Array.from(filesInput.files || []);
+      if (!files.length) {
+        help.textContent = '먼저 JSON 파일을 1개 이상 선택하세요.';
+        return;
+      }
+
+      try {
+        const texts = await Promise.all(files.map(readText));
+        const parsed = texts.map((txt, idx) => {
+          try {
+            return JSON.parse(txt);
+          } catch (_) {
+            throw new Error(`JSON 파싱 실패: ${files[idx].name}`);
+          }
+        });
+
+        const selected = modeSel.value || 'auto';
+        const mode = selected === 'auto' ? detectMode(parsed) : selected;
+
+        let merged;
+        let conflicts = 0;
+
+        if (mode === 'array-concat') {
+          merged = parsed.flatMap((v) => Array.isArray(v) ? v : [v]);
+        } else if (mode === 'object-merge') {
+          merged = {};
+          parsed.forEach((obj) => {
+            if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return;
+            Object.keys(obj).forEach((k) => {
+              if (Object.prototype.hasOwnProperty.call(merged, k)) conflicts += 1;
+              merged[k] = obj[k];
+            });
+          });
+        } else {
+          merged = parsed;
+        }
+
+        const pretty = JSON.stringify(merged, null, 2);
+        output.value = pretty;
+
+        const blob = new Blob([pretty], { type: 'application/json;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        download.href = url;
+        download.download = `merged-${new Date().toISOString().slice(0, 10)}.json`;
+
+        itemCount.textContent = fmt(getCount(merged));
+        conflictCount.textContent = fmt(conflicts);
+        sizeOut.textContent = fmt(new TextEncoder().encode(pretty).length);
+        help.textContent = `${files.length}개 파일 병합 완료 (${mode}). 다운로드 버튼으로 저장하세요.`;
+      } catch (err) {
+        output.value = '';
+        itemCount.textContent = '-';
+        conflictCount.textContent = '-';
+        sizeOut.textContent = '-';
+        help.textContent = err?.message || '병합 중 오류가 발생했습니다.';
+      }
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      const text = output.value || '';
+      if (!text.trim()) {
+        help.textContent = '복사할 병합 결과가 없습니다. 먼저 JSON 합치기를 실행하세요.';
+        return;
+      }
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+  }
+
   if (slug === 'font-change') {
     const input = document.getElementById('fc-input');
     const list = document.getElementById('fc-list');
