@@ -1,7 +1,10 @@
 (() => {
-  const slug = window.location.pathname.split('/').filter(Boolean).pop();
+  const pathParts = window.location.pathname.split('/').filter(Boolean);
+  const slug = pathParts[pathParts.length - 1];
+  const pageLang = ['en', 'ja'].includes(pathParts[0]) ? pathParts[0] : 'ko';
+  const numberLocale = pageLang === 'en' ? 'en-US' : (pageLang === 'ja' ? 'ja-JP' : 'ko-KR');
 
-  const formatNum = (n) => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
+  const formatNum = (n) => new Intl.NumberFormat(numberLocale).format(Math.round(n || 0));
 
   if (slug === 'text-counter') {
     const input = document.getElementById('tc-input'); if (!input) return;
@@ -1262,7 +1265,65 @@
 
     if (!amount || !rate || !years || !type || !monthly || !totalInterest || !totalPayment || !monthCount || !comparePayment || !compareInterest || !help) return;
 
-    const fmtKRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
+    const loanI18n = {
+      ko: {
+        currency: '원',
+        count: '회',
+        comparePayment: (ep, ef, el) => `원리금균등: ${ep} / 원금균등: 첫 달 ${ef} → 마지막 ${el}`,
+        compareInterestEmpty: '총 이자 차이: -',
+        compareInterestSame: '총 이자 차이: 거의 없음',
+        compareInterestEqualPrincipalLess: (v) => `총 이자 차이: 원금균등이 ${v} 더 적음`,
+        compareInterestEqualPaymentLess: (v) => `총 이자 차이: 원리금균등이 ${v} 더 적음`,
+        invalidHelp: '대출금액·연이율·상환기간을 올바르게 입력하세요.',
+        estimateHelp: (label) => `${label} 기준 추정값입니다. 실제 대출은 수수료·우대금리·중도상환 여부에 따라 달라질 수 있습니다.`,
+        copyTitle: (label) => `대출 계산 결과 (${label})`,
+        copyMonthly: (v) => `월 납입액(첫 달): ${v}`,
+        copyInterest: (v) => `총 이자: ${v}`,
+        copyTotal: (v) => `총 상환액: ${v}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        currency: '',
+        count: 'months',
+        comparePayment: (ep, ef, el) => `Amortized: ${ep} / Equal principal: first ${ef} → last ${el}`,
+        compareInterestEmpty: 'Interest difference: -',
+        compareInterestSame: 'Interest difference: almost none',
+        compareInterestEqualPrincipalLess: (v) => `Interest difference: equal principal is lower by ${v}`,
+        compareInterestEqualPaymentLess: (v) => `Interest difference: amortized is lower by ${v}`,
+        invalidHelp: 'Enter a valid loan amount, annual rate, and term.',
+        estimateHelp: (label) => `Estimated result based on ${label}. Actual loans vary by fees, preferential rates, and prepayment conditions.`,
+        copyTitle: (label) => `Loan calculation (${label})`,
+        copyMonthly: (v) => `Monthly payment (first): ${v}`,
+        copyInterest: (v) => `Total interest: ${v}`,
+        copyTotal: (v) => `Total repayment: ${v}`,
+        copied: 'Copied',
+        copyDefault: 'Copy results'
+      },
+      ja: {
+        currency: '円',
+        count: '回',
+        comparePayment: (ep, ef, el) => `元利均等: ${ep} / 元金均等: 初回 ${ef} → 最終 ${el}`,
+        compareInterestEmpty: '総利息差: -',
+        compareInterestSame: '総利息差: ほぼなし',
+        compareInterestEqualPrincipalLess: (v) => `総利息差: 元金均等のほうが${v}少ない`,
+        compareInterestEqualPaymentLess: (v) => `総利息差: 元利均等のほうが${v}少ない`,
+        invalidHelp: '借入額・年利・返済期間を正しく入力してください。',
+        estimateHelp: (label) => `${label}基準の試算です。実際のローンは手数料・優遇金利・繰上返済条件で変わる場合があります。`,
+        copyTitle: (label) => `ローン計算結果 (${label})`,
+        copyMonthly: (v) => `毎月返済額(初回): ${v}`,
+        copyInterest: (v) => `総利息: ${v}`,
+        copyTotal: (v) => `総返済額: ${v}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    };
+    const loanText = loanI18n[pageLang] || loanI18n.ko;
+    const fmtKRW = (v) => {
+      const rounded = Math.round(v);
+      if (pageLang === 'en') return `$${rounded.toLocaleString(numberLocale)}`;
+      return `${rounded.toLocaleString(numberLocale)}${loanText.currency}`;
+    };
 
     const calcPlan = ({ principal, n, r, mode }) => {
       let firstMonthly = 0;
@@ -1304,9 +1365,9 @@
       totalInterest.textContent = '-';
       totalPayment.textContent = '-';
       monthCount.textContent = '-';
-      comparePayment.textContent = '원리금균등: - / 원금균등: 첫 달 - → 마지막 -';
-      compareInterest.textContent = '총 이자 차이: -';
-      help.textContent = '대출금액·연이율·상환기간을 올바르게 입력하세요.';
+      comparePayment.textContent = loanText.comparePayment('-', '-', '-');
+      compareInterest.textContent = loanText.compareInterestEmpty;
+      help.textContent = loanText.invalidHelp;
     };
 
     const render = () => {
@@ -1328,20 +1389,24 @@
       monthly.textContent = fmtKRW(selected.firstMonthly);
       totalInterest.textContent = fmtKRW(selected.interest);
       totalPayment.textContent = fmtKRW(selected.total);
-      monthCount.textContent = `${n.toLocaleString('ko-KR')}회`;
+      monthCount.textContent = `${n.toLocaleString(numberLocale)} ${loanText.count}`;
 
-      comparePayment.textContent = `원리금균등: ${fmtKRW(equalPayment.firstMonthly)} / 원금균등: 첫 달 ${fmtKRW(equalPrincipal.firstMonthly)} → 마지막 ${fmtKRW(equalPrincipal.lastMonthly)}`;
+      comparePayment.textContent = loanText.comparePayment(
+        fmtKRW(equalPayment.firstMonthly),
+        fmtKRW(equalPrincipal.firstMonthly),
+        fmtKRW(equalPrincipal.lastMonthly)
+      );
 
       const diffInterest = equalPrincipal.interest - equalPayment.interest;
       if (Math.abs(diffInterest) < 1) {
-        compareInterest.textContent = '총 이자 차이: 거의 없음';
+        compareInterest.textContent = loanText.compareInterestSame;
       } else if (diffInterest < 0) {
-        compareInterest.textContent = `총 이자 차이: 원금균등이 ${fmtKRW(Math.abs(diffInterest))} 더 적음`;
+        compareInterest.textContent = loanText.compareInterestEqualPrincipalLess(fmtKRW(Math.abs(diffInterest)));
       } else {
-        compareInterest.textContent = `총 이자 차이: 원리금균등이 ${fmtKRW(Math.abs(diffInterest))} 더 적음`;
+        compareInterest.textContent = loanText.compareInterestEqualPaymentLess(fmtKRW(Math.abs(diffInterest)));
       }
 
-      help.textContent = `${type.options[type.selectedIndex].text} 기준 추정값입니다. 실제 대출은 수수료·우대금리·중도상환 여부에 따라 달라질 수 있습니다.`;
+      help.textContent = loanText.estimateHelp(type.options[type.selectedIndex].text);
     };
 
     [amount, rate, years, type].forEach((el) => el.addEventListener('input', render));
@@ -1356,17 +1421,17 @@
 
     copyBtn?.addEventListener('click', async () => {
       const text = [
-        `대출 계산 결과 (${type.options[type.selectedIndex].text})`,
-        `월 납입액(첫 달): ${monthly.textContent}`,
-        `총 이자: ${totalInterest.textContent}`,
-        `총 상환액: ${totalPayment.textContent}`,
+        loanText.copyTitle(type.options[type.selectedIndex].text),
+        loanText.copyMonthly(monthly.textContent),
+        loanText.copyInterest(totalInterest.textContent),
+        loanText.copyTotal(totalPayment.textContent),
         comparePayment.textContent,
         compareInterest.textContent
       ].join(' | ');
       await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = loanText.copied;
+      setTimeout(() => { copyBtn.textContent = old || loanText.copyDefault; }, 900);
     });
 
     if (!amount.value) amount.value = 100000000;
@@ -1790,7 +1855,41 @@
 
     if (!annual || !nonTax || !dependent || !children || !netMonth || !netYear || !taxMonth || !insuranceMonth || !summary) return;
 
-    const KRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
+    const salaryI18n = {
+      ko: {
+        currency: '원',
+        idle: '연봉(세전)을 입력하면 예상 실수령액을 계산합니다.',
+        needAnnual: '연봉을 먼저 입력하세요.',
+        summary: (rate, capped) => `공제율 약 ${rate}% 기준 추정치입니다.${capped ? ' 비과세 월급은 월 총급여를 넘지 않도록 자동 보정했습니다.' : ''} 회사별 비과세·수당·정산에 따라 실제 수령액은 달라질 수 있습니다.`,
+        copyText: (m, y, t, i) => `실수령액 계산 결과 | 월 ${m} | 연 ${y} | 소득세+지방세(월) ${t} | 4대보험(월) ${i}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        currency: '',
+        idle: 'Enter annual gross salary to estimate take-home pay.',
+        needAnnual: 'Enter annual salary first.',
+        summary: (rate, capped) => `Estimated deduction rate: about ${rate}%.${capped ? ' Non-taxable monthly income was auto-capped at monthly gross pay.' : ''} Actual net pay may vary by company policy, non-taxable items, and payroll settlement.`,
+        copyText: (m, y, t, i) => `Take-home estimate | Monthly ${m} | Yearly ${y} | Income+local tax (monthly) ${t} | Social insurance (monthly) ${i}`,
+        copied: 'Copied',
+        copyDefault: 'Copy results'
+      },
+      ja: {
+        currency: '円',
+        idle: '額面年収を入力すると、手取り見込みを計算します。',
+        needAnnual: '先に年収を入力してください。',
+        summary: (rate, capped) => `控除率は約${rate}%の試算です。${capped ? ' 非課税月額は月額総支給を超えないよう自動補正しました。' : ''} 実際の手取りは会社規定・非課税項目・精算方法により変動します。`,
+        copyText: (m, y, t, i) => `手取り試算結果 | 月 ${m} | 年 ${y} | 所得税+住民税(月) ${t} | 社会保険(月) ${i}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    };
+    const salText = salaryI18n[pageLang] || salaryI18n.ko;
+    const KRW = (v) => {
+      const rounded = Math.round(v);
+      if (pageLang === 'en') return `$${rounded.toLocaleString(numberLocale)}`;
+      return `${rounded.toLocaleString(numberLocale)}${salText.currency}`;
+    };
 
     const earnedIncomeDeduction = (gross) => {
       if (gross <= 5000000) return gross * 0.7;
@@ -1848,7 +1947,7 @@
       const childCount = Math.min(10, Math.max(0, Math.floor(Number(children.value || 0))));
 
       if (!(grossAnnual > 0)) {
-        setIdle('연봉(세전)을 입력하면 예상 실수령액을 계산합니다.');
+        setIdle(salText.idle);
         return;
       }
 
@@ -1886,21 +1985,21 @@
       taxMonth.textContent = KRW(monthlyTax);
       insuranceMonth.textContent = KRW(monthlyInsurance);
       const cappedNonTax = nonTaxMonthlyRaw > nonTaxMonthly;
-      summary.textContent = `공제율 약 ${effectiveRate.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}% 기준 추정치입니다.${cappedNonTax ? ' 비과세 월급은 월 총급여를 넘지 않도록 자동 보정했습니다.' : ''} 회사별 비과세·수당·정산에 따라 실제 수령액은 달라질 수 있습니다.`;
+      summary.textContent = salText.summary(effectiveRate.toLocaleString(numberLocale, { maximumFractionDigits: 2 }), cappedNonTax);
     };
 
     [annual, nonTax, dependent, children].forEach((el) => el?.addEventListener('input', render));
 
     copyBtn?.addEventListener('click', async () => {
       if (netMonth.textContent === '-') {
-        setIdle('연봉을 먼저 입력하세요.');
+        setIdle(salText.needAnnual);
         return;
       }
-      const text = `실수령액 계산 결과 | 월 ${netMonth.textContent} | 연 ${netYear.textContent} | 소득세+지방세(월) ${taxMonth.textContent} | 4대보험(월) ${insuranceMonth.textContent}`;
+      const text = salText.copyText(netMonth.textContent, netYear.textContent, taxMonth.textContent, insuranceMonth.textContent);
       await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = salText.copied;
+      setTimeout(() => { copyBtn.textContent = old || salText.copyDefault; }, 900);
     });
 
     resetBtn?.addEventListener('click', () => {

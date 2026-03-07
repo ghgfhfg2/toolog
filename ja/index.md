@@ -11,7 +11,7 @@ permalink: /ja/
       <p>画像・テキスト・計算ツールをすぐに見つけて使えます。</p>
       <p style="margin-top:8px;font-size:14px;">
         言語:
-        <a href="{{ '/' | relative_url }}">한국어</a> ·
+        <a href="{{ '/' | relative_url }}">韓国語</a> ·
         <a href="{{ '/en/' | relative_url }}">English</a> ·
         <a href="{{ '/ja/' | relative_url }}">日本語</a>
       </p>

@@ -41,6 +41,6 @@ alternate_urls:
 4. 返済方式を比較して家計に合う方法を選択
 
 ## 関連ツール
-- 資産成長の試算: [複利計算機]({{ '/tools/compound-interest-calculator/' | relative_url }})
-- 比率計算: [パーセント計算機]({{ '/tools/percent-calculator/' | relative_url }})
-- 手取り見積もり: [年봉 실수령액 계산기]({{ '/tools/salary-calculator/' | relative_url }})
+- 資産成長の試算: [複利計算機]({{ '/ja/tools/compound-interest-calculator/' | relative_url }})
+- 比率計算: [パーセント計算機]({{ '/ja/tools/percent-calculator/' | relative_url }})
+- 手取り見積もり: [年収手取り計算機]({{ '/ja/tools/salary-calculator/' | relative_url }})

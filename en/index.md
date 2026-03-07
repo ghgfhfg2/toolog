@@ -11,7 +11,7 @@ permalink: /en/
       <p>Find useful image, text, and calculator tools and run them instantly.</p>
       <p style="margin-top:8px;font-size:14px;">
         Language:
-        <a href="{{ '/' | relative_url }}">한국어</a> ·
+        <a href="{{ '/' | relative_url }}">Korean</a> ·
         <a href="{{ '/en/' | relative_url }}">English</a> ·
         <a href="{{ '/ja/' | relative_url }}">日本語</a>
       </p>

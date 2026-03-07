@@ -391,43 +391,43 @@ layout: default
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="loan-amount">대출금액(원)</label>
-              <input id="loan-amount" type="number" min="0" step="10000" placeholder="예: 100000000" inputmode="numeric" />
+              <label for="loan-amount">{% if page.lang == 'en' %}Loan amount{% elsif page.lang == 'ja' %}借入額{% else %}대출금액(원){% endif %}</label>
+              <input id="loan-amount" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 100000000{% elsif page.lang == 'ja' %}例: 100000000{% else %}예: 100000000{% endif %}" inputmode="numeric" />
             </div>
             <div>
-              <label for="loan-rate">연이율(%)</label>
-              <input id="loan-rate" type="number" min="0" step="0.01" placeholder="예: 4.2" inputmode="decimal" />
+              <label for="loan-rate">{% if page.lang == 'en' %}Annual interest rate (%) {% elsif page.lang == 'ja' %}年利(%) {% else %}연이율(%) {% endif %}</label>
+              <input id="loan-rate" type="number" min="0" step="0.01" placeholder="{% if page.lang == 'en' %}e.g. 4.2{% elsif page.lang == 'ja' %}例: 4.2{% else %}예: 4.2{% endif %}" inputmode="decimal" />
             </div>
           </div>
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="loan-years">상환기간(년)</label>
-              <input id="loan-years" type="number" min="1" step="1" placeholder="예: 30" inputmode="numeric" />
+              <label for="loan-years">{% if page.lang == 'en' %}Repayment term (years){% elsif page.lang == 'ja' %}返済期間(年){% else %}상환기간(년){% endif %}</label>
+              <input id="loan-years" type="number" min="1" step="1" placeholder="{% if page.lang == 'en' %}e.g. 30{% elsif page.lang == 'ja' %}例: 30{% else %}예: 30{% endif %}" inputmode="numeric" />
             </div>
             <div>
-              <label for="loan-type">상환방식</label>
+              <label for="loan-type">{% if page.lang == 'en' %}Repayment type{% elsif page.lang == 'ja' %}返済方式{% else %}상환방식{% endif %}</label>
               <select id="loan-type">
-                <option value="equal-payment">원리금균등상환</option>
-                <option value="equal-principal">원금균등상환</option>
+                <option value="equal-payment">{% if page.lang == 'en' %}Amortized (equal payment){% elsif page.lang == 'ja' %}元利均等返済{% else %}원리금균등상환{% endif %}</option>
+                <option value="equal-principal">{% if page.lang == 'en' %}Equal principal{% elsif page.lang == 'ja' %}元金均等返済{% else %}원금균등상환{% endif %}</option>
               </select>
             </div>
           </div>
           <div class="tool-row-grid pct-actions">
-            <button id="loan-copy" type="button">결과 복사</button>
-            <button id="loan-reset" type="button">초기화</button>
+            <button id="loan-copy" type="button">{% if page.lang == 'en' %}Copy results{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="loan-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
           <div class="tool-stats">
-            <div><strong id="loan-monthly">-</strong><span>월 납입액(첫 달)</span></div>
-            <div><strong id="loan-total-interest">-</strong><span>총 이자</span></div>
-            <div><strong id="loan-total-payment">-</strong><span>총 상환액</span></div>
-            <div><strong id="loan-month-count">-</strong><span>총 납입 횟수</span></div>
+            <div><strong id="loan-monthly">-</strong><span>{% if page.lang == 'en' %}Monthly payment (first){% elsif page.lang == 'ja' %}毎月返済額(初回){% else %}월 납입액(첫 달){% endif %}</span></div>
+            <div><strong id="loan-total-interest">-</strong><span>{% if page.lang == 'en' %}Total interest{% elsif page.lang == 'ja' %}総利息{% else %}총 이자{% endif %}</span></div>
+            <div><strong id="loan-total-payment">-</strong><span>{% if page.lang == 'en' %}Total repayment{% elsif page.lang == 'ja' %}総返済額{% else %}총 상환액{% endif %}</span></div>
+            <div><strong id="loan-month-count">-</strong><span>{% if page.lang == 'en' %}Total payments{% elsif page.lang == 'ja' %}支払回数{% else %}총 납입 횟수{% endif %}</span></div>
           </div>
           <div class="tool-compare" id="loan-compare" aria-live="polite">
-            <p><strong>상환방식 비교</strong></p>
-            <p class="tool-result" id="loan-compare-payment">원리금균등: - / 원금균등: 첫 달 - → 마지막 -</p>
-            <p class="tool-result" id="loan-compare-interest">총 이자 차이: -</p>
+            <p><strong>{% if page.lang == 'en' %}Repayment comparison{% elsif page.lang == 'ja' %}返済方式の比較{% else %}상환방식 비교{% endif %}</strong></p>
+            <p class="tool-result" id="loan-compare-payment">{% if page.lang == 'en' %}Amortized: - / Equal principal: first - → last -{% elsif page.lang == 'ja' %}元利均等: - / 元金均等: 初回 - → 最終 -{% else %}원리금균등: - / 원금균등: 첫 달 - → 마지막 -{% endif %}</p>
+            <p class="tool-result" id="loan-compare-interest">{% if page.lang == 'en' %}Interest difference: -{% elsif page.lang == 'ja' %}総利息差: -{% else %}총 이자 차이: -{% endif %}</p>
           </div>
-          <p class="tool-result" id="loan-help">금액·이율·기간을 입력하면 월 납입액과 총 이자를 계산합니다.</p>
+          <p class="tool-result" id="loan-help">{% if page.lang == 'en' %}Enter amount, rate, and term to calculate monthly payment and total interest.{% elsif page.lang == 'ja' %}借入額・年利・期間を入力すると毎月返済額と総利息を計算します。{% else %}금액·이율·기간을 입력하면 월 납입액과 총 이자를 계산합니다.{% endif %}</p>
         </div>
       {% when 'compound-interest-calculator' %}
         <div class="tool-ui">
@@ -567,35 +567,35 @@ layout: default
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="sal-annual">연봉(세전, 원)</label>
-              <input id="sal-annual" type="number" min="0" step="100000" placeholder="예: 50000000" inputmode="numeric" />
+              <label for="sal-annual">{% if page.lang == 'en' %}Annual salary (gross){% elsif page.lang == 'ja' %}年収(額面){% else %}연봉(세전, 원){% endif %}</label>
+              <input id="sal-annual" type="number" min="0" step="100000" placeholder="{% if page.lang == 'en' %}e.g. 50000000{% elsif page.lang == 'ja' %}例: 50000000{% else %}예: 50000000{% endif %}" inputmode="numeric" />
             </div>
             <div>
-              <label for="sal-nontax">비과세 월급(원, 선택)</label>
-              <input id="sal-nontax" type="number" min="0" step="10000" placeholder="예: 200000" inputmode="numeric" />
+              <label for="sal-nontax">{% if page.lang == 'en' %}Non-taxable monthly pay (optional){% elsif page.lang == 'ja' %}非課税月額(任意){% else %}비과세 월급(원, 선택){% endif %}</label>
+              <input id="sal-nontax" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 200000{% elsif page.lang == 'ja' %}例: 200000{% else %}예: 200000{% endif %}" inputmode="numeric" />
             </div>
           </div>
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="sal-dependent">부양가족 수(본인 제외)</label>
-              <input id="sal-dependent" type="number" min="0" max="20" step="1" placeholder="예: 1" inputmode="numeric" />
+              <label for="sal-dependent">{% if page.lang == 'en' %}Dependents (excluding self){% elsif page.lang == 'ja' %}扶養人数(本人除く){% else %}부양가족 수(본인 제외){% endif %}</label>
+              <input id="sal-dependent" type="number" min="0" max="20" step="1" placeholder="{% if page.lang == 'en' %}e.g. 1{% elsif page.lang == 'ja' %}例: 1{% else %}예: 1{% endif %}" inputmode="numeric" />
             </div>
             <div>
-              <label for="sal-children">자녀 수</label>
-              <input id="sal-children" type="number" min="0" max="10" step="1" placeholder="예: 1" inputmode="numeric" />
+              <label for="sal-children">{% if page.lang == 'en' %}Number of children{% elsif page.lang == 'ja' %}子どもの人数{% else %}자녀 수{% endif %}</label>
+              <input id="sal-children" type="number" min="0" max="10" step="1" placeholder="{% if page.lang == 'en' %}e.g. 1{% elsif page.lang == 'ja' %}例: 1{% else %}예: 1{% endif %}" inputmode="numeric" />
             </div>
           </div>
           <div class="tool-row-grid pct-actions">
-            <button id="sal-copy" type="button">결과 복사</button>
-            <button id="sal-reset" type="button">초기화</button>
+            <button id="sal-copy" type="button">{% if page.lang == 'en' %}Copy results{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="sal-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
           <div class="tool-stats">
-            <div><strong id="sal-net-month">-</strong><span>예상 실수령액(월)</span></div>
-            <div><strong id="sal-net-year">-</strong><span>예상 실수령액(연)</span></div>
-            <div><strong id="sal-tax-month">-</strong><span>소득세+지방세(월)</span></div>
-            <div><strong id="sal-insurance-month">-</strong><span>4대보험(월)</span></div>
+            <div><strong id="sal-net-month">-</strong><span>{% if page.lang == 'en' %}Estimated net pay (monthly){% elsif page.lang == 'ja' %}推定手取り(月){% else %}예상 실수령액(월){% endif %}</span></div>
+            <div><strong id="sal-net-year">-</strong><span>{% if page.lang == 'en' %}Estimated net pay (yearly){% elsif page.lang == 'ja' %}推定手取り(年){% else %}예상 실수령액(연){% endif %}</span></div>
+            <div><strong id="sal-tax-month">-</strong><span>{% if page.lang == 'en' %}Income + local tax (monthly){% elsif page.lang == 'ja' %}所得税+住民税(月){% else %}소득세+지방세(월){% endif %}</span></div>
+            <div><strong id="sal-insurance-month">-</strong><span>{% if page.lang == 'en' %}Social insurance (monthly){% elsif page.lang == 'ja' %}社会保険(月){% else %}4대보험(월){% endif %}</span></div>
           </div>
-          <p class="tool-result" id="sal-summary">연봉과 공제 조건을 입력하면 예상 실수령액을 계산합니다.</p>
+          <p class="tool-result" id="sal-summary">{% if page.lang == 'en' %}Enter salary and deduction conditions to estimate take-home pay.{% elsif page.lang == 'ja' %}年収と控除条件を入力すると、手取り見込みを計算します。{% else %}연봉과 공제 조건을 입력하면 예상 실수령액을 계산합니다.{% endif %}</p>
         </div>
       {% when 'severance-pay-calculator' %}
         <div class="tool-ui">

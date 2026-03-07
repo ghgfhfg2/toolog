@@ -41,6 +41,6 @@ This tool gives all three in one view.
 4. Compare repayment methods and pick the plan that fits your cash flow.
 
 ## Related tools
-- Investment growth: [Compound Interest Calculator]({{ '/tools/compound-interest-calculator/' | relative_url }})
-- Ratio math: [Percent Calculator]({{ '/tools/percent-calculator/' | relative_url }})
-- Net income planning: [Salary Calculator]({{ '/tools/salary-calculator/' | relative_url }})
+- Investment growth: [Compound Interest Calculator]({{ '/en/tools/compound-interest-calculator/' | relative_url }})
+- Ratio math: [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
+- Net income planning: [Salary Calculator]({{ '/en/tools/salary-calculator/' | relative_url }})
