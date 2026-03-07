@@ -40,6 +40,6 @@ alternate_urls:
 4. 月額換算コストと有利な選択肢を確認
 
 ## 関連ツール
-- 借入計画: [ローン計算機]({{ '/tools/loan-calculator/' | relative_url }})
-- 機会費用の試算: [複利計算機]({{ '/tools/compound-interest-calculator/' | relative_url }})
-- 引越し時手数料確認: [不動産仲介手数料計算機]({{ '/tools/brokerage-fee-calculator/' | relative_url }})
+- 借入計画: [ローン計算機]({{ '/ja/tools/loan-calculator/' | relative_url }})
+- 機会費用の試算: [複利計算機]({{ '/ja/tools/compound-interest-calculator/' | relative_url }})
+- 引越し時手数料確認: [不動産仲介手数料計算機]({{ '/ja/tools/brokerage-fee-calculator/' | relative_url }})

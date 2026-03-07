@@ -40,6 +40,6 @@ This tool answers those with quick numbers.
 3. (Optional) Enter inflation rate to view real-value estimate.
 
 ## Related tools
-- Repayment comparison: [Loan Calculator]({{ '/tools/loan-calculator/' | relative_url }})
-- Percentage math: [Percent Calculator]({{ '/tools/percent-calculator/' | relative_url }})
-- Savings check: [Discount Calculator]({{ '/tools/discount-calculator/' | relative_url }})
+- Repayment comparison: [Loan Calculator]({{ '/en/tools/loan-calculator/' | relative_url }})
+- Percentage math: [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
+- Savings check: [Discount Calculator]({{ '/en/tools/discount-calculator/' | relative_url }})

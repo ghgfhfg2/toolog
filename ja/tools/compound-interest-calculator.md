@@ -40,6 +40,6 @@ alternate_urls:
 3. 必要ならインフレ率を入力して実質価値を確認
 
 ## 関連ツール
-- 返済比較: [ローン計算機]({{ '/tools/loan-calculator/' | relative_url }})
-- 比率計算: [パーセント計算機]({{ '/tools/percent-calculator/' | relative_url }})
-- 節約試算: [割引計算機]({{ '/tools/discount-calculator/' | relative_url }})
+- 返済比較: [ローン計算機]({{ '/ja/tools/loan-calculator/' | relative_url }})
+- 比率計算: [パーセント計算機]({{ '/ja/tools/percent-calculator/' | relative_url }})
+- 節約試算: [割引計算機]({{ '/ja/tools/discount-calculator/' | relative_url }})

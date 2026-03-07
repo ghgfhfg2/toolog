@@ -433,50 +433,50 @@ layout: default
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="ci-initial">초기 투자금(원)</label>
-              <input id="ci-initial" type="number" min="0" step="10000" placeholder="예: 1000000" inputmode="numeric" />
+              <label for="ci-initial">{% if page.lang == 'en' %}Initial investment{% elsif page.lang == 'ja' %}初期投資額{% else %}초기 투자금(원){% endif %}</label>
+              <input id="ci-initial" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 1000000{% elsif page.lang == 'ja' %}例: 1000000{% else %}예: 1000000{% endif %}" inputmode="numeric" />
             </div>
             <div>
-              <label for="ci-monthly">매월 추가 적립금(원)</label>
-              <input id="ci-monthly" type="number" min="0" step="10000" placeholder="예: 300000" inputmode="numeric" />
-            </div>
-          </div>
-          <div class="tool-row-grid pct-grid">
-            <div>
-              <label for="ci-rate">연 수익률(%)</label>
-              <input id="ci-rate" type="number" min="0" max="100" step="0.01" placeholder="예: 7" inputmode="decimal" />
-            </div>
-            <div>
-              <label for="ci-years">투자 기간(년)</label>
-              <input id="ci-years" type="number" min="1" max="100" step="1" placeholder="예: 10" inputmode="numeric" />
+              <label for="ci-monthly">{% if page.lang == 'en' %}Monthly contribution{% elsif page.lang == 'ja' %}毎月の積立額{% else %}매월 추가 적립금(원){% endif %}</label>
+              <input id="ci-monthly" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 300000{% elsif page.lang == 'ja' %}例: 300000{% else %}예: 300000{% endif %}" inputmode="numeric" />
             </div>
           </div>
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="ci-compound">복리 주기</label>
+              <label for="ci-rate">{% if page.lang == 'en' %}Annual return (%) {% elsif page.lang == 'ja' %}年利回り(%) {% else %}연 수익률(%) {% endif %}</label>
+              <input id="ci-rate" type="number" min="0" max="100" step="0.01" placeholder="{% if page.lang == 'en' %}e.g. 7{% elsif page.lang == 'ja' %}例: 7{% else %}예: 7{% endif %}" inputmode="decimal" />
+            </div>
+            <div>
+              <label for="ci-years">{% if page.lang == 'en' %}Investment term (years){% elsif page.lang == 'ja' %}運用期間(年){% else %}투자 기간(년){% endif %}</label>
+              <input id="ci-years" type="number" min="1" max="100" step="1" placeholder="{% if page.lang == 'en' %}e.g. 10{% elsif page.lang == 'ja' %}例: 10{% else %}예: 10{% endif %}" inputmode="numeric" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="ci-compound">{% if page.lang == 'en' %}Compounding frequency{% elsif page.lang == 'ja' %}複利頻度{% else %}복리 주기{% endif %}</label>
               <select id="ci-compound">
-                <option value="12">매월</option>
-                <option value="4">분기</option>
-                <option value="2">반기</option>
-                <option value="1">매년</option>
+                <option value="12">{% if page.lang == 'en' %}Monthly{% elsif page.lang == 'ja' %}毎月{% else %}매월{% endif %}</option>
+                <option value="4">{% if page.lang == 'en' %}Quarterly{% elsif page.lang == 'ja' %}四半期{% else %}분기{% endif %}</option>
+                <option value="2">{% if page.lang == 'en' %}Semiannual{% elsif page.lang == 'ja' %}半年{% else %}반기{% endif %}</option>
+                <option value="1">{% if page.lang == 'en' %}Yearly{% elsif page.lang == 'ja' %}毎年{% else %}매년{% endif %}</option>
               </select>
             </div>
             <div>
-              <label for="ci-inflation">연 인플레이션(선택, %)</label>
-              <input id="ci-inflation" type="number" min="0" max="50" step="0.01" placeholder="예: 2.5" inputmode="decimal" />
+              <label for="ci-inflation">{% if page.lang == 'en' %}Inflation rate (optional, %){% elsif page.lang == 'ja' %}インフレ率(任意, %){% else %}연 인플레이션(선택, %){% endif %}</label>
+              <input id="ci-inflation" type="number" min="0" max="50" step="0.01" placeholder="{% if page.lang == 'en' %}e.g. 2.5{% elsif page.lang == 'ja' %}例: 2.5{% else %}예: 2.5{% endif %}" inputmode="decimal" />
             </div>
           </div>
           <div class="tool-row-grid pct-actions">
-            <button id="ci-copy" type="button">결과 복사</button>
-            <button id="ci-reset" type="button">예시값 채우기</button>
+            <button id="ci-copy" type="button">{% if page.lang == 'en' %}Copy results{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="ci-reset" type="button">{% if page.lang == 'en' %}Fill sample values{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시값 채우기{% endif %}</button>
           </div>
           <div class="tool-stats">
-            <div><strong id="ci-final">-</strong><span>만기 예상 자산</span></div>
-            <div><strong id="ci-contrib">-</strong><span>총 원금(투입액)</span></div>
-            <div><strong id="ci-interest">-</strong><span>예상 수익(이자)</span></div>
-            <div><strong id="ci-real">-</strong><span>물가 반영 실질가치</span></div>
+            <div><strong id="ci-final">-</strong><span>{% if page.lang == 'en' %}Estimated ending balance{% elsif page.lang == 'ja' %}満期予想資産{% else %}만기 예상 자산{% endif %}</span></div>
+            <div><strong id="ci-contrib">-</strong><span>{% if page.lang == 'en' %}Total principal contributed{% elsif page.lang == 'ja' %}元本合計(投下額){% else %}총 원금(투입액){% endif %}</span></div>
+            <div><strong id="ci-interest">-</strong><span>{% if page.lang == 'en' %}Estimated profit{% elsif page.lang == 'ja' %}想定利益{% else %}예상 수익(이자){% endif %}</span></div>
+            <div><strong id="ci-real">-</strong><span>{% if page.lang == 'en' %}Inflation-adjusted value{% elsif page.lang == 'ja' %}インフレ調整後価値{% else %}물가 반영 실질가치{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="ci-help">입력값을 넣으면 복리 결과가 즉시 계산됩니다.</p>
+          <p class="tool-result" id="ci-help">{% if page.lang == 'en' %}Enter your inputs to calculate compound growth instantly.{% elsif page.lang == 'ja' %}入力すると複利の結果をすぐに計算します。{% else %}입력값을 넣으면 복리 결과가 즉시 계산됩니다.{% endif %}</p>
         </div>
       {% when 'discount-calculator' %}
         <div class="tool-ui">
@@ -741,46 +741,46 @@ layout: default
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="jv-jeonse">전세 보증금(원)</label>
-              <input id="jv-jeonse" type="number" min="0" step="10000" placeholder="예: 400000000" inputmode="numeric" />
+              <label for="jv-jeonse">{% if page.lang == 'en' %}Jeonse deposit{% elsif page.lang == 'ja' %}チョンセ保証金{% else %}전세 보증금(원){% endif %}</label>
+              <input id="jv-jeonse" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 400000000{% elsif page.lang == 'ja' %}例: 400000000{% else %}예: 400000000{% endif %}" inputmode="numeric" />
             </div>
             <div>
-              <label for="jv-wolse-deposit">월세 보증금(원)</label>
-              <input id="jv-wolse-deposit" type="number" min="0" step="10000" placeholder="예: 50000000" inputmode="numeric" />
-            </div>
-          </div>
-
-          <div class="tool-row-grid pct-grid">
-            <div>
-              <label for="jv-wolse-rent">월세(원)</label>
-              <input id="jv-wolse-rent" type="number" min="0" step="10000" placeholder="예: 1100000" inputmode="numeric" />
-            </div>
-            <div>
-              <label for="jv-rate">기대 수익률(연 %)</label>
-              <input id="jv-rate" type="number" min="0" max="30" step="0.01" placeholder="예: 3.5" inputmode="decimal" />
+              <label for="jv-wolse-deposit">{% if page.lang == 'en' %}Wolse deposit{% elsif page.lang == 'ja' %}ウォルセ保証金{% else %}월세 보증금(원){% endif %}</label>
+              <input id="jv-wolse-deposit" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 50000000{% elsif page.lang == 'ja' %}例: 50000000{% else %}예: 50000000{% endif %}" inputmode="numeric" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="jv-months">거주기간(개월)</label>
-              <input id="jv-months" type="number" min="1" max="120" step="1" placeholder="예: 24" inputmode="numeric" />
+              <label for="jv-wolse-rent">{% if page.lang == 'en' %}Monthly wolse rent{% elsif page.lang == 'ja' %}月額ウォルセ家賃{% else %}월세(원){% endif %}</label>
+              <input id="jv-wolse-rent" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 1100000{% elsif page.lang == 'ja' %}例: 1100000{% else %}예: 1100000{% endif %}" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="jv-rate">{% if page.lang == 'en' %}Expected annual return (%) {% elsif page.lang == 'ja' %}期待利回り(年 %) {% else %}기대 수익률(연 %) {% endif %}</label>
+              <input id="jv-rate" type="number" min="0" max="30" step="0.01" placeholder="{% if page.lang == 'en' %}e.g. 3.5{% elsif page.lang == 'ja' %}例: 3.5{% else %}예: 3.5{% endif %}" inputmode="decimal" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="jv-months">{% if page.lang == 'en' %}Stay period (months){% elsif page.lang == 'ja' %}居住期間(か月){% else %}거주기간(개월){% endif %}</label>
+              <input id="jv-months" type="number" min="1" max="120" step="1" placeholder="{% if page.lang == 'en' %}e.g. 24{% elsif page.lang == 'ja' %}例: 24{% else %}예: 24{% endif %}" inputmode="numeric" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="jv-copy" type="button">결과 복사</button>
-            <button id="jv-reset" type="button">초기화</button>
+            <button id="jv-copy" type="button">{% if page.lang == 'en' %}Copy results{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="jv-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
 
           <div class="tool-stats">
-            <div><strong id="jv-jeonse-cost">-</strong><span>전세 총 주거비(기회비용)</span></div>
-            <div><strong id="jv-wolse-cost">-</strong><span>월세 총 주거비</span></div>
-            <div><strong id="jv-monthly-gap">-</strong><span>월 기준 비용 차이</span></div>
-            <div><strong id="jv-break-even">-</strong><span>손익분기 월세</span></div>
+            <div><strong id="jv-jeonse-cost">-</strong><span>{% if page.lang == 'en' %}Total jeonse housing cost (opportunity cost){% elsif page.lang == 'ja' %}チョンセ総住居費(機会費用){% else %}전세 총 주거비(기회비용){% endif %}</span></div>
+            <div><strong id="jv-wolse-cost">-</strong><span>{% if page.lang == 'en' %}Total wolse housing cost{% elsif page.lang == 'ja' %}ウォルセ総住居費{% else %}월세 총 주거비{% endif %}</span></div>
+            <div><strong id="jv-monthly-gap">-</strong><span>{% if page.lang == 'en' %}Monthly cost gap{% elsif page.lang == 'ja' %}月額コスト差{% else %}월 기준 비용 차이{% endif %}</span></div>
+            <div><strong id="jv-break-even">-</strong><span>{% if page.lang == 'en' %}Break-even wolse rent{% elsif page.lang == 'ja' %}損益分岐ウォルセ家賃{% else %}손익분기 월세{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="jv-help">보증금/월세/수익률/거주기간을 입력하면 전세와 월세를 같은 기준으로 비교합니다.</p>
+          <p class="tool-result" id="jv-help">{% if page.lang == 'en' %}Enter deposits, monthly rent, expected return, and stay period to compare jeonse and wolse on a monthly-equivalent basis.{% elsif page.lang == 'ja' %}保証金・家賃・期待利回り・居住期間を入力すると、チョンセとウォルセを月額換算で比較できます。{% else %}보증금/월세/수익률/거주기간을 입력하면 전세와 월세를 같은 기준으로 비교합니다.{% endif %}</p>
         </div>
       {% when 'brokerage-fee-calculator' %}
         <div class="tool-ui">

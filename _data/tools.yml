@@ -1,10 +1,20 @@
 - id: jeonse-vs-wolse-calculator
   title: 전세 vs 월세 계산기
+  title_en: Jeonse vs Wolse Calculator
+  title_ja: チョンセ vs ウォルセ比較計算機
   category: calculator
   category_label: 부동산/금융
+  category_label_en: Real Estate/Finance
+  category_label_ja: 不動産/金融
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 전세·월세 보증금과 수익률·거주기간을 넣으면 총 주거비와 손익분기 월세를 비교해요.
+  description_en: Compare total housing cost and break-even wolse rent using jeonse/wolse deposits, expected return, and stay period.
+  description_ja: チョンセ・ウォルセ保証金、期待利回り、居住期間から総住居費と損益分岐ウォルセ家賃を比較します。
   url: /tools/jeonse-vs-wolse-calculator/
+  url_en: /en/tools/jeonse-vs-wolse-calculator/
+  url_ja: /ja/tools/jeonse-vs-wolse-calculator/
   thumbnail: /assets/thumbs/jeonse-vs-wolse-calculator.svg
 
 - id: loan-calculator

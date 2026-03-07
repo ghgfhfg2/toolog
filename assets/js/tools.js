@@ -1458,7 +1458,47 @@
 
     if (!initial || !monthly || !rate || !years || !compound || !inflation || !final || !contrib || !interest || !real || !help) return;
 
-    const fmtKRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
+    const ciI18n = {
+      ko: {
+        currency: '원',
+        idle: '입력값을 넣으면 복리 결과가 즉시 계산됩니다.',
+        invalid: '숫자만 입력해 주세요.',
+        term: '투자 기간(1년 이상)을 입력하세요.',
+        noInflation: '인플레이션 미입력',
+        summary: (y, bal, annualized) => `${y}년 후 예상 자산은 ${bal}이며, 원금 대비 수익률은 약 ${annualized}%입니다.`,
+        copy: (f,c,i,r) => `복리 계산 결과 | 만기 자산 ${f} | 총 원금 ${c} | 예상 수익 ${i} | 실질가치 ${r}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        currency: '',
+        idle: 'Enter your inputs to calculate compound growth instantly.',
+        invalid: 'Please enter numbers only.',
+        term: 'Enter an investment term of at least 1 year.',
+        noInflation: 'No inflation input',
+        summary: (y, bal, annualized) => `Estimated ending balance after ${y} years is ${bal}, with an approximate return of ${annualized}% versus total principal.`,
+        copy: (f,c,i,r) => `Compound interest result | Ending balance ${f} | Total principal ${c} | Estimated profit ${i} | Inflation-adjusted value ${r}`,
+        copied: 'Copied',
+        copyDefault: 'Copy results'
+      },
+      ja: {
+        currency: '円',
+        idle: '入力すると複利の結果をすぐに計算します。',
+        invalid: '数値のみ入力してください。',
+        term: '運用期間は1年以上で入力してください。',
+        noInflation: 'インフレ率未入力',
+        summary: (y, bal, annualized) => `${y}年後の予想資産は ${bal}、元本に対する収益率は約 ${annualized}% です。`,
+        copy: (f,c,i,r) => `複利計算結果 | 満期予想資産 ${f} | 元本合計 ${c} | 想定利益 ${i} | インフレ調整後価値 ${r}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    };
+    const t = ciI18n[pageLang] || ciI18n.ko;
+    const fmtCurrency = (v) => {
+      const rounded = Math.round(v);
+      if (pageLang === 'en') return `$${rounded.toLocaleString(numberLocale)}`;
+      return `${rounded.toLocaleString(numberLocale)}${t.currency}`;
+    };
 
     const setIdle = (msg) => {
       final.textContent = '-';
@@ -1469,17 +1509,11 @@
     };
 
     const copyText = async (text) => {
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch (_) {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
         const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
       }
     };
 
@@ -1494,12 +1528,11 @@
       const inf = clamp(Number(inflation.value || 0), 0, 50);
 
       if (!Number.isFinite(p0) || !Number.isFinite(mAdd) || !Number.isFinite(rAnnual) || !Number.isFinite(y) || !Number.isFinite(inf)) {
-        setIdle('숫자만 입력해 주세요.');
+        setIdle(t.invalid);
         return;
       }
-
       if (!(y > 0)) {
-        setIdle('투자 기간(1년 이상)을 입력하세요.');
+        setIdle(t.term);
         return;
       }
 
@@ -1515,9 +1548,7 @@
       const monthsPerPeriod = 12 / n;
 
       for (let month = 1; month <= totalMonths; month++) {
-        if (month % monthsPerPeriod === 0) {
-          balance *= (1 + periodicRate);
-        }
+        if (month % monthsPerPeriod === 0) balance *= (1 + periodicRate);
         balance += mAdd;
       }
 
@@ -1525,13 +1556,13 @@
       const earned = balance - totalContrib;
       const realValue = balance / Math.pow(1 + inf / 100, y);
 
-      final.textContent = fmtKRW(balance);
-      contrib.textContent = fmtKRW(totalContrib);
-      interest.textContent = fmtKRW(earned);
-      real.textContent = inf > 0 ? fmtKRW(realValue) : '인플레이션 미입력';
+      final.textContent = fmtCurrency(balance);
+      contrib.textContent = fmtCurrency(totalContrib);
+      interest.textContent = fmtCurrency(earned);
+      real.textContent = inf > 0 ? fmtCurrency(realValue) : t.noInflation;
 
       const annualized = totalContrib > 0 ? ((balance / totalContrib - 1) * 100) : 0;
-      help.textContent = `${y}년 후 예상 자산은 ${fmtKRW(balance)}이며, 원금 대비 수익률은 약 ${annualized.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}%입니다.`;
+      help.textContent = t.summary(y, fmtCurrency(balance), annualized.toLocaleString(numberLocale, { maximumFractionDigits: 2 }));
     };
 
     [initial, monthly, rate, years, compound, inflation].forEach((el) => {
@@ -1540,11 +1571,11 @@
     });
 
     copyBtn?.addEventListener('click', async () => {
-      const text = `복리 계산 결과 | 만기 자산 ${final.textContent} | 총 원금 ${contrib.textContent} | 예상 수익 ${interest.textContent} | 실질가치 ${real.textContent}`;
+      const text = t.copy(final.textContent, contrib.textContent, interest.textContent, real.textContent);
       await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
     });
 
     resetBtn?.addEventListener('click', () => {
@@ -1563,6 +1594,7 @@
     if (!years.value) years.value = 10;
     render();
   }
+
 
   if (slug === 'discount-calculator') {
     const mode = document.getElementById('dc-mode');
@@ -2932,20 +2964,63 @@
 
     if (!jeonse || !wolseDeposit || !wolseRent || !rate || !months || !jeonseCostEl || !wolseCostEl || !monthlyGapEl || !breakEvenEl || !help) return;
 
-    const KRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
+    const jvI18n = {
+      ko: {
+        currency: '원',
+        needInput: '전세 보증금과 거주기간을 입력하세요.',
+        jeonseBetter: '전세 유리',
+        wolseBetter: '월세 유리',
+        similar: '거의 동일',
+        monthlyGap: (v, label) => `${v} (${label})`,
+        helpJeonse: (v) => `입력 조건에서는 전세의 월 환산 주거비가 약 ${v} 더 낮습니다.`,
+        helpWolse: (v) => `입력 조건에서는 월세의 월 환산 주거비가 약 ${v} 더 낮습니다.`,
+        helpSame: '입력 조건에서 전세와 월세의 월 환산 주거비가 거의 같습니다.',
+        copy: (a,b,c,d) => `전세 vs 월세 비교 | 전세 총 주거비 ${a} | 월세 총 주거비 ${b} | 월 기준 비용 차이 ${c} | 손익분기 월세 ${d}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        currency: '',
+        needInput: 'Enter jeonse deposit and stay period.',
+        jeonseBetter: 'Jeonse is cheaper',
+        wolseBetter: 'Wolse is cheaper',
+        similar: 'Almost the same',
+        monthlyGap: (v, label) => `${v} (${label})`,
+        helpJeonse: (v) => `Under this scenario, jeonse is lower by about ${v} per month-equivalent cost.`,
+        helpWolse: (v) => `Under this scenario, wolse is lower by about ${v} per month-equivalent cost.`,
+        helpSame: 'Under this scenario, jeonse and wolse are nearly the same on a monthly-equivalent basis.',
+        copy: (a,b,c,d) => `Jeonse vs Wolse | Total jeonse cost ${a} | Total wolse cost ${b} | Monthly cost gap ${c} | Break-even wolse rent ${d}`,
+        copied: 'Copied',
+        copyDefault: 'Copy results'
+      },
+      ja: {
+        currency: 'ウォン',
+        needInput: 'チョンセ保証金と居住期間を入力してください。',
+        jeonseBetter: 'チョンセが有利',
+        wolseBetter: 'ウォルセが有利',
+        similar: 'ほぼ同じ',
+        monthlyGap: (v, label) => `${v}（${label}）`,
+        helpJeonse: (v) => `この条件では、月額換算でチョンセのほうが約 ${v} 低くなります。`,
+        helpWolse: (v) => `この条件では、月額換算でウォルセのほうが約 ${v} 低くなります。`,
+        helpSame: 'この条件では、月額換算でチョンセとウォルセはほぼ同水準です。',
+        copy: (a,b,c,d) => `チョンセ vs ウォルセ | チョンセ総住居費 ${a} | ウォルセ総住居費 ${b} | 月額コスト差 ${c} | 損益分岐ウォルセ家賃 ${d}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    };
+    const t = jvI18n[pageLang] || jvI18n.ko;
+    const fmtCurrency = (v) => {
+      const rounded = Math.round(v);
+      if (pageLang === 'en') return `$${rounded.toLocaleString(numberLocale)}`;
+      return `${rounded.toLocaleString(numberLocale)}${t.currency}`;
+    };
 
     const copyText = async (text) => {
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch (_) {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
         const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
       }
     };
 
@@ -2967,19 +3042,17 @@
       const mRaw = Number(months.value || 0);
 
       if (!(j > 0) || !(mRaw > 0)) {
-        setIdle('전세 보증금과 거주기간을 입력하세요.');
+        setIdle(t.needInput);
         return;
       }
 
       const r = Number.isFinite(rRaw) ? clamp(rRaw, 0, 30) : 0;
       const m = Number.isFinite(mRaw) ? clamp(Math.floor(mRaw), 1, 120) : 1;
-
       if (rRaw !== r) rate.value = r;
       if (mRaw !== m) months.value = m;
 
       const annualRate = r / 100;
       const monthRate = annualRate / 12;
-
       const jeonseCost = j * annualRate * (m / 12);
       const wolseOpportunity = wd * annualRate * (m / 12);
       const wolseCost = wolseOpportunity + (wr * m);
@@ -2987,32 +3060,27 @@
       const monthlyJeonse = jeonseCost / m;
       const monthlyWolse = wolseCost / m;
       const gapMonthly = monthlyWolse - monthlyJeonse;
-
       const breakEvenMonthlyRent = Math.max(0, (j - wd) * monthRate);
 
-      jeonseCostEl.textContent = KRW(jeonseCost);
-      wolseCostEl.textContent = KRW(wolseCost);
-      monthlyGapEl.textContent = `${KRW(Math.abs(gapMonthly))} (${gapMonthly > 0 ? '전세 유리' : gapMonthly < 0 ? '월세 유리' : '거의 동일'})`;
-      breakEvenEl.textContent = KRW(breakEvenMonthlyRent);
+      jeonseCostEl.textContent = fmtCurrency(jeonseCost);
+      wolseCostEl.textContent = fmtCurrency(wolseCost);
+      monthlyGapEl.textContent = t.monthlyGap(fmtCurrency(Math.abs(gapMonthly)), gapMonthly > 0 ? t.jeonseBetter : gapMonthly < 0 ? t.wolseBetter : t.similar);
+      breakEvenEl.textContent = fmtCurrency(breakEvenMonthlyRent);
 
-      if (gapMonthly > 0) {
-        help.textContent = `입력 조건에서는 전세의 월 환산 주거비가 약 ${KRW(Math.abs(gapMonthly))} 더 낮습니다.`;
-      } else if (gapMonthly < 0) {
-        help.textContent = `입력 조건에서는 월세의 월 환산 주거비가 약 ${KRW(Math.abs(gapMonthly))} 더 낮습니다.`;
-      } else {
-        help.textContent = '입력 조건에서 전세와 월세의 월 환산 주거비가 거의 같습니다.';
-      }
+      if (gapMonthly > 0) help.textContent = t.helpJeonse(fmtCurrency(Math.abs(gapMonthly)));
+      else if (gapMonthly < 0) help.textContent = t.helpWolse(fmtCurrency(Math.abs(gapMonthly)));
+      else help.textContent = t.helpSame;
     };
 
     [jeonse, wolseDeposit, wolseRent, rate, months].forEach((el) => el?.addEventListener('input', render));
 
     copyBtn?.addEventListener('click', async () => {
       if (jeonseCostEl.textContent === '-') return;
-      const text = `전세 vs 월세 비교 | 전세 총 주거비 ${jeonseCostEl.textContent} | 월세 총 주거비 ${wolseCostEl.textContent} | 월 기준 비용 차이 ${monthlyGapEl.textContent} | 손익분기 월세 ${breakEvenEl.textContent}`;
+      const text = t.copy(jeonseCostEl.textContent, wolseCostEl.textContent, monthlyGapEl.textContent, breakEvenEl.textContent);
       await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
     });
 
     resetBtn?.addEventListener('click', () => {
@@ -3031,6 +3099,7 @@
     if (!months.value) months.value = 24;
     render();
   }
+
 
   if (slug === 'blog-banned-word-checker') {
     const input = document.getElementById('bw-input');

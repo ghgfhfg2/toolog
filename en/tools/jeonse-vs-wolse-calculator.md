@@ -40,6 +40,6 @@ This tool compares both on the same monthly-equivalent basis.
 4. Check monthly-equivalent cost and better option.
 
 ## Related tools
-- Loan planning: [Loan Calculator]({{ '/tools/loan-calculator/' | relative_url }})
-- Opportunity cost scenario: [Compound Interest Calculator]({{ '/tools/compound-interest-calculator/' | relative_url }})
-- Moving transaction fee check: [Brokerage Fee Calculator]({{ '/tools/brokerage-fee-calculator/' | relative_url }})
+- Loan planning: [Loan Calculator]({{ '/en/tools/loan-calculator/' | relative_url }})
+- Opportunity cost scenario: [Compound Interest Calculator]({{ '/en/tools/compound-interest-calculator/' | relative_url }})
+- Moving transaction fee check: [Brokerage Fee Calculator]({{ '/en/tools/brokerage-fee-calculator/' | relative_url }})
