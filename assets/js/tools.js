@@ -1700,7 +1700,7 @@
         copyDefault: '결과 복사'
       },
       en: {
-        currency: '',
+        currency: ' KRW',
         count: 'months',
         comparePayment: (ep, ef, el) => `Amortized: ${ep} / Equal principal: first ${ef} → last ${el}`,
         compareInterestEmpty: 'Interest difference: -',
@@ -1737,7 +1737,7 @@
     const loanText = loanI18n[pageLang] || loanI18n.ko;
     const fmtKRW = (v) => {
       const rounded = Math.round(v);
-      if (pageLang === 'en') return `$${rounded.toLocaleString(numberLocale)}`;
+      if (pageLang === 'en') return `${rounded.toLocaleString(numberLocale)}${loanText.currency}`;
       return `${rounded.toLocaleString(numberLocale)}${loanText.currency}`;
     };
 
@@ -1887,7 +1887,7 @@
         copyDefault: '결과 복사'
       },
       en: {
-        currency: '',
+        currency: ' KRW',
         idle: 'Enter your inputs to calculate compound growth instantly.',
         invalid: 'Please enter numbers only.',
         term: 'Enter an investment term of at least 1 year.',
@@ -1912,7 +1912,7 @@
     const t = ciI18n[pageLang] || ciI18n.ko;
     const fmtCurrency = (v) => {
       const rounded = Math.round(v);
-      if (pageLang === 'en') return `$${rounded.toLocaleString(numberLocale)}`;
+      if (pageLang === 'en') return `${rounded.toLocaleString(numberLocale)}${t.currency}`;
       return `${rounded.toLocaleString(numberLocale)}${t.currency}`;
     };
 
@@ -3636,6 +3636,10 @@
         noInput: '결제 금액을 입력하면 결과가 계산됩니다.',
         summary: (tip, total, per, people) => `팁 ${tip}, 총 ${total}, ${people}인 기준 1인당 ${per}`,
         copy: '팁 계산 결과',
+        copyTip: '팁',
+        copyTotal: '총액',
+        copyPerPerson: '1인당',
+        copyBase: '팁 기준 금액',
         copied: '복사됨',
         copyDefault: '결과 복사'
       },
@@ -3643,6 +3647,10 @@
         noInput: 'Enter bill values to calculate results.',
         summary: (tip, total, per, people) => `Tip ${tip}, total ${total}, ${per} per person (${people} people)`,
         copy: 'Tip calculation',
+        copyTip: 'Tip',
+        copyTotal: 'Total',
+        copyPerPerson: 'Per person',
+        copyBase: 'Tip base',
         copied: 'Copied',
         copyDefault: 'Copy result'
       },
@@ -3650,6 +3658,10 @@
         noInput: '金額を入力すると結果を計算します。',
         summary: (tip, total, per, people) => `チップ ${tip}、合計 ${total}、${people}人で1人あたり ${per}`,
         copy: 'チップ計算結果',
+        copyTip: 'チップ',
+        copyTotal: '合計',
+        copyPerPerson: '1人あたり',
+        copyBase: 'チップ基準額',
         copied: 'コピー完了',
         copyDefault: '結果をコピー'
       }
@@ -3657,6 +3669,10 @@
       noInput: '결제 금액을 입력하면 결과가 계산됩니다.',
       summary: (tip, total, per, people) => `팁 ${tip}, 총 ${total}, ${people}인 기준 1인당 ${per}`,
       copy: '팁 계산 결과',
+      copyTip: '팁',
+      copyTotal: '총액',
+      copyPerPerson: '1인당',
+      copyBase: '팁 기준 금액',
       copied: '복사됨',
       copyDefault: '결과 복사'
     };
@@ -3737,7 +3753,7 @@
 
     copyBtn?.addEventListener('click', async () => {
       if (outTotal.textContent === '-') return;
-      const msg = `${text.copy} | tip ${outTip.textContent} | total ${outTotal.textContent} | per person ${outPer.textContent} | tip base ${outBase.textContent}`;
+      const msg = `${text.copy} | ${text.copyTip} ${outTip.textContent} | ${text.copyTotal} ${outTotal.textContent} | ${text.copyPerPerson} ${outPer.textContent} | ${text.copyBase} ${outBase.textContent}`;
       await copyText(msg);
       const old = copyBtn.textContent;
       copyBtn.textContent = text.copied;
