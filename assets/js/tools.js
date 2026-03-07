@@ -2030,7 +2030,74 @@
 
     if (!start || !end || !monthly || !annualBonus || !serviceDays || !serviceYears || !dailyWage || !amount || !help) return;
 
-    const fmtKRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
+    const sevI18n = {
+      ko: {
+        currency: '원',
+        chooseDates: '입사일과 퇴사일을 선택하세요.',
+        invalidRange: '퇴사일은 입사일보다 빠를 수 없습니다.',
+        needMonthly: '최근 월급(세전)을 입력하세요.',
+        dayUnit: '일',
+        yearUnit: '년',
+        eligibleHelp: '법정 평균임금의 간편 추정 방식(연 환산)으로 계산한 참고값입니다. 실제 퇴직금은 최근 3개월 임금·상여 반영 방식에 따라 달라질 수 있습니다.',
+        ineligibleHelp: '재직기간이 1년 미만으로 보입니다. 계산은 가능하지만 법적 지급 요건 충족 여부를 반드시 확인하세요.',
+        inputCheck: '입력 확인',
+        copyResult: '퇴직금 계산 결과',
+        copyLabels: {
+          days: '재직일수',
+          years: '계속근로연수',
+          daily: '1일 평균임금',
+          amount: '예상 퇴직금'
+        },
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        currency: '',
+        chooseDates: 'Select start date and end date.',
+        invalidRange: 'End date cannot be earlier than start date.',
+        needMonthly: 'Enter recent monthly gross salary.',
+        dayUnit: ' days',
+        yearUnit: ' years',
+        eligibleHelp: 'This is a simplified estimate based on annualized statutory average wage. Actual severance may differ depending on how wages and bonuses from the last 3 months are reflected.',
+        ineligibleHelp: 'Your service period appears to be under 1 year. Calculation is possible, but please verify legal eligibility requirements.',
+        inputCheck: 'Check inputs',
+        copyResult: 'Severance estimate',
+        copyLabels: {
+          days: 'Service days',
+          years: 'Years of service',
+          daily: 'Average daily wage',
+          amount: 'Estimated severance'
+        },
+        copied: 'Copied',
+        copyDefault: 'Copy results'
+      },
+      ja: {
+        currency: '円',
+        chooseDates: '入社日と退社日を選択してください。',
+        invalidRange: '退社日は入社日より前にできません。',
+        needMonthly: '直近の月給（額面）を入力してください。',
+        dayUnit: '日',
+        yearUnit: '年',
+        eligibleHelp: '法定の平均賃金を年換算した簡易推定です。実際の退職金は直近3か月の賃金・賞与の反映方法により異なる場合があります。',
+        ineligibleHelp: '勤続期間が1年未満の可能性があります。計算は可能ですが、法的な支給要件を必ず確認してください。',
+        inputCheck: '入力を確認',
+        copyResult: '退職金試算結果',
+        copyLabels: {
+          days: '勤続日数',
+          years: '勤続年数',
+          daily: '1日平均賃金',
+          amount: '退職金見込み'
+        },
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    };
+    const sevText = sevI18n[pageLang] || sevI18n.ko;
+    const fmtKRW = (v) => {
+      const rounded = Math.round(v);
+      if (pageLang === 'en') return `$${rounded.toLocaleString(numberLocale)}`;
+      return `${rounded.toLocaleString(numberLocale)}${sevText.currency}`;
+    };
 
     const toDate = (value) => {
       if (!value) return null;
@@ -2073,15 +2140,15 @@
       const b = Math.max(0, Number(annualBonus.value || 0));
 
       if (!s || !e) {
-        setIdle('입사일과 퇴사일을 선택하세요.');
+        setIdle(sevText.chooseDates);
         return;
       }
       if (e < s) {
-        setIdle('퇴사일은 입사일보다 빠를 수 없습니다.');
+        setIdle(sevText.invalidRange);
         return;
       }
       if (!(m > 0)) {
-        setIdle('최근 월급(세전)을 입력하세요.');
+        setIdle(sevText.needMonthly);
         return;
       }
 
@@ -2092,13 +2159,11 @@
       const severance = avgDailyWage * 30 * years;
       const isEligible = days >= 365;
 
-      serviceDays.textContent = `${days.toLocaleString('ko-KR')}일`;
-      serviceYears.textContent = `${years.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}년`;
+      serviceDays.textContent = `${days.toLocaleString(numberLocale)}${sevText.dayUnit}`;
+      serviceYears.textContent = `${years.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}${sevText.yearUnit}`;
       dailyWage.textContent = fmtKRW(avgDailyWage);
       amount.textContent = fmtKRW(severance);
-      help.textContent = isEligible
-        ? '법정 평균임금의 간편 추정 방식(연 환산)으로 계산한 참고값입니다. 실제 퇴직금은 최근 3개월 임금·상여 반영 방식에 따라 달라질 수 있습니다.'
-        : '재직기간이 1년 미만으로 보입니다. 계산은 가능하지만 법적 지급 요건 충족 여부를 반드시 확인하세요.';
+      help.textContent = isEligible ? sevText.eligibleHelp : sevText.ineligibleHelp;
     };
 
     const toISO = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
@@ -2122,15 +2187,15 @@
     copyBtn?.addEventListener('click', async () => {
       if (amount.textContent === '-') {
         const old = copyBtn.textContent;
-        copyBtn.textContent = '입력 확인';
-        setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+        copyBtn.textContent = sevText.inputCheck;
+        setTimeout(() => { copyBtn.textContent = old || sevText.copyDefault; }, 900);
         return;
       }
-      const text = `퇴직금 계산 결과 | 재직일수 ${serviceDays.textContent} | 계속근로연수 ${serviceYears.textContent} | 1일 평균임금 ${dailyWage.textContent} | 예상 퇴직금 ${amount.textContent}`;
+      const text = `${sevText.copyResult} | ${sevText.copyLabels.days} ${serviceDays.textContent} | ${sevText.copyLabels.years} ${serviceYears.textContent} | ${sevText.copyLabels.daily} ${dailyWage.textContent} | ${sevText.copyLabels.amount} ${amount.textContent}`;
       await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = sevText.copied;
+      setTimeout(() => { copyBtn.textContent = old || sevText.copyDefault; }, 900);
     });
 
     if (!monthly.value) monthly.value = 3200000;
@@ -2153,8 +2218,84 @@
 
     if (!currentQty || !currentPrice || !addQty || !addPrice || !newAvg || !totalQtyOut || !totalCostOut || !needQtyOut || !help) return;
 
-    const fmtKRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
-    const fmtQty = (v) => `${Math.round(v).toLocaleString('ko-KR')}주`;
+    const stockI18n = {
+      ko: {
+        currency: '원',
+        shareUnit: '주',
+        needCurrent: '현재 보유 수량과 평단가를 먼저 입력하세요.',
+        avgWithPlan: (avg) => `추가 매수 반영 시 새 평단가는 ${avg}입니다.`,
+        alreadyTarget: '현재 평단가가 이미 목표 평단 이하입니다.',
+        alreadyWithPlan: '현재 입력된 추가 매수 계획까지 반영하면 이미 목표 평단을 만족합니다.',
+        alreadyNow: '현재 보유 상태로 이미 목표 평단을 만족합니다.',
+        impossible: '달성 불가',
+        impossibleHelp: '추가 매수가가 목표 평단 이상이면 같은 가격의 추가 매수만으로 목표 평단을 만들 수 없습니다.',
+        needAfterPlan: (tp, need, aq) => `현재 계획(${aq}) 이후에도 목표 평단 ${tp}를 맞추려면 최소 ${need}를 같은 가격에 더 매수해야 합니다.`,
+        needNow: (tp, need) => `목표 평단 ${tp}를 맞추려면 현재 조건에서 최소 ${need} 추가 매수가 필요합니다.`,
+        zeroShares: '0주',
+        copyTitle: '물타기 계산 결과',
+        copyLabels: {
+          avg: '새 평단가',
+          qty: '총 보유',
+          cost: '총 매수금액',
+          need: '목표 평단 필요수량'
+        },
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        currency: '',
+        shareUnit: ' shares',
+        needCurrent: 'Enter current holding quantity and average cost first.',
+        avgWithPlan: (avg) => `New average cost with planned buy: ${avg}.`,
+        alreadyTarget: 'Your current average cost is already at or below the target.',
+        alreadyWithPlan: 'With the additional buy plan already entered, the target average is already met.',
+        alreadyNow: 'Your current holdings already meet the target average.',
+        impossible: 'Not achievable',
+        impossibleHelp: 'If your additional buy price is at or above the target average, you cannot reach the target by buying more at that same price.',
+        needAfterPlan: (tp, need, aq) => `After your current plan (${aq}), you still need at least ${need} more at the same price to reach target average ${tp}.`,
+        needNow: (tp, need) => `To reach target average ${tp}, you need at least ${need} more shares under current conditions.`,
+        zeroShares: '0 shares',
+        copyTitle: 'Average-down calculation',
+        copyLabels: {
+          avg: 'New average cost',
+          qty: 'Total shares',
+          cost: 'Total invested',
+          need: 'Required shares for target average'
+        },
+        copied: 'Copied',
+        copyDefault: 'Copy results'
+      },
+      ja: {
+        currency: '円',
+        shareUnit: '株',
+        needCurrent: '現在の保有株数と平均取得単価を先に入力してください。',
+        avgWithPlan: (avg) => `追加購入を反映した新しい平均取得単価は ${avg} です。`,
+        alreadyTarget: '現在の平均取得単価はすでに目標以下です。',
+        alreadyWithPlan: '現在入力済みの追加購入計画まで反映すると、すでに目標単価を満たしています。',
+        alreadyNow: '現在の保有状態ですでに目標単価を満たしています。',
+        impossible: '達成不可',
+        impossibleHelp: '追加購入単価が目標単価以上の場合、同じ価格での買い増しだけでは目標単価に到達できません。',
+        needAfterPlan: (tp, need, aq) => `現在の計画（${aq}）の後も、目標単価 ${tp} にするには同価格で最低 ${need} の追加購入が必要です。`,
+        needNow: (tp, need) => `目標単価 ${tp} にするには、現在条件で最低 ${need} の追加購入が必要です。`,
+        zeroShares: '0株',
+        copyTitle: 'ナンピン計算結果',
+        copyLabels: {
+          avg: '新しい平均取得単価',
+          qty: '総保有株数',
+          cost: '総購入金額',
+          need: '目標単価に必要な株数'
+        },
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    };
+    const stockText = stockI18n[pageLang] || stockI18n.ko;
+    const fmtKRW = (v) => {
+      const rounded = Math.round(v);
+      if (pageLang === 'en') return `$${rounded.toLocaleString(numberLocale)}`;
+      return `${rounded.toLocaleString(numberLocale)}${stockText.currency}`;
+    };
+    const fmtQty = (v) => `${Math.round(v).toLocaleString(numberLocale)}${stockText.shareUnit}`;
 
     const copyText = async (text) => {
       try {
@@ -2188,7 +2329,7 @@
       const tp = tpRaw === '' ? null : Math.max(0, Number(tpRaw));
 
       if (!(cq > 0) || !(cp > 0)) {
-        setIdle('현재 보유 수량과 평단가를 먼저 입력하세요.');
+        setIdle(stockText.needCurrent);
         return;
       }
 
@@ -2204,13 +2345,13 @@
 
       if (tp === null || !Number.isFinite(tp)) {
         needQtyOut.textContent = '-';
-        help.textContent = `추가 매수 반영 시 새 평단가는 ${fmtKRW(avg)}입니다.`;
+        help.textContent = stockText.avgWithPlan(fmtKRW(avg));
         return;
       }
 
       if (tp >= cp && aq === 0) {
-        needQtyOut.textContent = '0주';
-        help.textContent = '현재 평단가가 이미 목표 평단 이하입니다.';
+        needQtyOut.textContent = stockText.zeroShares;
+        help.textContent = stockText.alreadyTarget;
         return;
       }
 
@@ -2218,35 +2359,33 @@
       const numerator = totalCost - (tp * totalQty);
 
       if (numerator <= 0) {
-        needQtyOut.textContent = '0주';
-        help.textContent = aq > 0
-          ? '현재 입력된 추가 매수 계획까지 반영하면 이미 목표 평단을 만족합니다.'
-          : '현재 보유 상태로 이미 목표 평단을 만족합니다.';
+        needQtyOut.textContent = stockText.zeroShares;
+        help.textContent = aq > 0 ? stockText.alreadyWithPlan : stockText.alreadyNow;
         return;
       }
 
       if (denominator <= 0) {
-        needQtyOut.textContent = '달성 불가';
-        help.textContent = '추가 매수가가 목표 평단 이상이면 같은 가격의 추가 매수만으로 목표 평단을 만들 수 없습니다.';
+        needQtyOut.textContent = stockText.impossible;
+        help.textContent = stockText.impossibleHelp;
         return;
       }
 
       const need = Math.ceil(numerator / denominator);
       needQtyOut.textContent = fmtQty(need);
       help.textContent = aq > 0
-        ? `현재 계획(${fmtQty(aq)}) 이후에도 목표 평단 ${fmtKRW(tp)}를 맞추려면 최소 ${fmtQty(need)}를 같은 가격에 더 매수해야 합니다.`
-        : `목표 평단 ${fmtKRW(tp)}를 맞추려면 현재 조건에서 최소 ${fmtQty(need)} 추가 매수가 필요합니다.`;
+        ? stockText.needAfterPlan(fmtKRW(tp), fmtQty(need), fmtQty(aq))
+        : stockText.needNow(fmtKRW(tp), fmtQty(need));
     };
 
     [currentQty, currentPrice, addQty, addPrice, targetPrice].forEach((el) => el?.addEventListener('input', render));
 
     copyBtn?.addEventListener('click', async () => {
       if (newAvg.textContent === '-') return;
-      const text = `물타기 계산 결과 | 새 평단가 ${newAvg.textContent} | 총 보유 ${totalQtyOut.textContent} | 총 매수금액 ${totalCostOut.textContent} | 목표 평단 필요수량 ${needQtyOut.textContent}`;
+      const text = `${stockText.copyTitle} | ${stockText.copyLabels.avg} ${newAvg.textContent} | ${stockText.copyLabels.qty} ${totalQtyOut.textContent} | ${stockText.copyLabels.cost} ${totalCostOut.textContent} | ${stockText.copyLabels.need} ${needQtyOut.textContent}`;
       await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = stockText.copied;
+      setTimeout(() => { copyBtn.textContent = old || stockText.copyDefault; }, 900);
     });
 
     resetBtn?.addEventListener('click', () => {
@@ -2285,8 +2424,65 @@
 
     if (!sex || !age || !height || !weight || !activity || !outBmr || !outMaintain || !outCut || !outBulk || !outProtein || !outFat || !outCarb || !help) return;
 
-    const fmtKcal = (v) => `${Math.round(v).toLocaleString('ko-KR')}kcal`;
-    const fmtGram = (v) => `${Math.round(v).toLocaleString('ko-KR')}g`;
+    const tdeeI18n = {
+      ko: {
+        idle: '값을 입력하면 BMR/TDEE와 목표별 칼로리가 계산됩니다.',
+        invalidRange: '나이(10~100), 키(120~230), 몸무게(25~250) 범위를 확인해 주세요.',
+        protein: '단백질',
+        fat: '지방',
+        carb: '탄수화물',
+        selectedActivity: '선택 활동량',
+        macroNotice: ' 현재 입력에서는 단백질/지방 최소치만으로 유지 칼로리를 거의 채워 탄수화물 권장량이 낮게 표시될 수 있습니다.',
+        help: (activityLabel, cut, bulk, notice) => `${activityLabel} 기준 추정치입니다. 보수 감량은 주당 약 ${cut}kg, 린 증량은 주당 약 ${bulk}kg 변화를 목표로 합니다. 2~3주 체중/허리둘레 변화에 맞춰 100~200kcal 단위로 조정하세요.${notice}`,
+        copyTitle: '칼로리 계산 결과',
+        copyLabels: {
+          maintain: '유지(TDEE)',
+          cut: '감량',
+          bulk: '증량'
+        },
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        idle: 'Enter values to calculate BMR/TDEE and goal-based calories.',
+        invalidRange: 'Check ranges: age (10–100), height (120–230), weight (25–250).',
+        protein: 'Protein',
+        fat: 'Fat',
+        carb: 'Carbs',
+        selectedActivity: 'Selected activity level',
+        macroNotice: ' With your current inputs, minimum protein/fat may already use most maintenance calories, so recommended carbs can appear low.',
+        help: (activityLabel, cut, bulk, notice) => `Estimate based on ${activityLabel}. A moderate cut targets about ${cut} kg/week, and a lean bulk targets about ${bulk} kg/week. Adjust by 100–200 kcal after tracking weight/waist changes for 2–3 weeks.${notice}`,
+        copyTitle: 'Calorie calculation',
+        copyLabels: {
+          maintain: 'Maintain (TDEE)',
+          cut: 'Cut',
+          bulk: 'Bulk'
+        },
+        copied: 'Copied',
+        copyDefault: 'Copy results'
+      },
+      ja: {
+        idle: '値を入力すると、BMR/TDEEと目的別カロリーを計算します。',
+        invalidRange: '範囲を確認してください（年齢 10〜100、身長 120〜230、体重 25〜250）。',
+        protein: 'たんぱく質',
+        fat: '脂質',
+        carb: '炭水化物',
+        selectedActivity: '選択した活動量',
+        macroNotice: ' 現在の入力では、たんぱく質/脂質の最低量だけで維持カロリーの多くを占めるため、炭水化物推奨量が低く表示される場合があります。',
+        help: (activityLabel, cut, bulk, notice) => `${activityLabel}を基準にした推定です。緩やかな減量は週あたり約${cut}kg、リーンバルクは週あたり約${bulk}kgの変化を目安にしています。2〜3週間の体重・ウエスト変化を見て100〜200kcal単位で調整してください。${notice}`,
+        copyTitle: 'カロリー計算結果',
+        copyLabels: {
+          maintain: '維持 (TDEE)',
+          cut: '減量',
+          bulk: '増量'
+        },
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    };
+    const tdeeText = tdeeI18n[pageLang] || tdeeI18n.ko;
+    const fmtKcal = (v) => `${Math.round(v).toLocaleString(numberLocale)}kcal`;
+    const fmtGram = (v) => `${Math.round(v).toLocaleString(numberLocale)}g`;
 
     const copyText = async (text) => {
       try {
@@ -2303,14 +2499,14 @@
       }
     };
 
-    const setIdle = (msg = '값을 입력하면 BMR/TDEE와 목표별 칼로리가 계산됩니다.') => {
+    const setIdle = (msg = tdeeText.idle) => {
       outBmr.textContent = '-';
       outMaintain.textContent = '-';
       outCut.textContent = '-';
       outBulk.textContent = '-';
-      outProtein.textContent = '단백질: -';
-      outFat.textContent = '지방: -';
-      outCarb.textContent = '탄수화물: -';
+      outProtein.textContent = `${tdeeText.protein}: -`;
+      outFat.textContent = `${tdeeText.fat}: -`;
+      outCarb.textContent = `${tdeeText.carb}: -`;
       help.textContent = msg;
     };
 
@@ -2321,7 +2517,7 @@
       const af = Number(activity.value || 1.2);
 
       if (!(a >= 10 && a <= 100) || !(h >= 120 && h <= 230) || !(w >= 25 && w <= 250)) {
-        setIdle('나이(10~100), 키(120~230), 몸무게(25~250) 범위를 확인해 주세요.');
+        setIdle(tdeeText.invalidRange);
         return;
       }
 
@@ -2350,15 +2546,18 @@
       outCut.textContent = `${fmtKcal(cutModerate)} / ${fmtKcal(cutAggressive)}`;
       outBulk.textContent = `${fmtKcal(bulkLean)} / ${fmtKcal(bulkAggressive)}`;
 
-      outProtein.textContent = `단백질: ${fmtGram(proteinG)} (약 ${(proteinG * 4).toLocaleString('ko-KR', { maximumFractionDigits: 0 })}kcal)`;
-      outFat.textContent = `지방: ${fmtGram(fatG)} (약 ${(fatG * 9).toLocaleString('ko-KR', { maximumFractionDigits: 0 })}kcal)`;
-      outCarb.textContent = `탄수화물: ${fmtGram(carbG)} (약 ${(carbG * 4).toLocaleString('ko-KR', { maximumFractionDigits: 0 })}kcal)`;
+      outProtein.textContent = `${tdeeText.protein}: ${fmtGram(proteinG)} (≈ ${(proteinG * 4).toLocaleString(numberLocale, { maximumFractionDigits: 0 })}kcal)`;
+      outFat.textContent = `${tdeeText.fat}: ${fmtGram(fatG)} (≈ ${(fatG * 9).toLocaleString(numberLocale, { maximumFractionDigits: 0 })}kcal)`;
+      outCarb.textContent = `${tdeeText.carb}: ${fmtGram(carbG)} (≈ ${(carbG * 4).toLocaleString(numberLocale, { maximumFractionDigits: 0 })}kcal)`;
 
-      const activityLabel = activity.options[activity.selectedIndex]?.text || '선택 활동량';
-      const macroNotice = macroBaseKcal > tdee
-        ? ' 현재 입력에서는 단백질/지방 최소치만으로 유지 칼로리를 거의 채워 탄수화물 권장량이 낮게 표시될 수 있습니다.'
-        : '';
-      help.textContent = `${activityLabel} 기준 추정치입니다. 보수 감량은 주당 약 ${weeklyCutKg.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}kg, 린 증량은 주당 약 ${weeklyBulkKg.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}kg 변화를 목표로 합니다. 2~3주 체중/허리둘레 변화에 맞춰 100~200kcal 단위로 조정하세요.${macroNotice}`;
+      const activityLabel = activity.options[activity.selectedIndex]?.text || tdeeText.selectedActivity;
+      const macroNotice = macroBaseKcal > tdee ? tdeeText.macroNotice : '';
+      help.textContent = tdeeText.help(
+        activityLabel,
+        weeklyCutKg.toLocaleString(numberLocale, { maximumFractionDigits: 2 }),
+        weeklyBulkKg.toLocaleString(numberLocale, { maximumFractionDigits: 2 }),
+        macroNotice
+      );
     };
 
     [sex, age, height, weight, activity].forEach((el) => el?.addEventListener('input', render));
@@ -2375,19 +2574,19 @@
     copyBtn?.addEventListener('click', async () => {
       if (outBmr.textContent === '-') return;
       const text = [
-        `칼로리 계산 결과`,
+        `${tdeeText.copyTitle}`,
         `BMR ${outBmr.textContent}`,
-        `유지(TDEE) ${outMaintain.textContent}`,
-        `감량 ${outCut.textContent}`,
-        `증량 ${outBulk.textContent}`,
+        `${tdeeText.copyLabels.maintain} ${outMaintain.textContent}`,
+        `${tdeeText.copyLabels.cut} ${outCut.textContent}`,
+        `${tdeeText.copyLabels.bulk} ${outBulk.textContent}`,
         outProtein.textContent,
         outFat.textContent,
         outCarb.textContent
       ].join(' | ');
       await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = tdeeText.copied;
+      setTimeout(() => { copyBtn.textContent = old || tdeeText.copyDefault; }, 900);
     });
 
     if (!age.value) age.value = 30;
