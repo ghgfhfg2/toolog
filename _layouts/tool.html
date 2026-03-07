@@ -82,58 +82,58 @@ layout: default
         <div class="tool-ui">
           <input id="ir-file" type="file" accept="image/*" />
           <div class="tool-row">
-            <label>프리셋</label>
+            <label>{% if page.lang == 'en' %}Preset{% elsif page.lang == 'ja' %}プリセット{% else %}프리셋{% endif %}</label>
             <select id="ir-preset">
-              <option value="custom">직접 입력</option>
-              <option value="1080x1080">인스타 정사각(1080×1080)</option>
-              <option value="1200x630">OG 이미지(1200×630)</option>
-              <option value="800x450">블로그 썸네일(800×450)</option>
-              <option value="1920x1080">FHD(1920×1080)</option>
+              <option value="custom">{% if page.lang == 'en' %}Custom size{% elsif page.lang == 'ja' %}カスタム入力{% else %}직접 입력{% endif %}</option>
+              <option value="1080x1080">{% if page.lang == 'en' %}Instagram Square (1080×1080){% elsif page.lang == 'ja' %}Instagram正方形 (1080×1080){% else %}인스타 정사각(1080×1080){% endif %}</option>
+              <option value="1200x630">{% if page.lang == 'en' %}OG Image (1200×630){% elsif page.lang == 'ja' %}OG画像 (1200×630){% else %}OG 이미지(1200×630){% endif %}</option>
+              <option value="800x450">{% if page.lang == 'en' %}Blog Thumbnail (800×450){% elsif page.lang == 'ja' %}ブログサムネイル (800×450){% else %}블로그 썸네일(800×450){% endif %}</option>
+              <option value="1920x1080">FHD (1920×1080)</option>
             </select>
           </div>
           <div class="tool-row-grid">
             <input id="ir-width" type="number" min="1" placeholder="width" />
             <input id="ir-height" type="number" min="1" placeholder="height" />
-            <button id="ir-run" type="button">리사이즈</button>
+            <button id="ir-run" type="button">{% if page.lang == 'en' %}Resize{% elsif page.lang == 'ja' %}リサイズ{% else %}리사이즈{% endif %}</button>
           </div>
-          <label class="tool-check"><input id="ir-lock" type="checkbox" checked /> 비율 고정</label>
-          <p class="tool-result" id="ir-result">원본/결과 사이즈 정보가 여기에 표시됩니다.</p>
+          <label class="tool-check"><input id="ir-lock" type="checkbox" checked /> {% if page.lang == 'en' %}Lock aspect ratio{% elsif page.lang == 'ja' %}アスペクト比を固定{% else %}비율 고정{% endif %}</label>
+          <p class="tool-result" id="ir-result">{% if page.lang == 'en' %}Original/result size info appears here.{% elsif page.lang == 'ja' %}元画像/出力サイズ情報をここに表示します。{% else %}원본/결과 사이즈 정보가 여기에 표시됩니다.{% endif %}</p>
           <canvas id="ir-canvas"></canvas>
-          <a id="ir-download" class="open-link" download="resized-image.png">다운로드</a>
+          <a id="ir-download" class="open-link" download="resized-image.png">{% if page.lang == 'en' %}Download{% elsif page.lang == 'ja' %}ダウンロード{% else %}다운로드{% endif %}</a>
         </div>
       {% when 'png-compressor' %}
         <div class="tool-ui">
           <input id="pc-file" type="file" accept="image/png,image/jpeg,image/webp" />
           <div class="tool-row">
-            <label>출력 포맷</label>
+            <label>{% if page.lang == 'en' %}Output format{% elsif page.lang == 'ja' %}出力形式{% else %}출력 포맷{% endif %}</label>
             <select id="pc-format">
-              <option value="image/webp">WebP (권장)</option>
+              <option value="image/webp">WebP {% if page.lang == 'en' %}(Recommended){% elsif page.lang == 'ja' %}(推奨){% else %}(권장){% endif %}</option>
               <option value="image/jpeg">JPEG</option>
-              <option value="image/png">PNG (무손실)</option>
+              <option value="image/png">PNG {% if page.lang == 'en' %}(Lossless){% elsif page.lang == 'ja' %}(可逆圧縮){% else %}(무손실){% endif %}</option>
             </select>
           </div>
           <div class="tool-row-grid">
-            <label>품질</label>
+            <label>{% if page.lang == 'en' %}Quality{% elsif page.lang == 'ja' %}品質{% else %}품질{% endif %}</label>
             <input id="pc-quality" type="range" min="0.4" max="1" step="0.05" value="0.8" />
-            <button id="pc-run" type="button">압축 실행</button>
+            <button id="pc-run" type="button">{% if page.lang == 'en' %}Compress{% elsif page.lang == 'ja' %}圧縮実行{% else %}압축 실행{% endif %}</button>
           </div>
-          <p class="tool-result" id="pc-result">원본/압축 결과가 여기에 표시됩니다.</p>
+          <p class="tool-result" id="pc-result">{% if page.lang == 'en' %}Original/compressed result appears here.{% elsif page.lang == 'ja' %}元画像/圧縮結果をここに表示します。{% else %}원본/압축 결과가 여기에 표시됩니다.{% endif %}</p>
           <canvas id="pc-canvas"></canvas>
-          <a id="pc-download" class="open-link" download="compressed.webp">다운로드</a>
+          <a id="pc-download" class="open-link" download="compressed.webp">{% if page.lang == 'en' %}Download{% elsif page.lang == 'ja' %}ダウンロード{% else %}다운로드{% endif %}</a>
         </div>
       {% when 'youtube-image-kit' %}
         <div class="tool-ui">
           <input id="ytk-file" type="file" accept="image/*" />
           <div class="tool-row-grid">
             <select id="ytk-fit">
-              <option value="cover">프레이밍: 꽉 채우기(cover)</option>
-              <option value="contain">프레이밍: 원본 전체 보이기(contain)</option>
+              <option value="cover">{% if page.lang == 'en' %}Framing: Fill frame (cover){% elsif page.lang == 'ja' %}フレーミング: 枠いっぱい (cover){% else %}프레이밍: 꽉 채우기(cover){% endif %}</option>
+              <option value="contain">{% if page.lang == 'en' %}Framing: Show full image (contain){% elsif page.lang == 'ja' %}フレーミング: 全体表示 (contain){% else %}프레이밍: 원본 전체 보이기(contain){% endif %}</option>
             </select>
             <input id="ytk-bg" type="color" value="#0f172a" />
-            <button id="ytk-run" type="button">유튜브 세트 생성</button>
+            <button id="ytk-run" type="button">{% if page.lang == 'en' %}Generate YouTube set{% elsif page.lang == 'ja' %}YouTubeセット生成{% else %}유튜브 세트 생성{% endif %}</button>
           </div>
-          <p class="tool-result" id="ytk-result">이미지를 선택하고 생성 버튼을 누르면 유튜브 업로드용 이미지 세트가 만들어집니다.</p>
-          <button id="ytk-download-all" type="button">전체 다운로드</button>
+          <p class="tool-result" id="ytk-result">{% if page.lang == 'en' %}Choose an image and click Generate to create a full YouTube upload image set.{% elsif page.lang == 'ja' %}画像を選択して生成を押すと、YouTube投稿用画像セットを作成します。{% else %}이미지를 선택하고 생성 버튼을 누르면 유튜브 업로드용 이미지 세트가 만들어집니다.{% endif %}</p>
+          <button id="ytk-download-all" type="button">{% if page.lang == 'en' %}Download all{% elsif page.lang == 'ja' %}一括ダウンロード{% else %}전체 다운로드{% endif %}</button>
           <div id="ytk-list" class="ytk-grid"></div>
         </div>
       {% when 'image-upscaler' %}

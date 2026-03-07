@@ -195,12 +195,30 @@
     let ratio = 1;
     let originBytes = 0;
 
+    const resizeText = {
+      ko: {
+        original: (w, h, b) => `원본: ${w}×${h}px / ${b} bytes`,
+        result: (ow, oh, w, h, b) => `원본: ${ow}×${oh}px → 결과: ${w}×${h}px / ${b} bytes`
+      },
+      en: {
+        original: (w, h, b) => `Original: ${w}×${h}px / ${b} bytes`,
+        result: (ow, oh, w, h, b) => `Original: ${ow}×${oh}px → Result: ${w}×${h}px / ${b} bytes`
+      },
+      ja: {
+        original: (w, h, b) => `元画像: ${w}×${h}px / ${b} bytes`,
+        result: (ow, oh, w, h, b) => `元画像: ${ow}×${oh}px → 出力: ${w}×${h}px / ${b} bytes`
+      }
+    }[pageLang] || {
+      original: (w, h, b) => `원본: ${w}×${h}px / ${b} bytes`,
+      result: (ow, oh, w, h, b) => `원본: ${ow}×${oh}px → 결과: ${w}×${h}px / ${b} bytes`
+    };
+
     const updateResult = (width, height, outBytes = 0) => {
       if (!result) return;
       if (!outBytes) {
-        result.textContent = `원본: ${img?.width || 0}×${img?.height || 0}px / ${formatNum(originBytes)} bytes`;
+        result.textContent = resizeText.original(img?.width || 0, img?.height || 0, formatNum(originBytes));
       } else {
-        result.textContent = `원본: ${img?.width || 0}×${img?.height || 0}px → 결과: ${width}×${height}px / ${formatNum(outBytes)} bytes`;
+        result.textContent = resizeText.result(img?.width || 0, img?.height || 0, width, height, formatNum(outBytes));
       }
     };
 
@@ -265,6 +283,24 @@
     let img = null;
     let originSize = 0;
 
+    const pcText = {
+      ko: {
+        original: (b) => `원본 크기: ${b} bytes`,
+        compressed: (o, c, r) => `원본: ${o} bytes → 압축: ${c} bytes (약 ${r}% 절감)`
+      },
+      en: {
+        original: (b) => `Original size: ${b} bytes`,
+        compressed: (o, c, r) => `Original: ${o} bytes → Compressed: ${c} bytes (about ${r}% reduced)`
+      },
+      ja: {
+        original: (b) => `元サイズ: ${b} bytes`,
+        compressed: (o, c, r) => `元画像: ${o} bytes → 圧縮後: ${c} bytes (約${r}%削減)`
+      }
+    }[pageLang] || {
+      original: (b) => `원본 크기: ${b} bytes`,
+      compressed: (o, c, r) => `원본: ${o} bytes → 압축: ${c} bytes (약 ${r}% 절감)`
+    };
+
     const extByMime = (mime) => {
       if (mime === 'image/jpeg') return 'jpg';
       if (mime === 'image/png') return 'png';
@@ -278,7 +314,7 @@
       const i = new Image();
       i.onload = () => { img = i; URL.revokeObjectURL(u); };
       i.src = u;
-      if (result) result.textContent = `원본 크기: ${formatNum(originSize)} bytes`;
+      if (result) result.textContent = pcText.original(formatNum(originSize));
     });
 
     run?.addEventListener('click', () => {
@@ -295,7 +331,7 @@
       const compressedBytes = Math.floor((data.length * 3) / 4);
       const ratio = originSize ? ((1 - compressedBytes / originSize) * 100) : 0;
       if (result) {
-        result.textContent = `원본: ${formatNum(originSize)} bytes → 압축: ${formatNum(compressedBytes)} bytes (약 ${ratio.toFixed(1)}% 절감)`;
+        result.textContent = pcText.compressed(formatNum(originSize), formatNum(compressedBytes), ratio.toFixed(1));
       }
     });
   }
@@ -309,12 +345,66 @@
     const result = document.getElementById('ytk-result');
     const allBtn = document.getElementById('ytk-download-all');
 
+    const ytkText = {
+      ko: {
+        labels: {
+          thumbnail: '유튜브 썸네일',
+          'shorts-cover': '쇼츠 커버',
+          'channel-banner': '채널 배너',
+          'channel-icon': '채널 아이콘',
+          watermark: '워터마크'
+        },
+        ready: (w, h) => `원본: ${w}x${h}px · 생성 준비 완료`,
+        download: (label) => `${label} 다운로드`,
+        previewAlt: (label) => `${label} 미리보기`,
+        done: (count) => `${count}개 출력 이미지를 생성했습니다.`
+      },
+      en: {
+        labels: {
+          thumbnail: 'YouTube Thumbnail',
+          'shorts-cover': 'Shorts Cover',
+          'channel-banner': 'Channel Banner',
+          'channel-icon': 'Channel Icon',
+          watermark: 'Watermark'
+        },
+        ready: (w, h) => `Original: ${w}x${h}px · Ready to generate`,
+        download: (label) => `Download ${label}`,
+        previewAlt: (label) => `${label} preview`,
+        done: (count) => `Generated ${count} output images.`
+      },
+      ja: {
+        labels: {
+          thumbnail: 'YouTubeサムネイル',
+          'shorts-cover': 'ショートカバー',
+          'channel-banner': 'チャンネルバナー',
+          'channel-icon': 'チャンネルアイコン',
+          watermark: '透かし'
+        },
+        ready: (w, h) => `元画像: ${w}x${h}px · 生成準備完了`,
+        download: (label) => `${label} をダウンロード`,
+        previewAlt: (label) => `${label} プレビュー`,
+        done: (count) => `${count}個の出力画像を生成しました。`
+      }
+    }[pageLang] || {
+      labels: {
+        thumbnail: '유튜브 썸네일',
+        'shorts-cover': '쇼츠 커버',
+        'channel-banner': '채널 배너',
+        'channel-icon': '채널 아이콘',
+        watermark: '워터마크'
+      },
+      ready: (w, h) => `원본: ${w}x${h}px · 생성 준비 완료`,
+      download: (label) => `${label} 다운로드`,
+      previewAlt: (label) => `${label} 미리보기`,
+      done: (count) => `${count}개 출력 이미지를 생성했습니다.`
+    };
+
     const targets = [
-      { key: 'thumbnail', label: '유튜브 썸네일', w: 1280, h: 720 },
-      { key: 'shorts-cover', label: '쇼츠 커버', w: 1080, h: 1920 },
-      { key: 'channel-banner', label: '채널 배너', w: 2560, h: 1440 },
-      { key: 'channel-icon', label: '채널 아이콘', w: 800, h: 800 },
-      { key: 'watermark', label: '워터마크', w: 150, h: 150 }
+      { key: 'thumbnail', w: 1280, h: 720 },
+      { key: 'shorts-cover', w: 1080, h: 1920 },
+      { key: 'channel-banner', w: 2560, h: 1440 },
+      { key: 'channel-icon', w: 800, h: 800 },
+      { key: 'watermark', w: 150, h: 150 }
     ];
 
     let img = null;
@@ -341,7 +431,7 @@
       i.onload = () => {
         img = i;
         URL.revokeObjectURL(u);
-        if (result) result.textContent = `원본: ${i.width}x${i.height}px · 생성 준비 완료`;
+        if (result) result.textContent = ytkText.ready(i.width, i.height);
       };
       i.src = u;
     });
@@ -351,6 +441,8 @@
       wrap.innerHTML = '';
       renders = [];
       targets.forEach((t) => {
+        const label = ytkText.labels[t.key] || t.key;
+
         const card = document.createElement('div');
         card.className = 'ytk-card';
 
@@ -361,7 +453,6 @@
         drawFrame(ctx, img, t.w, t.h, fit.value || 'cover', bg?.value || '#0f172a');
         const dataUrl = canvas.toDataURL('image/png');
 
-        // 미리보기는 카드 높이에 꽉 차도록 렌더링
         const previewCanvas = document.createElement('canvas');
         previewCanvas.width = t.w;
         previewCanvas.height = t.h;
@@ -371,19 +462,19 @@
 
         const link = document.createElement('a');
         link.className = 'open-link';
-        link.textContent = `${t.label} 다운로드`;
+        link.textContent = ytkText.download(label);
         link.download = `${t.key}-${t.w}x${t.h}.png`;
         link.href = dataUrl;
 
         const title = document.createElement('strong');
-        title.textContent = `${t.label} (${t.w}x${t.h})`;
+        title.textContent = `${label} (${t.w}x${t.h})`;
 
         const preview = document.createElement('div');
         preview.className = 'ytk-preview';
         const previewImg = document.createElement('img');
         previewImg.className = 'ytk-preview-img';
         previewImg.src = previewUrl;
-        previewImg.alt = `${t.label} 미리보기`;
+        previewImg.alt = ytkText.previewAlt(label);
         preview.appendChild(previewImg);
 
         card.appendChild(title);
@@ -393,7 +484,7 @@
 
         renders.push(link);
       });
-      if (result) result.textContent = `${targets.length}개 출력 이미지를 생성했습니다.`;
+      if (result) result.textContent = ytkText.done(targets.length);
     });
 
     allBtn?.addEventListener('click', async () => {
