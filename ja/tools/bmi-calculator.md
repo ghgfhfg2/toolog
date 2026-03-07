@@ -45,5 +45,5 @@ alternate_urls:
 - 筋肉量が多い場合は体脂肪率などの追加指標も確認してください。
 
 ## 関連ツール
-- 期限管理: [D-Day計算機]({{ '/tools/d-day-calculator/' | relative_url }})
-- 進捗率計算: [パーセント計算機]({{ '/tools/percent-calculator/' | relative_url }})
+- 期限管理: [D-Day計算機]({{ '/ja/tools/d-day-calculator/' | relative_url }})
+- 進捗率計算: [パーセント計算機]({{ '/ja/tools/percent-calculator/' | relative_url }})

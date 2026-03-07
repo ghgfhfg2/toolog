@@ -1500,12 +1500,58 @@
       age: { min: 1, max: 120 }
     };
 
+    const bmiI18n = {
+      ko: {
+        classify: ['저체중', '정상', '과체중', '비만', '고도비만'],
+        idleDefault: '키와 몸무게를 입력하면 BMI를 계산합니다.',
+        idlePending: '입력 대기',
+        idleNeedInputs: '키(cm)와 몸무게(kg)를 입력하세요.',
+        idleRange: (hMin, hMax, wMin, wMax) => `입력 범위를 확인하세요 (키 ${hMin}~${hMax}cm, 몸무게 ${wMin}~${wMax}kg).`,
+        bmrPending: '나이/성별 입력 시 계산',
+        bmrAgeRange: (aMin, aMax) => `나이는 ${aMin}~${aMax}세 범위로 입력하세요`,
+        help: (bmi, category) => `BMI ${bmi.toFixed(2)} (${category}). 성인 기준 참고값이며 진단을 대체하지 않습니다.`,
+        copyInputCheck: '입력 확인',
+        copyDefault: '결과 복사',
+        copied: '복사됨',
+        copyText: (bmi, category, normal, bmr) => `BMI ${bmi} (${category}) | 정상 체중 범위 ${normal} | BMR ${bmr}`
+      },
+      en: {
+        classify: ['Underweight', 'Normal', 'Overweight', 'Obese', 'Severely obese'],
+        idleDefault: 'Enter height and weight to calculate BMI.',
+        idlePending: 'Waiting for input',
+        idleNeedInputs: 'Enter height (cm) and weight (kg).',
+        idleRange: (hMin, hMax, wMin, wMax) => `Check input range (height ${hMin}-${hMax} cm, weight ${wMin}-${wMax} kg).`,
+        bmrPending: 'Shown when age and sex are provided',
+        bmrAgeRange: (aMin, aMax) => `Enter age between ${aMin} and ${aMax}.`,
+        help: (bmi, category) => `BMI ${bmi.toFixed(2)} (${category}). This is a screening reference for adults and not a medical diagnosis.`,
+        copyInputCheck: 'Check inputs',
+        copyDefault: 'Copy result',
+        copied: 'Copied',
+        copyText: (bmi, category, normal, bmr) => `BMI ${bmi} (${category}) | Healthy weight range ${normal} | BMR ${bmr}`
+      },
+      ja: {
+        classify: ['低体重', '普通体重', '過体重', '肥満', '高度肥満'],
+        idleDefault: '身長と体重を入力するとBMIを計算します。',
+        idlePending: '入力待ち',
+        idleNeedInputs: '身長(cm)と体重(kg)を入力してください。',
+        idleRange: (hMin, hMax, wMin, wMax) => `入力範囲を確認してください（身長 ${hMin}〜${hMax}cm、体重 ${wMin}〜${wMax}kg）。`,
+        bmrPending: '年齢・性別を入力すると表示',
+        bmrAgeRange: (aMin, aMax) => `年齢は${aMin}〜${aMax}歳で入力してください。`,
+        help: (bmi, category) => `BMI ${bmi.toFixed(2)}（${category}）。成人向けの目安であり、診断の代わりにはなりません。`,
+        copyInputCheck: '入力を確認',
+        copyDefault: '結果をコピー',
+        copied: 'コピー完了',
+        copyText: (bmi, category, normal, bmr) => `BMI ${bmi}（${category}） | 標準体重範囲 ${normal} | BMR ${bmr}`
+      }
+    };
+    const bmiText = bmiI18n[pageLang] || bmiI18n.ko;
+
     const classify = (bmi) => {
-      if (bmi < 18.5) return '저체중';
-      if (bmi < 23) return '정상';
-      if (bmi < 25) return '과체중';
-      if (bmi < 30) return '비만';
-      return '고도비만';
+      if (bmi < 18.5) return bmiText.classify[0];
+      if (bmi < 23) return bmiText.classify[1];
+      if (bmi < 25) return bmiText.classify[2];
+      if (bmi < 30) return bmiText.classify[3];
+      return bmiText.classify[4];
     };
 
     const calcBmr = ({ w, h, a, sx }) => {
@@ -1530,9 +1576,9 @@
       }
     };
 
-    const setIdle = (msg = '키와 몸무게를 입력하면 BMI를 계산합니다.') => {
+    const setIdle = (msg = bmiText.idleDefault) => {
       bmiValue.textContent = '-';
-      bmiCategory.textContent = '입력 대기';
+      bmiCategory.textContent = bmiText.idlePending;
       bmiNormal.textContent = '-';
       bmiBmr.textContent = '-';
       help.textContent = msg;
@@ -1545,12 +1591,12 @@
       const sx = sex?.value || '';
 
       if (!(h > 0) || !(w > 0)) {
-        setIdle('키(cm)와 몸무게(kg)를 입력하세요.');
+        setIdle(bmiText.idleNeedInputs);
         return false;
       }
 
       if (h < RANGE.height.min || h > RANGE.height.max || w < RANGE.weight.min || w > RANGE.weight.max) {
-        setIdle(`입력 범위를 확인하세요 (키 ${RANGE.height.min}~${RANGE.height.max}cm, 몸무게 ${RANGE.weight.min}~${RANGE.weight.max}kg).`);
+        setIdle(bmiText.idleRange(RANGE.height.min, RANGE.height.max, RANGE.weight.min, RANGE.weight.max));
         return false;
       }
 
@@ -1562,13 +1608,13 @@
       const hasValidAge = !age?.value || (a >= RANGE.age.min && a <= RANGE.age.max);
       const bmr = hasValidAge ? calcBmr({ w, h, a, sx }) : null;
 
-      bmiValue.textContent = bmi.toLocaleString('ko-KR', { maximumFractionDigits: 2 });
+      bmiValue.textContent = bmi.toLocaleString(numberLocale, { maximumFractionDigits: 2 });
       bmiCategory.textContent = category;
-      bmiNormal.textContent = `${normalMin.toLocaleString('ko-KR', { maximumFractionDigits: 1 })}kg ~ ${normalMax.toLocaleString('ko-KR', { maximumFractionDigits: 1 })}kg`;
+      bmiNormal.textContent = `${normalMin.toLocaleString(numberLocale, { maximumFractionDigits: 1 })}kg ~ ${normalMax.toLocaleString(numberLocale, { maximumFractionDigits: 1 })}kg`;
       bmiBmr.textContent = Number.isFinite(bmr)
-        ? `${Math.round(bmr).toLocaleString('ko-KR')} kcal`
-        : (hasValidAge ? '나이/성별 입력 시 계산' : `나이는 ${RANGE.age.min}~${RANGE.age.max}세 범위로 입력하세요`);
-      help.textContent = `BMI ${bmi.toFixed(2)} (${category}). 성인 기준 참고값이며 진단을 대체하지 않습니다.`;
+        ? `${Math.round(bmr).toLocaleString(numberLocale)} kcal`
+        : (hasValidAge ? bmiText.bmrPending : bmiText.bmrAgeRange(RANGE.age.min, RANGE.age.max));
+      help.textContent = bmiText.help(bmi, category);
       return true;
     };
 
@@ -1585,16 +1631,16 @@
     copyBtn?.addEventListener('click', async () => {
       if (!render() || bmiValue.textContent === '-') {
         const old = copyBtn.textContent;
-        copyBtn.textContent = '입력 확인';
-        setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+        copyBtn.textContent = bmiText.copyInputCheck;
+        setTimeout(() => { copyBtn.textContent = old || bmiText.copyDefault; }, 900);
         return;
       }
 
-      const text = `BMI ${bmiValue.textContent} (${bmiCategory.textContent}) | 정상 체중 범위 ${bmiNormal.textContent} | BMR ${bmiBmr.textContent}`;
+      const text = bmiText.copyText(bmiValue.textContent, bmiCategory.textContent, bmiNormal.textContent, bmiBmr.textContent);
       await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = bmiText.copied;
+      setTimeout(() => { copyBtn.textContent = old || bmiText.copyDefault; }, 900);
     });
 
     if (!height.value) height.value = 170;

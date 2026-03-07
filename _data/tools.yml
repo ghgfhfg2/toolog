@@ -281,29 +281,59 @@
 
 - id: d-day-calculator
   title: 디데이 계산기
+  title_en: D-Day Calculator
+  title_ja: D-Day計算機
   category: data
   category_label: 일정/생산성
+  category_label_en: Schedule/Productivity
+  category_label_ja: 予定/生産性
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 목표일까지 남은 일수·경과일·업무일을 한 번에 계산해요.
+  description_en: Calculate remaining days, elapsed days, and optional business-day difference to a target date in one view.
+  description_ja: 目標日までの残日数・経過日数・営業日差分を1画面でまとめて計算できます。
   url: /tools/d-day-calculator/
+  url_en: /en/tools/d-day-calculator/
+  url_ja: /ja/tools/d-day-calculator/
   thumbnail: /assets/thumbs/d-day-calculator.svg
 
 - id: bmi-calculator
   title: BMI 계산기
+  title_en: BMI Calculator
+  title_ja: BMI計算機
   category: data
   category_label: 건강/피트니스
+  category_label_en: Health/Fitness
+  category_label_ja: 健康/フィットネス
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 키·몸무게로 BMI와 정상 체중 범위, 선택 입력 시 BMR까지 계산해요.
+  description_en: Calculate BMI and healthy weight range from height and weight, with optional BMR estimate from age and sex.
+  description_ja: 身長と体重からBMIと標準体重範囲を計算し、年齢・性別入力時はBMR目安も確認できます。
   url: /tools/bmi-calculator/
+  url_en: /en/tools/bmi-calculator/
+  url_ja: /ja/tools/bmi-calculator/
   thumbnail: /assets/thumbs/bmi-calculator.svg
 
 - id: age-calculator
   title: 만나이 계산기
+  title_en: Age Calculator
+  title_ja: 年齢計算機
   category: data
   category_label: 생활/계산
+  category_label_en: Lifestyle/Date
+  category_label_ja: 生活/日付
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 만 나이·세는나이·총 개월 수·다음 생일 D-day를 한 번에 계산해요.
+  description_en: Calculate exact age, Korean counting age, total months lived, and days left until the next birthday.
+  description_ja: 満年齢・韓国式年齢・生後総月数・次の誕生日までの日数をまとめて計算できます。
   url: /tools/age-calculator/
+  url_en: /en/tools/age-calculator/
+  url_ja: /ja/tools/age-calculator/
   thumbnail: /assets/thumbs/age-calculator.svg
 
 - id: salary-calculator

@@ -46,5 +46,5 @@ If age and sex are provided, it also estimates BMR.
 - Athletes or high-muscle individuals may need additional body-composition checks.
 
 ## Related tools
-- Progress timeline: [D-Day Calculator]({{ '/tools/d-day-calculator/' | relative_url }})
-- Goal percentage tracking: [Percent Calculator]({{ '/tools/percent-calculator/' | relative_url }})
+- Progress timeline: [D-Day Calculator]({{ '/en/tools/d-day-calculator/' | relative_url }})
+- Goal percentage tracking: [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
