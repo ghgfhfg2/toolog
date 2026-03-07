@@ -749,6 +749,40 @@
     const link = document.getElementById('iu-download');
     const result = document.getElementById('iu-result');
 
+    const iuI18n = {
+      ko: {
+        original: (w, h, b) => `원본: ${w}x${h}px / ${b} bytes`,
+        result: (w, h, outBytes, ratio, mode) => `결과: ${w}x${h}px / ${outBytes} bytes (원본 대비 ${ratio}%) · ${mode}`,
+        mode1x: '1x 보정',
+        modeUpscale: (scale) => `${scale}x 업스케일`,
+        denoiseOn: '노이즈 감소 ON',
+        denoiseOff: '노이즈 감소 OFF',
+        sharpOn: '샤픈 ON',
+        sharpOff: '샤픈 OFF'
+      },
+      en: {
+        original: (w, h, b) => `Original: ${w}x${h}px / ${b} bytes`,
+        result: (w, h, outBytes, ratio, mode) => `Result: ${w}x${h}px / ${outBytes} bytes (${ratio}% of original) · ${mode}`,
+        mode1x: '1x enhance',
+        modeUpscale: (scale) => `${scale}x upscale`,
+        denoiseOn: 'Denoise ON',
+        denoiseOff: 'Denoise OFF',
+        sharpOn: 'Sharpen ON',
+        sharpOff: 'Sharpen OFF'
+      },
+      ja: {
+        original: (w, h, b) => `元画像: ${w}x${h}px / ${b} bytes`,
+        result: (w, h, outBytes, ratio, mode) => `結果: ${w}x${h}px / ${outBytes} bytes（元画像比 ${ratio}%）・${mode}`,
+        mode1x: '1x 補正',
+        modeUpscale: (scale) => `${scale}x アップスケール`,
+        denoiseOn: 'ノイズ低減 ON',
+        denoiseOff: 'ノイズ低減 OFF',
+        sharpOn: 'シャープ ON',
+        sharpOff: 'シャープ OFF'
+      }
+    };
+    const iuText = iuI18n[pageLang] || iuI18n.ko;
+
     let img = null;
     let originBytes = 0;
 
@@ -761,7 +795,7 @@
       i.onload = () => {
         img = i;
         URL.revokeObjectURL(u);
-        if (result) result.textContent = `원본: ${i.width}x${i.height}px / ${formatNum(originBytes)} bytes`;
+        if (result) result.textContent = iuText.original(i.width, i.height, formatNum(originBytes));
       };
       i.src = u;
     });
@@ -838,7 +872,7 @@
       stepCanvas.height = img.height;
       stepCtx.drawImage(img, 0, 0);
 
-      // 다단계 업스케일로 품질 저하 완화
+      // Multi-step upscale to reduce quality loss
       let cw = img.width;
       let ch = img.height;
       while (cw * 2 < w && ch * 2 < h) {
@@ -868,11 +902,11 @@
       const outBytes = Math.floor((data.length * 3) / 4);
       const ratio = originBytes ? ((outBytes / originBytes) * 100).toFixed(1) : '0';
       const mode = [
-        scale === 1 ? '1x 보정' : `${scale}x 업스케일`,
-        denoise?.checked ? '노이즈 감소 ON' : '노이즈 감소 OFF',
-        sharp?.checked ? '샤픈 ON' : '샤픈 OFF'
+        scale === 1 ? iuText.mode1x : iuText.modeUpscale(scale),
+        denoise?.checked ? iuText.denoiseOn : iuText.denoiseOff,
+        sharp?.checked ? iuText.sharpOn : iuText.sharpOff
       ].join(' · ');
-      if (result) result.textContent = `결과: ${w}x${h}px / ${formatNum(outBytes)} bytes (원본 대비 ${ratio}%) · ${mode}`;
+      if (result) result.textContent = iuText.result(w, h, formatNum(outBytes), ratio, mode);
     });
   }
 
@@ -894,6 +928,49 @@
     const help = document.getElementById('pw-help');
 
     if (!lenInput || !countInput || !upper || !lower || !number || !symbol || !runBtn || !copyAllBtn || !output || !strength || !poolOut || !combosOut || !bitsOut || !help) return;
+
+    const pwI18n = {
+      ko: {
+        scoreLow: '낮음',
+        scoreMedium: '보통',
+        scoreStrong: '강함',
+        scoreVeryStrong: '매우 강함',
+        poolUnit: '자',
+        chooseType: '최소 1개 문자 유형을 선택해 주세요.',
+        tooShort: (length, n) => `현재 길이(${length})로는 선택한 문자 유형 ${n}개를 모두 포함할 수 없습니다.`,
+        generatedAll: (length, count) => `길이 ${length}, ${count}개 생성 완료. 각 비밀번호는 선택한 모든 문자 유형을 최소 1개 이상 포함합니다.`,
+        generatedPartial: (size, count) => `중복 없는 비밀번호 ${size}개를 생성했습니다. (요청 ${count}개, 문자풀/길이 조합 제한)`,
+        copied: '복사됨',
+        copyDefault: '전체 복사'
+      },
+      en: {
+        scoreLow: 'Low',
+        scoreMedium: 'Medium',
+        scoreStrong: 'Strong',
+        scoreVeryStrong: 'Very strong',
+        poolUnit: 'chars',
+        chooseType: 'Select at least one character type.',
+        tooShort: (length, n) => `Current length (${length}) cannot include all ${n} selected character types.`,
+        generatedAll: (length, count) => `Generated ${count} password(s) at length ${length}. Each password includes every selected character type at least once.`,
+        generatedPartial: (size, count) => `Generated ${size} unique password(s). (Requested: ${count}; limited by pool/length combination)`,
+        copied: 'Copied',
+        copyDefault: 'Copy all'
+      },
+      ja: {
+        scoreLow: '低い',
+        scoreMedium: '普通',
+        scoreStrong: '強い',
+        scoreVeryStrong: '非常に強い',
+        poolUnit: '文字',
+        chooseType: '文字種を1つ以上選択してください。',
+        tooShort: (length, n) => `現在の長さ（${length}）では、選択した${n}種類すべてを含められません。`,
+        generatedAll: (length, count) => `長さ${length}で${count}件生成しました。各パスワードは選択した文字種をすべて最低1文字含みます。`,
+        generatedPartial: (size, count) => `重複なしパスワードを${size}件生成しました。（要求${count}件、文字プール/長さの組み合わせ制限）`,
+        copied: 'コピー完了',
+        copyDefault: 'すべてコピー'
+      }
+    };
+    const pwText = pwI18n[pageLang] || pwI18n.ko;
 
     const SETS = {
       upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
@@ -921,7 +998,7 @@
 
     const toScientificFromLog10 = (log10Value) => {
       if (!Number.isFinite(log10Value)) return '-';
-      if (log10Value < 6) return Math.round(10 ** log10Value).toLocaleString('ko-KR');
+      if (log10Value < 6) return Math.round(10 ** log10Value).toLocaleString(numberLocale);
       const exp = Math.floor(log10Value);
       const mantissa = (10 ** (log10Value - exp)).toFixed(2);
       return `${mantissa}e+${exp}`;
@@ -945,10 +1022,10 @@
     };
 
     const scoreLabel = (bits) => {
-      if (bits < 40) return '낮음';
-      if (bits < 60) return '보통';
-      if (bits < 80) return '강함';
-      return '매우 강함';
+      if (bits < 40) return pwText.scoreLow;
+      if (bits < 60) return pwText.scoreMedium;
+      if (bits < 80) return pwText.scoreStrong;
+      return pwText.scoreVeryStrong;
     };
 
     const renderStats = (poolSize, len) => {
@@ -962,9 +1039,9 @@
       const bits = len * Math.log2(poolSize);
       const log10Combos = len * Math.log10(poolSize);
       strength.textContent = scoreLabel(bits);
-      poolOut.textContent = `${poolSize.toLocaleString('ko-KR')}자`;
+      poolOut.textContent = `${poolSize.toLocaleString(numberLocale)} ${pwText.poolUnit}`;
       combosOut.textContent = toScientificFromLog10(log10Combos);
-      bitsOut.textContent = `${bits.toLocaleString('ko-KR', { maximumFractionDigits: 1 })} bit`;
+      bitsOut.textContent = `${bits.toLocaleString(numberLocale, { maximumFractionDigits: 1 })} bit`;
     };
 
     const generate = () => {
@@ -977,14 +1054,14 @@
       if (!normalized.length || !pool.length) {
         output.value = '';
         renderStats(0, length);
-        help.textContent = '최소 1개 문자 유형을 선택해 주세요.';
+        help.textContent = pwText.chooseType;
         return;
       }
 
       if (length < normalized.length) {
         output.value = '';
         renderStats(pool.length, length);
-        help.textContent = `현재 길이(${length})로는 선택한 문자 유형 ${normalized.length}개를 모두 포함할 수 없습니다.`;
+        help.textContent = pwText.tooShort(length, normalized.length);
         return;
       }
 
@@ -1008,9 +1085,9 @@
 
       output.value = list.join('\n');
       if (list.length === count) {
-        help.textContent = `길이 ${length}, ${count}개 생성 완료. 각 비밀번호는 선택한 모든 문자 유형을 최소 1개 이상 포함합니다.`;
+        help.textContent = pwText.generatedAll(length, count);
       } else {
-        help.textContent = `중복 없는 비밀번호 ${list.length}개를 생성했습니다. (요청 ${count}개, 문자풀/길이 조합 제한)`;
+        help.textContent = pwText.generatedPartial(list.length, count);
       }
     };
 
@@ -1040,8 +1117,8 @@
       if (!output.value.trim()) return;
       await copyText(output.value.trim());
       const old = copyAllBtn.textContent;
-      copyAllBtn.textContent = '복사됨';
-      setTimeout(() => { copyAllBtn.textContent = old || '전체 복사'; }, 900);
+      copyAllBtn.textContent = pwText.copied;
+      setTimeout(() => { copyAllBtn.textContent = old || pwText.copyDefault; }, 900);
     });
 
     generate();
@@ -1062,11 +1139,63 @@
 
     if (!m2Input || !pyeongInput || !priceInput || !outM2 || !outPyeong || !outPricePer || !outPricePer10k || !help) return;
 
+    const pyI18n = {
+      ko: {
+        currency: '원',
+        unitPyeong: '평',
+        unitManwon: '만원',
+        unitEok: '억원',
+        invalidNumber: '숫자 형식으로 입력해 주세요.',
+        needPositiveInput: '㎡ 또는 평 중 하나를 0보다 크게 입력하세요.',
+        areaPositive: '면적은 0보다 커야 합니다.',
+        summaryPrice: (m2, p, per10k, eokText) => `입력 면적 ${m2}㎡(약 ${p}평) 기준 평당가는 ${per10k}만원${eokText ? ` (${eokText})` : ''}입니다.`,
+        summaryArea: (m2, p) => `면적 ${m2}㎡ = 약 ${p}평`,
+        needAreaFirst: '㎡ 또는 평 중 하나를 먼저 입력하세요.',
+        copyText: (m2, p, pricePer, pricePer10k) => `평수 계산 결과 | ${m2} | ${p} | 평당가 ${pricePer} (${pricePer10k})`,
+        copied: '복사됨',
+        copyDefault: '결과 복사',
+        idle: '㎡ 또는 평 중 하나를 입력하면 자동으로 변환됩니다.'
+      },
+      en: {
+        currency: 'KRW',
+        unitPyeong: 'pyeong',
+        unitManwon: '10k KRW',
+        unitEok: '100M KRW',
+        invalidNumber: 'Please enter valid numeric values.',
+        needPositiveInput: 'Enter either m² or pyeong greater than 0.',
+        areaPositive: 'Area must be greater than 0.',
+        summaryPrice: (m2, p, per10k, eokText) => `For ${m2}m² (about ${p} pyeong), price per pyeong is ${per10k} ${eokText ? `(${eokText})` : ''}.`,
+        summaryArea: (m2, p) => `${m2}m² = about ${p} pyeong`,
+        needAreaFirst: 'Enter m² or pyeong first.',
+        copyText: (m2, p, pricePer, pricePer10k) => `Pyeong conversion result | ${m2} | ${p} | Price per pyeong ${pricePer} (${pricePer10k})`,
+        copied: 'Copied',
+        copyDefault: 'Copy result',
+        idle: 'Enter either m² or pyeong to convert automatically.'
+      },
+      ja: {
+        currency: 'ウォン',
+        unitPyeong: '坪',
+        unitManwon: '万ウォン',
+        unitEok: '億ウォン',
+        invalidNumber: '数値形式で入力してください。',
+        needPositiveInput: '㎡または坪のどちらかに0より大きい値を入力してください。',
+        areaPositive: '面積は0より大きい必要があります。',
+        summaryPrice: (m2, p, per10k, eokText) => `入力面積 ${m2}㎡（約${p}坪）を基準にした坪単価は ${per10k}${eokText ? `（${eokText}）` : ''}です。`,
+        summaryArea: (m2, p) => `面積 ${m2}㎡ = 約${p}坪`,
+        needAreaFirst: '先に㎡または坪を入力してください。',
+        copyText: (m2, p, pricePer, pricePer10k) => `坪数計算結果 | ${m2} | ${p} | 坪単価 ${pricePer} (${pricePer10k})`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー',
+        idle: '㎡または坪を入力すると自動で変換されます。'
+      }
+    };
+    const pyText = pyI18n[pageLang] || pyI18n.ko;
+
     let lock = false;
 
-    const fmt = (v, max = 4) => Number(v).toLocaleString('ko-KR', { maximumFractionDigits: max });
-    const fmtKRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
-    const fmtEok = (v) => `${fmt(v / 100000000, 2)}억원`;
+    const fmt = (v, max = 4) => Number(v).toLocaleString(numberLocale, { maximumFractionDigits: max });
+    const fmtKRW = (v) => `${Math.round(v).toLocaleString(numberLocale)} ${pyText.currency}`;
+    const fmtEok = (v) => `${fmt(v / 100000000, 2)} ${pyText.unitEok}`;
 
     const setIdle = (msg) => {
       outM2.textContent = '-';
@@ -1098,12 +1227,12 @@
       const price = Number.isFinite(priceRaw) ? Math.max(0, priceRaw) : 0;
 
       if (!Number.isFinite(m2Raw) || !Number.isFinite(pRaw)) {
-        setIdle('숫자 형식으로 입력해 주세요.');
+        setIdle(pyText.invalidNumber);
         return;
       }
 
       if (m2Raw <= 0 && pRaw <= 0) {
-        setIdle('㎡ 또는 평 중 하나를 0보다 크게 입력하세요.');
+        setIdle(pyText.needPositiveInput);
         return;
       }
 
@@ -1119,7 +1248,7 @@
       }
 
       if (!(m2 > 0) || !(p > 0)) {
-        setIdle('면적은 0보다 커야 합니다.');
+        setIdle(pyText.areaPositive);
         return;
       }
 
@@ -1129,20 +1258,21 @@
       lock = false;
 
       outM2.textContent = `${fmt(m2, 2)}㎡`;
-      outPyeong.textContent = `${fmt(p, 2)}평`;
+      outPyeong.textContent = `${fmt(p, 2)} ${pyText.unitPyeong}`;
 
       if (price > 0) {
         const per = price / p;
         const per10k = per / 10000;
+        const eokText = per >= 100000000 ? fmtEok(per) : '';
         outPricePer.textContent = fmtKRW(per);
-        outPricePer10k.textContent = per >= 100000000
-          ? `${fmt(per10k, 1)}만원 (${fmtEok(per)})`
-          : `${fmt(per10k, 1)}만원`;
-        help.textContent = `입력 면적 ${fmt(m2, 2)}㎡(약 ${fmt(p, 2)}평) 기준 평당가는 ${fmt(per10k, 1)}만원${per >= 100000000 ? ` (${fmtEok(per)})` : ''}입니다.`;
+        outPricePer10k.textContent = eokText
+          ? `${fmt(per10k, 1)} ${pyText.unitManwon} (${eokText})`
+          : `${fmt(per10k, 1)} ${pyText.unitManwon}`;
+        help.textContent = pyText.summaryPrice(fmt(m2, 2), fmt(p, 2), fmt(per10k, 1), eokText);
       } else {
         outPricePer.textContent = '-';
         outPricePer10k.textContent = '-';
-        help.textContent = `면적 ${fmt(m2, 2)}㎡ = 약 ${fmt(p, 2)}평`; 
+        help.textContent = pyText.summaryArea(fmt(m2, 2), fmt(p, 2));
       }
     };
 
@@ -1151,26 +1281,26 @@
     priceInput.addEventListener('input', () => {
       if (Number(m2Input.value || 0) > 0) render('m2');
       else if (Number(pyeongInput.value || 0) > 0) render('pyeong');
-      else setIdle('㎡ 또는 평 중 하나를 먼저 입력하세요.');
+      else setIdle(pyText.needAreaFirst);
     });
 
     copyBtn?.addEventListener('click', async () => {
       if (outM2.textContent === '-') return;
-      const text = `평수 계산 결과 | ${outM2.textContent} | ${outPyeong.textContent} | 평당가 ${outPricePer.textContent} (${outPricePer10k.textContent})`;
+      const text = pyText.copyText(outM2.textContent, outPyeong.textContent, outPricePer.textContent, outPricePer10k.textContent);
       await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = pyText.copied;
+      setTimeout(() => { copyBtn.textContent = old || pyText.copyDefault; }, 900);
     });
 
     resetBtn?.addEventListener('click', () => {
       m2Input.value = '';
       pyeongInput.value = '';
       priceInput.value = '';
-      setIdle('㎡ 또는 평 중 하나를 입력하면 자동으로 변환됩니다.');
+      setIdle(pyText.idle);
     });
 
-    setIdle('㎡ 또는 평 중 하나를 입력하면 자동으로 변환됩니다.');
+    setIdle(pyText.idle);
   }
 
   if (slug === 'd-day-calculator') {

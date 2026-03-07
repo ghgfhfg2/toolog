@@ -141,18 +141,18 @@ layout: default
           <input id="iu-file" type="file" accept="image/*" />
           <div class="tool-row-grid pct-grid">
             <select id="iu-scale">
-              <option value="1">1x (업스케일 없이 보정만)</option>
-              <option value="2">2x 업스케일</option>
-              <option value="3">3x 업스케일</option>
-              <option value="4">4x 업스케일</option>
+              <option value="1">{% if page.lang == 'en' %}1x (enhance only, no upscale){% elsif page.lang == 'ja' %}1x（拡大なし・補正のみ）{% else %}1x (업스케일 없이 보정만){% endif %}</option>
+              <option value="2">{% if page.lang == 'en' %}2x upscale{% elsif page.lang == 'ja' %}2倍アップスケール{% else %}2x 업스케일{% endif %}</option>
+              <option value="3">{% if page.lang == 'en' %}3x upscale{% elsif page.lang == 'ja' %}3倍アップスケール{% else %}3x 업스케일{% endif %}</option>
+              <option value="4">{% if page.lang == 'en' %}4x upscale{% elsif page.lang == 'ja' %}4倍アップスケール{% else %}4x 업스케일{% endif %}</option>
             </select>
-            <button id="iu-run" type="button">화질 보정 실행</button>
+            <button id="iu-run" type="button">{% if page.lang == 'en' %}Run enhancement{% elsif page.lang == 'ja' %}補正を実行{% else %}화질 보정 실행{% endif %}</button>
           </div>
-          <label class="tool-check"><input id="iu-sharp" type="checkbox" checked /> 선명도 보정(가벼운 샤픈)</label>
-          <label class="tool-check"><input id="iu-denoise" type="checkbox" checked /> 노이즈 감소(부드럽게)</label>
-          <p class="tool-result" id="iu-result">이미지를 선택한 뒤 보정을 실행하세요. (1x는 확대 없이 보정만 적용)</p>
+          <label class="tool-check"><input id="iu-sharp" type="checkbox" checked /> {% if page.lang == 'en' %}Sharpen (light){% elsif page.lang == 'ja' %}シャープ補正（軽め）{% else %}선명도 보정(가벼운 샤픈){% endif %}</label>
+          <label class="tool-check"><input id="iu-denoise" type="checkbox" checked /> {% if page.lang == 'en' %}Noise reduction (smooth){% elsif page.lang == 'ja' %}ノイズ低減（なめらか）{% else %}노이즈 감소(부드럽게){% endif %}</label>
+          <p class="tool-result" id="iu-result">{% if page.lang == 'en' %}Choose an image, then run enhancement. (1x applies enhancement only.){% elsif page.lang == 'ja' %}画像を選んで補正を実行してください。（1xは拡大せず補正のみ）{% else %}이미지를 선택한 뒤 보정을 실행하세요. (1x는 확대 없이 보정만 적용){% endif %}</p>
           <canvas id="iu-canvas"></canvas>
-          <a id="iu-download" class="open-link" download="upscaled-image.png">다운로드</a>
+          <a id="iu-download" class="open-link" download="upscaled-image.png">{% if page.lang == 'en' %}Download{% elsif page.lang == 'ja' %}ダウンロード{% else %}다운로드{% endif %}</a>
         </div>
       {% when 'blog-banned-word-checker' %}
         <div class="tool-ui">
@@ -252,73 +252,73 @@ layout: default
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="pw-length">비밀번호 길이</label>
+              <label for="pw-length">{% if page.lang == 'en' %}Password length{% elsif page.lang == 'ja' %}パスワード長{% else %}비밀번호 길이{% endif %}</label>
               <input id="pw-length" type="number" min="4" max="128" step="1" value="16" inputmode="numeric" />
             </div>
             <div>
-              <label for="pw-count">생성 개수</label>
+              <label for="pw-count">{% if page.lang == 'en' %}Count{% elsif page.lang == 'ja' %}生成件数{% else %}생성 개수{% endif %}</label>
               <input id="pw-count" type="number" min="1" max="20" step="1" value="5" inputmode="numeric" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="pw-upper" type="checkbox" checked /> 영문 대문자 (A-Z)</label>
-            <label class="tool-check"><input id="pw-lower" type="checkbox" checked /> 영문 소문자 (a-z)</label>
+            <label class="tool-check"><input id="pw-upper" type="checkbox" checked /> {% if page.lang == 'en' %}Uppercase letters (A-Z){% elsif page.lang == 'ja' %}英大文字 (A-Z){% else %}영문 대문자 (A-Z){% endif %}</label>
+            <label class="tool-check"><input id="pw-lower" type="checkbox" checked /> {% if page.lang == 'en' %}Lowercase letters (a-z){% elsif page.lang == 'ja' %}英小文字 (a-z){% else %}영문 소문자 (a-z){% endif %}</label>
           </div>
           <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="pw-number" type="checkbox" checked /> 숫자 (0-9)</label>
-            <label class="tool-check"><input id="pw-symbol" type="checkbox" checked /> 특수문자 (!@#$...)</label>
+            <label class="tool-check"><input id="pw-number" type="checkbox" checked /> {% if page.lang == 'en' %}Numbers (0-9){% elsif page.lang == 'ja' %}数字 (0-9){% else %}숫자 (0-9){% endif %}</label>
+            <label class="tool-check"><input id="pw-symbol" type="checkbox" checked /> {% if page.lang == 'en' %}Symbols (!@#$...){% elsif page.lang == 'ja' %}記号 (!@#$...){% else %}특수문자 (!@#$...){% endif %}</label>
           </div>
-          <label class="tool-check"><input id="pw-exclude-similar" type="checkbox" /> 헷갈리는 문자 제외 (O/0, l/I/1 등)</label>
+          <label class="tool-check"><input id="pw-exclude-similar" type="checkbox" /> {% if page.lang == 'en' %}Exclude similar characters (O/0, l/I/1, etc.){% elsif page.lang == 'ja' %}紛らわしい文字を除外（O/0, l/I/1 など）{% else %}헷갈리는 문자 제외 (O/0, l/I/1 등){% endif %}</label>
 
           <div class="tool-row-grid pct-actions">
-            <button id="pw-run" type="button">비밀번호 생성</button>
-            <button id="pw-copy-all" type="button">전체 복사</button>
+            <button id="pw-run" type="button">{% if page.lang == 'en' %}Generate passwords{% elsif page.lang == 'ja' %}パスワード生成{% else %}비밀번호 생성{% endif %}</button>
+            <button id="pw-copy-all" type="button">{% if page.lang == 'en' %}Copy all{% elsif page.lang == 'ja' %}すべてコピー{% else %}전체 복사{% endif %}</button>
           </div>
 
           <div class="tool-stats">
-            <div><strong id="pw-strength">-</strong><span>강도 추정</span></div>
-            <div><strong id="pw-pool">-</strong><span>문자 풀 크기</span></div>
-            <div><strong id="pw-combos">-</strong><span>가능 조합 수(근사)</span></div>
-            <div><strong id="pw-bits">-</strong><span>엔트로피(비트)</span></div>
+            <div><strong id="pw-strength">-</strong><span>{% if page.lang == 'en' %}Estimated strength{% elsif page.lang == 'ja' %}強度目安{% else %}강도 추정{% endif %}</span></div>
+            <div><strong id="pw-pool">-</strong><span>{% if page.lang == 'en' %}Pool size{% elsif page.lang == 'ja' %}文字プール数{% else %}문자 풀 크기{% endif %}</span></div>
+            <div><strong id="pw-combos">-</strong><span>{% if page.lang == 'en' %}Possible combinations (approx.){% elsif page.lang == 'ja' %}組み合わせ数（概算）{% else %}가능 조합 수(근사){% endif %}</span></div>
+            <div><strong id="pw-bits">-</strong><span>{% if page.lang == 'en' %}Entropy (bits){% elsif page.lang == 'ja' %}エントロピー（bit）{% else %}엔트로피(비트){% endif %}</span></div>
           </div>
 
-          <textarea id="pw-output" rows="7" readonly placeholder="생성된 비밀번호가 여기에 표시됩니다."></textarea>
-          <p class="tool-result" id="pw-help">옵션을 고르고 생성 버튼을 누르면 안전한 랜덤 비밀번호를 만듭니다.</p>
+          <textarea id="pw-output" rows="7" readonly placeholder="{% if page.lang == 'en' %}Generated passwords appear here.{% elsif page.lang == 'ja' %}生成されたパスワードがここに表示されます。{% else %}생성된 비밀번호가 여기에 표시됩니다.{% endif %}"></textarea>
+          <p class="tool-result" id="pw-help">{% if page.lang == 'en' %}Choose options and click generate to create secure random passwords.{% elsif page.lang == 'ja' %}オプションを選んで生成を押すと、安全なランダムパスワードを作成します。{% else %}옵션을 고르고 생성 버튼을 누르면 안전한 랜덤 비밀번호를 만듭니다.{% endif %}</p>
         </div>
       {% when 'pyeong-calculator' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="py-m2">면적(㎡)</label>
-              <input id="py-m2" type="number" min="0" step="0.01" placeholder="예: 84" inputmode="decimal" />
+              <label for="py-m2">{% if page.lang == 'en' %}Area (m²){% elsif page.lang == 'ja' %}面積（㎡）{% else %}면적(㎡){% endif %}</label>
+              <input id="py-m2" type="number" min="0" step="0.01" placeholder="{% if page.lang == 'en' %}e.g., 84{% elsif page.lang == 'ja' %}例: 84{% else %}예: 84{% endif %}" inputmode="decimal" />
             </div>
             <div>
-              <label for="py-pyeong">면적(평)</label>
-              <input id="py-pyeong" type="number" min="0" step="0.01" placeholder="예: 25.41" inputmode="decimal" />
+              <label for="py-pyeong">{% if page.lang == 'en' %}Area (pyeong){% elsif page.lang == 'ja' %}面積（坪）{% else %}면적(평){% endif %}</label>
+              <input id="py-pyeong" type="number" min="0" step="0.01" placeholder="{% if page.lang == 'en' %}e.g., 25.41{% elsif page.lang == 'ja' %}例: 25.41{% else %}예: 25.41{% endif %}" inputmode="decimal" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="py-price">총액(원, 선택)</label>
-              <input id="py-price" type="number" min="0" step="10000" placeholder="예: 900000000" inputmode="numeric" />
+              <label for="py-price">{% if page.lang == 'en' %}Total price (KRW, optional){% elsif page.lang == 'ja' %}総額（KRW・任意）{% else %}총액(원, 선택){% endif %}</label>
+              <input id="py-price" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g., 900000000{% elsif page.lang == 'ja' %}例: 900000000{% else %}예: 900000000{% endif %}" inputmode="numeric" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="py-copy" type="button">결과 복사</button>
-            <button id="py-reset" type="button">초기화</button>
+            <button id="py-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="py-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
 
           <div class="tool-stats">
-            <div><strong id="py-out-m2">-</strong><span>제곱미터(㎡)</span></div>
-            <div><strong id="py-out-pyeong">-</strong><span>평</span></div>
-            <div><strong id="py-price-per">-</strong><span>평당가</span></div>
-            <div><strong id="py-price-per-10k">-</strong><span>평당가(만원)</span></div>
+            <div><strong id="py-out-m2">-</strong><span>{% if page.lang == 'en' %}Square meters (m²){% elsif page.lang == 'ja' %}平方メートル（㎡）{% else %}제곱미터(㎡){% endif %}</span></div>
+            <div><strong id="py-out-pyeong">-</strong><span>{% if page.lang == 'en' %}Pyeong{% elsif page.lang == 'ja' %}坪{% else %}평{% endif %}</span></div>
+            <div><strong id="py-price-per">-</strong><span>{% if page.lang == 'en' %}Price per pyeong{% elsif page.lang == 'ja' %}坪単価{% else %}평당가{% endif %}</span></div>
+            <div><strong id="py-price-per-10k">-</strong><span>{% if page.lang == 'en' %}Price per pyeong (10k KRW){% elsif page.lang == 'ja' %}坪単価（万ウォン）{% else %}평당가(만원){% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="py-help">㎡ 또는 평 중 하나를 입력하면 자동으로 변환됩니다.</p>
+          <p class="tool-result" id="py-help">{% if page.lang == 'en' %}Enter either m² or pyeong to convert automatically.{% elsif page.lang == 'ja' %}㎡または坪のどちらかを入力すると自動変換されます。{% else %}㎡ 또는 평 중 하나를 입력하면 자동으로 변환됩니다.{% endif %}</p>
         </div>
       {% when 'd-day-calculator' %}
         <div class="tool-ui">
