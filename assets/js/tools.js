@@ -2673,7 +2673,14 @@
 
     const detectMode = (roots) => {
       if (roots.every((v) => Array.isArray(v))) return 'array-concat';
-      if (roots.every((v) => v && typeof v === 'object' && !Array.isArray(v))) return 'object-merge';
+      if (roots.every((v) => v && typeof v === 'object' && !Array.isArray(v))) {
+        // 흔한 패턴: { items: [...] } 형태를 파일별로 분할 저장한 경우
+        const keySets = roots.map((obj) => Object.keys(obj));
+        const commonKeys = keySets.reduce((acc, keys) => acc.filter((k) => keys.includes(k)), keySets[0] || []);
+        const arrayCommonKeys = commonKeys.filter((k) => roots.every((obj) => Array.isArray(obj[k])));
+        if (arrayCommonKeys.length === 1) return 'object-array-concat';
+        return 'object-merge';
+      }
       return 'wrap-array';
     };
 
@@ -2712,6 +2719,19 @@
 
         if (mode === 'array-concat') {
           merged = parsed.flatMap((v) => Array.isArray(v) ? v : [v]);
+        } else if (mode === 'object-array-concat') {
+          const keySets = parsed.map((obj) => Object.keys(obj));
+          const commonKeys = keySets.reduce((acc, keys) => acc.filter((k) => keys.includes(k)), keySets[0] || []);
+          const arrayKey = commonKeys.find((k) => parsed.every((obj) => Array.isArray(obj[k])));
+          merged = { ...(parsed[0] || {}) };
+          merged[arrayKey] = parsed.flatMap((obj) => Array.isArray(obj[arrayKey]) ? obj[arrayKey] : []);
+          parsed.slice(1).forEach((obj) => {
+            Object.keys(obj || {}).forEach((k) => {
+              if (k === arrayKey) return;
+              if (Object.prototype.hasOwnProperty.call(merged, k)) conflicts += 1;
+              merged[k] = obj[k];
+            });
+          });
         } else if (mode === 'object-merge') {
           merged = {};
           parsed.forEach((obj) => {
@@ -2736,7 +2756,13 @@
         itemCount.textContent = fmt(getCount(merged));
         conflictCount.textContent = fmt(conflicts);
         sizeOut.textContent = fmt(new TextEncoder().encode(pretty).length);
-        help.textContent = `${files.length}개 파일 병합 완료 (${mode}). 다운로드 버튼으로 저장하세요.`;
+        const modeLabelMap = {
+          'array-concat': '배열 이어붙이기',
+          'object-merge': '객체 키 병합',
+          'object-array-concat': '객체 내 공통 배열 자동 이어붙이기',
+          'wrap-array': '파일별 루트 배열 감싸기'
+        };
+        help.textContent = `${files.length}개 파일 병합 완료 (${modeLabelMap[mode] || mode}). 다운로드 버튼으로 저장하세요.`;
       } catch (err) {
         output.value = '';
         itemCount.textContent = '-';
