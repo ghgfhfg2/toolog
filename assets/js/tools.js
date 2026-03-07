@@ -1716,8 +1716,48 @@
 
     if (!mode || !listPrice || !discountRate || !coupon || !quantity || !shipping || !targetPrice || !discountAmount || !unitPrice || !finalTotal || !effectiveRate || !help) return;
 
-    const fmtKRW = (v) => `${Math.round(v).toLocaleString('ko-KR')}원`;
-    const fmtPct = (v) => `${v.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}%`;
+    const discountI18n = {
+      ko: {
+        currency: '원',
+        needPrice: '정가를 0원보다 크게 입력하세요.',
+        invalidRate: '할인율은 0%~100% 범위에서 입력하세요.',
+        forwardHelp: (price, q) => `${price} 상품 ${q}개 기준, 쿠폰/배송비까지 반영한 최종 결제금액입니다.`,
+        reverseHighTarget: '목표 판매가(1개 기준)가 정가보다 높아 할인율은 0%로 표시됩니다.',
+        reverseHelp: (price, target, rate) => `정가 ${price}(1개)를 목표가 ${target}로 맞추려면 약 ${rate} 할인이 필요합니다.`,
+        copyText: (discount, unit, total, rate) => `할인 계산 결과 | 할인 금액: ${discount} | 할인 후 단가: ${unit} | 최종 결제금액: ${total} | 실질 할인율: ${rate}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        currency: '$',
+        needPrice: 'Enter a list price greater than 0.',
+        invalidRate: 'Discount rate must be between 0% and 100%.',
+        forwardHelp: (price, q) => `Final payable amount for ${q} item(s), including coupon and shipping, based on list price ${price}.`,
+        reverseHighTarget: 'Target selling price is higher than list price, so required discount is shown as 0%.',
+        reverseHelp: (price, target, rate) => `To lower ${price} (per item) to target ${target}, you need about ${rate} discount.`,
+        copyText: (discount, unit, total, rate) => `Discount calculation | Discount amount: ${discount} | Discounted unit price: ${unit} | Final payable amount: ${total} | Effective discount rate: ${rate}`,
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        currency: '円',
+        needPrice: '定価は0より大きい値を入力してください。',
+        invalidRate: '割引率は0%〜100%の範囲で入力してください。',
+        forwardHelp: (price, q) => `定価${price}・${q}個を基準に、クーポンと送料を反映した最終支払金額です。`,
+        reverseHighTarget: '目標販売価格（1個あたり）が定価より高いため、必要割引率は0%で表示します。',
+        reverseHelp: (price, target, rate) => `定価${price}（1個）を目標価格${target}にするには、約${rate}の割引が必要です。`,
+        copyText: (discount, unit, total, rate) => `割引計算結果 | 割引額: ${discount} | 割引後単価: ${unit} | 最終支払金額: ${total} | 実質割引率: ${rate}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    };
+    const dcText = discountI18n[pageLang] || discountI18n.ko;
+    const fmtKRW = (v) => {
+      const rounded = Math.round(v).toLocaleString(numberLocale);
+      if (pageLang === 'en') return `${dcText.currency}${rounded}`;
+      return `${rounded}${dcText.currency}`;
+    };
+    const fmtPct = (v) => `${v.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}%`;
     const n = (el, fallback = 0) => {
       const num = Number(el?.value || fallback);
       return Number.isFinite(num) ? num : fallback;
@@ -1762,14 +1802,14 @@
       const ship = Math.max(0, n(shipping));
 
       if (price <= 0) {
-        setOutput({ message: '정가를 0원보다 크게 입력하세요.' });
+        setOutput({ message: dcText.needPrice });
         return;
       }
 
       if ((mode.value || 'forward') === 'forward') {
         const rate = n(discountRate);
         if (rate < 0 || rate > 100) {
-          setOutput({ message: '할인율은 0%~100% 범위에서 입력하세요.' });
+          setOutput({ message: dcText.invalidRate });
           return;
         }
 
@@ -1786,7 +1826,7 @@
         unitPrice.textContent = fmtKRW(unit);
         finalTotal.textContent = fmtKRW(total);
         effectiveRate.textContent = fmtPct(Math.max(0, effRate));
-        help.textContent = `${fmtKRW(price)} 상품 ${q}개 기준, 쿠폰/배송비까지 반영한 최종 결제금액입니다.`;
+        help.textContent = dcText.forwardHelp(fmtKRW(price), q);
       } else {
         const target = Math.max(0, n(targetPrice));
         if (target > price) {
@@ -1794,7 +1834,7 @@
           unitPrice.textContent = fmtKRW(target);
           finalTotal.textContent = fmtKRW(target);
           effectiveRate.textContent = fmtPct(0);
-          help.textContent = '목표 판매가(1개 기준)가 정가보다 높아 할인율은 0%로 표시됩니다.';
+          help.textContent = dcText.reverseHighTarget;
           return;
         }
 
@@ -1803,18 +1843,18 @@
         unitPrice.textContent = fmtKRW(target);
         finalTotal.textContent = fmtKRW(target);
         effectiveRate.textContent = fmtPct(Math.max(0, needRate));
-        help.textContent = `정가 ${fmtKRW(price)}(1개)를 목표가 ${fmtKRW(target)}로 맞추려면 약 ${fmtPct(needRate)} 할인이 필요합니다.`;
+        help.textContent = dcText.reverseHelp(fmtKRW(price), fmtKRW(target), fmtPct(needRate));
       }
     };
 
     [mode, listPrice, discountRate, coupon, quantity, shipping, targetPrice].forEach((el) => el?.addEventListener('input', render));
 
     copyBtn?.addEventListener('click', async () => {
-      const text = `할인 계산 결과 | 할인 금액: ${discountAmount.textContent} | 할인 후 단가: ${unitPrice.textContent} | 최종 결제금액: ${finalTotal.textContent} | 실질 할인율: ${effectiveRate.textContent}`;
+      const text = dcText.copyText(discountAmount.textContent, unitPrice.textContent, finalTotal.textContent, effectiveRate.textContent);
       await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = dcText.copied;
+      setTimeout(() => { copyBtn.textContent = old || dcText.copyDefault; }, 900);
     });
 
     resetBtn?.addEventListener('click', () => {
@@ -1847,6 +1887,58 @@
     const resetBtn = document.getElementById('age-reset');
 
     if (!birth || !target || !international || !korean || !months || !days || !nextBirthday) return;
+
+    const ageI18n = {
+      ko: {
+        years: '세',
+        months: '개월',
+        days: '일',
+        hidden: '숨김',
+        idleNeedBoth: '생년월일과 기준일을 입력하세요.',
+        idleInvalid: '생년월일은 기준일보다 늦을 수 없습니다.',
+        nextBirthday: (date, dday) => `다음 생일: ${date} (${dday})`,
+        dday: 'D-day',
+        dminus: (days) => `D-${days}`,
+        copyInputCheck: '입력 확인',
+        copyDefault: '결과 복사',
+        copied: '복사됨',
+        copyText: (intl, kr, m, d, next) => `나이 계산 결과 | 만 나이 ${intl} | 세는나이 ${kr} | 총 ${m} / ${d} | ${next}`,
+        firstMessage: '생년월일을 입력하면 나이 계산 결과가 표시됩니다.'
+      },
+      en: {
+        years: ' years',
+        months: ' months',
+        days: ' days',
+        hidden: 'Hidden',
+        idleNeedBoth: 'Enter birth date and reference date.',
+        idleInvalid: 'Birth date cannot be later than the reference date.',
+        nextBirthday: (date, dday) => `Next birthday: ${date} (${dday})`,
+        dday: 'D-day',
+        dminus: (days) => `D-${days}`,
+        copyInputCheck: 'Check inputs',
+        copyDefault: 'Copy result',
+        copied: 'Copied',
+        copyText: (intl, kr, m, d, next) => `Age calculation | International age ${intl} | Korean age ${kr} | Total ${m} / ${d} | ${next}`,
+        firstMessage: 'Enter your birth date to show age calculation results.'
+      },
+      ja: {
+        years: '歳',
+        months: 'か月',
+        days: '日',
+        hidden: '非表示',
+        idleNeedBoth: '生年月日と基準日を入力してください。',
+        idleInvalid: '生年月日は基準日より後にできません。',
+        nextBirthday: (date, dday) => `次の誕生日: ${date}（${dday}）`,
+        dday: 'D-day',
+        dminus: (days) => `D-${days}`,
+        copyInputCheck: '入力を確認',
+        copyDefault: '結果をコピー',
+        copied: 'コピー完了',
+        copyText: (intl, kr, m, d, next) => `年齢計算結果 | 満年齢 ${intl} | 韓国式年齢 ${kr} | 合計 ${m} / ${d} | ${next}`,
+        firstMessage: '生年月日を入力すると年齢計算結果を表示します。'
+      }
+    };
+    const ageText = ageI18n[pageLang] || ageI18n.ko;
 
     const toDate = (value) => {
       if (!value) return null;
@@ -1915,11 +2007,11 @@
       const b = toDate(birth.value);
       const t = toDate(target.value);
       if (!b || !t) {
-        setIdle('생년월일과 기준일을 입력하세요.');
+        setIdle(ageText.idleNeedBoth);
         return;
       }
       if (b > t) {
-        setIdle('생년월일은 기준일보다 늦을 수 없습니다.');
+        setIdle(ageText.idleInvalid);
         return;
       }
 
@@ -1930,14 +2022,14 @@
       const upcomingBirthday = getNextBirthday(b, t);
       const daysLeft = dayDiff(t, upcomingBirthday);
 
-      international.textContent = `${fullAge}세`;
-      korean.textContent = koreanMode?.checked ? `${koreanAge}세` : '숨김';
-      months.textContent = `${totalMonths.toLocaleString('ko-KR')}개월`;
-      days.textContent = `${totalDays.toLocaleString('ko-KR')}일`;
+      international.textContent = `${fullAge.toLocaleString(numberLocale)}${ageText.years}`;
+      korean.textContent = koreanMode?.checked ? `${koreanAge.toLocaleString(numberLocale)}${ageText.years}` : ageText.hidden;
+      months.textContent = `${totalMonths.toLocaleString(numberLocale)}${ageText.months}`;
+      days.textContent = `${totalDays.toLocaleString(numberLocale)}${ageText.days}`;
 
       const birthdayText = `${upcomingBirthday.getFullYear()}-${String(upcomingBirthday.getMonth() + 1).padStart(2, '0')}-${String(upcomingBirthday.getDate()).padStart(2, '0')}`;
-      const ddayText = daysLeft === 0 ? 'D-day' : `D-${daysLeft.toLocaleString('ko-KR')}`;
-      nextBirthday.textContent = `다음 생일: ${birthdayText} (${ddayText})`;
+      const ddayText = daysLeft === 0 ? ageText.dday : ageText.dminus(daysLeft.toLocaleString(numberLocale));
+      nextBirthday.textContent = ageText.nextBirthday(birthdayText, ddayText);
     };
 
     const today = new Date();
@@ -1954,18 +2046,18 @@
     copyBtn?.addEventListener('click', async () => {
       if (international.textContent === '-') {
         const old = copyBtn.textContent;
-        copyBtn.textContent = '입력 확인';
-        setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+        copyBtn.textContent = ageText.copyInputCheck;
+        setTimeout(() => { copyBtn.textContent = old || ageText.copyDefault; }, 900);
         return;
       }
-      const text = `나이 계산 결과 | 만 나이 ${international.textContent} | 세는나이 ${korean.textContent} | 총 ${months.textContent} / ${days.textContent} | ${nextBirthday.textContent}`;
+      const text = ageText.copyText(international.textContent, korean.textContent, months.textContent, days.textContent, nextBirthday.textContent);
       await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = ageText.copied;
+      setTimeout(() => { copyBtn.textContent = old || ageText.copyDefault; }, 900);
     });
 
-    setIdle('생년월일을 입력하면 나이 계산 결과가 표시됩니다.');
+    setIdle(ageText.firstMessage);
     render();
   }
 

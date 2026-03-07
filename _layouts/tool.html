@@ -481,87 +481,87 @@ layout: default
       {% when 'discount-calculator' %}
         <div class="tool-ui">
           <div class="tool-row">
-            <label for="dc-mode">계산 모드</label>
+            <label for="dc-mode">{% if page.lang == 'en' %}Calculation mode{% elsif page.lang == 'ja' %}計算モード{% else %}계산 모드{% endif %}</label>
             <select id="dc-mode">
-              <option value="forward">할인 적용가 계산</option>
-              <option value="reverse">목표가 기준 할인율 역산</option>
+              <option value="forward">{% if page.lang == 'en' %}Discounted price calculation{% elsif page.lang == 'ja' %}割引適用価格を計算{% else %}할인 적용가 계산{% endif %}</option>
+              <option value="reverse">{% if page.lang == 'en' %}Reverse-calculate discount for target price{% elsif page.lang == 'ja' %}目標価格から割引率を逆算{% else %}목표가 기준 할인율 역산{% endif %}</option>
             </select>
           </div>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="dc-list-price">정가(원)</label>
-              <input id="dc-list-price" type="number" min="0" step="100" placeholder="예: 59000" inputmode="numeric" />
+              <label for="dc-list-price">{% if page.lang == 'en' %}List price{% elsif page.lang == 'ja' %}定価{% else %}정가(원){% endif %}</label>
+              <input id="dc-list-price" type="number" min="0" step="100" placeholder="{% if page.lang == 'en' %}e.g. 59000{% elsif page.lang == 'ja' %}例: 59000{% else %}예: 59000{% endif %}" inputmode="numeric" />
             </div>
             <div>
-              <label for="dc-discount-rate">할인율(%)</label>
-              <input id="dc-discount-rate" type="number" min="0" max="100" step="0.1" placeholder="예: 20" inputmode="decimal" />
+              <label for="dc-discount-rate">{% if page.lang == 'en' %}Discount rate (%) {% elsif page.lang == 'ja' %}割引率(%) {% else %}할인율(%) {% endif %}</label>
+              <input id="dc-discount-rate" type="number" min="0" max="100" step="0.1" placeholder="{% if page.lang == 'en' %}e.g. 20{% elsif page.lang == 'ja' %}例: 20{% else %}예: 20{% endif %}" inputmode="decimal" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid" id="dc-forward-fields">
             <div>
-              <label for="dc-coupon">쿠폰(원)</label>
-              <input id="dc-coupon" type="number" min="0" step="100" placeholder="예: 3000" inputmode="numeric" />
+              <label for="dc-coupon">{% if page.lang == 'en' %}Coupon amount{% elsif page.lang == 'ja' %}クーポン額{% else %}쿠폰(원){% endif %}</label>
+              <input id="dc-coupon" type="number" min="0" step="100" placeholder="{% if page.lang == 'en' %}e.g. 3000{% elsif page.lang == 'ja' %}例: 3000{% else %}예: 3000{% endif %}" inputmode="numeric" />
             </div>
             <div>
-              <label for="dc-quantity">수량</label>
-              <input id="dc-quantity" type="number" min="1" step="1" placeholder="예: 2" inputmode="numeric" />
+              <label for="dc-quantity">{% if page.lang == 'en' %}Quantity{% elsif page.lang == 'ja' %}数量{% else %}수량{% endif %}</label>
+              <input id="dc-quantity" type="number" min="1" step="1" placeholder="{% if page.lang == 'en' %}e.g. 2{% elsif page.lang == 'ja' %}例: 2{% else %}예: 2{% endif %}" inputmode="numeric" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid" id="dc-forward-fields-2">
             <div>
-              <label for="dc-shipping">배송비(원)</label>
-              <input id="dc-shipping" type="number" min="0" step="100" placeholder="예: 2500" inputmode="numeric" />
+              <label for="dc-shipping">{% if page.lang == 'en' %}Shipping fee{% elsif page.lang == 'ja' %}送料{% else %}배송비(원){% endif %}</label>
+              <input id="dc-shipping" type="number" min="0" step="100" placeholder="{% if page.lang == 'en' %}e.g. 2500{% elsif page.lang == 'ja' %}例: 2500{% else %}예: 2500{% endif %}" inputmode="numeric" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid" id="dc-reverse-fields" hidden>
             <div>
-              <label for="dc-target-price">목표 판매가(원, 1개 기준)</label>
-              <input id="dc-target-price" type="number" min="0" step="100" placeholder="예: 99000" inputmode="numeric" />
+              <label for="dc-target-price">{% if page.lang == 'en' %}Target selling price (per item){% elsif page.lang == 'ja' %}目標販売価格（1個あたり）{% else %}목표 판매가(원, 1개 기준){% endif %}</label>
+              <input id="dc-target-price" type="number" min="0" step="100" placeholder="{% if page.lang == 'en' %}e.g. 99000{% elsif page.lang == 'ja' %}例: 99000{% else %}예: 99000{% endif %}" inputmode="numeric" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="dc-copy" type="button">결과 복사</button>
-            <button id="dc-reset" type="button">초기화</button>
+            <button id="dc-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="dc-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
 
           <div class="tool-stats">
-            <div><strong id="dc-discount-amount">-</strong><span>할인 금액(1개 기준)</span></div>
-            <div><strong id="dc-unit-price">-</strong><span>할인 후 단가</span></div>
-            <div><strong id="dc-final-total">-</strong><span>최종 결제금액</span></div>
-            <div><strong id="dc-effective-rate">-</strong><span>실질 할인율</span></div>
+            <div><strong id="dc-discount-amount">-</strong><span>{% if page.lang == 'en' %}Discount amount (per item){% elsif page.lang == 'ja' %}割引額（1個あたり）{% else %}할인 금액(1개 기준){% endif %}</span></div>
+            <div><strong id="dc-unit-price">-</strong><span>{% if page.lang == 'en' %}Discounted unit price{% elsif page.lang == 'ja' %}割引後の単価{% else %}할인 후 단가{% endif %}</span></div>
+            <div><strong id="dc-final-total">-</strong><span>{% if page.lang == 'en' %}Final payable amount{% elsif page.lang == 'ja' %}最終支払金額{% else %}최종 결제금액{% endif %}</span></div>
+            <div><strong id="dc-effective-rate">-</strong><span>{% if page.lang == 'en' %}Effective discount rate{% elsif page.lang == 'ja' %}実質割引率{% else %}실질 할인율{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="dc-help">정가와 할인 정보를 입력하면 최종 결제금액을 계산합니다.</p>
+          <p class="tool-result" id="dc-help">{% if page.lang == 'en' %}Enter list price and discount details to calculate the final payable amount.{% elsif page.lang == 'ja' %}定価と割引情報を入力すると、最終支払金額を計算できます。{% else %}정가와 할인 정보를 입력하면 최종 결제금액을 계산합니다.{% endif %}</p>
         </div>
       {% when 'age-calculator' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="age-birth-date">생년월일</label>
+              <label for="age-birth-date">{% if page.lang == 'en' %}Birth date{% elsif page.lang == 'ja' %}生年月日{% else %}생년월일{% endif %}</label>
               <input id="age-birth-date" type="date" />
             </div>
             <div>
-              <label for="age-target-date">기준일</label>
+              <label for="age-target-date">{% if page.lang == 'en' %}Reference date{% elsif page.lang == 'ja' %}基準日{% else %}기준일{% endif %}</label>
               <input id="age-target-date" type="date" />
             </div>
           </div>
-          <label class="tool-check"><input id="age-korean-mode" type="checkbox" checked /> 만나이 + 한국식 세는나이 함께 보기</label>
+          <label class="tool-check"><input id="age-korean-mode" type="checkbox" checked /> {% if page.lang == 'en' %}Show international age + Korean age{% elsif page.lang == 'ja' %}満年齢＋韓国式年齢を表示{% else %}만나이 + 한국식 세는나이 함께 보기{% endif %}</label>
           <div class="tool-row-grid pct-actions">
-            <button id="age-copy" type="button">결과 복사</button>
-            <button id="age-reset" type="button">오늘 기준으로 초기화</button>
+            <button id="age-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="age-reset" type="button">{% if page.lang == 'en' %}Reset to today{% elsif page.lang == 'ja' %}今日基準にリセット{% else %}오늘 기준으로 초기화{% endif %}</button>
           </div>
           <div class="tool-stats">
-            <div><strong id="age-international">-</strong><span>만 나이</span></div>
-            <div><strong id="age-korean">-</strong><span>세는나이(한국식)</span></div>
-            <div><strong id="age-months">-</strong><span>총 개월 수</span></div>
-            <div><strong id="age-days">-</strong><span>총 일수</span></div>
+            <div><strong id="age-international">-</strong><span>{% if page.lang == 'en' %}International age{% elsif page.lang == 'ja' %}満年齢{% else %}만 나이{% endif %}</span></div>
+            <div><strong id="age-korean">-</strong><span>{% if page.lang == 'en' %}Korean age{% elsif page.lang == 'ja' %}韓国式年齢{% else %}세는나이(한국식){% endif %}</span></div>
+            <div><strong id="age-months">-</strong><span>{% if page.lang == 'en' %}Total months{% elsif page.lang == 'ja' %}総月数{% else %}총 개월 수{% endif %}</span></div>
+            <div><strong id="age-days">-</strong><span>{% if page.lang == 'en' %}Total days{% elsif page.lang == 'ja' %}総日数{% else %}총 일수{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="age-next-birthday" role="status" aria-live="polite">생년월일을 입력하면 다음 생일까지 남은 기간을 계산합니다.</p>
+          <p class="tool-result" id="age-next-birthday" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter your birth date to calculate the days remaining until your next birthday.{% elsif page.lang == 'ja' %}生年月日を入力すると、次の誕生日までの日数を計算します。{% else %}생년월일을 입력하면 다음 생일까지 남은 기간을 계산합니다.{% endif %}</p>
         </div>
       {% when 'salary-calculator' %}
         <div class="tool-ui">
@@ -680,62 +680,62 @@ layout: default
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="tdee-sex">성별</label>
+              <label for="tdee-sex">{% if page.lang == 'en' %}Sex{% elsif page.lang == 'ja' %}性別{% else %}성별{% endif %}</label>
               <select id="tdee-sex">
-                <option value="male">남성</option>
-                <option value="female">여성</option>
+                <option value="male">{% if page.lang == 'en' %}Male{% elsif page.lang == 'ja' %}男性{% else %}남성{% endif %}</option>
+                <option value="female">{% if page.lang == 'en' %}Female{% elsif page.lang == 'ja' %}女性{% else %}여성{% endif %}</option>
               </select>
             </div>
             <div>
-              <label for="tdee-age">나이</label>
-              <input id="tdee-age" type="number" min="10" max="100" step="1" placeholder="예: 30" inputmode="numeric" />
+              <label for="tdee-age">{% if page.lang == 'en' %}Age{% elsif page.lang == 'ja' %}年齢{% else %}나이{% endif %}</label>
+              <input id="tdee-age" type="number" min="10" max="100" step="1" placeholder="{% if page.lang == 'en' %}e.g. 30{% elsif page.lang == 'ja' %}例: 30{% else %}예: 30{% endif %}" inputmode="numeric" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="tdee-height">키(cm)</label>
-              <input id="tdee-height" type="number" min="120" max="230" step="0.1" placeholder="예: 170" inputmode="decimal" />
+              <label for="tdee-height">{% if page.lang == 'en' %}Height (cm){% elsif page.lang == 'ja' %}身長(cm){% else %}키(cm){% endif %}</label>
+              <input id="tdee-height" type="number" min="120" max="230" step="0.1" placeholder="{% if page.lang == 'en' %}e.g. 170{% elsif page.lang == 'ja' %}例: 170{% else %}예: 170{% endif %}" inputmode="decimal" />
             </div>
             <div>
-              <label for="tdee-weight">몸무게(kg)</label>
-              <input id="tdee-weight" type="number" min="25" max="250" step="0.1" placeholder="예: 68" inputmode="decimal" />
+              <label for="tdee-weight">{% if page.lang == 'en' %}Weight (kg){% elsif page.lang == 'ja' %}体重(kg){% else %}몸무게(kg){% endif %}</label>
+              <input id="tdee-weight" type="number" min="25" max="250" step="0.1" placeholder="{% if page.lang == 'en' %}e.g. 68{% elsif page.lang == 'ja' %}例: 68{% else %}예: 68{% endif %}" inputmode="decimal" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="tdee-activity">활동량</label>
+              <label for="tdee-activity">{% if page.lang == 'en' %}Activity level{% elsif page.lang == 'ja' %}活動量{% else %}활동량{% endif %}</label>
               <select id="tdee-activity">
-                <option value="1.2">거의 운동 안 함 (좌식)</option>
-                <option value="1.375">가벼운 활동 (주 1~3회)</option>
-                <option value="1.55">보통 활동 (주 3~5회)</option>
-                <option value="1.725">높은 활동 (주 6~7회)</option>
-                <option value="1.9">매우 높은 활동 (육체노동/2회 운동)</option>
+                <option value="1.2">{% if page.lang == 'en' %}Little to no exercise (sedentary){% elsif page.lang == 'ja' %}ほぼ運動なし（座位中心）{% else %}거의 운동 안 함 (좌식){% endif %}</option>
+                <option value="1.375">{% if page.lang == 'en' %}Light activity (1–3 workouts/week){% elsif page.lang == 'ja' %}軽い活動（週1〜3回）{% else %}가벼운 활동 (주 1~3회){% endif %}</option>
+                <option value="1.55">{% if page.lang == 'en' %}Moderate activity (3–5 workouts/week){% elsif page.lang == 'ja' %}中程度の活動（週3〜5回）{% else %}보통 활동 (주 3~5회){% endif %}</option>
+                <option value="1.725">{% if page.lang == 'en' %}High activity (6–7 workouts/week){% elsif page.lang == 'ja' %}高い活動量（週6〜7回）{% else %}높은 활동 (주 6~7회){% endif %}</option>
+                <option value="1.9">{% if page.lang == 'en' %}Very high activity (physical job / 2 workouts/day){% elsif page.lang == 'ja' %}非常に高い活動量（肉体労働/1日2回運動）{% else %}매우 높은 활동 (육체노동/2회 운동){% endif %}</option>
               </select>
             </div>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="tdee-copy" type="button">결과 복사</button>
-            <button id="tdee-reset" type="button">초기화</button>
+            <button id="tdee-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="tdee-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
 
           <div class="tool-stats">
-            <div><strong id="tdee-bmr">-</strong><span>BMR(기초대사량)</span></div>
-            <div><strong id="tdee-maintain">-</strong><span>유지 칼로리(TDEE)</span></div>
-            <div><strong id="tdee-cut">-</strong><span>감량 권장(보수/적극)</span></div>
-            <div><strong id="tdee-bulk">-</strong><span>증량 권장(린/적극)</span></div>
+            <div><strong id="tdee-bmr">-</strong><span>{% if page.lang == 'en' %}BMR (Basal Metabolic Rate){% elsif page.lang == 'ja' %}BMR（基礎代謝量）{% else %}BMR(기초대사량){% endif %}</span></div>
+            <div><strong id="tdee-maintain">-</strong><span>{% if page.lang == 'en' %}Maintenance calories (TDEE){% elsif page.lang == 'ja' %}維持カロリー（TDEE）{% else %}유지 칼로리(TDEE){% endif %}</span></div>
+            <div><strong id="tdee-cut">-</strong><span>{% if page.lang == 'en' %}Cut target (moderate/aggressive){% elsif page.lang == 'ja' %}減量目安（緩やか/積極）{% else %}감량 권장(보수/적극){% endif %}</span></div>
+            <div><strong id="tdee-bulk">-</strong><span>{% if page.lang == 'en' %}Bulk target (lean/aggressive){% elsif page.lang == 'ja' %}増量目安（リーン/積極）{% else %}증량 권장(린/적극){% endif %}</span></div>
           </div>
 
           <div class="tool-compare" aria-live="polite">
-            <p><strong>매크로 가이드 (유지 칼로리 기준)</strong></p>
-            <p class="tool-result" id="tdee-protein">단백질: -</p>
-            <p class="tool-result" id="tdee-fat">지방: -</p>
-            <p class="tool-result" id="tdee-carb">탄수화물: -</p>
+            <p><strong>{% if page.lang == 'en' %}Macro guide (based on maintenance calories){% elsif page.lang == 'ja' %}マクロ目安（維持カロリー基準）{% else %}매크로 가이드 (유지 칼로리 기준){% endif %}</strong></p>
+            <p class="tool-result" id="tdee-protein">{% if page.lang == 'en' %}Protein{% elsif page.lang == 'ja' %}たんぱく質{% else %}단백질{% endif %}: -</p>
+            <p class="tool-result" id="tdee-fat">{% if page.lang == 'en' %}Fat{% elsif page.lang == 'ja' %}脂質{% else %}지방{% endif %}: -</p>
+            <p class="tool-result" id="tdee-carb">{% if page.lang == 'en' %}Carbs{% elsif page.lang == 'ja' %}炭水化物{% else %}탄수화물{% endif %}: -</p>
           </div>
 
-          <p class="tool-result" id="tdee-help">값을 입력하면 BMR/TDEE와 목표별 칼로리가 계산됩니다.</p>
+          <p class="tool-result" id="tdee-help">{% if page.lang == 'en' %}Enter values to calculate BMR/TDEE and goal-based calorie targets.{% elsif page.lang == 'ja' %}値を入力すると、BMR/TDEEと目的別カロリー目安を計算します。{% else %}값을 입력하면 BMR/TDEE와 목표별 칼로리가 계산됩니다.{% endif %}</p>
         </div>
       {% when 'jeonse-vs-wolse-calculator' %}
         <div class="tool-ui">
