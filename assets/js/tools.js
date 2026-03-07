@@ -3679,9 +3679,7 @@
 
     const fmtMoney = (v) => {
       const n = Number(v || 0);
-      if (pageLang === 'en') return `$${n.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}`;
-      if (pageLang === 'ja') return `${n.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}円`;
-      return `${n.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}원`;
+      return n.toLocaleString(numberLocale, { maximumFractionDigits: 2 });
     };
 
     const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
