@@ -15,38 +15,38 @@ layout: default
     {% case page.tool_key %}
       {% when 'text-counter' %}
         <div class="tool-ui">
-          <textarea id="tc-input" placeholder="텍스트를 입력하세요"></textarea>
+          <textarea id="tc-input" placeholder="{% if page.lang == 'en' %}Enter text{% elsif page.lang == 'ja' %}テキストを入力{% else %}텍스트를 입력하세요{% endif %}"></textarea>
           <div class="tool-stats">
-            <div><strong id="tc-chars">0</strong><span>글자수(공백포함)</span></div>
-            <div><strong id="tc-no-spaces">0</strong><span>글자수(공백제외)</span></div>
-            <div><strong id="tc-words">0</strong><span>단어수</span></div>
-            <div><strong id="tc-bytes">0</strong><span>바이트(UTF-8)</span></div>
+            <div><strong id="tc-chars">0</strong><span>{% if page.lang == 'en' %}Characters (with spaces){% elsif page.lang == 'ja' %}文字数（空白含む）{% else %}글자수(공백포함){% endif %}</span></div>
+            <div><strong id="tc-no-spaces">0</strong><span>{% if page.lang == 'en' %}Characters (no spaces){% elsif page.lang == 'ja' %}文字数（空白除く）{% else %}글자수(공백제외){% endif %}</span></div>
+            <div><strong id="tc-words">0</strong><span>{% if page.lang == 'en' %}Words{% elsif page.lang == 'ja' %}単語数{% else %}단어수{% endif %}</span></div>
+            <div><strong id="tc-bytes">0</strong><span>{% if page.lang == 'en' %}Bytes (UTF-8){% elsif page.lang == 'ja' %}バイト数（UTF-8）{% else %}바이트(UTF-8){% endif %}</span></div>
           </div>
         </div>
       {% when 'vat-calculator' %}
         <div class="tool-ui">
           <div class="tool-row">
-            <label>기준</label>
-            <select id="vat-mode"><option value="supply">공급가 기준</option><option value="total">합계 기준</option></select>
+            <label>{% if page.lang == 'en' %}Base{% elsif page.lang == 'ja' %}基準{% else %}기준{% endif %}</label>
+            <select id="vat-mode"><option value="supply">{% if page.lang == 'en' %}Net price base{% elsif page.lang == 'ja' %}税抜基準{% else %}공급가 기준{% endif %}</option><option value="total">{% if page.lang == 'en' %}Gross total base{% elsif page.lang == 'ja' %}税込基準{% else %}합계 기준{% endif %}</option></select>
           </div>
           <div class="tool-row">
-            <label>금액(원)</label>
-            <input id="vat-amount" type="number" min="0" step="1" placeholder="예: 11000" />
+            <label>{% if page.lang == 'en' %}Amount{% elsif page.lang == 'ja' %}金額{% else %}금액(원){% endif %}</label>
+            <input id="vat-amount" type="number" min="0" step="1" placeholder="{% if page.lang == 'en' %}e.g., 11000{% elsif page.lang == 'ja' %}例: 11000{% else %}예: 11000{% endif %}" />
           </div>
           <div class="tool-stats">
-            <div><strong id="vat-supply">0</strong><span>공급가</span></div>
-            <div><strong id="vat-tax">0</strong><span>부가세</span></div>
-            <div><strong id="vat-total">0</strong><span>합계</span></div>
+            <div><strong id="vat-supply">0</strong><span>{% if page.lang == 'en' %}Net price{% elsif page.lang == 'ja' %}税抜{% else %}공급가{% endif %}</span></div>
+            <div><strong id="vat-tax">0</strong><span>{% if page.lang == 'en' %}VAT{% elsif page.lang == 'ja' %}VAT{% else %}부가세{% endif %}</span></div>
+            <div><strong id="vat-total">0</strong><span>{% if page.lang == 'en' %}Gross total{% elsif page.lang == 'ja' %}税込合計{% else %}합계{% endif %}</span></div>
           </div>
         </div>
       {% when 'unit-converter' %}
         <div class="tool-ui">
           <div class="tool-row">
-            <label>변환 타입</label>
+            <label>{% if page.lang == 'en' %}Conversion type{% elsif page.lang == 'ja' %}変換タイプ{% else %}변환 타입{% endif %}</label>
             <select id="uc-type">
-              <option value="length">길이</option>
-              <option value="weight">무게</option>
-              <option value="temperature">온도</option>
+              <option value="length">{% if page.lang == 'en' %}Length{% elsif page.lang == 'ja' %}長さ{% else %}길이{% endif %}</option>
+              <option value="weight">{% if page.lang == 'en' %}Weight{% elsif page.lang == 'ja' %}重さ{% else %}무게{% endif %}</option>
+              <option value="temperature">{% if page.lang == 'en' %}Temperature{% elsif page.lang == 'ja' %}温度{% else %}온도{% endif %}</option>
             </select>
           </div>
           <div class="tool-row-grid">
@@ -55,7 +55,7 @@ layout: default
             <span>→</span>
             <select id="uc-to"></select>
           </div>
-          <p class="tool-result" id="uc-result">결과가 여기에 표시됩니다.</p>
+          <p class="tool-result" id="uc-result">{% if page.lang == 'en' %}Result will appear here.{% elsif page.lang == 'ja' %}結果がここに表示されます。{% else %}결과가 여기에 표시됩니다.{% endif %}</p>
         </div>
       {% when 'timezone-converter' %}
         <div class="tool-ui">

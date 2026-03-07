@@ -62,6 +62,12 @@
       temperature: [['c','℃'],['f','℉'],['k','K']]
     };
 
+    const ucText = {
+      ko: { result: '결과' },
+      en: { result: 'Result' },
+      ja: { result: '結果' }
+    }[pageLang] || { result: '결과' };
+
     const fillUnits = () => {
       const t = type.value || 'length';
       const opts = labels[t] || labels.length;
@@ -91,7 +97,7 @@
         const base = v * (map[from.value] || 1);
         result = base / (map[to.value] || 1);
       }
-      out.textContent = `결과: ${result.toLocaleString('ko-KR', { maximumFractionDigits: 6 })} ${to.options[to.selectedIndex]?.text || ''}`;
+      out.textContent = `${ucText.result}: ${result.toLocaleString(numberLocale, { maximumFractionDigits: 6 })} ${to.options[to.selectedIndex]?.text || ''}`;
     };
 
     [type, value, from, to].forEach(el => el?.addEventListener('input', run));

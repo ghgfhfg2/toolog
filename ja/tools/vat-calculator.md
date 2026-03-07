@@ -37,6 +37,6 @@ alternate_urls:
 - 取引先との内訳共有
 
 ## 関連ツール
-- 比率計算: [パーセント計算機]({{ '/tools/percent-calculator/' | relative_url }})
-- 単位変換: [単位変換ツール]({{ '/tools/unit-converter/' | relative_url }})
-- 時差確認: [タイムゾーン変換]({{ '/tools/timezone-converter/' | relative_url }})
+- 比率計算: [パーセント計算機]({{ '/ja/tools/percent-calculator/' | relative_url }})
+- 単位変換: [単位変換ツール]({{ '/ja/tools/unit-converter/' | relative_url }})
+- 時差確認: [タイムゾーン変換]({{ '/ja/tools/timezone-converter/' | relative_url }})

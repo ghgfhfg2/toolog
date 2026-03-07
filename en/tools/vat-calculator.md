@@ -37,6 +37,6 @@ Use this tool when you need to verify:
 - Sharing clear tax breakdown with partners
 
 ## Related tools
-- Ratio and percentage math: [Percent Calculator]({{ '/tools/percent-calculator/' | relative_url }})
-- Unit conversion before quoting: [Unit Converter]({{ '/tools/unit-converter/' | relative_url }})
-- Cross-region schedules: [Timezone Converter]({{ '/tools/timezone-converter/' | relative_url }})
+- Ratio and percentage math: [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
+- Unit conversion before quoting: [Unit Converter]({{ '/en/tools/unit-converter/' | relative_url }})
+- Cross-region schedules: [Timezone Converter]({{ '/en/tools/timezone-converter/' | relative_url }})

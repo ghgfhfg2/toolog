@@ -149,11 +149,21 @@
 
 - id: text-counter
   title: 글자수 계산기
+  title_en: Text Counter
+  title_ja: 文字数カウンター
   category: text
   category_label: 텍스트/편집
+  category_label_en: Text/Editing
+  category_label_ja: テキスト/編集
   badge: Popular
+  badge_en: Popular
+  badge_ja: 人気
   description: 공백 포함/제외, 단어 수, 바이트를 한 번에 확인해요.
+  description_en: Count characters with and without spaces, words, and UTF-8 bytes in one view.
+  description_ja: 空白あり/なしの文字数、単語数、UTF-8バイト数をまとめて確認できます。
   url: /tools/text-counter/
+  url_en: /en/tools/text-counter/
+  url_ja: /ja/tools/text-counter/
   thumbnail: /assets/thumbs/text-counter.svg
 
 - id: case-converter
@@ -176,20 +186,40 @@
 
 - id: vat-calculator
   title: 부가세 계산기
+  title_en: VAT Calculator
+  title_ja: VAT計算機
   category: data
   category_label: 데이터/계산
+  category_label_en: Data/Finance
+  category_label_ja: データ/計算
   badge: Hot
+  badge_en: Hot
+  badge_ja: 注目
   description: 공급가/합계 기준 VAT 10%를 빠르고 정확하게 계산해요.
+  description_en: Quickly calculate VAT 10% from net price or reverse-calculate net and VAT from gross total.
+  description_ja: 税抜基準・税込基準でVAT 10%を素早く正確に計算できます。
   url: /tools/vat-calculator/
+  url_en: /en/tools/vat-calculator/
+  url_ja: /ja/tools/vat-calculator/
   thumbnail: /assets/thumbs/vat-calculator.svg
 
 - id: unit-converter
   title: 단위 변환기
+  title_en: Unit Converter
+  title_ja: 単位変換ツール
   category: data
   category_label: 데이터/계산
+  category_label_en: Data/Utilities
+  category_label_ja: データ/計算
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 길이·무게·온도 단위를 한 화면에서 정확히 변환해요.
+  description_en: Convert length, weight, and temperature units accurately on one screen.
+  description_ja: 長さ・重さ・温度の単位を1画面で正確に換算できます。
   url: /tools/unit-converter/
+  url_en: /en/tools/unit-converter/
+  url_ja: /ja/tools/unit-converter/
   thumbnail: /assets/thumbs/unit-converter.svg
 
 - id: timezone-converter
