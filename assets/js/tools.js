@@ -2412,7 +2412,47 @@
     const copyBtn = document.getElementById('bf-copy');
     const resetBtn = document.getElementById('bf-reset');
 
-    const KRW = (n) => `${Math.round(n || 0).toLocaleString('ko-KR')}원`;
+    const i18n = {
+      ko: {
+        currency: '원',
+        noFixedCap: '법정 정액 상한 없음',
+        idle: '거래 유형과 거래금액을 입력하면 중개보수 상한을 계산합니다.',
+        typeSale: '매매',
+        typeRent: '임대차',
+        rentHint: ' (환산금액: 보증금 + 월세×100)',
+        helpLine: (typeLabel, rentHint) => `주택 ${typeLabel} 상한 요율 기준 계산값입니다${rentHint}. 실제 중개보수는 공인중개사와 상한 이내 협의로 결정됩니다.`,
+        copyText: (typeLabel, amountText, rateText, feeText, vatText) => `거래유형: ${typeLabel}\n거래금액: ${amountText}\n적용 상한 요율: ${rateText}\n예상 중개보수(한도): ${feeText}\n부가세 포함(참고): ${vatText}`,
+        copiedPrimary: '결과를 클립보드에 복사했습니다.',
+        copiedFallback: '결과를 복사했습니다.'
+      },
+      en: {
+        currency: ' KRW',
+        noFixedCap: 'No fixed statutory cap',
+        idle: 'Enter transaction type and amount to estimate the legal fee cap.',
+        typeSale: 'Home sale',
+        typeRent: 'Lease',
+        rentHint: ' (converted value: deposit + monthly rent × 100)',
+        helpLine: (typeLabel, rentHint) => `Based on Korea’s statutory upper-rate table for ${typeLabel.toLowerCase()}${rentHint}. Actual brokerage fees are negotiated within the legal cap.`,
+        copyText: (typeLabel, amountText, rateText, feeText, vatText) => `Transaction type: ${typeLabel}\nTransaction amount: ${amountText}\nApplied max rate: ${rateText}\nEstimated brokerage fee (max): ${feeText}\nVAT included (reference): ${vatText}`,
+        copiedPrimary: 'Copied to clipboard.',
+        copiedFallback: 'Copied result.'
+      },
+      ja: {
+        currency: 'ウォン',
+        noFixedCap: '法定の定額上限なし',
+        idle: '取引タイプと取引金額を入力すると、仲介手数料の上限を試算します。',
+        typeSale: '売買',
+        typeRent: '賃貸',
+        rentHint: '（換算金額: 保証金 + 月家賃×100）',
+        helpLine: (typeLabel, rentHint) => `住宅${typeLabel}の上限料率に基づく試算です${rentHint ? ` ${rentHint}` : ''}。実際の仲介手数料は上限内で協議して決まります。`,
+        copyText: (typeLabel, amountText, rateText, feeText, vatText) => `取引タイプ: ${typeLabel}\n取引金額: ${amountText}\n適用上限料率: ${rateText}\n仲介手数料（上限目安）: ${feeText}\nVAT込み（参考）: ${vatText}`,
+        copiedPrimary: 'クリップボードにコピーしました。',
+        copiedFallback: '結果をコピーしました。'
+      }
+    };
+    const t = i18n[pageLang] || i18n.ko;
+
+    const KRW = (n) => `${Math.round(n || 0).toLocaleString(numberLocale)}${t.currency}`;
 
     const tables = {
       sale: [
@@ -2433,7 +2473,7 @@
       ]
     };
 
-    const resolveRow = (t, v) => (tables[t] || tables.sale).find((r) => v <= r.max) || tables.sale[tables.sale.length - 1];
+    const resolveRow = (tt, v) => (tables[tt] || tables.sale).find((r) => v <= r.max) || tables.sale[tables.sale.length - 1];
 
     const syncRentConvertedAmount = () => {
       if ((type?.value || 'sale') !== 'rent' || !amount) return;
@@ -2452,24 +2492,25 @@
         limitEl.textContent = '-';
         feeEl.textContent = '-';
         vatEl.textContent = '-';
-        if (help) help.textContent = '거래 유형과 거래금액을 입력하면 중개보수 상한을 계산합니다.';
+        if (help) help.textContent = t.idle;
         return;
       }
 
-      const row = resolveRow(type?.value || 'sale', v);
+      const currentType = type?.value || 'sale';
+      const row = resolveRow(currentType, v);
       const raw = v * row.rate;
       const capped = row.cap ? Math.min(raw, row.cap) : raw;
       const vatIncluded = capped * 1.1;
 
       rateEl.textContent = `${(row.rate * 100).toFixed(1)}%`;
-      limitEl.textContent = row.cap ? KRW(row.cap) : '법정 정액 상한 없음';
+      limitEl.textContent = row.cap ? KRW(row.cap) : t.noFixedCap;
       feeEl.textContent = KRW(capped);
       vatEl.textContent = KRW(vatIncluded);
 
       if (help) {
-        const typeLabel = (type?.value || 'sale') === 'sale' ? '매매' : '임대차';
-        const rentHint = (type?.value || 'sale') === 'rent' ? ' (환산금액: 보증금 + 월세×100)' : '';
-        help.textContent = `주택 ${typeLabel} 상한 요율 기준 계산값입니다${rentHint}. 실제 중개보수는 공인중개사와 상한 이내 협의로 결정됩니다.`;
+        const typeLabel = currentType === 'sale' ? t.typeSale : t.typeRent;
+        const rentHint = currentType === 'rent' ? t.rentHint : '';
+        help.textContent = t.helpLine(typeLabel, rentHint);
       }
     };
 
@@ -2483,14 +2524,11 @@
     });
 
     copyBtn?.addEventListener('click', async () => {
-      const text = `거래유형: ${type?.selectedOptions?.[0]?.text || '-'}
-거래금액: ${KRW(Number(amount?.value || 0))}
-적용 상한 요율: ${rateEl.textContent}
-예상 중개보수(한도): ${feeEl.textContent}
-부가세 포함(참고): ${vatEl.textContent}`;
+      const typeLabel = type?.selectedOptions?.[0]?.text || '-';
+      const text = t.copyText(typeLabel, KRW(Number(amount?.value || 0)), rateEl.textContent, feeEl.textContent, vatEl.textContent);
       try {
         await navigator.clipboard.writeText(text);
-        if (help) help.textContent = '결과를 클립보드에 복사했습니다.';
+        if (help) help.textContent = t.copiedPrimary;
       } catch {
         const ta = document.createElement('textarea');
         ta.value = text;
@@ -2500,7 +2538,7 @@
         ta.select();
         document.execCommand('copy');
         document.body.removeChild(ta);
-        if (help) help.textContent = '결과를 복사했습니다.';
+        if (help) help.textContent = t.copiedFallback;
       }
     });
 
@@ -2530,8 +2568,57 @@
 
     if (!hourly || !hours || !days || !perfect || !eligibleEl || !paidHoursEl || !weeklyEl || !monthlyEl || !help) return;
 
-    const KRW = (n) => `${Math.round(n || 0).toLocaleString('ko-KR')}원`;
-    const HOURS = (n) => `${Number(n || 0).toLocaleString('ko-KR', { maximumFractionDigits: 2 })}시간`;
+    const i18n = {
+      ko: {
+        currency: '원',
+        hourUnit: '시간',
+        invalidNumber: '숫자 형식으로 입력해 주세요.',
+        needInput: '시급·주 소정근로시간·근무일수를 입력하세요.',
+        eligible: '대상',
+        ineligible: '비대상',
+        under15h: '주 15시간 미만이면 일반적으로 주휴수당 대상이 아닙니다.',
+        noPerfect: '개근 조건을 충족하지 않으면 해당 주 주휴수당이 제한될 수 있습니다.',
+        capNotice: ' (주휴시간 상한 8시간 적용)',
+        summary: (w, m, c) => `입력 기준 예상 주휴수당은 주 ${w}, 월 환산 ${m}입니다.${c}`,
+        copy: (e, h, w, m) => `주휴수당 계산 결과 | 대상 여부 ${e} | 주휴시간 ${h} | 주 ${w} | 월 환산 ${m}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        currency: ' KRW',
+        hourUnit: 'h',
+        invalidNumber: 'Please enter valid numbers.',
+        needInput: 'Enter hourly wage, weekly hours, and scheduled workdays.',
+        eligible: 'Eligible',
+        ineligible: 'Not eligible',
+        under15h: 'Under 15 weekly hours is generally not eligible for paid weekly holiday allowance.',
+        noPerfect: 'If perfect attendance is not met, the allowance may be limited for that week.',
+        capNotice: ' (8-hour cap applied to paid holiday hours)',
+        summary: (w, m, c) => `Estimated paid holiday allowance: ${w} per week, ${m} per month.${c}`,
+        copy: (e, h, w, m) => `Weekly holiday pay result | Eligibility: ${e} | Paid holiday hours: ${h} | Weekly: ${w} | Monthly est.: ${m}`,
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        currency: 'ウォン',
+        hourUnit: '時間',
+        invalidNumber: '数値形式で入力してください。',
+        needInput: '時給・週労働時間・勤務日数を入力してください。',
+        eligible: '対象',
+        ineligible: '対象外',
+        under15h: '週15時間未満の場合、一般的に週休手当の対象外です。',
+        noPerfect: '皆勤条件を満たさない場合、その週の週休手当は制限されることがあります。',
+        capNotice: '（週休時間の上限8時間を適用）',
+        summary: (w, m, c) => `入力条件での週休手当見込みは週 ${w}、月換算 ${m} です。${c}`,
+        copy: (e, h, w, m) => `週休手当計算結果 | 対象可否 ${e} | 週休時間 ${h} | 週 ${w} | 月換算 ${m}`,
+        copied: 'コピーしました',
+        copyDefault: '結果をコピー'
+      }
+    };
+    const t = i18n[pageLang] || i18n.ko;
+
+    const KRW = (n) => `${Math.round(n || 0).toLocaleString(numberLocale)}${t.currency}`;
+    const HOURS = (n) => `${Number(n || 0).toLocaleString(numberLocale, { maximumFractionDigits: 2 })}${t.hourUnit}`;
 
     const copyText = async (text) => {
       try {
@@ -2564,7 +2651,7 @@
       const weekDaysRaw = Number(days.value || 0);
 
       if (!Number.isFinite(wageRaw) || !Number.isFinite(weekHoursRaw) || !Number.isFinite(weekDaysRaw)) {
-        setIdle('숫자 형식으로 입력해 주세요.');
+        setIdle(t.invalidNumber);
         return;
       }
 
@@ -2578,7 +2665,7 @@
       if (weekDaysRaw !== weekDays) days.value = weekDays;
 
       if (!(wage > 0) || !(weekHours > 0) || !(weekDays > 0)) {
-        setIdle('시급·주 소정근로시간·근무일수를 입력하세요.');
+        setIdle(t.needInput);
         return;
       }
 
@@ -2589,18 +2676,18 @@
       const weeklyPay = eligible ? (paidHours * wage) : 0;
       const monthlyPay = weeklyPay * 4.345;
 
-      eligibleEl.textContent = eligible ? '대상' : '비대상';
+      eligibleEl.textContent = eligible ? t.eligible : t.ineligible;
       paidHoursEl.textContent = HOURS(eligible ? paidHours : 0);
       weeklyEl.textContent = KRW(weeklyPay);
       monthlyEl.textContent = KRW(monthlyPay);
 
       if (!eligibleByHour) {
-        help.textContent = '주 15시간 미만이면 일반적으로 주휴수당 대상이 아닙니다.';
+        help.textContent = t.under15h;
       } else if (!isPerfect) {
-        help.textContent = '개근 조건을 충족하지 않으면 해당 주 주휴수당이 제한될 수 있습니다.';
+        help.textContent = t.noPerfect;
       } else {
-        const capNotice = rawPaidHours > 8 ? ' (주휴시간 상한 8시간 적용)' : '';
-        help.textContent = `입력 기준 예상 주휴수당은 주 ${KRW(weeklyPay)}, 월 환산 ${KRW(monthlyPay)}입니다.${capNotice}`;
+        const capNotice = rawPaidHours > 8 ? t.capNotice : '';
+        help.textContent = t.summary(KRW(weeklyPay), KRW(monthlyPay), capNotice);
       }
     };
 
@@ -2608,11 +2695,11 @@
 
     copyBtn?.addEventListener('click', async () => {
       if (eligibleEl.textContent === '-') return;
-      const text = `주휴수당 계산 결과 | 대상 여부 ${eligibleEl.textContent} | 주휴시간 ${paidHoursEl.textContent} | 주 ${weeklyEl.textContent} | 월 환산 ${monthlyEl.textContent}`;
+      const text = t.copy(eligibleEl.textContent, paidHoursEl.textContent, weeklyEl.textContent, monthlyEl.textContent);
       await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
     });
 
     resetBtn?.addEventListener('click', () => {

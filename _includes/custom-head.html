@@ -7,10 +7,12 @@
 <meta name="keywords" content="{{ page.keywords | join: ', ' }}">
 {% endif %}
 {% if page.thumbnail %}
+{% assign img_alt_suffix = ' 대표 이미지' %}
+{% if page.lang == 'en' %}{% assign img_alt_suffix = ' cover image' %}{% elsif page.lang == 'ja' %}{% assign img_alt_suffix = ' 代表画像' %}{% endif %}
 <meta property="og:image" content="{{ page.thumbnail | absolute_url }}">
-<meta property="og:image:alt" content="{{ page.image.alt | default: page.title | append: ' 대표 이미지' }}">
+<meta property="og:image:alt" content="{{ page.image.alt | default: page.title | append: img_alt_suffix }}">
 <meta name="twitter:image" content="{{ page.thumbnail | absolute_url }}">
-<meta name="twitter:image:alt" content="{{ page.image.alt | default: page.title | append: ' 대표 이미지' }}">
+<meta name="twitter:image:alt" content="{{ page.image.alt | default: page.title | append: img_alt_suffix }}">
 {% endif %}
 {% if page.alternate_urls %}
 {% assign alt = page.alternate_urls %}

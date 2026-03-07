@@ -786,79 +786,79 @@ layout: default
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="bf-type">거래 유형</label>
+              <label for="bf-type">{% if page.lang == 'en' %}Transaction type{% elsif page.lang == 'ja' %}取引タイプ{% else %}거래 유형{% endif %}</label>
               <select id="bf-type">
-                <option value="sale">주택 매매</option>
-                <option value="rent">주택 임대차(전세/월세 환산)</option>
+                <option value="sale">{% if page.lang == 'en' %}Home sale{% elsif page.lang == 'ja' %}住宅売買{% else %}주택 매매{% endif %}</option>
+                <option value="rent">{% if page.lang == 'en' %}Lease (Jeonse/Wolse conversion){% elsif page.lang == 'ja' %}賃貸（チョンセ/ウォルセ換算）{% else %}주택 임대차(전세/월세 환산){% endif %}</option>
               </select>
             </div>
             <div>
-              <label for="bf-amount">거래금액(원)</label>
-              <input id="bf-amount" type="number" min="0" step="10000" placeholder="예: 650000000" inputmode="numeric" />
+              <label for="bf-amount">{% if page.lang == 'en' %}Transaction amount (KRW){% elsif page.lang == 'ja' %}取引金額（KRW）{% else %}거래금액(원){% endif %}</label>
+              <input id="bf-amount" type="number" min="0" step="10000" placeholder="e.g. 650000000" inputmode="numeric" />
             </div>
           </div>
 
           <div id="bf-rent-helper" class="tool-row-grid pct-grid" hidden>
             <div>
-              <label for="bf-deposit">보증금(원)</label>
-              <input id="bf-deposit" type="number" min="0" step="10000" placeholder="예: 50000000" inputmode="numeric" />
+              <label for="bf-deposit">{% if page.lang == 'en' %}Deposit (KRW){% elsif page.lang == 'ja' %}保証金（KRW）{% else %}보증금(원){% endif %}</label>
+              <input id="bf-deposit" type="number" min="0" step="10000" placeholder="e.g. 50000000" inputmode="numeric" />
             </div>
             <div>
-              <label for="bf-monthly-rent">월세(원)</label>
-              <input id="bf-monthly-rent" type="number" min="0" step="10000" placeholder="예: 800000" inputmode="numeric" />
+              <label for="bf-monthly-rent">{% if page.lang == 'en' %}Monthly rent (KRW){% elsif page.lang == 'ja' %}月家賃（KRW）{% else %}월세(원){% endif %}</label>
+              <input id="bf-monthly-rent" type="number" min="0" step="10000" placeholder="e.g. 800000" inputmode="numeric" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="bf-copy" type="button">결과 복사</button>
-            <button id="bf-reset" type="button">초기화</button>
+            <button id="bf-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="bf-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
 
           <div class="tool-stats">
-            <div><strong id="bf-rate">-</strong><span>적용 상한 요율</span></div>
-            <div><strong id="bf-limit">-</strong><span>상한액</span></div>
-            <div><strong id="bf-fee">-</strong><span>예상 중개보수(한도)</span></div>
-            <div><strong id="bf-vat">-</strong><span>부가세 포함(참고)</span></div>
+            <div><strong id="bf-rate">-</strong><span>{% if page.lang == 'en' %}Applied max rate{% elsif page.lang == 'ja' %}適用上限料率{% else %}적용 상한 요율{% endif %}</span></div>
+            <div><strong id="bf-limit">-</strong><span>{% if page.lang == 'en' %}Cap amount{% elsif page.lang == 'ja' %}上限額{% else %}상한액{% endif %}</span></div>
+            <div><strong id="bf-fee">-</strong><span>{% if page.lang == 'en' %}Estimated brokerage fee (max){% elsif page.lang == 'ja' %}仲介手数料（上限目安）{% else %}예상 중개보수(한도){% endif %}</span></div>
+            <div><strong id="bf-vat">-</strong><span>{% if page.lang == 'en' %}VAT included (reference){% elsif page.lang == 'ja' %}VAT込み（参考）{% else %}부가세 포함(참고){% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="bf-help">주택 기준 상한 요율표(2021.10 개정)에 따라 계산합니다. 임대차에서 보증금/월세를 입력하면 환산금액(보증금 + 월세×100)도 바로 채울 수 있습니다.</p>
+          <p class="tool-result" id="bf-help">{% if page.lang == 'en' %}Calculated using Korea’s statutory residential brokerage-fee table (revised 2021-10). For lease deals, entering deposit/monthly rent auto-fills converted value (deposit + monthly rent × 100).{% elsif page.lang == 'ja' %}韓国の住宅仲介手数料上限表（2021年10月改定）に基づいて計算します。賃貸では保証金・月家賃を入力すると換算金額（保証金 + 月家賃×100）を自動入力できます。{% else %}주택 기준 상한 요율표(2021.10 개정)에 따라 계산합니다. 임대차에서 보증금/월세를 입력하면 환산금액(보증금 + 월세×100)도 바로 채울 수 있습니다.{% endif %}</p>
         </div>
       {% when 'weekly-holiday-pay-calculator' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="whp-hourly">시급(원)</label>
-              <input id="whp-hourly" type="number" min="0" step="10" placeholder="예: 10030" inputmode="numeric" />
+              <label for="whp-hourly">{% if page.lang == 'en' %}Hourly wage (KRW){% elsif page.lang == 'ja' %}時給（KRW）{% else %}시급(원){% endif %}</label>
+              <input id="whp-hourly" type="number" min="0" step="10" placeholder="e.g. 10030" inputmode="numeric" />
             </div>
             <div>
-              <label for="whp-hours">주 소정근로시간</label>
-              <input id="whp-hours" type="number" min="0" max="80" step="0.1" placeholder="예: 20" inputmode="decimal" />
+              <label for="whp-hours">{% if page.lang == 'en' %}Scheduled weekly hours{% elsif page.lang == 'ja' %}週の所定労働時間{% else %}주 소정근로시간{% endif %}</label>
+              <input id="whp-hours" type="number" min="0" max="80" step="0.1" placeholder="e.g. 20" inputmode="decimal" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="whp-days">주 소정근무일수</label>
-              <input id="whp-days" type="number" min="1" max="7" step="1" placeholder="예: 5" inputmode="numeric" />
+              <label for="whp-days">{% if page.lang == 'en' %}Scheduled workdays per week{% elsif page.lang == 'ja' %}週の所定勤務日数{% else %}주 소정근무일수{% endif %}</label>
+              <input id="whp-days" type="number" min="1" max="7" step="1" placeholder="e.g. 5" inputmode="numeric" />
             </div>
             <div>
-              <label class="tool-check"><input id="whp-perfect" type="checkbox" checked /> 소정근무일 개근</label>
+              <label class="tool-check"><input id="whp-perfect" type="checkbox" checked /> {% if page.lang == 'en' %}Perfect attendance on scheduled days{% elsif page.lang == 'ja' %}所定勤務日の皆勤{% else %}소정근무일 개근{% endif %}</label>
             </div>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="whp-copy" type="button">결과 복사</button>
-            <button id="whp-reset" type="button">초기화</button>
+            <button id="whp-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="whp-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
 
           <div class="tool-stats">
-            <div><strong id="whp-eligible">-</strong><span>주휴수당 대상 여부</span></div>
-            <div><strong id="whp-hours-paid">-</strong><span>주휴시간</span></div>
-            <div><strong id="whp-weekly">-</strong><span>주휴수당(주)</span></div>
-            <div><strong id="whp-monthly">-</strong><span>주휴수당(월 환산)</span></div>
+            <div><strong id="whp-eligible">-</strong><span>{% if page.lang == 'en' %}Eligibility{% elsif page.lang == 'ja' %}対象可否{% else %}주휴수당 대상 여부{% endif %}</span></div>
+            <div><strong id="whp-hours-paid">-</strong><span>{% if page.lang == 'en' %}Paid holiday hours{% elsif page.lang == 'ja' %}有給休日日数（時間）{% else %}주휴시간{% endif %}</span></div>
+            <div><strong id="whp-weekly">-</strong><span>{% if page.lang == 'en' %}Weekly paid holiday pay{% elsif page.lang == 'ja' %}週あたり支給額{% else %}주휴수당(주){% endif %}</span></div>
+            <div><strong id="whp-monthly">-</strong><span>{% if page.lang == 'en' %}Monthly estimate{% elsif page.lang == 'ja' %}月換算額{% else %}주휴수당(월 환산){% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="whp-help">시급/주근로시간/근무일수를 입력하면 주휴수당 대상 여부와 예상 금액을 계산합니다.</p>
+          <p class="tool-result" id="whp-help">{% if page.lang == 'en' %}Enter wage, weekly hours, and workdays to estimate eligibility and paid holiday allowance.{% elsif page.lang == 'ja' %}時給・週労働時間・勤務日数を入力すると、対象可否と支給見込み額を計算します。{% else %}시급/주근로시간/근무일수를 입력하면 주휴수당 대상 여부와 예상 금액을 계산합니다.{% endif %}</p>
         </div>
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
@@ -871,7 +871,7 @@ layout: default
 
   {% if page.related_tools %}
   <section class="tool-page__related">
-    <h2>함께 쓰면 좋은 도구</h2>
+    <h2>{% if page.lang == 'en' %}Related tools{% elsif page.lang == 'ja' %}関連ツール{% else %}함께 쓰면 좋은 도구{% endif %}</h2>
     <div class="related-grid">
       {% for rel in site.tools %}
         {% assign rel_key = rel.tool_key %}
