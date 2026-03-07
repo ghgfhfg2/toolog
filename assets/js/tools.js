@@ -111,6 +111,22 @@
     const dt = document.getElementById('tz-datetime');
     const out = document.getElementById('tz-result');
 
+    const tzI18n = {
+      ko: {
+        locale: 'ko-KR',
+        result: (fromText, toText, timeText) => `${fromText} 기준 → ${toText}: ${timeText}`
+      },
+      en: {
+        locale: 'en-US',
+        result: (fromText, toText, timeText) => `${fromText} → ${toText}: ${timeText}`
+      },
+      ja: {
+        locale: 'ja-JP',
+        result: (fromText, toText, timeText) => `${fromText} 基準 → ${toText}: ${timeText}`
+      }
+    };
+    const tzText = tzI18n[pageLang] || tzI18n.ko;
+
     if (dt && !dt.value) {
       const n = new Date();
       dt.value = new Date(n.getTime() - n.getTimezoneOffset() * 60000).toISOString().slice(0,16);
@@ -151,12 +167,12 @@
       if (!dt.value) return;
       const utcDate = zonedToUtc(dt.value, from.value);
       if (!utcDate) return;
-      const text = new Intl.DateTimeFormat('ko-KR', {
+      const text = new Intl.DateTimeFormat(tzText.locale, {
         dateStyle: 'full',
         timeStyle: 'short',
         timeZone: to.value
       }).format(utcDate);
-      out.textContent = `${from.options[from.selectedIndex].text} 기준 → ${to.options[to.selectedIndex].text}: ${text}`;
+      out.textContent = tzText.result(from.options[from.selectedIndex].text, to.options[to.selectedIndex].text, text);
     };
 
     [from, to, dt].forEach(el => el.addEventListener('input', run));

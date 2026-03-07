@@ -60,15 +60,15 @@ layout: default
       {% when 'timezone-converter' %}
         <div class="tool-ui">
           <div class="tool-row-grid tz-grid">
-            <select id="tz-from"><option value="Asia/Seoul">서울 (KST)</option><option value="America/New_York">뉴욕 (EST/EDT)</option><option value="Europe/London">런던</option><option value="Asia/Tokyo">도쿄</option></select>
+            <select id="tz-from"><option value="Asia/Seoul">{% if page.lang == 'en' %}Seoul (KST){% elsif page.lang == 'ja' %}ソウル (KST){% else %}서울 (KST){% endif %}</option><option value="America/New_York">{% if page.lang == 'en' %}New York (EST/EDT){% elsif page.lang == 'ja' %}ニューヨーク (EST/EDT){% else %}뉴욕 (EST/EDT){% endif %}</option><option value="Europe/London">{% if page.lang == 'en' %}London{% elsif page.lang == 'ja' %}ロンドン{% else %}런던{% endif %}</option><option value="Asia/Tokyo">{% if page.lang == 'en' %}Tokyo{% elsif page.lang == 'ja' %}東京{% else %}도쿄{% endif %}</option></select>
             <input id="tz-datetime" type="datetime-local" />
-            <select id="tz-to"><option value="America/Los_Angeles">로스앤젤레스</option><option value="Asia/Seoul">서울</option><option value="Europe/Paris">파리</option><option value="Asia/Singapore">싱가포르</option></select>
+            <select id="tz-to"><option value="America/Los_Angeles">{% if page.lang == 'en' %}Los Angeles{% elsif page.lang == 'ja' %}ロサンゼルス{% else %}로스앤젤레스{% endif %}</option><option value="Asia/Seoul">{% if page.lang == 'en' %}Seoul{% elsif page.lang == 'ja' %}ソウル{% else %}서울{% endif %}</option><option value="Europe/Paris">{% if page.lang == 'en' %}Paris{% elsif page.lang == 'ja' %}パリ{% else %}파리{% endif %}</option><option value="Asia/Singapore">{% if page.lang == 'en' %}Singapore{% elsif page.lang == 'ja' %}シンガポール{% else %}싱가포르{% endif %}</option></select>
           </div>
-          <p class="tool-result" id="tz-result">결과 시간이 여기에 표시됩니다.</p>
+          <p class="tool-result" id="tz-result">{% if page.lang == 'en' %}Converted time appears here.{% elsif page.lang == 'ja' %}変換後の時刻がここに表示されます。{% else %}결과 시간이 여기에 표시됩니다.{% endif %}</p>
         </div>
       {% when 'case-converter' %}
         <div class="tool-ui">
-          <textarea id="cc-input" placeholder="변환할 텍스트 입력"></textarea>
+          <textarea id="cc-input" placeholder="{% if page.lang == 'en' %}Enter text to convert{% elsif page.lang == 'ja' %}変換するテキストを入力{% else %}변환할 텍스트 입력{% endif %}"></textarea>
           <div class="tool-row-grid cc-grid">
             <button type="button" data-mode="upper">UPPER</button>
             <button type="button" data-mode="lower">lower</button>
@@ -76,7 +76,7 @@ layout: default
             <button type="button" data-mode="camel">camelCase</button>
             <button type="button" data-mode="snake">snake_case</button>
           </div>
-          <textarea id="cc-output" placeholder="결과" readonly></textarea>
+          <textarea id="cc-output" placeholder="{% if page.lang == 'en' %}Result{% elsif page.lang == 'ja' %}結果{% else %}결과{% endif %}" readonly></textarea>
         </div>
       {% when 'image-resizer' %}
         <div class="tool-ui">
@@ -156,13 +156,13 @@ layout: default
         </div>
       {% when 'blog-banned-word-checker' %}
         <div class="tool-ui">
-          <textarea id="bw-input" maxlength="5000" placeholder="검사할 글을 붙여넣으세요"></textarea>
-          <p class="tool-result" id="bw-summary">텍스트를 입력하면 금칙어/주의 패턴을 즉시 검사합니다.</p>
+          <textarea id="bw-input" maxlength="5000" placeholder="{% if page.lang == 'en' %}Paste text to check{% elsif page.lang == 'ja' %}チェックする文章を貼り付け{% else %}검사할 글을 붙여넣으세요{% endif %}"></textarea>
+          <p class="tool-result" id="bw-summary">{% if page.lang == 'en' %}Enter text to instantly scan risky/banned patterns.{% elsif page.lang == 'ja' %}テキストを入力すると、禁止語/注意パターンをすぐに点検します。{% else %}텍스트를 입력하면 금칙어/주의 패턴을 즉시 검사합니다.{% endif %}</p>
           <div class="tool-stats">
-            <div><strong id="bw-total">0</strong><span>검출 수</span></div>
-            <div><strong id="bw-spam">0</strong><span>스팸/홍보</span></div>
-            <div><strong id="bw-claim">0</strong><span>과장/광고성</span></div>
-            <div><strong id="bw-link">0</strong><span>링크/연락처</span></div>
+            <div><strong id="bw-total">0</strong><span>{% if page.lang == 'en' %}Detections{% elsif page.lang == 'ja' %}検出数{% else %}검출 수{% endif %}</span></div>
+            <div><strong id="bw-spam">0</strong><span>{% if page.lang == 'en' %}Spam / promo{% elsif page.lang == 'ja' %}スパム/宣伝{% else %}스팸/홍보{% endif %}</span></div>
+            <div><strong id="bw-claim">0</strong><span>{% if page.lang == 'en' %}Overclaim / ad tone{% elsif page.lang == 'ja' %}誇大/広告表現{% else %}과장/광고성{% endif %}</span></div>
+            <div><strong id="bw-link">0</strong><span>{% if page.lang == 'en' %}Links / contacts{% elsif page.lang == 'ja' %}リンク/連絡先{% else %}링크/연락처{% endif %}</span></div>
           </div>
           <div id="bw-list" class="bw-list"></div>
         </div>
@@ -198,15 +198,15 @@ layout: default
         </div>
       {% when 'font-change' %}
         <div class="tool-ui font-change-ui">
-          <textarea id="fc-input" maxlength="500" placeholder="텍스트를 입력하세요"></textarea>
+          <textarea id="fc-input" maxlength="500" placeholder="{% if page.lang == 'en' %}Enter text{% elsif page.lang == 'ja' %}テキストを入力{% else %}텍스트를 입력하세요{% endif %}"></textarea>
           <div class="font-change-controls">
-            <button id="fc-show-fav" type="button">★ 즐겨찾기만 보기: OFF</button>
-            <button id="fc-show-all" type="button">확장 폰트 보기: OFF</button>
-            <button id="fc-clear-fav" type="button">즐겨찾기 초기화</button>
+            <button id="fc-show-fav" type="button">{% if page.lang == 'en' %}★ Favorites only: OFF{% elsif page.lang == 'ja' %}★ お気に入りのみ: OFF{% else %}★ 즐겨찾기만 보기: OFF{% endif %}</button>
+            <button id="fc-show-all" type="button">{% if page.lang == 'en' %}Show extended styles: OFF{% elsif page.lang == 'ja' %}拡張スタイル表示: OFF{% else %}확장 폰트 보기: OFF{% endif %}</button>
+            <button id="fc-clear-fav" type="button">{% if page.lang == 'en' %}Reset favorites{% elsif page.lang == 'ja' %}お気に入りをリセット{% else %}즐겨찾기 초기화{% endif %}</button>
           </div>
-          <p class="tool-result">입력 즉시 모든 스타일이 변환됩니다. 항목 클릭 시 복사되고, ★로 즐겨찾기 저장됩니다.</p>
+          <p class="tool-result">{% if page.lang == 'en' %}All styles update instantly. Click an item to copy, and use ★ to save favorites.{% elsif page.lang == 'ja' %}入力と同時に全スタイルが更新されます。項目をクリックするとコピーされ、★でお気に入り保存できます。{% else %}입력 즉시 모든 스타일이 변환됩니다. 항목 클릭 시 복사되고, ★로 즐겨찾기 저장됩니다.{% endif %}</p>
           <div id="fc-list" class="font-preview-list"></div>
-          <div id="fc-toast" class="copy-toast" aria-live="polite">복사되었습니다</div>
+          <div id="fc-toast" class="copy-toast" aria-live="polite">{% if page.lang == 'en' %}Copied{% elsif page.lang == 'ja' %}コピーしました{% else %}복사되었습니다{% endif %}</div>
         </div>
       {% when 'percent-calculator' %}
         <div class="tool-ui">
@@ -353,39 +353,39 @@ layout: default
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="bmi-height">키(cm)</label>
-              <input id="bmi-height" type="number" min="50" max="260" step="0.1" placeholder="예: 170" inputmode="decimal" />
+              <label for="bmi-height">{% if page.lang == 'en' %}Height (cm){% elsif page.lang == 'ja' %}身長(cm){% else %}키(cm){% endif %}</label>
+              <input id="bmi-height" type="number" min="50" max="260" step="0.1" placeholder="{% if page.lang == 'en' %}e.g., 170{% elsif page.lang == 'ja' %}例: 170{% else %}예: 170{% endif %}" inputmode="decimal" />
             </div>
             <div>
-              <label for="bmi-weight">몸무게(kg)</label>
-              <input id="bmi-weight" type="number" min="10" max="400" step="0.1" placeholder="예: 65" inputmode="decimal" />
+              <label for="bmi-weight">{% if page.lang == 'en' %}Weight (kg){% elsif page.lang == 'ja' %}体重(kg){% else %}몸무게(kg){% endif %}</label>
+              <input id="bmi-weight" type="number" min="10" max="400" step="0.1" placeholder="{% if page.lang == 'en' %}e.g., 65{% elsif page.lang == 'ja' %}例: 65{% else %}예: 65{% endif %}" inputmode="decimal" />
             </div>
           </div>
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="bmi-age">나이(선택)</label>
-              <input id="bmi-age" type="number" min="1" max="120" step="1" placeholder="예: 30" inputmode="numeric" />
+              <label for="bmi-age">{% if page.lang == 'en' %}Age (optional){% elsif page.lang == 'ja' %}年齢（任意）{% else %}나이(선택){% endif %}</label>
+              <input id="bmi-age" type="number" min="1" max="120" step="1" placeholder="{% if page.lang == 'en' %}e.g., 30{% elsif page.lang == 'ja' %}例: 30{% else %}예: 30{% endif %}" inputmode="numeric" />
             </div>
             <div>
-              <label for="bmi-sex">성별(선택)</label>
+              <label for="bmi-sex">{% if page.lang == 'en' %}Sex (optional){% elsif page.lang == 'ja' %}性別（任意）{% else %}성별(선택){% endif %}</label>
               <select id="bmi-sex">
-                <option value="">선택 안 함</option>
-                <option value="male">남성</option>
-                <option value="female">여성</option>
+                <option value="">{% if page.lang == 'en' %}Prefer not to say{% elsif page.lang == 'ja' %}未選択{% else %}선택 안 함{% endif %}</option>
+                <option value="male">{% if page.lang == 'en' %}Male{% elsif page.lang == 'ja' %}男性{% else %}남성{% endif %}</option>
+                <option value="female">{% if page.lang == 'en' %}Female{% elsif page.lang == 'ja' %}女性{% else %}여성{% endif %}</option>
               </select>
             </div>
           </div>
           <div class="tool-row-grid pct-actions">
-            <button id="bmi-copy" type="button">결과 복사</button>
-            <button id="bmi-reset" type="button">초기화</button>
+            <button id="bmi-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="bmi-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
           <div class="tool-stats">
             <div><strong id="bmi-value">-</strong><span>BMI</span></div>
-            <div><strong id="bmi-category">입력 대기</strong><span>체중 분류</span></div>
-            <div><strong id="bmi-normal">-</strong><span>정상 체중 범위</span></div>
-            <div><strong id="bmi-bmr">-</strong><span>기초대사량(BMR)</span></div>
+            <div><strong id="bmi-category">{% if page.lang == 'en' %}Waiting for input{% elsif page.lang == 'ja' %}入力待ち{% else %}입력 대기{% endif %}</strong><span>{% if page.lang == 'en' %}Weight category{% elsif page.lang == 'ja' %}体重区分{% else %}체중 분류{% endif %}</span></div>
+            <div><strong id="bmi-normal">-</strong><span>{% if page.lang == 'en' %}Healthy weight range{% elsif page.lang == 'ja' %}標準体重範囲{% else %}정상 체중 범위{% endif %}</span></div>
+            <div><strong id="bmi-bmr">-</strong><span>{% if page.lang == 'en' %}Basal metabolic rate (BMR){% elsif page.lang == 'ja' %}基礎代謝量(BMR){% else %}기초대사량(BMR){% endif %}</span></div>
           </div>
-          <p class="tool-result" id="bmi-help">키와 몸무게를 입력하면 BMI와 정상 체중 범위를 계산합니다.</p>
+          <p class="tool-result" id="bmi-help">{% if page.lang == 'en' %}Enter height and weight to calculate BMI and healthy weight range.{% elsif page.lang == 'ja' %}身長と体重を入力すると、BMIと標準体重範囲を計算します。{% else %}키와 몸무게를 입력하면 BMI와 정상 체중 범위를 계산합니다.{% endif %}</p>
         </div>
       {% when 'loan-calculator' %}
         <div class="tool-ui">
