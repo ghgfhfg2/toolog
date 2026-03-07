@@ -28,3 +28,7 @@ alternate_urls:
 - 医療・法律・金融の誇大表現
 - 連絡先ID・電話番号・外部リンク過多
 - ハッシュタグや同語反復の多用
+
+## 関連ツール
+- [文字数カウンター]({{ '/ja/tools/text-counter/' | relative_url }})
+- [大文字・小文字変換]({{ '/ja/tools/case-converter/' | relative_url }})

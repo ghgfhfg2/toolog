@@ -24,3 +24,7 @@ alternate_urls:
 - 2x/3x/4x拡大
 - シャープ補正オプション
 - ダウンロードまでブラウザで完了
+
+## 関連ツール
+- [PNG圧縮ツール]({{ '/ja/tools/png-compressor/' | relative_url }})
+- [画像リサイズツール]({{ '/ja/tools/image-resizer/' | relative_url }})

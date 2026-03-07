@@ -152,29 +152,59 @@
 
 - id: image-upscaler
   title: 이미지 업스케일러
+  title_en: Image Upscaler
+  title_ja: 画像アップスケーラー
   category: image
   category_label: 이미지/그래픽
+  category_label_en: Image/Graphics
+  category_label_ja: 画像/グラフィック
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 작은 이미지를 화질 손실을 줄여 2x·3x·4x로 확대해요.
+  description_en: Upscale low-resolution images by 2x, 3x, or 4x with sharpening options to improve perceived clarity.
+  description_ja: 低解像度画像を2x・3x・4xに拡大し、シャープ補正で見た目の劣化を抑えます。
   url: /tools/image-upscaler/
+  url_en: /en/tools/image-upscaler/
+  url_ja: /ja/tools/image-upscaler/
   thumbnail: /assets/thumbs/image-upscaler.svg
 
 - id: font-change
   title: 폰트 변환기
+  title_en: Font Changer
+  title_ja: フォント変換
   category: text
   category_label: 텍스트/편집
+  category_label_en: Text/Editing
+  category_label_ja: テキスト/編集
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 입력하면 다양한 유니코드 폰트로 실시간 변환하고 클릭 복사해요.
+  description_en: Convert plain text into multiple Unicode font styles in real time and copy any style with one click.
+  description_ja: 入力テキストを複数のUnicodeフォントにリアルタイム変換し、ワンクリックでコピーできます。
   url: /tools/font-change/
+  url_en: /en/tools/font-change/
+  url_ja: /ja/tools/font-change/
   thumbnail: /assets/thumbs/font-change.svg
 
 - id: blog-banned-word-checker
   title: 금칙어 검사기
+  title_en: Banned Word Checker
+  title_ja: 禁止語チェック
   category: text
   category_label: 텍스트/편집
+  category_label_en: Text/Editing
+  category_label_ja: テキスト/編集
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 스팸/과장/어뷰징/외부링크 패턴을 실시간으로 점검해요.
+  description_en: Scan text in real time for spam, overclaim wording, abuse patterns, and risky external-link signals.
+  description_ja: テキスト内のスパム・誇大表現・不正利用パターン・外部リンクリスクをリアルタイムで検出します。
   url: /tools/blog-banned-word-checker/
+  url_en: /en/tools/blog-banned-word-checker/
+  url_ja: /ja/tools/blog-banned-word-checker/
   thumbnail: /assets/thumbs/blog-banned-word-checker.svg
 
 - id: text-counter

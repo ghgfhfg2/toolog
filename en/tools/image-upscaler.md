@@ -30,3 +30,7 @@ Directly enlarging a small image often makes edges blurry. This tool scales firs
 
 ## Tip
 Start with 2x for natural-looking output, then test 3x/4x only if needed.
+
+## Related tools
+- [PNG Compressor]({{ '/en/tools/png-compressor/' | relative_url }})
+- [Image Resizer]({{ '/en/tools/image-resizer/' | relative_url }})

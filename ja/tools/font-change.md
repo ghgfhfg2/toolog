@@ -22,3 +22,7 @@ alternate_urls:
 
 ## 使いどころ
 SNSプロフィールやチャンネル名を装飾したい時に、入力→比較→コピーを1画面で完了できます。
+
+## 関連ツール
+- [文字数カウンター]({{ '/ja/tools/text-counter/' | relative_url }})
+- [大文字・小文字変換]({{ '/ja/tools/case-converter/' | relative_url }})
