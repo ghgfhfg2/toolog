@@ -12,6 +12,16 @@
 <meta name="twitter:image" content="{{ page.thumbnail | absolute_url }}">
 <meta name="twitter:image:alt" content="{{ page.image.alt | default: page.title | append: ' 대표 이미지' }}">
 {% endif %}
+{% if page.alternate_urls %}
+{% assign alt = page.alternate_urls %}
+{% if alt.ko %}<link rel="alternate" hreflang="ko" href="{{ alt.ko | absolute_url }}">{% endif %}
+{% if alt.en %}<link rel="alternate" hreflang="en" href="{{ alt.en | absolute_url }}">{% endif %}
+{% if alt.ja %}<link rel="alternate" hreflang="ja" href="{{ alt.ja | absolute_url }}">{% endif %}
+{% if alt.en and alt.ja and alt.ko %}<link rel="alternate" hreflang="x-default" href="{{ alt.ko | absolute_url }}">{% endif %}
+{% endif %}
+{% if page.canonical_url %}
+<link rel="canonical" href="{{ page.canonical_url | absolute_url }}">
+{% endif %}
 {% if page.robots %}
 <meta name="robots" content="{{ page.robots }}">
 {% else %}
