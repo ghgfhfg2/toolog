@@ -2427,7 +2427,7 @@
     const salText = salaryI18n[pageLang] || salaryI18n.ko;
     const KRW = (v) => {
       const rounded = Math.round(v);
-      if (pageLang === 'en') return `$${rounded.toLocaleString(numberLocale)}`;
+      if (pageLang === 'en') return `${rounded.toLocaleString(numberLocale)} KRW`;
       return `${rounded.toLocaleString(numberLocale)}${salText.currency}`;
     };
 
@@ -2635,7 +2635,7 @@
     const sevText = sevI18n[pageLang] || sevI18n.ko;
     const fmtKRW = (v) => {
       const rounded = Math.round(v);
-      if (pageLang === 'en') return `$${rounded.toLocaleString(numberLocale)}`;
+      if (pageLang === 'en') return `${rounded.toLocaleString(numberLocale)} KRW`;
       return `${rounded.toLocaleString(numberLocale)}${sevText.currency}`;
     };
 
@@ -2832,7 +2832,7 @@
     const stockText = stockI18n[pageLang] || stockI18n.ko;
     const fmtKRW = (v) => {
       const rounded = Math.round(v);
-      if (pageLang === 'en') return `$${rounded.toLocaleString(numberLocale)}`;
+      if (pageLang === 'en') return `${rounded.toLocaleString(numberLocale)} KRW`;
       return `${rounded.toLocaleString(numberLocale)}${stockText.currency}`;
     };
     const fmtQty = (v) => `${Math.round(v).toLocaleString(numberLocale)}${stockText.shareUnit}`;
@@ -3519,7 +3519,7 @@
     const t = jvI18n[pageLang] || jvI18n.ko;
     const fmtCurrency = (v) => {
       const rounded = Math.round(v);
-      if (pageLang === 'en') return `$${rounded.toLocaleString(numberLocale)}`;
+      if (pageLang === 'en') return `${rounded.toLocaleString(numberLocale)} KRW`;
       return `${rounded.toLocaleString(numberLocale)}${t.currency}`;
     };
 
