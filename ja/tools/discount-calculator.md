@@ -40,6 +40,6 @@ alternate_urls:
 4. 最終支払額と割引内訳を確認
 
 ## 関連ツール
-- 比率計算: [パーセント計算機]({{ '/tools/percent-calculator/' | relative_url }})
-- 税込み金額: [VAT計算機]({{ '/tools/vat-calculator/' | relative_url }})
-- 分割支払の比較: [ローン計算機]({{ '/tools/loan-calculator/' | relative_url }})
+- 比率計算: [パーセント計算機]({{ '/ja/tools/percent-calculator/' | relative_url }})
+- 税込み金額: [VAT計算機]({{ '/ja/tools/vat-calculator/' | relative_url }})
+- 分割支払の比較: [ローン計算機]({{ '/ja/tools/loan-calculator/' | relative_url }})

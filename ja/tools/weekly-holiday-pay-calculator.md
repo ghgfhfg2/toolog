@@ -49,5 +49,5 @@ alternate_urls:
 - 実際の支給は契約内容・勤怠・会社規定によって異なります。
 
 ## 関連ツール
-- 手取り見込み: [給与計算機]({{ '/tools/salary-calculator/' | relative_url }})
-- 退職時チェック: [退職金計算機]({{ '/tools/severance-pay-calculator/' | relative_url }})
+- 手取り見込み: [給与計算機]({{ '/ja/tools/salary-calculator/' | relative_url }})
+- 退職時チェック: [退職金計算機]({{ '/ja/tools/severance-pay-calculator/' | relative_url }})

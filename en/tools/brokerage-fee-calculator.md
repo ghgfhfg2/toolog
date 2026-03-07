@@ -43,6 +43,6 @@ For monthly rent, transaction value is converted by:
 3. Check estimated max brokerage fee and VAT reference.
 
 ## Related tools
-- Area conversion: [Pyeong Calculator]({{ '/tools/pyeong-calculator/' | relative_url }})
-- Percentage check: [Percent Calculator]({{ '/tools/percent-calculator/' | relative_url }})
-- Financing estimate: [Loan Calculator]({{ '/tools/loan-calculator/' | relative_url }})
+- Area conversion: [Pyeong Calculator]({{ '/en/tools/pyeong-calculator/' | relative_url }})
+- Percentage check: [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
+- Financing estimate: [Loan Calculator]({{ '/en/tools/loan-calculator/' | relative_url }})

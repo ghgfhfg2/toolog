@@ -49,5 +49,5 @@ This tool helps you quickly check **eligibility + estimated weekly/monthly amoun
 - Actual payroll may differ by contract, attendance records, and company policy.
 
 ## Related tools
-- Net income estimate: [Salary Calculator]({{ '/tools/salary-calculator/' | relative_url }})
-- Leaving payment check: [Severance Pay Calculator]({{ '/tools/severance-pay-calculator/' | relative_url }})
+- Net income estimate: [Salary Calculator]({{ '/en/tools/salary-calculator/' | relative_url }})
+- Leaving payment check: [Severance Pay Calculator]({{ '/en/tools/severance-pay-calculator/' | relative_url }})

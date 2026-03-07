@@ -41,6 +41,6 @@ alternate_urls:
 4. チップ額・合計・1人あたりを確認
 
 ## 関連ツール
-- 比率計算: [パーセント計算機]({{ '/tools/percent-calculator/' | relative_url }})
-- 値引き計算: [割引計算機]({{ '/tools/discount-calculator/' | relative_url }})
-- VAT計算: [VAT計算機]({{ '/tools/vat-calculator/' | relative_url }})
+- 比率計算: [パーセント計算機]({{ '/ja/tools/percent-calculator/' | relative_url }})
+- 値引き計算: [割引計算機]({{ '/ja/tools/discount-calculator/' | relative_url }})
+- VAT計算: [VAT計算機]({{ '/ja/tools/vat-calculator/' | relative_url }})

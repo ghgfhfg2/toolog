@@ -41,6 +41,6 @@ Great for travel, group dinners, and quick settlement chats.
 4. Review tip, total, and per-person amount.
 
 ## Related tools
-- Percent math: [Percent Calculator]({{ '/tools/percent-calculator/' | relative_url }})
-- Discounted totals: [Discount Calculator]({{ '/tools/discount-calculator/' | relative_url }})
-- VAT math: [VAT Calculator]({{ '/tools/vat-calculator/' | relative_url }})
+- Percent math: [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
+- Discounted totals: [Discount Calculator]({{ '/en/tools/discount-calculator/' | relative_url }})
+- VAT math: [VAT Calculator]({{ '/en/tools/vat-calculator/' | relative_url }})

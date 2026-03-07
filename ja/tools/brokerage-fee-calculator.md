@@ -43,6 +43,6 @@ alternate_urls:
 3. 推定上限手数料とVAT込み参考額を確認
 
 ## 関連ツール
-- 面積換算: [坪計算機]({{ '/tools/pyeong-calculator/' | relative_url }})
-- 比率計算: [パーセント計算機]({{ '/tools/percent-calculator/' | relative_url }})
-- 借入試算: [ローン計算機]({{ '/tools/loan-calculator/' | relative_url }})
+- 面積換算: [坪計算機]({{ '/ja/tools/pyeong-calculator/' | relative_url }})
+- 比率計算: [パーセント計算機]({{ '/ja/tools/percent-calculator/' | relative_url }})
+- 借入試算: [ローン計算機]({{ '/ja/tools/loan-calculator/' | relative_url }})

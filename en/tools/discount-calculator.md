@@ -41,6 +41,6 @@ It also supports reverse calculation for target selling price.
 4. Review final amount and discount summary.
 
 ## Related tools
-- Percentage math: [Percent Calculator]({{ '/tools/percent-calculator/' | relative_url }})
-- Tax-included totals: [VAT Calculator]({{ '/tools/vat-calculator/' | relative_url }})
-- Payment planning: [Loan Calculator]({{ '/tools/loan-calculator/' | relative_url }})
+- Percentage math: [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
+- Tax-included totals: [VAT Calculator]({{ '/en/tools/vat-calculator/' | relative_url }})
+- Payment planning: [Loan Calculator]({{ '/en/tools/loan-calculator/' | relative_url }})
