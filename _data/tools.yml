@@ -338,38 +338,78 @@
 
 - id: salary-calculator
   title: 연봉 실수령액 계산기
+  title_en: Salary Calculator
+  title_ja: 年収手取り計算機
   category: calculator
   category_label: 금융/비즈니스
+  category_label_en: Finance/Business
+  category_label_ja: 金融/ビジネス
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 연봉과 비과세·가족 정보를 넣으면 월/연 실수령액과 세금·4대보험 공제를 빠르게 계산해요.
+  description_en: Estimate monthly and yearly take-home pay from annual salary, non-taxable income, and dependent information.
+  description_ja: 年収・非課税月額・扶養情報から、月/年の手取りと税金・4大保険控除の目安を素早く計算します。
   url: /tools/salary-calculator/
+  url_en: /en/tools/salary-calculator/
+  url_ja: /ja/tools/salary-calculator/
   thumbnail: /assets/thumbs/salary-calculator.svg
 
 - id: severance-pay-calculator
   title: 퇴직금 계산기
+  title_en: Severance Pay Calculator
+  title_ja: 退職金計算機
   category: calculator
   category_label: 금융/비즈니스
+  category_label_en: Finance/Business
+  category_label_ja: 金融/ビジネス
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 입사일·퇴사일·월급·상여금 입력으로 재직일수와 예상 퇴직금, 1년 요건 여부를 빠르게 확인해요.
+  description_en: Estimate service days, average daily wage, and expected severance pay from employment dates, monthly salary, and bonus.
+  description_ja: 入社日・退社日・月給・賞与から、勤続日数・平均賃金・退職金見込みを素早く試算します。
   url: /tools/severance-pay-calculator/
+  url_en: /en/tools/severance-pay-calculator/
+  url_ja: /ja/tools/severance-pay-calculator/
   thumbnail: /assets/thumbs/severance-pay-calculator.svg
 
 - id: stock-average-calculator
   title: 물타기 계산기
+  title_en: Stock Average Calculator
+  title_ja: ナンピン計算機
   category: calculator
   category_label: 투자/금융
+  category_label_en: Investment/Finance
+  category_label_ja: 投資/金融
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 현재 보유 평단과 추가 매수 계획을 넣어 새 평단가와 목표 평단 달성 필요 수량을 계산해요.
+  description_en: Calculate new average cost after additional buys and estimate shares needed to reach a target average price.
+  description_ja: 現在の平均取得単価と追加購入条件から、新しい平均単価と目標単価達成に必要な数量を計算します。
   url: /tools/stock-average-calculator/
+  url_en: /en/tools/stock-average-calculator/
+  url_ja: /ja/tools/stock-average-calculator/
   thumbnail: /assets/thumbs/stock-average-calculator.svg
 
 - id: tdee-calculator
   title: 칼로리 계산기 (TDEE)
+  title_en: TDEE Calculator
+  title_ja: TDEEカロリー計算機
   category: data
   category_label: 건강/피트니스
+  category_label_en: Health/Fitness
+  category_label_ja: 健康/フィットネス
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: BMR·TDEE와 감량/유지/증량 하루 권장 칼로리를 빠르게 계산해요.
+  description_en: Estimate BMR, TDEE, and daily calorie targets for cutting, maintenance, and bulking.
+  description_ja: BMR・TDEEと、減量・維持・増量それぞれの1日カロリー目安を素早く計算します。
   url: /tools/tdee-calculator/
+  url_en: /en/tools/tdee-calculator/
+  url_ja: /ja/tools/tdee-calculator/
   thumbnail: /assets/thumbs/tdee-calculator.svg
 
 - id: tip-calculator
