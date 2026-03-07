@@ -3166,7 +3166,12 @@
       return `${n.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}원`;
     };
 
-    const parse = (el) => Math.max(0, Number(el?.value || 0));
+    const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
+    const parseNonNegative = (el, max = 1000000000000) => {
+      const raw = Number(el?.value || 0);
+      if (!Number.isFinite(raw)) return 0;
+      return clamp(raw, 0, max);
+    };
 
     const copyText = async (v) => {
       try { await navigator.clipboard.writeText(v); }
@@ -3185,11 +3190,13 @@
 
     const render = () => {
       syncMode();
-      const subtotal = parse(subtotalEl);
-      const tax = parse(taxEl);
-      const service = parse(serviceEl);
-      const people = Math.max(1, Math.floor(Number(peopleEl.value || 1)));
-      peopleEl.value = people;
+      const subtotal = parseNonNegative(subtotalEl);
+      const tax = parseNonNegative(taxEl);
+      const service = parseNonNegative(serviceEl);
+
+      const peopleRaw = Number(peopleEl.value || 1);
+      const people = Number.isFinite(peopleRaw) ? clamp(Math.floor(peopleRaw), 1, 1000) : 1;
+      if (peopleRaw !== people) peopleEl.value = people;
 
       if (subtotal <= 0 && tax <= 0 && service <= 0) {
         outTip.textContent = '-';
@@ -3202,9 +3209,17 @@
 
       const billTotal = subtotal + tax + service;
       const tipBase = (baseModeEl.value || 'subtotal') === 'total' ? billTotal : subtotal;
+      const tipRateRaw = Number(tipRateEl.value || 0);
+      const tipRate = Number.isFinite(tipRateRaw) ? clamp(tipRateRaw, 0, 100) : 0;
+      if (tipRateRaw !== tipRate) tipRateEl.value = tipRate;
+
+      const tipFixedRaw = Number(tipFixedEl.value || 0);
+      const tipFixed = Number.isFinite(tipFixedRaw) ? clamp(tipFixedRaw, 0, 1000000000000) : 0;
+      if (tipFixedRaw !== tipFixed) tipFixedEl.value = tipFixed;
+
       const tipAmount = (tipModeEl.value || 'percent') === 'fixed'
-        ? parse(tipFixedEl)
-        : tipBase * (Math.max(0, Number(tipRateEl.value || 0)) / 100);
+        ? tipFixed
+        : tipBase * (tipRate / 100);
 
       const total = billTotal + tipAmount;
       const per = total / people;
