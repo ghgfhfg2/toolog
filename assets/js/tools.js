@@ -2457,11 +2457,26 @@
       help.textContent = msg;
     };
 
+    const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
+
     const render = () => {
-      const wage = Math.max(0, Number(hourly.value || 0));
-      const weekHours = Math.max(0, Number(hours.value || 0));
-      const weekDays = Math.max(1, Math.floor(Number(days.value || 0)));
+      const wageRaw = Number(hourly.value || 0);
+      const weekHoursRaw = Number(hours.value || 0);
+      const weekDaysRaw = Number(days.value || 0);
+
+      if (!Number.isFinite(wageRaw) || !Number.isFinite(weekHoursRaw) || !Number.isFinite(weekDaysRaw)) {
+        setIdle('숫자 형식으로 입력해 주세요.');
+        return;
+      }
+
+      const wage = clamp(wageRaw, 0, 1000000);
+      const weekHours = clamp(weekHoursRaw, 0, 80);
+      const weekDays = clamp(Math.floor(weekDaysRaw), 1, 7);
       const isPerfect = !!perfect.checked;
+
+      if (wageRaw !== wage) hourly.value = wage;
+      if (weekHoursRaw !== weekHours) hours.value = weekHours;
+      if (weekDaysRaw !== weekDays) days.value = weekDays;
 
       if (!(wage > 0) || !(weekHours > 0) || !(weekDays > 0)) {
         setIdle('시급·주 소정근로시간·근무일수를 입력하세요.');
