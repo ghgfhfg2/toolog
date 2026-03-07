@@ -9,38 +9,78 @@
 
 - id: loan-calculator
   title: 대출 이자 계산기
+  title_en: Loan Calculator
+  title_ja: ローン計算機
   category: calculator
   category_label: 금융/비즈니스
+  category_label_en: Finance
+  category_label_ja: 金融
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 대출금액·금리·기간으로 월 납입액, 총 이자, 상환방식을 한 번에 비교해요.
+  description_en: Compare monthly payment, total interest, and repayment types from loan amount, rate, and term.
+  description_ja: 借入額・金利・期間から、毎月返済額・総利息・返済方式をまとめて比較できます。
   url: /tools/loan-calculator/
+  url_en: /en/tools/loan-calculator/
+  url_ja: /ja/tools/loan-calculator/
   thumbnail: /assets/thumbs/loan-calculator.svg
 
 - id: compound-interest-calculator
   title: 복리 계산기
+  title_en: Compound Interest Calculator
+  title_ja: 複利計算機
   category: calculator
   category_label: 투자/금융
+  category_label_en: Investment/Finance
+  category_label_ja: 投資/金融
   badge: Popular
+  badge_en: Popular
+  badge_ja: 人気
   description: 초기금·월 적립금·수익률·기간으로 만기 자산, 총 원금, 예상 수익, 물가 반영 가치를 계산해요.
+  description_en: Calculate ending balance, total principal, estimated profit, and inflation-adjusted value with monthly contributions.
+  description_ja: 初期資金・毎月積立・利回り・期間から、満期資産・元本合計・想定利益・インフレ調整後価値を計算します。
   url: /tools/compound-interest-calculator/
+  url_en: /en/tools/compound-interest-calculator/
+  url_ja: /ja/tools/compound-interest-calculator/
   thumbnail: /assets/thumbs/compound-interest-calculator.svg
 
 - id: brokerage-fee-calculator
   title: 부동산 중개수수료 계산기
+  title_en: Real Estate Brokerage Fee Calculator
+  title_ja: 不動産仲介手数料計算機
   category: calculator
   category_label: 부동산/금융
+  category_label_en: Real Estate/Finance
+  category_label_ja: 不動産/金融
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 주택 매매·전월세 거래금액 기준 법정 상한 요율로 중개보수 한도를 빠르게 계산해요.
+  description_en: Estimate the legal maximum brokerage fee for home sales and leases based on transaction value.
+  description_ja: 売買・賃貸の取引金額を基準に、法定上限料率で仲介手数料の上限目安を素早く計算します。
   url: /tools/brokerage-fee-calculator/
+  url_en: /en/tools/brokerage-fee-calculator/
+  url_ja: /ja/tools/brokerage-fee-calculator/
   thumbnail: /assets/thumbs/brokerage-fee-calculator.svg
 
 - id: password-generator
   title: 비밀번호 생성기
+  title_en: Password Generator
+  title_ja: パスワード生成ツール
   category: security
   category_label: 보안/계정
+  category_label_en: Security/Accounts
+  category_label_ja: セキュリティ/アカウント
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 길이·문자조합·가독성 옵션으로 강력한 랜덤 비밀번호를 생성해요.
+  description_en: Generate strong random passwords with length, character sets, and readability options.
+  description_ja: 長さ・文字種・可読性オプションを指定して、強力なランダムパスワードを生成します。
   url: /tools/password-generator/
+  url_en: /en/tools/password-generator/
+  url_ja: /ja/tools/password-generator/
   thumbnail: /assets/thumbs/password-generator.svg
 
 - id: png-compressor

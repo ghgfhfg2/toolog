@@ -31,19 +31,23 @@ permalink: /en/
 
   <section class="tool-grid" id="toolGrid">
     {% for tool in site.data.tools %}
-    <article class="tool-card" data-category="{{ tool.category }}" data-title="{{ tool.title | downcase }}" data-description="{{ tool.description | downcase }}">
-      <a class="tool-thumb-wrap" href="{{ tool.url | relative_url }}" aria-label="{{ tool.title }}">
+    {% assign localized_title = tool.title_en | default: tool.title %}
+    {% assign localized_description = tool.description_en | default: tool.description %}
+    {% assign localized_badge = tool.badge_en | default: tool.badge %}
+    {% assign localized_url = tool.url_en | default: tool.url %}
+    <article class="tool-card" data-category="{{ tool.category }}" data-title="{{ localized_title | downcase }}" data-description="{{ localized_description | downcase }}">
+      <a class="tool-thumb-wrap" href="{{ localized_url | relative_url }}" aria-label="{{ localized_title }}">
         {% if tool.thumbnail %}
-        <img class="tool-thumbnail" src="{{ tool.thumbnail | relative_url }}" alt="{{ tool.title }} thumbnail" loading="lazy" />
+        <img class="tool-thumbnail" src="{{ tool.thumbnail | relative_url }}" alt="{{ localized_title }} thumbnail" loading="lazy" />
         {% else %}
-        <div class="tool-thumbnail tool-thumbnail--fallback">{{ tool.title | slice: 0, 1 }}</div>
+        <div class="tool-thumbnail tool-thumbnail--fallback">{{ localized_title | slice: 0, 1 }}</div>
         {% endif %}
-        <span class="tool-badge">{{ tool.badge }}</span>
+        <span class="tool-badge">{{ localized_badge }}</span>
       </a>
 
       <div class="tool-meta">
-        <a class="tool-title" href="{{ tool.url | relative_url }}">{{ tool.title }}</a>
-        <p class="tool-desc">{{ tool.description }}</p>
+        <a class="tool-title" href="{{ localized_url | relative_url }}">{{ localized_title }}</a>
+        <p class="tool-desc">{{ localized_description }}</p>
       </div>
     </article>
     {% endfor %}
