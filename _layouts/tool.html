@@ -979,6 +979,45 @@ layout: default
 
           <p class="tool-result" id="tip-help">{% if page.lang == 'en' %}Enter bill values to calculate tip, total, and split instantly.{% elsif page.lang == 'ja' %}金額を入力すると、チップ・合計・1人あたりをすぐ計算します。{% else %}금액을 입력하면 팁·총액·1인당 금액을 바로 계산합니다.{% endif %}</p>
         </div>
+      {% when 'pomodoro-timer' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="pomo-focus">{% if page.lang == 'en' %}Focus (min){% elsif page.lang == 'ja' %}集中（分）{% else %}집중 시간(분){% endif %}</label>
+              <input id="pomo-focus" type="number" min="1" max="120" step="1" value="25" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="pomo-short">{% if page.lang == 'en' %}Short break (min){% elsif page.lang == 'ja' %}短い休憩（分）{% else %}짧은 휴식(분){% endif %}</label>
+              <input id="pomo-short" type="number" min="1" max="60" step="1" value="5" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="pomo-long">{% if page.lang == 'en' %}Long break (min){% elsif page.lang == 'ja' %}長い休憩（分）{% else %}긴 휴식(분){% endif %}</label>
+              <input id="pomo-long" type="number" min="1" max="90" step="1" value="15" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="pomo-cycle">{% if page.lang == 'en' %}Long break every N focus sessions{% elsif page.lang == 'ja' %}何回ごとに長い休憩{% else %}긴 휴식 주기(집중 N회마다){% endif %}</label>
+              <input id="pomo-cycle" type="number" min="2" max="12" step="1" value="4" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="pomo-start" type="button">{% if page.lang == 'en' %}Start / Pause{% elsif page.lang == 'ja' %}開始 / 一時停止{% else %}시작 / 일시정지{% endif %}</button>
+            <button id="pomo-skip" type="button">{% if page.lang == 'en' %}Skip phase{% elsif page.lang == 'ja' %}フェーズスキップ{% else %}구간 건너뛰기{% endif %}</button>
+            <button id="pomo-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="pomo-phase">-</strong><span>{% if page.lang == 'en' %}Current phase{% elsif page.lang == 'ja' %}現在フェーズ{% else %}현재 구간{% endif %}</span></div>
+            <div><strong id="pomo-remaining">25:00</strong><span>{% if page.lang == 'en' %}Time remaining{% elsif page.lang == 'ja' %}残り時間{% else %}남은 시간{% endif %}</span></div>
+            <div><strong id="pomo-progress">0 / 4</strong><span>{% if page.lang == 'en' %}Focus progress{% elsif page.lang == 'ja' %}集中 진행도{% else %}집중 진행도{% endif %}</span></div>
+            <div><strong id="pomo-status">{% if page.lang == 'en' %}Ready{% elsif page.lang == 'ja' %}準備完了{% else %}준비됨{% endif %}</strong><span>{% if page.lang == 'en' %}Status{% elsif page.lang == 'ja' %}状態{% else %}상태{% endif %}</span></div>
+          </div>
+
+          <p class="tool-result" id="pomo-help">{% if page.lang == 'en' %}Set minutes and press Start. Timer continues in this tab while open.{% elsif page.lang == 'ja' %}分を設定して開始を押してください。このタブを開いている間タイマーが動作します。{% else %}분 단위를 설정하고 시작을 누르세요. 탭이 열려 있는 동안 타이머가 동작합니다.{% endif %}</p>
+        </div>
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
     {% endcase %}

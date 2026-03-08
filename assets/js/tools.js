@@ -3975,6 +3975,141 @@
     render();
   }
 
+  if (slug === 'pomodoro-timer') {
+    const focusEl = document.getElementById('pomo-focus');
+    const shortEl = document.getElementById('pomo-short');
+    const longEl = document.getElementById('pomo-long');
+    const cycleEl = document.getElementById('pomo-cycle');
+    const startBtn = document.getElementById('pomo-start');
+    const skipBtn = document.getElementById('pomo-skip');
+    const resetBtn = document.getElementById('pomo-reset');
+
+    const outPhase = document.getElementById('pomo-phase');
+    const outRemaining = document.getElementById('pomo-remaining');
+    const outProgress = document.getElementById('pomo-progress');
+    const outStatus = document.getElementById('pomo-status');
+    const help = document.getElementById('pomo-help');
+
+    if (!focusEl || !shortEl || !longEl || !cycleEl || !startBtn || !skipBtn || !resetBtn || !outPhase || !outRemaining || !outProgress || !outStatus || !help) return;
+
+    const t = {
+      ko: {
+        phase: { focus: '집중', short: '짧은 휴식', long: '긴 휴식' },
+        ready: '준비됨', running: '진행 중', paused: '일시정지',
+        helpReady: '시작을 누르면 포모도로 타이머가 시작됩니다.',
+        helpPhaseDone: (phase) => `${phase} 시간이 끝났습니다. 다음 구간으로 자동 전환됩니다.`
+      },
+      en: {
+        phase: { focus: 'Focus', short: 'Short break', long: 'Long break' },
+        ready: 'Ready', running: 'Running', paused: 'Paused',
+        helpReady: 'Press Start to begin the Pomodoro timer.',
+        helpPhaseDone: (phase) => `${phase} completed. Switched to next phase automatically.`
+      },
+      ja: {
+        phase: { focus: '集中', short: '短い休憩', long: '長い休憩' },
+        ready: '準備完了', running: '進行中', paused: '一時停止',
+        helpReady: '開始を押すとポモドーロタイマーが始まります。',
+        helpPhaseDone: (phase) => `${phase}が終了し、次のフェーズに自動で切り替わりました。`
+      }
+    }[pageLang] || {
+      phase: { focus: '집중', short: '짧은 휴식', long: '긴 휴식' },
+      ready: '준비됨', running: '진행 중', paused: '일시정지',
+      helpReady: '시작을 누르면 포모도로 타이머가 시작됩니다.',
+      helpPhaseDone: (phase) => `${phase} 시간이 끝났습니다. 다음 구간으로 자동 전환됩니다.`
+    };
+
+    let timer = null;
+    let phase = 'focus';
+    let focusDone = 0;
+    let remainingSec = 25 * 60;
+    let running = false;
+
+    const clampInt = (v, min, max) => {
+      const n = Math.floor(Number(v || min));
+      if (!Number.isFinite(n)) return min;
+      return Math.min(max, Math.max(min, n));
+    };
+
+    const settings = () => {
+      const focus = clampInt(focusEl.value, 1, 120);
+      const short = clampInt(shortEl.value, 1, 60);
+      const long = clampInt(longEl.value, 1, 90);
+      const cycle = clampInt(cycleEl.value, 2, 12);
+      focusEl.value = focus;
+      shortEl.value = short;
+      longEl.value = long;
+      cycleEl.value = cycle;
+      return { focus, short, long, cycle };
+    };
+
+    const formatSec = (sec) => {
+      const s = Math.max(0, sec);
+      const m = Math.floor(s / 60);
+      const r = s % 60;
+      return `${String(m).padStart(2, '0')}:${String(r).padStart(2, '0')}`;
+    };
+
+    const nextPhase = () => {
+      const { focus, short, long, cycle } = settings();
+      if (phase === 'focus') {
+        focusDone += 1;
+        const longTurn = (focusDone > 0 && focusDone % cycle === 0);
+        phase = longTurn ? 'long' : 'short';
+        remainingSec = (longTurn ? long : short) * 60;
+      } else {
+        phase = 'focus';
+        remainingSec = focus * 60;
+      }
+      help.textContent = t.helpPhaseDone(t.phase[phase]);
+    };
+
+    const render = () => {
+      const { cycle } = settings();
+      outPhase.textContent = t.phase[phase] || phase;
+      outRemaining.textContent = formatSec(remainingSec);
+      outProgress.textContent = `${focusDone % cycle} / ${cycle}`;
+      outStatus.textContent = running ? t.running : (focusDone === 0 && phase === 'focus' && remainingSec === settings().focus * 60 ? t.ready : t.paused);
+    };
+
+    const tick = () => {
+      if (!running) return;
+      remainingSec -= 1;
+      if (remainingSec <= 0) nextPhase();
+      render();
+    };
+
+    const resetAll = () => {
+      const { focus } = settings();
+      if (timer) clearInterval(timer);
+      timer = null;
+      running = false;
+      phase = 'focus';
+      focusDone = 0;
+      remainingSec = focus * 60;
+      outStatus.textContent = t.ready;
+      help.textContent = t.helpReady;
+      render();
+    };
+
+    startBtn.addEventListener('click', () => {
+      if (!timer) timer = setInterval(tick, 1000);
+      running = !running;
+      render();
+    });
+
+    skipBtn.addEventListener('click', () => {
+      nextPhase();
+      render();
+    });
+
+    resetBtn.addEventListener('click', resetAll);
+    [focusEl, shortEl, longEl, cycleEl].forEach((el) => el.addEventListener('input', () => {
+      if (!running) resetAll();
+    }));
+
+    resetAll();
+  }
+
   if (slug === 'blog-banned-word-checker') {
     const input = document.getElementById('bw-input');
     const summary = document.getElementById('bw-summary');

@@ -1,3 +1,22 @@
+- id: pomodoro-timer
+  title: 뽀모도로 타이머
+  title_en: Pomodoro Timer
+  title_ja: ポモドーロタイマー
+  category: productivity
+  category_label: 일정/생산성
+  category_label_en: Schedule/Productivity
+  category_label_ja: 予定/生産性
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 집중·휴식 시간을 자동 전환해 공부와 업무 리듬을 유지하는 포모도로 타이머예요.
+  description_en: Keep your study/work rhythm with automatic focus-break cycles using a customizable Pomodoro timer.
+  description_ja: 集中と休憩を自動で切り替え、学習や作業リズムを整えるカスタム可能なポモドーロタイマーです。
+  url: /tools/pomodoro-timer/
+  url_en: /en/tools/pomodoro-timer/
+  url_ja: /ja/tools/pomodoro-timer/
+  thumbnail: /assets/thumbs/pomodoro-timer.svg
+
 - id: body-fat-calculator
   title: 체지방률 계산기
   title_en: Body Fat Calculator

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="ポモドーロタイマーサムネイル">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="290" cy="315" r="160" fill="#ef4444" opacity="0.2"/>
+  <circle cx="290" cy="315" r="122" fill="none" stroke="#f87171" stroke-width="18"/>
+  <line x1="290" y1="315" x2="290" y2="235" stroke="#fca5a5" stroke-width="14" stroke-linecap="round"/>
+  <line x1="290" y1="315" x2="350" y2="315" stroke="#fca5a5" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="290" cy="315" r="12" fill="#fecaca"/>
+  <text x="470" y="280" fill="#f8fafc" font-size="70" font-family="Pretendard, Inter, Arial, sans-serif" font-weight="800">ポモドーロタイマー</text>
+  <text x="470" y="350" fill="#cbd5e1" font-size="34" font-family="Pretendard, Inter, Arial, sans-serif">集中 · 休憩 · 繰り返し</text>
+</svg>
