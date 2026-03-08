@@ -14,6 +14,13 @@ image:
 tool_key: jeonse-vs-wolse-calculator
 keywords: [jeonse vs wolse, korea rent comparison, housing cost calculator, break-even rent]
 related_tools: [loan-calculator, compound-interest-calculator, brokerage-fee-calculator]
+faq:
+  - q: Why does this tool use an expected return rate?
+    a: Jeonse deposit ties up capital that could otherwise earn returns. The expected return models that opportunity cost.
+  - q: What does break-even wolse rent mean?
+    a: It is the monthly rent level where jeonse and wolse become equal on a monthly-equivalent cost basis under your inputs.
+  - q: Does this include taxes, maintenance fees, or moving costs?
+    a: No. This tool focuses on deposit opportunity cost and rent cash flow. Add extra costs separately when making a final decision.
 alternate_urls:
   ko: /tools/jeonse-vs-wolse-calculator/
   en: /en/tools/jeonse-vs-wolse-calculator/

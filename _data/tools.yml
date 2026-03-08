@@ -511,6 +511,25 @@
   url_ja: /ja/tools/tdee-calculator/
   thumbnail: /assets/thumbs/tdee-calculator.svg
 
+- id: weekly-holiday-pay-calculator
+  title: 주휴수당 계산기
+  title_en: Weekly Holiday Pay Calculator
+  title_ja: 週休手当計算機
+  category: calculator
+  category_label: 금융/비즈니스
+  category_label_en: Finance/Business
+  category_label_ja: 金融/ビジネス
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 시급·주 소정근로시간·근무일수로 주휴수당 대상 여부와 주/월 예상 금액을 계산해요.
+  description_en: Check paid weekly holiday eligibility and estimate weekly/monthly allowance from hourly wage and scheduled work hours.
+  description_ja: 時給・週所定労働時間・勤務日数から、週休手当の対象可否と週/月の見込み額を計算します。
+  url: /tools/weekly-holiday-pay-calculator/
+  url_en: /en/tools/weekly-holiday-pay-calculator/
+  url_ja: /ja/tools/weekly-holiday-pay-calculator/
+  thumbnail: /assets/thumbs/weekly-holiday-pay-calculator.svg
+
 - id: tip-calculator
   title: 팁 계산기
   title_en: Tip Calculator

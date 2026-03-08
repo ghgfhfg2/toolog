@@ -14,6 +14,13 @@ image:
 tool_key: jeonse-vs-wolse-calculator
 keywords: [チョンセ ウォルセ 比較, 韓国 賃貸 比較, 住居費 計算, 損益分岐 家賃]
 related_tools: [loan-calculator, compound-interest-calculator, brokerage-fee-calculator]
+faq:
+  - q: なぜ期待利回りを入力する必要がありますか？
+    a: チョンセ保証金は拘束資金になるため、その資金を運用できた場合の機会費用を見積もるためです。
+  - q: 損益分岐ウォルセ家賃とは何ですか？
+    a: 入力条件でチョンセとウォルセの月額換算コストが同じになる月家賃の目安です。
+  - q: 管理費・税金・引越し費用は含まれますか？
+    a: 含まれません。本ツールは保証金の機会費用と家賃支出に絞った比較です。最終判断時は別途加算してください。
 alternate_urls:
   ko: /tools/jeonse-vs-wolse-calculator/
   en: /en/tools/jeonse-vs-wolse-calculator/
