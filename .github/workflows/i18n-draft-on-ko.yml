@@ -1,0 +1,45 @@
+name: Auto draft EN/JA when KO tool is added
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "_tools/*.md"
+
+permissions:
+  contents: write
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: pip install pyyaml
+
+      - name: Generate EN/JA drafts and queue review
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.sha }}
+        run: python scripts/i18n_draft_from_ko.py
+
+      - name: Commit generated drafts
+        run: |
+          if git diff --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add en/tools ja/tools .automation/i18n-pending
+          git commit -m "chore(i18n): auto-generate EN/JA drafts from KO tools"
+          git push
