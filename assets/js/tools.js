@@ -2246,7 +2246,7 @@
         copyDefault: '결과 복사'
       },
       en: {
-        currency: '$',
+        currency: ' KRW',
         needPrice: 'Enter a list price greater than 0.',
         invalidRate: 'Discount rate must be between 0% and 100%.',
         forwardHelp: (price, q) => `Final payable amount for ${q} item(s), including coupon and shipping, based on list price ${price}.`,
@@ -2271,7 +2271,7 @@
     const dcText = discountI18n[pageLang] || discountI18n.ko;
     const fmtKRW = (v) => {
       const rounded = Math.round(v).toLocaleString(numberLocale);
-      if (pageLang === 'en') return `${dcText.currency}${rounded}`;
+      if (pageLang === 'en') return `${rounded}${dcText.currency}`;
       return `${rounded}${dcText.currency}`;
     };
     const fmtPct = (v) => `${v.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}%`;
@@ -3004,7 +3004,7 @@
         copyDefault: 'Copy results'
       },
       ja: {
-        currency: '円',
+        currency: 'ウォン',
         shareUnit: '株',
         needCurrent: '現在の保有株数と平均取得単価を先に入力してください。',
         avgWithPlan: (avg) => `追加購入を反映した新しい平均取得単価は ${avg} です。`,
