@@ -11,6 +11,13 @@ thumbnail: /assets/thumbs/json-merge.svg
 tool_key: json-merge
 keywords: [json 結合, json マージ, 複数 json 1つ, json merge]
 related_tools: [text-counter, case-converter]
+faq:
+  - q: 配列JSONを複数アップロードすると、どう結合されますか？
+    a: 自動モードでは、すべてのルートが配列ならアップロード順に連結されます。
+  - q: オブジェクトJSONはどう結合されますか？
+    a: オブジェクト結合モードではキーを統合し、同名キーは後から読み込んだ値で上書きされます。
+  - q: ファイル構造が混在している場合は？
+    a: 自動モードでは各ルートを配列で包んで保持するため、元構造を崩さず扱えます。
 alternate_urls:
   ko: /tools/json-merge/
   en: /en/tools/json-merge/
