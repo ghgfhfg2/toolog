@@ -940,13 +940,25 @@ layout: default
     <h2>{% if page.lang == 'en' %}Related tools{% elsif page.lang == 'ja' %}関連ツール{% else %}함께 쓰면 좋은 도구{% endif %}</h2>
     <div class="related-grid">
       {% assign current_lang = page.lang | default: 'ko' %}
-      {% for rel in site.tools %}
-        {% assign rel_key = rel.tool_key %}
-        {% assign rel_lang = rel.lang | default: 'ko' %}
-        {% if page.related_tools contains rel_key and rel_lang == current_lang %}
-        <a class="related-card" href="{{ rel.url | relative_url }}">
-          <strong>{{ rel.title }}</strong>
-          <span>{{ rel.description }}</span>
+      {% for rel_key in page.related_tools %}
+        {% assign rel_item = site.data.tools | where: "id", rel_key | first %}
+        {% if rel_item %}
+          {% if current_lang == 'en' %}
+            {% assign rel_title = rel_item.title_en | default: rel_item.title %}
+            {% assign rel_desc = rel_item.description_en | default: rel_item.description %}
+            {% assign rel_url = rel_item.url_en | default: rel_item.url %}
+          {% elsif current_lang == 'ja' %}
+            {% assign rel_title = rel_item.title_ja | default: rel_item.title %}
+            {% assign rel_desc = rel_item.description_ja | default: rel_item.description %}
+            {% assign rel_url = rel_item.url_ja | default: rel_item.url %}
+          {% else %}
+            {% assign rel_title = rel_item.title %}
+            {% assign rel_desc = rel_item.description %}
+            {% assign rel_url = rel_item.url %}
+          {% endif %}
+        <a class="related-card" href="{{ rel_url | relative_url }}">
+          <strong>{{ rel_title }}</strong>
+          <span>{{ rel_desc }}</span>
         </a>
         {% endif %}
       {% endfor %}
