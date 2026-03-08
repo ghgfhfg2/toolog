@@ -56,11 +56,24 @@
       temperature: { c: 'c', f: 'f', k: 'k' }
     };
 
-    const labels = {
-      length: [['m','m'],['cm','cm'],['km','km'],['inch','inch'],['ft','ft']],
-      weight: [['kg','kg'],['g','g'],['lb','lb'],['oz','oz']],
-      temperature: [['c','℃'],['f','℉'],['k','K']]
+    const unitLabelsByLang = {
+      ko: {
+        length: [['m','m'],['cm','cm'],['km','km'],['inch','인치'],['ft','피트']],
+        weight: [['kg','kg'],['g','g'],['lb','파운드(lb)'],['oz','온스(oz)']],
+        temperature: [['c','℃'],['f','℉'],['k','K']]
+      },
+      en: {
+        length: [['m','m'],['cm','cm'],['km','km'],['inch','inch'],['ft','ft']],
+        weight: [['kg','kg'],['g','g'],['lb','lb'],['oz','oz']],
+        temperature: [['c','℃'],['f','℉'],['k','K']]
+      },
+      ja: {
+        length: [['m','m'],['cm','cm'],['km','km'],['inch','インチ'],['ft','フィート']],
+        weight: [['kg','kg'],['g','g'],['lb','ポンド(lb)'],['oz','オンス(oz)']],
+        temperature: [['c','℃'],['f','℉'],['k','K']]
+      }
     };
+    const labels = unitLabelsByLang[pageLang] || unitLabelsByLang.ko;
 
     const ucText = {
       ko: { result: '결과' },
@@ -4398,7 +4411,8 @@
       }
 
       targets.forEach((font) => {
-        const out = font.convert(value || 'Hello Font');
+        const sampleText = pageLang === 'en' ? 'Hello Font' : (pageLang === 'ja' ? 'フォントサンプル' : '폰트 샘플');
+        const out = font.convert(value || sampleText);
 
         const item = document.createElement('div');
         item.className = 'font-preview-item';
