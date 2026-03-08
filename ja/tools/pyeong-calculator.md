@@ -22,3 +22,7 @@ alternate_urls:
 
 ## 基本情報
 1坪 = 3.305785㎡ を基準に計算します。面積比較と価格比較を同時に行えます。
+## 関連ツール
+- [ローン計算機]({{ '/ja/tools/loan-calculator/' | relative_url }})
+- [不動産仲介手数料計算機]({{ '/ja/tools/brokerage-fee-calculator/' | relative_url }})
+- [パーセント計算機]({{ '/ja/tools/percent-calculator/' | relative_url }})

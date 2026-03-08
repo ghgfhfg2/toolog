@@ -28,3 +28,7 @@ A higher gross salary does not always mean a large increase in real cash flow. T
 - Income tax + local income tax estimate
 - Pension, health, long-term care, employment insurance
 - Optional non-taxable monthly amount
+## Related tools
+- [Severance Pay Calculator]({{ '/en/tools/severance-pay-calculator/' | relative_url }})
+- [Loan Calculator]({{ '/en/tools/loan-calculator/' | relative_url }})
+- [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})

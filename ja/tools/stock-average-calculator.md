@@ -24,3 +24,7 @@ alternate_urls:
 - 追加購入後の平均取得単価
 - 総保有数量と総投資額
 - 目標平均単価に必要な追加数量（達成可能な場合）
+## 関連ツール
+- [複利計算機]({{ '/ja/tools/compound-interest-calculator/' | relative_url }})
+- [パーセント計算機]({{ '/ja/tools/percent-calculator/' | relative_url }})
+- [ローン計算機]({{ '/ja/tools/loan-calculator/' | relative_url }})

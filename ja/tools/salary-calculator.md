@@ -22,3 +22,7 @@ alternate_urls:
 
 ## 使い方
 年収(額面)と条件を入力すると、手取り・税金・保険料をまとめて確認できます。転職/家計計画の初期試算に便利です。
+## 関連ツール
+- [退職金計算機]({{ '/ja/tools/severance-pay-calculator/' | relative_url }})
+- [ローン計算機]({{ '/ja/tools/loan-calculator/' | relative_url }})
+- [パーセント計算機]({{ '/ja/tools/percent-calculator/' | relative_url }})

@@ -25,3 +25,7 @@ Before resignation, you can estimate severance amount and check whether service 
 
 ## Notes
 This is a quick estimate. Actual payout can differ by company policy, payroll components, and legal interpretation.
+## Related tools
+- [Salary Calculator]({{ '/en/tools/salary-calculator/' | relative_url }})
+- [Loan Calculator]({{ '/en/tools/loan-calculator/' | relative_url }})
+- [Compound Interest Calculator]({{ '/en/tools/compound-interest-calculator/' | relative_url }})

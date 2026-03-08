@@ -22,3 +22,7 @@ alternate_urls:
 
 ## 注意
 本ツールは簡易推定です。実際の退職金は会社規程、賃金項目、法解釈により変わる場合があります。
+## 関連ツール
+- [年収手取り計算機]({{ '/ja/tools/salary-calculator/' | relative_url }})
+- [ローン計算機]({{ '/ja/tools/loan-calculator/' | relative_url }})
+- [複利計算機]({{ '/ja/tools/compound-interest-calculator/' | relative_url }})

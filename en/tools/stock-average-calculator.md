@@ -27,3 +27,7 @@ When prices drop, decision quality improves if you test scenarios with numbers f
 - New average cost
 - Total shares and total invested amount
 - Extra shares needed for a target average (when feasible)
+## Related tools
+- [Compound Interest Calculator]({{ '/en/tools/compound-interest-calculator/' | relative_url }})
+- [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
+- [Loan Calculator]({{ '/en/tools/loan-calculator/' | relative_url }})

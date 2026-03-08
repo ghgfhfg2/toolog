@@ -25,3 +25,7 @@ alternate_urls:
 - TDEE with activity multiplier
 - Daily calorie targets for cut/maintain/bulk
 - Practical baseline for diet planning
+## Related tools
+- [BMI Calculator]({{ '/en/tools/bmi-calculator/' | relative_url }})
+- [Age Calculator]({{ '/en/tools/age-calculator/' | relative_url }})
+- [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})

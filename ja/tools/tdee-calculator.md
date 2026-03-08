@@ -22,3 +22,7 @@ alternate_urls:
 
 ## 概要
 BMR(基礎代謝)と活動量をもとにTDEEを推定し、減量・維持・増量の開始目安を素早く確認できます。
+## 関連ツール
+- [BMI計算機]({{ '/ja/tools/bmi-calculator/' | relative_url }})
+- [年齢計算機]({{ '/ja/tools/age-calculator/' | relative_url }})
+- [パーセント計算機]({{ '/ja/tools/percent-calculator/' | relative_url }})

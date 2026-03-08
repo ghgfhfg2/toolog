@@ -26,3 +26,7 @@ alternate_urls:
 - Faster listing comparison with unified unit
 
 Reference: 1 pyeong = 3.305785 m².
+## Related tools
+- [Loan Calculator]({{ '/en/tools/loan-calculator/' | relative_url }})
+- [Brokerage Fee Calculator]({{ '/en/tools/brokerage-fee-calculator/' | relative_url }})
+- [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
