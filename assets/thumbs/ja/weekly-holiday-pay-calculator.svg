@@ -1,0 +1,21 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="週休手当計算機サムネイル">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B132B"/>
+      <stop offset="1" stop-color="#1C2541"/>
+    </linearGradient>
+    <linearGradient id="card" x1="210" y1="120" x2="930" y2="510" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5BC0BE" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#3A506B" stop-opacity="0.4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="210" y="120" width="780" height="390" rx="28" fill="url(#card)" stroke="#5BC0BE" stroke-opacity="0.4"/>
+  <text x="260" y="220" fill="#9FE7E5" font-size="34" font-family="Inter, Arial, sans-serif" font-weight="700">TOOLOG CALCULATOR</text>
+  <text x="260" y="300" fill="#FFFFFF" font-size="58" font-family="Inter, Arial, sans-serif" font-weight="800">週休手当計算機</text>
+  <text x="260" y="362" fill="#D5E6F7" font-size="30" font-family="Inter, Arial, sans-serif">時給・週労働時間・勤務日数を即計算</text>
+  <rect x="260" y="402" width="320" height="62" rx="14" fill="#5BC0BE" fill-opacity="0.2" stroke="#7BE0DE"/>
+  <text x="290" y="443" fill="#DFFFFE" font-size="28" font-family="Inter, Arial, sans-serif" font-weight="700">週/月換算に対応</text>
+  <circle cx="920" cy="190" r="36" fill="#5BC0BE" fill-opacity="0.2"/>
+  <circle cx="975" cy="250" r="20" fill="#7BE0DE" fill-opacity="0.22"/>
+</svg>

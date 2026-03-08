@@ -7,9 +7,9 @@ permalink: /en/tools/body-fat-calculator/
 canonical_url: /en/tools/body-fat-calculator/
 category: calculator
 category_label: Health/Fitness
-thumbnail: /assets/thumbs/body-fat-calculator.svg
+thumbnail: /assets/thumbs/en/body-fat-calculator.svg
 image:
-  path: /assets/thumbs/body-fat-calculator.svg
+  path: /assets/thumbs/en/body-fat-calculator.svg
   alt: Body fat calculator preview
 tool_key: body-fat-calculator
 keywords: [body fat calculator, us navy body fat, body fat percentage, fat mass calculator, lean mass calculator]

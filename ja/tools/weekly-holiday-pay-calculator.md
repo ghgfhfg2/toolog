@@ -7,10 +7,10 @@ permalink: /ja/tools/weekly-holiday-pay-calculator/
 canonical_url: /ja/tools/weekly-holiday-pay-calculator/
 category: calculator
 category_label: 金融・ビジネス
-thumbnail: /assets/thumbs/weekly-holiday-pay-calculator.svg
+thumbnail: /assets/thumbs/ja/weekly-holiday-pay-calculator.svg
 tool_key: weekly-holiday-pay-calculator
 image:
-  path: /assets/thumbs/weekly-holiday-pay-calculator.svg
+  path: /assets/thumbs/ja/weekly-holiday-pay-calculator.svg
   alt: 週休手当計算機の結果カード例
 keywords: [週休手当 計算, 時給 週休手当, アルバイト 手当, 韓国 労働]
 related_tools: [salary-calculator, severance-pay-calculator, percent-calculator]

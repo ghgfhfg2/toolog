@@ -7,9 +7,9 @@ permalink: /ja/tools/body-fat-calculator/
 canonical_url: /ja/tools/body-fat-calculator/
 category: calculator
 category_label: 健康/フィットネス
-thumbnail: /assets/thumbs/body-fat-calculator.svg
+thumbnail: /assets/thumbs/ja/body-fat-calculator.svg
 image:
-  path: /assets/thumbs/body-fat-calculator.svg
+  path: /assets/thumbs/ja/body-fat-calculator.svg
   alt: 体脂肪率計算機プレビュー
 tool_key: body-fat-calculator
 keywords: [体脂肪率計算, body fat calculator, us navy, 脂肪量, 除脂肪体重]

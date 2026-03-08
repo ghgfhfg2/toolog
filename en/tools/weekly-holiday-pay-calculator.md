@@ -7,10 +7,10 @@ permalink: /en/tools/weekly-holiday-pay-calculator/
 canonical_url: /en/tools/weekly-holiday-pay-calculator/
 category: calculator
 category_label: Finance/Business
-thumbnail: /assets/thumbs/weekly-holiday-pay-calculator.svg
+thumbnail: /assets/thumbs/en/weekly-holiday-pay-calculator.svg
 tool_key: weekly-holiday-pay-calculator
 image:
-  path: /assets/thumbs/weekly-holiday-pay-calculator.svg
+  path: /assets/thumbs/en/weekly-holiday-pay-calculator.svg
   alt: Weekly holiday pay calculator result card preview
 keywords: [weekly holiday pay calculator, holiday allowance, part-time holiday pay, Korea labor weekly paid holiday]
 related_tools: [salary-calculator, severance-pay-calculator, percent-calculator]
