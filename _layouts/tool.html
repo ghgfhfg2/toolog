@@ -176,6 +176,7 @@ layout: default
               <option value="auto">{% if page.lang == 'en' %}Auto (recommended){% elsif page.lang == 'ja' %}自動（推奨）{% else %}자동(권장){% endif %}</option>
               <option value="array-concat">{% if page.lang == 'en' %}Concatenate arrays{% elsif page.lang == 'ja' %}配列を連結{% else %}배열 이어붙이기{% endif %}</option>
               <option value="object-merge">{% if page.lang == 'en' %}Merge object keys (later files win){% elsif page.lang == 'ja' %}オブジェクトキー統合（後のファイル優先）{% else %}객체 키 병합(뒤 파일 우선){% endif %}</option>
+              <option value="object-array-concat">{% if page.lang == 'en' %}Auto-concatenate common array in objects{% elsif page.lang == 'ja' %}オブジェクト内の共通配列を自動連結{% else %}객체 내 공통 배열 자동 이어붙이기{% endif %}</option>
               <option value="wrap-array">{% if page.lang == 'en' %}Wrap file roots into array{% elsif page.lang == 'ja' %}各ファイルのルートを配列で包む{% else %}파일별 루트를 배열로 감싸기{% endif %}</option>
             </select>
           </div>
