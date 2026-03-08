@@ -1,3 +1,22 @@
+- id: body-fat-calculator
+  title: 체지방률 계산기
+  title_en: Body Fat Calculator
+  title_ja: 体脂肪率計算機
+  category: calculator
+  category_label: 건강/피트니스
+  category_label_en: Health/Fitness
+  category_label_ja: 健康/フィットネス
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: US Navy 공식을 기반으로 체지방률·체지방량·제지방량을 빠르게 계산해요.
+  description_en: Estimate body fat percentage, fat mass, and lean mass instantly using the U.S. Navy method.
+  description_ja: U.S. Navy方式で体脂肪率・脂肪量・除脂肪体重をすばやく計算します。
+  url: /tools/body-fat-calculator/
+  url_en: /en/tools/body-fat-calculator/
+  url_ja: /ja/tools/body-fat-calculator/
+  thumbnail: /assets/thumbs/body-fat-calculator.svg
+
 - id: jeonse-vs-wolse-calculator
   title: 전세 vs 월세 계산기
   title_en: Jeonse vs Wolse Calculator

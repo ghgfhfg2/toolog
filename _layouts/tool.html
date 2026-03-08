@@ -387,6 +387,58 @@ layout: default
           </div>
           <p class="tool-result" id="bmi-help">{% if page.lang == 'en' %}Enter height and weight to calculate BMI and healthy weight range.{% elsif page.lang == 'ja' %}身長と体重を入力すると、BMIと標準体重範囲を計算します。{% else %}키와 몸무게를 입력하면 BMI와 정상 체중 범위를 계산합니다.{% endif %}</p>
         </div>
+      {% when 'body-fat-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="bfat-sex">{% if page.lang == 'en' %}Sex{% elsif page.lang == 'ja' %}Sex{% else %}성별{% endif %}</label>
+              <select id="bfat-sex">
+                <option value="male">{% if page.lang == 'en' %}Male{% elsif page.lang == 'ja' %}男性{% else %}남성{% endif %}</option>
+                <option value="female">{% if page.lang == 'en' %}Female{% elsif page.lang == 'ja' %}女性{% else %}여성{% endif %}</option>
+              </select>
+            </div>
+            <div>
+              <label for="bfat-height">{% if page.lang == 'en' %}Height (cm){% elsif page.lang == 'ja' %}身長(cm){% else %}키(cm){% endif %}</label>
+              <input id="bfat-height" type="number" min="120" max="230" step="0.1" placeholder="170" inputmode="decimal" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="bfat-neck">{% if page.lang == 'en' %}Neck (cm){% elsif page.lang == 'ja' %}首周り(cm){% else %}목 둘레(cm){% endif %}</label>
+              <input id="bfat-neck" type="number" min="20" max="70" step="0.1" placeholder="38" inputmode="decimal" />
+            </div>
+            <div>
+              <label for="bfat-waist">{% if page.lang == 'en' %}Waist (cm){% elsif page.lang == 'ja' %}腹囲(cm){% else %}허리 둘레(cm){% endif %}</label>
+              <input id="bfat-waist" type="number" min="40" max="180" step="0.1" placeholder="82" inputmode="decimal" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="bfat-hip">{% if page.lang == 'en' %}Hip (cm, female only){% elsif page.lang == 'ja' %}ヒップ(cm, 女性のみ){% else %}엉덩이 둘레(cm, 여성만){% endif %}</label>
+              <input id="bfat-hip" type="number" min="50" max="200" step="0.1" placeholder="95" inputmode="decimal" />
+            </div>
+            <div>
+              <label for="bfat-weight">{% if page.lang == 'en' %}Weight (kg){% elsif page.lang == 'ja' %}体重(kg){% else %}몸무게(kg){% endif %}</label>
+              <input id="bfat-weight" type="number" min="30" max="250" step="0.1" placeholder="68" inputmode="decimal" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="bfat-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="bfat-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="bfat-percent">-</strong><span>{% if page.lang == 'en' %}Body fat (%) {% elsif page.lang == 'ja' %}体脂肪率(%) {% else %}체지방률(%) {% endif %}</span></div>
+            <div><strong id="bfat-category">{% if page.lang == 'en' %}Waiting for input{% elsif page.lang == 'ja' %}入力待ち{% else %}입력 대기{% endif %}</strong><span>{% if page.lang == 'en' %}Category{% elsif page.lang == 'ja' %}판정{% else %}판정{% endif %}</span></div>
+            <div><strong id="bfat-fat-mass">-</strong><span>{% if page.lang == 'en' %}Fat mass{% elsif page.lang == 'ja' %}脂肪量{% else %}체지방량{% endif %}</span></div>
+            <div><strong id="bfat-lean-mass">-</strong><span>{% if page.lang == 'en' %}Lean mass{% elsif page.lang == 'ja' %}除脂肪体重{% else %}제지방량{% endif %}</span></div>
+          </div>
+
+          <p class="tool-result" id="bfat-help">{% if page.lang == 'en' %}Enter your measurements to estimate body fat using the U.S. Navy formula.{% elsif page.lang == 'ja' %}U.S. Navy方式で体脂肪率を推定します。数値を入力してください。{% else %}U.S. Navy 공식을 기반으로 체지방률을 추정합니다. 수치를 입력하세요.{% endif %}</p>
+        </div>
       {% when 'loan-calculator' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">

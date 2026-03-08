@@ -1677,6 +1677,163 @@
     render();
   }
 
+
+  if (slug === 'body-fat-calculator') {
+    const sex = document.getElementById('bfat-sex');
+    const height = document.getElementById('bfat-height');
+    const neck = document.getElementById('bfat-neck');
+    const waist = document.getElementById('bfat-waist');
+    const hip = document.getElementById('bfat-hip');
+    const weight = document.getElementById('bfat-weight');
+    const outPercent = document.getElementById('bfat-percent');
+    const outCategory = document.getElementById('bfat-category');
+    const outFatMass = document.getElementById('bfat-fat-mass');
+    const outLeanMass = document.getElementById('bfat-lean-mass');
+    const help = document.getElementById('bfat-help');
+    const copyBtn = document.getElementById('bfat-copy');
+    const resetBtn = document.getElementById('bfat-reset');
+
+    if (!sex || !height || !neck || !waist || !hip || !weight || !outPercent || !outCategory || !outFatMass || !outLeanMass || !help) return;
+
+    const t = {
+      ko: {
+        waiting: '입력 대기',
+        idle: '키·목·허리·몸무게를 입력하면 체지방률을 계산합니다. 여성은 엉덩이 둘레도 입력하세요.',
+        invalid: '치수가 올바른지 확인하세요. (허리 > 목, 여성은 허리+엉덩이 > 목)',
+        categoriesMale: ['필수지방', '운동선수', '피트니스', '평균', '높음'],
+        categoriesFemale: ['필수지방', '운동선수', '피트니스', '평균', '높음'],
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        waiting: 'Waiting for input',
+        idle: 'Enter height, neck, waist, and weight. For female mode, add hip measurement.',
+        invalid: 'Check measurements. (waist > neck, and for female: waist + hip > neck)',
+        categoriesMale: ['Essential', 'Athletes', 'Fitness', 'Average', 'High'],
+        categoriesFemale: ['Essential', 'Athletes', 'Fitness', 'Average', 'High'],
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        waiting: '入力待ち',
+        idle: '身長・首・腹囲・体重を入力してください。女性モードはヒップも入力します。',
+        invalid: '測定値を確認してください。（腹囲 > 首、女性は 腹囲+ヒップ > 首）',
+        categoriesMale: ['必須脂肪', 'アスリート', 'フィットネス', '平均', '高め'],
+        categoriesFemale: ['必須脂肪', 'アスリート', 'フィットネス', '平均', '高め'],
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    }[pageLang] || {
+      waiting: '입력 대기', idle: '값을 입력하세요.', invalid: '입력값 확인',
+      categoriesMale: ['필수지방','운동선수','피트니스','평균','높음'],
+      categoriesFemale: ['필수지방','운동선수','피트니스','평균','높음'],
+      copied: '복사됨', copyDefault: '결과 복사'
+    };
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const classify = (percent, female) => {
+      const c = female ? t.categoriesFemale : t.categoriesMale;
+      if (female) {
+        if (percent < 14) return c[0];
+        if (percent < 21) return c[1];
+        if (percent < 25) return c[2];
+        if (percent < 32) return c[3];
+        return c[4];
+      }
+      if (percent < 6) return c[0];
+      if (percent < 14) return c[1];
+      if (percent < 18) return c[2];
+      if (percent < 25) return c[3];
+      return c[4];
+    };
+
+    const setIdle = (msg = t.idle) => {
+      outPercent.textContent = '-';
+      outCategory.textContent = t.waiting;
+      outFatMass.textContent = '-';
+      outLeanMass.textContent = '-';
+      help.textContent = msg;
+    };
+
+    const render = () => {
+      const isFemale = sex.value === 'female';
+      const h = Number(height.value || 0);
+      const n = Number(neck.value || 0);
+      const w = Number(waist.value || 0);
+      const hp = Number(hip.value || 0);
+      const kg = Number(weight.value || 0);
+
+      if (!(h > 0) || !(n > 0) || !(w > 0) || !(kg > 0) || (isFemale && !(hp > 0))) {
+        setIdle();
+        return;
+      }
+
+      const inch = 0.3937007874;
+      const hi = h * inch;
+      const ni = n * inch;
+      const wi = w * inch;
+      const hpi = hp * inch;
+
+      let denominator;
+      if (isFemale) {
+        if ((wi + hpi) <= ni) { setIdle(t.invalid); return; }
+        denominator = 1.29579 - 0.35004 * Math.log10(wi + hpi - ni) + 0.22100 * Math.log10(hi);
+      } else {
+        if (wi <= ni) { setIdle(t.invalid); return; }
+        denominator = 1.0324 - 0.19077 * Math.log10(wi - ni) + 0.15456 * Math.log10(hi);
+      }
+
+      if (!(denominator > 0)) { setIdle(t.invalid); return; }
+      const bf = 495 / denominator - 450;
+      if (!Number.isFinite(bf) || bf <= 0 || bf >= 70) { setIdle(t.invalid); return; }
+
+      const fatMass = kg * (bf / 100);
+      const leanMass = kg - fatMass;
+      const category = classify(bf, isFemale);
+
+      outPercent.textContent = `${bf.toLocaleString(numberLocale, { maximumFractionDigits: 1 })}%`;
+      outCategory.textContent = category;
+      outFatMass.textContent = `${fatMass.toLocaleString(numberLocale, { maximumFractionDigits: 1 })}kg`;
+      outLeanMass.textContent = `${leanMass.toLocaleString(numberLocale, { maximumFractionDigits: 1 })}kg`;
+      help.textContent = `US Navy formula · ${outPercent.textContent} (${category})`;
+    };
+
+    [sex, height, neck, waist, hip, weight].forEach((el) => el?.addEventListener('input', render));
+
+    resetBtn?.addEventListener('click', () => {
+      sex.value = 'male';
+      height.value = 170;
+      neck.value = 38;
+      waist.value = 82;
+      hip.value = '';
+      weight.value = 68;
+      render();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (outPercent.textContent === '-') return;
+      await copyText(`Body fat ${outPercent.textContent} | ${outCategory.textContent} | Fat mass ${outFatMass.textContent} | Lean mass ${outLeanMass.textContent}`);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+
+    if (!height.value) height.value = 170;
+    if (!neck.value) neck.value = 38;
+    if (!waist.value) waist.value = 82;
+    if (!weight.value) weight.value = 68;
+    render();
+  }
+
+
   if (slug === 'loan-calculator') {
     const amount = document.getElementById('loan-amount');
     const rate = document.getElementById('loan-rate');
