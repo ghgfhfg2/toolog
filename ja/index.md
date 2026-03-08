@@ -37,11 +37,7 @@ permalink: /ja/
     {% assign localized_url = tool.url_ja | default: tool.url %}
     <article class="tool-card" data-category="{{ tool.category }}" data-title="{{ localized_title | downcase }}" data-description="{{ localized_description | downcase }}">
       <a class="tool-thumb-wrap" href="{{ localized_url | relative_url }}" aria-label="{{ localized_title }}">
-        {% if tool.thumbnail %}
-        <img class="tool-thumbnail" src="{{ tool.thumbnail | relative_url }}" alt="{{ localized_title }} thumbnail" loading="lazy" />
-        {% else %}
-        <div class="tool-thumbnail tool-thumbnail--fallback">{{ localized_title | slice: 0, 1 }}</div>
-        {% endif %}
+        <img class="tool-thumbnail" src="{{ '/assets/thumbs/ja/' | append: tool.id | append: '.svg' | relative_url }}" alt="{{ localized_title }} thumbnail" loading="lazy" />
         <span class="tool-badge">{{ localized_badge }}</span>
       </a>
 

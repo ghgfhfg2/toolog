@@ -1,0 +1,13 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="32" fill="url(#bg)"/>
+  <rect x="56" y="56" width="1088" height="518" rx="24" fill="rgba(15,23,42,0.55)" stroke="#334155"/>
+  <text x="600" y="248" text-anchor="middle" fill="#F8FAFC" font-size="56" font-family="Inter, Pretendard, Arial, sans-serif" font-weight="800">YouTube Image Kit Maker</text>
+  <text x="600" y="376" text-anchor="middle" fill="#93C5FD" font-size="30" font-family="Inter, Pretendard, Arial, sans-serif">Practical Web Tool</text>
+  <text x="600" y="458" text-anchor="middle" fill="#CBD5E1" font-size="24" font-family="Inter, Pretendard, Arial, sans-serif">Toolog</text>
+</svg>
