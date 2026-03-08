@@ -939,9 +939,11 @@ layout: default
   <section class="tool-page__related">
     <h2>{% if page.lang == 'en' %}Related tools{% elsif page.lang == 'ja' %}関連ツール{% else %}함께 쓰면 좋은 도구{% endif %}</h2>
     <div class="related-grid">
+      {% assign current_lang = page.lang | default: 'ko' %}
       {% for rel in site.tools %}
         {% assign rel_key = rel.tool_key %}
-        {% if page.related_tools contains rel_key %}
+        {% assign rel_lang = rel.lang | default: 'ko' %}
+        {% if page.related_tools contains rel_key and rel_lang == current_lang %}
         <a class="related-card" href="{{ rel.url | relative_url }}">
           <strong>{{ rel.title }}</strong>
           <span>{{ rel.description }}</span>
