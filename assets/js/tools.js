@@ -1771,6 +1771,15 @@
       help.textContent = msg;
     };
 
+    const within = (value, min, max) => value >= min && value <= max;
+
+    const toggleHipField = () => {
+      const isFemale = sex.value === 'female';
+      hip.disabled = !isFemale;
+      hip.setAttribute('aria-disabled', String(!isFemale));
+      if (!isFemale) hip.value = '';
+    };
+
     const render = () => {
       const isFemale = sex.value === 'female';
       const h = Number(height.value || 0);
@@ -1781,6 +1790,11 @@
 
       if (!(h > 0) || !(n > 0) || !(w > 0) || !(kg > 0) || (isFemale && !(hp > 0))) {
         setIdle();
+        return;
+      }
+
+      if (!within(h, 120, 230) || !within(n, 20, 70) || !within(w, 40, 180) || !within(kg, 30, 250) || (isFemale && !within(hp, 50, 200))) {
+        setIdle(t.invalid);
         return;
       }
 
@@ -1815,6 +1829,10 @@
     };
 
     [sex, height, neck, waist, hip, weight].forEach((el) => el?.addEventListener('input', render));
+    sex?.addEventListener('change', () => {
+      toggleHipField();
+      render();
+    });
 
     resetBtn?.addEventListener('click', () => {
       sex.value = 'male';
@@ -1823,6 +1841,7 @@
       waist.value = 82;
       hip.value = '';
       weight.value = 68;
+      toggleHipField();
       render();
     });
 
@@ -1838,6 +1857,7 @@
     if (!neck.value) neck.value = 38;
     if (!waist.value) waist.value = 82;
     if (!weight.value) weight.value = 68;
+    toggleHipField();
     render();
   }
 
