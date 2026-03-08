@@ -391,7 +391,7 @@ layout: default
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="bfat-sex">{% if page.lang == 'en' %}Sex{% elsif page.lang == 'ja' %}Sex{% else %}성별{% endif %}</label>
+              <label for="bfat-sex">{% if page.lang == 'en' %}Sex{% elsif page.lang == 'ja' %}性別{% else %}성별{% endif %}</label>
               <select id="bfat-sex">
                 <option value="male">{% if page.lang == 'en' %}Male{% elsif page.lang == 'ja' %}男性{% else %}남성{% endif %}</option>
                 <option value="female">{% if page.lang == 'en' %}Female{% elsif page.lang == 'ja' %}女性{% else %}여성{% endif %}</option>
@@ -432,7 +432,7 @@ layout: default
 
           <div class="tool-stats">
             <div><strong id="bfat-percent">-</strong><span>{% if page.lang == 'en' %}Body fat (%) {% elsif page.lang == 'ja' %}体脂肪率(%) {% else %}체지방률(%) {% endif %}</span></div>
-            <div><strong id="bfat-category">{% if page.lang == 'en' %}Waiting for input{% elsif page.lang == 'ja' %}入力待ち{% else %}입력 대기{% endif %}</strong><span>{% if page.lang == 'en' %}Category{% elsif page.lang == 'ja' %}판정{% else %}판정{% endif %}</span></div>
+            <div><strong id="bfat-category">{% if page.lang == 'en' %}Waiting for input{% elsif page.lang == 'ja' %}入力待ち{% else %}입력 대기{% endif %}</strong><span>{% if page.lang == 'en' %}Category{% elsif page.lang == 'ja' %}判定{% else %}판정{% endif %}</span></div>
             <div><strong id="bfat-fat-mass">-</strong><span>{% if page.lang == 'en' %}Fat mass{% elsif page.lang == 'ja' %}脂肪量{% else %}체지방량{% endif %}</span></div>
             <div><strong id="bfat-lean-mass">-</strong><span>{% if page.lang == 'en' %}Lean mass{% elsif page.lang == 'ja' %}除脂肪体重{% else %}제지방량{% endif %}</span></div>
           </div>

@@ -1702,6 +1702,8 @@
         invalid: '치수가 올바른지 확인하세요. (허리 > 목, 여성은 허리+엉덩이 > 목)',
         categoriesMale: ['필수지방', '운동선수', '피트니스', '평균', '높음'],
         categoriesFemale: ['필수지방', '운동선수', '피트니스', '평균', '높음'],
+        helpSummary: (percent, category) => `US Navy 공식 · ${percent} (${category})`,
+        copyText: (percent, category, fatMass, leanMass) => `체지방률 ${percent} | ${category} | 체지방량 ${fatMass} | 제지방량 ${leanMass}`,
         copied: '복사됨',
         copyDefault: '결과 복사'
       },
@@ -1711,6 +1713,8 @@
         invalid: 'Check measurements. (waist > neck, and for female: waist + hip > neck)',
         categoriesMale: ['Essential', 'Athletes', 'Fitness', 'Average', 'High'],
         categoriesFemale: ['Essential', 'Athletes', 'Fitness', 'Average', 'High'],
+        helpSummary: (percent, category) => `US Navy formula · ${percent} (${category})`,
+        copyText: (percent, category, fatMass, leanMass) => `Body fat ${percent} | ${category} | Fat mass ${fatMass} | Lean mass ${leanMass}`,
         copied: 'Copied',
         copyDefault: 'Copy result'
       },
@@ -1720,6 +1724,8 @@
         invalid: '測定値を確認してください。（腹囲 > 首、女性は 腹囲+ヒップ > 首）',
         categoriesMale: ['必須脂肪', 'アスリート', 'フィットネス', '平均', '高め'],
         categoriesFemale: ['必須脂肪', 'アスリート', 'フィットネス', '平均', '高め'],
+        helpSummary: (percent, category) => `U.S. Navy方式 · ${percent}（${category}）`,
+        copyText: (percent, category, fatMass, leanMass) => `体脂肪率 ${percent} | ${category} | 脂肪量 ${fatMass} | 除脂肪体重 ${leanMass}`,
         copied: 'コピー完了',
         copyDefault: '結果をコピー'
       }
@@ -1727,6 +1733,8 @@
       waiting: '입력 대기', idle: '값을 입력하세요.', invalid: '입력값 확인',
       categoriesMale: ['필수지방','운동선수','피트니스','평균','높음'],
       categoriesFemale: ['필수지방','운동선수','피트니스','평균','높음'],
+      helpSummary: (percent, category) => `US Navy 공식 · ${percent} (${category})`,
+      copyText: (percent, category, fatMass, leanMass) => `체지방률 ${percent} | ${category} | 체지방량 ${fatMass} | 제지방량 ${leanMass}`,
       copied: '복사됨', copyDefault: '결과 복사'
     };
 
@@ -1803,7 +1811,7 @@
       outCategory.textContent = category;
       outFatMass.textContent = `${fatMass.toLocaleString(numberLocale, { maximumFractionDigits: 1 })}kg`;
       outLeanMass.textContent = `${leanMass.toLocaleString(numberLocale, { maximumFractionDigits: 1 })}kg`;
-      help.textContent = `US Navy formula · ${outPercent.textContent} (${category})`;
+      help.textContent = t.helpSummary(outPercent.textContent, category);
     };
 
     [sex, height, neck, waist, hip, weight].forEach((el) => el?.addEventListener('input', render));
@@ -1820,7 +1828,7 @@
 
     copyBtn?.addEventListener('click', async () => {
       if (outPercent.textContent === '-') return;
-      await copyText(`Body fat ${outPercent.textContent} | ${outCategory.textContent} | Fat mass ${outFatMass.textContent} | Lean mass ${outLeanMass.textContent}`);
+      await copyText(t.copyText(outPercent.textContent, outCategory.textContent, outFatMass.textContent, outLeanMass.textContent));
       const old = copyBtn.textContent;
       copyBtn.textContent = t.copied;
       setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
@@ -4512,6 +4520,25 @@
       { key: 'alt-box', label: 'Alt Box', convert: (s) => s.replace(/[asxcASXC]/g, (c) => ({a:'卂',s:'丂',x:'乂',c:'匚',A:'卂',S:'丂',X:'乂',C:'匚'}[c] || c)) }
     ];
 
+    const labelI18n = {
+      ja: {
+        normal: '標準', bold: '太字 (Serif)', italic: '斜体 (Serif)', 'bold-italic': '太字斜体 (Serif)',
+        sans: 'Sans', 'sans-bold': 'Sans 太字', 'sans-italic': 'Sans 斜体', 'sans-bold-italic': 'Sans 太字斜体',
+        'script-bold': 'スクリプト太字', 'fraktur-bold': 'フラクトゥール太字', 'double-struck': '二重線体',
+        monospace: '等幅', 'small-caps': 'スモールキャップ', 'small-caps-strict': 'スモールキャップ（厳密）',
+        circled: '丸囲み', parenthesized: '括弧付き', 'full-width': '全角', 'upside-down': '上下反転',
+        'strike-through': '取り消し線', underline: '下線', slash: 'スラッシュ', crossed: 'クロス線',
+        overline: '上線', 'underline-overline': '上下線', 'long-strike': '長い取り消し線', 'double-slash': 'スラッシュ×3',
+        superscript: '上付き', subscript: '下付き', 'thai-comb-1a5a': '結合記号 ᩚ', 'wing-only': 'ウィング装飾',
+        'mini-bottom-align': 'ミニ下付き', 'bottom-mix': '下付きミックス'
+      }
+    };
+
+    const getStyleLabel = (font) => {
+      if (pageLang === 'ja') return labelI18n.ja?.[font.key] || font.label;
+      return font.label;
+    };
+
     const safeKeys = new Set([
       'normal','bold','italic','bold-italic','sans','sans-bold','sans-italic','sans-bold-italic',
       'script-bold','fraktur-bold','double-struck','monospace','small-caps','small-caps-strict',
@@ -4583,6 +4610,10 @@
         const body = document.createElement('div');
         body.className = 'font-preview-body';
 
+        const name = document.createElement('span');
+        name.className = 'font-preview-name';
+        name.textContent = getStyleLabel(font);
+
         const text = document.createElement('span');
         text.className = 'font-preview-text';
         text.textContent = out;
@@ -4602,6 +4633,7 @@
           showToast();
         });
 
+        body.appendChild(name);
         body.appendChild(text);
         item.appendChild(favBtn);
         item.appendChild(body);
