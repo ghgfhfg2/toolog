@@ -1730,7 +1730,7 @@
         copyDefault: 'Copy results'
       },
       ja: {
-        currency: '円',
+        currency: 'ウォン',
         count: '回',
         comparePayment: (ep, ef, el) => `元利均等: ${ep} / 元金均等: 初回 ${ef} → 最終 ${el}`,
         compareInterestEmpty: '総利息差: -',
@@ -1911,7 +1911,7 @@
         copyDefault: 'Copy results'
       },
       ja: {
-        currency: '円',
+        currency: 'ウォン',
         idle: '入力すると複利の結果をすぐに計算します。',
         invalid: '数値のみ入力してください。',
         term: '運用期間は1年以上で入力してください。',
@@ -2072,7 +2072,7 @@
         copyDefault: 'Copy result'
       },
       ja: {
-        currency: '円',
+        currency: 'ウォン',
         needPrice: '定価は0より大きい値を入力してください。',
         invalidRate: '割引率は0%〜100%の範囲で入力してください。',
         forwardHelp: (price, q) => `定価${price}・${q}個を基準に、クーポンと送料を反映した最終支払金額です。`,
@@ -2428,7 +2428,7 @@
         copyDefault: 'Copy results'
       },
       ja: {
-        currency: '円',
+        currency: 'ウォン',
         idle: '額面年収を入力すると、手取り見込みを計算します。',
         needAnnual: '先に年収を入力してください。',
         summary: (rate, capped) => `控除率は約${rate}%の試算です。${capped ? ' 非課税月額は月額総支給を超えないよう自動補正しました。' : ''} 実際の手取りは会社規定・非課税項目・精算方法により変動します。`,
@@ -2625,7 +2625,7 @@
         copyDefault: 'Copy results'
       },
       ja: {
-        currency: '円',
+        currency: 'ウォン',
         chooseDates: '入社日と退社日を選択してください。',
         invalidRange: '退社日は入社日より前にできません。',
         needMonthly: '直近の月給（額面）を入力してください。',
