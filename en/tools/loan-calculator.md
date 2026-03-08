@@ -1,6 +1,6 @@
 ---
 layout: tool
-title: Loan Calculator | Monthly Payment, Total Interest, and Repayment Comparison
+title: Loan Repayment Calculator | Monthly Payment, Total Interest, and Plan Comparison
 description: Calculate monthly payment and total interest for amortized and equal-principal repayment plans. Compare first and last monthly payments quickly.
 lang: en
 permalink: /en/tools/loan-calculator/

@@ -1,6 +1,6 @@
 ---
 layout: tool
-title: Font Changer | Unicode Font Styles with One-click Copy
+title: Font Style Converter | Unicode Font Styles with One-click Copy
 description: Convert plain text into multiple Unicode font styles in real time and copy any style instantly.
 lang: en
 permalink: /en/tools/font-change/

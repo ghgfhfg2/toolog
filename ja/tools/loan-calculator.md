@@ -1,6 +1,6 @@
 ---
 layout: tool
-title: ローン計算機 | 毎月返済額・総利息・返済方式を比較
+title: ローン返済計算機 | 毎月返済額・総利息・返済方式を比較
 description: 元利均等返済と元金均等返済の毎月返済額・総返済額・総利息を試算。元金均等の初回と最終回の返済額も比較できます。
 lang: ja
 permalink: /ja/tools/loan-calculator/

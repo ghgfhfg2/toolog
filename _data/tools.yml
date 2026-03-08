@@ -38,8 +38,8 @@
 
 - id: loan-calculator
   title: 대출 이자 계산기
-  title_en: Loan Calculator
-  title_ja: ローン計算機
+  title_en: Loan Repayment Calculator
+  title_ja: ローン返済計算機
   category: calculator
   category_label: 금융/비즈니스
   category_label_en: Finance
@@ -190,8 +190,8 @@
 
 - id: font-change
   title: 폰트 변환기
-  title_en: Font Changer
-  title_ja: フォント変換
+  title_en: Font Style Converter
+  title_ja: フォント変換ツール
   category: text
   category_label: 텍스트/편집
   category_label_en: Text/Editing

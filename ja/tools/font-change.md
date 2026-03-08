@@ -1,6 +1,6 @@
 ---
 layout: tool
-title: フォント変換 | Unicodeスタイルをリアルタイム変換＆コピー
+title: フォント変換ツール | Unicodeスタイルをリアルタイム変換＆コピー
 description: テキストを入力すると複数のUnicodeフォントに即時変換。好きなスタイルをワンクリックでコピーできます。
 lang: ja
 permalink: /ja/tools/font-change/
