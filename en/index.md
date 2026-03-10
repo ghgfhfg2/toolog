@@ -23,9 +23,12 @@ permalink: /en/
     <input id="toolSearch" type="search" placeholder="Search tools (e.g., PNG compressor, text counter)" autocomplete="off" />
     <div class="chip-row" id="chipBar">
       <button type="button" class="chip is-active" data-filter="all">All</button>
+      <button type="button" class="chip" data-filter="calculator">Calculator</button>
       <button type="button" class="chip" data-filter="image">Image/Graphics</button>
       <button type="button" class="chip" data-filter="text">Text/Editing</button>
-      <button type="button" class="chip" data-filter="data">Data/Calculator</button>
+      <button type="button" class="chip" data-filter="data">Data/Developer</button>
+      <button type="button" class="chip" data-filter="productivity">Productivity</button>
+      <button type="button" class="chip" data-filter="security">Security</button>
     </div>
   </section>
 

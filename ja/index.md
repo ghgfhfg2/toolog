@@ -23,9 +23,12 @@ permalink: /ja/
     <input id="toolSearch" type="search" placeholder="ツール検索 (例: PNG 圧縮, 文字数カウンター)" autocomplete="off" />
     <div class="chip-row" id="chipBar">
       <button type="button" class="chip is-active" data-filter="all">すべて</button>
+      <button type="button" class="chip" data-filter="calculator">計算機</button>
       <button type="button" class="chip" data-filter="image">画像/グラフィック</button>
       <button type="button" class="chip" data-filter="text">テキスト/編集</button>
-      <button type="button" class="chip" data-filter="data">データ/計算</button>
+      <button type="button" class="chip" data-filter="data">データ/開発</button>
+      <button type="button" class="chip" data-filter="productivity">生産性</button>
+      <button type="button" class="chip" data-filter="security">セキュリティ</button>
     </div>
   </section>
 
