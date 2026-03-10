@@ -20,18 +20,18 @@ layout: default
     <input id="toolSearch" type="search" placeholder="툴 검색 (예: PNG 압축기, 글자수 계산기)" autocomplete="off" />
     <div class="chip-row" id="chipBar">
       <button type="button" class="chip is-active" data-filter="all">전체</button>
-      <button type="button" class="chip" data-filter="calculator">계산기</button>
-      <button type="button" class="chip" data-filter="image">이미지/그래픽</button>
-      <button type="button" class="chip" data-filter="text">텍스트/편집</button>
-      <button type="button" class="chip" data-filter="data">데이터/개발</button>
-      <button type="button" class="chip" data-filter="productivity">생산성</button>
-      <button type="button" class="chip" data-filter="security">보안</button>
+      {% assign ko_labels = site.data.tools | map: 'category_label' | uniq | sort %}
+      {% for label in ko_labels %}
+      {% if label and label != '' %}
+      <button type="button" class="chip" data-filter="{{ label }}">{{ label }}</button>
+      {% endif %}
+      {% endfor %}
     </div>
   </section>
 
   <section class="tool-grid" id="toolGrid">
     {% for tool in site.data.tools %}
-    <article class="tool-card" data-category="{{ tool.category }}" data-title="{{ tool.title | downcase }}" data-description="{{ tool.description | downcase }}">
+    <article class="tool-card" data-category="{{ tool.category_label }}" data-title="{{ tool.title | downcase }}" data-description="{{ tool.description | downcase }}">
       <a class="tool-thumb-wrap" href="{{ tool.url | relative_url }}" aria-label="{{ tool.title }}">
         {% if tool.thumbnail %}
         <img class="tool-thumbnail" src="{{ tool.thumbnail | relative_url }}" alt="{{ tool.title }} 웹툴 썸네일" loading="lazy" />

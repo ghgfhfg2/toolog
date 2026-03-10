@@ -23,12 +23,12 @@ permalink: /ja/
     <input id="toolSearch" type="search" placeholder="ツール検索 (例: PNG 圧縮, 文字数カウンター)" autocomplete="off" />
     <div class="chip-row" id="chipBar">
       <button type="button" class="chip is-active" data-filter="all">すべて</button>
-      <button type="button" class="chip" data-filter="calculator">計算機</button>
-      <button type="button" class="chip" data-filter="image">画像/グラフィック</button>
-      <button type="button" class="chip" data-filter="text">テキスト/編集</button>
-      <button type="button" class="chip" data-filter="data">データ/開発</button>
-      <button type="button" class="chip" data-filter="productivity">生産性</button>
-      <button type="button" class="chip" data-filter="security">セキュリティ</button>
+      {% assign ja_labels = site.data.tools | map: 'category_label_ja' | uniq | sort %}
+      {% for label in ja_labels %}
+      {% if label and label != '' %}
+      <button type="button" class="chip" data-filter="{{ label }}">{{ label }}</button>
+      {% endif %}
+      {% endfor %}
     </div>
   </section>
 
@@ -38,7 +38,8 @@ permalink: /ja/
     {% assign localized_description = tool.description_ja | default: tool.description %}
     {% assign localized_badge = tool.badge_ja | default: tool.badge %}
     {% assign localized_url = tool.url_ja | default: tool.url %}
-    <article class="tool-card" data-category="{{ tool.category }}" data-title="{{ localized_title | downcase }}" data-description="{{ localized_description | downcase }}">
+    {% assign localized_category_label = tool.category_label_ja | default: tool.category_label %}
+    <article class="tool-card" data-category="{{ localized_category_label }}" data-title="{{ localized_title | downcase }}" data-description="{{ localized_description | downcase }}">
       <a class="tool-thumb-wrap" href="{{ localized_url | relative_url }}" aria-label="{{ localized_title }}">
         <img class="tool-thumbnail" src="{{ '/assets/thumbs/ja/' | append: tool.id | append: '.svg' | relative_url }}" alt="{{ localized_title }} thumbnail" loading="lazy" />
         <span class="tool-badge">{{ localized_badge }}</span>
