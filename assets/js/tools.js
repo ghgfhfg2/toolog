@@ -3662,13 +3662,15 @@
     const months = document.getElementById('jv-months');
     const jeonseCostEl = document.getElementById('jv-jeonse-cost');
     const wolseCostEl = document.getElementById('jv-wolse-cost');
+    const monthlyJeonseEl = document.getElementById('jv-monthly-jeonse');
+    const monthlyWolseEl = document.getElementById('jv-monthly-wolse');
     const monthlyGapEl = document.getElementById('jv-monthly-gap');
     const breakEvenEl = document.getElementById('jv-break-even');
     const help = document.getElementById('jv-help');
     const copyBtn = document.getElementById('jv-copy');
     const resetBtn = document.getElementById('jv-reset');
 
-    if (!jeonse || !wolseDeposit || !wolseRent || !rate || !months || !jeonseCostEl || !wolseCostEl || !monthlyGapEl || !breakEvenEl || !help) return;
+    if (!jeonse || !wolseDeposit || !wolseRent || !rate || !months || !jeonseCostEl || !wolseCostEl || !monthlyJeonseEl || !monthlyWolseEl || !monthlyGapEl || !breakEvenEl || !help) return;
 
     const jvI18n = {
       ko: {
@@ -3681,7 +3683,7 @@
         helpJeonse: (v) => `입력 조건에서는 전세의 월 환산 주거비가 약 ${v} 더 낮습니다.`,
         helpWolse: (v) => `입력 조건에서는 월세의 월 환산 주거비가 약 ${v} 더 낮습니다.`,
         helpSame: '입력 조건에서 전세와 월세의 월 환산 주거비가 거의 같습니다.',
-        copy: (a,b,c,d) => `전세 vs 월세 비교 | 전세 총 주거비 ${a} | 월세 총 주거비 ${b} | 월 기준 비용 차이 ${c} | 손익분기 월세 ${d}`,
+        copy: (a,b,c,d,e,f) => `전세 vs 월세 비교 | 전세 총 주거비 ${a} | 월세 총 주거비 ${b} | 전세 월 환산 ${c} | 월세 월 환산 ${d} | 월 기준 비용 차이 ${e} | 손익분기 월세 ${f}`,
         copied: '복사됨',
         copyDefault: '결과 복사'
       },
@@ -3695,7 +3697,7 @@
         helpJeonse: (v) => `Under this scenario, jeonse is lower by about ${v} per month-equivalent cost.`,
         helpWolse: (v) => `Under this scenario, wolse is lower by about ${v} per month-equivalent cost.`,
         helpSame: 'Under this scenario, jeonse and wolse are nearly the same on a monthly-equivalent basis.',
-        copy: (a,b,c,d) => `Jeonse vs Wolse | Total jeonse cost ${a} | Total wolse cost ${b} | Monthly cost gap ${c} | Break-even wolse rent ${d}`,
+        copy: (a,b,c,d,e,f) => `Jeonse vs Wolse | Total jeonse cost ${a} | Total wolse cost ${b} | Jeonse monthly-equivalent ${c} | Wolse monthly-equivalent ${d} | Monthly cost gap ${e} | Break-even wolse rent ${f}`,
         copied: 'Copied',
         copyDefault: 'Copy results'
       },
@@ -3709,7 +3711,7 @@
         helpJeonse: (v) => `この条件では、月額換算でチョンセのほうが約 ${v} 低くなります。`,
         helpWolse: (v) => `この条件では、月額換算でウォルセのほうが約 ${v} 低くなります。`,
         helpSame: 'この条件では、月額換算でチョンセとウォルセはほぼ同水準です。',
-        copy: (a,b,c,d) => `チョンセ vs ウォルセ | チョンセ総住居費 ${a} | ウォルセ総住居費 ${b} | 月額コスト差 ${c} | 損益分岐ウォルセ家賃 ${d}`,
+        copy: (a,b,c,d,e,f) => `チョンセ vs ウォルセ | チョンセ総住居費 ${a} | ウォルセ総住居費 ${b} | チョンセ月額換算 ${c} | ウォルセ月額換算 ${d} | 月額コスト差 ${e} | 損益分岐ウォルセ家賃 ${f}`,
         copied: 'コピー完了',
         copyDefault: '結果をコピー'
       }
@@ -3733,6 +3735,8 @@
     const setIdle = (msg) => {
       jeonseCostEl.textContent = '-';
       wolseCostEl.textContent = '-';
+      monthlyJeonseEl.textContent = '-';
+      monthlyWolseEl.textContent = '-';
       monthlyGapEl.textContent = '-';
       breakEvenEl.textContent = '-';
       help.textContent = msg;
@@ -3770,6 +3774,8 @@
 
       jeonseCostEl.textContent = fmtCurrency(jeonseCost);
       wolseCostEl.textContent = fmtCurrency(wolseCost);
+      monthlyJeonseEl.textContent = fmtCurrency(monthlyJeonse);
+      monthlyWolseEl.textContent = fmtCurrency(monthlyWolse);
       monthlyGapEl.textContent = t.monthlyGap(fmtCurrency(Math.abs(gapMonthly)), gapMonthly > 0 ? t.jeonseBetter : gapMonthly < 0 ? t.wolseBetter : t.similar);
       breakEvenEl.textContent = fmtCurrency(breakEvenMonthlyRent);
 
@@ -3782,7 +3788,14 @@
 
     copyBtn?.addEventListener('click', async () => {
       if (jeonseCostEl.textContent === '-') return;
-      const text = t.copy(jeonseCostEl.textContent, wolseCostEl.textContent, monthlyGapEl.textContent, breakEvenEl.textContent);
+      const text = t.copy(
+        jeonseCostEl.textContent,
+        wolseCostEl.textContent,
+        monthlyJeonseEl.textContent,
+        monthlyWolseEl.textContent,
+        monthlyGapEl.textContent,
+        breakEvenEl.textContent
+      );
       await copyText(text);
       const old = copyBtn.textContent;
       copyBtn.textContent = t.copied;
