@@ -10,6 +10,18 @@
   if (!grid) return;
 
   const cards = Array.from(grid.querySelectorAll('.tool-card'));
+
+  // 최신 툴(New 배지)을 앞쪽에 우선 배치
+  const getPriority = (card) => {
+    const badge = card.querySelector('.tool-badge');
+    const label = (badge?.textContent || '').trim().toLowerCase();
+    if (label === 'new') return 0;
+    return 1;
+  };
+
+  cards.sort((a, b) => getPriority(a) - getPriority(b));
+  cards.forEach((card) => grid.appendChild(card));
+
   const PAGE_SIZE = 15;
   let category = 'all';
   let currentPage = 1;
