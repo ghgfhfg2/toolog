@@ -8,6 +8,13 @@
   --line: #273244;
   --line-soft: rgba(255, 255, 255, 0.06);
   --hover: #3b82f6;
+
+  /* spacing system */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
 }
 
 * { box-sizing: border-box; }
@@ -24,7 +31,7 @@ body {
 
 /* Reduce top gap below header */
 .page-content {
-  padding-top: 8px;
+  padding-top: var(--s-2);
 }
 
 .site-header,
@@ -34,7 +41,18 @@ body {
   backdrop-filter: blur(10px);
 }
 
-.wrapper { max-width: 1480px; }
+.site-header {
+  padding-block: var(--s-2);
+}
+
+.site-footer {
+  padding-block: var(--s-3);
+}
+
+.wrapper {
+  max-width: 1360px;
+  padding-inline: var(--s-4);
+}
 
 .site-title,
 .page-link,
@@ -252,15 +270,15 @@ a:hover { color: #fff; text-decoration: none; }
   padding-left: .8rem;
 }
 
-.discover { padding: .45rem 0 1.2rem; }
+.discover { padding: var(--s-3) 0 var(--s-5); }
 
 .discover__head {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   gap: .8rem;
-  padding: 0 20px;
-  margin-bottom: .8rem;
+  padding: 0;
+  margin-bottom: var(--s-3);
 }
 .discover__head h1 {
   margin: 0;
@@ -282,8 +300,8 @@ a:hover { color: #fff; text-decoration: none; }
 }
 
 .discover__controls {
-  padding: 0 20px;
-  margin-bottom: .85rem;
+  padding: 0;
+  margin-bottom: var(--s-3);
 }
 .discover__controls input {
   width: 100%;
@@ -327,7 +345,7 @@ a:hover { color: #fff; text-decoration: none; }
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 14px;
-  padding: 0 20px;
+  padding: 0;
 }
 
 .tool-card {
@@ -432,7 +450,7 @@ a:hover { color: #fff; text-decoration: none; }
 }
 
 .published-posts {
-  margin: 1rem 20px 0;
+  margin: var(--s-4) 0 0;
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: .9rem;
@@ -785,8 +803,8 @@ a:hover { color: #fff; text-decoration: none; }
   .tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .related-grid { grid-template-columns: 1fr; }
   .ytk-grid { grid-template-columns: 1fr; }
-  .discover__head { padding: 0 14px; }
-  .discover__controls { padding: 0 14px; }
-  .tool-grid { padding: 0 14px; }
-  .empty-state { margin-left: 14px; margin-right: 14px; }
+  .discover__head { padding: 0; }
+  .discover__controls { padding: 0; }
+  .tool-grid { padding: 0; }
+  .empty-state { margin-left: 0; margin-right: 0; }
 }
