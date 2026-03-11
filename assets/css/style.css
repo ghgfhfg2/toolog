@@ -36,6 +36,30 @@ body {
 a { color: #dbe3f0; }
 a:hover { color: #fff; text-decoration: none; }
 
+/* Brand logo (from provided source image) */
+.site-title {
+  font-size: 0;
+  line-height: 0;
+  display: inline-flex;
+  align-items: center;
+}
+.site-title::before {
+  content: "";
+  display: block;
+  width: 176px;
+  height: 46px;
+  background-image: url('/assets/logo/toolog-logo-source.jpg');
+  background-repeat: no-repeat;
+  background-size: 220%;
+  background-position: 30% 58%;
+}
+@media (max-width: 600px) {
+  .site-title::before {
+    width: 142px;
+    height: 38px;
+  }
+}
+
 /* Header nav: disable hamburger menu and keep links visible on mobile */
 .site-nav .nav-trigger,
 .site-nav .menu-icon {
