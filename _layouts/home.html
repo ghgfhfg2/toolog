@@ -43,7 +43,7 @@ layout: default
         {% else %}
         <div class="tool-thumbnail tool-thumbnail--fallback">{{ tool.title | slice: 0, 1 }}</div>
         {% endif %}
-        <span class="tool-badge">{{ tool.badge }}</span>
+        <span class="tool-badge">{{ tool.category_label }}</span>
       </a>
 
       <div class="tool-meta">
