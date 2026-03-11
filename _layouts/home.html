@@ -31,7 +31,7 @@ layout: default
 
   <section class="tool-grid" id="toolGrid">
     {% for tool in site.data.tools %}
-    <article class="tool-card" data-category="{{ tool.category_label }}" data-title="{{ tool.title | downcase }}" data-description="{{ tool.description | downcase }}">
+    <article class="tool-card" data-category="{{ tool.category_label }}" data-title="{{ tool.title | downcase }}" data-description="{{ tool.description | downcase }}" data-published-at="{{ tool.published_at | default: '' }}">
       <a class="tool-thumb-wrap" href="{{ tool.url | relative_url }}" aria-label="{{ tool.title }}">
         {% if tool.thumbnail %}
         <img class="tool-thumbnail" src="{{ tool.thumbnail | relative_url }}" alt="{{ tool.title }} 웹툴 썸네일" loading="lazy" />

@@ -11,15 +11,32 @@
 
   const cards = Array.from(grid.querySelectorAll('.tool-card'));
 
-  // 최신 툴(New 배지)을 앞쪽에 우선 배치
-  const getPriority = (card) => {
-    const badge = card.querySelector('.tool-badge');
-    const label = (badge?.textContent || '').trim().toLowerCase();
-    if (label === 'new') return 0;
-    return 1;
+  // 게시일 기준 최신순 정렬
+  // 1) data-published-at(YYYY-MM-DD 등) 존재 시 해당 날짜 내림차순
+  // 2) 날짜가 없으면 데이터 작성 순서(아래에 추가된 항목) 우선
+  const toTime = (v) => {
+    const t = Date.parse(v || '');
+    return Number.isFinite(t) ? t : NaN;
   };
 
-  cards.sort((a, b) => getPriority(a) - getPriority(b));
+  cards.forEach((card, idx) => {
+    card.dataset.orderIndex = String(idx);
+  });
+
+  cards.sort((a, b) => {
+    const aTime = toTime(a.dataset.publishedAt);
+    const bTime = toTime(b.dataset.publishedAt);
+
+    const aHas = Number.isFinite(aTime);
+    const bHas = Number.isFinite(bTime);
+
+    if (aHas && bHas && aTime !== bTime) return bTime - aTime;
+    if (aHas !== bHas) return aHas ? -1 : 1;
+
+    // 날짜 없을 때: 기존 목록의 뒤쪽(최근 추가)을 앞으로
+    return Number(b.dataset.orderIndex) - Number(a.dataset.orderIndex);
+  });
+
   cards.forEach((card) => grid.appendChild(card));
 
   const PAGE_SIZE = 15;
