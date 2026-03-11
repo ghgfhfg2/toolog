@@ -47,8 +47,9 @@ a:hover { color: #fff; text-decoration: none; }
   white-space: nowrap;
   background-image: url('/assets/logo/toolog-logo-header.png');
   background-repeat: no-repeat;
-  background-size: auto 88%;
-  background-position: left center;
+  /* 로고 원본 여백을 CSS 줌으로 보정 */
+  background-size: auto 180%;
+  background-position: left 48%;
   filter: drop-shadow(0 0 14px rgba(14, 165, 233, 0.25));
 }
 
@@ -66,8 +67,8 @@ a:hover { color: #fff; text-decoration: none; }
   white-space: nowrap;
   background-image: url('/assets/logo/toolog-logo-header.png');
   background-repeat: no-repeat;
-  background-size: auto 82%;
-  background-position: left center;
+  background-size: auto 165%;
+  background-position: left 50%;
   filter: drop-shadow(0 0 12px rgba(14, 165, 233, 0.2));
 }
 
@@ -79,13 +80,15 @@ a:hover { color: #fff; text-decoration: none; }
   .site-title {
     width: 178px;
     height: 42px;
-    background-size: auto 82%;
+    background-size: auto 170%;
+    background-position: left 48%;
   }
 
   .site-footer .footer-heading {
     width: 184px;
     height: 42px;
-    background-size: auto 78%;
+    background-size: auto 155%;
+    background-position: left 50%;
   }
 }
 
