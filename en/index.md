@@ -64,14 +64,19 @@ permalink: /en/
     <h2>Recent Posts (EN)</h2>
     {% assign en_posts = site.posts | where: "lang", "en" %}
     {% if en_posts.size > 0 %}
-    <ul>
-      {% for post in en_posts limit: 12 %}
+    <ul id="publishedPostsList">
+      {% for post in en_posts %}
       <li>
         <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
         <small>{{ post.date | date: "%Y-%m-%d" }}</small>
       </li>
       {% endfor %}
     </ul>
+    <div id="postPagination" class="tool-pagination" hidden>
+      <button id="postPrev" type="button">Prev</button>
+      <span id="postInfo">1 / 1</span>
+      <button id="postNext" type="button">Next</button>
+    </div>
     {% else %}
     <p>English posts are being prepared. Please check back soon.</p>
     {% endif %}

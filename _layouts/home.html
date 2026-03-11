@@ -65,14 +65,19 @@ layout: default
   <section class="published-posts">
     <h2>최근 발행 글</h2>
     {% if site.posts.size > 0 %}
-    <ul>
-      {% for post in site.posts limit: 8 %}
+    <ul id="publishedPostsList">
+      {% for post in site.posts %}
       <li>
         <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
         <small>{{ post.date | date: "%Y-%m-%d" }}</small>
       </li>
       {% endfor %}
     </ul>
+    <div id="postPagination" class="tool-pagination" hidden>
+      <button id="postPrev" type="button">이전</button>
+      <span id="postInfo">1 / 1</span>
+      <button id="postNext" type="button">다음</button>
+    </div>
     {% else %}
     <p>아직 발행된 글이 없습니다.</p>
     {% endif %}

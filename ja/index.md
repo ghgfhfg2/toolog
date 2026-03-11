@@ -64,14 +64,19 @@ permalink: /ja/
     <h2>最新記事（JA）</h2>
     {% assign ja_posts = site.posts | where: "lang", "ja" %}
     {% if ja_posts.size > 0 %}
-    <ul>
-      {% for post in ja_posts limit: 12 %}
+    <ul id="publishedPostsList">
+      {% for post in ja_posts %}
       <li>
         <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
         <small>{{ post.date | date: "%Y-%m-%d" }}</small>
       </li>
       {% endfor %}
     </ul>
+    <div id="postPagination" class="tool-pagination" hidden>
+      <button id="postPrev" type="button">前へ</button>
+      <span id="postInfo">1 / 1</span>
+      <button id="postNext" type="button">次へ</button>
+    </div>
     {% else %}
     <p>日本語の記事は準備中です。もうしばらくお待ちください。</p>
     {% endif %}

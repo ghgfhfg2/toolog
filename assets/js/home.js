@@ -9,6 +9,11 @@
   const prevBtn = document.getElementById('pgPrev');
   const nextBtn = document.getElementById('pgNext');
   const info = document.getElementById('pgInfo');
+  const postList = document.getElementById('publishedPostsList');
+  const postPager = document.getElementById('postPagination');
+  const postPrevBtn = document.getElementById('postPrev');
+  const postNextBtn = document.getElementById('postNext');
+  const postInfo = document.getElementById('postInfo');
   if (!grid) return;
 
   const cards = Array.from(grid.querySelectorAll('.tool-card'));
@@ -53,8 +58,10 @@
   }
 
   const PAGE_SIZE = 15;
+  const POST_PAGE_SIZE = 10;
   let category = 'all';
   let currentPage = 1;
+  let postCurrentPage = 1;
 
   const normalize = (s) => (s || '').toLowerCase().trim();
 
@@ -122,5 +129,51 @@
     }
   });
 
+  const renderPostPagination = () => {
+    if (!postList) return;
+
+    const postItems = Array.from(postList.querySelectorAll('li'));
+    const total = postItems.length;
+    const totalPages = Math.max(1, Math.ceil(total / POST_PAGE_SIZE));
+    if (postCurrentPage > totalPages) postCurrentPage = totalPages;
+
+    const start = (postCurrentPage - 1) * POST_PAGE_SIZE;
+    const end = start + POST_PAGE_SIZE;
+
+    postItems.forEach((item, idx) => {
+      item.hidden = idx < start || idx >= end;
+    });
+
+    if (postPager) {
+      postPager.hidden = total <= POST_PAGE_SIZE || total === 0;
+    }
+    if (postInfo) {
+      postInfo.textContent = `${postCurrentPage} / ${totalPages}`;
+    }
+    if (postPrevBtn) {
+      postPrevBtn.disabled = postCurrentPage <= 1;
+    }
+    if (postNextBtn) {
+      postNextBtn.disabled = postCurrentPage >= totalPages;
+    }
+  };
+
+  postPrevBtn?.addEventListener('click', () => {
+    if (postCurrentPage > 1) {
+      postCurrentPage -= 1;
+      renderPostPagination();
+    }
+  });
+
+  postNextBtn?.addEventListener('click', () => {
+    const totalPosts = postList ? postList.querySelectorAll('li').length : 0;
+    const totalPages = Math.max(1, Math.ceil(totalPosts / POST_PAGE_SIZE));
+    if (postCurrentPage < totalPages) {
+      postCurrentPage += 1;
+      renderPostPagination();
+    }
+  });
+
   render();
+  renderPostPagination();
 })();
