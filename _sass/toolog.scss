@@ -59,6 +59,16 @@ body {
 a { color: #dbe3f0; }
 a:hover { color: #fff; text-decoration: none; }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
 /* Brand logo system (header + footer) */
 .site-title {
   display: inline-flex;
@@ -79,6 +89,7 @@ a:hover { color: #fff; text-decoration: none; }
 
 .site-footer {
   background: linear-gradient(180deg, rgba(9, 13, 24, 0.96), rgba(7, 11, 20, 0.98));
+  border-top: 1px solid rgba(71, 85, 105, .35);
 }
 
 .site-footer .wrapper {
@@ -110,13 +121,16 @@ a:hover { color: #fff; text-decoration: none; }
 
 .site-footer .footer-col-3 {
   text-align: right;
+  color: #9fb0c7;
+  font-size: .84rem;
+  line-height: 1.45;
 }
 
 .brand-logo-img--footer {
   width: 120px;
   height: auto;
   filter: grayscale(1);
-  opacity: 0.5;
+  opacity: 0.56;
 }
 
 .site-footer .contact-list .p-name {
@@ -344,6 +358,10 @@ a:hover { color: #fff; text-decoration: none; }
   border-color: #3b82f6;
   background: #1b2a42;
 }
+.chip:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 1px;
+}
 .chip.is-active {
   border-color: #60a5fa;
   background: linear-gradient(135deg, #2563eb, #0ea5e9);
@@ -395,6 +413,10 @@ a:hover { color: #fff; text-decoration: none; }
   transform: translateY(-3px);
   border-color: rgba(59, 130, 246, .9);
   box-shadow: 0 10px 24px rgba(7, 11, 18, .42), 0 0 0 1px rgba(59, 130, 246, .24);
+}
+.tool-card:focus-within {
+  border-color: rgba(96, 165, 250, .92);
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, .22);
 }
 
 .tool-thumb-wrap {
