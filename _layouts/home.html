@@ -29,6 +29,11 @@ layout: default
     </div>
   </section>
 
+  <section class="latest-strip" id="latestStrip" aria-label="최신 업데이트" hidden>
+    <h2>최신 업데이트</h2>
+    <div class="latest-strip__list" id="latestStripList"></div>
+  </section>
+
   <section class="tool-grid" id="toolGrid">
     {% for tool in site.data.tools %}
     <article class="tool-card" data-category="{{ tool.category_label }}" data-title="{{ tool.title | downcase }}" data-description="{{ tool.description | downcase }}" data-published-at="{{ tool.published_at | default: '' }}">

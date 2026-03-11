@@ -4,6 +4,8 @@
   const search = document.getElementById('toolSearch');
   const empty = document.getElementById('emptyState');
   const pager = document.getElementById('toolPagination');
+  const latestStrip = document.getElementById('latestStrip');
+  const latestStripList = document.getElementById('latestStripList');
   const prevBtn = document.getElementById('pgPrev');
   const nextBtn = document.getElementById('pgNext');
   const info = document.getElementById('pgInfo');
@@ -38,6 +40,17 @@
   });
 
   cards.forEach((card) => grid.appendChild(card));
+
+  // 최신 업데이트 스트립(상위 6개)
+  if (latestStrip && latestStripList) {
+    const top = cards.slice(0, 6);
+    latestStripList.innerHTML = top.map((card) => {
+      const title = card.querySelector('.tool-title')?.textContent?.trim() || '';
+      const href = card.querySelector('.tool-title')?.getAttribute('href') || '#';
+      return `<a class="latest-pill" href="${href}">${title}</a>`;
+    }).join('');
+    latestStrip.hidden = top.length === 0;
+  }
 
   const PAGE_SIZE = 15;
   let category = 'all';

@@ -303,6 +303,10 @@ a:hover { color: #fff; text-decoration: none; }
 .discover__controls {
   padding: 0;
   margin-bottom: var(--s-3);
+  background: rgba(12, 19, 31, .62);
+  border: 1px solid rgba(71, 85, 105, .38);
+  border-radius: 14px;
+  padding: var(--s-3);
 }
 .discover__controls input {
   width: 100%;
@@ -346,6 +350,32 @@ a:hover { color: #fff; text-decoration: none; }
   color: white;
 }
 
+.latest-strip {
+  margin: 0 0 var(--s-4);
+}
+.latest-strip h2 {
+  margin: 0 0 var(--s-2);
+  font-size: .85rem;
+  color: #a9bad1;
+  font-weight: 700;
+}
+.latest-strip__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+.latest-pill {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #334155;
+  background: #111827;
+  color: #e2e8f0;
+  border-radius: 999px;
+  padding: .28rem .62rem;
+  font-size: .74rem;
+}
+.latest-pill:hover { border-color: #60a5fa; color: #fff; }
+
 /* 핵심: 4~5열 카드형 메인 레이아웃 */
 .tool-grid {
   display: grid;
@@ -372,6 +402,14 @@ a:hover { color: #fff; text-decoration: none; }
   position: relative;
 }
 
+.tool-thumb-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(2, 6, 23, 0) 50%, rgba(2, 6, 23, .22) 100%);
+  pointer-events: none;
+}
+
 /* 카드의 체감 80%를 썸네일이 차지 */
 .tool-thumbnail {
   width: 100%;
@@ -379,6 +417,7 @@ a:hover { color: #fff; text-decoration: none; }
   object-fit: cover;
   display: block;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  filter: saturate(.84) contrast(.96);
 }
 
 .tool-thumbnail--fallback {
