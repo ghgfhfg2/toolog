@@ -40,15 +40,15 @@ a:hover { color: #fff; text-decoration: none; }
 .site-title {
   display: inline-flex;
   align-items: center;
-  width: 230px;
-  height: 52px;
+  width: auto;
+  height: auto;
   color: transparent !important;
 }
 
 .brand-logo-img {
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 120px;
+  height: auto;
   object-fit: contain;
   object-position: left center;
   filter: drop-shadow(0 0 14px rgba(14, 165, 233, 0.24));
@@ -59,14 +59,33 @@ a:hover { color: #fff; text-decoration: none; }
 }
 
 .site-footer .footer-heading {
-  width: 220px;
-  height: 48px;
-  margin: 0 0 .9rem;
+  margin: 0;
   color: transparent;
+  flex: 0 0 auto;
+}
+
+.site-footer .footer-col-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.site-footer .footer-col {
+  width: auto;
+  margin-bottom: 0;
+}
+
+.site-footer .footer-col-3 {
+  text-align: right;
 }
 
 .brand-logo-img--footer {
-  filter: drop-shadow(0 0 12px rgba(14, 165, 233, 0.2));
+  width: 120px;
+  height: auto;
+  filter: grayscale(1);
+  opacity: 0.5;
 }
 
 .site-footer .contact-list .p-name {
@@ -74,14 +93,14 @@ a:hover { color: #fff; text-decoration: none; }
 }
 
 @media (max-width: 600px) {
-  .site-title {
-    width: 178px;
-    height: 42px;
+  .site-footer .footer-col-wrapper {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: .6rem 1rem;
   }
 
-  .site-footer .footer-heading {
-    width: 184px;
-    height: 42px;
+  .site-footer .footer-col-3 {
+    text-align: left;
   }
 }
 
