@@ -36,13 +36,12 @@ permalink: /en/
     {% for tool in site.data.tools %}
     {% assign localized_title = tool.title_en | default: tool.title %}
     {% assign localized_description = tool.description_en | default: tool.description %}
-    {% assign localized_badge = tool.badge_en | default: tool.badge %}
     {% assign localized_url = tool.url_en | default: tool.url %}
     {% assign localized_category_label = tool.category_label_en | default: tool.category_label %}
     <article class="tool-card" data-category="{{ localized_category_label }}" data-title="{{ localized_title | downcase }}" data-description="{{ localized_description | downcase }}">
       <a class="tool-thumb-wrap" href="{{ localized_url | relative_url }}" aria-label="{{ localized_title }}">
         <img class="tool-thumbnail" src="{{ '/assets/thumbs/en/' | append: tool.id | append: '.svg' | relative_url }}" alt="{{ localized_title }} thumbnail" loading="lazy" />
-        <span class="tool-badge">{{ localized_badge }}</span>
+        <span class="tool-badge">{{ localized_category_label }}</span>
       </a>
 
       <div class="tool-meta">
