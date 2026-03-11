@@ -58,6 +58,13 @@ a:hover { color: #fff; text-decoration: none; }
   background: linear-gradient(180deg, rgba(9, 13, 24, 0.96), rgba(7, 11, 20, 0.98));
 }
 
+.site-footer .wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+}
+
 .site-footer .footer-heading {
   margin: 0;
   color: transparent;
@@ -66,9 +73,10 @@ a:hover { color: #fff; text-decoration: none; }
 
 .site-footer .footer-col-wrapper {
   display: flex;
+  flex: 1 1 auto;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 1rem;
 }
 
@@ -93,7 +101,14 @@ a:hover { color: #fff; text-decoration: none; }
 }
 
 @media (max-width: 600px) {
+  .site-footer .wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .65rem;
+  }
+
   .site-footer .footer-col-wrapper {
+    width: 100%;
     flex-wrap: wrap;
     justify-content: flex-start;
     gap: .6rem 1rem;
@@ -104,7 +119,24 @@ a:hover { color: #fff; text-decoration: none; }
   }
 }
 
-/* Header nav: disable hamburger menu and keep links visible on mobile */
+/* Header nav: keep logo + menu horizontally aligned */
+.site-header .wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.site-nav {
+  margin-left: auto;
+}
+
+.site-nav .trigger {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+}
+
 .site-nav .nav-trigger,
 .site-nav .menu-icon {
   display: none !important;
@@ -114,12 +146,14 @@ a:hover { color: #fff; text-decoration: none; }
     position: static;
     border: 0;
     background: transparent;
+    margin-left: auto;
   }
   .site-nav .trigger {
     display: flex !important;
+    align-items: center;
     flex-wrap: wrap;
     gap: .65rem;
-    padding-bottom: .2rem;
+    padding-bottom: 0;
   }
   .site-nav .page-link {
     margin-left: 0 !important;
