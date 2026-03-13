@@ -5007,4 +5007,115 @@
     updateButtonsText();
     render();
   }
+  if (slug === 'work-end-time-calculator') {
+    const startEl = document.getElementById('we-start');
+    const workEl = document.getElementById('we-work-hours');
+    const breakEl = document.getElementById('we-break-minutes');
+    const endEl = document.getElementById('we-end-time');
+    const stayEl = document.getElementById('we-total-stay');
+    const nextEl = document.getElementById('we-next-day');
+    const breakSummaryEl = document.getElementById('we-break-summary');
+    const help = document.getElementById('we-help');
+    const copyBtn = document.getElementById('we-copy');
+    const resetBtn = document.getElementById('we-reset');
+
+    if (!startEl || !workEl || !breakEl || !endEl || !stayEl || !nextEl || !breakSummaryEl || !help) return;
+
+    const t = {
+      ko: {
+        needInput: '출근 시각과 근무시간을 입력하세요.',
+        nextSame: '당일',
+        nextDay: (n) => `+${n}일`,
+        breakSummary: (m) => `총 ${m}분`,
+        help: (end, day) => `예상 퇴근 시각은 ${end} (${day}) 입니다.`,
+        copy: (e,s,d,b) => `퇴근 시간 계산 결과 | 퇴근 ${e} | 체류 ${s} | 날짜 ${d} | 휴게 ${b}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        needInput: 'Enter start time and work hours.',
+        nextSame: 'Same day',
+        nextDay: (n) => `+${n} day(s)`,
+        breakSummary: (m) => `${m} min total`,
+        help: (end, day) => `Estimated clock-out time: ${end} (${day}).`,
+        copy: (e,s,d,b) => `Work end time | End ${e} | Stay ${s} | Day ${d} | Break ${b}`,
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        needInput: '出勤時刻と勤務時間を入力してください。',
+        nextSame: '当日',
+        nextDay: (n) => `+${n}日`,
+        breakSummary: (m) => `合計 ${m}分`,
+        help: (end, day) => `退勤予定時刻は ${end}（${day}）です。`,
+        copy: (e,s,d,b) => `退勤時刻計算 | 退勤 ${e} | 滞在 ${s} | 日付 ${d} | 休憩 ${b}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    }[pageLang] || null;
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const fmtHM = (minutes) => {
+      const m = ((minutes % 1440) + 1440) % 1440;
+      const h = Math.floor(m / 60);
+      const mm = m % 60;
+      return `${String(h).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+    };
+
+    const render = () => {
+      const start = startEl.value || '';
+      const workHours = Number(workEl.value || 0);
+      const breakMinutes = Number(breakEl.value || 0);
+
+      if (!start || !(workHours > 0)) {
+        endEl.textContent = '-'; stayEl.textContent = '-'; nextEl.textContent = '-'; breakSummaryEl.textContent = '-';
+        help.textContent = t.needInput;
+        return;
+      }
+
+      const [h, m] = start.split(':').map(Number);
+      const startMinutes = (h * 60) + m;
+      const totalMinutes = Math.round(workHours * 60 + Math.max(0, breakMinutes));
+      const endMinutesRaw = startMinutes + totalMinutes;
+      const dayOffset = Math.floor(endMinutesRaw / 1440);
+      const endTime = fmtHM(endMinutesRaw);
+
+      endEl.textContent = endTime;
+      stayEl.textContent = `${Math.floor(totalMinutes / 60)}h ${totalMinutes % 60}m`;
+      nextEl.textContent = dayOffset > 0 ? t.nextDay(dayOffset) : t.nextSame;
+      breakSummaryEl.textContent = t.breakSummary(Math.max(0, breakMinutes));
+      help.textContent = t.help(endTime, nextEl.textContent);
+    };
+
+    [startEl, workEl, breakEl].forEach((el) => el.addEventListener('input', render));
+
+    resetBtn?.addEventListener('click', () => {
+      startEl.value = '09:00';
+      workEl.value = '8';
+      breakEl.value = '60';
+      render();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (endEl.textContent === '-') return;
+      await copyText(t.copy(endEl.textContent, stayEl.textContent, nextEl.textContent, breakSummaryEl.textContent));
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+
+    if (!startEl.value) startEl.value = '09:00';
+    if (!workEl.value) workEl.value = '8';
+    if (!breakEl.value) breakEl.value = '60';
+    render();
+  }
+
 })();

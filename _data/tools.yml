@@ -1,3 +1,22 @@
+- id: work-end-time-calculator
+  title: 퇴근 시간 계산기
+  title_en: Work End Time Calculator
+  title_ja: 退勤時刻計算機
+  category: productivity
+  category_label: 일정/생산성
+  category_label_en: Schedule/Productivity
+  category_label_ja: 予定/生産性
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 출근 시각·근무시간·휴게시간을 입력하면 예상 퇴근 시각과 총 체류시간을 계산해요.
+  description_en: Calculate estimated clock-out time and total stay time from start time, work hours, and breaks.
+  description_ja: 出勤時刻・勤務時間・休憩時間から、退勤予定時刻と総滞在時間を計算します。
+  url: /tools/work-end-time-calculator/
+  url_en: /en/tools/work-end-time-calculator/
+  url_ja: /ja/tools/work-end-time-calculator/
+  thumbnail: /assets/thumbs/work-end-time-calculator.svg
+
 - id: profit-margin-calculator
   title: 원가율 계산기
   title_en: Profit Margin Calculator

@@ -981,6 +981,39 @@ layout: default
 
           <p class="tool-result" id="tip-help">{% if page.lang == 'en' %}Enter bill values to calculate tip, total, and split instantly.{% elsif page.lang == 'ja' %}金額を入力すると、チップ・合計・1人あたりをすぐ計算します。{% else %}금액을 입력하면 팁·총액·1인당 금액을 바로 계산합니다.{% endif %}</p>
         </div>
+      {% when 'work-end-time-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="we-start">{% if page.lang == 'en' %}Start time{% elsif page.lang == 'ja' %}出勤時刻{% else %}출근 시각{% endif %}</label>
+              <input id="we-start" type="time" />
+            </div>
+            <div>
+              <label for="we-work-hours">{% if page.lang == 'en' %}Work hours{% elsif page.lang == 'ja' %}勤務時間(時間){% else %}근무시간(시간){% endif %}</label>
+              <input id="we-work-hours" type="number" min="0" max="24" step="0.5" inputmode="decimal" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="we-break-minutes">{% if page.lang == 'en' %}Break minutes{% elsif page.lang == 'ja' %}休憩時間(分){% else %}휴게시간(분){% endif %}</label>
+              <input id="we-break-minutes" type="number" min="0" max="600" step="5" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="we-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="we-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="we-end-time">-</strong><span>{% if page.lang == 'en' %}Estimated end time{% elsif page.lang == 'ja' %}退勤予定時刻{% else %}예상 퇴근 시각{% endif %}</span></div>
+            <div><strong id="we-total-stay">-</strong><span>{% if page.lang == 'en' %}Total stay time{% elsif page.lang == 'ja' %}総滞在時間{% else %}총 체류시간{% endif %}</span></div>
+            <div><strong id="we-next-day">-</strong><span>{% if page.lang == 'en' %}Day offset{% elsif page.lang == 'ja' %}日付オフセット{% else %}날짜 오프셋{% endif %}</span></div>
+            <div><strong id="we-break-summary">-</strong><span>{% if page.lang == 'en' %}Break summary{% elsif page.lang == 'ja' %}休憩サマリー{% else %}휴게 요약{% endif %}</span></div>
+          </div>
+
+          <p class="tool-result" id="we-help">{% if page.lang == 'en' %}Enter start time, work hours, and break minutes to calculate clock-out time.{% elsif page.lang == 'ja' %}出勤時刻・勤務時間・休憩時間を入力すると、退勤時刻を計算します。{% else %}출근 시각·근무시간·휴게시간을 입력하면 퇴근 시각을 계산합니다.{% endif %}</p>
+        </div>
       {% when 'profit-margin-calculator' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="퇴근 시간 계산기 썸네일">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="90" y="90" width="1020" height="450" rx="28" fill="#ffffff" opacity="0.95"/>
+  <text x="150" y="220" font-size="64" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" fill="#0f172a" font-weight="700">퇴근 시간 계산기</text>
+  <text x="150" y="292" font-size="34" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" fill="#334155">출근·근무·휴게 입력으로 예상 퇴근 시각 계산</text>
+  <rect x="150" y="350" width="330" height="110" rx="18" fill="#e2e8f0"/>
+  <text x="180" y="418" font-size="42" font-family="monospace" fill="#0f172a">09:00</text>
+  <text x="510" y="418" font-size="50" font-family="Pretendard, sans-serif" fill="#1e293b">→</text>
+  <rect x="570" y="350" width="330" height="110" rx="18" fill="#dbeafe"/>
+  <text x="600" y="418" font-size="42" font-family="monospace" fill="#1d4ed8">18:00</text>
+</svg>
