@@ -3988,6 +3988,137 @@
     render();
   }
 
+  if (slug === 'profit-margin-calculator') {
+    const sales = document.getElementById('pm-sales');
+    const cost = document.getElementById('pm-cost');
+    const targetMargin = document.getElementById('pm-target-margin');
+    const outProfit = document.getElementById('pm-profit');
+    const outCostRate = document.getElementById('pm-cost-rate');
+    const outMarginRate = document.getElementById('pm-margin-rate');
+    const outTargetPrice = document.getElementById('pm-target-price');
+    const help = document.getElementById('pm-help');
+    const copyBtn = document.getElementById('pm-copy');
+    const resetBtn = document.getElementById('pm-reset');
+
+    if (!sales || !cost || !targetMargin || !outProfit || !outCostRate || !outMarginRate || !outTargetPrice || !help) return;
+
+    const i18n = {
+      ko: {
+        currency: '원',
+        needInput: '매출과 원가를 입력하세요.',
+        invalid: '매출은 0보다 커야 하고 원가는 0 이상이어야 합니다.',
+        summary: (cr, mr) => `원가율 ${cr}, 마진율 ${mr} 기준 결과입니다.`,
+        impossible: '목표 마진율은 100% 미만이어야 합니다.',
+        copy: (p, cr, mr, tp) => `원가율 계산 결과 | 이익 ${p} | 원가율 ${cr} | 마진율 ${mr} | 권장 판매가 ${tp}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        currency: ' KRW',
+        needInput: 'Enter sales and cost.',
+        invalid: 'Sales must be greater than 0, and cost must be 0 or higher.',
+        summary: (cr, mr) => `Calculated from cost ratio ${cr} and margin ratio ${mr}.`,
+        impossible: 'Target margin must be less than 100%.',
+        copy: (p, cr, mr, tp) => `Profit margin result | Profit ${p} | Cost ratio ${cr} | Margin ratio ${mr} | Suggested price ${tp}`,
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        currency: 'ウォン',
+        needInput: '売上と原価を入力してください。',
+        invalid: '売上は0より大きく、原価は0以上で入力してください。',
+        summary: (cr, mr) => `原価率 ${cr}、利益率 ${mr} の結果です。`,
+        impossible: '目標利益率は100%未満で入力してください。',
+        copy: (p, cr, mr, tp) => `原価率計算結果 | 利益 ${p} | 原価率 ${cr} | 利益率 ${mr} | 推奨販売価格 ${tp}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    };
+    const t = i18n[pageLang] || i18n.ko;
+
+    const fmtMoney = (v) => {
+      const rounded = Math.round(v || 0).toLocaleString(numberLocale);
+      return `${rounded}${t.currency}`;
+    };
+    const fmtPct = (v) => `${(v || 0).toLocaleString(numberLocale, { maximumFractionDigits: 2 })}%`;
+
+    const setIdle = (msg) => {
+      outProfit.textContent = '-';
+      outCostRate.textContent = '-';
+      outMarginRate.textContent = '-';
+      outTargetPrice.textContent = '-';
+      help.textContent = msg;
+    };
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const render = () => {
+      const s = Number(sales.value || 0);
+      const c = Number(cost.value || 0);
+      const tm = Number(targetMargin.value || 0);
+
+      if (!(s > 0) && !(c > 0)) {
+        setIdle(t.needInput);
+        return;
+      }
+      if (!(s > 0) || c < 0) {
+        setIdle(t.invalid);
+        return;
+      }
+
+      const profit = s - c;
+      const costRate = (c / s) * 100;
+      const marginRate = (profit / s) * 100;
+
+      outProfit.textContent = fmtMoney(profit);
+      outCostRate.textContent = fmtPct(costRate);
+      outMarginRate.textContent = fmtPct(marginRate);
+
+      if (targetMargin.value !== '') {
+        if (tm >= 100) {
+          outTargetPrice.textContent = '-';
+          help.textContent = t.impossible;
+        } else {
+          const suggested = c / (1 - (tm / 100));
+          outTargetPrice.textContent = fmtMoney(suggested);
+          help.textContent = t.summary(fmtPct(costRate), fmtPct(marginRate));
+        }
+      } else {
+        outTargetPrice.textContent = '-';
+        help.textContent = t.summary(fmtPct(costRate), fmtPct(marginRate));
+      }
+    };
+
+    [sales, cost, targetMargin].forEach((el) => el.addEventListener('input', render));
+
+    copyBtn?.addEventListener('click', async () => {
+      if (outProfit.textContent === '-') return;
+      const text = t.copy(outProfit.textContent, outCostRate.textContent, outMarginRate.textContent, outTargetPrice.textContent);
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      sales.value = 10000;
+      cost.value = 7000;
+      targetMargin.value = 30;
+      render();
+    });
+
+    if (!sales.value) sales.value = 10000;
+    if (!cost.value) cost.value = 7000;
+    render();
+  }
+
   if (slug === 'pomodoro-timer') {
     const focusEl = document.getElementById('pomo-focus');
     const shortEl = document.getElementById('pomo-short');

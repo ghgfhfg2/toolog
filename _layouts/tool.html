@@ -981,6 +981,40 @@ layout: default
 
           <p class="tool-result" id="tip-help">{% if page.lang == 'en' %}Enter bill values to calculate tip, total, and split instantly.{% elsif page.lang == 'ja' %}金額を入力すると、チップ・合計・1人あたりをすぐ計算します。{% else %}금액을 입력하면 팁·총액·1인당 금액을 바로 계산합니다.{% endif %}</p>
         </div>
+      {% when 'profit-margin-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="pm-sales">{% if page.lang == 'en' %}Sales amount{% elsif page.lang == 'ja' %}売上金額{% else %}매출 금액{% endif %}</label>
+              <input id="pm-sales" type="number" min="0" step="100" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="pm-cost">{% if page.lang == 'en' %}Cost amount{% elsif page.lang == 'ja' %}原価{% else %}원가{% endif %}</label>
+              <input id="pm-cost" type="number" min="0" step="100" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="pm-target-margin">{% if page.lang == 'en' %}Target margin (%) (optional){% elsif page.lang == 'ja' %}目標利益率(%)（任意）{% else %}목표 마진율(%) (선택){% endif %}</label>
+              <input id="pm-target-margin" type="number" min="0" max="99.9" step="0.1" inputmode="decimal" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="pm-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="pm-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="pm-profit">-</strong><span>{% if page.lang == 'en' %}Profit{% elsif page.lang == 'ja' %}利益{% else %}이익{% endif %}</span></div>
+            <div><strong id="pm-cost-rate">-</strong><span>{% if page.lang == 'en' %}Cost ratio{% elsif page.lang == 'ja' %}原価率{% else %}원가율{% endif %}</span></div>
+            <div><strong id="pm-margin-rate">-</strong><span>{% if page.lang == 'en' %}Margin ratio{% elsif page.lang == 'ja' %}利益率{% else %}마진율{% endif %}</span></div>
+            <div><strong id="pm-target-price">-</strong><span>{% if page.lang == 'en' %}Suggested price (target margin){% elsif page.lang == 'ja' %}推奨販売価格（目標利益率）{% else %}목표 마진 기준 권장 판매가{% endif %}</span></div>
+          </div>
+
+          <p class="tool-result" id="pm-help">{% if page.lang == 'en' %}Enter sales and cost to calculate cost and margin ratios.{% elsif page.lang == 'ja' %}売上と原価を入力すると、原価率と利益率を計算します。{% else %}매출과 원가를 입력하면 원가율과 마진율을 계산합니다.{% endif %}</p>
+        </div>
       {% when 'pomodoro-timer' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">

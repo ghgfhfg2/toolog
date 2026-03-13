@@ -1,3 +1,22 @@
+- id: profit-margin-calculator
+  title: 원가율 계산기
+  title_en: Profit Margin Calculator
+  title_ja: 原価率計算機
+  category: calculator
+  category_label: 금융/비즈니스
+  category_label_en: Finance/Business
+  category_label_ja: 金融/ビジネス
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 매출·원가로 원가율·마진율·이익과 목표 마진율 기준 권장 판매가를 빠르게 계산해요.
+  description_en: Calculate cost ratio, margin ratio, profit, and suggested selling price from sales, cost, and target margin.
+  description_ja: 売上・原価から原価率・利益率・利益と、目標利益率ベースの推奨販売価格を計算します。
+  url: /tools/profit-margin-calculator/
+  url_en: /en/tools/profit-margin-calculator/
+  url_ja: /ja/tools/profit-margin-calculator/
+  thumbnail: /assets/thumbs/profit-margin-calculator.svg
+
 - id: pomodoro-timer
   title: 뽀모도로 타이머
   title_en: Pomodoro Timer

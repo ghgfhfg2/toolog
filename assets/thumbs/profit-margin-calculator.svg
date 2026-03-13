@@ -1,0 +1,26 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B1220"/>
+      <stop offset="1" stop-color="#1E293B"/>
+    </linearGradient>
+    <linearGradient id="card" x1="160" y1="120" x2="1040" y2="510" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1F2937"/>
+      <stop offset="1" stop-color="#0F172A"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="160" y="120" width="880" height="390" rx="28" fill="url(#card)" stroke="#334155" stroke-width="2"/>
+  <text x="220" y="220" fill="#E2E8F0" font-size="56" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">원가율 계산기</text>
+  <text x="220" y="270" fill="#94A3B8" font-size="28" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">매출 · 원가 · 마진율 · 권장 판매가</text>
+
+  <rect x="220" y="320" width="300" height="120" rx="16" fill="#111827" stroke="#374151"/>
+  <text x="245" y="362" fill="#9CA3AF" font-size="22" font-family="sans-serif">원가율</text>
+  <text x="245" y="410" fill="#F8FAFC" font-size="40" font-family="sans-serif" font-weight="700">70%</text>
+
+  <rect x="550" y="320" width="300" height="120" rx="16" fill="#111827" stroke="#374151"/>
+  <text x="575" y="362" fill="#9CA3AF" font-size="22" font-family="sans-serif">마진율</text>
+  <text x="575" y="410" fill="#34D399" font-size="40" font-family="sans-serif" font-weight="700">30%</text>
+
+  <path d="M900 430 L980 350 L1010 380 L1065 320" stroke="#22C55E" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
