@@ -20,7 +20,7 @@
 
   // 게시일 기준 최신순 정렬
   // 1) data-published-at(YYYY-MM-DD 등) 존재 시 해당 날짜 내림차순
-  // 2) 날짜가 없으면 데이터 작성 순서(아래에 추가된 항목) 우선
+  // 2) 날짜가 없으면 데이터 파일 작성 순서를 유지(위쪽 항목 우선)
   const toTime = (v) => {
     const t = Date.parse(v || '');
     return Number.isFinite(t) ? t : NaN;
@@ -40,8 +40,8 @@
     if (aHas && bHas && aTime !== bTime) return bTime - aTime;
     if (aHas !== bHas) return aHas ? -1 : 1;
 
-    // 날짜 없을 때: 기존 목록의 뒤쪽(최근 추가)을 앞으로
-    return Number(b.dataset.orderIndex) - Number(a.dataset.orderIndex);
+    // 날짜 없을 때: 데이터 파일 순서 유지(위쪽이 먼저 노출)
+    return Number(a.dataset.orderIndex) - Number(b.dataset.orderIndex);
   });
 
   cards.forEach((card) => grid.appendChild(card));
