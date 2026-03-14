@@ -1,3 +1,22 @@
+- id: savings-interest-calculator
+  title: 예금 이자 계산기
+  title_en: Savings Interest Calculator
+  title_ja: 預金利息計算機
+  category: calculator
+  category_label: 금융/비즈니스
+  category_label_en: Finance/Business
+  category_label_ja: 金融/ビジネス
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 예치금·금리·기간·과세를 입력하면 단리/월복리 기준 세전·세후 이자와 만기금액을 계산해요.
+  description_en: Calculate pre-tax/after-tax interest and maturity amount from deposit, rate, term, and tax mode (simple or monthly compound).
+  description_ja: 預入額・金利・期間・課税条件から、単利/毎月複利ベースで税引前・税引後利息と満期金額を計算します。
+  url: /tools/savings-interest-calculator/
+  url_en: /en/tools/savings-interest-calculator/
+  url_ja: /ja/tools/savings-interest-calculator/
+  thumbnail: /assets/thumbs/savings-interest-calculator.svg
+
 - id: work-end-time-calculator
   title: 퇴근 시간 계산기
   title_en: Work End Time Calculator

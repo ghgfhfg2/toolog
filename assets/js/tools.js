@@ -5118,4 +5118,134 @@
     render();
   }
 
+  if (slug === 'savings-interest-calculator') {
+    const principal = document.getElementById('si-principal');
+    const rate = document.getElementById('si-rate');
+    const months = document.getElementById('si-months');
+    const method = document.getElementById('si-method');
+    const tax = document.getElementById('si-tax');
+    const grossInterestEl = document.getElementById('si-gross-interest');
+    const taxAmountEl = document.getElementById('si-tax-amount');
+    const netInterestEl = document.getElementById('si-net-interest');
+    const maturityEl = document.getElementById('si-maturity');
+    const help = document.getElementById('si-help');
+    const copyBtn = document.getElementById('si-copy');
+    const resetBtn = document.getElementById('si-reset');
+
+    if (!principal || !rate || !months || !method || !tax || !grossInterestEl || !taxAmountEl || !netInterestEl || !maturityEl || !help) return;
+
+    const t = {
+      ko: {
+        needInput: '예치금·금리·기간을 입력하세요.',
+        summary: (gross, net) => `세전 이자 ${gross}, 세후 이자 ${net} 기준 결과입니다.`,
+        copy: (g, t, n, m) => `예금 이자 계산 결과 | 세전 이자 ${g} | 세금 ${t} | 세후 이자 ${n} | 만기금액 ${m}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        needInput: 'Enter deposit, rate, and term.',
+        summary: (gross, net) => `Estimated result based on pre-tax interest ${gross} and after-tax interest ${net}.`,
+        copy: (g, t, n, m) => `Savings interest result | Pre-tax interest ${g} | Tax ${t} | After-tax interest ${n} | Maturity amount ${m}`,
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        needInput: '預入額・金利・期間を入力してください。',
+        summary: (gross, net) => `税引前利息 ${gross}、税引後利息 ${net} の試算結果です。`,
+        copy: (g, t, n, m) => `預金利息計算結果 | 税引前利息 ${g} | 税額 ${t} | 税引後利息 ${n} | 満期金額 ${m}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    }[pageLang] || {
+      needInput: '예치금·금리·기간을 입력하세요.',
+      summary: (gross, net) => `세전 이자 ${gross}, 세후 이자 ${net} 기준 결과입니다.`,
+      copy: (g, t, n, m) => `예금 이자 계산 결과 | 세전 이자 ${g} | 세금 ${t} | 세후 이자 ${n} | 만기금액 ${m}`,
+      copied: '복사됨',
+      copyDefault: '결과 복사'
+    };
+
+    const fmtMoney = (v) => `${Math.round(v || 0).toLocaleString(numberLocale)}${pageLang === 'en' ? ' KRW' : (pageLang === 'ja' ? 'ウォン' : '원')}`;
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const setIdle = (msg) => {
+      grossInterestEl.textContent = '-';
+      taxAmountEl.textContent = '-';
+      netInterestEl.textContent = '-';
+      maturityEl.textContent = '-';
+      help.textContent = msg;
+    };
+
+    const render = () => {
+      const p = Math.max(0, Number(principal.value || 0));
+      const r = Math.max(0, Number(rate.value || 0));
+      const m = Math.max(1, Math.floor(Number(months.value || 0)));
+      const taxRate = Math.max(0, Number(tax.value || 0)) / 100;
+
+      if (!(p > 0) || !(r >= 0) || !(m > 0)) {
+        setIdle(t.needInput);
+        return;
+      }
+
+      if (Number(months.value || 0) !== m) months.value = m;
+
+      const annualRate = r / 100;
+      let grossInterest = 0;
+      if ((method.value || 'simple') === 'monthly-compound') {
+        const monthlyRate = annualRate / 12;
+        grossInterest = p * (Math.pow(1 + monthlyRate, m) - 1);
+      } else {
+        grossInterest = p * annualRate * (m / 12);
+      }
+
+      const taxAmount = grossInterest * taxRate;
+      const netInterest = grossInterest - taxAmount;
+      const maturity = p + netInterest;
+
+      grossInterestEl.textContent = fmtMoney(grossInterest);
+      taxAmountEl.textContent = fmtMoney(taxAmount);
+      netInterestEl.textContent = fmtMoney(netInterest);
+      maturityEl.textContent = fmtMoney(maturity);
+      help.textContent = t.summary(fmtMoney(grossInterest), fmtMoney(netInterest));
+    };
+
+    [principal, rate, months, method, tax].forEach((el) => el?.addEventListener('input', render));
+
+    copyBtn?.addEventListener('click', async () => {
+      if (maturityEl.textContent === '-') return;
+      const text = t.copy(grossInterestEl.textContent, taxAmountEl.textContent, netInterestEl.textContent, maturityEl.textContent);
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      principal.value = 10000000;
+      rate.value = 3.5;
+      months.value = 12;
+      method.value = 'simple';
+      tax.value = '15.4';
+      render();
+    });
+
+    if (!principal.value) principal.value = 10000000;
+    if (!rate.value) rate.value = 3.5;
+    if (!months.value) months.value = 12;
+    render();
+  }
+
 })();

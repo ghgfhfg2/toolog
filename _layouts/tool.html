@@ -1048,6 +1048,57 @@ layout: default
 
           <p class="tool-result" id="pm-help">{% if page.lang == 'en' %}Enter sales and cost to calculate cost and margin ratios.{% elsif page.lang == 'ja' %}売上と原価を入力すると、原価率と利益率を計算します。{% else %}매출과 원가를 입력하면 원가율과 마진율을 계산합니다.{% endif %}</p>
         </div>
+      {% when 'savings-interest-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="si-principal">{% if page.lang == 'en' %}Deposit amount{% elsif page.lang == 'ja' %}預入額{% else %}예치금(원){% endif %}</label>
+              <input id="si-principal" type="number" min="0" step="10000" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="si-rate">{% if page.lang == 'en' %}Annual interest rate (%) {% elsif page.lang == 'ja' %}年利(%) {% else %}연이율(%) {% endif %}</label>
+              <input id="si-rate" type="number" min="0" max="50" step="0.01" inputmode="decimal" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="si-months">{% if page.lang == 'en' %}Term (months){% elsif page.lang == 'ja' %}期間(か月){% else %}예치기간(개월){% endif %}</label>
+              <input id="si-months" type="number" min="1" max="120" step="1" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="si-method">{% if page.lang == 'en' %}Interest method{% elsif page.lang == 'ja' %}利息方式{% else %}이자 방식{% endif %}</label>
+              <select id="si-method">
+                <option value="simple">{% if page.lang == 'en' %}Simple interest{% elsif page.lang == 'ja' %}単利{% else %}단리{% endif %}</option>
+                <option value="monthly-compound">{% if page.lang == 'en' %}Monthly compound{% elsif page.lang == 'ja' %}毎月複利{% else %}월복리{% endif %}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="si-tax">{% if page.lang == 'en' %}Tax mode{% elsif page.lang == 'ja' %}課税区分{% else %}과세 유형{% endif %}</label>
+              <select id="si-tax">
+                <option value="15.4">{% if page.lang == 'en' %}Taxable (15.4%){% elsif page.lang == 'ja' %}課税 (15.4%){% else %}일반과세 (15.4%){% endif %}</option>
+                <option value="0">{% if page.lang == 'en' %}Tax exempt (0%){% elsif page.lang == 'ja' %}非課税 (0%){% else %}비과세 (0%){% endif %}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="si-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="si-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="si-gross-interest">-</strong><span>{% if page.lang == 'en' %}Pre-tax interest{% elsif page.lang == 'ja' %}税引前利息{% else %}세전 이자{% endif %}</span></div>
+            <div><strong id="si-tax-amount">-</strong><span>{% if page.lang == 'en' %}Tax amount{% elsif page.lang == 'ja' %}税額{% else %}세금{% endif %}</span></div>
+            <div><strong id="si-net-interest">-</strong><span>{% if page.lang == 'en' %}After-tax interest{% elsif page.lang == 'ja' %}税引後利息{% else %}세후 이자{% endif %}</span></div>
+            <div><strong id="si-maturity">-</strong><span>{% if page.lang == 'en' %}Maturity amount{% elsif page.lang == 'ja' %}満期金額{% else %}만기금액{% endif %}</span></div>
+          </div>
+
+          <p class="tool-result" id="si-help">{% if page.lang == 'en' %}Enter deposit, rate, and term to estimate maturity amount.{% elsif page.lang == 'ja' %}預入額・金利・期間を入力すると満期金額を試算します。{% else %}예치금·금리·기간을 입력하면 만기금액을 계산합니다.{% endif %}</p>
+        </div>
       {% when 'pomodoro-timer' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
