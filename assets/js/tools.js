@@ -5248,4 +5248,140 @@
     render();
   }
 
+  if (slug === 'parking-fee-calculator') {
+    const minutes = document.getElementById('pf-minutes');
+    const baseMinutes = document.getElementById('pf-base-minutes');
+    const baseFee = document.getElementById('pf-base-fee');
+    const unitMinutes = document.getElementById('pf-unit-minutes');
+    const unitFee = document.getElementById('pf-unit-fee');
+    const maxFee = document.getElementById('pf-max-fee');
+    const outTotal = document.getElementById('pf-total');
+    const outOver = document.getElementById('pf-over-minutes');
+    const outUnits = document.getElementById('pf-units');
+    const outCap = document.getElementById('pf-cap-applied');
+    const help = document.getElementById('pf-help');
+    const copyBtn = document.getElementById('pf-copy');
+    const resetBtn = document.getElementById('pf-reset');
+
+    if (!minutes || !baseMinutes || !baseFee || !unitMinutes || !unitFee || !maxFee || !outTotal || !outOver || !outUnits || !outCap || !help) return;
+
+    const i18n = {
+      ko: {
+        currency: '원',
+        minute: '분',
+        unit: '회',
+        yes: '적용',
+        no: '미적용',
+        needInput: '주차 시간과 요금 조건을 입력하세요.',
+        summary: (fee) => `예상 주차요금은 ${fee}입니다.`,
+        copy: (a, b, c, d) => `주차요금 계산 결과 | 요금 ${a} | 초과시간 ${b} | 과금단위 ${c} | 최대요금 ${d}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        currency: ' KRW',
+        minute: ' min',
+        unit: ' units',
+        yes: 'Applied',
+        no: 'Not applied',
+        needInput: 'Enter parking time and pricing policy.',
+        summary: (fee) => `Estimated parking fee: ${fee}.`,
+        copy: (a, b, c, d) => `Parking fee result | Fee ${a} | Overtime ${b} | Charged units ${c} | Max fee ${d}`,
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        currency: 'ウォン',
+        minute: '分',
+        unit: '回',
+        yes: '適用',
+        no: '未適用',
+        needInput: '駐車時間と料金条件を入力してください。',
+        summary: (fee) => `予想駐車料金は ${fee} です。`,
+        copy: (a, b, c, d) => `駐車料金計算結果 | 料金 ${a} | 超過時間 ${b} | 課金単位 ${c} | 最大料金 ${d}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    };
+    const t = i18n[pageLang] || i18n.ko;
+
+    const fmtMoney = (v) => {
+      const rounded = Math.round(v || 0).toLocaleString(numberLocale);
+      return `${rounded}${t.currency}`;
+    };
+    const fmtMinute = (v) => `${Math.max(0, Math.round(v || 0)).toLocaleString(numberLocale)}${t.minute}`;
+    const fmtUnit = (v) => `${Math.max(0, Math.round(v || 0)).toLocaleString(numberLocale)}${t.unit}`;
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const setIdle = (msg) => {
+      outTotal.textContent = '-';
+      outOver.textContent = '-';
+      outUnits.textContent = '-';
+      outCap.textContent = '-';
+      help.textContent = msg;
+    };
+
+    const render = () => {
+      const m = Math.max(0, Number(minutes.value || 0));
+      const bm = Math.max(0, Number(baseMinutes.value || 0));
+      const bf = Math.max(0, Number(baseFee.value || 0));
+      const um = Math.max(1, Number(unitMinutes.value || 1));
+      const uf = Math.max(0, Number(unitFee.value || 0));
+      const mfRaw = Number(maxFee.value || 0);
+      const mf = Number.isFinite(mfRaw) && mfRaw > 0 ? mfRaw : 0;
+
+      if (!(m > 0)) {
+        setIdle(t.needInput);
+        return;
+      }
+
+      const over = Math.max(0, m - bm);
+      const units = over > 0 ? Math.ceil(over / um) : 0;
+      const rawFee = bf + (units * uf);
+      const finalFee = mf > 0 ? Math.min(rawFee, mf) : rawFee;
+      const capApplied = mf > 0 && rawFee > mf;
+
+      outTotal.textContent = fmtMoney(finalFee);
+      outOver.textContent = fmtMinute(over);
+      outUnits.textContent = fmtUnit(units);
+      outCap.textContent = capApplied ? t.yes : t.no;
+      help.textContent = t.summary(fmtMoney(finalFee));
+    };
+
+    [minutes, baseMinutes, baseFee, unitMinutes, unitFee, maxFee].forEach((el) => el?.addEventListener('input', render));
+
+    copyBtn?.addEventListener('click', async () => {
+      if (outTotal.textContent === '-') return;
+      await copyText(t.copy(outTotal.textContent, outOver.textContent, outUnits.textContent, outCap.textContent));
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      minutes.value = 135;
+      baseMinutes.value = 60;
+      baseFee.value = 2000;
+      unitMinutes.value = 10;
+      unitFee.value = 500;
+      maxFee.value = 15000;
+      render();
+    });
+
+    if (!minutes.value) minutes.value = 135;
+    if (!baseMinutes.value) baseMinutes.value = 60;
+    if (!baseFee.value) baseFee.value = 2000;
+    if (!unitMinutes.value) unitMinutes.value = 10;
+    if (!unitFee.value) unitFee.value = 500;
+    render();
+  }
+
 })();

@@ -1138,6 +1138,55 @@ layout: default
 
           <p class="tool-result" id="pomo-help">{% if page.lang == 'en' %}Set minutes and press Start. Timer continues in this tab while open.{% elsif page.lang == 'ja' %}分を設定して開始を押してください。このタブを開いている間タイマーが動作します。{% else %}분 단위를 설정하고 시작을 누르세요. 탭이 열려 있는 동안 타이머가 동작합니다.{% endif %}</p>
         </div>
+      {% when 'parking-fee-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="pf-minutes">{% if page.lang == 'en' %}Parking time (minutes){% elsif page.lang == 'ja' %}駐車時間（分）{% else %}주차 시간(분){% endif %}</label>
+              <input id="pf-minutes" type="number" min="0" step="1" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="pf-base-minutes">{% if page.lang == 'en' %}Base time (minutes){% elsif page.lang == 'ja' %}基本時間（分）{% else %}기본시간(분){% endif %}</label>
+              <input id="pf-base-minutes" type="number" min="0" step="1" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="pf-base-fee">{% if page.lang == 'en' %}Base fee{% elsif page.lang == 'ja' %}基本料金{% else %}기본요금(원){% endif %}</label>
+              <input id="pf-base-fee" type="number" min="0" step="100" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="pf-unit-minutes">{% if page.lang == 'en' %}Additional unit (minutes){% elsif page.lang == 'ja' %}追加単位（分）{% else %}추가단위(분){% endif %}</label>
+              <input id="pf-unit-minutes" type="number" min="1" step="1" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="pf-unit-fee">{% if page.lang == 'en' %}Fee per additional unit{% elsif page.lang == 'ja' %}追加単位あたり料金{% else %}추가요금(원){% endif %}</label>
+              <input id="pf-unit-fee" type="number" min="0" step="100" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="pf-max-fee">{% if page.lang == 'en' %}Daily max fee (optional){% elsif page.lang == 'ja' %}1日最大料金（任意）{% else %}일 최대요금(선택){% endif %}</label>
+              <input id="pf-max-fee" type="number" min="0" step="100" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="pf-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="pf-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="pf-total">-</strong><span>{% if page.lang == 'en' %}Estimated fee{% elsif page.lang == 'ja' %}予想料金{% else %}예상 주차요금{% endif %}</span></div>
+            <div><strong id="pf-over-minutes">-</strong><span>{% if page.lang == 'en' %}Overtime minutes{% elsif page.lang == 'ja' %}超過時間{% else %}초과 시간{% endif %}</span></div>
+            <div><strong id="pf-units">-</strong><span>{% if page.lang == 'en' %}Charged units{% elsif page.lang == 'ja' %}課金単位 수{% else %}과금 단위 수{% endif %}</span></div>
+            <div><strong id="pf-cap-applied">-</strong><span>{% if page.lang == 'en' %}Max fee applied{% elsif page.lang == 'ja' %}最大料金 적용 여부{% else %}최대요금 적용{% endif %}</span></div>
+          </div>
+
+          <p class="tool-result" id="pf-help">{% if page.lang == 'en' %}Enter parking time and pricing policy to estimate your parking fee.{% elsif page.lang == 'ja' %}駐車時間と料金条件を入力すると、駐車料金を試算します。{% else %}주차시간과 요금 조건을 입력하면 주차요금을 계산합니다.{% endif %}</p>
+        </div>
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
     {% endcase %}
