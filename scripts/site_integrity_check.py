@@ -57,6 +57,8 @@ def main() -> int:
             f"en/tools/{tool_id}.md",
             f"ja/tools/{tool_id}.md",
             f"assets/thumbs/{tool_id}.svg",
+            f"assets/thumbs/en/{tool_id}.svg",
+            f"assets/thumbs/ja/{tool_id}.svg",
         ]:
             if not (ROOT / rel).exists():
                 missing.append(rel)

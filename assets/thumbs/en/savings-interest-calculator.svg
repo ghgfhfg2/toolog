@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="예금 이자 계산기 썸네일">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Savings interest calculator thumbnail">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#0b5cff"/>
@@ -7,9 +7,9 @@
   </defs>
   <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
   <rect x="74" y="74" width="1052" height="482" rx="28" fill="rgba(255,255,255,0.12)"/>
-  <text x="130" y="220" fill="#fff" font-size="72" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">예금 이자 계산기</text>
-  <text x="130" y="292" fill="#e8f4ff" font-size="36" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">세전 · 세후 만기금액을 빠르게 계산</text>
-  <text x="130" y="390" fill="#fff" font-size="54" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">단리 / 월복리 / 과세 15.4%</text>
+  <text x="130" y="220" fill="#fff" font-size="72" font-family="Inter, Arial, sans-serif" font-weight="700">Savings Interest Calculator</text>
+  <text x="130" y="292" fill="#e8f4ff" font-size="36" font-family="Inter, Arial, sans-serif">Estimate pre-tax and after-tax maturity amount</text>
+  <text x="130" y="390" fill="#fff" font-size="54" font-family="Inter, Arial, sans-serif" font-weight="700">Simple / Monthly Compound / Tax 15.4%</text>
   <circle cx="1030" cy="450" r="82" fill="#ffffff" opacity="0.92"/>
   <text x="1000" y="468" fill="#0b5cff" font-size="72" font-family="Arial, sans-serif" font-weight="700">%</text>
 </svg>
