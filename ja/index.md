@@ -40,7 +40,7 @@ permalink: /ja/
     {% assign localized_category_label = tool.category_label_ja | default: tool.category_label %}
     <article class="tool-card" data-category="{{ localized_category_label }}" data-title="{{ localized_title | downcase }}" data-description="{{ localized_description | downcase }}">
       <a class="tool-thumb-wrap" href="{{ localized_url | relative_url }}" aria-label="{{ localized_title }}">
-        <img class="tool-thumbnail" src="{{ '/assets/thumbs/ja/' | append: tool.id | append: '.svg' | relative_url }}" alt="{{ localized_title }} thumbnail" loading="lazy" />
+        <img class="tool-thumbnail" src="{{ tool.thumbnail | relative_url }}" alt="{{ localized_title }} thumbnail" loading="lazy" />
         <span class="tool-badge">{{ localized_category_label }}</span>
       </a>
 
