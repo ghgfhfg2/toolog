@@ -1,3 +1,22 @@
+- id: lucky-draw-picker
+  title: 랜덤 추첨기
+  title_en: Lucky Draw Picker
+  title_ja: ランダム抽選ツール
+  category: productivity
+  category_label: 일정/생산성
+  category_label_en: Schedule/Productivity
+  category_label_ja: 予定/生産性
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 참여자 목록과 당첨 인원을 입력하면 중복 없이 랜덤 당첨자를 빠르게 뽑아요.
+  description_en: Pick random winners without duplicates from a participant list and winner count.
+  description_ja: 参加者リストと当選人数を入力すると、重複なしでランダム当選者を抽選できます。
+  url: /tools/lucky-draw-picker/
+  url_en: /en/tools/lucky-draw-picker/
+  url_ja: /ja/tools/lucky-draw-picker/
+  thumbnail: /assets/thumbs/lucky-draw-picker.svg
+
 - id: parking-fee-calculator
   title: 주차 요금 계산기
   title_en: Parking Fee Calculator

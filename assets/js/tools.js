@@ -5407,4 +5407,105 @@
     render();
   }
 
+  if (slug === 'lucky-draw-picker') {
+    const input = document.getElementById('ldp-input');
+    const count = document.getElementById('ldp-count');
+    const runBtn = document.getElementById('ldp-run');
+    const copyBtn = document.getElementById('ldp-copy');
+    const output = document.getElementById('ldp-output');
+    const totalEl = document.getElementById('ldp-total');
+    const pickedEl = document.getElementById('ldp-picked');
+    const help = document.getElementById('ldp-help');
+    if (!input || !count || !runBtn || !copyBtn || !output || !totalEl || !pickedEl || !help) return;
+
+    const t = {
+      ko: {
+        needInput: '참여자를 1명 이상 입력하세요.',
+        done: (p, w) => `${p}명 중 ${w}명 추첨 완료`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        needInput: 'Enter at least one participant.',
+        done: (p, w) => `Picked ${w} winner(s) from ${p} participant(s).`,
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        needInput: '参加者を1名以上入力してください。',
+        done: (p, w) => `${p}名中 ${w}名の抽選が完了しました。`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    }[pageLang] || {
+      needInput: '참여자를 1명 이상 입력하세요.',
+      done: (p, w) => `${p}명 중 ${w}명 추첨 완료`,
+      copied: '복사됨',
+      copyDefault: '결과 복사'
+    };
+
+    const uniqueNames = () => {
+      const lines = (input.value || '').split('\n').map(v => v.trim()).filter(Boolean);
+      return Array.from(new Set(lines));
+    };
+
+    const shuffle = (arr) => {
+      const out = [...arr];
+      for (let i = out.length - 1; i > 0; i--) {
+        const rand = new Uint32Array(1);
+        crypto.getRandomValues(rand);
+        const j = rand[0] % (i + 1);
+        [out[i], out[j]] = [out[j], out[i]];
+      }
+      return out;
+    };
+
+    const run = () => {
+      const users = uniqueNames();
+      totalEl.textContent = users.length.toLocaleString(numberLocale);
+      if (!users.length) {
+        output.value = '';
+        pickedEl.textContent = '0';
+        help.textContent = t.needInput;
+        return;
+      }
+      const wantedRaw = Number(count.value || 1);
+      const wanted = Math.min(users.length, Math.max(1, Math.floor(wantedRaw)));
+      count.value = wanted;
+      const winners = shuffle(users).slice(0, wanted);
+      output.value = winners.map((name, idx) => `${idx + 1}. ${name}`).join('\n');
+      pickedEl.textContent = wanted.toLocaleString(numberLocale);
+      help.textContent = t.done(users.length.toLocaleString(numberLocale), wanted.toLocaleString(numberLocale));
+    };
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    runBtn.addEventListener('click', run);
+    input.addEventListener('input', () => {
+      const users = uniqueNames();
+      totalEl.textContent = users.length.toLocaleString(numberLocale);
+      if (users.length && Number(count.value || 1) > users.length) count.value = users.length;
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      if (!output.value.trim()) return;
+      await copyText(output.value);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+  }
+
 })();

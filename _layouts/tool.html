@@ -1189,6 +1189,26 @@ layout: default
 
           <p class="tool-result" id="pf-help">{% if page.lang == 'en' %}Enter parking time and pricing policy to estimate your parking fee.{% elsif page.lang == 'ja' %}駐車時間と料金条件を入力すると、駐車料金を試算します。{% else %}주차시간과 요금 조건을 입력하면 주차요금을 계산합니다.{% endif %}</p>
         </div>
+      {% when 'lucky-draw-picker' %}
+        <div class="tool-ui">
+          <textarea id="ldp-input" rows="8" placeholder="{% if page.lang == 'en' %}Enter one participant per line{% elsif page.lang == 'ja' %}1行に1名ずつ入力{% else %}한 줄에 한 명씩 입력하세요{% endif %}"></textarea>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="ldp-count">{% if page.lang == 'en' %}Number of winners{% elsif page.lang == 'ja' %}当選人数{% else %}당첨 인원{% endif %}</label>
+              <input id="ldp-count" type="number" min="1" step="1" value="1" inputmode="numeric" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-actions">
+            <button id="ldp-run" type="button">{% if page.lang == 'en' %}Draw winners{% elsif page.lang == 'ja' %}抽選する{% else %}추첨하기{% endif %}</button>
+            <button id="ldp-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="ldp-total">0</strong><span>{% if page.lang == 'en' %}Participants{% elsif page.lang == 'ja' %}参加者数{% else %}참여자 수{% endif %}</span></div>
+            <div><strong id="ldp-picked">0</strong><span>{% if page.lang == 'en' %}Winners{% elsif page.lang == 'ja' %}当選人数{% else %}당첨 인원{% endif %}</span></div>
+          </div>
+          <textarea id="ldp-output" rows="6" readonly placeholder="{% if page.lang == 'en' %}Winners will appear here{% elsif page.lang == 'ja' %}抽選結果がここに表示されます{% else %}추첨 결과가 여기에 표시됩니다{% endif %}"></textarea>
+          <p class="tool-result" id="ldp-help">{% if page.lang == 'en' %}Paste participants and click Draw winners.{% elsif page.lang == 'ja' %}参加者を入力して「抽選」を押してください。{% else %}참여자 목록을 입력하고 추첨하기를 눌러주세요.{% endif %}</p>
+        </div>
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
     {% endcase %}
