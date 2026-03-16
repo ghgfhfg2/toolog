@@ -181,6 +181,8 @@ layout: default
             </select>
           </div>
 
+          <label class="tool-check"><input id="jm-dedupe" type="checkbox" /> {% if page.lang == 'en' %}Remove duplicates when merging arrays{% elsif page.lang == 'ja' %}配列マージ時に重複を除去{% else %}배열 병합 시 중복 제거{% endif %}</label>
+
           <div class="tool-row-grid pct-actions">
             <button id="jm-run" type="button">{% if page.lang == 'en' %}Merge JSON{% elsif page.lang == 'ja' %}JSONをマージ{% else %}JSON 합치기{% endif %}</button>
             <button id="jm-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>

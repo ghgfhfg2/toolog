@@ -4418,6 +4418,7 @@
     const filesInput = document.getElementById('jm-files');
     const modeSel = document.getElementById('jm-mode');
     const runBtn = document.getElementById('jm-run');
+    const dedupeChk = document.getElementById('jm-dedupe');
     const copyBtn = document.getElementById('jm-copy');
     const output = document.getElementById('jm-output');
     const download = document.getElementById('jm-download');
@@ -4524,6 +4525,25 @@
       return 1;
     };
 
+    const stableStringify = (value) => {
+      if (value === null || typeof value !== 'object') return JSON.stringify(value);
+      if (Array.isArray(value)) return `[${value.map(stableStringify).join(',')}]`;
+      const keys = Object.keys(value).sort();
+      return `{${keys.map((k) => `${JSON.stringify(k)}:${stableStringify(value[k])}`).join(',')}}`;
+    };
+
+    const dedupeArray = (arr) => {
+      const seen = new Set();
+      const out = [];
+      arr.forEach((item) => {
+        const key = stableStringify(item);
+        if (seen.has(key)) return;
+        seen.add(key);
+        out.push(item);
+      });
+      return out;
+    };
+
     filesInput.addEventListener('change', () => {
       fileCount.textContent = fmt(filesInput.files?.length || 0);
     });
@@ -4547,18 +4567,21 @@
 
         const selected = modeSel.value || 'auto';
         const mode = selected === 'auto' ? detectMode(parsed) : selected;
+        const dedupeEnabled = !!dedupeChk?.checked;
 
         let merged;
         let conflicts = 0;
 
         if (mode === 'array-concat') {
-          merged = parsed.flatMap((v) => Array.isArray(v) ? v : [v]);
+          const arr = parsed.flatMap((v) => Array.isArray(v) ? v : [v]);
+          merged = dedupeEnabled ? dedupeArray(arr) : arr;
         } else if (mode === 'object-array-concat') {
           const keySets = parsed.map((obj) => Object.keys(obj));
           const commonKeys = keySets.reduce((acc, keys) => acc.filter((k) => keys.includes(k)), keySets[0] || []);
           const arrayKey = commonKeys.find((k) => parsed.every((obj) => Array.isArray(obj[k])));
           merged = { ...(parsed[0] || {}) };
-          merged[arrayKey] = parsed.flatMap((obj) => Array.isArray(obj[arrayKey]) ? obj[arrayKey] : []);
+          const arr = parsed.flatMap((obj) => Array.isArray(obj[arrayKey]) ? obj[arrayKey] : []);
+          merged[arrayKey] = dedupeEnabled ? dedupeArray(arr) : arr;
           parsed.slice(1).forEach((obj) => {
             Object.keys(obj || {}).forEach((k) => {
               if (k === arrayKey) return;
