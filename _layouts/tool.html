@@ -1209,6 +1209,45 @@ layout: default
           <textarea id="ldp-output" rows="6" readonly placeholder="{% if page.lang == 'en' %}Winners will appear here{% elsif page.lang == 'ja' %}抽選結果がここに表示されます{% else %}추첨 결과가 여기에 표시됩니다{% endif %}"></textarea>
           <p class="tool-result" id="ldp-help">{% if page.lang == 'en' %}Paste participants and click Draw winners.{% elsif page.lang == 'ja' %}参加者を入力して「抽選」を押してください。{% else %}참여자 목록을 입력하고 추첨하기를 눌러주세요.{% endif %}</p>
         </div>
+      {% when 'hourly-monthly-salary-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="hms-hourly">{% if page.lang == 'en' %}Hourly wage{% elsif page.lang == 'ja' %}時給{% else %}시급(원){% endif %}</label>
+              <input id="hms-hourly" type="number" min="0" step="10" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="hms-weekly-hours">{% if page.lang == 'en' %}Weekly work hours{% elsif page.lang == 'ja' %}週の労働時間{% else %}주 근무시간{% endif %}</label>
+              <input id="hms-weekly-hours" type="number" min="0" max="80" step="0.5" inputmode="decimal" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="hms-weeks">{% if page.lang == 'en' %}Weeks per month{% elsif page.lang == 'ja' %}月換算 주수{% else %}월 환산 주수{% endif %}</label>
+              <input id="hms-weeks" type="number" min="4" max="5" step="0.001" value="4.345" inputmode="decimal" />
+            </div>
+            <div>
+              <label class="tool-check"><input id="hms-include-weekly" type="checkbox" checked /> {% if page.lang == 'en' %}Include weekly holiday pay (if eligible){% elsif page.lang == 'ja' %}週休手当を含める（対象時）{% else %}주휴수당 포함(대상 시){% endif %}</label>
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="hms-days">{% if page.lang == 'en' %}Workdays per week{% elsif page.lang == 'ja' %}週 근무일수{% else %}주 근무일수{% endif %}</label>
+              <input id="hms-days" type="number" min="1" max="7" step="1" value="5" inputmode="numeric" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-actions">
+            <button id="hms-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="hms-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="hms-weekly-pay">-</strong><span>{% if page.lang == 'en' %}Weekly pay{% elsif page.lang == 'ja' %}週給{% else %}주급{% endif %}</span></div>
+            <div><strong id="hms-monthly-pay">-</strong><span>{% if page.lang == 'en' %}Monthly pay (gross){% elsif page.lang == 'ja' %}月給(額面){% else %}월급(세전){% endif %}</span></div>
+            <div><strong id="hms-annual-pay">-</strong><span>{% if page.lang == 'en' %}Annual pay (gross){% elsif page.lang == 'ja' %}年収(額面){% else %}연봉(세전){% endif %}</span></div>
+            <div><strong id="hms-weekly-holiday">-</strong><span>{% if page.lang == 'en' %}Weekly holiday pay included{% elsif page.lang == 'ja' %}週休手当 반영액{% else %}주휴수당 반영액(주){% endif %}</span></div>
+          </div>
+          <p class="tool-result" id="hms-help">{% if page.lang == 'en' %}Enter hourly wage and hours to estimate monthly and annual gross salary.{% elsif page.lang == 'ja' %}時給と勤務時間を入力すると月給・年収の目安を計算します。{% else %}시급과 근무시간을 입력하면 월급·연봉(세전) 예상값을 계산합니다.{% endif %}</p>
+        </div>
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
     {% endcase %}

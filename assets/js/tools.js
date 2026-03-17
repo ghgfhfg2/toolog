@@ -5508,4 +5508,85 @@
     });
   }
 
+  if (slug === 'hourly-monthly-salary-calculator') {
+    const hourly = document.getElementById('hms-hourly');
+    const weeklyHours = document.getElementById('hms-weekly-hours');
+    const weeks = document.getElementById('hms-weeks');
+    const days = document.getElementById('hms-days');
+    const includeWeekly = document.getElementById('hms-include-weekly');
+    const weeklyPay = document.getElementById('hms-weekly-pay');
+    const monthlyPay = document.getElementById('hms-monthly-pay');
+    const annualPay = document.getElementById('hms-annual-pay');
+    const weeklyHoliday = document.getElementById('hms-weekly-holiday');
+    const help = document.getElementById('hms-help');
+    const copyBtn = document.getElementById('hms-copy');
+    const resetBtn = document.getElementById('hms-reset');
+    if (!hourly || !weeklyHours || !weeks || !days || !includeWeekly || !weeklyPay || !monthlyPay || !annualPay || !weeklyHoliday || !help) return;
+
+    const fmt = (n) => `${Math.round(n || 0).toLocaleString(numberLocale)}${pageLang === 'en' ? ' KRW' : pageLang === 'ja' ? 'ウォン' : '원'}`;
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const render = () => {
+      const h = Math.max(0, Number(hourly.value || 0));
+      const wh = Math.max(0, Number(weeklyHours.value || 0));
+      const wm = Math.min(5, Math.max(4, Number(weeks.value || 4.345)));
+      const wd = Math.min(7, Math.max(1, Math.floor(Number(days.value || 5))));
+      weeks.value = wm;
+      days.value = wd;
+
+      if (!(h > 0) || !(wh > 0)) {
+        weeklyPay.textContent = '-';
+        monthlyPay.textContent = '-';
+        annualPay.textContent = '-';
+        weeklyHoliday.textContent = '-';
+        help.textContent = pageLang === 'en' ? 'Enter hourly wage and weekly hours.' : pageLang === 'ja' ? '時給と週労働時間を入力してください。' : '시급과 주 근무시간을 입력하세요.';
+        return;
+      }
+
+      const baseWeekly = h * wh;
+      const holidayHours = wh >= 15 ? Math.min(8, wh / wd) : 0;
+      const holidayPay = includeWeekly.checked ? holidayHours * h : 0;
+      const weekTotal = baseWeekly + holidayPay;
+      const monthTotal = weekTotal * wm;
+      const yearTotal = monthTotal * 12;
+
+      weeklyPay.textContent = fmt(weekTotal);
+      monthlyPay.textContent = fmt(monthTotal);
+      annualPay.textContent = fmt(yearTotal);
+      weeklyHoliday.textContent = fmt(holidayPay);
+      help.textContent = wh >= 15
+        ? (pageLang === 'en' ? 'Weekly holiday pay included (15+ weekly hours).' : pageLang === 'ja' ? '週15時間以上のため週休手当を反映しました。' : '주 15시간 이상으로 주휴수당을 반영했습니다.')
+        : (pageLang === 'en' ? 'Weekly holiday pay is excluded under 15 weekly hours.' : pageLang === 'ja' ? '週15時間未満のため週休手当은 0です。' : '주 15시간 미만으로 주휴수당은 0원입니다.');
+    };
+
+    [hourly, weeklyHours, weeks, days, includeWeekly].forEach((el) => el.addEventListener('input', render));
+    copyBtn?.addEventListener('click', async () => {
+      if (weeklyPay.textContent === '-') return;
+      const title = pageLang === 'en' ? 'Hourly↔Monthly salary result' : pageLang === 'ja' ? '時給↔月給計算結果' : '시급↔월급 계산 결과';
+      await copyText(`${title} | ${weeklyPay.textContent} | ${monthlyPay.textContent} | ${annualPay.textContent} | ${weeklyHoliday.textContent}`);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = pageLang === 'en' ? 'Copied' : pageLang === 'ja' ? 'コピー完了' : '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || (pageLang === 'en' ? 'Copy result' : pageLang === 'ja' ? '結果をコピー' : '결과 복사'); }, 900);
+    });
+    resetBtn?.addEventListener('click', () => {
+      hourly.value = 10030;
+      weeklyHours.value = 20;
+      weeks.value = 4.345;
+      days.value = 5;
+      includeWeekly.checked = true;
+      render();
+    });
+    if (!hourly.value) hourly.value = 10030;
+    if (!weeklyHours.value) weeklyHours.value = 20;
+    render();
+  }
+
 })();

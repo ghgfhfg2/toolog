@@ -1,3 +1,22 @@
+- id: hourly-monthly-salary-calculator
+  title: 시급 월급 계산기
+  title_en: Hourly to Monthly Salary Calculator
+  title_ja: 時給・月給計算機
+  category: calculator
+  category_label: 금융/비즈니스
+  category_label_en: Finance/Business
+  category_label_ja: 金融/ビジネス
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 시급·주 근무시간·근무일수로 주휴 반영 주급, 월급, 연봉(세전)을 계산해요.
+  description_en: Estimate weekly, monthly, and annual gross pay from hourly wage, weekly hours, and workdays, with optional weekly holiday pay.
+  description_ja: 時給・週労働時間・勤務日数から、週休手当を含む週給・月給・年収（額面）を計算します。
+  url: /tools/hourly-monthly-salary-calculator/
+  url_en: /en/tools/hourly-monthly-salary-calculator/
+  url_ja: /ja/tools/hourly-monthly-salary-calculator/
+  thumbnail: /assets/thumbs/hourly-monthly-salary-calculator.svg
+
 - id: lucky-draw-picker
   title: 랜덤 추첨기
   title_en: Lucky Draw Picker
