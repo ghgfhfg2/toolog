@@ -13,8 +13,8 @@
   description_en: Calculate average, median, sum, minimum, and maximum from a number list in one place.
   description_ja: 数値リストの平均・中央値・合計・最小値・最大値をまとめて計算します。
   url: /tools/average-calculator/
-  url_en: /tools/average-calculator/
-  url_ja: /tools/average-calculator/
+  url_en: /en/tools/average-calculator/
+  url_ja: /ja/tools/average-calculator/
   thumbnail: /assets/thumbs/average-calculator.svg
   published_at: 2026-03-18
 
