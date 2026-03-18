@@ -5589,4 +5589,121 @@
     render();
   }
 
+  if (slug === 'average-calculator') {
+    const input = document.getElementById('avg-input');
+    const countEl = document.getElementById('avg-count');
+    const sumEl = document.getElementById('avg-sum');
+    const meanEl = document.getElementById('avg-mean');
+    const medianEl = document.getElementById('avg-median');
+    const minEl = document.getElementById('avg-min');
+    const maxEl = document.getElementById('avg-max');
+    const help = document.getElementById('avg-help');
+    const copyBtn = document.getElementById('avg-copy');
+    const resetBtn = document.getElementById('avg-reset');
+    if (!input || !countEl || !sumEl || !meanEl || !medianEl || !minEl || !maxEl || !help) return;
+
+    const text = {
+      ko: {
+        idle: '숫자를 입력하면 평균·중앙값·합계·범위를 계산합니다.',
+        invalid: '유효한 숫자를 한 개 이상 입력하세요. (쉼표·공백·줄바꿈 구분 지원)',
+        summary: (count, mean) => `${count}개 숫자의 평균은 ${mean}입니다.`,
+        copy: (count, sum, mean, median, min, max) => `평균 계산 결과 | 개수 ${count} | 합계 ${sum} | 평균 ${mean} | 중앙값 ${median} | 최솟값 ${min} | 최댓값 ${max}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        idle: 'Enter numbers to calculate count, sum, average, median, and range.',
+        invalid: 'Enter at least one valid number. (comma/space/newline separated)',
+        summary: (count, mean) => `Average of ${count} numbers is ${mean}.`,
+        copy: (count, sum, mean, median, min, max) => `Average result | Count ${count} | Sum ${sum} | Average ${mean} | Median ${median} | Min ${min} | Max ${max}`,
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        idle: '数値を入力すると、個数・合計・平均・中央値・範囲を計算します。',
+        invalid: '有効な数値を1つ以上入力してください。（カンマ・空白・改行区切り対応）',
+        summary: (count, mean) => `${count}個の数値の平均は ${mean} です。`,
+        copy: (count, sum, mean, median, min, max) => `平均計算結果 | 個数 ${count} | 合計 ${sum} | 平均 ${mean} | 中央値 ${median} | 最小値 ${min} | 最大値 ${max}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    }[pageLang] || {
+      idle: '숫자를 입력하면 평균·중앙값·합계·범위를 계산합니다.',
+      invalid: '유효한 숫자를 한 개 이상 입력하세요.',
+      summary: (count, mean) => `${count}개 숫자의 평균은 ${mean}입니다.`,
+      copy: (count, sum, mean, median, min, max) => `평균 계산 결과 | 개수 ${count} | 합계 ${sum} | 평균 ${mean} | 중앙값 ${median} | 최솟값 ${min} | 최댓값 ${max}`,
+      copied: '복사됨',
+      copyDefault: '결과 복사'
+    };
+
+    const fmt = (n) => Number(n).toLocaleString(numberLocale, { maximumFractionDigits: 6 });
+
+    const copyText = async (value) => {
+      try { await navigator.clipboard.writeText(value); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = value; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const setIdle = (msg) => {
+      countEl.textContent = '-';
+      sumEl.textContent = '-';
+      meanEl.textContent = '-';
+      medianEl.textContent = '-';
+      minEl.textContent = '-';
+      maxEl.textContent = '-';
+      help.textContent = msg;
+    };
+
+    const parseNumbers = (raw) => {
+      return (raw || '')
+        .split(/[\s,]+/)
+        .map((v) => v.trim())
+        .filter(Boolean)
+        .map((v) => Number(v))
+        .filter((v) => Number.isFinite(v));
+    };
+
+    const render = () => {
+      const nums = parseNumbers(input.value);
+      if (!nums.length) {
+        setIdle(input.value.trim() ? text.invalid : text.idle);
+        return;
+      }
+      const sorted = [...nums].sort((a, b) => a - b);
+      const count = nums.length;
+      const sum = nums.reduce((acc, cur) => acc + cur, 0);
+      const mean = sum / count;
+      const mid = Math.floor(count / 2);
+      const median = count % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+      const min = sorted[0];
+      const max = sorted[sorted.length - 1];
+
+      countEl.textContent = String(count);
+      sumEl.textContent = fmt(sum);
+      meanEl.textContent = fmt(mean);
+      medianEl.textContent = fmt(median);
+      minEl.textContent = fmt(min);
+      maxEl.textContent = fmt(max);
+      help.textContent = text.summary(count.toLocaleString(numberLocale), fmt(mean));
+    };
+
+    input.addEventListener('input', render);
+    copyBtn?.addEventListener('click', async () => {
+      if (countEl.textContent === '-') return;
+      await copyText(text.copy(countEl.textContent, sumEl.textContent, meanEl.textContent, medianEl.textContent, minEl.textContent, maxEl.textContent));
+      const old = copyBtn.textContent;
+      copyBtn.textContent = text.copied;
+      setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+    });
+    resetBtn?.addEventListener('click', () => {
+      input.value = '';
+      setIdle(text.idle);
+    });
+
+    setIdle(text.idle);
+  }
+
 })();

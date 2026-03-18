@@ -1,0 +1,17 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <rect x="72" y="72" width="1056" height="486" rx="24" fill="white" fill-opacity="0.08"/>
+  <text x="120" y="210" fill="white" font-size="64" font-family="Pretendard, Arial, sans-serif" font-weight="700">평균 계산기</text>
+  <text x="120" y="280" fill="#BFDBFE" font-size="34" font-family="Pretendard, Arial, sans-serif">평균 · 중앙값 · 합계 · 범위</text>
+  <rect x="120" y="330" width="440" height="150" rx="18" fill="white" fill-opacity="0.14"/>
+  <text x="148" y="382" fill="white" font-size="30" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">12, 18, 25, 30, 45</text>
+  <text x="148" y="430" fill="#DBEAFE" font-size="26" font-family="Pretendard, Arial, sans-serif">AVG 26.0 · MEDIAN 25</text>
+  <circle cx="900" cy="390" r="88" fill="#93C5FD" fill-opacity="0.35"/>
+  <text x="845" y="402" fill="white" font-size="42" font-family="Pretendard, Arial, sans-serif" font-weight="700">x̄</text>
+</svg>

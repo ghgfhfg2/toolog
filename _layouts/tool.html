@@ -1248,6 +1248,23 @@ layout: default
           </div>
           <p class="tool-result" id="hms-help">{% if page.lang == 'en' %}Enter hourly wage and hours to estimate monthly and annual gross salary.{% elsif page.lang == 'ja' %}時給と勤務時間を入力すると月給・年収の目安を計算します。{% else %}시급과 근무시간을 입력하면 월급·연봉(세전) 예상값을 계산합니다.{% endif %}</p>
         </div>
+      {% when 'average-calculator' %}
+        <div class="tool-ui">
+          <textarea id="avg-input" rows="6" placeholder="{% if page.lang == 'en' %}Enter numbers separated by commas, spaces, or line breaks{% elsif page.lang == 'ja' %}数値をカンマ・空白・改行で区切って入力{% else %}숫자를 쉼표·공백·줄바꿈으로 입력하세요{% endif %}"></textarea>
+          <div class="tool-row-grid pct-actions">
+            <button id="avg-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="avg-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="avg-count">-</strong><span>{% if page.lang == 'en' %}Count{% elsif page.lang == 'ja' %}個数{% else %}개수{% endif %}</span></div>
+            <div><strong id="avg-sum">-</strong><span>{% if page.lang == 'en' %}Sum{% elsif page.lang == 'ja' %}合計{% else %}합계{% endif %}</span></div>
+            <div><strong id="avg-mean">-</strong><span>{% if page.lang == 'en' %}Average{% elsif page.lang == 'ja' %}平均{% else %}평균{% endif %}</span></div>
+            <div><strong id="avg-median">-</strong><span>{% if page.lang == 'en' %}Median{% elsif page.lang == 'ja' %}中央値{% else %}중앙값{% endif %}</span></div>
+            <div><strong id="avg-min">-</strong><span>{% if page.lang == 'en' %}Minimum{% elsif page.lang == 'ja' %}最小값{% else %}최솟값{% endif %}</span></div>
+            <div><strong id="avg-max">-</strong><span>{% if page.lang == 'en' %}Maximum{% elsif page.lang == 'ja' %}最大値{% else %}최댓값{% endif %}</span></div>
+          </div>
+          <p class="tool-result" id="avg-help">{% if page.lang == 'en' %}Enter numbers to calculate average, median, sum, and range instantly.{% elsif page.lang == 'ja' %}数値を入力すると平均・中央値・合計・範囲を即時計算します。{% else %}숫자를 입력하면 평균·중앙값·합계·범위를 즉시 계산합니다.{% endif %}</p>
+        </div>
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
     {% endcase %}

@@ -1,3 +1,23 @@
+- id: average-calculator
+  title: 평균 계산기
+  title_en: Average Calculator
+  title_ja: 平均計算機
+  category: data
+  category_label: 데이터/계산
+  category_label_en: Data/Math
+  category_label_ja: データ/計算
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 숫자 목록의 평균·중앙값·합계·최솟값·최댓값을 한 번에 계산해요.
+  description_en: Calculate average, median, sum, minimum, and maximum from a number list in one place.
+  description_ja: 数値リストの平均・中央値・合計・最小値・最大値をまとめて計算します。
+  url: /tools/average-calculator/
+  url_en: /tools/average-calculator/
+  url_ja: /tools/average-calculator/
+  thumbnail: /assets/thumbs/average-calculator.svg
+  published_at: 2026-03-18
+
 - id: hourly-monthly-salary-calculator
   title: 시급 월급 계산기
   title_en: Hourly to Monthly Salary Calculator
