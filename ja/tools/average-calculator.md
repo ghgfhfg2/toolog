@@ -7,9 +7,9 @@ permalink: /ja/tools/average-calculator/
 canonical_url: /ja/tools/average-calculator/
 category: data
 category_label: データ/計算
-thumbnail: /assets/thumbs/average-calculator.svg
+thumbnail: /assets/thumbs/ja/average-calculator.svg
 image:
-  path: /assets/thumbs/average-calculator.svg
+  path: /assets/thumbs/ja/average-calculator.svg
   alt: 平均計算機プレビュー
 tool_key: average-calculator
 keywords: [平均計算機, 中央値計算, 合計計算, 数値統計, データ計算]

@@ -7,9 +7,9 @@ permalink: /en/tools/average-calculator/
 canonical_url: /en/tools/average-calculator/
 category: data
 category_label: Data/Math
-thumbnail: /assets/thumbs/average-calculator.svg
+thumbnail: /assets/thumbs/en/average-calculator.svg
 image:
-  path: /assets/thumbs/average-calculator.svg
+  path: /assets/thumbs/en/average-calculator.svg
   alt: Average calculator preview
 tool_key: average-calculator
 keywords: [average calculator, mean calculator, median calculator, sum calculator, number list stats]
