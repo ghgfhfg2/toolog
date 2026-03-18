@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="시급 월급 계산기 썸네일">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="時給・月給計算機のサムネイル">
   <defs>
     <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
       <stop offset="0%" stop-color="#0f172a"/>
@@ -7,7 +7,7 @@
   </defs>
   <rect width="1200" height="630" fill="url(#bg)"/>
   <rect x="80" y="90" width="1040" height="450" rx="28" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.25)"/>
-  <text x="120" y="240" fill="#fff" font-size="64" font-weight="700" font-family="Pretendard, Apple SD Gothic Neo, Segoe UI, sans-serif">시급 월급 계산기</text>
-  <text x="120" y="320" fill="#dbeafe" font-size="36" font-family="Pretendard, Apple SD Gothic Neo, Segoe UI, sans-serif">주휴 포함 · 주급 · 월급 · 연봉</text>
-  <text x="120" y="410" fill="#93c5fd" font-size="30" font-family="Pretendard, Apple SD Gothic Neo, Segoe UI, sans-serif">Hourly → Monthly Salary Calculator</text>
+  <text x="120" y="240" fill="#fff" font-size="64" font-weight="700" font-family="Noto Sans JP, Hiragino Kaku Gothic ProN, sans-serif">時給・月給計算機</text>
+  <text x="120" y="320" fill="#dbeafe" font-size="36" font-family="Noto Sans JP, Hiragino Kaku Gothic ProN, sans-serif">週休手当込み · 週給 · 月給 · 年収</text>
+  <text x="120" y="410" fill="#93c5fd" font-size="30" font-family="Noto Sans JP, Hiragino Kaku Gothic ProN, sans-serif">時給設定から額面給与をかんたん試算</text>
 </svg>

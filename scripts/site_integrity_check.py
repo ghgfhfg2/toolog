@@ -5,6 +5,7 @@ Fails fast when:
 - a tool listed in _data/tools.yml is missing KO/EN/JA page markdown
 - shared thumbnail is missing
 - a front-matter thumbnail path points to a missing file
+- EN/JA localized thumbnails still contain Hangul text
 """
 
 from __future__ import annotations
@@ -43,8 +44,13 @@ def exists_rel(web_path: str) -> bool:
     return (ROOT / rel).exists()
 
 
+def contains_hangul(text: str) -> bool:
+    return re.search(r"[가-힣]", text) is not None
+
+
 def main() -> int:
     missing: list[str] = []
+    lang_text_issues: list[str] = []
 
     tool_ids = parse_tool_ids(TOOLS_YML)
     if not tool_ids:
@@ -69,10 +75,24 @@ def main() -> int:
         if thumb and thumb.startswith("/") and not exists_rel(thumb):
             missing.append(f"{page.relative_to(ROOT)} -> {thumb}")
 
-    if missing:
-        print("❌ Site integrity check failed. Missing paths:")
-        for item in sorted(set(missing)):
-            print(f" - {item}")
+    # EN/JA thumbnails must not contain Hangul text.
+    for lang in ["en", "ja"]:
+        thumb_dir = ROOT / "assets" / "thumbs" / lang
+        for svg in thumb_dir.glob("*.svg"):
+            body = svg.read_text(encoding="utf-8")
+            if contains_hangul(body):
+                lang_text_issues.append(str(svg.relative_to(ROOT)))
+
+    if missing or lang_text_issues:
+        print("❌ Site integrity check failed.")
+        if missing:
+            print("Missing paths:")
+            for item in sorted(set(missing)):
+                print(f" - {item}")
+        if lang_text_issues:
+            print("Localized thumbnail language issues (Hangul found in EN/JA):")
+            for item in sorted(set(lang_text_issues)):
+                print(f" - {item}")
         return 1
 
     print(f"✅ Site integrity check passed ({len(tool_ids)} tools)")
