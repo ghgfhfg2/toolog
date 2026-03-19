@@ -736,7 +736,7 @@
   description_en: Calculate volumetric weight and chargeable weight from box dimensions and actual weight.
   description_ja: 箱サイズと実重量から容積重量と適用重量をすばやく計算します。
   url: /tools/volumetric-weight-calculator/
-  url_en: /tools/volumetric-weight-calculator/
-  url_ja: /tools/volumetric-weight-calculator/
+  url_en: /en/tools/volumetric-weight-calculator/
+  url_ja: /ja/tools/volumetric-weight-calculator/
   thumbnail: /assets/thumbs/volumetric-weight-calculator.svg
   published_at: 2026-03-19
