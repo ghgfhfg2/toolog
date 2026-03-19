@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Volumetric Weight Calculator</title>
+  <desc id="desc">Thumbnail for a tool that calculates volumetric and chargeable weight from box size and actual weight</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" rx="36"/>
+  <rect x="72" y="72" width="1056" height="486" rx="28" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.18)"/>
+  <g fill="none" stroke="#bfdbfe" stroke-width="10">
+    <rect x="120" y="220" width="240" height="170" rx="12"/>
+    <path d="M360 220l70-55h230l-70 55z"/>
+    <path d="M360 390l70-55v-170" opacity="0.8"/>
+    <path d="M590 165v170l-70 55" opacity="0.8"/>
+  </g>
+  <g fill="#e2e8f0" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif">
+    <text x="120" y="150" font-size="34" font-weight="700">TOOLOG WEB TOOL</text>
+    <text x="120" y="500" font-size="64" font-weight="800">Volumetric Weight Calculator</text>
+    <text x="120" y="545" font-size="28">Box size · actual weight · chargeable weight</text>
+  </g>
+  <g transform="translate(710 180)">
+    <rect width="360" height="240" rx="24" fill="rgba(255,255,255,0.95)"/>
+    <text x="28" y="56" fill="#0f172a" font-size="30" font-weight="700" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif">Volumetric</text>
+    <text x="28" y="118" fill="#1d4ed8" font-size="56" font-weight="800" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif">4.00 kg</text>
+    <text x="28" y="168" fill="#334155" font-size="26" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif">Chargeable 4.00 kg</text>
+    <text x="28" y="208" fill="#475569" font-size="24" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif">40 × 30 × 20 ÷ 6000</text>
+  </g>
+</svg>

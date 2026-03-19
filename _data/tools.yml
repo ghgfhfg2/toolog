@@ -721,3 +721,22 @@
   url_ja: /ja/tools/tip-calculator/
   thumbnail: /assets/thumbs/tip-calculator.svg
 
+- id: volumetric-weight-calculator
+  title: 부피무게 계산기
+  title_en: Volumetric Weight Calculator
+  title_ja: 容積重量計算機
+  category: calculator
+  category_label: 물류/비즈니스
+  category_label_en: Logistics/Business
+  category_label_ja: 物流/ビジネス
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 가로·세로·높이와 실제 무게로 부피무게와 적용무게를 빠르게 계산해요.
+  description_en: Calculate volumetric weight and chargeable weight from box dimensions and actual weight.
+  description_ja: 箱サイズと実重量から容積重量と適用重量をすばやく計算します。
+  url: /tools/volumetric-weight-calculator/
+  url_en: /tools/volumetric-weight-calculator/
+  url_ja: /tools/volumetric-weight-calculator/
+  thumbnail: /assets/thumbs/volumetric-weight-calculator.svg
+  published_at: 2026-03-19

@@ -1248,6 +1248,50 @@ layout: default
           </div>
           <p class="tool-result" id="hms-help">{% if page.lang == 'en' %}Enter hourly wage and hours to estimate monthly and annual gross salary.{% elsif page.lang == 'ja' %}時給と勤務時間を入力すると月給・年収の目安を計算します。{% else %}시급과 근무시간을 입력하면 월급·연봉(세전) 예상값을 계산합니다.{% endif %}</p>
         </div>
+      {% when 'volumetric-weight-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="vw-length">{% if page.lang == 'en' %}Length (cm){% elsif page.lang == 'ja' %}縦（cm）{% else %}가로/길이(cm){% endif %}</label>
+              <input id="vw-length" type="number" min="0" step="0.1" inputmode="decimal" />
+            </div>
+            <div>
+              <label for="vw-width">{% if page.lang == 'en' %}Width (cm){% elsif page.lang == 'ja' %}横（cm）{% else %}세로/너비(cm){% endif %}</label>
+              <input id="vw-width" type="number" min="0" step="0.1" inputmode="decimal" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="vw-height">{% if page.lang == 'en' %}Height (cm){% elsif page.lang == 'ja' %}高さ（cm）{% else %}높이(cm){% endif %}</label>
+              <input id="vw-height" type="number" min="0" step="0.1" inputmode="decimal" />
+            </div>
+            <div>
+              <label for="vw-actual">{% if page.lang == 'en' %}Actual weight (kg){% elsif page.lang == 'ja' %}実重量（kg）{% else %}실제 무게(kg){% endif %}</label>
+              <input id="vw-actual" type="number" min="0" step="0.01" inputmode="decimal" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="vw-divisor">{% if page.lang == 'en' %}Volumetric divisor{% elsif page.lang == 'ja' %}容積係数{% else %}부피배수{% endif %}</label>
+              <select id="vw-divisor">
+                <option value="6000">6000</option>
+                <option value="5000">5000</option>
+                <option value="4000">4000</option>
+              </select>
+            </div>
+          </div>
+          <div class="tool-row-grid pct-actions">
+            <button id="vw-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="vw-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="vw-volume">-</strong><span>{% if page.lang == 'en' %}Box volume (L){% elsif page.lang == 'ja' %}箱の容積（L）{% else %}박스 부피(L){% endif %}</span></div>
+            <div><strong id="vw-volumetric">-</strong><span>{% if page.lang == 'en' %}Volumetric weight{% elsif page.lang == 'ja' %}容積重量{% else %}부피무게{% endif %}</span></div>
+            <div><strong id="vw-chargeable">-</strong><span>{% if page.lang == 'en' %}Chargeable weight{% elsif page.lang == 'ja' %}適用重量{% else %}적용무게{% endif %}</span></div>
+            <div><strong id="vw-basis">-</strong><span>{% if page.lang == 'en' %}Billing basis{% elsif page.lang == 'ja' %}과금 기준{% else %}청구 기준{% endif %}</span></div>
+          </div>
+          <p class="tool-result" id="vw-help">{% if page.lang == 'en' %}Enter dimensions and weight to calculate volumetric and chargeable weight.{% elsif page.lang == 'ja' %}サイズと重量を入力すると、容積重量と適用重量を計算します。{% else %}박스 규격과 실제 무게를 입력하면 부피무게와 적용무게를 계산합니다.{% endif %}</p>
+        </div>
       {% when 'average-calculator' %}
         <div class="tool-ui">
           <textarea id="avg-input" rows="6" placeholder="{% if page.lang == 'en' %}Enter numbers separated by commas, spaces, or line breaks{% elsif page.lang == 'ja' %}数値をカンマ・空白・改行で区切って入力{% else %}숫자를 쉼표·공백·줄바꿈으로 입력하세요{% endif %}"></textarea>

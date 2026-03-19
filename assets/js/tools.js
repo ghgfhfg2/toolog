@@ -5589,6 +5589,127 @@
     render();
   }
 
+
+  if (slug === 'volumetric-weight-calculator') {
+    const lengthEl = document.getElementById('vw-length');
+    const widthEl = document.getElementById('vw-width');
+    const heightEl = document.getElementById('vw-height');
+    const actualEl = document.getElementById('vw-actual');
+    const divisorEl = document.getElementById('vw-divisor');
+    const volumeEl = document.getElementById('vw-volume');
+    const volumetricEl = document.getElementById('vw-volumetric');
+    const chargeableEl = document.getElementById('vw-chargeable');
+    const basisEl = document.getElementById('vw-basis');
+    const help = document.getElementById('vw-help');
+    const copyBtn = document.getElementById('vw-copy');
+    const resetBtn = document.getElementById('vw-reset');
+
+    if (!lengthEl || !widthEl || !heightEl || !actualEl || !divisorEl || !volumeEl || !volumetricEl || !chargeableEl || !basisEl || !help) return;
+
+    const text = {
+      ko: {
+        needInput: '가로·세로·높이와 실제 무게를 입력하세요.',
+        basisActual: '실제 무게 기준',
+        basisVolumetric: '부피무게 기준',
+        summary: (vw, cw) => `부피무게 ${vw}, 적용무게 ${cw} 기준으로 운임을 비교해 보세요.`,
+        copy: (v, vw, cw, b) => `부피무게 계산 결과 | 박스 부피 ${v} | 부피무게 ${vw} | 적용무게 ${cw} | 청구 기준 ${b}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        needInput: 'Enter length, width, height, and actual weight.',
+        basisActual: 'Actual weight basis',
+        basisVolumetric: 'Volumetric weight basis',
+        summary: (vw, cw) => `Compare shipping cost using volumetric weight ${vw} and chargeable weight ${cw}.`,
+        copy: (v, vw, cw, b) => `Volumetric weight result | Box volume ${v} | Volumetric weight ${vw} | Chargeable weight ${cw} | Billing basis ${b}`,
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        needInput: '縦・横・高さと実重量を入力してください。',
+        basisActual: '実重量基準',
+        basisVolumetric: '容積重量基準',
+        summary: (vw, cw) => `容積重量 ${vw} と適用重量 ${cw} を基準に送料を比較してください。`,
+        copy: (v, vw, cw, b) => `容積重量計算結果 | 箱の容積 ${v} | 容積重量 ${vw} | 適用重量 ${cw} | 請求基準 ${b}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    }[pageLang] || {
+      needInput: '가로·세로·높이와 실제 무게를 입력하세요.',
+      basisActual: '실제 무게 기준',
+      basisVolumetric: '부피무게 기준',
+      summary: (vw, cw) => `부피무게 ${vw}, 적용무게 ${cw} 기준으로 운임을 비교해 보세요.`,
+      copy: (v, vw, cw, b) => `부피무게 계산 결과 | 박스 부피 ${v} | 부피무게 ${vw} | 적용무게 ${cw} | 청구 기준 ${b}`,
+      copied: '복사됨',
+      copyDefault: '결과 복사'
+    };
+
+    const fmtKg = (n) => `${Number(n || 0).toLocaleString(numberLocale, { maximumFractionDigits: 2 })}kg`;
+    const fmtL = (n) => `${Number(n || 0).toLocaleString(numberLocale, { maximumFractionDigits: 2 })}L`;
+
+    const copyText = async (value) => {
+      try { await navigator.clipboard.writeText(value); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = value; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const render = () => {
+      const l = Math.max(0, Number(lengthEl.value || 0));
+      const w = Math.max(0, Number(widthEl.value || 0));
+      const h = Math.max(0, Number(heightEl.value || 0));
+      const actual = Math.max(0, Number(actualEl.value || 0));
+      const divisor = Math.max(1, Number(divisorEl.value || 6000));
+
+      if (!(l > 0) || !(w > 0) || !(h > 0) || !(actual > 0)) {
+        volumeEl.textContent = '-';
+        volumetricEl.textContent = '-';
+        chargeableEl.textContent = '-';
+        basisEl.textContent = '-';
+        help.textContent = text.needInput;
+        return;
+      }
+
+      const volumeLiter = (l * w * h) / 1000;
+      const volumetric = (l * w * h) / divisor;
+      const chargeable = Math.max(actual, volumetric);
+      const basis = actual >= volumetric ? text.basisActual : text.basisVolumetric;
+
+      volumeEl.textContent = fmtL(volumeLiter);
+      volumetricEl.textContent = fmtKg(volumetric);
+      chargeableEl.textContent = fmtKg(chargeable);
+      basisEl.textContent = basis;
+      help.textContent = text.summary(fmtKg(volumetric), fmtKg(chargeable));
+    };
+
+    [lengthEl, widthEl, heightEl, actualEl, divisorEl].forEach((el) => el.addEventListener('input', render));
+
+    copyBtn?.addEventListener('click', async () => {
+      if (chargeableEl.textContent === '-') return;
+      await copyText(text.copy(volumeEl.textContent, volumetricEl.textContent, chargeableEl.textContent, basisEl.textContent));
+      const old = copyBtn.textContent;
+      copyBtn.textContent = text.copied;
+      setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      lengthEl.value = 40;
+      widthEl.value = 30;
+      heightEl.value = 20;
+      actualEl.value = 2.8;
+      divisorEl.value = 6000;
+      render();
+    });
+
+    if (!lengthEl.value) lengthEl.value = 40;
+    if (!widthEl.value) widthEl.value = 30;
+    if (!heightEl.value) heightEl.value = 20;
+    if (!actualEl.value) actualEl.value = 2.8;
+    render();
+  }
+
   if (slug === 'average-calculator') {
     const input = document.getElementById('avg-input');
     const countEl = document.getElementById('avg-count');
