@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title>割り勘計算機</title>
+  <desc>合計 ÷ 人数</desc>
+  <rect width="1200" height="630" fill="#f5f3ff"/>
+  <rect x="72" y="72" width="1056" height="486" rx="36" fill="white"/>
+  <rect x="120" y="132" width="280" height="280" rx="32" fill="#7c3aed" opacity="0.12"/>
+  <circle cx="220" cy="222" r="46" fill="#7c3aed" opacity="0.95"/>
+  <circle cx="300" cy="222" r="46" fill="#7c3aed" opacity="0.75"/>
+  <circle cx="260" cy="302" r="46" fill="#7c3aed" opacity="0.55"/>
+  <text x="470" y="235" font-size="72" font-weight="800" fill="#0f172a" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, Segoe UI, sans-serif">割り勘計算機</text>
+  <text x="470" y="320" font-size="42" font-weight="600" fill="#475569" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, Segoe UI, sans-serif">合計 ÷ 人数</text>
+  <text x="470" y="410" font-size="36" font-weight="700" fill="#7c3aed" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, Segoe UI, sans-serif">1/N · Rounded Share · Exact Total</text>
+</svg>

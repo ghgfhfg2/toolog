@@ -740,3 +740,23 @@
   url_ja: /ja/tools/volumetric-weight-calculator/
   thumbnail: /assets/thumbs/volumetric-weight-calculator.svg
   published_at: 2026-03-19
+
+- id: split-bill-calculator
+  title: N빵 계산기
+  title_en: Split Bill Calculator
+  title_ja: 割り勘計算機
+  category: calculator
+  category_label: 생활/정산
+  category_label_en: Lifestyle/Billing
+  category_label_ja: 生活/精算
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 총 금액·인원 수·반올림 단위를 기준으로 1인당 금액과 마지막 1인 조정 금액을 계산해요.
+  description_en: Split a total bill by group size and rounding unit, with last-person adjustment to keep the total exact.
+  description_ja: 合計金額・人数・丸め単位から、1人あたり金額と最後の1人の調整額を計算します。
+  url: /tools/split-bill-calculator/
+  url_en: /en/tools/split-bill-calculator/
+  url_ja: /ja/tools/split-bill-calculator/
+  thumbnail: /assets/thumbs/split-bill-calculator.svg
+  published_at: 2026-03-20

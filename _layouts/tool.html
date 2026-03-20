@@ -1292,6 +1292,49 @@ layout: default
           </div>
           <p class="tool-result" id="vw-help">{% if page.lang == 'en' %}Enter dimensions and weight to calculate volumetric and chargeable weight.{% elsif page.lang == 'ja' %}サイズと重量を入力すると、容積重量と適用重量を計算します。{% else %}박스 규격과 실제 무게를 입력하면 부피무게와 적용무게를 계산합니다.{% endif %}</p>
         </div>
+      {% when 'split-bill-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="sb-total">{% if page.lang == 'en' %}Total amount{% elsif page.lang == 'ja' %}合計金額{% else %}총 금액{% endif %}</label>
+              <input id="sb-total" type="number" min="0" step="1" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="sb-people">{% if page.lang == 'en' %}People{% elsif page.lang == 'ja' %}人数{% else %}인원 수{% endif %}</label>
+              <input id="sb-people" type="number" min="1" step="1" value="2" inputmode="numeric" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="sb-rounding">{% if page.lang == 'en' %}Rounding unit{% elsif page.lang == 'ja' %}丸め単位{% else %}반올림 단위{% endif %}</label>
+              <select id="sb-rounding">
+                <option value="1">1</option>
+                <option value="10">10</option>
+                <option value="100">100</option>
+                <option value="1000">1000</option>
+              </select>
+            </div>
+            <div>
+              <label for="sb-mode">{% if page.lang == 'en' %}Rounding mode{% elsif page.lang == 'ja' %}丸め方式{% else %}반올림 방식{% endif %}</label>
+              <select id="sb-mode">
+                <option value="nearest">{% if page.lang == 'en' %}Nearest{% elsif page.lang == 'ja' %}四捨五入{% else %}반올림{% endif %}</option>
+                <option value="up">{% if page.lang == 'en' %}Round up{% elsif page.lang == 'ja' %}切り上げ{% else %}올림{% endif %}</option>
+                <option value="down">{% if page.lang == 'en' %}Round down{% elsif page.lang == 'ja' %}切り捨て{% else %}내림{% endif %}</option>
+              </select>
+            </div>
+          </div>
+          <div class="tool-row-grid pct-actions">
+            <button id="sb-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="sb-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="sb-base">-</strong><span>{% if page.lang == 'en' %}Exact share per person{% elsif page.lang == 'ja' %}正確な1人あたり{% else %}정확한 1인당 금액{% endif %}</span></div>
+            <div><strong id="sb-rounded">-</strong><span>{% if page.lang == 'en' %}Rounded standard share{% elsif page.lang == 'ja' %}丸め後の標準金額{% else %}반올림 기준 금액{% endif %}</span></div>
+            <div><strong id="sb-last">-</strong><span>{% if page.lang == 'en' %}Last person adjustment{% elsif page.lang == 'ja' %}最後の1人の調整額{% else %}마지막 1인 조정 금액{% endif %}</span></div>
+            <div><strong id="sb-diff">-</strong><span>{% if page.lang == 'en' %}Rounding difference{% elsif page.lang == 'ja' %}端数差額{% else %}반올림 차액{% endif %}</span></div>
+          </div>
+          <p class="tool-result" id="sb-help">{% if page.lang == 'en' %}Enter total and people to split the bill.{% elsif page.lang == 'ja' %}合計金額と人数を入れると割り勘結果を計算します。{% else %}총액과 인원 수를 입력하면 N빵 결과를 계산합니다.{% endif %}</p>
+        </div>
       {% when 'average-calculator' %}
         <div class="tool-ui">
           <textarea id="avg-input" rows="6" placeholder="{% if page.lang == 'en' %}Enter numbers separated by commas, spaces, or line breaks{% elsif page.lang == 'ja' %}数値をカンマ・空白・改行で区切って入力{% else %}숫자를 쉼표·공백·줄바꿈으로 입력하세요{% endif %}"></textarea>

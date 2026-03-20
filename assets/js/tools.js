@@ -5827,4 +5827,85 @@
     setIdle(text.idle);
   }
 
+
+  if (slug === 'split-bill-calculator') {
+    const total = document.getElementById('sb-total');
+    const people = document.getElementById('sb-people');
+    const rounding = document.getElementById('sb-rounding');
+    const mode = document.getElementById('sb-mode');
+    const outBase = document.getElementById('sb-base');
+    const outRounded = document.getElementById('sb-rounded');
+    const outLast = document.getElementById('sb-last');
+    const outDiff = document.getElementById('sb-diff');
+    const help = document.getElementById('sb-help');
+    const copyBtn = document.getElementById('sb-copy');
+    const resetBtn = document.getElementById('sb-reset');
+
+    if (!total || !people || !rounding || !mode || !outBase || !outRounded || !outLast || !outDiff || !help) return;
+
+    const t = {
+      ko: {
+        currency: '원', idle: '총액과 인원 수를 입력하면 N빵 결과를 계산합니다.',
+        summary: (share, last, people) => `${people}명 기준 기본 송금액은 ${share}, 마지막 1인은 ${last}로 맞추면 총액이 정확히 맞습니다.`,
+        copy: (a,b,c,d) => `N빵 계산 결과 | 정확한 1인당 ${a} | 반올림 기준 금액 ${b} | 마지막 1인 조정 ${c} | 차액 ${d}`,
+        copied: '복사됨', copyDefault: '결과 복사'
+      },
+      en: {
+        currency: ' KRW', idle: 'Enter total amount and people to split the bill.',
+        summary: (share, last, people) => `For ${people} people, send ${share} as the standard share and ${last} for the last person to match the exact total.`,
+        copy: (a,b,c,d) => `Split bill result | Exact share ${a} | Rounded share ${b} | Last-person adjustment ${c} | Difference ${d}`,
+        copied: 'Copied', copyDefault: 'Copy result'
+      },
+      ja: {
+        currency: 'ウォン', idle: '合計金額と人数を入れると割り勘結果を計算します。',
+        summary: (share, last, people) => `${people}人なら標準金額は ${share}、最後の1人を ${last} にすると合計がぴったり合います。`,
+        copy: (a,b,c,d) => `割り勘計算結果 | 正確な1人あたり ${a} | 丸め後の標準金額 ${b} | 最後の1人の調整額 ${c} | 差額 ${d}`,
+        copied: 'コピー完了', copyDefault: '結果をコピー'
+      }
+    }[pageLang] || { currency: '원', idle: '총액과 인원 수를 입력하면 N빵 결과를 계산합니다.', summary: (share,last,people) => `${people}명 기준 기본 송금액은 ${share}, 마지막 1인은 ${last}로 맞추면 총액이 정확히 맞습니다.`, copy: (a,b,c,d) => `N빵 계산 결과 | 정확한 1인당 ${a} | 반올림 기준 금액 ${b} | 마지막 1인 조정 ${c} | 차액 ${d}`, copied: '복사됨', copyDefault: '결과 복사' };
+
+    const fmt = (n) => `${Math.round(n || 0).toLocaleString(numberLocale)}${t.currency}`;
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+    const roundByMode = (value, unit, modeValue) => {
+      if (modeValue === 'up') return Math.ceil(value / unit) * unit;
+      if (modeValue === 'down') return Math.floor(value / unit) * unit;
+      return Math.round(value / unit) * unit;
+    };
+    const render = () => {
+      const totalValue = Math.max(0, Number(total.value || 0));
+      const peopleValue = Math.max(1, Math.floor(Number(people.value || 1)));
+      const unit = Math.max(1, Number(rounding.value || 1));
+      people.value = peopleValue;
+      if (!(totalValue > 0)) {
+        outBase.textContent = '-'; outRounded.textContent = '-'; outLast.textContent = '-'; outDiff.textContent = '-'; help.textContent = t.idle; return;
+      }
+      const exact = totalValue / peopleValue;
+      const rounded = roundByMode(exact, unit, mode.value || 'nearest');
+      const last = totalValue - rounded * (peopleValue - 1);
+      const diff = last - rounded;
+      outBase.textContent = fmt(exact);
+      outRounded.textContent = fmt(rounded);
+      outLast.textContent = fmt(last);
+      outDiff.textContent = fmt(diff);
+      help.textContent = t.summary(fmt(rounded), fmt(last), peopleValue.toLocaleString(numberLocale));
+    };
+    [total, people, rounding, mode].forEach((el) => el?.addEventListener('input', render));
+    copyBtn?.addEventListener('click', async () => {
+      if (outBase.textContent === '-') return;
+      await copyText(t.copy(outBase.textContent, outRounded.textContent, outLast.textContent, outDiff.textContent));
+      const old = copyBtn.textContent; copyBtn.textContent = t.copied; setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+    resetBtn?.addEventListener('click', () => { total.value = 50000; people.value = 3; rounding.value = 100; mode.value = 'nearest'; render(); });
+    if (!people.value) people.value = 2;
+    render();
+  }
+
+
 })();
