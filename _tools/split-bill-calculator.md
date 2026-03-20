@@ -39,9 +39,9 @@ faq:
 4. 기본 금액과 마지막 1인 조정 금액을 확인합니다.
 
 ## 함께 쓰면 좋은 도구
-- 팁 포함 정산: [팁 계산기]({ '/tools/tip-calculator/' | relative_url })
-- 할인 반영 결제 계산: [할인 계산기]({ '/tools/discount-calculator/' | relative_url })
-- 비율 확인: [퍼센트 계산기]({ '/tools/percent-calculator/' | relative_url })
+- 팁 포함 정산: [팁 계산기]({{ '/tools/tip-calculator/' | relative_url }})
+- 할인 반영 결제 계산: [할인 계산기]({{ '/tools/discount-calculator/' | relative_url }})
+- 비율 확인: [퍼센트 계산기]({{ '/tools/percent-calculator/' | relative_url }})
 
 ## FAQ
 ### 반올림 단위는 언제 쓰면 좋나요?
