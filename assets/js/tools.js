@@ -5828,6 +5828,137 @@
   }
 
 
+  if (slug === 'fraction-calculator') {
+    const aNum = document.getElementById('frac-a-num');
+    const aDen = document.getElementById('frac-a-den');
+    const bNum = document.getElementById('frac-b-num');
+    const bDen = document.getElementById('frac-b-den');
+    const op = document.getElementById('frac-op');
+    const outResult = document.getElementById('frac-result');
+    const outMixed = document.getElementById('frac-mixed');
+    const outDecimal = document.getElementById('frac-decimal');
+    const outPercent = document.getElementById('frac-percent');
+    const help = document.getElementById('frac-help');
+    const copyBtn = document.getElementById('frac-copy');
+    const resetBtn = document.getElementById('frac-reset');
+
+    if (!aNum || !aDen || !bNum || !bDen || !op || !outResult || !outMixed || !outDecimal || !outPercent || !help) return;
+
+    const text = {
+      ko: {
+        idle: '분수 2개를 입력하면 사칙연산과 약분 결과를 바로 확인할 수 있습니다.',
+        invalid: '분모는 0이 될 수 없습니다.',
+        divZero: '0으로 나누는 연산은 할 수 없습니다.',
+        mixedNone: '해당 없음',
+        copy: (r, m, d, p) => `분수 계산 결과 | 약분 결과 ${r} | 대분수 ${m} | 소수값 ${d} | 백분율 ${p}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        idle: 'Enter two fractions to calculate and simplify the result instantly.',
+        invalid: 'Denominator cannot be 0.',
+        divZero: 'Division by zero is not allowed.',
+        mixedNone: 'N/A',
+        copy: (r, m, d, p) => `Fraction result | Simplified ${r} | Mixed ${m} | Decimal ${d} | Percent ${p}`,
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        idle: '2つの分数を入力すると、四則演算と約分結果をすぐ確認できます。',
+        invalid: '分母に 0 は使えません。',
+        divZero: '0 で割ることはできません。',
+        mixedNone: '該当なし',
+        copy: (r, m, d, p) => `分数計算結果 | 約分結果 ${r} | 帯分数 ${m} | 小数 ${d} | 百分率 ${p}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    }[pageLang] || {
+      idle: '분수 2개를 입력하면 사칙연산과 약분 결과를 바로 확인할 수 있습니다.',
+      invalid: '분모는 0이 될 수 없습니다.',
+      divZero: '0으로 나누는 연산은 할 수 없습니다.',
+      mixedNone: '해당 없음',
+      copy: (r, m, d, p) => `분수 계산 결과 | 약분 결과 ${r} | 대분수 ${m} | 소수값 ${d} | 백분율 ${p}`,
+      copied: '복사됨',
+      copyDefault: '결과 복사'
+    };
+
+    const gcd = (a, b) => {
+      let x = Math.abs(a), y = Math.abs(b);
+      while (y) [x, y] = [y, x % y];
+      return x || 1;
+    };
+    const simplify = (n, d) => {
+      const sign = d < 0 ? -1 : 1;
+      const g = gcd(n, d);
+      return { n: sign * n / g, d: Math.abs(d) / g };
+    };
+    const fmt = (n, max = 6) => Number(n).toLocaleString(numberLocale, { maximumFractionDigits: max });
+    const copyText = async (value) => {
+      try { await navigator.clipboard.writeText(value); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = value; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+    const setIdle = (msg) => {
+      outResult.textContent = '-';
+      outMixed.textContent = '-';
+      outDecimal.textContent = '-';
+      outPercent.textContent = '-';
+      help.textContent = msg;
+    };
+    const render = () => {
+      const an = Math.trunc(Number(aNum.value || 0));
+      const ad = Math.trunc(Number(aDen.value || 0));
+      const bn = Math.trunc(Number(bNum.value || 0));
+      const bd = Math.trunc(Number(bDen.value || 0));
+      if (!ad || !bd) {
+        setIdle(text.invalid);
+        return;
+      }
+      let rn = 0, rd = 1;
+      if (op.value === 'add') {
+        rn = an * bd + bn * ad; rd = ad * bd;
+      } else if (op.value === 'sub') {
+        rn = an * bd - bn * ad; rd = ad * bd;
+      } else if (op.value === 'mul') {
+        rn = an * bn; rd = ad * bd;
+      } else {
+        if (bn === 0) {
+          setIdle(text.divZero);
+          return;
+        }
+        rn = an * bd; rd = ad * bn;
+      }
+      const s = simplify(rn, rd);
+      const dec = s.n / s.d;
+      outResult.textContent = s.d === 1 ? `${s.n}` : `${s.n}/${s.d}`;
+      const whole = Math.trunc(s.n / s.d);
+      const rem = Math.abs(s.n % s.d);
+      outMixed.textContent = rem === 0 ? `${whole}` : (Math.abs(s.n) < s.d ? text.mixedNone : `${whole} ${rem}/${s.d}`);
+      outDecimal.textContent = fmt(dec, 8);
+      outPercent.textContent = `${fmt(dec * 100, 4)}%`;
+      help.textContent = `${an}/${ad} ${op.options[op.selectedIndex].text} ${bn}/${bd} = ${outResult.textContent}`;
+    };
+    [aNum, aDen, bNum, bDen, op].forEach((el) => el.addEventListener('input', render));
+    resetBtn?.addEventListener('click', () => {
+      aNum.value = 1; aDen.value = 2; bNum.value = 1; bDen.value = 3; op.value = 'add'; render();
+    });
+    copyBtn?.addEventListener('click', async () => {
+      if (outResult.textContent === '-') return;
+      await copyText(text.copy(outResult.textContent, outMixed.textContent, outDecimal.textContent, outPercent.textContent));
+      const old = copyBtn.textContent;
+      copyBtn.textContent = text.copied;
+      setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+    });
+    if (!aNum.value) aNum.value = 1;
+    if (!aDen.value) aDen.value = 2;
+    if (!bNum.value) bNum.value = 1;
+    if (!bDen.value) bDen.value = 3;
+    render();
+  }
+
   if (slug === 'split-bill-calculator') {
     const total = document.getElementById('sb-total');
     const people = document.getElementById('sb-people');

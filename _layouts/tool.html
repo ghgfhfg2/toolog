@@ -1352,6 +1352,49 @@ layout: default
           </div>
           <p class="tool-result" id="avg-help">{% if page.lang == 'en' %}Enter numbers to calculate average, median, sum, and range instantly.{% elsif page.lang == 'ja' %}数値を入力すると平均・中央値・合計・範囲を即時計算します。{% else %}숫자를 입력하면 평균·중앙값·합계·범위를 즉시 계산합니다.{% endif %}</p>
         </div>
+      {% when 'fraction-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="frac-a-num">{% if page.lang == 'en' %}First fraction{% elsif page.lang == 'ja' %}1つ目の分数{% else %}첫 번째 분수{% endif %}</label>
+              <div class="tool-row-grid pct-grid">
+                <input id="frac-a-num" type="number" step="1" placeholder="1" inputmode="numeric" />
+                <span>/</span>
+                <input id="frac-a-den" type="number" step="1" placeholder="2" inputmode="numeric" />
+              </div>
+            </div>
+            <div>
+              <label for="frac-op">{% if page.lang == 'en' %}Operation{% elsif page.lang == 'ja' %}演算{% else %}연산{% endif %}</label>
+              <select id="frac-op">
+                <option value="add">+</option>
+                <option value="sub">−</option>
+                <option value="mul">×</option>
+                <option value="div">÷</option>
+              </select>
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="frac-b-num">{% if page.lang == 'en' %}Second fraction{% elsif page.lang == 'ja' %}2つ目の分数{% else %}두 번째 분수{% endif %}</label>
+              <div class="tool-row-grid pct-grid">
+                <input id="frac-b-num" type="number" step="1" placeholder="1" inputmode="numeric" />
+                <span>/</span>
+                <input id="frac-b-den" type="number" step="1" placeholder="3" inputmode="numeric" />
+              </div>
+            </div>
+          </div>
+          <div class="tool-row-grid pct-actions">
+            <button id="frac-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="frac-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="frac-result">-</strong><span>{% if page.lang == 'en' %}Simplified result{% elsif page.lang == 'ja' %}約分結果{% else %}약분 결과{% endif %}</span></div>
+            <div><strong id="frac-mixed">-</strong><span>{% if page.lang == 'en' %}Mixed number{% elsif page.lang == 'ja' %}帯分数{% else %}대분수{% endif %}</span></div>
+            <div><strong id="frac-decimal">-</strong><span>{% if page.lang == 'en' %}Decimal{% elsif page.lang == 'ja' %}小数{% else %}소수값{% endif %}</span></div>
+            <div><strong id="frac-percent">-</strong><span>{% if page.lang == 'en' %}Percent{% elsif page.lang == 'ja' %}百分率{% else %}백분율{% endif %}</span></div>
+          </div>
+          <p class="tool-result" id="frac-help">{% if page.lang == 'en' %}Enter two fractions to add, subtract, multiply, or divide them instantly.{% elsif page.lang == 'ja' %}2つの分数を入力すると、加減乗除と約分結果をすぐ確認できます。{% else %}분수 2개를 입력하면 사칙연산과 약분 결과를 바로 확인할 수 있습니다.{% endif %}</p>
+        </div>
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
     {% endcase %}
