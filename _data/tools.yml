@@ -780,3 +780,23 @@
   url_ja: /ja/tools/split-bill-calculator/
   thumbnail: /assets/thumbs/split-bill-calculator.svg
   published_at: 2026-03-20
+
+- id: gpa-calculator
+  title: 학점 계산기
+  title_en: GPA Calculator
+  title_ja: GPA計算機
+  category: calculator
+  category_label: 교육/학업
+  category_label_en: Education/Study
+  category_label_ja: 教育/学業
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 과목별 학점과 등급을 넣으면 4.5·4.3·4.0 기준 가중 평균 GPA를 빠르게 계산해요.
+  description_en: Calculate weighted GPA quickly from course credits and grades on 4.5, 4.3, or 4.0 scales.
+  description_ja: 科目ごとの単位数と成績を入力すると、4.5・4.3・4.0基準の加重平均GPAをすばやく計算します。
+  url: /tools/gpa-calculator/
+  url_en: /en/tools/gpa-calculator/
+  url_ja: /ja/tools/gpa-calculator/
+  thumbnail: /assets/thumbs/gpa-calculator.svg
+  published_at: 2026-03-22

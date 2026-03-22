@@ -6038,5 +6038,127 @@
     render();
   }
 
+  if (slug === 'gpa-calculator') {
+    const scale = document.getElementById('gpa-scale');
+    const outResult = document.getElementById('gpa-result');
+    const outCredits = document.getElementById('gpa-credits');
+    const outPoints = document.getElementById('gpa-points');
+    const outPass = document.getElementById('gpa-pass');
+    const help = document.getElementById('gpa-help');
+    const copyBtn = document.getElementById('gpa-copy');
+    const resetBtn = document.getElementById('gpa-reset');
+    if (!scale || !outResult || !outCredits || !outPoints || !outPass || !help) return;
+
+    const text = {
+      ko: {
+        idle: '과목별 학점과 등급을 입력하면 가중 평균 GPA를 바로 계산합니다.',
+        summary: (gpa, credits, pass) => `평가 반영 ${credits}학점 기준 GPA는 ${gpa}입니다. P 처리 학점은 ${pass}학점으로 따로 집계했습니다.`,
+        copy: (gpa, credits, points, pass) => `학점 계산 결과 | GPA ${gpa} | 반영 학점 ${credits} | 총 평점 ${points} | P/제외 학점 ${pass}`,
+        copied: '복사됨', copyDefault: '결과 복사', creditUnit: '학점'
+      },
+      en: {
+        idle: 'Enter course credits and grades to calculate weighted GPA instantly.',
+        summary: (gpa, credits, pass) => `Weighted GPA is ${gpa} across ${credits} graded credits. Pass/ignored credits total ${pass}.`,
+        copy: (gpa, credits, points, pass) => `GPA result | GPA ${gpa} | Graded credits ${credits} | Grade points ${points} | Pass/ignored credits ${pass}`,
+        copied: 'Copied', copyDefault: 'Copy result', creditUnit: ' credits'
+      },
+      ja: {
+        idle: '科目ごとの単位数と成績を入力すると、加重平均GPAをすぐ計算できます。',
+        summary: (gpa, credits, pass) => `評価反映 ${credits} を基準にした GPA は ${gpa} です。P扱いの単位は ${pass} として別集計しました。`,
+        copy: (gpa, credits, points, pass) => `GPA計算結果 | GPA ${gpa} | 評価反映単位 ${credits} | 総評点 ${points} | P/除外単位 ${pass}`,
+        copied: 'コピー完了', copyDefault: '結果をコピー', creditUnit: '単位'
+      }
+    }[pageLang] || {
+      idle: '과목별 학점과 등급을 입력하면 가중 평균 GPA를 바로 계산합니다.',
+      summary: (gpa, credits, pass) => `평가 반영 ${credits}학점 기준 GPA는 ${gpa}입니다. P 처리 학점은 ${pass}학점으로 따로 집계했습니다.`,
+      copy: (gpa, credits, points, pass) => `학점 계산 결과 | GPA ${gpa} | 반영 학점 ${credits} | 총 평점 ${points} | P/제외 학점 ${pass}`,
+      copied: '복사됨', copyDefault: '결과 복사', creditUnit: '학점'
+    };
+
+    const gradeMaps = {
+      '4.5': { 'A+': 4.5, 'A0': 4.0, 'B+': 3.5, 'B0': 3.0, 'C+': 2.5, 'C0': 2.0, 'D+': 1.5, 'D0': 1.0, 'F': 0 },
+      '4.3': { 'A+': 4.3, 'A0': 4.0, 'B+': 3.3, 'B0': 3.0, 'C+': 2.3, 'C0': 2.0, 'D+': 1.3, 'D0': 1.0, 'F': 0 },
+      '4.0': { 'A+': 4.0, 'A0': 4.0, 'B+': 3.3, 'B0': 3.0, 'C+': 2.3, 'C0': 2.0, 'D+': 1.3, 'D0': 1.0, 'F': 0 }
+    };
+
+    const rows = Array.from({ length: 6 }, (_, idx) => ({
+      credit: document.getElementById(`gpa-credit-${idx + 1}`),
+      grade: document.getElementById(`gpa-grade-${idx + 1}`)
+    }));
+
+    const copyText = async (value) => {
+      try { await navigator.clipboard.writeText(value); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = value; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const fmt = (n, digits = 2) => Number(n || 0).toLocaleString(numberLocale, { maximumFractionDigits: digits, minimumFractionDigits: digits });
+    const fmtCredit = (n) => `${Number(n || 0).toLocaleString(numberLocale, { maximumFractionDigits: 1 })}${text.creditUnit}`;
+
+    const render = () => {
+      const map = gradeMaps[scale.value || '4.5'];
+      let credits = 0;
+      let points = 0;
+      let passCredits = 0;
+
+      rows.forEach(({ credit, grade }) => {
+        const c = Math.max(0, Number(credit?.value || 0));
+        const g = grade?.value || '';
+        if (!(c > 0) || !g) return;
+        if (g === 'P') {
+          passCredits += c;
+          return;
+        }
+        credits += c;
+        points += c * (map[g] ?? 0);
+      });
+
+      if (!(credits > 0) && !(passCredits > 0)) {
+        outResult.textContent = '-';
+        outCredits.textContent = '-';
+        outPoints.textContent = '-';
+        outPass.textContent = '-';
+        help.textContent = text.idle;
+        return;
+      }
+
+      const gpa = credits > 0 ? points / credits : 0;
+      outResult.textContent = credits > 0 ? fmt(gpa, 2) : '-';
+      outCredits.textContent = fmtCredit(credits);
+      outPoints.textContent = fmt(points, 2);
+      outPass.textContent = fmtCredit(passCredits);
+      help.textContent = text.summary(credits > 0 ? fmt(gpa, 2) : '-', fmtCredit(credits), fmtCredit(passCredits));
+    };
+
+    [scale, ...rows.flatMap((row) => [row.credit, row.grade])].forEach((el) => el?.addEventListener('input', render));
+    resetBtn?.addEventListener('click', () => {
+      scale.value = '4.5';
+      const sample = [
+        { credit: 3, grade: 'A+' },
+        { credit: 3, grade: 'A0' },
+        { credit: 2, grade: 'B+' },
+        { credit: 3, grade: 'B0' },
+        { credit: 1, grade: 'P' },
+        { credit: '', grade: '' }
+      ];
+      rows.forEach((row, idx) => {
+        row.credit.value = sample[idx].credit;
+        row.grade.value = sample[idx].grade;
+      });
+      render();
+    });
+    copyBtn?.addEventListener('click', async () => {
+      if (outResult.textContent === '-' && outPass.textContent === '-') return;
+      await copyText(text.copy(outResult.textContent, outCredits.textContent, outPoints.textContent, outPass.textContent));
+      const old = copyBtn.textContent;
+      copyBtn.textContent = text.copied;
+      setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+    });
+    render();
+  }
+
 
 })();
