@@ -6038,6 +6038,149 @@
     render();
   }
 
+  if (slug === 'required-gpa-calculator') {
+    const scale = document.getElementById('rg-scale');
+    const currentGpa = document.getElementById('rg-current-gpa');
+    const completedCredits = document.getElementById('rg-completed-credits');
+    const targetGpa = document.getElementById('rg-target-gpa');
+    const remainingCredits = document.getElementById('rg-remaining-credits');
+    const neededGpa = document.getElementById('rg-needed-gpa');
+    const currentPoints = document.getElementById('rg-current-points');
+    const maxFinalGpa = document.getElementById('rg-max-final-gpa');
+    const status = document.getElementById('rg-status');
+    const help = document.getElementById('rg-help');
+    const copyBtn = document.getElementById('rg-copy');
+    const resetBtn = document.getElementById('rg-reset');
+
+    if (!scale || !currentGpa || !completedCredits || !targetGpa || !remainingCredits || !neededGpa || !currentPoints || !maxFinalGpa || !status || !help) return;
+
+    const t = {
+      ko: {
+        idle: '현재 GPA·이수학점·목표 GPA·남은 학점을 입력하면 앞으로 필요한 GPA를 계산합니다.',
+        needInput: '현재 GPA, 이수학점, 목표 GPA, 남은 학점을 모두 입력하세요.',
+        invalid: '입력값이 학점 스케일 범위를 벗어났습니다.',
+        guaranteed: '이미 목표권',
+        achievable: '달성 가능',
+        impossible: '달성 어려움',
+        impossibleMsg: (need, max) => `남은 학기 평균 ${need}가 필요합니다. 현재 스케일 최고점 ${max}를 넘어 목표 달성이 어렵습니다.`,
+        achievableMsg: (need) => `남은 학기 평균 GPA ${need}를 받으면 목표에 도달할 수 있습니다.`,
+        guaranteedMsg: '현재 누적 성적 기준으로 목표권에 있습니다.',
+        copy: (need, points, max, status) => `목표 학점 계산 결과 | 필요한 평균 GPA ${need} | 현재 총 평점 ${points} | 최대 최종 GPA ${max} | 판정 ${status}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        idle: 'Enter your current GPA, completed credits, target GPA, and remaining credits to calculate the GPA you need.',
+        needInput: 'Enter current GPA, completed credits, target GPA, and remaining credits.',
+        invalid: 'One or more values are outside the selected GPA scale.',
+        guaranteed: 'Already on track',
+        achievable: 'Achievable',
+        impossible: 'Very unlikely',
+        impossibleMsg: (need, max) => `You need an average GPA of ${need} from now on. That exceeds the scale maximum of ${max}, so the target is not realistic under the current plan.`,
+        achievableMsg: (need) => `You can reach the target if you average ${need} from now on.`,
+        guaranteedMsg: 'Your current cumulative record already keeps you within target range.',
+        copy: (need, points, max, status) => `Required GPA result | Needed GPA ${need} | Current grade points ${points} | Max final GPA ${max} | Status ${status}`,
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        idle: '現在GPA・取得済み単位・目標GPA・残り単位を入力すると、今後必要なGPAを計算します。',
+        needInput: '現在GPA、取得済み単位、目標GPA、残り単位を入力してください。',
+        invalid: '入力値が選択したGPAスケール範囲を超えています。',
+        guaranteed: 'すでに目標圏内',
+        achievable: '達成可能',
+        impossible: '達成困難',
+        impossibleMsg: (need, max) => `今後平均 ${need} のGPAが必要です。選択スケール上限 ${max} を超えるため、現在条件では目標達成が難しいです。`,
+        achievableMsg: (need) => `今後平均 ${need} を取れば目標に到達できます。`,
+        guaranteedMsg: '現在の累積成績ですでに目標圏内です。',
+        copy: (need, points, max, status) => `目標GPA逆算結果 | 必要GPA ${need} | 現在の総評点 ${points} | 最大最終GPA ${max} | 判定 ${status}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    }[pageLang] || {};
+
+    const fmt = (v, digits = 2) => Number(v).toLocaleString(numberLocale, { maximumFractionDigits: digits, minimumFractionDigits: digits });
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const setIdle = (msg = t.idle) => {
+      neededGpa.textContent = '-';
+      currentPoints.textContent = '-';
+      maxFinalGpa.textContent = '-';
+      status.textContent = pageLang === 'en' ? 'Waiting for input' : (pageLang === 'ja' ? '入力待ち' : '입력 대기');
+      help.textContent = msg;
+    };
+
+    const render = () => {
+      const s = Number(scale.value || 4.5);
+      const cur = Number(currentGpa.value || 0);
+      const done = Number(completedCredits.value || 0);
+      const target = Number(targetGpa.value || 0);
+      const left = Number(remainingCredits.value || 0);
+
+      if (!(cur >= 0) || !(done >= 0) || !(target >= 0) || !(left > 0)) {
+        setIdle(t.needInput);
+        return;
+      }
+      if (cur > s || target > s) {
+        setIdle(t.invalid);
+        return;
+      }
+
+      const currentTotalPoints = cur * done;
+      const finalCredits = done + left;
+      const required = ((target * finalCredits) - currentTotalPoints) / left;
+      const maxFinal = ((currentTotalPoints) + (s * left)) / finalCredits;
+
+      neededGpa.textContent = fmt(Math.max(0, required));
+      currentPoints.textContent = fmt(currentTotalPoints);
+      maxFinalGpa.textContent = fmt(maxFinal);
+
+      if (required <= 0) {
+        status.textContent = t.guaranteed;
+        help.textContent = t.guaranteedMsg;
+      } else if (required <= s) {
+        status.textContent = t.achievable;
+        help.textContent = t.achievableMsg(fmt(required));
+      } else {
+        status.textContent = t.impossible;
+        help.textContent = t.impossibleMsg(fmt(required), fmt(s));
+      }
+    };
+
+    [scale, currentGpa, completedCredits, targetGpa, remainingCredits].forEach((el) => el?.addEventListener('input', render));
+
+    resetBtn?.addEventListener('click', () => {
+      scale.value = '4.5';
+      currentGpa.value = '3.72';
+      completedCredits.value = '96';
+      targetGpa.value = '3.90';
+      remainingCredits.value = '24';
+      render();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (neededGpa.textContent === '-') return;
+      await copyText(t.copy(neededGpa.textContent, currentPoints.textContent, maxFinalGpa.textContent, status.textContent));
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+
+    if (!currentGpa.value) currentGpa.value = '3.72';
+    if (!completedCredits.value) completedCredits.value = '96';
+    if (!targetGpa.value) targetGpa.value = '3.90';
+    if (!remainingCredits.value) remainingCredits.value = '24';
+    render();
+  }
+
+
   if (slug === 'gpa-calculator') {
     const scale = document.getElementById('gpa-scale');
     const outResult = document.getElementById('gpa-result');

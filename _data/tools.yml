@@ -800,3 +800,23 @@
   url_ja: /ja/tools/gpa-calculator/
   thumbnail: /assets/thumbs/gpa-calculator.svg
   published_at: 2026-03-22
+
+- id: required-gpa-calculator
+  title: 목표 학점 계산기
+  title_en: Required GPA Calculator
+  title_ja: 目標GPA逆算計算機
+  category: calculator
+  category_label: 교육/학업
+  category_label_en: Education/Study
+  category_label_ja: 教育/学業
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 현재 GPA, 이수학점, 목표 GPA, 남은 학점을 넣으면 남은 학기에 필요한 평균 GPA를 계산해요.
+  description_en: Enter your current GPA, completed credits, target GPA, and remaining credits to calculate the GPA you need from now on.
+  description_ja: 現在のGPA、取得済み単位、目標GPA、残り単位数を入力すると、今後必要な平均GPAを計算します。
+  url: /tools/required-gpa-calculator/
+  url_en: /en/tools/required-gpa-calculator/
+  url_ja: /ja/tools/required-gpa-calculator/
+  thumbnail: /assets/thumbs/required-gpa-calculator.svg
+  published_at: 2026-03-23
