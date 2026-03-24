@@ -5710,6 +5710,121 @@
     render();
   }
 
+  if (slug === 'average-speed-calculator') {
+    const distance = document.getElementById('as-distance');
+    const hours = document.getElementById('as-hours');
+    const minutes = document.getElementById('as-minutes');
+    const speed = document.getElementById('as-speed');
+    const pace = document.getElementById('as-pace');
+    const out5k = document.getElementById('as-5k');
+    const out10k = document.getElementById('as-10k');
+    const help = document.getElementById('as-help');
+    const copyBtn = document.getElementById('as-copy');
+    const resetBtn = document.getElementById('as-reset');
+
+    if (!distance || !hours || !minutes || !speed || !pace || !out5k || !out10k || !help) return;
+
+    const t = {
+      ko: {
+        idle: '거리와 시간을 입력하면 속도와 페이스를 계산합니다.',
+        invalid: '거리와 총 시간은 0보다 커야 합니다.',
+        summary: (s, p) => `평균 속도 ${s}, 1km 페이스 ${p} 기준 결과입니다.`,
+        copied: '복사됨',
+        copyDefault: '결과 복사',
+        copy: (s,p,f,t) => `평균 속도 계산 결과 | 평균 속도 ${s} | 페이스 ${p} | 예상 5km ${f} | 예상 10km ${t}`
+      },
+      en: {
+        idle: 'Enter distance and time to calculate speed and pace.',
+        invalid: 'Distance and total time must be greater than 0.',
+        summary: (s, p) => `Calculated from average speed ${s} and pace ${p}.`,
+        copied: 'Copied',
+        copyDefault: 'Copy result',
+        copy: (s,p,f,t) => `Average speed result | Average speed ${s} | Pace ${p} | Estimated 5K ${f} | Estimated 10K ${t}`
+      },
+      ja: {
+        idle: '距離と時間を入力すると速度とペースを計算します。',
+        invalid: '距離と総時間は0より大きい必要があります。',
+        summary: (s, p) => `平均速度 ${s}、1kmペース ${p} を基準にした結果です。`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー',
+        copy: (s,p,f,t) => `平均速度計算結果 | 平均速度 ${s} | ペース ${p} | 予想5K ${f} | 予想10K ${t}`
+      }
+    }[pageLang] || {
+      idle: '거리와 시간을 입력하면 속도와 페이스를 계산합니다.',
+      invalid: '거리와 총 시간은 0보다 커야 합니다.',
+      summary: (s, p) => `평균 속도 ${s}, 1km 페이스 ${p} 기준 결과입니다.`,
+      copied: '복사됨', copyDefault: '결과 복사',
+      copy: (s,p,f,t) => `평균 속도 계산 결과 | 평균 속도 ${s} | 페이스 ${p} | 예상 5km ${f} | 예상 10km ${t}`
+    };
+
+    const pad = (n) => String(Math.floor(n)).padStart(2, '0');
+    const formatRaceTime = (minutesTotal) => {
+      const totalSeconds = Math.round(minutesTotal * 60);
+      const h = Math.floor(totalSeconds / 3600);
+      const m = Math.floor((totalSeconds % 3600) / 60);
+      const s = totalSeconds % 60;
+      return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
+    };
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const render = () => {
+      const d = Math.max(0, Number(distance.value || 0));
+      const h = Math.max(0, Number(hours.value || 0));
+      const mRaw = Number(minutes.value || 0);
+      const m = Number.isFinite(mRaw) ? Math.min(59, Math.max(0, Math.floor(mRaw))) : 0;
+      if (mRaw !== m) minutes.value = m;
+
+      const totalHours = h + (m / 60);
+      const totalMinutes = (h * 60) + m;
+
+      if (!(d > 0) || !(totalHours > 0)) {
+        speed.textContent = '-';
+        pace.textContent = '-';
+        out5k.textContent = '-';
+        out10k.textContent = '-';
+        help.textContent = d === 0 && totalHours === 0 ? t.idle : t.invalid;
+        return;
+      }
+
+      const speedKmh = d / totalHours;
+      const paceMin = totalMinutes / d;
+      speed.textContent = `${speedKmh.toLocaleString(numberLocale, { maximumFractionDigits: 2 })} km/h`;
+      pace.textContent = `${formatRaceTime(paceMin)}/km`;
+      out5k.textContent = formatRaceTime(paceMin * 5);
+      out10k.textContent = formatRaceTime(paceMin * 10);
+      help.textContent = t.summary(speed.textContent, pace.textContent);
+    };
+
+    [distance, hours, minutes].forEach((el) => el?.addEventListener('input', render));
+
+    copyBtn?.addEventListener('click', async () => {
+      if (speed.textContent === '-') return;
+      await copyText(t.copy(speed.textContent, pace.textContent, out5k.textContent, out10k.textContent));
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      distance.value = 10;
+      hours.value = 1;
+      minutes.value = 0;
+      render();
+    });
+
+    if (!distance.value) distance.value = 10;
+    if (!hours.value) hours.value = 1;
+    render();
+  }
+
   if (slug === 'average-calculator') {
     const input = document.getElementById('avg-input');
     const countEl = document.getElementById('avg-count');

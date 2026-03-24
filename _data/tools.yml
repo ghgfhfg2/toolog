@@ -820,3 +820,24 @@
   url_ja: /ja/tools/required-gpa-calculator/
   thumbnail: /assets/thumbs/required-gpa-calculator.svg
   published_at: 2026-03-23
+
+- id: average-speed-calculator
+  title: 평균 속도 계산기
+  title_en: Average Speed Calculator
+  title_ja: 平均速度計算機
+  category: calculator
+  category_label: 이동/생활
+  category_label_en: Travel/Lifestyle
+  category_label_ja: 移動/生活
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 이동거리와 시간을 넣으면 평균 속도, 1km 페이스, 예상 5K·10K 기록을 한 번에 계산해요.
+  description_en: Enter distance and time to calculate average speed, pace per kilometer, and estimated 5K/10K times.
+  description_ja: 移動距離と時間から、平均速度・1kmペース・予想5K/10Kタイムをまとめて計算します。
+  url: /tools/average-speed-calculator/
+  url_en: /en/tools/average-speed-calculator/
+  url_ja: /ja/tools/average-speed-calculator/
+  thumbnail: /assets/thumbs/average-speed-calculator.svg
+  published_at: 2026-03-24
+

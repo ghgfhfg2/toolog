@@ -1428,6 +1428,36 @@ layout: default
           </div>
           <p class="tool-result" id="gpa-help">{% if page.lang == 'en' %}Enter course credits and grades to calculate weighted GPA instantly.{% elsif page.lang == 'ja' %}학점과 등급을 입력하면 가중 평균 GPA를 바로 계산합니다.{% else %}과목별 학점과 등급을 입력하면 가중 평균 GPA를 바로 계산합니다.{% endif %}</p>
         </div>
+      {% when 'average-speed-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="as-distance">{% if page.lang == 'en' %}Distance (km){% elsif page.lang == 'ja' %}距離 (km){% else %}이동거리(km){% endif %}</label>
+              <input id="as-distance" type="number" min="0" step="0.01" inputmode="decimal" placeholder="10" />
+            </div>
+            <div>
+              <label for="as-hours">{% if page.lang == 'en' %}Hours{% elsif page.lang == 'ja' %}時間{% else %}시간{% endif %}</label>
+              <input id="as-hours" type="number" min="0" step="1" inputmode="numeric" placeholder="1" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="as-minutes">{% if page.lang == 'en' %}Minutes{% elsif page.lang == 'ja' %}分{% else %}분{% endif %}</label>
+              <input id="as-minutes" type="number" min="0" max="59" step="1" inputmode="numeric" placeholder="30" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-actions">
+            <button id="as-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="as-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="as-speed">-</strong><span>{% if page.lang == 'en' %}Average speed{% elsif page.lang == 'ja' %}平均速度{% else %}평균 속도{% endif %}</span></div>
+            <div><strong id="as-pace">-</strong><span>{% if page.lang == 'en' %}Pace per km{% elsif page.lang == 'ja' %}1kmペース{% else %}1km 페이스{% endif %}</span></div>
+            <div><strong id="as-5k">-</strong><span>{% if page.lang == 'en' %}Estimated 5K{% elsif page.lang == 'ja' %}予想5K{% else %}예상 5km 기록{% endif %}</span></div>
+            <div><strong id="as-10k">-</strong><span>{% if page.lang == 'en' %}Estimated 10K{% elsif page.lang == 'ja' %}予想10K{% else %}예상 10km 기록{% endif %}</span></div>
+          </div>
+          <p class="tool-result" id="as-help">{% if page.lang == 'en' %}Enter distance and time to calculate speed and pace.{% elsif page.lang == 'ja' %}距離と時間を入力すると速度とペースを計算します。{% else %}거리와 시간을 입력하면 속도와 페이스를 계산합니다.{% endif %}</p>
+        </div>
       {% when 'average-calculator' %}
         <div class="tool-ui">
           <textarea id="avg-input" rows="6" placeholder="{% if page.lang == 'en' %}Enter numbers separated by commas, spaces, or line breaks{% elsif page.lang == 'ja' %}数値をカンマ・空白・改行で区切って入力{% else %}숫자를 쉼표·공백·줄바꿈으로 입력하세요{% endif %}"></textarea>
