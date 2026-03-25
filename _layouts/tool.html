@@ -1475,6 +1475,39 @@ layout: default
           </div>
           <p class="tool-result" id="avg-help">{% if page.lang == 'en' %}Enter numbers to calculate average, median, sum, and range instantly.{% elsif page.lang == 'ja' %}数値を入力すると平均・中央値・合計・範囲を即時計算します。{% else %}숫자를 입력하면 평균·중앙값·합계·범위를 즉시 계산합니다.{% endif %}</p>
         </div>
+      {% when 'time-difference-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="td-start">{% if page.lang == 'en' %}Start time{% elsif page.lang == 'ja' %}開始時刻{% else %}시작 시각{% endif %}</label>
+              <input id="td-start" type="time" />
+            </div>
+            <div>
+              <label for="td-end">{% if page.lang == 'en' %}End time{% elsif page.lang == 'ja' %}終了時刻{% else %}종료 시각{% endif %}</label>
+              <input id="td-end" type="time" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="td-break">{% if page.lang == 'en' %}Break minutes{% elsif page.lang == 'ja' %}休憩時間(分){% else %}휴게시간(분){% endif %}</label>
+              <input id="td-break" type="number" min="0" max="1440" step="1" inputmode="numeric" />
+            </div>
+            <div>
+              <label class="tool-check"><input id="td-next-day" type="checkbox" /> {% if page.lang == 'en' %}End time is on the next day{% elsif page.lang == 'ja' %}終了時刻は翌日{% else %}종료 시각이 다음 날{% endif %}</label>
+            </div>
+          </div>
+          <div class="tool-row-grid pct-actions">
+            <button id="td-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="td-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="td-elapsed">-</strong><span>{% if page.lang == 'en' %}Elapsed time{% elsif page.lang == 'ja' %}経過時間{% else %}총 경과시간{% endif %}</span></div>
+            <div><strong id="td-net">-</strong><span>{% if page.lang == 'en' %}Net time{% elsif page.lang == 'ja' %}実作業時間{% else %}순수 시간{% endif %}</span></div>
+            <div><strong id="td-total-min">-</strong><span>{% if page.lang == 'en' %}Total minutes{% elsif page.lang == 'ja' %}総分数{% else %}총 분{% endif %}</span></div>
+            <div><strong id="td-decimal">-</strong><span>{% if page.lang == 'en' %}Decimal hours{% elsif page.lang == 'ja' %}小数時間{% else %}소수 시간{% endif %}</span></div>
+          </div>
+          <p class="tool-result" id="td-help">{% if page.lang == 'en' %}Enter start and end times to calculate the difference instantly.{% elsif page.lang == 'ja' %}開始時刻と終了時刻を入力すると差を即時計算します。{% else %}시작 시각과 종료 시각을 입력하면 시간 차이를 즉시 계산합니다.{% endif %}</p>
+        </div>
       {% when 'fraction-calculator' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">

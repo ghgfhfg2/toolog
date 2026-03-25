@@ -1,3 +1,23 @@
+- id: time-difference-calculator
+  title: 시간 차이 계산기
+  title_en: Time Difference Calculator
+  title_ja: 時間差計算機
+  category: productivity
+  category_label: 일정/생산성
+  category_label_en: Schedule/Productivity
+  category_label_ja: 予定/生産性
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 시작·종료 시각과 휴게시간을 넣으면 경과시간, 총 분, 소수 시간, 순수 시간을 바로 계산해요.
+  description_en: Enter start/end times and break minutes to calculate elapsed time, total minutes, decimal hours, and net time instantly.
+  description_ja: 開始・終了時刻と休憩時間を入力すると、経過時間・総分数・小数時間・実作業時間をすぐ計算します。
+  url: /tools/time-difference-calculator/
+  url_en: /en/tools/time-difference-calculator/
+  url_ja: /ja/tools/time-difference-calculator/
+  thumbnail: /assets/thumbs/time-difference-calculator.svg
+  published_at: 2026-03-25
+
 - id: average-calculator
   title: 평균 계산기
   title_en: Average Calculator

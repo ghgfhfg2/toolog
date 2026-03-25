@@ -6418,5 +6418,152 @@
     render();
   }
 
+  if (slug === 'time-difference-calculator') {
+    const start = document.getElementById('td-start');
+    const end = document.getElementById('td-end');
+    const breakEl = document.getElementById('td-break');
+    const nextDay = document.getElementById('td-next-day');
+    const elapsedEl = document.getElementById('td-elapsed');
+    const netEl = document.getElementById('td-net');
+    const totalMinEl = document.getElementById('td-total-min');
+    const decimalEl = document.getElementById('td-decimal');
+    const help = document.getElementById('td-help');
+    const copyBtn = document.getElementById('td-copy');
+    const resetBtn = document.getElementById('td-reset');
+
+    if (!start || !end || !breakEl || !nextDay || !elapsedEl || !netEl || !totalMinEl || !decimalEl || !help) return;
+
+    const text = {
+      ko: {
+        idle: '시작 시각과 종료 시각을 입력하면 시간 차이를 즉시 계산합니다.',
+        needInput: '시작 시각과 종료 시각을 모두 입력하세요.',
+        summary: (elapsed, net, minutes, decimal) => `총 ${elapsed} · 순수 ${net} · ${minutes} · ${decimal}`,
+        totalMin: '분',
+        decimal: '시간',
+        hour: '시간',
+        minute: '분',
+        copy: (elapsed, net, minutes, decimal) => `시간 차이 계산 결과 | 총 경과시간 ${elapsed} | 순수 시간 ${net} | 총 분 ${minutes} | 소수 시간 ${decimal}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        idle: 'Enter start and end times to calculate the difference instantly.',
+        needInput: 'Enter both start time and end time.',
+        summary: (elapsed, net, minutes, decimal) => `Elapsed ${elapsed} · Net ${net} · ${minutes} · ${decimal}`,
+        totalMin: 'min',
+        decimal: 'hours',
+        hour: 'h',
+        minute: 'm',
+        copy: (elapsed, net, minutes, decimal) => `Time difference result | Elapsed ${elapsed} | Net ${net} | Total minutes ${minutes} | Decimal hours ${decimal}`,
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        idle: '開始時刻と終了時刻を入力すると差を即時計算します。',
+        needInput: '開始時刻と終了時刻をどちらも入力してください。',
+        summary: (elapsed, net, minutes, decimal) => `経過 ${elapsed} · 実作業 ${net} · ${minutes} · ${decimal}`,
+        totalMin: '分',
+        decimal: '時間',
+        hour: '時間',
+        minute: '分',
+        copy: (elapsed, net, minutes, decimal) => `時間差計算結果 | 経過時間 ${elapsed} | 実作業時間 ${net} | 総分数 ${minutes} | 小数時間 ${decimal}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    }[pageLang] || {
+      idle: '시작 시각과 종료 시각을 입력하면 시간 차이를 즉시 계산합니다.',
+      needInput: '시작 시각과 종료 시각을 모두 입력하세요.',
+      summary: (elapsed, net, minutes, decimal) => `총 ${elapsed} · 순수 ${net} · ${minutes} · ${decimal}`,
+      totalMin: '분',
+      decimal: '시간',
+      hour: '시간',
+      minute: '분',
+      copy: (elapsed, net, minutes, decimal) => `시간 차이 계산 결과 | 총 경과시간 ${elapsed} | 순수 시간 ${net} | 총 분 ${minutes} | 소수 시간 ${decimal}`,
+      copied: '복사됨',
+      copyDefault: '결과 복사'
+    };
+
+    const toMinutes = (value) => {
+      if (!value || !value.includes(':')) return null;
+      const [h, m] = value.split(':').map(Number);
+      if (!Number.isFinite(h) || !Number.isFinite(m)) return null;
+      return (h * 60) + m;
+    };
+
+    const formatDuration = (minutes) => {
+      const total = Math.max(0, Math.round(minutes));
+      const h = Math.floor(total / 60);
+      const m = total % 60;
+      return `${h}${text.hour} ${m}${text.minute}`;
+    };
+
+    const copyText = async (value) => {
+      try { await navigator.clipboard.writeText(value); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = value;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const setIdle = (msg) => {
+      elapsedEl.textContent = '-';
+      netEl.textContent = '-';
+      totalMinEl.textContent = '-';
+      decimalEl.textContent = '-';
+      help.textContent = msg;
+    };
+
+    const render = () => {
+      const s = toMinutes(start.value);
+      const e = toMinutes(end.value);
+      const breakMinutes = Math.max(0, Math.min(1440, Number(breakEl.value || 0)));
+      if (Number(breakEl.value || 0) !== breakMinutes) breakEl.value = breakMinutes;
+
+      if (s === null || e === null) {
+        setIdle(text.needInput);
+        return;
+      }
+
+      let diff = e - s;
+      if (nextDay.checked && diff <= 0) diff += 1440;
+      else if (!nextDay.checked && diff < 0) diff = 0;
+
+      const net = Math.max(0, diff - breakMinutes);
+      elapsedEl.textContent = formatDuration(diff);
+      netEl.textContent = formatDuration(net);
+      totalMinEl.textContent = `${diff.toLocaleString(numberLocale)} ${text.totalMin}`;
+      decimalEl.textContent = `${(diff / 60).toLocaleString(numberLocale, { maximumFractionDigits: 2 })} ${text.decimal}`;
+      help.textContent = text.summary(elapsedEl.textContent, netEl.textContent, totalMinEl.textContent, decimalEl.textContent);
+    };
+
+    [start, end, breakEl, nextDay].forEach((el) => el?.addEventListener('input', render));
+
+    resetBtn?.addEventListener('click', () => {
+      start.value = '09:00';
+      end.value = '18:30';
+      breakEl.value = 60;
+      nextDay.checked = false;
+      render();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (elapsedEl.textContent === '-') return;
+      await copyText(text.copy(elapsedEl.textContent, netEl.textContent, totalMinEl.textContent, decimalEl.textContent));
+      const old = copyBtn.textContent;
+      copyBtn.textContent = text.copied;
+      setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+    });
+
+    if (!start.value) start.value = '09:00';
+    if (!end.value) end.value = '18:30';
+    if (!breakEl.value) breakEl.value = 0;
+    render();
+  }
 
 })();
