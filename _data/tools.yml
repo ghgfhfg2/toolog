@@ -1,3 +1,23 @@
+- id: unit-price-calculator
+  title: 단가 계산기
+  title_en: Unit Price Calculator
+  title_ja: 単価計算ツール
+  category: calculator
+  category_label: 쇼핑/비교
+  category_label_en: Shopping/Comparison
+  category_label_ja: ショッピング/比較
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 총 가격과 수량을 기준으로 1개당·100g당·1L당 가격을 계산하고 두 상품의 가성비를 비교해요.
+  description_en: Compare value by price per item, per 100g, and per liter from total price and quantity.
+  description_ja: 総価格と数量から1個あたり・100gあたり・1Lあたりの単価を計算し、2商品のコスパを比較します。
+  url: /tools/unit-price-calculator/
+  url_en: /en/tools/unit-price-calculator/
+  url_ja: /ja/tools/unit-price-calculator/
+  thumbnail: /assets/thumbs/unit-price-calculator.svg
+  published_at: 2026-03-26
+
 - id: time-difference-calculator
   title: 시간 차이 계산기
   title_en: Time Difference Calculator

@@ -6566,4 +6566,205 @@
     render();
   }
 
+  if (slug === 'unit-price-calculator') {
+    const mode = document.getElementById('up-mode');
+    const unit = document.getElementById('up-unit');
+    const priceA = document.getElementById('up-price-a');
+    const qtyA = document.getElementById('up-qty-a');
+    const priceB = document.getElementById('up-price-b');
+    const qtyB = document.getElementById('up-qty-b');
+    const unitAEl = document.getElementById('up-unit-a');
+    const unitBEl = document.getElementById('up-unit-b');
+    const compareEl = document.getElementById('up-compare');
+    const savingsEl = document.getElementById('up-savings');
+    const subAEl = document.getElementById('up-sub-a');
+    const subBEl = document.getElementById('up-sub-b');
+    const help = document.getElementById('up-help');
+    const copyBtn = document.getElementById('up-copy');
+    const resetBtn = document.getElementById('up-reset');
+
+    if (!mode || !unit || !priceA || !qtyA || !priceB || !qtyB || !unitAEl || !unitBEl || !compareEl || !savingsEl || !subAEl || !subBEl || !help) return;
+
+    const text = {
+      ko: {
+        need: '가격과 수량을 입력하면 단가가 계산됩니다.',
+        invalid: '수량은 0보다 커야 합니다.',
+        same: '거의 동일',
+        aCheaper: '상품 A가 더 저렴',
+        bCheaper: '상품 B가 더 저렴',
+        save: (money, pct) => `${money} 절약 · 약 ${pct}% 차이`,
+        onlyA: '상품 A 단가만 계산했습니다.',
+        onlyB: '상품 B 단가만 계산했습니다.',
+        compare: (label, money, pct) => `${label} · 기준 단가 차이 ${money} (${pct}%)`,
+        perItem: '1개당',
+        per100g: '100g당',
+        per1kg: '1kg당',
+        per100ml: '100ml당',
+        per1l: '1L당',
+        copyDefault: '결과 복사',
+        copied: '복사됨',
+        copy: (a,b,c,d,sa,sb) => `단가 계산 결과 | A ${a} | B ${b} | 비교 ${c} | 절감 ${d} | A 보조 ${sa} | B 보조 ${sb}`
+      },
+      en: {
+        need: 'Enter price and quantity to calculate unit price.',
+        invalid: 'Quantity must be greater than 0.',
+        same: 'Almost the same',
+        aCheaper: 'Product A is cheaper',
+        bCheaper: 'Product B is cheaper',
+        save: (money, pct) => `Save ${money} · about ${pct}% difference`,
+        onlyA: 'Calculated only product A unit price.',
+        onlyB: 'Calculated only product B unit price.',
+        compare: (label, money, pct) => `${label} · unit price gap ${money} (${pct}%)`,
+        perItem: 'Per item',
+        per100g: 'Per 100g',
+        per1kg: 'Per 1kg',
+        per100ml: 'Per 100ml',
+        per1l: 'Per 1L',
+        copyDefault: 'Copy result',
+        copied: 'Copied',
+        copy: (a,b,c,d,sa,sb) => `Unit price result | A ${a} | B ${b} | Compare ${c} | Savings ${d} | A extra ${sa} | B extra ${sb}`
+      },
+      ja: {
+        need: '価格と数量を入力すると単価を計算できます。',
+        invalid: '数量は0より大きい必要があります。',
+        same: 'ほぼ同じ',
+        aCheaper: '商品Aが安い',
+        bCheaper: '商品Bが安い',
+        save: (money, pct) => `${money} 節約・約${pct}%差`,
+        onlyA: '商品Aの単価のみ計算しました。',
+        onlyB: '商品Bの単価のみ計算しました。',
+        compare: (label, money, pct) => `${label} ・単価差 ${money}（${pct}%）`,
+        perItem: '1個あたり',
+        per100g: '100gあたり',
+        per1kg: '1kgあたり',
+        per100ml: '100mlあたり',
+        per1l: '1Lあたり',
+        copyDefault: '結果をコピー',
+        copied: 'コピー完了',
+        copy: (a,b,c,d,sa,sb) => `単価計算結果 | A ${a} | B ${b} | 比較 ${c} | 節約 ${d} | A補助 ${sa} | B補助 ${sb}`
+      }
+    }[pageLang] || { need: '가격과 수량을 입력하면 단가가 계산됩니다.', invalid: '수량은 0보다 커야 합니다.', same: '거의 동일', aCheaper: '상품 A가 더 저렴', bCheaper: '상품 B가 더 저렴', save: (money, pct) => `${money} 절약 · 약 ${pct}% 차이`, onlyA: '상품 A 단가만 계산했습니다.', onlyB: '상품 B 단가만 계산했습니다.', compare: (label, money, pct) => `${label} · 기준 단가 차이 ${money} (${pct}%)`, perItem: '1개당', per100g: '100g당', per1kg: '1kg당', per100ml: '100ml당', per1l: '1L당', copyDefault: '결과 복사', copied: '복사됨', copy: (a,b,c,d,sa,sb) => `단가 계산 결과 | A ${a} | B ${b} | 비교 ${c} | 절감 ${d} | A 보조 ${sa} | B 보조 ${sb}` };
+
+    const fmtMoney = (v) => `${Math.round(v || 0).toLocaleString(numberLocale)}${pageLang === 'en' ? ' KRW' : (pageLang === 'ja' ? 'ウォン' : '원')}`;
+    const q = (el) => { const n = Number(el?.value || 0); return Number.isFinite(n) ? n : 0; };
+    const copyText = async (textValue) => {
+      try { await navigator.clipboard.writeText(textValue); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = textValue; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const syncUnits = () => {
+      const m = mode.value || 'count';
+      if (m === 'count') unit.value = 'count';
+      if (m === 'weight' && !['g','kg'].includes(unit.value)) unit.value = 'g';
+      if (m === 'volume' && !['ml','l'].includes(unit.value)) unit.value = 'ml';
+      Array.from(unit.options).forEach((opt) => {
+        const allowed = m === 'count' ? ['count'] : (m === 'weight' ? ['g','kg'] : ['ml','l']);
+        opt.hidden = !allowed.includes(opt.value);
+      });
+    };
+
+    const perBase = (price, qtyValue, unitValue) => {
+      if (!(qtyValue > 0)) return null;
+      let baseQty = qtyValue;
+      if (unitValue === 'kg' || unitValue === 'l') baseQty = qtyValue * 1000;
+      return price / baseQty;
+    };
+
+    const subLabel = (unitValue) => {
+      if (unitValue === 'count') return text.perItem;
+      if (unitValue === 'g') return text.per100g;
+      if (unitValue === 'kg') return text.per1kg;
+      if (unitValue === 'ml') return text.per100ml;
+      return text.per1l;
+    };
+
+    const subValue = (baseUnitPrice, unitValue) => {
+      if (baseUnitPrice == null) return '-';
+      if (unitValue === 'count') return `${text.perItem} ${fmtMoney(baseUnitPrice)}`;
+      if (unitValue === 'g') return `${text.per100g} ${fmtMoney(baseUnitPrice * 100)} · ${text.per1kg} ${fmtMoney(baseUnitPrice * 1000)}`;
+      if (unitValue === 'kg') return `${text.per1kg} ${fmtMoney(baseUnitPrice * 1000)}`;
+      if (unitValue === 'ml') return `${text.per100ml} ${fmtMoney(baseUnitPrice * 100)} · ${text.per1l} ${fmtMoney(baseUnitPrice * 1000)}`;
+      return `${text.per1l} ${fmtMoney(baseUnitPrice * 1000)}`;
+    };
+
+    const render = () => {
+      syncUnits();
+      const pa = Math.max(0, q(priceA));
+      const qa = Math.max(0, q(qtyA));
+      const pb = Math.max(0, q(priceB));
+      const qb = Math.max(0, q(qtyB));
+      const uv = unit.value || 'count';
+
+      const ua = perBase(pa, qa, uv);
+      const ub = perBase(pb, qb, uv);
+
+      unitAEl.textContent = ua == null ? '-' : `${subLabel(uv)} ${fmtMoney(uv === 'count' ? ua : (['g','ml'].includes(uv) ? ua * 100 : ua * 1000))}`;
+      unitBEl.textContent = ub == null ? '-' : `${subLabel(uv)} ${fmtMoney(uv === 'count' ? ub : (['g','ml'].includes(uv) ? ub * 100 : ub * 1000))}`;
+      subAEl.textContent = subValue(ua, uv);
+      subBEl.textContent = subValue(ub, uv);
+
+      if (ua == null && ub == null) {
+        compareEl.textContent = '-';
+        savingsEl.textContent = '-';
+        help.textContent = text.need;
+        return;
+      }
+      if ((qa <= 0 && pa > 0) || (qb <= 0 && pb > 0)) {
+        help.textContent = text.invalid;
+      }
+      if (ua != null && ub == null) {
+        compareEl.textContent = 'A';
+        savingsEl.textContent = '-';
+        help.textContent = text.onlyA;
+        return;
+      }
+      if (ua == null && ub != null) {
+        compareEl.textContent = 'B';
+        savingsEl.textContent = '-';
+        help.textContent = text.onlyB;
+        return;
+      }
+
+      const diff = Math.abs(ua - ub);
+      const cheaper = ua < ub ? 'A' : (ub < ua ? 'B' : 'same');
+      const pct = Math.max(0, ((diff / Math.max(ua, ub)) * 100));
+      if (cheaper === 'same' || diff < 1e-9) {
+        compareEl.textContent = text.same;
+        savingsEl.textContent = text.save(fmtMoney(0), '0');
+        help.textContent = text.compare(text.same, fmtMoney(0), '0');
+      } else if (cheaper === 'A') {
+        compareEl.textContent = text.aCheaper;
+        savingsEl.textContent = text.save(fmtMoney(uv === 'count' ? diff : diff * (['g','ml'].includes(uv) ? 100 : 1000)), pct.toLocaleString(numberLocale, { maximumFractionDigits: 2 }));
+        help.textContent = text.compare(text.aCheaper, fmtMoney(uv === 'count' ? diff : diff * (['g','ml'].includes(uv) ? 100 : 1000)), pct.toLocaleString(numberLocale, { maximumFractionDigits: 2 }));
+      } else {
+        compareEl.textContent = text.bCheaper;
+        savingsEl.textContent = text.save(fmtMoney(uv === 'count' ? diff : diff * (['g','ml'].includes(uv) ? 100 : 1000)), pct.toLocaleString(numberLocale, { maximumFractionDigits: 2 }));
+        help.textContent = text.compare(text.bCheaper, fmtMoney(uv === 'count' ? diff : diff * (['g','ml'].includes(uv) ? 100 : 1000)), pct.toLocaleString(numberLocale, { maximumFractionDigits: 2 }));
+      }
+    };
+
+    [mode, unit, priceA, qtyA, priceB, qtyB].forEach((el) => el?.addEventListener('input', render));
+    copyBtn?.addEventListener('click', async () => {
+      const payload = text.copy(unitAEl.textContent, unitBEl.textContent, compareEl.textContent, savingsEl.textContent, subAEl.textContent, subBEl.textContent);
+      await copyText(payload);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = text.copied;
+      setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+    });
+    resetBtn?.addEventListener('click', () => {
+      mode.value = 'count'; unit.value = 'count';
+      priceA.value = 5980; qtyA.value = 4; priceB.value = 8400; qtyB.value = 6;
+      render();
+    });
+    if (!priceA.value) priceA.value = 5980;
+    if (!qtyA.value) qtyA.value = 4;
+    if (!priceB.value) priceB.value = 8400;
+    if (!qtyB.value) qtyB.value = 6;
+    render();
+  }
+
 })();

@@ -1551,6 +1551,67 @@ layout: default
           </div>
           <p class="tool-result" id="frac-help">{% if page.lang == 'en' %}Enter two fractions to add, subtract, multiply, or divide them instantly.{% elsif page.lang == 'ja' %}2つの分数を入力すると、加減乗除と約分結果をすぐ確認できます。{% else %}분수 2개를 입력하면 사칙연산과 약분 결과를 바로 확인할 수 있습니다.{% endif %}</p>
         </div>
+      {% when 'unit-price-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row">
+            <label for="up-mode">{% if page.lang == 'en' %}Comparison basis{% elsif page.lang == 'ja' %}比較基準{% else %}비교 기준{% endif %}</label>
+            <select id="up-mode">
+              <option value="count">{% if page.lang == 'en' %}Count / items{% elsif page.lang == 'ja' %}個数基準{% else %}개수 기준{% endif %}</option>
+              <option value="weight">{% if page.lang == 'en' %}Weight (g / kg){% elsif page.lang == 'ja' %}重さ (g / kg){% else %}무게 기준(g/kg){% endif %}</option>
+              <option value="volume">{% if page.lang == 'en' %}Volume (ml / L){% elsif page.lang == 'ja' %}容量 (ml / L){% else %}용량 기준(ml/L){% endif %}</option>
+            </select>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="up-price-a">{% if page.lang == 'en' %}Product A price{% elsif page.lang == 'ja' %}商品Aの価格{% else %}상품 A 가격(원){% endif %}</label>
+              <input id="up-price-a" type="number" min="0" step="1" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="up-qty-a">{% if page.lang == 'en' %}Product A quantity{% elsif page.lang == 'ja' %}商品Aの数量{% else %}상품 A 수량{% endif %}</label>
+              <input id="up-qty-a" type="number" min="0" step="0.01" inputmode="decimal" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="up-price-b">{% if page.lang == 'en' %}Product B price{% elsif page.lang == 'ja' %}商品Bの価格{% else %}상품 B 가격(원){% endif %}</label>
+              <input id="up-price-b" type="number" min="0" step="1" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="up-qty-b">{% if page.lang == 'en' %}Product B quantity{% elsif page.lang == 'ja' %}商品Bの数量{% else %}상품 B 수량{% endif %}</label>
+              <input id="up-qty-b" type="number" min="0" step="0.01" inputmode="decimal" />
+            </div>
+          </div>
+
+          <div class="tool-row">
+            <label for="up-unit">{% if page.lang == 'en' %}Quantity unit{% elsif page.lang == 'ja' %}数量単位{% else %}수량 단위{% endif %}</label>
+            <select id="up-unit">
+              <option value="count">{% if page.lang == 'en' %}items{% elsif page.lang == 'ja' %}個{% else %}개{% endif %}</option>
+              <option value="g">g</option>
+              <option value="kg">kg</option>
+              <option value="ml">ml</option>
+              <option value="l">L</option>
+            </select>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="up-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="up-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="up-unit-a">-</strong><span>{% if page.lang == 'en' %}Product A unit price{% elsif page.lang == 'ja' %}商品Aの単価{% else %}상품 A 단가{% endif %}</span></div>
+            <div><strong id="up-unit-b">-</strong><span>{% if page.lang == 'en' %}Product B unit price{% elsif page.lang == 'ja' %}商品Bの単価{% else %}상품 B 단가{% endif %}</span></div>
+            <div><strong id="up-compare">-</strong><span>{% if page.lang == 'en' %}Cheaper option{% elsif page.lang == 'ja' %}より安い商品{% else %}더 저렴한 상품{% endif %}</span></div>
+            <div><strong id="up-savings">-</strong><span>{% if page.lang == 'en' %}Savings vs other{% elsif page.lang == 'ja' %}節約効果{% else %}절감 효과{% endif %}</span></div>
+            <div><strong id="up-sub-a">-</strong><span>{% if page.lang == 'en' %}Product A extra unit view{% elsif page.lang == 'ja' %}商品A 補助換算{% else %}상품 A 보조 환산{% endif %}</span></div>
+            <div><strong id="up-sub-b">-</strong><span>{% if page.lang == 'en' %}Product B extra unit view{% elsif page.lang == 'ja' %}商品B 補助換算{% else %}상품 B 보조 환산{% endif %}</span></div>
+          </div>
+
+          <p class="tool-result" id="up-help">{% if page.lang == 'en' %}Enter total price and quantity to compare unit prices.{% elsif page.lang == 'ja' %}総価格と数量を入力すると単価を比較できます。{% else %}총 가격과 수량을 입력하면 단가를 비교할 수 있습니다.{% endif %}</p>
+        </div>
+
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
     {% endcase %}
