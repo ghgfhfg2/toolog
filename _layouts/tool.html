@@ -1551,6 +1551,45 @@ layout: default
           </div>
           <p class="tool-result" id="frac-help">{% if page.lang == 'en' %}Enter two fractions to add, subtract, multiply, or divide them instantly.{% elsif page.lang == 'ja' %}2つの分数を入力すると、加減乗除と約分結果をすぐ確認できます。{% else %}분수 2개를 입력하면 사칙연산과 약분 결과를 바로 확인할 수 있습니다.{% endif %}</p>
         </div>
+      {% when 'electricity-cost-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="ec-power">{% if page.lang == 'en' %}Power consumption (W){% elsif page.lang == 'ja' %}消費電力(W){% else %}소비전력(W){% endif %}</label>
+              <input id="ec-power" type="number" min="0" step="1" inputmode="numeric" placeholder="1500" />
+            </div>
+            <div>
+              <label for="ec-hours">{% if page.lang == 'en' %}Hours per day{% elsif page.lang == 'ja' %}1日の使用時間{% else %}하루 사용시간{% endif %}</label>
+              <input id="ec-hours" type="number" min="0" step="0.1" inputmode="decimal" placeholder="4" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="ec-days">{% if page.lang == 'en' %}Days per month{% elsif page.lang == 'ja' %}月の使用日数{% else %}한 달 사용일수{% endif %}</label>
+              <input id="ec-days" type="number" min="0" step="1" inputmode="numeric" placeholder="30" />
+            </div>
+            <div>
+              <label for="ec-rate">{% if page.lang == 'en' %}Price per kWh{% elsif page.lang == 'ja' %}1kWhあたり単価{% else %}전기단가(1kWh당){% endif %}</label>
+              <input id="ec-rate" type="number" min="0" step="0.1" inputmode="decimal" placeholder="150" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="ec-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="ec-reset" type="button">{% if page.lang == 'en' %}Fill sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시값 채우기{% endif %}</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="ec-daily-kwh">-</strong><span>{% if page.lang == 'en' %}Daily usage{% elsif page.lang == 'ja' %}1日の使用量{% else %}하루 사용량{% endif %}</span></div>
+            <div><strong id="ec-monthly-kwh">-</strong><span>{% if page.lang == 'en' %}Monthly usage{% elsif page.lang == 'ja' %}月間使用量{% else %}월 사용량{% endif %}</span></div>
+            <div><strong id="ec-monthly-cost">-</strong><span>{% if page.lang == 'en' %}Monthly cost{% elsif page.lang == 'ja' %}月額料金{% else %}예상 월 요금{% endif %}</span></div>
+            <div><strong id="ec-yearly-cost">-</strong><span>{% if page.lang == 'en' %}Yearly cost{% elsif page.lang == 'ja' %}年額料金{% else %}예상 연 요금{% endif %}</span></div>
+          </div>
+
+          <p class="tool-result" id="ec-help">{% if page.lang == 'en' %}Enter power, time, days, and price per kWh to estimate electricity cost.{% elsif page.lang == 'ja' %}消費電力・時間・日数・単価を入力すると電気料金を試算します。{% else %}소비전력·사용시간·사용일수·전기단가를 입력하면 예상 전기요금을 계산합니다.{% endif %}</p>
+        </div>
+
       {% when 'unit-price-calculator' %}
         <div class="tool-ui">
           <div class="tool-row">

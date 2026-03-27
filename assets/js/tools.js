@@ -6767,4 +6767,123 @@
     render();
   }
 
+
+  if (slug === 'electricity-cost-calculator') {
+    const power = document.getElementById('ec-power');
+    const hours = document.getElementById('ec-hours');
+    const days = document.getElementById('ec-days');
+    const rate = document.getElementById('ec-rate');
+    const dailyKwh = document.getElementById('ec-daily-kwh');
+    const monthlyKwh = document.getElementById('ec-monthly-kwh');
+    const monthlyCost = document.getElementById('ec-monthly-cost');
+    const yearlyCost = document.getElementById('ec-yearly-cost');
+    const help = document.getElementById('ec-help');
+    const copyBtn = document.getElementById('ec-copy');
+    const resetBtn = document.getElementById('ec-reset');
+
+    if (!power || !hours || !days || !rate || !dailyKwh || !monthlyKwh || !monthlyCost || !yearlyCost || !help) return;
+
+    const i18n = {
+      ko: {
+        currency: '원',
+        idle: '소비전력·사용시간·사용일수·전기단가를 입력하면 예상 전기요금을 계산합니다.',
+        needInput: '소비전력, 사용시간, 사용일수, 전기단가를 모두 입력하세요.',
+        summary: (m, y) => `예상 월 요금은 ${m}, 연간으로는 약 ${y}입니다. 실제 청구요금은 누진제/기본요금 등에 따라 달라질 수 있습니다.`,
+        copy: (d, m, mc, yc) => `전기요금 계산 결과 | 하루 사용량 ${d} | 월 사용량 ${m} | 예상 월 요금 ${mc} | 예상 연 요금 ${yc}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        currency: ' KRW',
+        idle: 'Enter power, hours, days, and price per kWh to estimate electricity cost.',
+        needInput: 'Enter wattage, hours, days, and price per kWh.',
+        summary: (m, y) => `Estimated monthly cost is ${m}, and yearly cost is about ${y}. Actual bills can differ because of taxes, base fees, or tiered pricing.`,
+        copy: (d, m, mc, yc) => `Electricity cost result | Daily usage ${d} | Monthly usage ${m} | Monthly cost ${mc} | Yearly cost ${yc}`,
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        currency: 'ウォン',
+        idle: '消費電力・使用時間・使用日数・単価を入力すると電気料金を試算します。',
+        needInput: '消費電力、使用時間、使用日数、電気単価を入力してください。',
+        summary: (m, y) => `予想月額料金は ${m}、年間では約 ${y} です。実際の請求額は基本料金や段階料金などで変わる場合があります。`,
+        copy: (d, m, mc, yc) => `電気料金計算結果 | 1日の使用量 ${d} | 月間使用量 ${m} | 予想月額料金 ${mc} | 予想年額料金 ${yc}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    };
+    const t = i18n[pageLang] || i18n.ko;
+
+    const fmtCurrency = (v) => {
+      const rounded = Math.round(v || 0).toLocaleString(numberLocale);
+      if (pageLang === 'en') return `${rounded}${t.currency}`;
+      return `${rounded}${t.currency}`;
+    };
+    const fmtKwh = (v) => `${Number(v || 0).toLocaleString(numberLocale, { maximumFractionDigits: 2 })} kWh`;
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const setIdle = (msg) => {
+      dailyKwh.textContent = '-';
+      monthlyKwh.textContent = '-';
+      monthlyCost.textContent = '-';
+      yearlyCost.textContent = '-';
+      help.textContent = msg;
+    };
+
+    const render = () => {
+      const p = Math.max(0, Number(power.value || 0));
+      const h = Math.max(0, Number(hours.value || 0));
+      const d = Math.max(0, Number(days.value || 0));
+      const r = Math.max(0, Number(rate.value || 0));
+
+      if (!(p > 0) || !(h > 0) || !(d > 0) || !(r > 0)) {
+        setIdle(t.needInput);
+        return;
+      }
+
+      const daily = (p / 1000) * h;
+      const monthly = daily * d;
+      const monthlyFee = monthly * r;
+      const yearlyFee = monthlyFee * 12;
+
+      dailyKwh.textContent = fmtKwh(daily);
+      monthlyKwh.textContent = fmtKwh(monthly);
+      monthlyCost.textContent = fmtCurrency(monthlyFee);
+      yearlyCost.textContent = fmtCurrency(yearlyFee);
+      help.textContent = t.summary(fmtCurrency(monthlyFee), fmtCurrency(yearlyFee));
+    };
+
+    [power, hours, days, rate].forEach((el) => el?.addEventListener('input', render));
+
+    copyBtn?.addEventListener('click', async () => {
+      if (monthlyCost.textContent === '-') return;
+      await copyText(t.copy(dailyKwh.textContent, monthlyKwh.textContent, monthlyCost.textContent, yearlyCost.textContent));
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      power.value = 1500;
+      hours.value = 4;
+      days.value = 30;
+      rate.value = 150;
+      render();
+    });
+
+    if (!power.value) power.value = 1500;
+    if (!hours.value) hours.value = 4;
+    if (!days.value) days.value = 30;
+    if (!rate.value) rate.value = 150;
+    render();
+  }
+
 })();

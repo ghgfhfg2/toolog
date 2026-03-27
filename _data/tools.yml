@@ -881,3 +881,22 @@
   thumbnail: /assets/thumbs/average-speed-calculator.svg
   published_at: 2026-03-24
 
+- id: electricity-cost-calculator
+  title: 전기요금 계산기
+  title_en: Electricity Cost Calculator
+  title_ja: 電気料金計算機
+  category: calculator
+  category_label: 생활/요금
+  category_label_en: Lifestyle/Fees
+  category_label_ja: 生活/料金
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 소비전력·사용시간·사용일수·전기단가로 하루/월/연 예상 전기요금을 계산해요.
+  description_en: Estimate daily, monthly, and yearly electricity cost from wattage, usage hours, days, and price per kWh.
+  description_ja: 消費電力・使用時間・使用日数・電気単価から、1日/1か月/1年の電気料金を見積もります。
+  url: /tools/electricity-cost-calculator/
+  url_en: /en/tools/electricity-cost-calculator/
+  url_ja: /ja/tools/electricity-cost-calculator/
+  thumbnail: /assets/thumbs/electricity-cost-calculator.svg
+  published_at: 2026-03-27

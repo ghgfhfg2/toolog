@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Electricity Cost Calculator</title>
+  <desc id="desc">Thumbnail for an electricity cost calculator web tool</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <g transform="translate(74 76)">
+    <rect width="1052" height="478" rx="28" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.18)"/>
+    <text x="56" y="92" fill="#93c5fd" font-size="28" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">TOOLOG CALCULATOR</text>
+    <text x="56" y="176" fill="#ffffff" font-size="64" font-weight="700" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">Electricity Cost Calculator</text>
+    <text x="56" y="228" fill="#dbeafe" font-size="28" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">Estimate energy cost from wattage, runtime, and price per kWh</text>
+    <g transform="translate(56 286)">
+      <rect width="470" height="160" rx="22" fill="#eff6ff"/>
+      <text x="34" y="54" fill="#1e3a8a" font-size="26" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">Monthly usage</text>
+      <text x="34" y="116" fill="#111827" font-size="62" font-weight="700" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">180 kWh</text>
+    </g>
+    <g transform="translate(562 286)">
+      <rect width="434" height="160" rx="22" fill="#111827"/>
+      <text x="34" y="54" fill="#93c5fd" font-size="26" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">Estimated monthly cost</text>
+      <text x="34" y="116" fill="#ffffff" font-size="62" font-weight="700" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">27,000 KRW</text>
+    </g>
+  </g>
+</svg>

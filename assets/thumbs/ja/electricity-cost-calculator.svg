@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">電気料金計算機</title>
+  <desc id="desc">消費電力と使用時間から電気料金を計算するツールのサムネイル</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <g transform="translate(74 76)">
+    <rect width="1052" height="478" rx="28" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.18)"/>
+    <text x="56" y="92" fill="#93c5fd" font-size="28" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">TOOLOG CALCULATOR</text>
+    <text x="56" y="176" fill="#ffffff" font-size="64" font-weight="700" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">電気料金計算機</text>
+    <text x="56" y="228" fill="#dbeafe" font-size="28" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">消費電力・使用時間・kWh単価から電気料金を試算</text>
+    <g transform="translate(56 286)">
+      <rect width="470" height="160" rx="22" fill="#eff6ff"/>
+      <text x="34" y="54" fill="#1e3a8a" font-size="26" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">月間使用量</text>
+      <text x="34" y="116" fill="#111827" font-size="62" font-weight="700" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">180 kWh</text>
+    </g>
+    <g transform="translate(562 286)">
+      <rect width="434" height="160" rx="22" fill="#111827"/>
+      <text x="34" y="54" fill="#93c5fd" font-size="26" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">予想月額料金</text>
+      <text x="34" y="116" fill="#ffffff" font-size="62" font-weight="700" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">27,000ウォン</text>
+    </g>
+  </g>
+</svg>
