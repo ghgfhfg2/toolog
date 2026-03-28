@@ -1,0 +1,29 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#0F172A"/>
+  <rect x="44" y="44" width="1112" height="542" rx="28" fill="#111827" stroke="#334155" stroke-width="2"/>
+  <rect x="92" y="92" width="320" height="446" rx="24" fill="#1E293B"/>
+  <rect x="138" y="136" width="228" height="124" rx="18" fill="#020617" stroke="#475569" stroke-width="2"/>
+  <text x="252" y="186" text-anchor="middle" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="30" font-weight="700">Fuel Economy</text>
+  <text x="252" y="224" text-anchor="middle" fill="#94A3B8" font-family="Arial, sans-serif" font-size="20">km/L · L/100km · Fuel cost</text>
+  <rect x="138" y="292" width="228" height="88" rx="18" fill="#0F172A" stroke="#334155"/>
+  <text x="164" y="327" fill="#94A3B8" font-family="Arial, sans-serif" font-size="18">Distance</text>
+  <text x="164" y="360" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="30" font-weight="700">420 km</text>
+  <rect x="138" y="398" width="228" height="88" rx="18" fill="#0F172A" stroke="#334155"/>
+  <text x="164" y="433" fill="#94A3B8" font-family="Arial, sans-serif" font-size="18">Fuel used</text>
+  <text x="164" y="466" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="30" font-weight="700">28.0 L</text>
+  <rect x="454" y="92" width="610" height="446" rx="24" fill="#020617" stroke="#1E293B" stroke-width="2"/>
+  <text x="502" y="152" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="44" font-weight="700">Fuel Economy</text>
+  <text x="502" y="194" fill="#94A3B8" font-family="Arial, sans-serif" font-size="24">Calculate mileage and driving cost in one view</text>
+  <rect x="502" y="240" width="250" height="118" rx="20" fill="#0F172A" stroke="#334155"/>
+  <text x="532" y="284" fill="#94A3B8" font-family="Arial, sans-serif" font-size="20">km/L</text>
+  <text x="532" y="332" fill="#22C55E" font-family="Arial, sans-serif" font-size="42" font-weight="800">15.00</text>
+  <rect x="782" y="240" width="250" height="118" rx="20" fill="#0F172A" stroke="#334155"/>
+  <text x="812" y="284" fill="#94A3B8" font-family="Arial, sans-serif" font-size="20">L/100km</text>
+  <text x="812" y="332" fill="#60A5FA" font-family="Arial, sans-serif" font-size="42" font-weight="800">6.67</text>
+  <rect x="502" y="386" width="250" height="118" rx="20" fill="#0F172A" stroke="#334155"/>
+  <text x="532" y="430" fill="#94A3B8" font-family="Arial, sans-serif" font-size="20">Total cost</text>
+  <text x="532" y="478" fill="#F59E0B" font-family="Arial, sans-serif" font-size="42" font-weight="800">48,160 KRW</text>
+  <rect x="782" y="386" width="250" height="118" rx="20" fill="#0F172A" stroke="#334155"/>
+  <text x="812" y="430" fill="#94A3B8" font-family="Arial, sans-serif" font-size="20">Cost / km</text>
+  <text x="812" y="478" fill="#F472B6" font-family="Arial, sans-serif" font-size="42" font-weight="800">115 KRW</text>
+</svg>

@@ -1,3 +1,21 @@
+- id: fuel-economy-calculator
+  title: 연비 계산기
+  title_en: Fuel Economy Calculator
+  title_ja: 燃費計算機
+  category: calculator
+  category_label: 자동차/비용
+  category_label_en: Auto/Cost
+  category_label_ja: 自動車/費用
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 주행거리와 주유량으로 km/L 연비를 계산하고, 100km당 연료소비량과 총 주유비, 1km당 연료비까지 함께 확인해요.
+  description_en: Calculate fuel economy in km/L, fuel use per 100km, total fuel cost, and cost per km from distance and fuel volume.
+  description_ja: 走行距離と給油量から km/L 燃費、100kmあたり燃料消費量、総燃料費、1kmあたり燃料費をまとめて計算します。
+  url: /tools/fuel-economy-calculator/
+  thumbnail: /assets/thumbs/fuel-economy-calculator.svg
+  published_at: 2026-03-28
+
 - id: unit-price-calculator
   title: 단가 계산기
   title_en: Unit Price Calculator

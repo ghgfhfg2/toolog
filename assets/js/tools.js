@@ -6566,6 +6566,131 @@
     render();
   }
 
+
+  if (slug === 'fuel-economy-calculator') {
+    const distance = document.getElementById('fe-distance');
+    const fuel = document.getElementById('fe-fuel');
+    const price = document.getElementById('fe-price');
+    const outKml = document.getElementById('fe-kml');
+    const outL100 = document.getElementById('fe-l100');
+    const outTotalCost = document.getElementById('fe-total-cost');
+    const outCostPerKm = document.getElementById('fe-cost-per-km');
+    const help = document.getElementById('fe-help');
+    const copyBtn = document.getElementById('fe-copy');
+    const resetBtn = document.getElementById('fe-reset');
+
+    if (!distance || !fuel || !price || !outKml || !outL100 || !outTotalCost || !outCostPerKm || !help) return;
+
+    const i18n = {
+      ko: {
+        currency: '원',
+        needInput: '주행거리와 주유량을 입력하세요.',
+        invalid: '주행거리와 주유량은 0보다 커야 합니다.',
+        noPrice: '단가를 입력하면 총 주유비와 1km당 연료비도 함께 계산됩니다.',
+        summary: (kml, l100, total, perKm) => `연비 ${kml}, 100km당 ${l100}, 총 주유비 ${total}, 1km당 ${perKm}`,
+        copy: (kml, l100, total, perKm) => `연비 계산 결과 | 연비 ${kml} | 100km당 소비량 ${l100} | 총 주유비 ${total} | 1km당 연료비 ${perKm}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        currency: ' KRW',
+        needInput: 'Enter distance and fuel used.',
+        invalid: 'Distance and fuel used must be greater than 0.',
+        noPrice: 'Enter fuel price to calculate total cost and cost per km as well.',
+        summary: (kml, l100, total, perKm) => `Fuel economy ${kml}, ${l100} per 100km, total fuel cost ${total}, cost per km ${perKm}`,
+        copy: (kml, l100, total, perKm) => `Fuel economy result | ${kml} | ${l100} per 100km | Total fuel cost ${total} | Cost per km ${perKm}`,
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        currency: 'ウォン',
+        needInput: '走行距離と給油量を入力してください。',
+        invalid: '走行距離と給油量は0より大きい値で入力してください。',
+        noPrice: '単価を入力すると、総燃料費と1kmあたり燃料費も計算します。',
+        summary: (kml, l100, total, perKm) => `燃費 ${kml}、100kmあたり ${l100}、総燃料費 ${total}、1kmあたり ${perKm}`,
+        copy: (kml, l100, total, perKm) => `燃費計算結果 | 燃費 ${kml} | 100kmあたり消費量 ${l100} | 総燃料費 ${total} | 1kmあたり燃料費 ${perKm}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    };
+    const t = i18n[pageLang] || i18n.ko;
+    const fmtMoney = (v) => {
+      const rounded = Math.round(v || 0).toLocaleString(numberLocale);
+      return pageLang === 'en' ? `${rounded}${t.currency}` : `${rounded}${t.currency}`;
+    };
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const setIdle = (msg) => {
+      outKml.textContent = '-';
+      outL100.textContent = '-';
+      outTotalCost.textContent = '-';
+      outCostPerKm.textContent = '-';
+      help.textContent = msg;
+    };
+
+    const render = () => {
+      const d = Number(distance.value || 0);
+      const f = Number(fuel.value || 0);
+      const p = Math.max(0, Number(price.value || 0));
+
+      if (!(d > 0) && !(f > 0)) {
+        setIdle(t.needInput);
+        return;
+      }
+      if (!(d > 0) || !(f > 0)) {
+        setIdle(t.invalid);
+        return;
+      }
+
+      const kml = d / f;
+      const l100 = 100 / kml;
+      outKml.textContent = `${kml.toLocaleString(numberLocale, { maximumFractionDigits: 2 })} km/L`;
+      outL100.textContent = `${l100.toLocaleString(numberLocale, { maximumFractionDigits: 2 })} L/100km`;
+
+      if (p > 0) {
+        const total = f * p;
+        const perKm = total / d;
+        outTotalCost.textContent = fmtMoney(total);
+        outCostPerKm.textContent = fmtMoney(perKm);
+        help.textContent = t.summary(outKml.textContent, outL100.textContent, outTotalCost.textContent, outCostPerKm.textContent);
+      } else {
+        outTotalCost.textContent = '-';
+        outCostPerKm.textContent = '-';
+        help.textContent = t.noPrice;
+      }
+    };
+
+    [distance, fuel, price].forEach((el) => el?.addEventListener('input', render));
+
+    copyBtn?.addEventListener('click', async () => {
+      if (outKml.textContent === '-') return;
+      const text = t.copy(outKml.textContent, outL100.textContent, outTotalCost.textContent, outCostPerKm.textContent);
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      distance.value = 420;
+      fuel.value = 28;
+      price.value = 1720;
+      render();
+    });
+
+    if (!distance.value) distance.value = 420;
+    if (!fuel.value) fuel.value = 28;
+    render();
+  }
+
   if (slug === 'unit-price-calculator') {
     const mode = document.getElementById('up-mode');
     const unit = document.getElementById('up-unit');

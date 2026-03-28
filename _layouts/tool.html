@@ -1590,6 +1590,37 @@ layout: default
           <p class="tool-result" id="ec-help">{% if page.lang == 'en' %}Enter power, time, days, and price per kWh to estimate electricity cost.{% elsif page.lang == 'ja' %}消費電力・時間・日数・単価を入力すると電気料金を試算します。{% else %}소비전력·사용시간·사용일수·전기단가를 입력하면 예상 전기요금을 계산합니다.{% endif %}</p>
         </div>
 
+      {% when 'fuel-economy-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="fe-distance">{% if page.lang == 'en' %}Distance (km){% elsif page.lang == 'ja' %}走行距離 (km){% else %}주행거리(km){% endif %}</label>
+              <input id="fe-distance" type="number" min="0" step="0.1" inputmode="decimal" placeholder="420" />
+            </div>
+            <div>
+              <label for="fe-fuel">{% if page.lang == 'en' %}Fuel used (L){% elsif page.lang == 'ja' %}給油量 (L){% else %}주유량(L){% endif %}</label>
+              <input id="fe-fuel" type="number" min="0" step="0.01" inputmode="decimal" placeholder="28" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="fe-price">{% if page.lang == 'en' %}Fuel price per liter (optional){% elsif page.lang == 'ja' %}リッター単価（任意）{% else %}리터당 단가(선택){% endif %}</label>
+              <input id="fe-price" type="number" min="0" step="1" inputmode="numeric" placeholder="1720" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-actions">
+            <button id="fe-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="fe-reset" type="button">{% if page.lang == 'en' %}Fill sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시값 채우기{% endif %}</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="fe-kml">-</strong><span>{% if page.lang == 'en' %}Fuel economy (km/L){% elsif page.lang == 'ja' %}燃費 (km/L){% else %}연비(km/L){% endif %}</span></div>
+            <div><strong id="fe-l100">-</strong><span>{% if page.lang == 'en' %}Fuel use per 100km{% elsif page.lang == 'ja' %}100kmあたり消費量{% else %}100km당 소비량{% endif %}</span></div>
+            <div><strong id="fe-total-cost">-</strong><span>{% if page.lang == 'en' %}Total fuel cost{% elsif page.lang == 'ja' %}総燃料費{% else %}총 주유비{% endif %}</span></div>
+            <div><strong id="fe-cost-per-km">-</strong><span>{% if page.lang == 'en' %}Fuel cost per km{% elsif page.lang == 'ja' %}1kmあたり燃料費{% else %}1km당 연료비{% endif %}</span></div>
+          </div>
+          <p class="tool-result" id="fe-help">{% if page.lang == 'en' %}Enter distance and fuel used to calculate fuel economy instantly.{% elsif page.lang == 'ja' %}走行距離と給油量を入力すると燃費をすぐ計算します。{% else %}주행거리와 주유량을 입력하면 연비를 즉시 계산합니다.{% endif %}</p>
+        </div>
+
       {% when 'unit-price-calculator' %}
         <div class="tool-ui">
           <div class="tool-row">
