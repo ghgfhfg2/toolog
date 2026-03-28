@@ -13,6 +13,8 @@
   description_en: Calculate fuel economy in km/L, fuel use per 100km, total fuel cost, and cost per km from distance and fuel volume.
   description_ja: 走行距離と給油量から km/L 燃費、100kmあたり燃料消費量、総燃料費、1kmあたり燃料費をまとめて計算します。
   url: /tools/fuel-economy-calculator/
+  url_en: /en/tools/fuel-economy-calculator/
+  url_ja: /ja/tools/fuel-economy-calculator/
   thumbnail: /assets/thumbs/fuel-economy-calculator.svg
   published_at: 2026-03-28
 
