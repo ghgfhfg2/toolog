@@ -16,14 +16,14 @@
   <text x="510" y="194" fill="#94A3B8" font-family="Arial, sans-serif" font-size="24">Estimate months, contributions, and interest</text>
   <rect x="510" y="238" width="250" height="118" rx="20" fill="#0F172A" stroke="#334155"/>
   <text x="540" y="282" fill="#94A3B8" font-family="Arial, sans-serif" font-size="20">Required Time</text>
-  <text x="540" y="330" fill="#22C55E" font-family="Arial, sans-serif" font-size="42" font-weight="800">15 months</text>
+  <text x="540" y="330" fill="#22C55E" font-family="Arial, sans-serif" font-size="42" font-weight="800">16 months</text>
   <rect x="790" y="238" width="250" height="118" rx="20" fill="#0F172A" stroke="#334155"/>
   <text x="820" y="282" fill="#94A3B8" font-family="Arial, sans-serif" font-size="20">Period</text>
-  <text x="820" y="330" fill="#60A5FA" font-family="Arial, sans-serif" font-size="42" font-weight="800">1y 3m</text>
+  <text x="820" y="330" fill="#60A5FA" font-family="Arial, sans-serif" font-size="42" font-weight="800">1y 4m</text>
   <rect x="510" y="384" width="250" height="118" rx="20" fill="#0F172A" stroke="#334155"/>
   <text x="540" y="428" fill="#94A3B8" font-family="Arial, sans-serif" font-size="20">Contributions</text>
-  <text x="540" y="476" fill="#F59E0B" font-family="Arial, sans-serif" font-size="34" font-weight="800">7,500,000 KRW</text>
+  <text x="540" y="476" fill="#F59E0B" font-family="Arial, sans-serif" font-size="34" font-weight="800">8,000,000 KRW</text>
   <rect x="790" y="384" width="250" height="118" rx="20" fill="#0F172A" stroke="#334155"/>
   <text x="820" y="428" fill="#94A3B8" font-family="Arial, sans-serif" font-size="20">Interest</text>
-  <text x="820" y="476" fill="#F472B6" font-family="Arial, sans-serif" font-size="34" font-weight="800">about 58,000</text>
+  <text x="820" y="476" fill="#F472B6" font-family="Arial, sans-serif" font-size="34" font-weight="800">about 253,661</text>
 </svg>

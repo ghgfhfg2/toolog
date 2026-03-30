@@ -53,10 +53,10 @@ That makes it useful for quick planning without getting lost in banking details.
 - Monthly savings: 500,000 KRW
 - Annual interest: 3%
 
-→ Required time: **about 15 months**  
-→ Period summary: **1 year 3 months**  
-→ Total contributions: **7,500,000 KRW**  
-→ Estimated interest: **a modest extra boost from compounding**
+→ Required time: **about 16 months**  
+→ Period summary: **1 year 4 months**  
+→ Total contributions: **8,000,000 KRW**  
+→ Estimated interest: **about 253,661 KRW**
 
 ## Good companion tools
 - For full future-value growth: [Compound Interest Calculator]({{ '/en/tools/compound-interest-calculator/' | relative_url }})

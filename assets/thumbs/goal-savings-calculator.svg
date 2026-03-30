@@ -16,14 +16,14 @@
   <text x="510" y="194" fill="#94A3B8" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="24">목표 금액 달성까지 필요한 기간과 예상 이자 계산</text>
   <rect x="510" y="238" width="250" height="118" rx="20" fill="#0F172A" stroke="#334155"/>
   <text x="540" y="282" fill="#94A3B8" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="20">필요 기간</text>
-  <text x="540" y="330" fill="#22C55E" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="42" font-weight="800">15개월</text>
+  <text x="540" y="330" fill="#22C55E" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="42" font-weight="800">16개월</text>
   <rect x="790" y="238" width="250" height="118" rx="20" fill="#0F172A" stroke="#334155"/>
   <text x="820" y="282" fill="#94A3B8" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="20">기간 환산</text>
-  <text x="820" y="330" fill="#60A5FA" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="42" font-weight="800">1년 3개월</text>
+  <text x="820" y="330" fill="#60A5FA" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="42" font-weight="800">1년 4개월</text>
   <rect x="510" y="384" width="250" height="118" rx="20" fill="#0F172A" stroke="#334155"/>
   <text x="540" y="428" fill="#94A3B8" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="20">총 납입액</text>
-  <text x="540" y="476" fill="#F59E0B" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="38" font-weight="800">7,500,000원</text>
+  <text x="540" y="476" fill="#F59E0B" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="38" font-weight="800">8,000,000원</text>
   <rect x="790" y="384" width="250" height="118" rx="20" fill="#0F172A" stroke="#334155"/>
   <text x="820" y="428" fill="#94A3B8" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="20">예상 이자</text>
-  <text x="820" y="476" fill="#F472B6" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="38" font-weight="800">약 58,000원</text>
+  <text x="820" y="476" fill="#F472B6" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="38" font-weight="800">약 253,661원</text>
 </svg>

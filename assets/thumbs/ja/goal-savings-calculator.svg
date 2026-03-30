@@ -16,14 +16,14 @@
   <text x="510" y="194" fill="#94A3B8" font-family="Arial, sans-serif" font-size="24">必要月数・総納入額・想定利息を計算</text>
   <rect x="510" y="238" width="250" height="118" rx="20" fill="#0F172A" stroke="#334155"/>
   <text x="540" y="282" fill="#94A3B8" font-family="Arial, sans-serif" font-size="20">必要期間</text>
-  <text x="540" y="330" fill="#22C55E" font-family="Arial, sans-serif" font-size="42" font-weight="800">15か月</text>
+  <text x="540" y="330" fill="#22C55E" font-family="Arial, sans-serif" font-size="42" font-weight="800">16か月</text>
   <rect x="790" y="238" width="250" height="118" rx="20" fill="#0F172A" stroke="#334155"/>
   <text x="820" y="282" fill="#94A3B8" font-family="Arial, sans-serif" font-size="20">期間換算</text>
-  <text x="820" y="330" fill="#60A5FA" font-family="Arial, sans-serif" font-size="42" font-weight="800">1年3か月</text>
+  <text x="820" y="330" fill="#60A5FA" font-family="Arial, sans-serif" font-size="42" font-weight="800">1年4か月</text>
   <rect x="510" y="384" width="250" height="118" rx="20" fill="#0F172A" stroke="#334155"/>
   <text x="540" y="428" fill="#94A3B8" font-family="Arial, sans-serif" font-size="20">総納入額</text>
-  <text x="540" y="476" fill="#F59E0B" font-family="Arial, sans-serif" font-size="34" font-weight="800">7,500,000ウォン</text>
+  <text x="540" y="476" fill="#F59E0B" font-family="Arial, sans-serif" font-size="34" font-weight="800">8,000,000ウォン</text>
   <rect x="790" y="384" width="250" height="118" rx="20" fill="#0F172A" stroke="#334155"/>
   <text x="820" y="428" fill="#94A3B8" font-family="Arial, sans-serif" font-size="20">想定利息</text>
-  <text x="820" y="476" fill="#F472B6" font-family="Arial, sans-serif" font-size="34" font-weight="800">約58,000</text>
+  <text x="820" y="476" fill="#F472B6" font-family="Arial, sans-serif" font-size="34" font-weight="800">約253,661</text>
 </svg>
