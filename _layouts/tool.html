@@ -1621,6 +1621,41 @@ layout: default
           <p class="tool-result" id="fe-help">{% if page.lang == 'en' %}Enter distance and fuel used to calculate fuel economy instantly.{% elsif page.lang == 'ja' %}走行距離と給油量を入力すると燃費をすぐ計算します。{% else %}주행거리와 주유량을 입력하면 연비를 즉시 계산합니다.{% endif %}</p>
         </div>
 
+      {% when 'goal-savings-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="gs-current">{% if page.lang == 'en' %}Current savings{% elsif page.lang == 'ja' %}現在の貯蓄額{% else %}현재 금액{% endif %}</label>
+              <input id="gs-current" type="number" min="0" step="1" inputmode="numeric" placeholder="2000000" />
+            </div>
+            <div>
+              <label for="gs-target">{% if page.lang == 'en' %}Target amount{% elsif page.lang == 'ja' %}目標金額{% else %}목표 금액{% endif %}</label>
+              <input id="gs-target" type="number" min="0" step="1" inputmode="numeric" placeholder="10000000" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="gs-monthly">{% if page.lang == 'en' %}Monthly savings{% elsif page.lang == 'ja' %}毎月の積立額{% else %}월 저축액{% endif %}</label>
+              <input id="gs-monthly" type="number" min="0" step="1" inputmode="numeric" placeholder="500000" />
+            </div>
+            <div>
+              <label for="gs-rate">{% if page.lang == 'en' %}Annual interest rate (optional){% elsif page.lang == 'ja' %}年利（任意）{% else %}연 이율(선택){% endif %}</label>
+              <input id="gs-rate" type="number" min="0" step="0.01" inputmode="decimal" placeholder="3" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-actions">
+            <button id="gs-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="gs-reset" type="button">{% if page.lang == 'en' %}Fill sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시값 채우기{% endif %}</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="gs-months">-</strong><span>{% if page.lang == 'en' %}Required months{% elsif page.lang == 'ja' %}必要な月数{% else %}필요 개월 수{% endif %}</span></div>
+            <div><strong id="gs-period">-</strong><span>{% if page.lang == 'en' %}Period summary{% elsif page.lang == 'ja' %}期間換算{% else %}기간 환산{% endif %}</span></div>
+            <div><strong id="gs-contrib">-</strong><span>{% if page.lang == 'en' %}Total contributions{% elsif page.lang == 'ja' %}総納入額{% else %}총 납입액{% endif %}</span></div>
+            <div><strong id="gs-interest">-</strong><span>{% if page.lang == 'en' %}Estimated interest{% elsif page.lang == 'ja' %}想定利息{% else %}예상 이자{% endif %}</span></div>
+          </div>
+          <p class="tool-result" id="gs-help">{% if page.lang == 'en' %}Enter current savings, target, and monthly savings to estimate when you'll reach your goal.{% elsif page.lang == 'ja' %}現在の貯蓄額・目標金額・毎月の積立額を入れると、目標到達時期を試算できます。{% else %}현재 금액·목표 금액·월 저축액을 입력하면 목표 달성 시점을 계산합니다.{% endif %}</p>
+        </div>
+
       {% when 'unit-price-calculator' %}
         <div class="tool-ui">
           <div class="tool-row">

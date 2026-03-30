@@ -1,3 +1,23 @@
+- id: goal-savings-calculator
+  title: 목표 저축 기간 계산기
+  title_en: Goal Savings Timeline Calculator
+  title_ja: 目標貯蓄期間計算機
+  category: calculator
+  category_label: 금융/비즈니스
+  category_label_en: Finance/Business
+  category_label_ja: 金融/ビジネス
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 현재 금액, 목표 금액, 월 저축액, 연 이율로 목표 달성까지 필요한 기간과 총 납입액, 예상 이자를 계산해요.
+  description_en: Estimate how many months it takes to reach your savings goal from current savings, monthly contributions, and annual interest.
+  description_ja: 現在の貯蓄額・目標金額・毎月の積立額・年利から、目標達成までの期間、総納入額、想定利息を計算します。
+  url: /tools/goal-savings-calculator/
+  url_en: /en/tools/goal-savings-calculator/
+  url_ja: /ja/tools/goal-savings-calculator/
+  thumbnail: /assets/thumbs/goal-savings-calculator.svg
+  published_at: 2026-03-30
+
 - id: fuel-economy-calculator
   title: 연비 계산기
   title_en: Fuel Economy Calculator

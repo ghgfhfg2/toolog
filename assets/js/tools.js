@@ -6691,6 +6691,166 @@
     render();
   }
 
+  if (slug === 'goal-savings-calculator') {
+    const current = document.getElementById('gs-current');
+    const target = document.getElementById('gs-target');
+    const monthly = document.getElementById('gs-monthly');
+    const rate = document.getElementById('gs-rate');
+    const outMonths = document.getElementById('gs-months');
+    const outPeriod = document.getElementById('gs-period');
+    const outContrib = document.getElementById('gs-contrib');
+    const outInterest = document.getElementById('gs-interest');
+    const help = document.getElementById('gs-help');
+    const copyBtn = document.getElementById('gs-copy');
+    const resetBtn = document.getElementById('gs-reset');
+
+    if (!current || !target || !monthly || !rate || !outMonths || !outPeriod || !outContrib || !outInterest || !help) return;
+
+    const t = {
+      ko: {
+        currency: '원',
+        need: '현재 금액, 목표 금액, 월 저축액을 입력하세요.',
+        invalid: '목표 금액은 현재 금액보다 커야 하고, 월 저축액은 0보다 커야 합니다.',
+        achieved: '이미 목표 금액을 달성한 상태입니다.',
+        impossible: '월 저축액이 0원이면 목표 금액까지 도달할 수 없습니다.',
+        months: '개월',
+        year: '년',
+        month: '개월',
+        summary: (m, p, c, i) => `${m} 동안 모으면 ${p} 뒤 목표 달성이 예상됩니다. 총 납입액 ${c}, 예상 이자 ${i}`,
+        copy: (m, p, c, i) => `목표 저축 기간 계산 결과 | 필요 개월 수 ${m} | 기간 환산 ${p} | 총 납입액 ${c} | 예상 이자 ${i}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        currency: ' KRW',
+        need: 'Enter current savings, target amount, and monthly savings.',
+        invalid: 'Target must be greater than current savings, and monthly savings must be greater than 0.',
+        achieved: 'You have already reached your target amount.',
+        impossible: 'You cannot reach the target if monthly savings is 0.',
+        months: 'months',
+        year: 'yr',
+        month: 'mo',
+        summary: (m, p, c, i) => `You are expected to reach the goal in ${m} (${p}). Total contributions ${c}, estimated interest ${i}.`,
+        copy: (m, p, c, i) => `Goal savings result | Required months ${m} | Period ${p} | Total contributions ${c} | Estimated interest ${i}`,
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        currency: 'ウォン',
+        need: '現在の貯蓄額、目標金額、毎月の積立額を入力してください。',
+        invalid: '目標金額は現在額より大きく、毎月の積立額は0より大きい必要があります。',
+        achieved: 'すでに目標金額を達成しています。',
+        impossible: '毎月の積立額が0だと目標金額に到達できません。',
+        months: 'か月',
+        year: '年',
+        month: 'か月',
+        summary: (m, p, c, i) => `${m} で積み立てると、${p} 後に目標達成見込みです。総納入額 ${c}、想定利息 ${i}。`,
+        copy: (m, p, c, i) => `目標貯蓄期間計算結果 | 必要月数 ${m} | 期間 ${p} | 総納入額 ${c} | 想定利息 ${i}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    }[pageLang] || {};
+
+    const fmtMoney = (v) => `${Math.round(v || 0).toLocaleString(numberLocale)}${t.currency}`;
+    const fmtMonths = (v) => `${Math.round(v || 0).toLocaleString(numberLocale)} ${t.months}`;
+    const periodText = (months) => {
+      const years = Math.floor(months / 12);
+      const rem = months % 12;
+      if (years <= 0) return `${rem.toLocaleString(numberLocale)} ${t.month}`;
+      if (rem <= 0) return `${years.toLocaleString(numberLocale)} ${t.year}`;
+      return `${years.toLocaleString(numberLocale)} ${t.year} ${rem.toLocaleString(numberLocale)} ${t.month}`;
+    };
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const setIdle = (msg) => {
+      outMonths.textContent = '-';
+      outPeriod.textContent = '-';
+      outContrib.textContent = '-';
+      outInterest.textContent = '-';
+      help.textContent = msg;
+    };
+
+    const render = () => {
+      const cur = Math.max(0, Number(current.value || 0));
+      const tgt = Math.max(0, Number(target.value || 0));
+      const mon = Math.max(0, Number(monthly.value || 0));
+      const annualRate = Math.max(0, Number(rate.value || 0));
+
+      if (!(cur > 0) && !(tgt > 0) && !(mon > 0)) {
+        setIdle(t.need);
+        return;
+      }
+      if (tgt <= cur) {
+        outMonths.textContent = `0 ${t.months}`;
+        outPeriod.textContent = pageLang === 'en' ? '0 mo' : (pageLang === 'ja' ? '0か月' : '0개월');
+        outContrib.textContent = fmtMoney(0);
+        outInterest.textContent = fmtMoney(0);
+        help.textContent = t.achieved;
+        return;
+      }
+      if (!(mon > 0)) {
+        setIdle(t.impossible);
+        return;
+      }
+
+      const monthlyRate = annualRate / 100 / 12;
+      let balance = cur;
+      let months = 0;
+      let totalContrib = 0;
+      const maxMonths = 1200;
+
+      while (balance < tgt && months < maxMonths) {
+        balance += mon;
+        totalContrib += mon;
+        if (monthlyRate > 0) balance *= (1 + monthlyRate);
+        months += 1;
+      }
+
+      if (balance < tgt) {
+        setIdle(t.invalid);
+        return;
+      }
+
+      const interest = Math.max(0, balance - cur - totalContrib);
+      outMonths.textContent = fmtMonths(months);
+      outPeriod.textContent = periodText(months);
+      outContrib.textContent = fmtMoney(totalContrib);
+      outInterest.textContent = fmtMoney(interest);
+      help.textContent = t.summary(outMonths.textContent, outPeriod.textContent, outContrib.textContent, outInterest.textContent);
+    };
+
+    [current, target, monthly, rate].forEach((el) => el?.addEventListener('input', render));
+
+    copyBtn?.addEventListener('click', async () => {
+      if (outMonths.textContent === '-') return;
+      await copyText(t.copy(outMonths.textContent, outPeriod.textContent, outContrib.textContent, outInterest.textContent));
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      current.value = 2000000;
+      target.value = 10000000;
+      monthly.value = 500000;
+      rate.value = 3;
+      render();
+    });
+
+    if (!current.value) current.value = 2000000;
+    if (!target.value) target.value = 10000000;
+    if (!monthly.value) monthly.value = 500000;
+    render();
+  }
+
   if (slug === 'unit-price-calculator') {
     const mode = document.getElementById('up-mode');
     const unit = document.getElementById('up-unit');
