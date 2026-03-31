@@ -7171,4 +7171,196 @@
     render();
   }
 
+  if (slug === 'ratio-split-calculator') {
+    const total = document.getElementById('rs-total');
+    const rounding = document.getElementById('rs-rounding');
+    const items = document.getElementById('rs-items');
+    const ratioSum = document.getElementById('rs-ratio-sum');
+    const itemCount = document.getElementById('rs-item-count');
+    const lastAdjust = document.getElementById('rs-last-adjust');
+    const checkTotal = document.getElementById('rs-check-total');
+    const list = document.getElementById('rs-list');
+    const help = document.getElementById('rs-help');
+    const copyBtn = document.getElementById('rs-copy');
+    const resetBtn = document.getElementById('rs-reset');
+
+    if (!total || !rounding || !items || !ratioSum || !itemCount || !lastAdjust || !checkTotal || !list || !help) return;
+
+    const t = {
+      ko: {
+        need: '총 금액과 항목별 비율을 입력하세요.',
+        invalidTotal: '총 금액은 0보다 커야 합니다.',
+        invalidItems: '항목은 한 줄에 이름,비율 형식으로 입력하고 비율은 0보다 커야 합니다.',
+        ratioUnit: '합',
+        itemUnit: '개',
+        summary: (count, total, adjust) => `${count}개 항목으로 ${total}을 배분했습니다. 마지막 차액 보정은 ${adjust}입니다.`,
+        exact: '정확히 일치',
+        adjustment: '보정',
+        amount: '배분 금액',
+        weight: '비율',
+        share: '비중',
+        totalAmount: '총 배분 합계',
+        copyTitle: '비율 분배 계산 결과',
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        need: 'Enter a total amount and item ratios.',
+        invalidTotal: 'Total amount must be greater than 0.',
+        invalidItems: 'Enter each item as name,ratio on a new line, and ratios must be greater than 0.',
+        ratioUnit: 'sum',
+        itemUnit: 'items',
+        summary: (count, total, adjust) => `Allocated ${total} across ${count} items. Final adjustment: ${adjust}.`,
+        exact: 'Exact match',
+        adjustment: 'Adjustment',
+        amount: 'Amount',
+        weight: 'Ratio',
+        share: 'Share',
+        totalAmount: 'Allocated total',
+        copyTitle: 'Ratio split result',
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        need: '総額と項目ごとの比率を入力してください。',
+        invalidTotal: '総額は0より大きい必要があります。',
+        invalidItems: '項目は1行ごとに 名前,比率 の形式で入力し、比率は0より大きくしてください。',
+        ratioUnit: '合計',
+        itemUnit: '項目',
+        summary: (count, total, adjust) => `${count}項目に ${total} を配分しました。最後の差額補正は ${adjust} です。`,
+        exact: '完全一致',
+        adjustment: '補正',
+        amount: '配分金額',
+        weight: '比率',
+        share: '割合',
+        totalAmount: '配分合計',
+        copyTitle: '比率配分計算結果',
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    }[pageLang] || {};
+
+    const fmtMoney = (v) => Math.round(v || 0).toLocaleString(numberLocale);
+    const roundValue = (value, unit) => Math.round(value / unit) * unit;
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const setIdle = (msg) => {
+      ratioSum.textContent = '-';
+      itemCount.textContent = '-';
+      lastAdjust.textContent = '-';
+      checkTotal.textContent = '-';
+      list.innerHTML = '';
+      help.textContent = msg;
+    };
+
+    const parseItems = () => {
+      const lines = (items.value || '').split(/\n+/).map((line) => line.trim()).filter(Boolean);
+      const parsed = [];
+      for (const [idx, line] of lines.entries()) {
+        const parts = line.split(',');
+        if (parts.length < 2) return null;
+        const name = parts.slice(0, -1).join(',').trim() || `Item ${idx + 1}`;
+        const ratio = Number(parts[parts.length - 1].trim());
+        if (!Number.isFinite(ratio) || ratio <= 0) return null;
+        parsed.push({ name, ratio });
+      }
+      return parsed;
+    };
+
+    const render = () => {
+      const totalAmount = Math.max(0, Number(total.value || 0));
+      const unit = Math.max(1, Number(rounding.value || 1));
+      const parsed = parseItems();
+
+      if (!(totalAmount > 0) && !(items.value || '').trim()) {
+        setIdle(t.need);
+        return;
+      }
+      if (!(totalAmount > 0)) {
+        setIdle(t.invalidTotal);
+        return;
+      }
+      if (!parsed || !parsed.length) {
+        setIdle(t.invalidItems);
+        return;
+      }
+
+      const sum = parsed.reduce((acc, item) => acc + item.ratio, 0);
+      const allocations = parsed.map((item) => ({
+        ...item,
+        percent: (item.ratio / sum) * 100,
+        rawAmount: totalAmount * (item.ratio / sum)
+      }));
+
+      let allocated = 0;
+      allocations.forEach((item, idx) => {
+        if (idx === allocations.length - 1) return;
+        item.amount = roundValue(item.rawAmount, unit);
+        allocated += item.amount;
+      });
+      const last = allocations[allocations.length - 1];
+      last.amount = totalAmount - allocated;
+
+      const finalTotal = allocations.reduce((acc, item) => acc + item.amount, 0);
+      const adjustment = last.amount - roundValue(last.rawAmount, unit);
+
+      ratioSum.textContent = `${sum.toLocaleString(numberLocale, { maximumFractionDigits: 2 })} ${t.ratioUnit}`;
+      itemCount.textContent = `${allocations.length.toLocaleString(numberLocale)} ${t.itemUnit}`;
+      lastAdjust.textContent = adjustment === 0 ? t.exact : `${fmtMoney(adjustment)} (${t.adjustment})`;
+      checkTotal.textContent = fmtMoney(finalTotal);
+
+      list.innerHTML = allocations.map((item) => `
+        <div class="bw-item">
+          <strong>${item.name}<span class="bw-tag">${item.percent.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}%</span></strong>
+          <p>${t.amount}: ${fmtMoney(item.amount)} · ${t.weight}: ${item.ratio.toLocaleString(numberLocale, { maximumFractionDigits: 2 })} · ${t.share}: ${item.percent.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}%</p>
+        </div>
+      `).join('');
+
+      help.textContent = t.summary(allocations.length.toLocaleString(numberLocale), fmtMoney(totalAmount), adjustment === 0 ? t.exact : fmtMoney(adjustment));
+    };
+
+    [total, rounding, items].forEach((el) => el?.addEventListener('input', render));
+
+    copyBtn?.addEventListener('click', async () => {
+      const parsed = parseItems();
+      if (!parsed || !parsed.length || !(Number(total.value || 0) > 0)) return;
+      render();
+      const lines = Array.from(list.querySelectorAll('.bw-item')).map((item) => item.textContent.trim().replace(/\s+/g, ' '));
+      const text = [t.copyTitle, ...lines, `${t.totalAmount}: ${checkTotal.textContent}`].join('\n');
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      total.value = 1000000;
+      rounding.value = 100;
+      items.value = pageLang === 'en'
+        ? 'Marketing,5\nOperations,3\nReserve,2'
+        : (pageLang === 'ja'
+          ? 'マーケ,5\n運営,3\n予備,2'
+          : '항목 A,5\n항목 B,3\n항목 C,2');
+      render();
+    });
+
+    if (!total.value) total.value = 1000000;
+    if (!(items.value || '').trim()) {
+      items.value = pageLang === 'en'
+        ? 'Marketing,5\nOperations,3\nReserve,2'
+        : (pageLang === 'ja'
+          ? 'マーケ,5\n運営,3\n予備,2'
+          : '항목 A,5\n항목 B,3\n항목 C,2');
+    }
+    render();
+  }
+
 })();

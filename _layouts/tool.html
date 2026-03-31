@@ -1336,6 +1336,41 @@ layout: default
           <p class="tool-result" id="sb-help">{% if page.lang == 'en' %}Enter total and people to split the bill.{% elsif page.lang == 'ja' %}合計金額と人数を入れると割り勘結果を計算します。{% else %}총액과 인원 수를 입력하면 N빵 결과를 계산합니다.{% endif %}</p>
         </div>
 
+      {% when 'ratio-split-calculator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="rs-total">{% if page.lang == 'en' %}Total amount{% elsif page.lang == 'ja' %}総額{% else %}총 금액{% endif %}</label>
+              <input id="rs-total" type="number" min="0" step="1" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="rs-rounding">{% if page.lang == 'en' %}Rounding unit{% elsif page.lang == 'ja' %}丸め単位{% else %}반올림 단위{% endif %}</label>
+              <select id="rs-rounding">
+                <option value="1">1</option>
+                <option value="10">10</option>
+                <option value="100">100</option>
+                <option value="1000">1000</option>
+              </select>
+            </div>
+          </div>
+          <div class="tool-row">
+            <label for="rs-items">{% if page.lang == 'en' %}Items (one per line: name,ratio){% elsif page.lang == 'ja' %}項目（1行ごと: 名前,比率）{% else %}항목 목록 (한 줄에 이름,비율){% endif %}</label>
+            <textarea id="rs-items" rows="7" placeholder="{% if page.lang == 'en' %}Marketing,5&#10;Operations,3&#10;Reserve,2{% elsif page.lang == 'ja' %}マーケ,5&#10;運営,3&#10;予備,2{% else %}항목 A,5&#10;항목 B,3&#10;항목 C,2{% endif %}"></textarea>
+          </div>
+          <div class="tool-row-grid pct-actions">
+            <button id="rs-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="rs-reset" type="button">{% if page.lang == 'en' %}Fill sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시값 채우기{% endif %}</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="rs-ratio-sum">-</strong><span>{% if page.lang == 'en' %}Ratio sum{% elsif page.lang == 'ja' %}比率合計{% else %}비율 합계{% endif %}</span></div>
+            <div><strong id="rs-item-count">-</strong><span>{% if page.lang == 'en' %}Items{% elsif page.lang == 'ja' %}項目数{% else %}항목 수{% endif %}</span></div>
+            <div><strong id="rs-last-adjust">-</strong><span>{% if page.lang == 'en' %}Last-item adjustment{% elsif page.lang == 'ja' %}最後の差額補正{% else %}마지막 차액 보정{% endif %}</span></div>
+            <div><strong id="rs-check-total">-</strong><span>{% if page.lang == 'en' %}Allocated total{% elsif page.lang == 'ja' %}配分合計{% else %}배분 합계{% endif %}</span></div>
+          </div>
+          <div id="rs-list" class="bw-list"></div>
+          <p class="tool-result" id="rs-help">{% if page.lang == 'en' %}Enter a total and ratios to split the amount instantly.{% elsif page.lang == 'ja' %}総額と比率を入力すると、金額をすぐ配分します。{% else %}총 금액과 비율을 입력하면 금액을 즉시 나눕니다.{% endif %}</p>
+        </div>
+
       {% when 'required-gpa-calculator' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">

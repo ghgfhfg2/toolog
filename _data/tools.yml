@@ -1,3 +1,23 @@
+- id: ratio-split-calculator
+  title: 비율 분배 계산기
+  title_en: Ratio Split Calculator
+  title_ja: 比率配分計算機
+  category: calculator
+  category_label: 생활/정산
+  category_label_en: Life/Settlement
+  category_label_ja: 生活/精算
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 총 금액과 비율 목록으로 각 항목 배분 금액, 퍼센트, 마지막 차액 보정까지 계산해요.
+  description_en: Split a total amount by custom ratios and calculate allocations, percentages, and final rounding adjustment.
+  description_ja: 総額を任意の比率で配分し、各項目の金額・割合・最後の差額補正まで計算します。
+  url: /tools/ratio-split-calculator/
+  url_en: /en/tools/ratio-split-calculator/
+  url_ja: /ja/tools/ratio-split-calculator/
+  thumbnail: /assets/thumbs/ratio-split-calculator.svg
+  published_at: 2026-03-31
+
 - id: goal-savings-calculator
   title: 목표 저축 기간 계산기
   title_en: Goal Savings Timeline Calculator

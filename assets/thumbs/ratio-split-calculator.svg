@@ -1,0 +1,27 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#0F172A"/>
+  <rect x="54" y="54" width="1092" height="522" rx="28" fill="#111827" stroke="#334155" stroke-width="2"/>
+  <rect x="92" y="92" width="292" height="446" rx="24" fill="#1E293B"/>
+  <rect x="420" y="92" width="688" height="446" rx="24" fill="#F8FAFC"/>
+  <text x="118" y="170" fill="#E2E8F0" font-size="34" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">비율 분배</text>
+  <text x="118" y="212" fill="#94A3B8" font-size="22" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">총금액을 비율대로 나누기</text>
+  <rect x="118" y="258" width="240" height="64" rx="16" fill="#0F172A" stroke="#334155"/>
+  <text x="138" y="297" fill="#E2E8F0" font-size="22" font-family="monospace">1,000,000원</text>
+  <rect x="118" y="344" width="240" height="132" rx="18" fill="#0F172A" stroke="#334155"/>
+  <text x="138" y="384" fill="#94A3B8" font-size="20" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">항목 A  5</text>
+  <text x="138" y="420" fill="#94A3B8" font-size="20" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">항목 B  3</text>
+  <text x="138" y="456" fill="#94A3B8" font-size="20" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">항목 C  2</text>
+  <text x="456" y="150" fill="#0F172A" font-size="38" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="800">비율 분배 계산기</text>
+  <text x="456" y="194" fill="#475569" font-size="22" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">배분 금액 · 퍼센트 · 차액 보정</text>
+  <rect x="456" y="244" width="606" height="48" rx="14" fill="#E2E8F0"/>
+  <rect x="456" y="318" width="303" height="64" rx="18" fill="#2563EB"/>
+  <rect x="775" y="318" width="180" height="64" rx="18" fill="#14B8A6"/>
+  <rect x="971" y="318" width="91" height="64" rx="18" fill="#F59E0B"/>
+  <text x="474" y="360" fill="#FFFFFF" font-size="28" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">A 50%</text>
+  <text x="792" y="360" fill="#FFFFFF" font-size="28" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">B 30%</text>
+  <text x="989" y="360" fill="#FFFFFF" font-size="28" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">C 20%</text>
+  <text x="456" y="442" fill="#0F172A" font-size="30" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">500,000원</text>
+  <text x="676" y="442" fill="#0F172A" font-size="30" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">300,000원</text>
+  <text x="896" y="442" fill="#0F172A" font-size="30" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">200,000원</text>
+  <text x="456" y="505" fill="#64748B" font-size="20" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">반올림 단위 적용 · 마지막 차액 자동 보정</text>
+</svg>
