@@ -22,3 +22,5 @@ bundle exec jekyll serve
 4. 커밋/푸시 (GitHub Pages 자동 반영)
 
 자세한 운영 정책은 `OPERATIONS.md` 참고.
+
+신규 툴 선정 다양화 기준은 `TOOL_SELECTION_POLICY.md` 참고.
