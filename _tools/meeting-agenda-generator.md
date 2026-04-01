@@ -8,6 +8,8 @@ image:
   path: /assets/thumbs/meeting-agenda-generator.svg
   alt: 회의 안건 생성기 썸네일
 tool_key: meeting-agenda-generator
+tool_type: generator
+topic_cluster: work
 keywords: [회의 안건 생성기, 회의 아젠다 만들기, 미팅 안건 정리, 회의 준비 도구, 회의 agenda generator]
 related_tools: [pomodoro-timer, text-counter, case-converter]
 faq:
