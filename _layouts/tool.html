@@ -166,6 +166,58 @@ layout: default
           </div>
           <div id="bw-list" class="bw-list"></div>
         </div>
+      {% when 'meeting-agenda-generator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="mag-type">{% if page.lang == 'en' %}Meeting type{% elsif page.lang == 'ja' %}会議タイプ{% else %}회의 유형{% endif %}</label>
+              <select id="mag-type">
+                <option value="weekly">{% if page.lang == 'en' %}Weekly sync{% elsif page.lang == 'ja' %}定例ミーティング{% else %}주간 정기회의{% endif %}</option>
+                <option value="project">{% if page.lang == 'en' %}Project kickoff / update{% elsif page.lang == 'ja' %}프로젝트 킥오프 / 업데이트{% else %}프로젝트 킥오프 / 업데이트{% endif %}</option>
+                <option value="retrospective">{% if page.lang == 'en' %}Retrospective{% elsif page.lang == 'ja' %}振り返り{% else %}회고 미팅{% endif %}</option>
+                <option value="client">{% if page.lang == 'en' %}Client meeting{% elsif page.lang == 'ja' %}顧客ミーティング{% else %}클라이언트 미팅{% endif %}</option>
+                <option value="interview">{% if page.lang == 'en' %}Interview / screening{% elsif page.lang == 'ja' %}面談・面接{% else %}면담 / 인터뷰{% endif %}</option>
+              </select>
+            </div>
+            <div>
+              <label for="mag-duration">{% if page.lang == 'en' %}Duration (minutes){% elsif page.lang == 'ja' %}所要時間（分）{% else %}회의 시간(분){% endif %}</label>
+              <input id="mag-duration" type="number" min="10" max="240" step="5" value="30" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="mag-participants">{% if page.lang == 'en' %}Participants / teams{% elsif page.lang == 'ja' %}参加者 / チーム{% else %}참여자 / 팀{% endif %}</label>
+              <input id="mag-participants" type="text" placeholder="{% if page.lang == 'en' %}e.g. Product, Design, Dev{% elsif page.lang == 'ja' %}例: PM, デザイン, 開発{% else %}예: PM, 디자인, 개발{% endif %}" />
+            </div>
+            <div>
+              <label for="mag-goal">{% if page.lang == 'en' %}Main goal{% elsif page.lang == 'ja' %}主な 목적{% else %}회의 목표{% endif %}</label>
+              <input id="mag-goal" type="text" placeholder="{% if page.lang == 'en' %}e.g. Align next sprint priorities{% elsif page.lang == 'ja' %}例: 次スプリント優先順位の確認{% else %}예: 다음 스프린트 우선순위 정리{% endif %}" />
+            </div>
+          </div>
+
+          <div class="tool-row">
+            <label for="mag-topics">{% if page.lang == 'en' %}Key topics (one per line){% elsif page.lang == 'ja' %}主要トピック（1行に1つ）{% else %}핵심 안건 (한 줄에 하나씩){% endif %}</label>
+            <textarea id="mag-topics" rows="6" placeholder="{% if page.lang == 'en' %}Progress update&#10;Decision needed&#10;Risks / blockers{% elsif page.lang == 'ja' %}進捗共有&#10;意思決定が必要な事項&#10;リスク / ブロッカー{% else %}진행 상황 공유&#10;의사결정 필요 사항&#10;리스크 / 블로커{% endif %}"></textarea>
+          </div>
+
+          <label class="tool-check"><input id="mag-include-owner" type="checkbox" checked /> {% if page.lang == 'en' %}Include owner / follow-up section{% elsif page.lang == 'ja' %}担当者 / フォローアップ 섹션 포함{% else %}담당자 / 후속조치 섹션 포함{% endif %}</label>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="mag-run" type="button">{% if page.lang == 'en' %}Generate agenda{% elsif page.lang == 'ja' %}アジェンダ生成{% else %}안건 생성{% endif %}</button>
+            <button id="mag-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="mag-topic-count">0</strong><span>{% if page.lang == 'en' %}Topics{% elsif page.lang == 'ja' %}トピック数{% else %}안건 수{% endif %}</span></div>
+            <div><strong id="mag-duration-out">-</strong><span>{% if page.lang == 'en' %}Allocated minutes{% elsif page.lang == 'ja' %}配分時間{% else %}배정 시간{% endif %}</span></div>
+            <div><strong id="mag-format">-</strong><span>{% if page.lang == 'en' %}Output format{% elsif page.lang == 'ja' %}出力形式{% else %}출력 형식{% endif %}</span></div>
+            <div><strong id="mag-follow-up">-</strong><span>{% if page.lang == 'en' %}Follow-up section{% elsif page.lang == 'ja' %}フォローアップ 섹션{% else %}후속조치 섹션{% endif %}</span></div>
+          </div>
+
+          <textarea id="mag-output" rows="12" readonly placeholder="{% if page.lang == 'en' %}Generated agenda will appear here.{% elsif page.lang == 'ja' %}生成されたアジェンダがここに表示されます。{% else %}생성된 회의 안건이 여기에 표시됩니다.{% endif %}"></textarea>
+          <p class="tool-result" id="mag-help">{% if page.lang == 'en' %}Enter meeting context and click Generate to create a ready-to-share agenda.{% elsif page.lang == 'ja' %}会議情報を入力して生成を押すと、そのまま共有できるアジェンダを作成します。{% else %}회의 정보를 입력하고 생성 버튼을 누르면 바로 공유 가능한 안건을 만듭니다.{% endif %}</p>
+        </div>
       {% when 'json-merge' %}
         <div class="tool-ui">
           <input id="jm-files" type="file" accept="application/json,.json" multiple />

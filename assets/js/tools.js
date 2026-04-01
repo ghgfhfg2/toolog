@@ -4254,6 +4254,128 @@
     resetAll();
   }
 
+  if (slug === 'meeting-agenda-generator') {
+    const typeEl = document.getElementById('mag-type');
+    const durationEl = document.getElementById('mag-duration');
+    const participantsEl = document.getElementById('mag-participants');
+    const goalEl = document.getElementById('mag-goal');
+    const topicsEl = document.getElementById('mag-topics');
+    const includeOwnerEl = document.getElementById('mag-include-owner');
+    const runBtn = document.getElementById('mag-run');
+    const copyBtn = document.getElementById('mag-copy');
+    const topicCountEl = document.getElementById('mag-topic-count');
+    const durationOutEl = document.getElementById('mag-duration-out');
+    const formatEl = document.getElementById('mag-format');
+    const followUpEl = document.getElementById('mag-follow-up');
+    const outputEl = document.getElementById('mag-output');
+    const helpEl = document.getElementById('mag-help');
+
+    if (!typeEl || !durationEl || !participantsEl || !goalEl || !topicsEl || !includeOwnerEl || !runBtn || !copyBtn || !topicCountEl || !durationOutEl || !formatEl || !followUpEl || !outputEl || !helpEl) return;
+
+    const i18n = {
+      ko: {
+        types: {
+          weekly: '주간 정기회의',
+          project: '프로젝트 킥오프 / 업데이트',
+          retrospective: '회고 미팅',
+          client: '클라이언트 미팅',
+          interview: '면담 / 인터뷰'
+        },
+        intro: '회의 목적과 핵심 안건을 바탕으로 바로 공유 가능한 초안을 생성했습니다.',
+        title: '회의 안건',
+        purpose: '회의 목적',
+        attendees: '참여자',
+        agenda: '안건',
+        open: '오프닝 및 목표 확인',
+        close: '결론 정리 및 다음 액션',
+        owner: '담당자 / 후속조치',
+        minutes: '분',
+        output: '한국어 초안',
+        included: '포함',
+        excluded: '미포함',
+        placeholderTopic: '논의 주제',
+        copyDone: '복사됨',
+        copyDefault: '결과 복사',
+        needGoal: '회의 목표와 안건을 함께 넣으면 결과가 더 자연스러워집니다.'
+      }
+    };
+    const t = i18n.ko;
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const parseTopics = () => (topicsEl.value || '').split(/\n+/).map(v => v.trim()).filter(Boolean);
+
+    const generate = () => {
+      const meetingType = typeEl.value || 'weekly';
+      const duration = Math.min(240, Math.max(10, Number(durationEl.value || 30)));
+      durationEl.value = duration;
+      const participants = (participantsEl.value || '').trim() || '관련 담당자';
+      const goal = (goalEl.value || '').trim() || '핵심 이슈를 정리하고 다음 액션을 확정하기';
+      const topics = parseTopics();
+      const topicList = topics.length ? topics : [t.placeholderTopic];
+      const includeOwner = !!includeOwnerEl.checked;
+
+      const opening = Math.max(5, Math.round(duration * 0.15));
+      const closing = Math.max(5, Math.round(duration * 0.15));
+      const remaining = Math.max(5, duration - opening - closing);
+      const base = Math.floor(remaining / topicList.length);
+      let extra = remaining - (base * topicList.length);
+
+      const lines = [];
+      lines.push(`[${t.types[meetingType]}] ${t.title}`);
+      lines.push(`- ${t.purpose}: ${goal}`);
+      lines.push(`- ${t.attendees}: ${participants}`);
+      lines.push(`- 총 ${duration}${t.minutes}`);
+      lines.push('');
+      lines.push(`1. ${t.open} (${opening}${t.minutes})`);
+
+      topicList.forEach((topic, index) => {
+        const minutes = base + (extra > 0 ? 1 : 0);
+        if (extra > 0) extra -= 1;
+        lines.push(`${index + 2}. ${topic} (${minutes}${t.minutes})`);
+        lines.push(`   - 현재 상황 공유`);
+        lines.push(`   - 결정 필요 사항 / 쟁점 정리`);
+      });
+
+      lines.push(`${topicList.length + 2}. ${t.close} (${closing}${t.minutes})`);
+      lines.push(`   - 결정 사항 요약`);
+      lines.push(`   - 다음 일정 / 마감 확인`);
+
+      if (includeOwner) {
+        lines.push('');
+        lines.push(`[${t.owner}]`);
+        lines.push(`- 액션 1: 담당자 / 기한`);
+        lines.push(`- 액션 2: 담당자 / 기한`);
+      }
+
+      outputEl.value = lines.join('\n');
+      topicCountEl.textContent = String(topicList.length);
+      durationOutEl.textContent = `${duration}${t.minutes}`;
+      formatEl.textContent = t.output;
+      followUpEl.textContent = includeOwner ? t.included : t.excluded;
+      helpEl.textContent = topics.length ? t.intro : t.needGoal;
+    };
+
+    runBtn.addEventListener('click', generate);
+    [typeEl, durationEl, participantsEl, goalEl, topicsEl, includeOwnerEl].forEach((el) => el.addEventListener('input', generate));
+    copyBtn.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) generate();
+      await copyText(outputEl.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copyDone;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+
+    generate();
+  }
+
   if (slug === 'blog-banned-word-checker') {
     const input = document.getElementById('bw-input');
     const summary = document.getElementById('bw-summary');

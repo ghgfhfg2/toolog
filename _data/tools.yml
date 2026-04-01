@@ -1,3 +1,25 @@
+- id: meeting-agenda-generator
+  title: 회의 안건 생성기
+  title_en: Meeting Agenda Generator
+  title_ja: 会議アジェンダ生成ツール
+  category: productivity
+  category_label: 업무/생산성
+  category_label_en: Work/Productivity
+  category_label_ja: 仕事/生産性
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 회의 유형, 시간, 목표, 핵심 안건을 바탕으로 바로 공유 가능한 회의 아젠다 초안을 만들어요.
+  description_en: Generate a ready-to-share meeting agenda draft from meeting type, duration, goal, and key topics.
+  description_ja: 会議タイプ・時間・目的・主要トピックをもとに、そのまま共有できる会議アジェンダの下書きを作成します。
+  url: /tools/meeting-agenda-generator/
+  url_en: /en/tools/meeting-agenda-generator/
+  url_ja: /ja/tools/meeting-agenda-generator/
+  thumbnail: /assets/thumbs/meeting-agenda-generator.svg
+  published_at: 2026-04-01
+  tool_type: generator
+  topic_cluster: work
+
 - id: ratio-split-calculator
   title: 비율 분배 계산기
   title_en: Ratio Split Calculator

@@ -1,0 +1,19 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#0F172A"/>
+  <rect x="70" y="70" width="1060" height="490" rx="28" fill="#111827" stroke="#334155" stroke-width="4"/>
+  <rect x="120" y="120" width="420" height="390" rx="24" fill="#1E293B"/>
+  <rect x="600" y="120" width="470" height="70" rx="18" fill="#2563EB"/>
+  <rect x="600" y="220" width="470" height="36" rx="12" fill="#334155"/>
+  <rect x="600" y="280" width="410" height="28" rx="10" fill="#475569"/>
+  <rect x="600" y="330" width="390" height="28" rx="10" fill="#475569"/>
+  <rect x="600" y="380" width="440" height="28" rx="10" fill="#475569"/>
+  <rect x="600" y="430" width="360" height="28" rx="10" fill="#475569"/>
+  <rect x="165" y="165" width="330" height="46" rx="12" fill="#38BDF8" fill-opacity="0.28"/>
+  <rect x="165" y="237" width="260" height="18" rx="9" fill="#94A3B8"/>
+  <rect x="165" y="275" width="300" height="18" rx="9" fill="#94A3B8"/>
+  <rect x="165" y="313" width="230" height="18" rx="9" fill="#94A3B8"/>
+  <rect x="165" y="372" width="180" height="62" rx="18" fill="#22C55E"/>
+  <text x="600" y="510" fill="#E2E8F0" font-family="Hiragino Sans, Yu Gothic, sans-serif" font-size="54" font-weight="700">会議アジェンダ生成</text>
+  <text x="165" y="197" fill="#E0F2FE" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700">MEETING AGENDA</text>
+  <text x="640" y="165" fill="white" font-family="Hiragino Sans, Yu Gothic, sans-serif" font-size="30" font-weight="700">すぐ共有できる会議下書き</text>
+</svg>
