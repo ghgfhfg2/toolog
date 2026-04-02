@@ -4376,6 +4376,183 @@
     generate();
   }
 
+  if (slug === 'move-checklist-planner') {
+    const dateEl = document.getElementById('mcp-date');
+    const homeEl = document.getElementById('mcp-home');
+    const styleEl = document.getElementById('mcp-style');
+    const elevatorEl = document.getElementById('mcp-elevator');
+    const utilitiesEl = document.getElementById('mcp-utilities');
+    const essentialsEl = document.getElementById('mcp-essentials');
+    const runBtn = document.getElementById('mcp-run');
+    const copyBtn = document.getElementById('mcp-copy');
+    const totalEl = document.getElementById('mcp-total');
+    const urgentEl = document.getElementById('mcp-urgent');
+    const focusEl = document.getElementById('mcp-focus');
+    const formatEl = document.getElementById('mcp-format');
+    const outputEl = document.getElementById('mcp-output');
+    const helpEl = document.getElementById('mcp-help');
+
+    if (!dateEl || !homeEl || !styleEl || !elevatorEl || !utilitiesEl || !essentialsEl || !runBtn || !copyBtn || !totalEl || !urgentEl || !focusEl || !formatEl || !outputEl || !helpEl) return;
+
+    const t = {
+      homes: {
+        studio: '원룸 / 오피스텔',
+        apartment: '아파트 / 가족 이사',
+        office: '사무실 / 작업실'
+      },
+      styles: {
+        full: '포장이사',
+        semi: '반포장 / 셀프 포장',
+        self: '직접 운반 / 소형 이사'
+      },
+      elevator: {
+        yes: '엘리베이터 있음',
+        no: '엘리베이터 없음',
+        unknown: '엘리베이터 확인 필요'
+      },
+      focusByHome: {
+        studio: '생활 정리',
+        apartment: '가족 일정',
+        office: '설비 / 주소 이전'
+      },
+      focusByStyle: {
+        full: '예약 / 검수',
+        semi: '포장 우선순위',
+        self: '짐 줄이기 / 동선'
+      },
+      intro: '이사 준비를 2주 전, 3일 전, 당일 순서로 정리한 체크리스트입니다.',
+      format: '복사형 체크리스트',
+      copyDone: '복사됨',
+      copyDefault: '결과 복사'
+    };
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const formatDate = (value) => {
+      if (!value) return '미정';
+      const [y, m, d] = value.split('-').map(Number);
+      if (!y || !m || !d) return value;
+      return `${y}.${String(m).padStart(2, '0')}.${String(d).padStart(2, '0')}`;
+    };
+
+    const generate = () => {
+      const moveDate = dateEl.value || '';
+      const home = homeEl.value || 'studio';
+      const style = styleEl.value || 'full';
+      const elevator = elevatorEl.value || 'yes';
+      const needUtilities = !!utilitiesEl.checked;
+      const needEssentials = !!essentialsEl.checked;
+
+      const checklist = {
+        before2w: [
+          '이사업체 / 차량 일정 비교 후 예약 확정',
+          '버릴 물건, 기부할 물건, 가져갈 물건 3분류 정리',
+          '자주 안 쓰는 짐부터 박스 / 봉투 / 라벨 준비'
+        ],
+        before3d: [
+          '냉장고 / 냉동실 비우기 시작, 음식물 처리 계획 세우기',
+          '깨지기 쉬운 물건 / 귀중품 / 서류 별도 분리',
+          '청소도구, 휴지, 충전기 등 당일 바로 쓸 물건 한데 모으기'
+        ],
+        day0: [
+          '출발 전 기존 집 사진 / 계량기 / 비밀번호 / 열쇠 상태 확인',
+          '도착 후 큰 가구 위치 먼저 결정하고 박스 이동 순서 정리',
+          '퇴실·입실 체크리스트 마지막 확인'
+        ]
+      };
+
+      if (home === 'apartment') {
+        checklist.before2w.push('관리사무소 / 주차 / 엘리베이터 예약 가능 여부 확인');
+        checklist.before3d.push('가족별 필수 가방 / 옷 / 세면도구 분리 포장');
+        checklist.day0.push('아이 / 반려동물 / 가족 동선 먼저 확보');
+      } else if (home === 'office') {
+        checklist.before2w.push('사업자 주소 / 우편물 / 거래처 주소 변경 항목 정리');
+        checklist.before3d.push('장비, 케이블, 문서, 백업 드라이브를 구역별로 라벨링');
+        checklist.day0.push('인터넷 / 프린터 / 전원 멀티탭 작동 여부 즉시 점검');
+      } else {
+        checklist.before2w.push('생활 소형가전, 계절옷, 침구류부터 순차 포장');
+      }
+
+      if (style !== 'full') {
+        checklist.before2w.push('박스별 방 이름 / 우선순위 / 파손주의 표시하기');
+        checklist.before3d.push('무거운 짐과 가벼운 짐을 섞지 않도록 재포장 점검');
+      }
+      if (style === 'self') {
+        checklist.before2w.push('사다리차 / 운반 인원 / 차량 동선 직접 확인');
+        checklist.day0.push('들고 이동할 동선을 미리 비워두고 미끄럼 위험 제거');
+      }
+
+      if (elevator === 'no') {
+        checklist.before3d.push('계단 이동 대비 짐 무게 줄이기, 손잡이 박스 우선 배치');
+        checklist.day0.push('무거운 짐은 가장 먼저 옮기고 휴식 구간 확보');
+      } else if (elevator === 'unknown') {
+        checklist.before2w.push('엘리베이터 사용 가능 시간 / 예약 필요 여부 재확인');
+      }
+
+      if (needUtilities) {
+        checklist.before2w.push('전기 / 가스 / 수도 / 인터넷 이전 신청 일정 체크');
+        checklist.before3d.push('전입신고, 우편물 주소 변경, 각종 자동결제 주소 점검');
+      }
+
+      if (needEssentials) {
+        checklist.before3d.push('첫날 박스 따로 만들기: 세면도구, 충전기, 상비약, 옷 1벌');
+        checklist.day0.push('도착 즉시 첫날 박스부터 열고 잠자리 / 세면 동선부터 세팅');
+      }
+
+      const sections = [
+        ['2주 전', checklist.before2w],
+        ['3일 전', checklist.before3d],
+        ['이사 당일', checklist.day0]
+      ];
+
+      const lines = [];
+      lines.push(`[이사 체크리스트] ${formatDate(moveDate)}`);
+      lines.push(`- 집 형태: ${t.homes[home]}`);
+      lines.push(`- 이사 방식: ${t.styles[style]}`);
+      lines.push(`- 현장 조건: ${t.elevator[elevator]}`);
+      lines.push(`- 공과금/인터넷 이전: ${needUtilities ? '필요' : '불필요'}`);
+      lines.push(`- 당일 필수 박스: ${needEssentials ? '준비' : '미준비'}`);
+      lines.push('');
+
+      sections.forEach(([label, items]) => {
+        lines.push(`[${label}]`);
+        items.forEach((item) => lines.push(`- ${item}`));
+        lines.push('');
+      });
+
+      outputEl.value = lines.join('\n').trim();
+      totalEl.textContent = String(checklist.before2w.length + checklist.before3d.length + checklist.day0.length);
+      urgentEl.textContent = String(checklist.before3d.length + checklist.day0.length);
+      focusEl.textContent = `${t.focusByHome[home]} / ${t.focusByStyle[style]}`;
+      formatEl.textContent = t.format;
+      helpEl.textContent = t.intro;
+    };
+
+    runBtn.addEventListener('click', generate);
+    [dateEl, homeEl, styleEl, elevatorEl, utilitiesEl, essentialsEl].forEach((el) => el.addEventListener('input', generate));
+    copyBtn.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) generate();
+      await copyText(outputEl.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copyDone;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+
+    if (!dateEl.value) {
+      const now = new Date();
+      const future = new Date(now.getTime() + 14 * 86400000);
+      dateEl.value = new Date(future.getTime() - future.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    }
+    generate();
+  }
+
   if (slug === 'blog-banned-word-checker') {
     const input = document.getElementById('bw-input');
     const summary = document.getElementById('bw-summary');

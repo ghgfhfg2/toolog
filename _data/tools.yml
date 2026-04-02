@@ -1,3 +1,25 @@
+- id: move-checklist-planner
+  title: 이사 체크리스트 플래너
+  title_en: Move Checklist Planner
+  title_ja: 引っ越しチェックリストプランナー
+  category: lifestyle
+  category_label: 생활/준비
+  category_label_en: Lifestyle/Preparation
+  category_label_ja: 生活/準備
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 이사 날짜와 조건을 입력하면 2주 전, 3일 전, 이사 당일 기준으로 해야 할 일을 단계별로 정리해요.
+  description_en: Build a move checklist organized by two weeks before, three days before, and move day from your move date and setup.
+  description_ja: 引っ越し日と条件をもとに、2週間前・3日前・当日のやることを段階別に整理します。
+  url: /tools/move-checklist-planner/
+  url_en: /en/tools/move-checklist-planner/
+  url_ja: /ja/tools/move-checklist-planner/
+  thumbnail: /assets/thumbs/move-checklist-planner.svg
+  published_at: 2026-04-02
+  tool_type: planner
+  topic_cluster: lifestyle
+
 - id: meeting-agenda-generator
   title: 회의 안건 생성기
   title_en: Meeting Agenda Generator
