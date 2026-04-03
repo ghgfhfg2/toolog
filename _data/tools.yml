@@ -1,3 +1,25 @@
+- id: readability-checker
+  title: 문장 가독성 점검기
+  title_en: Readability Checker
+  title_ja: 文章の読みやすさチェッカー
+  category: text
+  category_label: 텍스트/편집
+  category_label_en: Text/Editing
+  category_label_ja: テキスト/編集
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 긴 문장, 긴 문단, 반복 표현, 줄바꿈 밀도를 점검해 더 읽기 쉬운 한국어 글쓰기를 도와줘요.
+  description_en: Check long sentences, dense paragraphs, repeated expressions, and line-break density to make text easier to read.
+  description_ja: 長い文・長い段落・表現の繰り返し・改行密度を点検して、読みやすい文章に整えます。
+  url: /tools/readability-checker/
+  url_en: /en/tools/readability-checker/
+  url_ja: /ja/tools/readability-checker/
+  thumbnail: /assets/thumbs/readability-checker.svg
+  published_at: 2026-04-03
+  tool_type: checker
+  topic_cluster: text
+
 - id: move-checklist-planner
   title: 이사 체크리스트 플래너
   title_en: Move Checklist Planner

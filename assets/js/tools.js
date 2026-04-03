@@ -4713,6 +4713,119 @@
     render();
   }
 
+  if (slug === 'readability-checker') {
+    const input = document.getElementById('rc-input');
+    const sentenceLimitEl = document.getElementById('rc-sentence-limit');
+    const paragraphLimitEl = document.getElementById('rc-paragraph-limit');
+    const copyBtn = document.getElementById('rc-copy');
+    const sampleBtn = document.getElementById('rc-sample');
+    const charsEl = document.getElementById('rc-chars');
+    const sentencesEl = document.getElementById('rc-sentences');
+    const avgEl = document.getElementById('rc-avg');
+    const longSentencesEl = document.getElementById('rc-long-sentences');
+    const longParagraphsEl = document.getElementById('rc-long-paragraphs');
+    const scoreEl = document.getElementById('rc-score');
+    const summaryEl = document.getElementById('rc-summary');
+    const listEl = document.getElementById('rc-list');
+    if (!input || !sentenceLimitEl || !paragraphLimitEl || !copyBtn || !sampleBtn || !charsEl || !sentencesEl || !avgEl || !longSentencesEl || !longParagraphsEl || !scoreEl || !summaryEl || !listEl) return;
+
+    const t = {
+      sample: '이번 안내는 신청자가 많을 경우 처리 시간이 조금 더 길어질 수 있으며, 제출 서류가 누락되면 접수가 자동으로 보류될 수 있으니 반드시 체크리스트를 먼저 확인한 뒤 제출해 주세요.\n\n또한 결과 안내 메일은 순차 발송되기 때문에 같은 날 신청했더라도 수신 시점이 다를 수 있습니다. 급한 문의는 담당 부서 운영시간을 확인한 후 연락해 주세요.',
+      empty: '텍스트를 입력하면 문장 길이와 문단 밀도를 바로 점검합니다.',
+      readability: ['매우 읽기 쉬움', '읽기 쉬움', '보통', '다소 빽빽함', '손보기 필요'],
+      summary: (score, avg, longS, longP) => `가독성 ${score} · 평균 문장 길이 ${avg}자 · 긴 문장 ${longS}개 · 긴 문단 ${longP}개`,
+      noIssues: '지금 기준에서는 크게 거슬리는 길이 문제나 반복 표현이 보이지 않습니다.',
+      copied: '복사됨',
+      copyDefault: '결과 복사'
+    };
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
+
+    const renderList = (items) => {
+      if (!items.length) {
+        listEl.innerHTML = `<div class="empty-state">${t.noIssues}</div>`;
+        return;
+      }
+      listEl.innerHTML = items.map((item) => `<div class="bw-item"><strong>${item.title}<span class="bw-tag">${item.count}</span></strong><p>${item.detail}</p></div>`).join('');
+    };
+
+    const analyze = () => {
+      const text = input.value || '';
+      const sentenceLimit = clamp(Number(sentenceLimitEl.value || 45), 20, 120);
+      const paragraphLimit = clamp(Number(paragraphLimitEl.value || 4), 2, 12);
+      sentenceLimitEl.value = sentenceLimit;
+      paragraphLimitEl.value = paragraphLimit;
+
+      const chars = text.length;
+      const sentences = text.split(/(?<=[.!?。！？])\s+|\n+/).map(v => v.trim()).filter(Boolean);
+      const paragraphs = text.split(/\n{2,}/).map(v => v.trim()).filter(Boolean);
+      const words = (text.match(/[가-힣A-Za-z0-9]{2,}/g) || []).map(v => v.toLowerCase());
+      const freq = {};
+      words.forEach((w) => { freq[w] = (freq[w] || 0) + 1; });
+      const repeated = Object.entries(freq).filter(([, n]) => n >= 4).sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+      const sentenceLengths = sentences.map((s) => s.replace(/\s+/g, '').length);
+      const longSentences = sentenceLengths.filter((n) => n >= sentenceLimit);
+      const paragraphLines = paragraphs.map((p) => Math.max(1, p.split(/\n/).filter(Boolean).length));
+      const longParagraphs = paragraphLines.filter((n) => n >= paragraphLimit);
+      const avg = sentenceLengths.length ? (sentenceLengths.reduce((a, b) => a + b, 0) / sentenceLengths.length) : 0;
+
+      let score = 100;
+      score -= longSentences.length * 8;
+      score -= longParagraphs.length * 10;
+      score -= repeated.length * 6;
+      if (avg > sentenceLimit * 0.9) score -= 12;
+      score = clamp(score, 0, 100);
+      const label = score >= 90 ? t.readability[0] : score >= 75 ? t.readability[1] : score >= 60 ? t.readability[2] : score >= 40 ? t.readability[3] : t.readability[4];
+
+      charsEl.textContent = chars.toLocaleString(numberLocale);
+      sentencesEl.textContent = sentences.length.toLocaleString(numberLocale);
+      avgEl.textContent = avg ? avg.toLocaleString(numberLocale, { maximumFractionDigits: 1 }) : '0';
+      longSentencesEl.textContent = longSentences.length.toLocaleString(numberLocale);
+      longParagraphsEl.textContent = longParagraphs.length.toLocaleString(numberLocale);
+      scoreEl.textContent = label;
+      summaryEl.textContent = chars ? t.summary(label, avg.toLocaleString(numberLocale, { maximumFractionDigits: 1 }), longSentences.length, longParagraphs.length) : t.empty;
+
+      const items = [];
+      if (longSentences.length) items.push({ title: '긴 문장', count: `${longSentences.length}개`, detail: `${sentenceLimit}자 이상 문장이 있습니다. 쉼표 뒤나 접속사 앞에서 둘로 나눌 수 있는지 확인해 보세요.` });
+      if (longParagraphs.length) items.push({ title: '긴 문단', count: `${longParagraphs.length}개`, detail: `${paragraphLimit}줄 이상 문단이 있습니다. 핵심 한 가지씩 묶어 문단을 쪼개면 읽기 호흡이 좋아집니다.` });
+      if (repeated.length) items.push({ title: '반복 표현', count: `${repeated.length}개`, detail: repeated.map(([w, n]) => `${w}(${n}회)`).join(', ') });
+      if (paragraphs.length && paragraphs.length <= 1 && chars >= 300) items.push({ title: '줄바꿈 밀도', count: '낮음', detail: '긴 글인데 문단 분리가 거의 없습니다. 2~4문장마다 한 번씩 끊어 읽기 흐름을 만들어 보세요.' });
+      renderList(items);
+    };
+
+    input.addEventListener('input', analyze);
+    sentenceLimitEl.addEventListener('input', analyze);
+    paragraphLimitEl.addEventListener('input', analyze);
+    sampleBtn.addEventListener('click', () => { input.value = t.sample; analyze(); });
+    copyBtn.addEventListener('click', async () => {
+      const text = [
+        `문장 가독성 점검기`,
+        `글자 수: ${charsEl.textContent}`,
+        `문장 수: ${sentencesEl.textContent}`,
+        `평균 문장 길이: ${avgEl.textContent}`,
+        `긴 문장: ${longSentencesEl.textContent}`,
+        `긴 문단: ${longParagraphsEl.textContent}`,
+        `가독성: ${scoreEl.textContent}`,
+        `요약: ${summaryEl.textContent}`
+      ].join(' | ');
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+    analyze();
+  }
+
   if (slug === 'json-merge') {
     const filesInput = document.getElementById('jm-files');
     const modeSel = document.getElementById('jm-mode');
