@@ -1,0 +1,21 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#FFF7ED"/>
+  <rect x="56" y="56" width="1088" height="518" rx="30" fill="#FFEDD5"/>
+  <rect x="92" y="100" width="520" height="430" rx="28" fill="#FFFFFF"/>
+  <rect x="654" y="100" width="454" height="430" rx="28" fill="#FB923C"/>
+  <circle cx="870" cy="226" r="92" fill="#FFF7ED"/>
+  <circle cx="840" cy="208" r="14" fill="#EA580C"/>
+  <circle cx="900" cy="208" r="14" fill="#EA580C"/>
+  <path d="M830 258C846 278 894 278 910 258" stroke="#EA580C" stroke-width="14" stroke-linecap="round"/>
+  <rect x="720" y="352" width="320" height="24" rx="12" fill="#FFEDD5"/>
+  <rect x="720" y="394" width="254" height="24" rx="12" fill="#FFEDD5"/>
+  <rect x="720" y="436" width="286" height="24" rx="12" fill="#FFEDD5"/>
+  <text x="130" y="200" fill="#9A3412" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="64" font-weight="800">점심 메뉴 추천기</text>
+  <text x="130" y="278" fill="#C2410C" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="34" font-weight="600">오늘 뭐 먹지? 상황·예산·기분별 3가지 메뉴 픽</text>
+  <rect x="130" y="340" width="240" height="56" rx="28" fill="#FED7AA"/>
+  <text x="164" y="377" fill="#9A3412" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="28" font-weight="700">혼밥 / 팀점심</text>
+  <rect x="388" y="340" width="164" height="56" rx="28" fill="#FED7AA"/>
+  <text x="435" y="377" fill="#9A3412" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="28" font-weight="700">예산</text>
+  <rect x="130" y="420" width="308" height="56" rx="28" fill="#FED7AA"/>
+  <text x="168" y="457" fill="#9A3412" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="28" font-weight="700">든든 / 가볍게 / 자극적</text>
+</svg>

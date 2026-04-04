@@ -1,3 +1,25 @@
+- id: lunch-menu-picker
+  title: 점심 메뉴 추천기
+  title_en: Lunch Menu Picker
+  title_ja: ランチメニューピッカー
+  category: lifestyle
+  category_label: 생활/선택
+  category_label_en: Lifestyle/Choice
+  category_label_ja: 生活/選択
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 점심/저녁/야식 상황, 예산, 인원, 기분을 고르면 지금 조건에 맞는 메뉴 후보 3개를 바로 추천해요.
+  description_en: Pick meal time, budget, company size, and mood to get three fitting menu suggestions instantly.
+  description_ja: 食事の時間・予算・人数・気分を選ぶと、今の条件に合うメニュー候補を3つすぐに提案します。
+  url: /tools/lunch-menu-picker/
+  url_en: /en/tools/lunch-menu-picker/
+  url_ja: /ja/tools/lunch-menu-picker/
+  thumbnail: /assets/thumbs/lunch-menu-picker.svg
+  published_at: 2026-04-04
+  tool_type: picker
+  topic_cluster: lifestyle
+
 - id: readability-checker
   title: 문장 가독성 점검기
   title_en: Readability Checker

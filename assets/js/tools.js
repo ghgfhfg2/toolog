@@ -4553,6 +4553,130 @@
     generate();
   }
 
+  if (slug === 'lunch-menu-picker') {
+    const timeEl = document.getElementById('lmp-time');
+    const companyEl = document.getElementById('lmp-company');
+    const budgetEl = document.getElementById('lmp-budget');
+    const moodEl = document.getElementById('lmp-mood');
+    const hotEl = document.getElementById('lmp-hot');
+    const riceEl = document.getElementById('lmp-rice');
+    const runBtn = document.getElementById('lmp-run');
+    const copyBtn = document.getElementById('lmp-copy');
+    const countEl = document.getElementById('lmp-count');
+    const topTagEl = document.getElementById('lmp-top-tag');
+    const budgetTagEl = document.getElementById('lmp-budget-tag');
+    const formatEl = document.getElementById('lmp-format');
+    const outputEl = document.getElementById('lmp-output');
+    const helpEl = document.getElementById('lmp-help');
+    if (!timeEl || !companyEl || !budgetEl || !moodEl || !hotEl || !riceEl || !runBtn || !copyBtn || !countEl || !topTagEl || !budgetTagEl || !formatEl || !outputEl || !helpEl) return;
+
+    const labelMap = { comfort: '든든', fresh: '가벼움', spicy: '자극적', fast: '빨리 먹기', social: '같이 먹기' };
+    const menus = [
+      { name: '김치찌개', time: ['lunch', 'dinner'], company: ['solo', 'pair', 'team'], budget: ['light', 'mid'], moods: ['comfort', 'spicy', 'fast'], hot: true, rice: true },
+      { name: '제육볶음', time: ['lunch', 'dinner'], company: ['solo', 'pair', 'team'], budget: ['light', 'mid'], moods: ['comfort', 'spicy'], hot: true, rice: true },
+      { name: '비빔밥', time: ['lunch', 'dinner'], company: ['solo', 'pair'], budget: ['light', 'mid'], moods: ['fresh', 'fast'], hot: false, rice: true },
+      { name: '샐러드 포케', time: ['lunch', 'dinner'], company: ['solo', 'pair'], budget: ['mid', 'high'], moods: ['fresh', 'fast'], hot: false, rice: false },
+      { name: '쌀국수', time: ['lunch', 'dinner'], company: ['solo', 'pair', 'team'], budget: ['mid'], moods: ['fresh', 'comfort'], hot: true, rice: false },
+      { name: '마라탕', time: ['lunch', 'dinner', 'late'], company: ['pair', 'team'], budget: ['mid', 'high'], moods: ['spicy', 'social'], hot: true, rice: false },
+      { name: '초밥', time: ['lunch', 'dinner'], company: ['pair', 'team'], budget: ['mid', 'high'], moods: ['fresh', 'social'], hot: false, rice: true },
+      { name: '돈까스', time: ['lunch', 'dinner'], company: ['solo', 'pair'], budget: ['light', 'mid'], moods: ['comfort', 'fast'], hot: true, rice: true },
+      { name: '파스타', time: ['lunch', 'dinner'], company: ['pair', 'team'], budget: ['mid', 'high'], moods: ['social', 'fresh'], hot: true, rice: false },
+      { name: '햄버거', time: ['lunch', 'dinner', 'late'], company: ['solo', 'pair'], budget: ['light', 'mid'], moods: ['fast'], hot: true, rice: false },
+      { name: '국밥', time: ['lunch', 'dinner', 'late'], company: ['solo', 'pair'], budget: ['light', 'mid'], moods: ['comfort', 'fast'], hot: true, rice: true },
+      { name: '칼국수', time: ['lunch', 'dinner'], company: ['solo', 'pair', 'team'], budget: ['light', 'mid'], moods: ['comfort'], hot: true, rice: false },
+      { name: '분식 세트', time: ['lunch', 'late'], company: ['solo', 'pair'], budget: ['light'], moods: ['fast', 'spicy'], hot: true, rice: false },
+      { name: '삼겹살', time: ['dinner'], company: ['pair', 'team'], budget: ['high'], moods: ['social', 'comfort'], hot: true, rice: true },
+      { name: '냉면', time: ['lunch', 'dinner'], company: ['solo', 'pair'], budget: ['light', 'mid'], moods: ['fresh'], hot: false, rice: false },
+      { name: '샤브샤브', time: ['dinner'], company: ['pair', 'team'], budget: ['high'], moods: ['social', 'fresh'], hot: true, rice: false },
+      { name: '도시락 / 덮밥', time: ['lunch', 'dinner'], company: ['solo', 'pair'], budget: ['light'], moods: ['fast', 'comfort'], hot: true, rice: true },
+      { name: '타코 / 브리또', time: ['lunch', 'dinner'], company: ['pair', 'team'], budget: ['mid'], moods: ['fresh', 'social'], hot: false, rice: false }
+    ];
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const scoreMenu = (menu, state) => {
+      let score = 0;
+      if (state.time === 'any' || menu.time.includes(state.time)) score += 3;
+      if (state.company === 'any' || menu.company.includes(state.company)) score += 2;
+      if (state.budget === 'any' || menu.budget.includes(state.budget)) score += 3;
+      if (state.mood === 'any' || menu.moods.includes(state.mood)) score += 4;
+      if (!state.wantHot && menu.hot) score -= 1;
+      if (!state.wantRice && menu.rice) score -= 1;
+      return score;
+    };
+
+    const generate = () => {
+      const state = {
+        time: timeEl.value || 'lunch',
+        company: companyEl.value || 'solo',
+        budget: budgetEl.value || 'mid',
+        mood: moodEl.value || 'comfort',
+        wantHot: !!hotEl.checked,
+        wantRice: !!riceEl.checked
+      };
+
+      let ranked = menus.map((menu) => ({ ...menu, score: scoreMenu(menu, state) }))
+        .filter((menu) => menu.score >= 4)
+        .sort((a, b) => b.score - a.score || a.name.localeCompare(b.name, 'ko'));
+
+      if (!state.wantHot) ranked = ranked.filter((menu) => !menu.hot || menu.score >= 7);
+      if (!state.wantRice) ranked = ranked.filter((menu) => !menu.rice || menu.score >= 7);
+      if (!ranked.length) {
+        ranked = menus.map((menu) => ({ ...menu, score: scoreMenu(menu, { ...state, mood: 'any', budget: 'any' }) }))
+          .sort((a, b) => b.score - a.score || a.name.localeCompare(b.name, 'ko'));
+      }
+
+      const picks = ranked.slice(0, 3);
+      const lines = [];
+      lines.push('[오늘 뭐 먹지? 메뉴 추천 결과]');
+      lines.push(`- 식사 상황: ${timeEl.options[timeEl.selectedIndex].text}`);
+      lines.push(`- 함께 먹는 사람: ${companyEl.options[companyEl.selectedIndex].text}`);
+      lines.push(`- 예산: ${budgetEl.options[budgetEl.selectedIndex].text}`);
+      lines.push(`- 원하는 분위기: ${moodEl.options[moodEl.selectedIndex].text}`);
+      lines.push('');
+      picks.forEach((pick, index) => {
+        const tags = [];
+        if (pick.hot) tags.push('뜨끈함');
+        if (pick.rice) tags.push('밥류');
+        tags.push(...pick.moods.slice(0, 2).map((m) => labelMap[m] || m));
+        lines.push(`${index + 1}. ${pick.name} — ${tags.join(' · ')}`);
+      });
+      lines.push('');
+      lines.push('고르기 팁');
+      lines.push('- 빨리 정해야 하면 1번부터, 여럿이 먹는 자리면 social 성향 메뉴를 먼저 보세요.');
+      lines.push('- 너무 무거운 메뉴가 싫으면 fresh, 든든하게 먹고 싶으면 comfort 성향 메뉴가 잘 맞습니다.');
+
+      outputEl.value = lines.join('\n');
+      countEl.textContent = String(ranked.length);
+      topTagEl.textContent = moodEl.options[moodEl.selectedIndex].text;
+      budgetTagEl.textContent = budgetEl.options[budgetEl.selectedIndex].text;
+      formatEl.textContent = '복사형 추천 리스트';
+      helpEl.textContent = picks.length ? `${picks.map((pick) => pick.name).join(', ')} 순으로 추천했어요.` : '조건을 조금 완화해서 다시 추천해보세요.';
+    };
+
+    [timeEl, companyEl, budgetEl, moodEl, hotEl, riceEl].forEach((el) => {
+      el.addEventListener('input', generate);
+      el.addEventListener('change', generate);
+    });
+    runBtn.addEventListener('click', generate);
+    copyBtn.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) generate();
+      await copyText(outputEl.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    generate();
+  }
+
   if (slug === 'blog-banned-word-checker') {
     const input = document.getElementById('bw-input');
     const summary = document.getElementById('bw-summary');
