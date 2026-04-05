@@ -11,6 +11,8 @@ image:
   path: /assets/thumbs/memory-quiz-generator.svg
   alt: 暗記クイズ生成ツールのサムネイル
 tool_key: memory-quiz-generator
+tool_type: learning
+topic_cluster: study
 keywords: [暗記クイズ生成, セルフテスト, 単語帳クイズ, 学習ノートテスト, フラッシュカード代替]
 related_tools: [pomodoro-timer, readability-checker, text-counter]
 faq:

@@ -11,6 +11,8 @@ image:
   path: /assets/thumbs/memory-quiz-generator.svg
   alt: Memory quiz generator thumbnail
 tool_key: memory-quiz-generator
+tool_type: learning
+topic_cluster: study
 keywords: [memory quiz generator, self test cards, vocabulary quiz maker, study note quiz, flashcard alternative]
 related_tools: [pomodoro-timer, readability-checker, text-counter]
 faq:
