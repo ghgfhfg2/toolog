@@ -198,6 +198,40 @@ layout: default
           <p class="tool-result" id="rc-summary">텍스트를 입력하면 문장 길이와 문단 밀도를 바로 점검합니다.</p>
           <div id="rc-list" class="bw-list"></div>
         </div>
+      {% when 'memory-quiz-generator' %}
+        <div class="tool-ui">
+          <textarea id="mqg-input" rows="10" maxlength="20000" placeholder="{% if page.lang == 'en' %}Paste one prompt-answer pair per line. Example: mitochondria = cell energy production{% elsif page.lang == 'ja' %}1行に1カードずつ貼り付けてください。例: ミトコンドリア = 細胞のエネルギー産生{% else %}한 줄에 카드 하나씩 붙여넣으세요. 예: 미토콘드리아 = 세포 에너지 생산{% endif %}"></textarea>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="mqg-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 넣기{% endif %}</button>
+            <button id="mqg-build" type="button">{% if page.lang == 'en' %}Create quiz{% elsif page.lang == 'ja' %}クイズ作成{% else %}퀴즈 만들기{% endif %}</button>
+            <label class="tool-check"><input id="mqg-shuffle" type="checkbox" checked /> {% if page.lang == 'en' %}Shuffle cards{% elsif page.lang == 'ja' %}順番をシャッフル{% else %}카드 순서 섞기{% endif %}</label>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="mqg-total">0</strong><span>{% if page.lang == 'en' %}Cards{% elsif page.lang == 'ja' %}カード数{% else %}카드 수{% endif %}</span></div>
+            <div><strong id="mqg-current">0</strong><span>{% if page.lang == 'en' %}Progress{% elsif page.lang == 'ja' %}進行{% else %}진행{% endif %}</span></div>
+            <div><strong id="mqg-correct">0</strong><span>{% if page.lang == 'en' %}Correct{% elsif page.lang == 'ja' %}正解{% else %}맞음{% endif %}</span></div>
+            <div><strong id="mqg-wrong">0</strong><span>{% if page.lang == 'en' %}Wrong{% elsif page.lang == 'ja' %}不正解{% else %}틀림{% endif %}</span></div>
+            <div><strong id="mqg-accuracy">-</strong><span>{% if page.lang == 'en' %}Accuracy{% elsif page.lang == 'ja' %}正答率{% else %}정답률{% endif %}</span></div>
+          </div>
+
+          <p class="tool-result" id="mqg-summary">{% if page.lang == 'en' %}Paste prompt-answer pairs and build a quiz to start self-testing.{% elsif page.lang == 'ja' %}質問と答えのペアを貼り付けてクイズを作成すると、セルフテストを始められます。{% else %}질문-정답 쌍을 붙여넣고 퀴즈를 만들면 셀프 테스트를 시작할 수 있습니다.{% endif %}</p>
+
+          <div class="tool-card" id="mqg-card">
+            <h3 id="mqg-question">{% if page.lang == 'en' %}No quiz yet{% elsif page.lang == 'ja' %}まだクイズがありません{% else %}아직 퀴즈가 없습니다{% endif %}</h3>
+            <p id="mqg-answer" class="tool-result">{% if page.lang == 'en' %}The answer will appear here after reveal.{% elsif page.lang == 'ja' %}答えを表示するとここに出ます。{% else %}정답 보기를 누르면 여기에 표시됩니다.{% endif %}</p>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="mqg-reveal" type="button">{% if page.lang == 'en' %}Reveal answer{% elsif page.lang == 'ja' %}答えを見る{% else %}정답 보기{% endif %}</button>
+            <button id="mqg-correct-btn" type="button">{% if page.lang == 'en' %}I got it{% elsif page.lang == 'ja' %}正解した{% else %}맞았어요{% endif %}</button>
+            <button id="mqg-wrong-btn" type="button">{% if page.lang == 'en' %}I missed it{% elsif page.lang == 'ja' %}間違えた{% else %}틀렸어요{% endif %}</button>
+            <button id="mqg-next" type="button">{% if page.lang == 'en' %}Next card{% elsif page.lang == 'ja' %}次のカード{% else %}다음 카드{% endif %}</button>
+          </div>
+
+          <div id="mqg-missed" class="bw-list"></div>
+        </div>
       {% when 'meeting-agenda-generator' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">

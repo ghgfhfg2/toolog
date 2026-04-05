@@ -1,3 +1,25 @@
+- id: memory-quiz-generator
+  title: 암기 퀴즈 생성기
+  title_en: Memory Quiz Generator
+  title_ja: 暗記クイズ生成ツール
+  category: study
+  category_label: 공부/학습
+  category_label_en: Study/Learning
+  category_label_ja: 学習/暗記
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 질문-정답 목록을 붙여넣으면 랜덤 퀴즈, 정답 보기, 자기 채점, 오답 복습까지 바로 할 수 있어요.
+  description_en: Paste prompt-answer pairs to create random quiz cards, reveal answers, self-mark results, and review missed items.
+  description_ja: 質問と答えの一覧を貼り付けると、ランダム出題、答え表示、自己採点、間違い復習までその場でできます。
+  url: /tools/memory-quiz-generator/
+  url_en: /en/tools/memory-quiz-generator/
+  url_ja: /ja/tools/memory-quiz-generator/
+  thumbnail: /assets/thumbs/memory-quiz-generator.svg
+  published_at: 2026-04-05
+  tool_type: learning
+  topic_cluster: study
+
 - id: lunch-menu-picker
   title: 점심 메뉴 추천기
   title_en: Lunch Menu Picker
