@@ -198,6 +198,69 @@ layout: default
           <p class="tool-result" id="rc-summary">텍스트를 입력하면 문장 길이와 문단 밀도를 바로 점검합니다.</p>
           <div id="rc-list" class="bw-list"></div>
         </div>
+      {% when 'remote-work-cost-simulator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="rw-total-days">월 근무일 수</label>
+              <input id="rw-total-days" type="number" min="1" max="31" step="1" value="20" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="rw-office-days">월 출근일 수</label>
+              <input id="rw-office-days" type="number" min="0" max="31" step="1" value="8" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="rw-commute-cost">출근 1일 교통비(왕복)</label>
+              <input id="rw-commute-cost" type="number" min="0" step="100" value="4000" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="rw-lunch-cost">출근 1일 점심값</label>
+              <input id="rw-lunch-cost" type="number" min="0" step="100" value="11000" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="rw-coffee-cost">출근 1일 커피/간식비</label>
+              <input id="rw-coffee-cost" type="number" min="0" step="100" value="3000" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="rw-home-extra">재택 1일 추가비용</label>
+              <input id="rw-home-extra" type="number" min="0" step="100" value="2000" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="rw-commute-minutes">왕복 통근시간(분)</label>
+              <input id="rw-commute-minutes" type="number" min="0" max="360" step="5" value="80" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="rw-hour-value">시간 가치 시급(선택)</label>
+              <input id="rw-hour-value" type="number" min="0" step="500" placeholder="예: 15000" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="rw-copy" type="button">결과 복사</button>
+            <button id="rw-reset" type="button">예시값 채우기</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="rw-office-total">-</strong><span>출근 총비용</span></div>
+            <div><strong id="rw-home-total">-</strong><span>재택 총비용</span></div>
+            <div><strong id="rw-time-cost">-</strong><span>통근 시간 환산</span></div>
+            <div><strong id="rw-gap">-</strong><span>월 체감 차이</span></div>
+            <div><strong id="rw-hours">-</strong><span>월 통근시간</span></div>
+            <div><strong id="rw-break-even">-</strong><span>손익분기 출근일</span></div>
+          </div>
+
+          <p class="tool-result" id="rw-help">월 근무일 수와 출근 비용을 입력하면 재택/출근 비용 차이를 시뮬레이션합니다.</p>
+        </div>
+
       {% when 'memory-quiz-generator' %}
         <div class="tool-ui">
           <textarea id="mqg-input" rows="10" maxlength="20000" placeholder="{% if page.lang == 'en' %}Paste one prompt-answer pair per line. Example: mitochondria = cell energy production{% elsif page.lang == 'ja' %}1行に1カードずつ貼り付けてください。例: ミトコンドリア = 細胞のエネルギー産生{% else %}한 줄에 카드 하나씩 붙여넣으세요. 예: 미토콘드리아 = 세포 에너지 생산{% endif %}"></textarea>

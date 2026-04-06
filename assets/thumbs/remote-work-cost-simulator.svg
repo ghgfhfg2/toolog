@@ -1,0 +1,23 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#0F172A"/>
+  <rect x="64" y="64" width="1072" height="502" rx="30" fill="#111827" stroke="#334155" stroke-width="4"/>
+  <rect x="120" y="128" width="424" height="374" rx="24" fill="#1E293B"/>
+  <rect x="656" y="128" width="424" height="374" rx="24" fill="#172554"/>
+  <rect x="168" y="176" width="168" height="168" rx="28" fill="#38BDF8" fill-opacity="0.2" stroke="#38BDF8" stroke-width="4"/>
+  <rect x="704" y="176" width="168" height="168" rx="28" fill="#A78BFA" fill-opacity="0.2" stroke="#A78BFA" stroke-width="4"/>
+  <path d="M214 294H290" stroke="#38BDF8" stroke-width="14" stroke-linecap="round"/>
+  <path d="M252 256V332" stroke="#38BDF8" stroke-width="14" stroke-linecap="round"/>
+  <path d="M742 314C742 286.386 764.386 264 792 264C819.614 264 842 286.386 842 314" stroke="#A78BFA" stroke-width="14" stroke-linecap="round"/>
+  <path d="M768 314H816" stroke="#A78BFA" stroke-width="14" stroke-linecap="round"/>
+  <rect x="168" y="380" width="320" height="22" rx="11" fill="#94A3B8"/>
+  <rect x="168" y="418" width="272" height="18" rx="9" fill="#64748B"/>
+  <rect x="168" y="448" width="220" height="18" rx="9" fill="#64748B"/>
+  <rect x="704" y="380" width="320" height="22" rx="11" fill="#C4B5FD"/>
+  <rect x="704" y="418" width="272" height="18" rx="9" fill="#818CF8"/>
+  <rect x="704" y="448" width="220" height="18" rx="9" fill="#818CF8"/>
+  <path d="M560 244L638 244" stroke="#22C55E" stroke-width="16" stroke-linecap="round"/>
+  <path d="M608 204L648 244L608 284" stroke="#22C55E" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="600" y="548" fill="#E2E8F0" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="50" font-weight="700" text-anchor="middle">재택 vs 출근 비용 비교 시뮬레이터</text>
+  <text x="188" y="232" fill="#E0F2FE" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="28" font-weight="700">REMOTE</text>
+  <text x="724" y="232" fill="#EDE9FE" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="28" font-weight="700">COMMUTE</text>
+</svg>

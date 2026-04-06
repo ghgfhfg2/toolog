@@ -8087,5 +8087,122 @@
 
     renderCard();
   }
+  if (slug === 'remote-work-cost-simulator') {
+    const totalDaysEl = document.getElementById('rw-total-days');
+    const officeDaysEl = document.getElementById('rw-office-days');
+    const commuteCostEl = document.getElementById('rw-commute-cost');
+    const lunchCostEl = document.getElementById('rw-lunch-cost');
+    const coffeeCostEl = document.getElementById('rw-coffee-cost');
+    const homeExtraEl = document.getElementById('rw-home-extra');
+    const commuteMinutesEl = document.getElementById('rw-commute-minutes');
+    const hourValueEl = document.getElementById('rw-hour-value');
+    const officeTotalEl = document.getElementById('rw-office-total');
+    const homeTotalEl = document.getElementById('rw-home-total');
+    const timeCostEl = document.getElementById('rw-time-cost');
+    const gapEl = document.getElementById('rw-gap');
+    const hoursEl = document.getElementById('rw-hours');
+    const breakEvenEl = document.getElementById('rw-break-even');
+    const helpEl = document.getElementById('rw-help');
+    const copyBtn = document.getElementById('rw-copy');
+    const resetBtn = document.getElementById('rw-reset');
+
+    if (!totalDaysEl || !officeDaysEl || !commuteCostEl || !lunchCostEl || !coffeeCostEl || !homeExtraEl || !commuteMinutesEl || !hourValueEl || !officeTotalEl || !homeTotalEl || !timeCostEl || !gapEl || !hoursEl || !breakEvenEl || !helpEl) return;
+
+    const t = {
+      currency: '원',
+      day: '일',
+      hour: '시간',
+      noValue: '미반영',
+      winOffice: '출근 쪽이 유리',
+      winHome: '재택 쪽이 유리',
+      similar: '거의 비슷함',
+      helpOffice: (gap) => `입력 기준으로는 출근 쪽이 월 ${gap} 더 유리합니다.`,
+      helpHome: (gap) => `입력 기준으로는 재택 쪽이 월 ${gap} 더 유리합니다.`,
+      helpSimilar: '입력 기준으로는 두 방식의 체감 차이가 크지 않습니다.',
+      copy: (office, home, time, gap, hours, be) => `재택 vs 출근 비교 | 출근 총비용 ${office} | 재택 총비용 ${home} | 통근 시간 환산 ${time} | 월 체감 차이 ${gap} | 월 통근시간 ${hours} | 손익분기 출근일 ${be}`,
+      copied: '복사됨',
+      copyDefault: '결과 복사'
+    };
+
+    const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
+    const fmtMoney = (v) => `${Math.round(v || 0).toLocaleString(numberLocale)}${t.currency}`;
+    const fmtHours = (mins) => `${(mins / 60).toLocaleString(numberLocale, { maximumFractionDigits: 1 })}${t.hour}`;
+    const fmtDays = (days) => `${Math.round(days).toLocaleString(numberLocale)}${t.day}`;
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const render = () => {
+      const totalDays = clamp(Math.floor(Number(totalDaysEl.value || 0)), 1, 31);
+      const officeDays = clamp(Math.floor(Number(officeDaysEl.value || 0)), 0, totalDays);
+      const homeDays = Math.max(0, totalDays - officeDays);
+      const commuteCost = Math.max(0, Number(commuteCostEl.value || 0));
+      const lunchCost = Math.max(0, Number(lunchCostEl.value || 0));
+      const coffeeCost = Math.max(0, Number(coffeeCostEl.value || 0));
+      const homeExtra = Math.max(0, Number(homeExtraEl.value || 0));
+      const commuteMinutes = clamp(Number(commuteMinutesEl.value || 0), 0, 360);
+      const hourValue = Math.max(0, Number(hourValueEl.value || 0));
+
+      totalDaysEl.value = totalDays;
+      officeDaysEl.value = officeDays;
+
+      const officeDaily = commuteCost + lunchCost + coffeeCost;
+      const officeTotal = officeDaily * officeDays;
+      const homeTotal = homeExtra * homeDays;
+      const totalCommuteMinutes = commuteMinutes * officeDays;
+      const timeCost = hourValue > 0 ? (totalCommuteMinutes / 60) * hourValue : 0;
+      const effectiveOffice = officeTotal + timeCost;
+      const gap = effectiveOffice - homeTotal;
+      const dailyGap = officeDaily + ((commuteMinutes / 60) * hourValue) + homeExtra;
+      const breakEvenDays = dailyGap <= 0 ? 0 : Math.ceil(homeTotal / dailyGap);
+
+      officeTotalEl.textContent = fmtMoney(officeTotal);
+      homeTotalEl.textContent = fmtMoney(homeTotal);
+      timeCostEl.textContent = hourValue > 0 ? fmtMoney(timeCost) : t.noValue;
+      hoursEl.textContent = fmtHours(totalCommuteMinutes);
+      breakEvenEl.textContent = fmtDays(Math.min(totalDays, breakEvenDays));
+
+      if (Math.abs(gap) < 1000) {
+        gapEl.textContent = `${fmtMoney(Math.abs(gap))} (${t.similar})`;
+        helpEl.textContent = t.helpSimilar;
+      } else if (gap < 0) {
+        gapEl.textContent = `${fmtMoney(Math.abs(gap))} (${t.winOffice})`;
+        helpEl.textContent = t.helpOffice(fmtMoney(Math.abs(gap)));
+      } else {
+        gapEl.textContent = `${fmtMoney(Math.abs(gap))} (${t.winHome})`;
+        helpEl.textContent = t.helpHome(fmtMoney(Math.abs(gap)));
+      }
+    };
+
+    [totalDaysEl, officeDaysEl, commuteCostEl, lunchCostEl, coffeeCostEl, homeExtraEl, commuteMinutesEl, hourValueEl].forEach((el) => el.addEventListener('input', render));
+
+    resetBtn?.addEventListener('click', () => {
+      totalDaysEl.value = 20;
+      officeDaysEl.value = 8;
+      commuteCostEl.value = 4000;
+      lunchCostEl.value = 11000;
+      coffeeCostEl.value = 3000;
+      homeExtraEl.value = 2000;
+      commuteMinutesEl.value = 80;
+      hourValueEl.value = '';
+      render();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      await copyText(t.copy(officeTotalEl.textContent, homeTotalEl.textContent, timeCostEl.textContent, gapEl.textContent, hoursEl.textContent, breakEvenEl.textContent));
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+
+    render();
+  }
+
 
 })();

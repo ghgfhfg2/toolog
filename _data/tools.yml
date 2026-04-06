@@ -1,3 +1,25 @@
+- id: remote-work-cost-simulator
+  title: 재택 vs 출근 비용 비교 시뮬레이터
+  title_en: Remote Work vs Commute Cost Simulator
+  title_ja: 在宅勤務 vs 通勤コスト比較シミュレーター
+  category: productivity
+  category_label: 업무/생산성
+  category_label_en: Work/Productivity
+  category_label_ja: 仕事/生産性
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 재택과 출근의 교통비, 식비, 커피값, 통근시간, 재택 추가비용을 월 기준으로 비교해 어떤 근무 방식이 더 유리한지 살펴봐요.
+  description_en: Compare commuting, meals, coffee, extra home-office costs, and travel time on a monthly basis to see which work style feels cheaper.
+  description_ja: 通勤費、食費、コーヒー代、移動時間、在宅追加費用を月単位で比較して、どの働き方が有利か確認できます。
+  url: /tools/remote-work-cost-simulator/
+  url_en: /en/tools/remote-work-cost-simulator/
+  url_ja: /ja/tools/remote-work-cost-simulator/
+  thumbnail: /assets/thumbs/remote-work-cost-simulator.svg
+  published_at: 2026-04-06
+  tool_type: simulator
+  topic_cluster: work
+
 - id: memory-quiz-generator
   title: 암기 퀴즈 생성기
   title_en: Memory Quiz Generator
