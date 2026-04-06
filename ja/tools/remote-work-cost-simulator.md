@@ -11,6 +11,8 @@ image:
   path: /assets/thumbs/ja/remote-work-cost-simulator.svg
   alt: 在宅勤務 vs 通勤コスト比較シミュレーターのサムネイル
 tool_key: remote-work-cost-simulator
+tool_type: simulator
+topic_cluster: work
 keywords: [在宅勤務 コスト比較, 通勤コスト, ハイブリッド勤務 比較, 働き方シミュレーター, 移動時間 コスト]
 related_tools: [time-difference-calculator, lunch-menu-picker, pomodoro-timer]
 faq:

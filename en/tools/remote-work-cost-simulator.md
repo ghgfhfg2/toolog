@@ -11,6 +11,8 @@ image:
   path: /assets/thumbs/en/remote-work-cost-simulator.svg
   alt: Remote work vs commute cost simulator thumbnail
 tool_key: remote-work-cost-simulator
+tool_type: simulator
+topic_cluster: work
 keywords: [remote work cost simulator, commute cost comparison, hybrid work calculator, work style comparison, travel time cost]
 related_tools: [time-difference-calculator, lunch-menu-picker, pomodoro-timer]
 faq:
