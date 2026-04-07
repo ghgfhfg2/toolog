@@ -4677,6 +4677,166 @@
     generate();
   }
 
+  if (slug === 'text-line-break-cleaner') {
+    const input = document.getElementById('tlbc-input');
+    const output = document.getElementById('tlbc-output');
+    const trim = document.getElementById('tlbc-trim');
+    const spaces = document.getElementById('tlbc-spaces');
+    const blank = document.getElementById('tlbc-blank');
+    const join = document.getElementById('tlbc-join');
+    const bullets = document.getElementById('tlbc-bullets');
+    const bulletStyle = document.getElementById('tlbc-bullet-style');
+    const runBtn = document.getElementById('tlbc-run');
+    const sampleBtn = document.getElementById('tlbc-sample');
+    const copyBtn = document.getElementById('tlbc-copy');
+    const linesIn = document.getElementById('tlbc-lines-in');
+    const linesOut = document.getElementById('tlbc-lines-out');
+    const charsOut = document.getElementById('tlbc-chars-out');
+    const changesEl = document.getElementById('tlbc-changes');
+    const help = document.getElementById('tlbc-help');
+
+    if (!input || !output || !trim || !spaces || !blank || !join || !bullets || !bulletStyle || !runBtn || !sampleBtn || !copyBtn || !linesIn || !linesOut || !charsOut || !changesEl || !help) return;
+
+    const tlbcText = {
+      ko: {
+        idle: '텍스트를 붙여넣고 정리 옵션을 고르면 복붙 흔적을 빠르게 다듬습니다.',
+        copied: '복사됨',
+        copyDefault: '결과 복사',
+        summary: (n) => `선택한 정리 옵션 ${n}개를 적용했습니다. 결과를 한 번 더 눈으로 확인해 보세요.`
+      },
+      en: {
+        idle: 'Paste text and choose cleanup options to tidy copied formatting quickly.',
+        copied: 'Copied',
+        copyDefault: 'Copy result',
+        summary: (n) => `Applied ${n} selected cleanup option(s). Review the result once before using it.`
+      },
+      ja: {
+        idle: 'テキストを貼り付けて整形オプションを選ぶと、コピー時の崩れをすばやく整えます。',
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー',
+        summary: (n) => `選択した整形オプション ${n} 件を適用しました。使用前に一度結果を確認してください。`
+      }
+    }[pageLang] || {
+      idle: '텍스트를 붙여넣고 정리 옵션을 고르면 복붙 흔적을 빠르게 다듬습니다.',
+      copied: '복사됨',
+      copyDefault: '결과 복사',
+      summary: (n) => `선택한 정리 옵션 ${n}개를 적용했습니다. 결과를 한 번 더 눈으로 확인해 보세요.`
+    };
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const isBulletLine = (line) => /^\s*([-*•]|\d+[.)])\s+/.test(line);
+    const isHeadingLine = (line) => /^\s*#{1,6}\s+/.test(line) || /^\s*\[[^\]]+\]\s*$/.test(line);
+    const looksSentenceEnd = (line) => /[.!?。！？…:：]$/.test(line.trim());
+
+    const clean = () => {
+      const selectedCount = [trim.checked, spaces.checked, blank.checked, join.checked, bullets.checked].filter(Boolean).length;
+      const original = input.value || '';
+      const originalLines = original === '' ? [] : original.replace(/\r\n?/g, '\n').split('\n');
+      let lines = [...originalLines];
+
+      if (trim.checked) {
+        lines = lines.map((line) => line.trim());
+      }
+
+      if (spaces.checked) {
+        lines = lines.map((line) => line.replace(/[ \t]{2,}/g, ' '));
+      }
+
+      if (bullets.checked) {
+        const style = bulletStyle.value || '-';
+        lines = lines.map((line) => line.replace(/^\s*([-*•])\s+/, `${style} `));
+      }
+
+      if (join.checked) {
+        const merged = [];
+        lines.forEach((line) => {
+          const current = line || '';
+          const prev = merged.length ? merged[merged.length - 1] : null;
+          const currentTrim = current.trim();
+          if (!currentTrim) {
+            merged.push('');
+            return;
+          }
+          if (!prev || !prev.trim()) {
+            merged.push(currentTrim);
+            return;
+          }
+          if (isBulletLine(currentTrim) || isBulletLine(prev) || isHeadingLine(currentTrim) || isHeadingLine(prev) || looksSentenceEnd(prev)) {
+            merged.push(currentTrim);
+            return;
+          }
+          merged[merged.length - 1] = `${prev.trim()} ${currentTrim}`.replace(/[ \t]{2,}/g, ' ');
+        });
+        lines = merged;
+      }
+
+      if (blank.checked) {
+        const compact = [];
+        let blankSeen = false;
+        lines.forEach((line) => {
+          if ((line || '').trim() === '') {
+            if (!blankSeen) compact.push('');
+            blankSeen = true;
+          } else {
+            compact.push(line);
+            blankSeen = false;
+          }
+        });
+        while (compact.length && compact[0] === '') compact.shift();
+        while (compact.length && compact[compact.length - 1] === '') compact.pop();
+        lines = compact;
+      }
+
+      const result = lines.join('\n');
+      output.value = result;
+      linesIn.textContent = formatNum(originalLines.length);
+      linesOut.textContent = formatNum(result ? result.split('\n').length : 0);
+      charsOut.textContent = formatNum(result.length);
+      changesEl.textContent = formatNum(selectedCount);
+      help.textContent = tlbcText.summary(selectedCount);
+    };
+
+    sampleBtn.addEventListener('click', () => {
+      input.value = "  회의 공지 초안  \n\n- 안건 1\n* 안건 2\n• 안건 3\n\nPDF에서 복사한 문장이라\n줄마다 강제로\n끊겨 보입니다.\n\n\n참석 가능 여부를\n금요일까지 알려주세요.  ";
+      clean();
+    });
+
+    runBtn.addEventListener('click', clean);
+    [input, trim, spaces, blank, join, bullets, bulletStyle].forEach((el) => {
+      el?.addEventListener('input', clean);
+      el?.addEventListener('change', clean);
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      if (!output.value.trim()) clean();
+      if (!output.value.trim()) return;
+      await copyText(output.value);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = tlbcText.copied;
+      setTimeout(() => { copyBtn.textContent = old || tlbcText.copyDefault; }, 900);
+    });
+
+    linesIn.textContent = '0';
+    linesOut.textContent = '0';
+    charsOut.textContent = '0';
+    changesEl.textContent = formatNum([trim.checked, spaces.checked, blank.checked, join.checked, bullets.checked].filter(Boolean).length);
+    help.textContent = tlbcText.idle;
+  }
+
   if (slug === 'blog-banned-word-checker') {
     const input = document.getElementById('bw-input');
     const summary = document.getElementById('bw-summary');

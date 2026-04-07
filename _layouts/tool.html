@@ -166,6 +166,48 @@ layout: default
           </div>
           <div id="bw-list" class="bw-list"></div>
         </div>
+      {% when 'text-line-break-cleaner' %}
+        <div class="tool-ui">
+          <textarea id="tlbc-input" rows="10" maxlength="30000" placeholder="복사한 텍스트를 붙여넣으세요."></textarea>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="tlbc-trim" type="checkbox" checked /> 줄 앞뒤 공백 제거</label>
+            <label class="tool-check"><input id="tlbc-spaces" type="checkbox" checked /> 중복 공백 정리</label>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="tlbc-blank" type="checkbox" checked /> 여러 개의 빈줄 줄이기</label>
+            <label class="tool-check"><input id="tlbc-join" type="checkbox" checked /> 문단 내 강제 줄바꿈 합치기</label>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="tlbc-bullets" type="checkbox" checked /> 목록 기호 통일</label>
+            <div>
+              <label for="tlbc-bullet-style">불릿 스타일</label>
+              <select id="tlbc-bullet-style">
+                <option value="-">하이픈 (-)</option>
+                <option value="•">점 (•)</option>
+                <option value="*">*</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="tlbc-run" type="button">텍스트 정리</button>
+            <button id="tlbc-sample" type="button">예시 넣기</button>
+            <button id="tlbc-copy" type="button">결과 복사</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="tlbc-lines-in">0</strong><span>원본 줄 수</span></div>
+            <div><strong id="tlbc-lines-out">0</strong><span>정리 후 줄 수</span></div>
+            <div><strong id="tlbc-chars-out">0</strong><span>정리 후 글자 수</span></div>
+            <div><strong id="tlbc-changes">0</strong><span>적용 항목 수</span></div>
+          </div>
+
+          <p class="tool-result" id="tlbc-help">텍스트를 붙여넣고 정리 옵션을 고르면 복붙 흔적을 빠르게 다듬습니다.</p>
+          <textarea id="tlbc-output" rows="12" readonly placeholder="정리 결과가 여기에 표시됩니다."></textarea>
+        </div>
       {% when 'readability-checker' %}
         <div class="tool-ui">
           <textarea id="rc-input" rows="10" maxlength="12000" placeholder="문장 가독성을 점검할 글을 붙여넣으세요."></textarea>

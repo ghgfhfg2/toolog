@@ -1,3 +1,25 @@
+- id: text-line-break-cleaner
+  title: 텍스트 줄바꿈 정리기
+  title_en: Text Line Break Cleaner
+  title_ja: テキスト改行クリーナー
+  category: text
+  category_label: 텍스트/유틸리티
+  category_label_en: Text/Utility
+  category_label_ja: テキスト/ユーティリティ
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 복붙한 텍스트의 줄바꿈, 빈줄, 목록 기호, 중복 공백을 한 번에 정리해 읽기 좋은 형태로 바꿔줘요.
+  description_en: Clean pasted text by fixing awkward line breaks, extra blank lines, bullet styles, and repeated spaces in one pass.
+  description_ja: コピーしたテキストの不自然な改行、空行、箇条書き記号、重複スペースをまとめて整えます。
+  url: /tools/text-line-break-cleaner/
+  url_en: /en/tools/text-line-break-cleaner/
+  url_ja: /ja/tools/text-line-break-cleaner/
+  thumbnail: /assets/thumbs/text-line-break-cleaner.svg
+  published_at: 2026-04-07
+  tool_type: utility
+  topic_cluster: text
+
 - id: remote-work-cost-simulator
   title: 재택 vs 출근 비용 비교 시뮬레이터
   title_en: Remote Work vs Commute Cost Simulator
