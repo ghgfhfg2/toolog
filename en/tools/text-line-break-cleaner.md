@@ -11,6 +11,8 @@ image:
   path: /assets/thumbs/en/text-line-break-cleaner.svg
   alt: Text line break cleaner thumbnail
 tool_key: text-line-break-cleaner
+tool_type: utility
+topic_cluster: text
 keywords: [text line break cleaner, text cleanup tool, remove extra line breaks, bullet cleanup, whitespace cleaner]
 related_tools: [readability-checker, text-counter, case-converter]
 faq:

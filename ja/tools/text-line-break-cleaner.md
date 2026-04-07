@@ -11,6 +11,8 @@ image:
   path: /assets/thumbs/ja/text-line-break-cleaner.svg
   alt: テキスト改行クリーナーのサムネイル
 tool_key: text-line-break-cleaner
+tool_type: utility
+topic_cluster: text
 keywords: [テキスト改行クリーナー, 改行整理, 空行整理, 箇条書き整理, 空白整理ツール]
 related_tools: [readability-checker, text-counter, case-converter]
 faq:
