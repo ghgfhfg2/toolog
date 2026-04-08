@@ -1,35 +1,7 @@
 ---
-title: Business Trip Checklist Planner
-description: Build a copy-ready business trip packing checklist based on trip length,
-  transport, baggage style, climate, and meeting needs.
-category: productivity
-category_label: 업무/여행 준비
-thumbnail: /assets/thumbs/business-trip-checklist-planner.svg
-image:
-  path: /assets/thumbs/business-trip-checklist-planner.svg
-  alt: 출장 준비 체크리스트 생성기 썸네일
-tool_key: business-trip-checklist-planner
-tool_type: planner
-topic_cluster: travel
-keywords:
-- 출장 준비 체크리스트
-- 출장 짐 리스트
-- 출장 준비물
-- 비즈니스 트립 체크리스트
-- 여행 준비 체크리스트
-related_tools:
-- move-checklist-planner
-- timezone-converter
-- remote-work-cost-simulator
-faq:
-- q: 개인 여행에도 써도 되나요?
-  a: 네. 회의 일정이나 업무 장비 관련 항목만 끄면 일반 여행 준비 리스트처럼 활용할 수 있습니다. 다만 이 도구는 출장 맥락에 맞춰 문서·기기·복장
-    항목이 조금 더 강조됩니다.
-- q: 짐 목록이 자동으로 완벽하게 정해지나요?
-  a: 기본적인 준비 누락을 줄이는 데 초점을 둔 체크리스트입니다. 회사 규정, 항공사 수하물 제한, 현지 행사 성격처럼 개인 조건은 마지막에 한
-    번 더 확인하는 것이 좋습니다.
-- q: 입력한 일정 정보가 서버에 저장되나요?
-  a: 아니요. 이 도구는 브라우저 안에서만 동작하며 입력한 정보는 서버로 전송하거나 저장하지 않습니다.
+layout: tool
+title: Business Trip Checklist Planner | Build a practical packing list by trip length, transport, and meeting needs
+description: Enter your business trip length, transport, baggage style, climate, and meeting needs to generate a copy-ready packing checklist.
 lang: en
 permalink: /en/tools/business-trip-checklist-planner/
 canonical_url: /en/tools/business-trip-checklist-planner/
@@ -37,98 +9,111 @@ alternate_urls:
   ko: /tools/business-trip-checklist-planner/
   en: /en/tools/business-trip-checklist-planner/
   ja: /ja/tools/business-trip-checklist-planner/
-auto_draft: true
+category: productivity
+category_label: Work/Travel Prep
+thumbnail: /assets/thumbs/en/business-trip-checklist-planner.svg
+image:
+  path: /assets/thumbs/en/business-trip-checklist-planner.svg
+  alt: Business trip checklist planner thumbnail
+tool_key: business-trip-checklist-planner
+tool_type: planner
+topic_cluster: travel
+keywords: [business trip checklist planner, business trip packing list, business travel checklist, work trip packing checklist, travel prep checklist]
+related_tools: [move-checklist-planner, timezone-converter, remote-work-cost-simulator]
+faq:
+  - q: Can I use it for personal travel too?
+    a: Yes. If you turn off meeting and work-gear related items, it works well as a general travel checklist too. It still leans a bit more toward documents, devices, and outfit planning because it was designed for business trips.
+  - q: Does it generate a perfect packing list automatically?
+    a: It is designed to reduce common omissions, not replace final judgment. You should still double-check company rules, airline baggage limits, and the nature of your event or meetings.
+  - q: Is my trip information stored on a server?
+    a: No. The tool runs entirely in your browser and does not send or store your input on a server.
 ---
 
-> ⚠️ Auto-generated draft from Korean source. Language polishing pending.
+## Why a business trip checklist planner helps
+Business travel has more **small but critical items that become inconvenient immediately if you forget them**.
+It is not just about packing a few extra clothes. You may also need a laptop charger, presentation files, ID, booking confirmation, business cards, and meeting-ready outfits.
 
-## 출장 준비 체크리스트 생성기가 왜 필요할까요?
-출장은 일반 여행보다 **빼먹으면 바로 불편해지는 항목**이 많습니다.
-옷 몇 벌만 챙기면 끝나는 게 아니라, 노트북 충전기, 발표 자료, 신분증, 예약 확인, 명함, 회의 복장처럼 업무 맥락의 준비물이 함께 붙습니다.
+Preparation tends to get messy in situations like these:
+- when the trip is only one night and two days, but you still worry about forgetting your laptop, charger, or documents
+- when what you need changes depending on whether you are flying or taking the train
+- when you are still deciding between carry-on only and checked baggage
+- when the local weather or meeting schedule changes what clothing matters most
+- when personal travel items and work items get mixed together and something important slips through
 
-특히 이런 상황에서 준비가 꼬이기 쉽습니다.
-- 1박 2일 짧은 출장인데도 노트북/충전기/서류를 빠뜨릴까 불안할 때
-- 비행기 이동인지, 기차 이동인지에 따라 챙길 짐이 달라질 때
-- 캐리온만 들고 갈지, 위탁수하물을 붙일지 아직 애매할 때
-- 현지 날씨나 미팅 일정 때문에 복장 우선순위가 달라질 때
-- 개인 여행 짐과 업무용 짐이 섞여 빠뜨리는 항목이 생길 때
+This tool is built to reduce that kind of friction.
+Choose the **trip length, trip type, transport, baggage style, climate, and meeting or device needs**, and it gives you a checklist draft you can copy right away.
 
-이 도구는 그런 상황을 줄이기 위해 만들었습니다.
-**출장 기간, 목적, 이동수단, 수하물 방식, 기후, 회의/장비 조건**을 고르면 바로 복사 가능한 체크리스트 초안을 정리해줍니다.
+## How it works
+The input flow is intentionally simple.
 
-## 어떻게 동작하나요?
-입력 구조는 최대한 단순하게 만들었습니다.
+1. Set the departure date and trip length.
+2. Choose the trip type, such as domestic or international, and how work-focused it will be.
+3. Select the transport method and baggage style.
+4. Pick the local climate and whether laundry is available.
+5. Turn on options like formal meeting wear or bringing a lot of electronics.
 
-1. 출발일과 출장 일수를 정합니다.
-2. 출장 성격(국내/해외, 업무 강도)을 고릅니다.
-3. 이동수단과 수하물 방식을 선택합니다.
-4. 현지 기후와 세탁 가능 여부를 정합니다.
-5. 정장/회의 준비, 전자기기 많이 챙기기 같은 옵션을 켭니다.
+Then, when you generate the checklist, it organizes items into sections such as:
+- **documents and booking confirmations**
+- **clothing and outfits**
+- **electronics and charging gear**
+- **toiletries, health, and daily essentials**
+- **day-of-departure checks**
 
-그다음 생성 버튼을 누르면,
-- **서류 / 예약 확인**
-- **의류 / 착장**
-- **전자기기 / 충전**
-- **세면 / 건강 / 상비품**
-- **이동 당일 체크**
+## Especially useful in these cases
+### 1) Short one-night or two-day trips
+Short trips often tempt you to pack casually, which is exactly when chargers, IDs, or important documents get left behind.
+A quick short-trip checklist helps reduce those mistakes.
 
-형태로 정리된 목록이 바로 만들어집니다.
+### 2) Flights or international business travel
+You may need extra items such as a passport, battery rule checks, a travel adapter, roaming or SIM setup, and checked baggage planning.
+Because the checklist changes based on transport and trip type, it is faster to organize what matters.
 
-## 이런 상황에서 특히 유용해요
-### 1) 짧은 1박 2일 출장
-기간이 짧을수록 “대충 챙겨도 되겠지” 하다가 중요한 충전기나 신분증을 놓치기 쉽습니다.
-짧은 출장용 체크리스트를 먼저 뽑아두면 실수를 줄이기 좋습니다.
+### 3) Presentation-heavy or meeting-focused schedules
+Outfits, presentation files, backups, HDMI adapters, and business cards matter more than they do on a normal leisure trip.
+If you turn on the meeting option, those items get more emphasis.
 
-### 2) 비행기 / 해외 출장
-여권, 보조배터리 규정, 멀티어댑터, 로밍/유심, 위탁 여부 같은 항목이 추가로 필요합니다.
-이동수단과 출장 유형에 따라 필요한 항목을 다르게 보여주기 때문에 빠르게 정리할 수 있습니다.
+## How to use it
+1. Enter the departure date and trip length.
+2. Choose the trip type and transport method.
+3. Select carry-on or checked baggage and the destination climate.
+4. Choose whether laundry is available, whether meeting attire is needed, and whether you are bringing a lot of electronics.
+5. Click `Generate Checklist`.
+6. Copy the result into notes, chat, Notion, or anywhere else you plan your trip.
 
-### 3) 발표 / 미팅 중심 일정
-복장, 발표 파일, 백업 자료, HDMI 젠더, 명함처럼 일반 여행보다 업무 장비가 중요해집니다.
-회의 옵션을 켜면 이런 항목이 더 강조됩니다.
+## Example scenarios
+### Example 1) A 2-night domestic business trip
+- Trip length: 2 nights, 3 days
+- Transport: KTX
+- Baggage: carry-on / backpack
+- Climate: mild
+- Meeting attire: required
 
-## 사용 방법
-1. 출발일과 일정 길이를 입력합니다.
-2. 출장 유형과 이동수단을 선택합니다.
-3. 캐리온/위탁 여부와 현지 기후를 고릅니다.
-4. 세탁 가능 여부, 회의 복장 필요 여부, 전자기기 많이 챙기기 여부를 선택합니다.
-5. `체크리스트 생성`을 누릅니다.
-6. 결과를 복사해 메모앱, 메신저, 노션 등에 붙여넣습니다.
+→ You get a lighter checklist centered on items like a laptop, charger, meeting shirt, ID, and booking confirmation.
 
-## 사용 예시
-### 예시 1) 2박 3일 국내 출장
-- 일정: 2박 3일
-- 이동수단: KTX
-- 수하물: 캐리온 / 백팩
-- 기후: 보통
-- 회의 복장: 필요
+### Example 2) A 4-night international business trip
+- Trip length: 4 nights, 5 days
+- Transport: airplane
+- Baggage: checked baggage included
+- Climate: hot and humid
+- Bringing lots of electronics: on
 
-→ 노트북, 충전기, 회의용 셔츠, 신분증, 예약 확인 같은 항목이 중심인 가벼운 출장 체크리스트가 만들어집니다.
+→ The checklist expands with items like a passport, travel adapter, roaming or SIM prep, battery rule checks, presentation backups, and cable organization.
 
-### 예시 2) 4박 5일 해외 출장
-- 일정: 4박 5일
-- 이동수단: 비행기
-- 수하물: 위탁수하물 있음
-- 기후: 덥고 습함
-- 전자기기 많이 챙기기: 켬
-
-→ 여권, 멀티어댑터, 로밍/유심, 보조배터리 규정 확인, 발표 자료 백업, 케이블 정리 같은 항목이 추가된 보다 촘촘한 목록이 나옵니다.
-
-## 함께 쓰면 좋은 도구
-- 이사/정리처럼 큰 준비 목록을 만들 때: [이사 체크리스트 플래너]({{ '/tools/move-checklist-planner/' | relative_url }})
-- 해외 일정의 시차를 확인할 때: [시간대 변환기]({{ '/tools/timezone-converter/' | relative_url }})
-- 출장 대신 재택/출근 비용을 비교해볼 때: [재택 vs 출근 비용 비교 시뮬레이터]({{ '/tools/remote-work-cost-simulator/' | relative_url }})
+## Related tools
+- For bigger preparation lists such as moving: [Move Checklist Planner]({{ '/en/tools/move-checklist-planner/' | relative_url }})
+- To check time differences for overseas schedules: [Timezone Converter]({{ '/en/tools/timezone-converter/' | relative_url }})
+- To compare remote work and commute costs instead of traveling: [Remote Work Cost Simulator]({{ '/en/tools/remote-work-cost-simulator/' | relative_url }})
 
 ## FAQ
-### 기후에 따라 옷 수량도 자동으로 바뀌나요?
-네. 아주 정밀한 패킹 공식은 아니지만, 출장 일수와 세탁 가능 여부를 기준으로 갈아입을 옷 수량 가이드를 함께 제시합니다.
+### Does it also adjust clothing quantity based on climate?
+Yes. It is not a hyper-detailed packing formula, but it does suggest clothing quantity based on trip length and whether laundry is available.
 
-### 체크리스트를 그대로 쓰면 되나요?
-기본 초안으로는 충분히 유용하지만, 회사 출입 규정, 행사 드레스코드, 항공사 수하물 규정은 마지막에 꼭 직접 확인하세요.
+### Can I use the checklist exactly as it is?
+It is a strong first draft, but you should still confirm company access rules, event dress codes, and airline baggage restrictions yourself.
 
-### 모바일에서도 쓸 수 있나요?
-네. 브라우저에서 바로 작동하며 결과를 복사해 메모앱이나 메신저로 옮겨 쓰기 좋게 만들었습니다.
+### Does it work on mobile?
+Yes. It runs directly in the browser and is designed so the result can be copied easily into notes or messaging apps.
 
-## 요약
-출장 준비 체크리스트 생성기는 **출장 일정과 조건에 맞춰 서류·복장·전자기기·이동 항목을 빠르게 구조화해주는 planner형 도구**입니다.
-짧은 국내 출장부터 해외 비즈니스 트립까지, 준비 누락을 줄이고 복사 가능한 초안을 바로 만들 때 특히 유용합니다.
+## Summary
+The Business Trip Checklist Planner is a **planner-style tool that quickly structures documents, outfits, electronics, and departure checks around the actual conditions of your trip**.
+It is especially useful when you want a copy-ready draft that reduces omissions for anything from a short domestic work trip to a longer international business trip.

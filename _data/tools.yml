@@ -13,8 +13,8 @@
   description_en: Build a copy-ready business trip packing checklist based on trip length, transport, baggage style, climate, and meeting needs.
   description_ja: 出張日数、移動手段、荷物の持ち方、気候、会議予定に合わせて、そのまま使える出張準備チェックリストを作成します。
   url: /tools/business-trip-checklist-planner/
-  url_en: /tools/business-trip-checklist-planner/
-  url_ja: /tools/business-trip-checklist-planner/
+  url_en: /en/tools/business-trip-checklist-planner/
+  url_ja: /ja/tools/business-trip-checklist-planner/
   thumbnail: /assets/thumbs/business-trip-checklist-planner.svg
   published_at: 2026-04-08
   tool_type: planner
