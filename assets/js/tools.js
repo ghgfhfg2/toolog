@@ -4553,6 +4553,242 @@
     generate();
   }
 
+  if (slug === 'business-trip-checklist-planner') {
+    const dateEl = document.getElementById('btcp-date');
+    const daysEl = document.getElementById('btcp-days');
+    const typeEl = document.getElementById('btcp-type');
+    const transportEl = document.getElementById('btcp-transport');
+    const baggageEl = document.getElementById('btcp-baggage');
+    const weatherEl = document.getElementById('btcp-weather');
+    const laundryEl = document.getElementById('btcp-laundry');
+    const formalEl = document.getElementById('btcp-formal');
+    const devicesEl = document.getElementById('btcp-devices');
+    const healthEl = document.getElementById('btcp-health');
+    const runBtn = document.getElementById('btcp-run');
+    const copyBtn = document.getElementById('btcp-copy');
+    const totalEl = document.getElementById('btcp-total');
+    const clothesEl = document.getElementById('btcp-clothes');
+    const focusEl = document.getElementById('btcp-focus');
+    const formatEl = document.getElementById('btcp-format');
+    const outputEl = document.getElementById('btcp-output');
+    const helpEl = document.getElementById('btcp-help');
+
+    if (!dateEl || !daysEl || !typeEl || !transportEl || !baggageEl || !weatherEl || !laundryEl || !formalEl || !devicesEl || !healthEl || !runBtn || !copyBtn || !totalEl || !clothesEl || !focusEl || !formatEl || !outputEl || !helpEl) return;
+
+    const t = {
+      type: {
+        domestic: '국내 출장',
+        international: '해외 출장',
+        conference: '행사 / 컨퍼런스 중심',
+        client: '고객 미팅 / 발표 중심'
+      },
+      transport: {
+        plane: '비행기',
+        train: 'KTX / 기차',
+        car: '차량 이동',
+        mixed: '복합 이동'
+      },
+      baggage: {
+        carry: '기내용 / 백팩 위주',
+        checked: '위탁수하물 / 캐리어 있음',
+        light: '최소 짐'
+      },
+      weather: {
+        mild: '보통',
+        hot: '덥고 습함',
+        cold: '쌀쌀함 / 추움',
+        rain: '비 가능성 높음'
+      },
+      format: '복사형 체크리스트',
+      copyDone: '복사됨',
+      copyDefault: '결과 복사'
+    };
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const formatDate = (value) => {
+      if (!value) return '미정';
+      const [y, m, d] = value.split('-').map(Number);
+      if (!y || !m || !d) return value;
+      return `${y}.${String(m).padStart(2, '0')}.${String(d).padStart(2, '0')}`;
+    };
+
+    const generate = () => {
+      const days = Math.min(30, Math.max(1, Math.floor(Number(daysEl.value || 3))));
+      daysEl.value = days;
+      const tripType = typeEl.value || 'domestic';
+      const transport = transportEl.value || 'plane';
+      const baggage = baggageEl.value || 'carry';
+      const weather = weatherEl.value || 'mild';
+      const laundry = !!laundryEl.checked;
+      const formal = !!formalEl.checked;
+      const devices = !!devicesEl.checked;
+      const health = !!healthEl.checked;
+
+      const top = [
+        '신분증 / 사원증 / 필요한 출입 정보 확인',
+        '교통편·숙소 예약 확인 메시지 다시 점검',
+        '일정표 / 주소 / 연락처를 휴대폰에서 바로 열 수 있게 정리'
+      ];
+      const docs = [
+        '회사 결재 문서 / 방문 확인 메일 / 일정 초대 링크 저장',
+        '영수증 정산 기준 또는 법인카드 사용 규칙 확인'
+      ];
+      const clothes = [
+        `상의 ${Math.max(2, laundry ? Math.ceil(days * 0.7) : days)}벌`,
+        `하의 ${Math.max(1, laundry ? Math.ceil(days * 0.4) : Math.ceil(days / 2))}벌`,
+        `속옷 / 양말 ${laundry ? Math.max(2, days - 1) : days}세트`,
+        '잠옷 또는 숙소용 편한 옷 1세트'
+      ];
+      const devicesList = [
+        '휴대폰 충전기 / 케이블',
+        '보조배터리 충전 상태 확인',
+        '업무용 파일 클라우드 업로드 또는 백업 링크 준비'
+      ];
+      const healthList = [
+        '세면도구 / 칫솔 / 렌즈용품 / 면도도구 확인',
+        '상비약 / 진통제 / 밴드 / 개인 복용약 챙기기'
+      ];
+      const dayOf = [
+        '출발 전 지갑, 휴대폰, 충전기, 신분증 4가지를 마지막 확인',
+        '이동 중 바로 꺼낼 물건은 바깥 주머니에 분리',
+        '숙소 도착 후 다음 날 일정과 알람 시간 먼저 확인'
+      ];
+
+      if (tripType === 'international') {
+        top.push('여권 유효기간 / 비자 / 입국 요건 재확인');
+        docs.push('로밍 / 유심 / eSIM 준비 여부 확인');
+        docs.push('현지 결제수단, 환전, 카드 해외사용 설정 확인');
+        dayOf.push('멀티어댑터 / 충전 규격 / 현지 시차 확인');
+      }
+
+      if (tripType === 'conference') {
+        docs.push('행사 등록 QR / 배지 발급 메일 저장');
+        docs.push('명함 / 네트워킹 메모 / 부스 위치 확인');
+      }
+
+      if (tripType === 'client') {
+        docs.push('발표 자료 최종본 + PDF 백업본 준비');
+        docs.push('회의실 장비(HDMI, 젠더, 리모컨) 호환성 확인');
+      }
+
+      if (formal) {
+        clothes.push('미팅용 셔츠 / 블라우스 1~2벌');
+        clothes.push('구김 적은 겉옷 또는 재킷 1벌');
+      } else {
+        clothes.push('이동이 편한 캐주얼 겉옷 1벌');
+      }
+
+      if (weather === 'hot') {
+        clothes.push('얇은 여벌 옷 / 흡습 빠른 이너 추가');
+        healthList.push('선크림 / 땀 닦는 티슈 / 물병 확인');
+      } else if (weather === 'cold') {
+        clothes.push('가벼운 니트 / 보온 이너 / 외투 확인');
+        healthList.push('건조 대비 립밤 / 핸드크림 챙기기');
+      } else if (weather === 'rain') {
+        clothes.push('얇은 우산 / 방수 파우치 / 여분 양말 추가');
+        dayOf.push('전자기기용 방수 파우치 또는 지퍼백 챙기기');
+      }
+
+      if (transport === 'plane') {
+        top.push('항공권 / 좌석 / 수하물 규정 확인');
+        dayOf.push('보안검색 전 꺼낼 물건 위치 미리 정리');
+      } else if (transport === 'train') {
+        top.push('승차권 / 좌석 / 탑승 시간 여유 확인');
+      } else if (transport === 'car') {
+        top.push('주차 / 톨비 / 운전 교대 여부 확인');
+        dayOf.push('차량용 충전기 / 거치대 / 물티슈 챙기기');
+      } else if (transport === 'mixed') {
+        top.push('구간별 티켓 / 환승 동선 / 짐 이동 난이도 확인');
+      }
+
+      if (baggage === 'carry') {
+        top.push('기내용 반입 제한 물품 재확인');
+        dayOf.push('노트북, 신분증, 충전기는 가장 꺼내기 쉬운 위치에 배치');
+      } else if (baggage === 'checked') {
+        top.push('짐표 / 위탁 마감 시간 / 분실 대비 이름표 확인');
+        clothes.push('비상용 갈아입을 옷 1세트는 손가방에도 분리');
+      } else if (baggage === 'light') {
+        clothes.push('다회전 코디 기준으로 색상 맞춰 최소화');
+        dayOf.push('현지 조달 가능한 소모품은 과감히 생략');
+      }
+
+      if (devices) {
+        devicesList.push('노트북 / 충전기 / 마우스 / 이어폰 확인');
+        devicesList.push('멀티탭 또는 작은 충전 허브 1개');
+        devicesList.push('발표용 젠더 / HDMI / USB 메모리 준비');
+      }
+
+      if (health) {
+        healthList.push('마스크 / 손소독제 / 물티슈 / 티슈 확인');
+      }
+
+      const focusTags = [t.type[tripType], t.transport[transport], weather === 'mild' ? '기본 짐' : t.weather[weather]];
+      if (formal) focusTags.push('회의 복장');
+      if (devices) focusTags.push('전자기기');
+
+      const sections = [
+        ['출발 전 확인', top],
+        ['문서 / 예약 / 업무 준비', docs],
+        ['의류 / 착장', clothes],
+        ['전자기기 / 충전', devicesList],
+        ['세면 / 건강', healthList],
+        ['이동 당일 체크', dayOf]
+      ];
+
+      const lines = [];
+      lines.push(`[출장 준비 체크리스트] ${formatDate(dateEl.value)} · ${days}일`);
+      lines.push(`- 출장 유형: ${t.type[tripType]}`);
+      lines.push(`- 이동수단: ${t.transport[transport]}`);
+      lines.push(`- 짐 스타일: ${t.baggage[baggage]}`);
+      lines.push(`- 현지 기후: ${t.weather[weather]}`);
+      lines.push(`- 세탁 가능: ${laundry ? '예' : '아니오'}`);
+      lines.push(`- 회의/발표 복장: ${formal ? '필요' : '불필요'}`);
+      lines.push(`- 전자기기 체크 강화: ${devices ? '예' : '아니오'}`);
+      lines.push('');
+      sections.forEach(([label, items]) => {
+        const uniqueItems = Array.from(new Set(items));
+        lines.push(`[${label}]`);
+        uniqueItems.forEach((item) => lines.push(`- ${item}`));
+        lines.push('');
+      });
+
+      outputEl.value = lines.join('\n').trim();
+      totalEl.textContent = String(sections.reduce((sum, [, items]) => sum + new Set(items).size, 0));
+      clothesEl.textContent = `${Math.max(2, laundry ? Math.ceil(days * 0.7) : days)}벌 상의 기준`;
+      focusEl.textContent = focusTags.join(' / ');
+      formatEl.textContent = t.format;
+      helpEl.textContent = `${days}일 일정 기준으로 서류, 복장, 전자기기, 이동 체크를 한 번에 묶은 리스트입니다. 항공/해외 규정과 회사 정책은 마지막에 한 번 더 확인하세요.`;
+    };
+
+    [dateEl, daysEl, typeEl, transportEl, baggageEl, weatherEl, laundryEl, formalEl, devicesEl, healthEl].forEach((el) => {
+      el.addEventListener('input', generate);
+      el.addEventListener('change', generate);
+    });
+    runBtn.addEventListener('click', generate);
+    copyBtn.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) generate();
+      await copyText(outputEl.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copyDone;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+
+    if (!dateEl.value) {
+      const now = new Date();
+      const future = new Date(now.getTime() + 3 * 86400000);
+      dateEl.value = new Date(future.getTime() - future.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    }
+    generate();
+  }
+
   if (slug === 'lunch-menu-picker') {
     const timeEl = document.getElementById('lmp-time');
     const companyEl = document.getElementById('lmp-company');

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">출장 준비 체크리스트 생성기</title>
+  <desc id="desc">가방, 체크리스트, 비행기 아이콘으로 구성된 출장 준비 체크리스트 생성기 썸네일</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <rect x="72" y="72" width="520" height="486" rx="28" fill="#f8fafc" opacity="0.96"/>
+  <rect x="660" y="110" width="440" height="410" rx="36" fill="#dbeafe" opacity="0.18"/>
+  <rect x="740" y="190" width="230" height="220" rx="28" fill="#93c5fd"/>
+  <rect x="792" y="158" width="126" height="38" rx="16" fill="#bfdbfe"/>
+  <rect x="780" y="250" width="150" height="18" rx="9" fill="#1e3a8a" opacity="0.28"/>
+  <rect x="780" y="292" width="150" height="18" rx="9" fill="#1e3a8a" opacity="0.28"/>
+  <rect x="780" y="334" width="150" height="18" rx="9" fill="#1e3a8a" opacity="0.28"/>
+  <circle cx="1010" cy="174" r="44" fill="#60a5fa"/>
+  <path d="M988 176h44M1010 154v44M995 161l30 30" stroke="#eff6ff" stroke-width="10" stroke-linecap="round"/>
+  <g fill="none" stroke="#0f172a" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M126 154h250"/>
+    <path d="M126 154l26 26"/>
+    <path d="M126 154l26-26"/>
+  </g>
+  <text x="126" y="250" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="58" font-weight="800" fill="#0f172a">출장 준비</text>
+  <text x="126" y="328" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="58" font-weight="800" fill="#0f172a">체크리스트 생성기</text>
+  <g fill="#1d4ed8">
+    <circle cx="140" cy="402" r="10"/>
+    <circle cx="140" cy="452" r="10"/>
+    <circle cx="140" cy="502" r="10"/>
+  </g>
+  <g fill="none" stroke="#2563eb" stroke-width="12" stroke-linecap="round">
+    <path d="M176 402h210"/>
+    <path d="M176 452h250"/>
+    <path d="M176 502h190"/>
+  </g>
+  <text x="660" y="572" font-family="Inter, Pretendard, sans-serif" font-size="30" font-weight="700" fill="#dbeafe">business-trip-checklist-planner</text>
+</svg>

@@ -1,3 +1,25 @@
+- id: business-trip-checklist-planner
+  title: 출장 준비 체크리스트 생성기
+  title_en: Business Trip Checklist Planner
+  title_ja: 出張準備チェックリスト作成ツール
+  category: productivity
+  category_label: 업무/여행 준비
+  category_label_en: Work/Travel Prep
+  category_label_ja: 仕事/出張準備
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 출장 기간, 이동수단, 수하물 방식, 기후, 회의 여부를 고르면 바로 복사해 쓸 수 있는 출장 준비 체크리스트를 만들어줘요.
+  description_en: Build a copy-ready business trip packing checklist based on trip length, transport, baggage style, climate, and meeting needs.
+  description_ja: 出張日数、移動手段、荷物の持ち方、気候、会議予定に合わせて、そのまま使える出張準備チェックリストを作成します。
+  url: /tools/business-trip-checklist-planner/
+  url_en: /tools/business-trip-checklist-planner/
+  url_ja: /tools/business-trip-checklist-planner/
+  thumbnail: /assets/thumbs/business-trip-checklist-planner.svg
+  published_at: 2026-04-08
+  tool_type: planner
+  topic_cluster: travel
+
 - id: text-line-break-cleaner
   title: 텍스트 줄바꿈 정리기
   title_en: Text Line Break Cleaner

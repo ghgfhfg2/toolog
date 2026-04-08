@@ -445,6 +445,84 @@ layout: default
           <textarea id="mcp-output" rows="16" readonly placeholder="이사 체크리스트가 여기에 생성됩니다."></textarea>
           <p class="tool-result" id="mcp-help">이사 날짜와 조건을 입력하면 단계별 준비 목록을 바로 정리합니다.</p>
         </div>
+      {% when 'business-trip-checklist-planner' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="btcp-date">출발일</label>
+              <input id="btcp-date" type="date" />
+            </div>
+            <div>
+              <label for="btcp-days">출장 일수</label>
+              <input id="btcp-days" type="number" min="1" max="30" step="1" value="3" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="btcp-type">출장 유형</label>
+              <select id="btcp-type">
+                <option value="domestic">국내 출장</option>
+                <option value="international">해외 출장</option>
+                <option value="conference">행사 / 컨퍼런스 중심</option>
+                <option value="client">고객 미팅 / 발표 중심</option>
+              </select>
+            </div>
+            <div>
+              <label for="btcp-transport">이동수단</label>
+              <select id="btcp-transport">
+                <option value="plane">비행기</option>
+                <option value="train">KTX / 기차</option>
+                <option value="car">차량 이동</option>
+                <option value="mixed">복합 이동</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="btcp-baggage">짐 스타일</label>
+              <select id="btcp-baggage">
+                <option value="carry">기내용 / 백팩 위주</option>
+                <option value="checked">위탁수하물 / 캐리어 있음</option>
+                <option value="light">최소 짐</option>
+              </select>
+            </div>
+            <div>
+              <label for="btcp-weather">현지 기후</label>
+              <select id="btcp-weather">
+                <option value="mild">보통</option>
+                <option value="hot">덥고 습함</option>
+                <option value="cold">쌀쌀함 / 추움</option>
+                <option value="rain">비 가능성 높음</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="btcp-laundry" type="checkbox" /> 현지에서 세탁 가능</label>
+            <label class="tool-check"><input id="btcp-formal" type="checkbox" checked /> 미팅 / 발표용 단정한 복장 필요</label>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="btcp-devices" type="checkbox" checked /> 노트북 / 충전기 등 전자기기 많이 챙기기</label>
+            <label class="tool-check"><input id="btcp-health" type="checkbox" checked /> 상비약 / 위생용품 체크 강화</label>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="btcp-run" type="button">체크리스트 생성</button>
+            <button id="btcp-copy" type="button">결과 복사</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="btcp-total">0</strong><span>전체 항목</span></div>
+            <div><strong id="btcp-clothes">-</strong><span>의류 가이드</span></div>
+            <div><strong id="btcp-focus">-</strong><span>강조 포인트</span></div>
+            <div><strong id="btcp-format">-</strong><span>출력 형식</span></div>
+          </div>
+
+          <textarea id="btcp-output" rows="18" readonly placeholder="출장 준비 체크리스트가 여기에 생성됩니다."></textarea>
+          <p class="tool-result" id="btcp-help">출장 일정과 조건을 입력하면 바로 복사 가능한 체크리스트를 만듭니다.</p>
+        </div>
       {% when 'lunch-menu-picker' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
