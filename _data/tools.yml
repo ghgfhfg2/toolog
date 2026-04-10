@@ -1,3 +1,25 @@
+- id: schedule-coordination-message-generator
+  title: 일정 조율 메시지 생성기
+  title_en: Schedule Coordination Message Generator
+  title_ja: 日程調整メッセージ作成ツール
+  category: productivity
+  category_label: 업무/커뮤니케이션
+  category_label_en: Work/Communication
+  category_label_ja: 仕事/コミュニケーション
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 회의, 약속, 인터뷰, 상담 같은 상황에서 상대에게 보낼 시간 제안 문구를 짧고 정중하게 빠르게 만들어줘요.
+  description_en: Create clear and polite time proposal messages for meetings, appointments, interviews, or consultations in seconds.
+  description_ja: 会議、約束、面談、インタビューなどで送る時間候補メッセージを、短く丁寧にすばやく作成できます。
+  url: /tools/schedule-coordination-message-generator/
+  url_en: /en/tools/schedule-coordination-message-generator/
+  url_ja: /ja/tools/schedule-coordination-message-generator/
+  thumbnail: /assets/thumbs/schedule-coordination-message-generator.svg
+  published_at: 2026-04-10
+  tool_type: generator
+  topic_cluster: communication
+
 - id: business-trip-checklist-planner
   title: 출장 준비 체크리스트 생성기
   title_en: Business Trip Checklist Planner

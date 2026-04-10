@@ -4789,6 +4789,179 @@
     generate();
   }
 
+  if (slug === 'schedule-coordination-message-generator') {
+    const situationEl = document.getElementById('scmg-situation');
+    const channelEl = document.getElementById('scmg-channel');
+    const toneEl = document.getElementById('scmg-tone');
+    const targetEl = document.getElementById('scmg-target');
+    const purposeEl = document.getElementById('scmg-purpose');
+    const timesEl = document.getElementById('scmg-times');
+    const deadlineEl = document.getElementById('scmg-deadline');
+    const extraEl = document.getElementById('scmg-extra');
+    const askAltEl = document.getElementById('scmg-ask-alt');
+    const greetEl = document.getElementById('scmg-greet');
+    const runBtn = document.getElementById('scmg-run');
+    const sampleBtn = document.getElementById('scmg-sample');
+    const copyBtn = document.getElementById('scmg-copy');
+    const countEl = document.getElementById('scmg-count');
+    const styleEl = document.getElementById('scmg-style');
+    const channelOutEl = document.getElementById('scmg-channel-out');
+    const variantCountEl = document.getElementById('scmg-variant-count');
+    const helpEl = document.getElementById('scmg-help');
+    const outputEl = document.getElementById('scmg-output');
+
+    if (!situationEl || !channelEl || !toneEl || !targetEl || !purposeEl || !timesEl || !deadlineEl || !extraEl || !askAltEl || !greetEl || !runBtn || !sampleBtn || !copyBtn || !countEl || !styleEl || !channelOutEl || !variantCountEl || !helpEl || !outputEl) return;
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const labels = {
+      meeting: '회의',
+      appointment: '약속',
+      interview: '인터뷰',
+      consultation: '상담/면담',
+      reschedule: '일정 변경'
+    };
+
+    const channelLabels = {
+      messenger: '메신저',
+      email: '이메일'
+    };
+
+    const toneLabels = {
+      neutral: '보통',
+      polite: '정중',
+      casual: '캐주얼'
+    };
+
+    const parseTimes = () => (timesEl.value || '').split(/\n+/).map((v) => v.trim()).filter(Boolean).slice(0, 8);
+
+    const joinTimesInline = (items) => {
+      if (!items.length) return '가능하신 시간을 알려주시면 맞춰보겠습니다.';
+      if (items.length === 1) return `${items[0]} 가능하실지 확인 부탁드립니다.`;
+      return `${items.join(', ')} 중 편하신 시간을 알려주시면 맞춰보겠습니다.`;
+    };
+
+    const buildGreeting = (target, tone, channel) => {
+      if (!greetEl.checked) return '';
+      if (target) return `${target} 안녕하세요.`;
+      if (tone === 'casual' && channel === 'messenger') return '안녕하세요!';
+      return '안녕하세요.';
+    };
+
+    const buildClosing = (tone, channel) => {
+      if (tone === 'casual') return channel === 'email' ? '확인 부탁드려요. 감사합니다.' : '편한 시간 알려주세요!';
+      if (tone === 'polite') return '확인 부탁드리며, 회신 주시면 일정 확정하겠습니다. 감사합니다.';
+      return '가능한 시간 회신 부탁드립니다. 감사합니다.';
+    };
+
+    const generate = () => {
+      const situation = situationEl.value || 'meeting';
+      const channel = channelEl.value || 'messenger';
+      const tone = toneEl.value || 'neutral';
+      const target = (targetEl.value || '').trim();
+      const purpose = (purposeEl.value || '').trim() || `${labels[situation]} 일정`;
+      const times = parseTimes();
+      const deadline = (deadlineEl.value || '').trim();
+      const extra = (extraEl.value || '').trim();
+      const askAlt = !!askAltEl.checked;
+      const greeting = buildGreeting(target, tone, channel);
+
+      const listBlock = times.length ? times.map((time, index) => `${index + 1}. ${time}`).join('\n') : '1. 가능한 시간을 먼저 받아 조율';
+      const askAltLine = askAlt ? (tone === 'polite' ? '위 시간이 어려우시면 가능하신 다른 시간도 함께 알려주시면 감사하겠습니다.' : '위 시간이 어렵다면 가능하신 다른 시간도 알려주세요.') : '';
+      const deadlineLine = deadline ? (tone === 'polite' ? `${deadline} 전까지 회신 주시면 일정 확정에 큰 도움이 됩니다.` : `${deadline} 전까지 알려주시면 일정 정리에 도움이 됩니다.`) : '';
+      const extraLine = extra ? `${extra}` : '';
+
+      const shortParts = [
+        greeting,
+        `${purpose} 관련해 ${joinTimesInline(times)}`,
+        deadlineLine,
+        askAltLine,
+        extraLine,
+        buildClosing(tone, channel)
+      ].filter(Boolean);
+
+      const basicParts = [
+        greeting,
+        `${purpose} 일정을 조율하고 있어 아래 시간 후보를 먼저 공유드립니다.`,
+        listBlock,
+        deadlineLine,
+        askAltLine,
+        extraLine,
+        buildClosing(tone, channel)
+      ].filter(Boolean);
+
+      const politeIntro = target ? `${target}께 ${purpose} 관련 일정 가능 여부를 여쭙고자 연락드립니다.` : `${purpose} 관련 일정 가능 여부를 여쭙고자 연락드립니다.`;
+      const politeParts = [
+        greeting,
+        tone === 'casual' ? `${purpose} 일정 잡으려고 해요.` : politeIntro,
+        times.length ? `가능한 시간 후보는 아래와 같습니다.\n${listBlock}` : '가능하신 시간을 알려주시면 그에 맞춰 조율하겠습니다.',
+        deadlineLine,
+        askAltLine,
+        extraLine,
+        buildClosing('polite', channel)
+      ].filter(Boolean);
+
+      outputEl.value = [
+        '[짧은형]',
+        shortParts.join(channel === 'email' ? '\n' : ' '),
+        '',
+        '[기본형]',
+        basicParts.join('\n'),
+        '',
+        '[정중형]',
+        politeParts.join('\n')
+      ].join('\n');
+
+      countEl.textContent = String(times.length);
+      styleEl.textContent = toneLabels[tone] || '-';
+      channelOutEl.textContent = channelLabels[channel] || '-';
+      variantCountEl.textContent = '3';
+      helpEl.textContent = times.length
+        ? `${labels[situation]} 상황에 맞는 일정 조율 문구 3가지를 만들었습니다.`
+        : '시간 후보를 한 줄에 하나씩 넣으면 더 자연스러운 결과가 나옵니다.';
+    };
+
+    sampleBtn.addEventListener('click', () => {
+      situationEl.value = 'meeting';
+      channelEl.value = 'messenger';
+      toneEl.value = 'neutral';
+      targetEl.value = '팀 여러분';
+      purposeEl.value = '다음 주 프로젝트 킥오프 미팅';
+      timesEl.value = '4월 12일(월) 오후 2시\n4월 12일(월) 오후 4시\n4월 13일(화) 오전 10시';
+      deadlineEl.value = '오늘 오후 6시';
+      extraEl.value = '회의 링크는 시간 확정 후 공유드릴게요.';
+      askAltEl.checked = true;
+      greetEl.checked = true;
+      generate();
+    });
+
+    runBtn.addEventListener('click', generate);
+    copyBtn.addEventListener('click', async () => {
+      await copyText(outputEl.value || '');
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = '결과 복사'; }, 1200);
+    });
+
+    [situationEl, channelEl, toneEl, targetEl, purposeEl, timesEl, deadlineEl, extraEl, askAltEl, greetEl].forEach((el) => {
+      el.addEventListener('input', generate);
+      el.addEventListener('change', generate);
+    });
+
+    generate();
+  }
+
   if (slug === 'lunch-menu-picker') {
     const timeEl = document.getElementById('lmp-time');
     const companyEl = document.getElementById('lmp-company');

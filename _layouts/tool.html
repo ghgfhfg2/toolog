@@ -523,6 +523,85 @@ layout: default
           <textarea id="btcp-output" rows="18" readonly placeholder="출장 준비 체크리스트가 여기에 생성됩니다."></textarea>
           <p class="tool-result" id="btcp-help">출장 일정과 조건을 입력하면 바로 복사 가능한 체크리스트를 만듭니다.</p>
         </div>
+      {% when 'schedule-coordination-message-generator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="scmg-situation">상황</label>
+              <select id="scmg-situation">
+                <option value="meeting">회의</option>
+                <option value="appointment">약속</option>
+                <option value="interview">인터뷰</option>
+                <option value="consultation">상담 / 면담</option>
+                <option value="reschedule">일정 변경</option>
+              </select>
+            </div>
+            <div>
+              <label for="scmg-channel">채널</label>
+              <select id="scmg-channel">
+                <option value="messenger">메신저 / DM</option>
+                <option value="email">이메일</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="scmg-tone">말투</label>
+              <select id="scmg-tone">
+                <option value="neutral">보통</option>
+                <option value="polite">정중</option>
+                <option value="casual">캐주얼</option>
+              </select>
+            </div>
+            <div>
+              <label for="scmg-target">상대 호칭</label>
+              <input id="scmg-target" type="text" maxlength="40" placeholder="예: 김대리님, 선생님, 팀 여러분" />
+            </div>
+          </div>
+
+          <div class="tool-row">
+            <label for="scmg-purpose">일정 목적</label>
+            <input id="scmg-purpose" type="text" maxlength="80" placeholder="예: 다음 주 프로젝트 킥오프 미팅" />
+          </div>
+
+          <div class="tool-row">
+            <label for="scmg-times">제안 시간 후보 (한 줄에 하나씩)</label>
+            <textarea id="scmg-times" rows="5" maxlength="500" placeholder="예: 4월 12일(월) 오후 2시&#10;4월 12일(월) 오후 4시&#10;4월 13일(화) 오전 10시"></textarea>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="scmg-deadline">답변 요청 시점</label>
+              <input id="scmg-deadline" type="text" maxlength="40" placeholder="예: 오늘 오후 6시 전" />
+            </div>
+            <div>
+              <label for="scmg-extra">추가 메모</label>
+              <input id="scmg-extra" type="text" maxlength="80" placeholder="예: 온라인 링크는 확정 후 공유드릴게요" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="scmg-ask-alt" type="checkbox" checked /> 다른 가능 시간도 함께 요청</label>
+            <label class="tool-check"><input id="scmg-greet" type="checkbox" checked /> 인사말 포함</label>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="scmg-run" type="button">메시지 생성</button>
+            <button id="scmg-sample" type="button">예시 넣기</button>
+            <button id="scmg-copy" type="button">결과 복사</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="scmg-count">0</strong><span>시간 후보 수</span></div>
+            <div><strong id="scmg-style">-</strong><span>선택 말투</span></div>
+            <div><strong id="scmg-channel-out">-</strong><span>채널</span></div>
+            <div><strong id="scmg-variant-count">3</strong><span>출력 버전</span></div>
+          </div>
+
+          <p class="tool-result" id="scmg-help">상황과 시간 후보를 넣으면 바로 보낼 수 있는 일정 조율 문구를 만들어줍니다.</p>
+          <textarea id="scmg-output" rows="16" readonly placeholder="생성된 메시지가 여기에 표시됩니다."></textarea>
+        </div>
       {% when 'lunch-menu-picker' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
