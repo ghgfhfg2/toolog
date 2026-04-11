@@ -1,0 +1,22 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#0F172A"/>
+  <rect x="70" y="70" width="1060" height="490" rx="28" fill="#111827" stroke="#334155" stroke-width="2"/>
+  <rect x="120" y="130" width="420" height="320" rx="24" fill="#1E293B"/>
+  <rect x="160" y="180" width="250" height="28" rx="14" fill="#94A3B8" fill-opacity="0.28"/>
+  <rect x="160" y="232" width="320" height="22" rx="11" fill="#38BDF8" fill-opacity="0.22"/>
+  <rect x="160" y="272" width="290" height="22" rx="11" fill="#38BDF8" fill-opacity="0.16"/>
+  <rect x="160" y="312" width="210" height="22" rx="11" fill="#38BDF8" fill-opacity="0.12"/>
+  <rect x="590" y="125" width="460" height="74" rx="18" fill="#0B1220" stroke="#334155"/>
+  <text x="630" y="172" fill="#E2E8F0" font-size="34" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">개인정보 노출 점검기</text>
+  <text x="630" y="222" fill="#94A3B8" font-size="24" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">전화번호, 이메일, 카드/계좌번호형 패턴 빠른 확인</text>
+  <rect x="590" y="262" width="460" height="214" rx="24" fill="#020617" stroke="#334155"/>
+  <rect x="626" y="302" width="166" height="40" rx="20" fill="#7C3AED" fill-opacity="0.22"/>
+  <text x="653" y="329" fill="#C4B5FD" font-size="22" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">민감정보 탐지</text>
+  <rect x="626" y="366" width="384" height="24" rx="12" fill="#EF4444" fill-opacity="0.16"/>
+  <rect x="626" y="402" width="350" height="24" rx="12" fill="#F59E0B" fill-opacity="0.16"/>
+  <rect x="626" y="438" width="300" height="24" rx="12" fill="#22C55E" fill-opacity="0.16"/>
+  <path d="M235 467C235 422.265 271.265 386 316 386H344C388.735 386 425 422.265 425 467V478H235V467Z" fill="#38BDF8" fill-opacity="0.18"/>
+  <circle cx="330" cy="328" r="72" fill="#38BDF8" fill-opacity="0.22"/>
+  <path d="M330 290C344.359 290 356 301.641 356 316C356 325.445 350.967 333.713 343.44 338.247C360.251 343.903 372 359.79 372 378.5V385H288V378.5C288 359.79 299.749 343.903 316.56 338.247C309.033 333.713 304 325.445 304 316C304 301.641 315.641 290 330 290Z" fill="#E0F2FE"/>
+  <rect x="301" y="344" width="58" height="12" rx="6" fill="#0F172A"/>
+</svg>

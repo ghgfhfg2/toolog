@@ -1,3 +1,25 @@
+- id: privacy-exposure-checker
+  title: 개인정보 노출 점검기
+  title_en: Privacy Exposure Checker
+  title_ja: 個人情報露出チェックツール
+  category: text
+  category_label: 텍스트/보안점검
+  category_label_en: Text/Security Check
+  category_label_ja: テキスト/セキュリティ点検
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 메시지, 공지문, 문서 초안 속 전화번호, 이메일, 주민등록번호 유사 패턴, 카드/계좌번호형 숫자열을 빠르게 찾아 마스킹해요.
+  description_en: Find and mask phone numbers, emails, ID-like patterns, and long number strings in drafts before sharing.
+  description_ja: メッセージや文書下書きの電話番号、メール、個人番号風パターン、長い数字列を見つけてマスキングします。
+  url: /tools/privacy-exposure-checker/
+  url_en: /en/tools/privacy-exposure-checker/
+  url_ja: /ja/tools/privacy-exposure-checker/
+  thumbnail: /assets/thumbs/privacy-exposure-checker.svg
+  published_at: 2026-04-11
+  tool_type: checker
+  topic_cluster: privacy
+
 - id: schedule-coordination-message-generator
   title: 일정 조율 메시지 생성기
   title_en: Schedule Coordination Message Generator

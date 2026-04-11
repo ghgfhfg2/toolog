@@ -5519,6 +5519,183 @@
     analyze();
   }
 
+  if (slug === 'privacy-exposure-checker') {
+    const input = document.getElementById('pec-input');
+    const maskPhone = document.getElementById('pec-mask-phone');
+    const maskId = document.getElementById('pec-mask-id');
+    const maskEmail = document.getElementById('pec-mask-email');
+    const maskAccount = document.getElementById('pec-mask-account');
+    const copyBtn = document.getElementById('pec-copy');
+    const sampleBtn = document.getElementById('pec-sample');
+    const totalEl = document.getElementById('pec-total');
+    const contactEl = document.getElementById('pec-contact');
+    const idnumEl = document.getElementById('pec-idnum');
+    const linkEl = document.getElementById('pec-link');
+    const summaryEl = document.getElementById('pec-summary');
+    const listEl = document.getElementById('pec-list');
+    const outputEl = document.getElementById('pec-output');
+    if (!input || !maskPhone || !maskId || !maskEmail || !maskAccount || !copyBtn || !sampleBtn || !totalEl || !contactEl || !idnumEl || !linkEl || !summaryEl || !listEl || !outputEl) return;
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const t = {
+      sample: '안녕하세요. 담당자 김도윤입니다.\n연락은 010-1234-5678 또는 doyoon.kim@example.com 으로 주세요.\n주민등록번호는 900101-1234567 형식으로 적지 마세요.\n법인카드는 4111 1111 1111 1111 처럼 전체 번호를 공유하지 않는 것이 좋습니다.\n입금 계좌는 123-45-678901, 문의 링크는 https://example.com/form 입니다.\n카카오톡 ID: sample_team',
+      idle: '텍스트를 입력하면 전화번호, 이메일, 주민등록번호 유사 패턴, 계좌/카드번호형 숫자열, 링크 유도 표현을 점검합니다.',
+      clean: '눈에 띄는 개인정보/민감정보 패턴은 감지되지 않았습니다. 그래도 이름, 주소, 고유번호처럼 문맥상 민감한 정보는 한 번 더 확인하세요.',
+      caution: (n) => `${n}개의 노출 가능 패턴이 감지됐어요. 외부 발송 전에는 마스킹 결과를 기준으로 꼭 한 번 더 검토하세요.`,
+      copied: '마스킹 결과를 복사했어요.',
+      emptyCopy: '복사할 마스킹 결과가 아직 없어요.',
+      catContact: '연락처/이메일',
+      catId: '식별번호/긴 숫자열',
+      catLink: '링크/아이디 유도',
+      riskHigh: '높음',
+      riskMedium: '중간',
+      riskLow: '낮음',
+      noList: '감지 항목이 없으면 여기에 결과가 정리됩니다.'
+    };
+
+    const rules = [
+      { key: 'phone', cat: 'contact', label: '전화번호', risk: 'medium', re: /(?:\+?82[-\s]?)?0?1[0-9][-.\s]?[0-9]{3,4}[-.\s]?[0-9]{4}/g },
+      { key: 'email', cat: 'contact', label: '이메일', risk: 'medium', re: /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi },
+      { key: 'rrn', cat: 'id', label: '주민등록번호 유사', risk: 'high', re: /\b\d{6}[- ]?[1-4]\d{6}\b/g },
+      { key: 'biz', cat: 'id', label: '사업자등록번호 유사', risk: 'high', re: /\b\d{3}[- ]?\d{2}[- ]?\d{5}\b/g },
+      { key: 'card', cat: 'id', label: '카드번호 유사', risk: 'high', re: /\b(?:\d[ -]*?){13,19}\b/g },
+      { key: 'account', cat: 'id', label: '계좌/긴 숫자열 유사', risk: 'medium', re: /\b\d{2,6}[- ]\d{2,6}[- ]\d{3,8}\b/g },
+      { key: 'url', cat: 'link', label: 'URL 링크', risk: 'low', re: /https?:\/\/[^\s]+|www\.[^\s]+/gi },
+      { key: 'messenger', cat: 'link', label: '메신저/아이디 유도', risk: 'low', re: /(카카오톡\s*ID|카톡\s*아이디|오픈채팅|텔레그램\s*@?\w+|디엠\s*주세요|DM\s*me|open\s?chat|telegram\s*@?\w+)/gi }
+    ];
+
+    const maskers = {
+      phone: (value) => value.replace(/(\d{2,3})[-.\s]?(\d{3,4})[-.\s]?(\d{4})/, (_, a, b, c) => `${a}-${b.slice(0, Math.max(1, b.length - 2))}${'*'.repeat(Math.min(2, b.length))}-${'*'.repeat(c.length)}`),
+      email: (value) => value.replace(/^([^@]{1,2})([^@]*)(@.*)$/, (_, a, b, c) => `${a}${'*'.repeat(Math.max(2, Math.min(6, b.length || 2)))}${c}`),
+      rrn: (value) => value.replace(/(\d{6})[- ]?(\d)(\d{6})/, (_, a, b) => `${a}-${b}******`),
+      biz: (value) => value.replace(/(\d{3})[- ]?(\d{2})[- ]?(\d{5})/, (_, a) => `${a}-**-*****`),
+      card: (value) => {
+        const digits = value.replace(/\D/g, '');
+        if (digits.length < 13 || digits.length > 19) return value;
+        return `${digits.slice(0, 4)} **** **** ${digits.slice(-4)}`;
+      },
+      account: (value) => value.replace(/\d/g, (char, index) => {
+        const digits = value.replace(/\D/g, '');
+        const digitIndex = value.slice(0, index + 1).replace(/\D/g, '').length - 1;
+        return digitIndex < 3 || digitIndex >= digits.length - 2 ? char : '*';
+      }),
+      url: (value) => value,
+      messenger: (value) => value
+    };
+
+    const shouldMask = (key) => {
+      if (key === 'phone') return maskPhone.checked;
+      if (key === 'email') return maskEmail.checked;
+      if (['rrn', 'biz', 'card'].includes(key)) return maskId.checked;
+      if (key === 'account') return maskAccount.checked;
+      return false;
+    };
+
+    const escapeHtml = (value) => value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    const findMatches = (text) => {
+      const items = [];
+      rules.forEach((rule) => {
+        const matches = [...text.matchAll(rule.re)];
+        matches.forEach((match) => {
+          const raw = match[0];
+          const digits = raw.replace(/\D/g, '');
+          if (rule.key === 'card' && (digits.length < 13 || digits.length > 19)) return;
+          items.push({
+            ...rule,
+            value: raw,
+            index: match.index || 0,
+            end: (match.index || 0) + raw.length,
+            masked: shouldMask(rule.key) ? (maskers[rule.key]?.(raw) || raw) : raw
+          });
+        });
+      });
+      return items.sort((a, b) => a.index - b.index);
+    };
+
+    const applyMask = (text, items) => {
+      if (!items.length) return text;
+      let cursor = 0;
+      let result = '';
+      items.forEach((item) => {
+        result += text.slice(cursor, item.index);
+        result += item.masked;
+        cursor = item.end;
+      });
+      result += text.slice(cursor);
+      return result;
+    };
+
+    const render = () => {
+      const text = input.value || '';
+      const items = findMatches(text);
+      const counts = {
+        contact: items.filter((item) => item.cat === 'contact').length,
+        id: items.filter((item) => item.cat === 'id').length,
+        link: items.filter((item) => item.cat === 'link').length
+      };
+
+      totalEl.textContent = formatNum(items.length);
+      contactEl.textContent = formatNum(counts.contact);
+      idnumEl.textContent = formatNum(counts.id);
+      linkEl.textContent = formatNum(counts.link);
+      summaryEl.textContent = text.trim() ? (items.length ? t.caution(items.length) : t.clean) : t.idle;
+      outputEl.value = text.trim() ? applyMask(text, items) : '';
+
+      if (!text.trim()) {
+        listEl.innerHTML = `<div class="tool-card"><p>${t.noList}</p></div>`;
+        return;
+      }
+
+      if (!items.length) {
+        listEl.innerHTML = `<div class="tool-card"><p>${t.clean}</p></div>`;
+        return;
+      }
+
+      listEl.innerHTML = items.map((item) => {
+        const riskLabel = item.risk === 'high' ? t.riskHigh : (item.risk === 'medium' ? t.riskMedium : t.riskLow);
+        const categoryLabel = item.cat === 'contact' ? t.catContact : (item.cat === 'id' ? t.catId : t.catLink);
+        return `
+          <div class="tool-card">
+            <strong>${escapeHtml(item.label)}</strong>
+            <p>${escapeHtml(categoryLabel)} · 위험도 ${escapeHtml(riskLabel)}</p>
+            <p><code>${escapeHtml(item.value)}</code></p>
+            <p>마스킹 예시: <code>${escapeHtml(item.masked)}</code></p>
+          </div>
+        `;
+      }).join('');
+    };
+
+    input.addEventListener('input', render);
+    [maskPhone, maskId, maskEmail, maskAccount].forEach((el) => el.addEventListener('change', render));
+    sampleBtn.addEventListener('click', () => { input.value = t.sample; render(); });
+    copyBtn.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) {
+        summaryEl.textContent = t.emptyCopy;
+        return;
+      }
+      await copyText(outputEl.value);
+      summaryEl.textContent = t.copied;
+    });
+    render();
+  }
+
   if (slug === 'json-merge') {
     const filesInput = document.getElementById('jm-files');
     const modeSel = document.getElementById('jm-mode');
