@@ -4,6 +4,7 @@ title: Goal Savings Timeline Calculator | Estimate months to reach your target
 description: Enter current savings, target amount, monthly contributions, and annual interest to estimate how many months it will take to reach your goal, plus total contributions and expected interest.
 lang: en
 permalink: /en/tools/goal-savings-calculator/
+canonical_url: /en/tools/goal-savings-calculator/
 category: calculator
 category_label: Finance/Business
 thumbnail: /assets/thumbs/en/goal-savings-calculator.svg
@@ -19,8 +20,7 @@ faq:
   - q: Is this accurate if I save different amounts every month?
     a: It is a simple planning tool that assumes the same monthly contribution each month. If your savings amount changes, the actual timeline can change too.
   - q: What if my current savings already meet the target?
-    a: The tool treats the goal as already achieved and shows 0 months required.
----
+    a: The tool treats the goal as already achieved and shows 0 months required.---
 
 ## What this calculator helps you answer
 The most practical savings question is simple: **if I save this much every month, when will I reach my target?**

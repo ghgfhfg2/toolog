@@ -18,7 +18,7 @@ faq:
     a: Yes. Enter break time in minutes and the tool will also show net working time after subtracting it from the total elapsed time.
   - q: Can I see the result in decimal hours too?
     a: Yes. For example, 1 hour 30 minutes is also shown as 1.5 hours.
----
+canonical_url: /en/tools/time-difference-calculator/---
 
 ## When is a time difference calculator useful?
 You often need to know **exactly how many hours and minutes** lie between two times.

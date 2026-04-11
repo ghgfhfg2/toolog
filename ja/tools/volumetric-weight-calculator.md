@@ -11,6 +11,7 @@ image:
 tool_key: volumetric-weight-calculator
 lang: ja
 permalink: /ja/tools/volumetric-weight-calculator/
+canonical_url: /ja/tools/volumetric-weight-calculator/
 keywords: [容積重量計算機, 適用重量, 配送料計算, 箱サイズ, 物流]
 related_tools: [unit-converter, discount-calculator, percent-calculator]
 faq:
@@ -19,8 +20,7 @@ faq:
   - q: 容積係数はどれを選べばいいですか？
     a: 配送会社や契約条件によって異なります。6000、5000、4000 などが使われるため、利用中の運送会社基準を確認してください。
   - q: 適用重量はどう決まりますか？
-    a: 実重量と容積重量を比べて、大きいほうを請求重量として使うケースが一般的です。
----
+    a: 実重量と容積重量を比べて、大きいほうを請求重量として使うケースが一般的です。---
 
 ## 容積重量計算機が役立つ場面
 見た目は軽くても、箱が大きいと送料が高くなることがあります。  

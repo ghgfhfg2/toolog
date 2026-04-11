@@ -4,6 +4,7 @@ title: Move Checklist Planner | Organize what to do before, right before, and on
 description: Enter your move date and setup to generate a practical moving checklist for two weeks before, three days before, and move day.
 lang: en
 permalink: /en/tools/move-checklist-planner/
+canonical_url: /en/tools/move-checklist-planner/
 category: lifestyle
 category_label: Lifestyle/Preparation
 thumbnail: /assets/thumbs/en/move-checklist-planner.svg
@@ -19,8 +20,7 @@ faq:
   - q: Is it only for home moves?
     a: No. It can also help with office or studio moves because it highlights setup, address, and equipment tasks too.
   - q: Can I copy the result into notes or chat?
-    a: Yes. The output is designed to be pasted into notes, family chat, or a simple shared checklist.
----
+    a: Yes. The output is designed to be pasted into notes, family chat, or a simple shared checklist.---
 
 ## Why this move checklist planner helps
 Moving becomes stressful when every task stays in your head.

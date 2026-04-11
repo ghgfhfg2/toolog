@@ -4,6 +4,7 @@ title: Text Line Break Cleaner | Tidy pasted text by fixing line breaks, spacing
 description: Clean copied text by removing awkward line breaks, extra blank lines, mixed bullet styles, and repeated spaces in one place.
 lang: en
 permalink: /en/tools/text-line-break-cleaner/
+canonical_url: /en/tools/text-line-break-cleaner/
 category: text
 category_label: Text/Utility
 thumbnail: /assets/thumbs/en/text-line-break-cleaner.svg
@@ -21,8 +22,7 @@ faq:
   - q: When should I use paragraph line merging?
     a: It is most useful for text copied from PDFs, chat apps, or documents where lines break in the middle of sentences. For poetry, code, or scripts, it is safer to leave that option off.
   - q: Can it normalize bullet lists too?
-    a: Yes. Mixed bullet symbols like hyphens, asterisks, and dots can be converted into one consistent list style.
----
+    a: Yes. Mixed bullet symbols like hyphens, asterisks, and dots can be converted into one consistent list style.---
 
 ## Why use a text line break cleaner?
 Copied text often breaks in annoying ways before the content itself becomes the problem.

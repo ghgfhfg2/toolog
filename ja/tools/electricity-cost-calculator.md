@@ -10,6 +10,7 @@ image:
 tool_key: electricity-cost-calculator
 lang: ja
 permalink: /ja/tools/electricity-cost-calculator/
+canonical_url: /ja/tools/electricity-cost-calculator/
 keywords: [電気料金計算機, 電気代計算, kWh計算, 消費電力計算, 家電の電気代]
 related_tools: [unit-converter, percent-calculator, average-calculator]
 faq:
@@ -18,8 +19,7 @@ faq:
   - q: WとkWの違いは？
     a: 1kWは1000Wです。たとえば1500Wのヒーターを2時間使うと、3kWh使用したと考えられます。
   - q: 家電同士の比較にも使えますか？
-    a: はい。家電ごとに消費電力と使用時間を入れ替えて、どの機器がより電気を使うか比較できます。
----
+    a: はい。家電ごとに消費電力と使用時間を入れ替えて、どの機器がより電気を使うか比較できます。---
 
 ## 電気料金計算機はどんなときに便利？
 エアコン、ヒーター、除湿機、PC、ホームサーバーなどは、**実際にいくらかかるのか感覚で分かりにくい**ことが多いです。

@@ -4,6 +4,7 @@ title: 在宅勤務 vs 通勤コスト比較シミュレーター | 月間コス
 description: 通勤費、ランチ代、コーヒー代、在宅追加費用、移動時間を月単位で比較し、どの働き方が有利か確認できるシミュレーターです。
 lang: ja
 permalink: /ja/tools/remote-work-cost-simulator/
+canonical_url: /ja/tools/remote-work-cost-simulator/
 category: productivity
 category_label: 仕事/生産性
 thumbnail: /assets/thumbs/ja/remote-work-cost-simulator.svg
@@ -21,8 +22,7 @@ faq:
   - q: 在宅勤務のほうが必ず有利ですか？
     a: そうとは限りません。食事補助、通勤補助、出社日数、在宅時の光熱費増加によって結果は変わります。
   - q: 時間単価は必須ですか？
-    a: 必須ではありません。空欄なら実費のみを比較し、入力すると移動時間も金額換算して表示します。
----
+    a: 必須ではありません。空欄なら実費のみを比較し、入力すると移動時間も金額換算して表示します。---
 
 ## なぜ在宅勤務と通勤コストを比べるのか
 働き方の違いは気分だけでなく、毎日積み重なる小さな負担で大きく変わります。

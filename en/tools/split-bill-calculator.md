@@ -11,14 +11,14 @@ image:
 tool_key: split-bill-calculator
 lang: en
 permalink: /en/tools/split-bill-calculator/
+canonical_url: /en/tools/split-bill-calculator/
 keywords: [split bill calculator, dutch pay calculator, bill split, expense sharing]
 related_tools: [tip-calculator, discount-calculator, percent-calculator]
 faq:
   - q: How does rounding work?
     a: Choose 1, 10, 100, or 1000 to round each standard share to that unit.
   - q: Why is the last person amount different?
-    a: The last person absorbs the rounding difference so the final total remains exact.
----
+    a: The last person absorbs the rounding difference so the final total remains exact.---
 
 ## Split bill calculator for quick group settlement
 Use this tool when you need to split a meal, taxi fare, delivery fee, or group expense quickly.

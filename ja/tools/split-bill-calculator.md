@@ -11,14 +11,14 @@ image:
 tool_key: split-bill-calculator
 lang: ja
 permalink: /ja/tools/split-bill-calculator/
+canonical_url: /ja/tools/split-bill-calculator/
 keywords: [割り勘計算機, 1人あたり計算, 精算ツール, 会計分割]
 related_tools: [tip-calculator, discount-calculator, percent-calculator]
 faq:
   - q: 丸め単位はどう使いますか？
     a: 1円、10円、100円、1000円単位から選ぶと、その単位で各人の金額を丸めます。
   - q: なぜ最後の1人の金額が違うのですか？
-    a: 丸めで生じた差額を最後の1人が調整し、合計金額を正確に合わせるためです。
----
+    a: 丸めで生じた差額を最後の1人が調整し、合計金額を正確に合わせるためです。---
 
 ## 割り勘計算機が便利な場面
 食事代、タクシー代、配達費、会費などを複数人で分けるときに便利です。

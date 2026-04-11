@@ -18,7 +18,7 @@ faq:
     a: Yes. The calculator shows common unit-price conversions along with the main comparison result.
   - q: Can I compare a discounted product with a regular one?
     a: Yes. Enter product A and B to see which has the lower unit price and how much you save.
----
+canonical_url: /en/tools/unit-price-calculator/---
 
 ## Why use a unit price calculator?
 A bundle deal or large-size package does not always mean a better deal.

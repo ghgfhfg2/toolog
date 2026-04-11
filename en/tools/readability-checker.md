@@ -4,6 +4,7 @@ title: Readability Checker | Spot long sentences, dense paragraphs, and repeated
 description: Paste text to check sentence length, paragraph density, repeated wording, and overall readability signals in one place.
 lang: en
 permalink: /en/tools/readability-checker/
+canonical_url: /en/tools/readability-checker/
 category: text
 category_label: Text/Editing
 thumbnail: /assets/thumbs/en/readability-checker.svg
@@ -19,8 +20,7 @@ faq:
   - q: Are long sentences always bad?
     a: Not necessarily. Some explanations need longer sentences. The goal is to notice where a sentence may be carrying too much at once and could be split more clearly.
   - q: Is it designed for Korean text only?
-    a: It works best for Korean writing patterns, but it can still be used as a lightweight checker for other languages too.
----
+    a: It works best for Korean writing patterns, but it can still be used as a lightweight checker for other languages too.---
 
 ## Why use a readability checker?
 A text can be correct and still feel tiring to read.

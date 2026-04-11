@@ -4,6 +4,7 @@ title: 比率配分計算機 | 総額を比率で手早く配分
 description: 総額と項目ごとの比率を入力すると、各配分金額、割合、最後の差額補正までまとめて計算できます。
 lang: ja
 permalink: /ja/tools/ratio-split-calculator/
+canonical_url: /ja/tools/ratio-split-calculator/
 category: calculator
 category_label: 生活/精算
 thumbnail: /assets/thumbs/ja/ratio-split-calculator.svg
@@ -19,8 +20,7 @@ faq:
   - q: 丸めをすると合計がずれませんか？
     a: 選んだ丸め単位で計算したあと、最後の項目で差額を補正するので、最終合計は元の総額と一致します。
   - q: 比率ではなくパーセントで入れても使えますか？
-    a: はい。50, 30, 20 のように入力しても同じように使えます。大事なのは相対的な比率です。
----
+    a: はい。50, 30, 20 のように入力しても同じように使えます。大事なのは相対的な比率です。---
 
 ## この計算機でできること
 予算を部門ごとに配分したり、利益を持分比率で分けたり、共通費用を決まった比率で精算したいとき、

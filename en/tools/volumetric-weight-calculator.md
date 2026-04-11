@@ -11,6 +11,7 @@ image:
 tool_key: volumetric-weight-calculator
 lang: en
 permalink: /en/tools/volumetric-weight-calculator/
+canonical_url: /en/tools/volumetric-weight-calculator/
 keywords: [volumetric weight calculator, dimensional weight, chargeable weight, shipping calculator, box volume]
 related_tools: [unit-converter, discount-calculator, percent-calculator]
 faq:
@@ -19,8 +20,7 @@ faq:
   - q: Which divisor should I choose?
     a: The divisor depends on the carrier or forwarder policy. 6000, 5000, and 4000 are all used in practice.
   - q: How is chargeable weight decided?
-    a: In many cases, the larger value between actual weight and volumetric weight is used as the billable weight.
----
+    a: In many cases, the larger value between actual weight and volumetric weight is used as the billable weight.---
 
 ## Why use a volumetric weight calculator?
 A parcel may feel light in hand, but shipping charges can still increase if the box is large.  

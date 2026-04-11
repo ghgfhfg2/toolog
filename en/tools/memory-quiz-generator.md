@@ -4,6 +4,7 @@ title: Memory Quiz Generator | Turn study notes into self-test cards instantly
 description: Paste term-answer pairs to create random quiz cards, reveal answers, and mark correct or incorrect items for quick review.
 lang: en
 permalink: /en/tools/memory-quiz-generator/
+canonical_url: /en/tools/memory-quiz-generator/
 category: study
 category_label: Study/Learning
 thumbnail: /assets/thumbs/memory-quiz-generator.svg
@@ -21,8 +22,7 @@ faq:
   - q: "Is it only for vocabulary study?"
     a: "No. It also works for interview prep, history facts, product knowledge, and any prompt-answer style notes."
   - q: "Does it auto-grade typed answers?"
-    a: "This version is designed for fast self-testing. You reveal the answer and mark each card as correct or incorrect yourself."
----
+    a: "This version is designed for fast self-testing. You reveal the answer and mark each card as correct or incorrect yourself."---
 
 ## Why use it?
 Reading notes again and again is not the same as recalling them.

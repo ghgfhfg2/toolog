@@ -4,6 +4,7 @@ title: Remote Work vs Commute Cost Simulator | Compare monthly cost, meals, and 
 description: Compare commuting cost, lunch, coffee, extra home-office costs, and travel time on a monthly basis to see which work style feels cheaper.
 lang: en
 permalink: /en/tools/remote-work-cost-simulator/
+canonical_url: /en/tools/remote-work-cost-simulator/
 category: productivity
 category_label: Work/Productivity
 thumbnail: /assets/thumbs/en/remote-work-cost-simulator.svg
@@ -21,8 +22,7 @@ faq:
   - q: Is remote work always cheaper?
     a: Not necessarily. Meal subsidies, commuting support, hybrid schedules, and extra home utility costs can change the result.
   - q: Do I have to enter an hourly value for time?
-    a: No. If you leave it blank, the tool compares direct expenses only. If you add it, commute time is converted into an estimated monthly time cost.
----
+    a: No. If you leave it blank, the tool compares direct expenses only. If you add it, commute time is converted into an estimated monthly time cost.---
 
 ## Why compare remote work and commuting costs?
 Work-style decisions often feel emotional, but a lot of the difference comes from repeated daily friction:

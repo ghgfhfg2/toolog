@@ -4,6 +4,7 @@ title: 燃費計算機 | km/L・L/100km・燃料費をまとめて計算
 description: 走行距離と給油量から km/L の燃費を計算し、100kmあたり消費量、総燃料費、1kmあたり燃料費までまとめて確認できます。
 lang: ja
 permalink: /ja/tools/fuel-economy-calculator/
+canonical_url: /ja/tools/fuel-economy-calculator/
 category: calculator
 category_label: 自動車/費用
 thumbnail: /assets/thumbs/ja/fuel-economy-calculator.svg
@@ -19,8 +20,7 @@ faq:
   - q: 燃料単価は必須ですか？
     a: いいえ。走行距離と給油量だけでも燃費は計算できます。単価を入れると、総燃料費と1kmあたり燃料費も表示されます。
   - q: EVにも使えますか？
-    a: このツールはリットル基準の燃料消費向けです。EVのkWh効率計算にはそのまま適していません。
----
+    a: このツールはリットル基準の燃料消費向けです。EVのkWh効率計算にはそのまま適していません。---
 
 ## この燃費計算機が便利な場面
 給油後やドライブの後に、**実際の燃費がどれくらいだったか**、そして **その走行にいくらかかったか** をすぐ確認したいことがあります。

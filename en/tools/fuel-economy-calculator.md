@@ -4,6 +4,7 @@ title: Fuel Economy Calculator | km/L, L/100km, and fuel cost at once
 description: Calculate fuel economy in km/L from distance and fuel used, then check L/100km, total fuel cost, and cost per km in one place.
 lang: en
 permalink: /en/tools/fuel-economy-calculator/
+canonical_url: /en/tools/fuel-economy-calculator/
 category: calculator
 category_label: Auto/Cost
 thumbnail: /assets/thumbs/en/fuel-economy-calculator.svg
@@ -19,8 +20,7 @@ faq:
   - q: Do I need to enter fuel price?
     a: No. Fuel economy can be calculated with distance and fuel used only. If you add price per liter, the tool also calculates total fuel cost and cost per km.
   - q: Can I use this for EV efficiency?
-    a: This tool is designed for liquid fuel and liters. It is not meant for EV efficiency in kWh.
----
+    a: This tool is designed for liquid fuel and liters. It is not meant for EV efficiency in kWh.---
 
 ## When this fuel economy calculator is useful
 After a trip or a refill, you may want to know **your real fuel economy** and **how much that drive actually cost**.
