@@ -698,6 +698,49 @@ layout: default
           <textarea id="lmp-output" rows="12" readonly placeholder="추천 결과가 여기에 생성됩니다."></textarea>
           <p class="tool-result" id="lmp-help">상황과 기분을 고르면 바로 먹을 메뉴 후보를 3개 추천합니다.</p>
         </div>
+      {% when 'korean-name-romanizer' %}
+        <div class="tool-ui">
+          <textarea id="knr-input" rows="8" maxlength="12000" placeholder="한글 이름, 상호명, 지명, 짧은 문장을 입력하세요."></textarea>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="knr-case">영문 스타일</label>
+              <select id="knr-case">
+                <option value="title">단어별 첫 글자 대문자</option>
+                <option value="lower">모두 소문자</option>
+                <option value="upper">모두 대문자</option>
+              </select>
+            </div>
+            <div>
+              <label for="knr-separator">단어 연결 방식</label>
+              <select id="knr-separator">
+                <option value="space">공백 유지</option>
+                <option value="hyphen">하이픈 연결</option>
+                <option value="none">붙여쓰기</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="knr-cap-syllable" type="checkbox" /> 음절마다 첫 글자 대문자</label>
+            <label class="tool-check"><input id="knr-trim" type="checkbox" checked /> 불필요한 공백 정리</label>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="knr-sample" type="button">예시 넣기</button>
+            <button id="knr-copy" type="button">결과 복사</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="knr-hangul-count">0</strong><span>한글 음절 수</span></div>
+            <div><strong id="knr-word-count">0</strong><span>단어 수</span></div>
+            <div><strong id="knr-char-count">0</strong><span>결과 글자 수</span></div>
+            <div><strong id="knr-style-out">-</strong><span>출력 스타일</span></div>
+          </div>
+
+          <p class="tool-result" id="knr-help">한글 입력을 로마자 표기 초안으로 빠르게 바꿉니다. 공식 서류 제출 전에는 기존 등록 영문명과 기관 기준을 꼭 다시 확인하세요.</p>
+          <textarea id="knr-output" rows="8" readonly placeholder="변환 결과가 여기에 표시됩니다."></textarea>
+        </div>
       {% when 'json-merge' %}
         <div class="tool-ui">
           <input id="jm-files" type="file" accept="application/json,.json" multiple />

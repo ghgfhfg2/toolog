@@ -5696,6 +5696,138 @@
     render();
   }
 
+  if (slug === 'korean-name-romanizer') {
+    const input = document.getElementById('knr-input');
+    const caseSel = document.getElementById('knr-case');
+    const sepSel = document.getElementById('knr-separator');
+    const capSyllable = document.getElementById('knr-cap-syllable');
+    const trim = document.getElementById('knr-trim');
+    const sampleBtn = document.getElementById('knr-sample');
+    const copyBtn = document.getElementById('knr-copy');
+    const output = document.getElementById('knr-output');
+    const help = document.getElementById('knr-help');
+    const hangulCount = document.getElementById('knr-hangul-count');
+    const wordCount = document.getElementById('knr-word-count');
+    const charCount = document.getElementById('knr-char-count');
+    const styleOut = document.getElementById('knr-style-out');
+
+    if (!input || !caseSel || !sepSel || !output || !help) return;
+
+    const L = ['g','kk','n','d','tt','r','m','b','pp','s','ss','','j','jj','ch','k','t','p','h'];
+    const V = ['a','ae','ya','yae','eo','e','yeo','ye','o','wa','wae','oe','yo','u','wo','we','wi','yu','eu','ui','i'];
+    const T = ['', 'k', 'k', 'ks', 'n', 'nj', 'nh', 't', 'l', 'lk', 'lm', 'lb', 'ls', 'lt', 'lp', 'lh', 'm', 'p', 'ps', 't', 't', 'ng', 't', 't', 'k', 't', 'p', 'h'];
+
+    const knrText = {
+      ko: {
+        help: (count, style) => `한글 ${count}자를 ${style} 기준 로마자 표기로 변환했습니다. 공식 문서에는 기존 등록 영문명을 우선 확인하세요.`,
+        idle: '한글 입력을 로마자 표기 초안으로 빠르게 바꿉니다. 공식 서류 제출 전에는 기존 등록 영문명과 기관 기준을 꼭 다시 확인하세요.',
+        copied: '복사됨',
+        copyDefault: '결과 복사',
+        styles: { title: '첫 글자 대문자', lower: '소문자', upper: '대문자', syllable: '음절 단위 대문자' },
+        separators: { space: '공백 유지', hyphen: '하이픈', none: '붙여쓰기' },
+        sample: '김민준\n서울 책방\n한강 공원 야간 산책'
+      },
+      en: {
+        help: (count, style) => `Converted ${count} Hangul syllable(s) using ${style}. Double-check official registered spellings for passports or formal documents.`,
+        idle: 'Convert Hangul input into quick Romanized drafts. For official documents, always verify your registered English spelling first.',
+        copied: 'Copied',
+        copyDefault: 'Copy result',
+        styles: { title: 'Title case', lower: 'Lowercase', upper: 'Uppercase', syllable: 'Syllable caps' },
+        separators: { space: 'Keep spaces', hyphen: 'Hyphens', none: 'Join words' },
+        sample: '김민준\n서울 책방\n한강 공원 야간 산책'
+      },
+      ja: {
+        help: (count, style) => `ハングル ${count}文字を ${style} 基準でローマ字化しました。公式書類では既存の登録英字名を優先して確認してください。`,
+        idle: 'ハングル入力をローマ字表記の下書きに変換します。公式書類では既存の登録表記を必ず確認してください。',
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー',
+        styles: { title: '単語先頭大文字', lower: '小文字', upper: '大文字', syllable: '音節ごと大文字' },
+        separators: { space: '空白維持', hyphen: 'ハイフン', none: 'つなげる' },
+        sample: '김민준\n서울 책방\n한강 공원 야간 산책'
+      }
+    }[pageLang] || {
+      help: (count, style) => `한글 ${count}자를 ${style} 기준 로마자 표기로 변환했습니다.`,
+      idle: '한글 입력을 로마자 표기 초안으로 빠르게 바꿉니다.',
+      copied: '복사됨',
+      copyDefault: '결과 복사',
+      styles: { title: '첫 글자 대문자', lower: '소문자', upper: '대문자', syllable: '음절 단위 대문자' },
+      separators: { space: '공백 유지', hyphen: '하이픈', none: '붙여쓰기' },
+      sample: '김민준\n서울 책방\n한강 공원 야간 산책'
+    };
+
+    const romanizeSyllable = (char) => {
+      const code = char.charCodeAt(0);
+      if (code < 0xAC00 || code > 0xD7A3) return char;
+      const index = code - 0xAC00;
+      const l = Math.floor(index / 588);
+      const v = Math.floor((index % 588) / 28);
+      const t = index % 28;
+      return `${L[l]}${V[v]}${T[t]}`;
+    };
+
+    const applyCase = (text, mode, syllableMode = false) => {
+      if (mode === 'upper') return text.toUpperCase();
+      if (mode === 'lower') return text.toLowerCase();
+      if (syllableMode) return text.replace(/[A-Za-z]+/g, (token) => token.charAt(0).toUpperCase() + token.slice(1).toLowerCase());
+      return text.replace(/\b([A-Za-z])/g, (m, c) => c.toUpperCase());
+    };
+
+    const convertLine = (line) => {
+      const normalized = trim.checked ? line.replace(/\s+/g, ' ').trim() : line;
+      const converted = Array.from(normalized).map((char) => romanizeSyllable(char)).join('');
+      const separatorMode = sepSel.value || 'space';
+      let joined = converted;
+      if (separatorMode === 'hyphen') joined = joined.replace(/\s+/g, '-');
+      if (separatorMode === 'none') joined = joined.replace(/\s+/g, '');
+      return applyCase(joined, caseSel.value || 'title', !!capSyllable.checked);
+    };
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const render = () => {
+      const raw = input.value || '';
+      const lines = raw.split(/\n/);
+      const convertedLines = lines.map((line) => convertLine(line));
+      const result = convertedLines.join('\n');
+      const hangulMatches = raw.match(/[가-힣]/g) || [];
+      const words = (raw.trim().match(/\S+/g) || []);
+      output.value = result;
+      hangulCount.textContent = formatNum(hangulMatches.length);
+      wordCount.textContent = formatNum(words.length);
+      charCount.textContent = formatNum(result.length);
+      const styleLabel = `${knrText.styles[caseSel.value || 'title']} · ${knrText.separators[sepSel.value || 'space']}${capSyllable.checked ? ' · ' + knrText.styles.syllable : ''}`;
+      styleOut.textContent = styleLabel;
+      help.textContent = hangulMatches.length ? knrText.help(formatNum(hangulMatches.length), styleLabel) : knrText.idle;
+    };
+
+    [input, caseSel, sepSel, capSyllable, trim].forEach((el) => el?.addEventListener('input', render));
+    sampleBtn?.addEventListener('click', () => {
+      input.value = knrText.sample;
+      render();
+    });
+    copyBtn?.addEventListener('click', async () => {
+      if (!output.value.trim()) return;
+      await copyText(output.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = knrText.copied;
+      setTimeout(() => { copyBtn.textContent = old || knrText.copyDefault; }, 900);
+    });
+    render();
+  }
+
   if (slug === 'json-merge') {
     const filesInput = document.getElementById('jm-files');
     const modeSel = document.getElementById('jm-mode');

@@ -1,3 +1,25 @@
+- id: korean-name-romanizer
+  title: 한글 이름 로마자 변환기
+  title_en: Korean Name Romanizer
+  title_ja: ハングル名前ローマ字変換ツール
+  category: text
+  category_label: 텍스트/변환
+  category_label_en: Text/Converter
+  category_label_ja: テキスト/変換
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 한글 이름, 상호명, 지명, 짧은 문장을 국문 입력 그대로 빠르게 영문 표기로 바꿔줘요.
+  description_en: Convert Korean names, place names, brand names, and short text into quick Romanized output.
+  description_ja: ハングルの名前、地名、ブランド名、短い文章をすばやくローマ字表記に変換します。
+  url: /tools/korean-name-romanizer/
+  url_en: /en/tools/korean-name-romanizer/
+  url_ja: /ja/tools/korean-name-romanizer/
+  thumbnail: /assets/thumbs/korean-name-romanizer.svg
+  published_at: 2026-04-12
+  tool_type: converter
+  topic_cluster: language
+
 - id: privacy-exposure-checker
   title: 개인정보 노출 점검기
   title_en: Privacy Exposure Checker
