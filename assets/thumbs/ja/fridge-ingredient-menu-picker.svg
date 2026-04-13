@@ -1,0 +1,21 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#F4FFF7"/>
+  <rect x="52" y="52" width="1096" height="526" rx="28" fill="#DFF7E7"/>
+  <rect x="92" y="98" width="452" height="434" rx="28" fill="#FFFFFF"/>
+  <rect x="576" y="98" width="540" height="434" rx="28" fill="#FFFFFF"/>
+  <circle cx="188" cy="204" r="60" fill="#FFC84D"/>
+  <rect x="250" y="168" width="200" height="28" rx="14" fill="#EAF9EF"/>
+  <rect x="250" y="214" width="174" height="28" rx="14" fill="#EAF9EF"/>
+  <rect x="122" y="326" width="390" height="34" rx="17" fill="#EAF9EF"/>
+  <rect x="122" y="378" width="328" height="34" rx="17" fill="#EAF9EF"/>
+  <rect x="122" y="430" width="254" height="34" rx="17" fill="#EAF9EF"/>
+  <rect x="618" y="144" width="444" height="84" rx="22" fill="#F1FBF4"/>
+  <rect x="618" y="248" width="444" height="84" rx="22" fill="#F1FBF4"/>
+  <rect x="618" y="352" width="444" height="84" rx="22" fill="#F1FBF4"/>
+  <text x="618" y="185" fill="#16351F" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="700">冷蔵庫食材</text>
+  <text x="618" y="224" fill="#16351F" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="700">メニューピッカー</text>
+  <text x="618" y="292" fill="#2E5B3B" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="600">家にある材料から作りやすい候補を提案</text>
+  <text x="618" y="330" fill="#4B7A58" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="500">食事シーン・時間・道具を反映</text>
+  <rect x="618" y="454" width="220" height="42" rx="21" fill="#59B66D"/>
+  <text x="728" y="481" text-anchor="middle" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700">TOOLOG</text>
+</svg>
