@@ -1,3 +1,25 @@
+- id: fridge-ingredient-menu-picker
+  title: 냉장고 재료 조합 추천기
+  title_en: Fridge Ingredient Menu Picker
+  title_ja: 冷蔵庫食材メニューピッカー
+  category: lifestyle
+  category_label: 생활/요리 선택
+  category_label_en: Lifestyle/Cooking Choice
+  category_label_ja: 生活/料理選択
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 집에 있는 재료, 식사 상황, 조리 시간, 조리도구를 바탕으로 지금 해먹기 쉬운 메뉴 후보를 추천해요.
+  description_en: Turn ingredients at home, meal timing, cooking time, and tools into quick menu ideas you can actually make now.
+  description_ja: 家にある食材、食事シーン、調理時間、使える道具をもとに、今すぐ作りやすいメニュー候補を提案します。
+  url: /tools/fridge-ingredient-menu-picker/
+  url_en: /en/tools/fridge-ingredient-menu-picker/
+  url_ja: /ja/tools/fridge-ingredient-menu-picker/
+  thumbnail: /assets/thumbs/fridge-ingredient-menu-picker.svg
+  published_at: 2026-04-13
+  tool_type: picker
+  topic_cluster: food
+
 - id: korean-name-romanizer
   title: 한글 이름 로마자 변환기
   title_en: Korean Name Romanizer

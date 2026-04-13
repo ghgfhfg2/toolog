@@ -1,0 +1,25 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#F4FFF7"/>
+  <rect x="48" y="48" width="1104" height="534" rx="28" fill="#DFF7E7"/>
+  <rect x="86" y="98" width="456" height="434" rx="28" fill="#FFFFFF"/>
+  <rect x="580" y="98" width="534" height="434" rx="28" fill="#FFFFFF"/>
+  <rect x="116" y="132" width="198" height="198" rx="24" fill="#B7EAC7"/>
+  <rect x="332" y="132" width="180" height="90" rx="18" fill="#EAF9EF"/>
+  <rect x="332" y="240" width="180" height="90" rx="18" fill="#EAF9EF"/>
+  <rect x="116" y="354" width="396" height="36" rx="18" fill="#EAF9EF"/>
+  <rect x="116" y="406" width="320" height="36" rx="18" fill="#EAF9EF"/>
+  <rect x="116" y="458" width="250" height="36" rx="18" fill="#EAF9EF"/>
+  <rect x="620" y="132" width="454" height="86" rx="22" fill="#F1FBF4"/>
+  <rect x="620" y="236" width="454" height="86" rx="22" fill="#F1FBF4"/>
+  <rect x="620" y="340" width="454" height="86" rx="22" fill="#F1FBF4"/>
+  <circle cx="190" cy="206" r="56" fill="#FFF4B0"/>
+  <path d="M190 154C210.987 154 228 171.013 228 192C228 219.614 190 258 190 258C190 258 152 219.614 152 192C152 171.013 169.013 154 190 154Z" fill="#FFC84D"/>
+  <rect x="214" y="188" width="54" height="16" rx="8" fill="#59B66D"/>
+  <rect x="214" y="212" width="68" height="16" rx="8" fill="#59B66D"/>
+  <text x="620" y="186" fill="#16351F" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="34" font-weight="700">냉장고 재료 조합 추천기</text>
+  <text x="620" y="284" fill="#2E5B3B" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="25" font-weight="600">지금 있는 재료로</text>
+  <text x="620" y="322" fill="#2E5B3B" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="25" font-weight="600">해먹기 쉬운 메뉴 후보 추천</text>
+  <text x="620" y="390" fill="#4B7A58" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="22" font-weight="500">식사 상황 · 조리 시간 · 조리도구 반영</text>
+  <rect x="620" y="450" width="220" height="42" rx="21" fill="#59B66D"/>
+  <text x="730" y="478" text-anchor="middle" fill="white" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="20" font-weight="700">TOOLOG</text>
+</svg>

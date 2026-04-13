@@ -4789,6 +4789,166 @@
     generate();
   }
 
+  if (slug === 'fridge-ingredient-menu-picker') {
+    const ingredientsEl = document.getElementById('fimp-ingredients');
+    const mealEl = document.getElementById('fimp-meal');
+    const timeEl = document.getElementById('fimp-time');
+    const styleEl = document.getElementById('fimp-style');
+    const carbEl = document.getElementById('fimp-carb');
+    const panEl = document.getElementById('fimp-pan');
+    const potEl = document.getElementById('fimp-pot');
+    const microEl = document.getElementById('fimp-micro');
+    const airEl = document.getElementById('fimp-air');
+    const runBtn = document.getElementById('fimp-run');
+    const sampleBtn = document.getElementById('fimp-sample');
+    const copyBtn = document.getElementById('fimp-copy');
+    const countEl = document.getElementById('fimp-count');
+    const topEl = document.getElementById('fimp-top');
+    const matchEl = document.getElementById('fimp-match');
+    const formatEl = document.getElementById('fimp-format');
+    const outputEl = document.getElementById('fimp-output');
+    const helpEl = document.getElementById('fimp-help');
+
+    if (!ingredientsEl || !mealEl || !timeEl || !styleEl || !carbEl || !panEl || !potEl || !microEl || !airEl || !runBtn || !sampleBtn || !copyBtn || !countEl || !topEl || !matchEl || !formatEl || !outputEl || !helpEl) return;
+
+    const recipes = [
+      { name: '햄야채볶음밥', required: ['밥', '계란'], optional: ['햄', '양파', '대파', '당근'], meal: ['lunch', 'dinner', 'late'], time: ['quick', 'short'], style: ['comfort'], carb: ['rice'], tools: ['pan'], summary: '남은 밥과 자투리 채소를 가장 빠르게 처리하기 좋은 메뉴예요.' },
+      { name: '계란볶음밥', required: ['밥', '계란'], optional: ['대파', '간장', '양파'], meal: ['breakfast', 'lunch', 'dinner'], time: ['quick', 'short'], style: ['comfort', 'light'], carb: ['rice'], tools: ['pan'], summary: '재료가 단순할수록 실패 확률이 낮고 10분 안팎으로 끝내기 쉽습니다.' },
+      { name: '김치볶음밥', required: ['밥', '김치'], optional: ['계란', '햄', '대파', '참기름'], meal: ['lunch', 'dinner', 'late'], time: ['quick', 'short'], style: ['comfort', 'spicy'], carb: ['rice'], tools: ['pan'], summary: '김치가 있으면 가장 안정적으로 든든한 한 끼를 만들 수 있어요.' },
+      { name: '된장찌개', required: ['된장', '두부'], optional: ['애호박', '양파', '대파', '버섯', '감자'], meal: ['lunch', 'dinner'], time: ['short', 'medium'], style: ['comfort', 'soup'], carb: ['protein'], tools: ['pot'], summary: '두부와 된장만 있어도 국물 있는 집밥 느낌을 만들기 좋습니다.' },
+      { name: '두부부침 + 간장양념', required: ['두부'], optional: ['간장', '대파', '고춧가루', '참기름'], meal: ['breakfast', 'lunch', 'dinner'], time: ['quick'], style: ['light', 'protein'], carb: ['protein'], tools: ['pan'], summary: '두부가 남았을 때 가장 간단하게 단백질 반찬 겸 한 끼 보완용으로 좋아요.' },
+      { name: '토스트 / 프렌치토스트', required: ['식빵', '계란'], optional: ['우유', '치즈', '설탕', '버터'], meal: ['breakfast', 'late'], time: ['quick'], style: ['light'], carb: ['bread'], tools: ['pan', 'micro'], summary: '아침이나 야식처럼 짧게 해결하고 싶을 때 가장 편한 선택입니다.' },
+      { name: '치즈계란토스트', required: ['식빵', '계란', '치즈'], optional: ['햄', '양배추', '마요네즈'], meal: ['breakfast', 'lunch', 'late'], time: ['quick'], style: ['light', 'comfort'], carb: ['bread'], tools: ['pan', 'micro'], summary: '빵과 계란, 치즈 조합이 맞으면 실패하기 어렵고 포만감도 적당해요.' },
+      { name: '라면 업그레이드', required: ['라면'], optional: ['계란', '대파', '만두', '치즈', '김치'], meal: ['lunch', 'dinner', 'late'], time: ['quick'], style: ['soup', 'spicy'], carb: ['noodle'], tools: ['pot'], summary: '기본 라면에 남은 재료를 더해 가장 빠르게 만족도를 높이는 방향입니다.' },
+      { name: '잔치국수 / 간단 국수', required: ['국수'], optional: ['계란', '대파', '간장', '김가루'], meal: ['lunch', 'dinner'], time: ['short'], style: ['light', 'soup'], carb: ['noodle'], tools: ['pot'], summary: '국수만 있어도 가볍고 따뜻한 한 끼로 정리하기 좋습니다.' },
+      { name: '에어프라이어 감자구이', required: ['감자'], optional: ['치즈', '버터', '후추', '소금'], meal: ['breakfast', 'lunch', 'dinner', 'late'], time: ['short', 'medium'], style: ['light', 'comfort'], carb: ['any'], tools: ['air'], summary: '에어프라이어가 가능하면 손을 많이 안 대고 사이드 겸 간식처럼 만들 수 있어요.' },
+      { name: '전자레인지 계란찜', required: ['계란'], optional: ['대파', '물', '소금', '치즈'], meal: ['breakfast', 'lunch', 'dinner'], time: ['quick'], style: ['light', 'soup'], carb: ['protein'], tools: ['micro'], summary: '불 쓰기 귀찮을 때 가장 빠르게 단백질 반찬을 확보하는 방식입니다.' },
+      { name: '참치마요덮밥', required: ['밥', '참치'], optional: ['마요네즈', '김', '계란', '양파'], meal: ['lunch', 'dinner'], time: ['quick'], style: ['comfort'], carb: ['rice'], tools: ['pan', 'micro'], summary: '참치 캔과 밥만 있으면 거의 바로 한 끼 구성이 가능합니다.' }
+    ];
+
+    const normalize = (text) => (text || '').toLowerCase().replace(/\s+/g, '');
+    const synonymMap = {
+      쪽파: '대파', 파: '대파', 스팸: '햄', 햄류: '햄', 밥한공기: '밥', 흰밥: '밥', 즉석밥: '밥',
+      달걀: '계란', 계란: '계란', 두부한모: '두부', 식빵류: '식빵', 토스트빵: '식빵',
+      어묵국수: '국수', 소면: '국수', 라면사리: '라면', 참치캔: '참치'
+    };
+
+    const parseIngredients = () => {
+      const raw = ingredientsEl.value || '';
+      return Array.from(new Set(raw.split(/[\n,\/]+/).map((item) => normalize(item)).filter(Boolean).map((item) => synonymMap[item] || item)));
+    };
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const generate = () => {
+      const items = parseIngredients();
+      const state = {
+        meal: mealEl.value || 'dinner',
+        time: timeEl.value || 'short',
+        style: styleEl.value || 'comfort',
+        carb: carbEl.value || 'rice',
+        tools: [panEl.checked && 'pan', potEl.checked && 'pot', microEl.checked && 'micro', airEl.checked && 'air'].filter(Boolean)
+      };
+
+      const ranked = recipes.map((recipe) => {
+        const requiredMatched = recipe.required.filter((item) => items.includes(item));
+        const optionalMatched = recipe.optional.filter((item) => items.includes(item));
+        let score = requiredMatched.length * 5 + optionalMatched.length * 1.5;
+        if (recipe.required.length && requiredMatched.length === recipe.required.length) score += 6;
+        if (state.meal === 'any' || recipe.meal.includes(state.meal)) score += 2;
+        if (state.time === 'any' || recipe.time.includes(state.time)) score += 2;
+        if (state.style === 'any' || recipe.style.includes(state.style)) score += 2;
+        if (state.carb === 'any' || recipe.carb.includes(state.carb) || recipe.carb.includes('any')) score += 2;
+        const toolMatches = recipe.tools.filter((tool) => state.tools.includes(tool));
+        if (toolMatches.length) score += 2;
+        if (recipe.tools.length && !toolMatches.length) score -= 6;
+        if (!requiredMatched.length) score -= 4;
+        return {
+          ...recipe,
+          requiredMatched,
+          optionalMatched,
+          missing: recipe.required.filter((item) => !items.includes(item)),
+          score
+        };
+      }).filter((recipe) => recipe.score > 0)
+        .sort((a, b) => b.score - a.score || b.requiredMatched.length - a.requiredMatched.length || a.name.localeCompare(b.name, 'ko'));
+
+      const picks = ranked.slice(0, 3);
+      const lines = [];
+      lines.push('[냉장고 재료 조합 추천 결과]');
+      lines.push(`- 입력 재료: ${items.length ? items.join(', ') : '없음'}`);
+      lines.push(`- 식사 상황: ${mealEl.options[mealEl.selectedIndex].text}`);
+      lines.push(`- 조리 시간: ${timeEl.options[timeEl.selectedIndex].text}`);
+      lines.push(`- 원하는 느낌: ${styleEl.options[styleEl.selectedIndex].text}`);
+      lines.push(`- 사용 가능 도구: ${state.tools.length ? state.tools.map((tool) => ({ pan: '팬', pot: '냄비', micro: '전자레인지', air: '에어프라이어' }[tool])).join(', ') : '없음'}`);
+      lines.push('');
+
+      if (!picks.length) {
+        lines.push('조건에 맞는 추천이 충분하지 않아요.');
+        lines.push('- 재료를 2~3개 더 넣거나');
+        lines.push('- 조리 시간/주재료 방향을 상관없음으로 완화해보세요.');
+      } else {
+        picks.forEach((pick, index) => {
+          const matchPercent = Math.round((pick.requiredMatched.length + pick.optionalMatched.length * 0.4) / Math.max(1, pick.required.length + pick.optional.length * 0.4) * 100);
+          lines.push(`${index + 1}. ${pick.name}`);
+          lines.push(`- 적합도: ${matchPercent}%`);
+          lines.push(`- 이미 있는 핵심 재료: ${pick.requiredMatched.length ? pick.requiredMatched.join(', ') : '없음'}`);
+          lines.push(`- 있으면 좋은 추가 재료: ${pick.optionalMatched.length ? pick.optionalMatched.join(', ') : '없음'}`);
+          lines.push(`- 부족한 핵심 재료: ${pick.missing.length ? pick.missing.join(', ') : '없음'}`);
+          lines.push(`- 추천 이유: ${pick.summary}`);
+          lines.push('');
+        });
+        lines.push('활용 팁');
+        lines.push('- 1순위가 마음에 들지 않으면 같은 재료로 2, 3순위를 비교해 가장 덜 번거로운 쪽을 고르세요.');
+        lines.push('- 부족한 핵심 재료가 1개뿐이면 장보기 메모로 바로 이어가기 좋습니다.');
+      }
+
+      outputEl.value = lines.join('\n').trim();
+      countEl.textContent = String(ranked.length);
+      topEl.textContent = picks[0]?.name || '-';
+      matchEl.textContent = picks[0] ? `${Math.round((picks[0].requiredMatched.length / Math.max(1, picks[0].required.length)) * 100)}%` : '-';
+      formatEl.textContent = '복사형 메뉴 후보 리스트';
+      helpEl.textContent = picks.length
+        ? `${picks.map((pick) => pick.name).join(', ')} 순으로 추천했어요. 냉장고 털이용으로는 1순위부터 보는 게 가장 편합니다.`
+        : '입력 재료가 너무 적거나 조건이 좁으면 추천 풀이 줄어듭니다. 조건을 조금만 완화해보세요.';
+    };
+
+    sampleBtn.addEventListener('click', () => {
+      ingredientsEl.value = '계란, 양파, 대파, 햄, 밥, 두부, 김치';
+      mealEl.value = 'dinner';
+      timeEl.value = 'short';
+      styleEl.value = 'comfort';
+      carbEl.value = 'rice';
+      panEl.checked = true;
+      potEl.checked = true;
+      microEl.checked = true;
+      airEl.checked = false;
+      generate();
+    });
+
+    [ingredientsEl, mealEl, timeEl, styleEl, carbEl, panEl, potEl, microEl, airEl].forEach((el) => {
+      el.addEventListener('input', generate);
+      el.addEventListener('change', generate);
+    });
+    runBtn.addEventListener('click', generate);
+    copyBtn.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) generate();
+      await copyText(outputEl.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    generate();
+  }
+
   if (slug === 'schedule-coordination-message-generator') {
     const situationEl = document.getElementById('scmg-situation');
     const channelEl = document.getElementById('scmg-channel');
