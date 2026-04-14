@@ -333,6 +333,76 @@ layout: default
           <p class="tool-result" id="rw-help">월 근무일 수와 출근 비용을 입력하면 재택/출근 비용 차이를 시뮬레이션합니다.</p>
         </div>
 
+      {% when 'subscription-cleanup-simulator' %}
+        <div class="tool-ui">
+          <p class="tool-result">{% if page.lang == 'en' %}Enter up to five subscriptions. You will get a practical keep, pause, or cancel order based on cost, real usage, replacement options, and billing urgency.{% elsif page.lang == 'ja' %}最大5件まで入力すると、料金・利用頻度・代替可否・決済日をもとに、維持・保留・解約の優先順位を整理します。{% else %}최대 5개까지 입력하면 가격, 실제 사용 빈도, 대체 가능성, 결제 임박도를 기준으로 유지·보류·해지 우선순위를 정리합니다.{% endif %}</p>
+
+          {% for i in (1..5) %}
+          <div class="tool-card">
+            <div class="tool-row-grid pct-grid">
+              <div>
+                <label for="scs-name-{{ i }}">{% if page.lang == 'en' %}Subscription {{ i }}{% elsif page.lang == 'ja' %}サブスク {{ i }}{% else %}구독 {{ i }}{% endif %}</label>
+                <input id="scs-name-{{ i }}" type="text" placeholder="{% if page.lang == 'en' %}e.g. Netflix{% elsif page.lang == 'ja' %}例: Netflix{% else %}예: 넷플릭스{% endif %}" />
+              </div>
+              <div>
+                <label for="scs-cost-{{ i }}">{% if page.lang == 'en' %}Monthly cost{% elsif page.lang == 'ja' %}月額料金{% else %}월 구독료{% endif %}</label>
+                <input id="scs-cost-{{ i }}" type="number" min="0" step="100" inputmode="numeric" placeholder="{% if page.lang == 'en' %}17000{% elsif page.lang == 'ja' %}1700{% else %}17000{% endif %}" />
+              </div>
+            </div>
+
+            <div class="tool-row-grid pct-grid">
+              <div>
+                <label for="scs-usage-{{ i }}">{% if page.lang == 'en' %}Usage frequency{% elsif page.lang == 'ja' %}利用頻度{% else %}사용 빈도{% endif %}</label>
+                <select id="scs-usage-{{ i }}">
+                  <option value="high">{% if page.lang == 'en' %}Use often{% elsif page.lang == 'ja' %}よく使う{% else %}자주 씀{% endif %}</option>
+                  <option value="medium">{% if page.lang == 'en' %}Use sometimes{% elsif page.lang == 'ja' %}たまに使う{% else %}가끔 씀{% endif %}</option>
+                  <option value="low">{% if page.lang == 'en' %}Rarely use{% elsif page.lang == 'ja' %}ほとんど使わない{% else %}거의 안 씀{% endif %}</option>
+                </select>
+              </div>
+              <div>
+                <label for="scs-alt-{{ i }}">{% if page.lang == 'en' %}Replacement option{% elsif page.lang == 'ja' %}代替手段{% else %}대체 수단{% endif %}</label>
+                <select id="scs-alt-{{ i }}">
+                  <option value="none">{% if page.lang == 'en' %}No replacement{% elsif page.lang == 'ja' %}代替 없음{% else %}대체 어려움{% endif %}</option>
+                  <option value="partial">{% if page.lang == 'en' %}Partial replacement{% elsif page.lang == 'ja' %}一部代替 가능{% else %}부분 대체 가능{% endif %}</option>
+                  <option value="easy">{% if page.lang == 'en' %}Easy to replace{% elsif page.lang == 'ja' %}代替しやすい{% else %}대체 쉬움{% endif %}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="tool-row-grid pct-grid">
+              <div>
+                <label for="scs-billing-{{ i }}">{% if page.lang == 'en' %}Next billing{% elsif page.lang == 'ja' %}次回決済まで{% else %}다음 결제까지{% endif %}</label>
+                <select id="scs-billing-{{ i }}">
+                  <option value="soon">{% if page.lang == 'en' %}Within 3 days{% elsif page.lang == 'ja' %}3日以内{% else %}3일 이내{% endif %}</option>
+                  <option value="week">{% if page.lang == 'en' %}Within 7 days{% elsif page.lang == 'ja' %}7日以内{% else %}7일 이내{% endif %}</option>
+                  <option value="later">{% if page.lang == 'en' %}8 days or later{% elsif page.lang == 'ja' %}8日以降{% else %}8일 이후{% endif %}</option>
+                </select>
+              </div>
+              <div class="tool-row-grid pct-grid">
+                <label class="tool-check"><input id="scs-shared-{{ i }}" type="checkbox" /> {% if page.lang == 'en' %}Shared / family plan{% elsif page.lang == 'ja' %}共有プラン{% else %}공유 중{% endif %}</label>
+                <label class="tool-check"><input id="scs-essential-{{ i }}" type="checkbox" /> {% if page.lang == 'en' %}Work or study essential{% elsif page.lang == 'ja' %}仕事・学習に必須{% else %}업무·학습에 필수{% endif %}</label>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+          <div class="tool-row-grid pct-actions">
+            <button id="scs-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 채우기{% endif %}</button>
+            <button id="scs-reset" type="button">{% if page.lang == 'en' %}Clear all{% elsif page.lang == 'ja' %}リセット{% else %}전체 비우기{% endif %}</button>
+            <button id="scs-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="scs-total">0</strong><span>{% if page.lang == 'en' %}Monthly total{% elsif page.lang == 'ja' %}月 합계{% else %}월 총구독료{% endif %}</span></div>
+            <div><strong id="scs-cancel-save">0</strong><span>{% if page.lang == 'en' %}Cancel savings{% elsif page.lang == 'ja' %}解約 절감액{% else %}해지 추천 절감액{% endif %}</span></div>
+            <div><strong id="scs-pause-save">0</strong><span>{% if page.lang == 'en' %}Pause review pool{% elsif page.lang == 'ja' %}保留 검토액{% else %}보류 검토 금액{% endif %}</span></div>
+            <div><strong id="scs-urgent">0</strong><span>{% if page.lang == 'en' %}Urgent decisions{% elsif page.lang == 'ja' %}急ぎ 판단{% else %}결제 임박 건수{% endif %}</span></div>
+          </div>
+
+          <p class="tool-result" id="scs-help">{% if page.lang == 'en' %}Add subscriptions to see which ones are easiest to trim first.{% elsif page.lang == 'ja' %}入力すると、先に整理しやすいサブスク부터 확인できます。{% else %}구독 정보를 넣으면 무엇부터 정리하기 쉬운지 바로 볼 수 있습니다.{% endif %}</p>
+          <div id="scs-output" class="bw-list"></div>
+        </div>
+
       {% when 'memory-quiz-generator' %}
         <div class="tool-ui">
           <textarea id="mqg-input" rows="10" maxlength="20000" placeholder="{% if page.lang == 'en' %}Paste one prompt-answer pair per line. Example: mitochondria = cell energy production{% elsif page.lang == 'ja' %}1行に1カードずつ貼り付けてください。例: ミトコンドリア = 細胞のエネルギー産生{% else %}한 줄에 카드 하나씩 붙여넣으세요. 예: 미토콘드리아 = 세포 에너지 생산{% endif %}"></textarea>

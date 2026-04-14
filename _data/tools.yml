@@ -1,3 +1,25 @@
+- id: subscription-cleanup-simulator
+  title: 구독 정리 우선순위 시뮬레이터
+  title_en: Subscription Cleanup Priority Simulator
+  title_ja: サブスク整理優先度シミュレーター
+  category: finance
+  category_label: 생활비/구독 관리
+  category_label_en: Budget/Subscriptions
+  category_label_ja: 家計/サブスク管理
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 구독 서비스별 가격, 사용 빈도, 대체 가능성, 업무 필수 여부, 다음 결제일을 바탕으로 유지·보류·해지 우선순위를 정리해요.
+  description_en: Rank subscriptions by keep, pause, or cancel priority using price, usage frequency, replacement options, work need, and next billing date.
+  description_ja: 料金、利用頻度、代替可否、仕事必須度、次回決済日をもとに、維持・保留・解約の優先順位を整理します。
+  url: /tools/subscription-cleanup-simulator/
+  url_en: /en/tools/subscription-cleanup-simulator/
+  url_ja: /ja/tools/subscription-cleanup-simulator/
+  thumbnail: /assets/thumbs/subscription-cleanup-simulator.svg
+  published_at: 2026-04-14
+  tool_type: simulator
+  topic_cluster: finance
+
 - id: fridge-ingredient-menu-picker
   title: 냉장고 재료 조합 추천기
   title_en: Fridge Ingredient Menu Picker
