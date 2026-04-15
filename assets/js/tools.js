@@ -4789,6 +4789,184 @@
     generate();
   }
 
+  if (slug === 'secondhand-trade-checklist-planner') {
+    const itemEl = document.getElementById('stcp-item');
+    const methodEl = document.getElementById('stcp-method');
+    const priceEl = document.getElementById('stcp-price');
+    const packageEl = document.getElementById('stcp-package');
+    const testEl = document.getElementById('stcp-test');
+    const partsEl = document.getElementById('stcp-parts');
+    const defectEl = document.getElementById('stcp-defect');
+    const urgentEl = document.getElementById('stcp-urgent');
+    const runBtn = document.getElementById('stcp-run');
+    const copyBtn = document.getElementById('stcp-copy');
+    const totalEl = document.getElementById('stcp-total');
+    const beforeEl = document.getElementById('stcp-before');
+    const focusEl = document.getElementById('stcp-focus');
+    const formatEl = document.getElementById('stcp-format');
+    const outputEl = document.getElementById('stcp-output');
+    const helpEl = document.getElementById('stcp-help');
+
+    if (!itemEl || !methodEl || !priceEl || !packageEl || !testEl || !partsEl || !defectEl || !urgentEl || !runBtn || !copyBtn || !totalEl || !beforeEl || !focusEl || !formatEl || !outputEl || !helpEl) return;
+
+    const t = {
+      item: {
+        electronics: '전자기기',
+        fashion: '의류 / 잡화',
+        books: '도서 / 취미용품',
+        home: '가구 / 생활용품'
+      },
+      method: {
+        meet: '직거래',
+        delivery: '택배거래',
+        both: '둘 다 가능'
+      },
+      price: {
+        low: '5만 원 미만',
+        mid: '5만~30만 원',
+        high: '30만 원 이상'
+      },
+      package: {
+        light: '간단 포장',
+        normal: '보통',
+        heavy: '완충 포장 중요'
+      },
+      format: '복사형 체크리스트',
+      copyDone: '복사됨',
+      copyDefault: '결과 복사'
+    };
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const generate = () => {
+      const item = itemEl.value || 'electronics';
+      const method = methodEl.value || 'meet';
+      const price = priceEl.value || 'low';
+      const packaging = packageEl.value || 'normal';
+      const testable = !!testEl.checked;
+      const hasParts = !!partsEl.checked;
+      const needDefect = !!defectEl.checked;
+      const urgent = !!urgentEl.checked;
+
+      const beforeSale = [
+        '사진은 밝은 곳에서 앞·뒤·측면과 사용 흔적이 보이게 촬영',
+        '판매글 제목에 모델명, 핵심 상태, 거래 방식을 짧게 정리',
+        '가격 제안 가능 여부와 네고 기준을 미리 정해두기'
+      ];
+      const beforeMeet = [
+        '상대와 날짜, 시간, 장소 또는 발송 방식을 다시 한 번 확인',
+        '판매 물품과 구성품을 한곳에 모아 빠짐없이 점검',
+        '거래 직전 연락용 메시지 초안을 짧게 준비'
+      ];
+      const afterTrade = [
+        '거래 완료 후 판매글 상태를 예약중 또는 판매완료로 바로 변경',
+        '계좌 입금 또는 현금 수령 여부를 다시 확인',
+        '남은 문의가 오지 않도록 완료 메모를 남기기'
+      ];
+
+      if (item === 'electronics') {
+        beforeSale.push('전원, 화면, 버튼, 배터리, 초기화 여부를 체크하고 설명문에 반영');
+        beforeMeet.push(testable ? '현장 테스트 순서를 미리 정하고 충전 상태를 30% 이상 확보' : '테스트가 어렵다면 동작 확인 영상이나 사진을 미리 준비');
+        afterTrade.push('계정 로그아웃, 초기화 여부, 일련번호 노출 사진 삭제를 확인');
+      } else if (item === 'fashion') {
+        beforeSale.push('오염, 보풀, 수선 흔적, 실측 정보를 글에 반영');
+        beforeMeet.push('접는 방식과 방수 포장을 미리 정해 구김과 오염을 줄이기');
+      } else if (item === 'books') {
+        beforeSale.push('밑줄, 필기, 찢김, 구성 누락 여부를 확인');
+        beforeMeet.push('세트 상품이면 권수 누락이 없는지 다시 체크');
+      } else if (item === 'home') {
+        beforeSale.push('크기, 무게, 분해 가능 여부, 차량 적재 가능성을 설명문에 포함');
+        beforeMeet.push('옮길 때 필요한 인원과 이동 동선을 미리 확인');
+      }
+
+      if (method === 'meet' || method === 'both') {
+        beforeMeet.push('사람이 많은 공공장소 또는 테스트 가능한 장소를 우선으로 잡기');
+        beforeMeet.push('거래 직전 출발 메시지와 도착 후 식별 포인트를 짧게 정리');
+      }
+      if (method === 'delivery' || method === 'both') {
+        beforeMeet.push('송장 정보, 수취인 연락처, 주소를 오타 없이 다시 확인');
+        beforeMeet.push('발송 후 송장 사진 또는 번호를 바로 전달할 준비');
+        afterTrade.push('택배 접수 시간과 운송장 조회 가능 시점을 메모');
+      }
+
+      if (packaging === 'heavy') {
+        beforeSale.push('파손 우려 부위는 근접 사진을 남기고 완충재 필요량을 미리 계산');
+        beforeMeet.push('에어캡, 모서리 보호, 테이프 보강 상태를 마지막으로 확인');
+      } else if (packaging === 'light') {
+        beforeMeet.push('간단 포장이어도 오염 방지용 봉투나 지퍼백은 준비');
+      }
+
+      if (price === 'high') {
+        beforeSale.push('고가 물품은 거래 이력, 구매 시기, 영수증 또는 인증 가능한 정보 여부를 확인');
+        beforeMeet.push('직거래면 CCTV 있는 장소, 택배면 포장 전후 사진을 남기기');
+        focusEl.textContent = '안전한 거래 환경 / 증빙 확보';
+      } else if (price === 'mid') {
+        focusEl.textContent = '상태 설명 정확도 / 구성품 누락 방지';
+      } else {
+        focusEl.textContent = '빠른 응답 / 준비 시간 최소화';
+      }
+
+      if (hasParts) {
+        beforeSale.push('박스, 설명서, 충전기, 여분 부속품을 한 번에 모아 사진과 설명문에 반영');
+      } else {
+        beforeSale.push('구성품이 없으면 본품만 판매라는 점을 제목 또는 본문 초반에 명확히 적기');
+      }
+
+      if (needDefect) {
+        beforeSale.push('생활기스, 사용감, 고장 이력, 교체 부품 여부를 짧게 정리');
+      }
+
+      if (urgent) {
+        beforeMeet.push('오늘 거래 가능 시간대와 응답 가능 시간을 먼저 고정해 혼선을 줄이기');
+        afterTrade.push('불발 시 바로 다음 후보자에게 보낼 짧은 안내문을 준비');
+      }
+
+      const lines = [];
+      lines.push('[중고거래 준비 체크리스트]');
+      lines.push(`- 물품 종류: ${t.item[item]}`);
+      lines.push(`- 거래 방식: ${t.method[method]}`);
+      lines.push(`- 가격대: ${t.price[price]}`);
+      lines.push(`- 포장 난이도: ${t.package[packaging]}`);
+      lines.push(`- 테스트 가능: ${testable ? '가능' : '어려움'}`);
+      lines.push(`- 구성품 포함: ${hasParts ? '있음' : '없음'}`);
+      lines.push(`- 하자 고지 메모: ${needDefect ? '포함' : '간단 표기'}`);
+      lines.push('');
+      lines.push('[판매 전 점검]');
+      beforeSale.forEach((itemText) => lines.push(`- ${itemText}`));
+      lines.push('');
+      lines.push('[약속 직전 / 발송 직전]');
+      beforeMeet.forEach((itemText) => lines.push(`- ${itemText}`));
+      lines.push('');
+      lines.push('[거래 후 확인]');
+      afterTrade.forEach((itemText) => lines.push(`- ${itemText}`));
+
+      outputEl.value = lines.join('\n').trim();
+      totalEl.textContent = String(beforeSale.length + beforeMeet.length + afterTrade.length);
+      beforeEl.textContent = String(beforeSale.length);
+      formatEl.textContent = t.format;
+      helpEl.textContent = '판매 전 확인, 거래 직전 준비, 거래 후 메모까지 한 번에 정리했습니다.';
+    };
+
+    runBtn.addEventListener('click', generate);
+    [itemEl, methodEl, priceEl, packageEl, testEl, partsEl, defectEl, urgentEl].forEach((el) => el.addEventListener('input', generate));
+    copyBtn.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) generate();
+      await copyText(outputEl.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copyDone;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+
+    generate();
+  }
+
   if (slug === 'fridge-ingredient-menu-picker') {
     const ingredientsEl = document.getElementById('fimp-ingredients');
     const mealEl = document.getElementById('fimp-meal');

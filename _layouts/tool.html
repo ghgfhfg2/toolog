@@ -623,6 +623,71 @@ layout: default
           <textarea id="btcp-output" rows="18" readonly placeholder="출장 준비 체크리스트가 여기에 생성됩니다."></textarea>
           <p class="tool-result" id="btcp-help">출장 일정과 조건을 입력하면 바로 복사 가능한 체크리스트를 만듭니다.</p>
         </div>
+      {% when 'secondhand-trade-checklist-planner' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="stcp-item">물품 종류</label>
+              <select id="stcp-item">
+                <option value="electronics">전자기기</option>
+                <option value="fashion">의류 / 잡화</option>
+                <option value="books">도서 / 취미용품</option>
+                <option value="home">가구 / 생활용품</option>
+              </select>
+            </div>
+            <div>
+              <label for="stcp-method">거래 방식</label>
+              <select id="stcp-method">
+                <option value="meet">직거래</option>
+                <option value="delivery">택배거래</option>
+                <option value="both">둘 다 가능</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="stcp-price">가격대</label>
+              <select id="stcp-price">
+                <option value="low">5만 원 미만</option>
+                <option value="mid">5만~30만 원</option>
+                <option value="high">30만 원 이상</option>
+              </select>
+            </div>
+            <div>
+              <label for="stcp-package">포장 난이도</label>
+              <select id="stcp-package">
+                <option value="light">간단 포장</option>
+                <option value="normal">보통</option>
+                <option value="heavy">완충 포장 중요</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="stcp-test" type="checkbox" checked /> 현장 또는 발송 전 테스트 가능</label>
+            <label class="tool-check"><input id="stcp-parts" type="checkbox" checked /> 박스 / 케이블 / 부속품 포함</label>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="stcp-defect" type="checkbox" checked /> 사용감 / 하자 고지 메모 포함</label>
+            <label class="tool-check"><input id="stcp-urgent" type="checkbox" /> 오늘 안에 거래 가능성 높음</label>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="stcp-run" type="button">체크리스트 생성</button>
+            <button id="stcp-copy" type="button">결과 복사</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="stcp-total">0</strong><span>전체 항목</span></div>
+            <div><strong id="stcp-before">0</strong><span>판매 전 점검</span></div>
+            <div><strong id="stcp-focus">-</strong><span>강조 포인트</span></div>
+            <div><strong id="stcp-format">-</strong><span>출력 형식</span></div>
+          </div>
+
+          <textarea id="stcp-output" rows="18" readonly placeholder="중고거래 준비 체크리스트가 여기에 생성됩니다."></textarea>
+          <p class="tool-result" id="stcp-help">거래 방식과 물품 조건을 입력하면 판매 전부터 거래 후까지 필요한 준비를 단계별로 정리합니다.</p>
+        </div>
       {% when 'fridge-ingredient-menu-picker' %}
         <div class="tool-ui">
           <div class="tool-row">

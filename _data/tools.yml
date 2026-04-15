@@ -1,3 +1,25 @@
+- id: secondhand-trade-checklist-planner
+  title: 중고거래 준비 체크리스트 플래너
+  title_en: Secondhand Trade Checklist Planner
+  title_ja: 中古取引準備チェックリストプランナー
+  category: lifestyle
+  category_label: 생활/거래 준비
+  category_label_en: Lifestyle/Trade Prep
+  category_label_ja: 生活/取引準備
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 판매 물품 종류, 거래 방식, 포장 난이도, 테스트 가능 여부를 바탕으로 판매 전 확인사항과 거래 직전 준비 항목을 단계별로 정리해요.
+  description_en: Build a step-by-step checklist for secondhand listings, meetup prep, and shipping prep based on item type, trade method, packaging difficulty, and testability.
+  description_ja: 商品種類、取引方法、梱包難易度、動作確認可否をもとに、販売前チェックと受け渡し直前準備を段階別に整理します。
+  url: /tools/secondhand-trade-checklist-planner/
+  url_en: /en/tools/secondhand-trade-checklist-planner/
+  url_ja: /ja/tools/secondhand-trade-checklist-planner/
+  thumbnail: /assets/thumbs/secondhand-trade-checklist-planner.svg
+  published_at: 2026-04-15
+  tool_type: planner
+  topic_cluster: shopping
+
 - id: subscription-cleanup-simulator
   title: 구독 정리 우선순위 시뮬레이터
   title_en: Subscription Cleanup Priority Simulator
