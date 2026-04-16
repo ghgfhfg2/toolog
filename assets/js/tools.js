@@ -9549,6 +9549,163 @@
 
     renderCard();
   }
+  if (slug === 'meeting-action-item-organizer') {
+    const titleEl = document.getElementById('maio-title');
+    const dueEl = document.getElementById('maio-due');
+    const inputEl = document.getElementById('maio-input');
+    const ownerEl = document.getElementById('maio-owner');
+    const priorityEl = document.getElementById('maio-priority');
+    const deadlineEl = document.getElementById('maio-deadline');
+    const checkboxEl = document.getElementById('maio-checkbox');
+    const runBtn = document.getElementById('maio-run');
+    const sampleBtn = document.getElementById('maio-sample');
+    const copyBtn = document.getElementById('maio-copy');
+    const linesEl = document.getElementById('maio-lines');
+    const actionsEl = document.getElementById('maio-actions');
+    const checksEl = document.getElementById('maio-checks');
+    const notesEl = document.getElementById('maio-notes');
+    const helpEl = document.getElementById('maio-help');
+    const outputEl = document.getElementById('maio-output');
+
+    if (!titleEl || !dueEl || !inputEl || !ownerEl || !priorityEl || !deadlineEl || !checkboxEl || !runBtn || !sampleBtn || !copyBtn || !linesEl || !actionsEl || !checksEl || !notesEl || !helpEl || !outputEl) return;
+
+    const t = {
+      sampleTitle: '제품 주간회의 후속정리',
+      sample: ['랜딩 문구 수정', '배너 시안 금요일까지 확인', '결제 오류 재현 로그 공유', '다음 회차 주제 확정', '고객 요청 범위 재확인', '회의록 링크 팀 채널에 공유'].join('\n'),
+      empty: '회의 메모를 한 줄에 한 항목씩 넣어 주세요.',
+      ready: (count) => `${count}개 메모를 정리했습니다. 결과를 바로 복사해 팀 채팅이나 문서에 붙여넣을 수 있어요.`,
+      copied: '복사됨',
+      copyDefault: '결과 복사',
+      labels: {
+        action: '실행 항목',
+        check: '확인 필요',
+        note: '공유 메모',
+        summary: '빠른 공유용 한 줄 요약',
+        owner: '담당',
+        priority: '우선순위',
+        deadline: '기한'
+      },
+      dueMap: {
+        'today': '오늘',
+        'tomorrow': '내일',
+        'this-week': '이번 주',
+        'next-week': '다음 주'
+      }
+    };
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const cleanLine = (line) => line
+      .replace(/^\s*[-*•\d.)]+\s*/, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    const classify = (line) => {
+      const text = line.toLowerCase();
+      const noteKeywords = ['확정', '결정', '공유', '안내', '링크', '회의록', '메모'];
+      const checkKeywords = ['확인', '재확인', '검토', '논의', '질문', '체크', '가능 여부'];
+      const urgentKeywords = ['오늘', '긴급', '즉시', 'asap', '오전', '오후', '금요일', '월요일'];
+
+      let bucket = 'action';
+      if (noteKeywords.some((word) => text.includes(word))) bucket = 'note';
+      if (checkKeywords.some((word) => text.includes(word))) bucket = 'check';
+      const priority = urgentKeywords.some((word) => text.includes(word)) ? '높음' : (bucket === 'action' ? '보통' : '낮음');
+      return { bucket, priority };
+    };
+
+    const buildItem = (line) => {
+      const { bucket, priority } = classify(line);
+      const prefix = checkboxEl.checked && bucket !== 'note' ? '- [ ] ' : '- ';
+      const tags = [];
+      if (ownerEl.checked && bucket !== 'note') tags.push(`@${t.labels.owner}: ____`);
+      if (priorityEl.checked) tags.push(`${t.labels.priority}: ${priority}`);
+      if (deadlineEl.checked && bucket !== 'note') tags.push(`${t.labels.deadline}: ${t.dueMap[dueEl.value] || t.dueMap['this-week']}`);
+      return {
+        bucket,
+        text: `${prefix}${line}${tags.length ? ` (${tags.join(' | ')})` : ''}`
+      };
+    };
+
+    const render = () => {
+      const lines = (inputEl.value || '').split('\n').map(cleanLine).filter(Boolean);
+      linesEl.textContent = String(lines.length);
+
+      if (!lines.length) {
+        actionsEl.textContent = '0';
+        checksEl.textContent = '0';
+        notesEl.textContent = '0';
+        helpEl.textContent = t.empty;
+        outputEl.value = '';
+        return;
+      }
+
+      const built = lines.map(buildItem);
+      const actions = built.filter((item) => item.bucket === 'action');
+      const checks = built.filter((item) => item.bucket === 'check');
+      const notes = built.filter((item) => item.bucket === 'note');
+      actionsEl.textContent = String(actions.length);
+      checksEl.textContent = String(checks.length);
+      notesEl.textContent = String(notes.length);
+
+      const title = (titleEl.value || t.sampleTitle).trim();
+      const summaryBits = [];
+      if (actions.length) summaryBits.push(`실행 ${actions.length}건`);
+      if (checks.length) summaryBits.push(`확인 ${checks.length}건`);
+      if (notes.length) summaryBits.push(`공유 ${notes.length}건`);
+
+      const sections = [
+        `# ${title}`,
+        '',
+        `## ${t.labels.summary}`,
+        `- ${summaryBits.join(' / ')}`,
+        ''
+      ];
+
+      if (actions.length) {
+        sections.push(`## ${t.labels.action}`);
+        sections.push(...actions.map((item) => item.text));
+        sections.push('');
+      }
+      if (checks.length) {
+        sections.push(`## ${t.labels.check}`);
+        sections.push(...checks.map((item) => item.text));
+        sections.push('');
+      }
+      if (notes.length) {
+        sections.push(`## ${t.labels.note}`);
+        sections.push(...notes.map((item) => item.text));
+        sections.push('');
+      }
+
+      outputEl.value = sections.join('\n').trim();
+      helpEl.textContent = t.ready(lines.length);
+    };
+
+    [titleEl, dueEl, inputEl, ownerEl, priorityEl, deadlineEl, checkboxEl].forEach((el) => el.addEventListener('input', render));
+    runBtn?.addEventListener('click', render);
+    sampleBtn?.addEventListener('click', () => {
+      titleEl.value = t.sampleTitle;
+      inputEl.value = t.sample;
+      render();
+    });
+    copyBtn?.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) return;
+      await copyText(outputEl.value);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+
+    render();
+  }
+
   if (slug === 'remote-work-cost-simulator') {
     const totalDaysEl = document.getElementById('rw-total-days');
     const officeDaysEl = document.getElementById('rw-office-days');
