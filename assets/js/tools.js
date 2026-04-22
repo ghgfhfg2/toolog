@@ -1153,6 +1153,181 @@
     generate();
   }
 
+  if (slug === 'korean-spelling-practice') {
+    const category = document.getElementById('ksp-category');
+    const count = document.getElementById('ksp-count');
+    const startBtn = document.getElementById('ksp-start');
+    const nextBtn = document.getElementById('ksp-next');
+    const resetBtn = document.getElementById('ksp-reset');
+    const optionA = document.getElementById('ksp-option-a');
+    const optionB = document.getElementById('ksp-option-b');
+    const question = document.getElementById('ksp-question');
+    const feedback = document.getElementById('ksp-feedback');
+    const missed = document.getElementById('ksp-missed');
+    const totalOut = document.getElementById('ksp-total');
+    const currentOut = document.getElementById('ksp-current');
+    const correctOut = document.getElementById('ksp-correct');
+    const wrongOut = document.getElementById('ksp-wrong');
+    const accuracyOut = document.getElementById('ksp-accuracy');
+
+    if (!category || !count || !startBtn || !nextBtn || !resetBtn || !optionA || !optionB || !question || !feedback || !missed) return;
+
+    const bank = [
+      { category: 'daily', prompt: '올바른 표현을 고르세요.', options: ['웬일', '왠일'], answer: 0, explain: '`웬`은 어찌 된, 어떤의 뜻으로 쓰여 `웬일`이 맞습니다.' },
+      { category: 'daily', prompt: '올바른 표현을 고르세요.', options: ['며칠', '몇일'], answer: 0, explain: '`며칠`이 표준어입니다.' },
+      { category: 'daily', prompt: '올바른 표현을 고르세요.', options: ['금세', '금새'], answer: 0, explain: '`금세`가 맞는 표기입니다.' },
+      { category: 'daily', prompt: '문장에 맞는 표현을 고르세요. “시간이 없어서 숙제를 ___.”', options: ['안 했다', '않 했다'], answer: 0, explain: '부정 표현 `안`과 동사 `했다`가 결합한 형태라 `안 했다`가 자연스럽습니다.' },
+      { category: 'daily', prompt: '문장에 맞는 표현을 고르세요. “어제는 정말 ___ 바빴다.”', options: ['어찌나', '어찌나나'], answer: 0, explain: '`어찌나`가 맞고 `어찌나나`는 잘못된 중복 표현입니다.' },
+      { category: 'daily', prompt: '올바른 표현을 고르세요.', options: ['어떡해', '어떻게'], answer: 1, explain: '방법을 묻는 말은 `어떻게`, 감탄이나 난감함은 문맥에 따라 `어떡해`가 쓰입니다. 단독 기본형 학습에서는 `어떻게`를 먼저 구분하는 것이 좋습니다.' },
+      { category: 'daily', prompt: '문장에 맞는 표현을 고르세요. “비가 와서 밖에 나가면 ___.”', options: ['안 된다', '안된다'], answer: 0, explain: '부정 부사 `안`과 용언 `된다`는 띄어 써 `안 된다`가 맞습니다.' },
+      { category: 'daily', prompt: '올바른 표현을 고르세요.', options: ['되레', '도리어'], answer: 0, explain: '둘 다 쓰지만 자주 헷갈리는 표준 표현으로는 `되레`가 자연스럽습니다.' },
+      { category: 'work', prompt: '업무 문장에 맞는 표현을 고르세요. “자료 ___ 부탁드립니다.”', options: ['검토 부탁드립니다', '검토부탁드립니다'], answer: 0, explain: '명사와 서술 구성이 이어질 때는 띄어 쓰는 것이 기본입니다.' },
+      { category: 'work', prompt: '업무 문장에 맞는 표현을 고르세요. “확인해 ___.”', options: ['주세요', '주십시요'], answer: 0, explain: '`주세요`가 맞고 `주십시요`는 잘못된 표기입니다.' },
+      { category: 'work', prompt: '업무 문장에 맞는 표현을 고르세요. “현재 검토 ___.”', options: ['중입니다', '중 입니다'], answer: 0, explain: '`중입니다`처럼 붙여 쓰는 것이 자연스럽습니다.' },
+      { category: 'work', prompt: '업무 문장에 맞는 표현을 고르세요. “첨부파일을 ___.”', options: ['확인 부탁드립니다', '확인부탁드립니다'], answer: 0, explain: '`확인 부탁드립니다`처럼 띄어 쓰는 형태가 맞습니다.' },
+      { category: 'work', prompt: '업무 문장에 맞는 표현을 고르세요. “일정은 내일까지 ___.”', options: ['공유해 주세요', '공유해주세요'], answer: 0, explain: '보조 용언 구성으로 보아 `공유해 주세요`처럼 띄어 쓰는 연습이 안전합니다.' },
+      { category: 'work', prompt: '업무 문장에 맞는 표현을 고르세요. “확인 후 다시 ___.”', options: ['연락드리겠습니다', '연락 드리겠습니다'], answer: 0, explain: '실무 문장에서는 `연락드리겠습니다`처럼 붙여 쓰는 표현이 널리 쓰입니다.' }
+    ];
+
+    let quiz = [];
+    let index = 0;
+    let correct = 0;
+    let wrong = 0;
+    let answered = false;
+    let wrongNotes = [];
+
+    const shuffle = (arr) => {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    };
+
+    const setButtonsDisabled = (value) => {
+      optionA.disabled = value;
+      optionB.disabled = value;
+    };
+
+    const renderStats = () => {
+      totalOut.textContent = quiz.length;
+      currentOut.textContent = quiz.length ? Math.min(index + 1, quiz.length) : 0;
+      correctOut.textContent = correct;
+      wrongOut.textContent = wrong;
+      const done = correct + wrong;
+      accuracyOut.textContent = done ? `${Math.round((correct / done) * 100)}%` : '-';
+    };
+
+    const renderMissed = () => {
+      if (!wrongNotes.length) {
+        missed.innerHTML = '<p class="tool-result">오답이 없으면 여기에 복습 목록이 표시되지 않습니다.</p>';
+        return;
+      }
+      missed.innerHTML = wrongNotes.map((item) => `
+        <div class="tool-card">
+          <strong>${item.question}</strong>
+          <p class="tool-result">내 선택: ${item.picked}</p>
+          <p class="tool-result">정답: ${item.answer}</p>
+          <p class="tool-result">해설: ${item.explain}</p>
+        </div>
+      `).join('');
+    };
+
+    const renderQuestion = () => {
+      renderStats();
+      if (!quiz.length) {
+        question.textContent = '연습 시작을 누르면 문제가 나옵니다.';
+        optionA.textContent = '보기 A';
+        optionB.textContent = '보기 B';
+        feedback.textContent = '자주 헷갈리는 맞춤법과 띄어쓰기를 짧은 2지선다 퀴즈로 복습해보세요.';
+        setButtonsDisabled(true);
+        return;
+      }
+
+      if (index >= quiz.length) {
+        question.textContent = '연습이 끝났습니다.';
+        optionA.textContent = '완료';
+        optionB.textContent = '완료';
+        feedback.textContent = `총 ${quiz.length}문제 중 ${correct}문제 정답입니다. 틀린 문제는 아래에서 다시 볼 수 있습니다.`;
+        setButtonsDisabled(true);
+        renderMissed();
+        currentOut.textContent = quiz.length;
+        return;
+      }
+
+      const item = quiz[index];
+      question.textContent = `${index + 1}. ${item.prompt}`;
+      optionA.textContent = item.options[0];
+      optionB.textContent = item.options[1];
+      feedback.textContent = '보기 중 하나를 선택하면 바로 해설이 표시됩니다.';
+      answered = false;
+      setButtonsDisabled(false);
+      missed.innerHTML = '<p class="tool-result">문제를 풀면 오답 복습 목록이 여기에 쌓입니다.</p>';
+    };
+
+    const answer = (picked) => {
+      if (answered || index >= quiz.length) return;
+      answered = true;
+      const item = quiz[index];
+      const isCorrect = picked === item.answer;
+      if (isCorrect) {
+        correct += 1;
+        feedback.textContent = `정답! ${item.explain}`;
+      } else {
+        wrong += 1;
+        feedback.textContent = `오답입니다. 정답은 “${item.options[item.answer]}”입니다. ${item.explain}`;
+        wrongNotes.push({
+          question: item.prompt,
+          picked: item.options[picked],
+          answer: item.options[item.answer],
+          explain: item.explain
+        });
+      }
+      renderStats();
+      setButtonsDisabled(true);
+      renderMissed();
+    };
+
+    const start = () => {
+      const selectedCategory = category.value || 'all';
+      const selectedCount = Number(count.value || 8);
+      const pool = selectedCategory === 'all' ? bank : bank.filter((item) => item.category === selectedCategory);
+      quiz = shuffle(pool).slice(0, Math.min(selectedCount, pool.length));
+      index = 0;
+      correct = 0;
+      wrong = 0;
+      wrongNotes = [];
+      answered = false;
+      renderQuestion();
+    };
+
+    optionA.addEventListener('click', () => answer(0));
+    optionB.addEventListener('click', () => answer(1));
+    startBtn.addEventListener('click', start);
+    nextBtn.addEventListener('click', () => {
+      if (!quiz.length) {
+        start();
+        return;
+      }
+      if (index < quiz.length) index += 1;
+      renderQuestion();
+    });
+    resetBtn.addEventListener('click', () => {
+      quiz = [];
+      index = 0;
+      correct = 0;
+      wrong = 0;
+      wrongNotes = [];
+      answered = false;
+      renderQuestion();
+      renderMissed();
+    });
+
+    renderQuestion();
+    renderMissed();
+  }
+
   if (slug === 'pyeong-calculator') {
     const FACTOR = 3.305785;
     const m2Input = document.getElementById('py-m2');

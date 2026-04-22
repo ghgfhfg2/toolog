@@ -437,6 +437,52 @@ layout: default
 
           <div id="mqg-missed" class="bw-list"></div>
         </div>
+      {% when 'korean-spelling-practice' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="ksp-category">연습 범위</label>
+              <select id="ksp-category">
+                <option value="all">전체</option>
+                <option value="daily">일상 표현</option>
+                <option value="work">업무 문장</option>
+              </select>
+            </div>
+            <div>
+              <label for="ksp-count">문제 수</label>
+              <select id="ksp-count">
+                <option value="5">5문제</option>
+                <option value="8" selected>8문제</option>
+                <option value="10">10문제</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="ksp-start" type="button">연습 시작</button>
+            <button id="ksp-next" type="button">다음 문제</button>
+            <button id="ksp-reset" type="button">다시 시작</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="ksp-total">0</strong><span>전체 문제</span></div>
+            <div><strong id="ksp-current">0</strong><span>현재 번호</span></div>
+            <div><strong id="ksp-correct">0</strong><span>정답 수</span></div>
+            <div><strong id="ksp-wrong">0</strong><span>오답 수</span></div>
+            <div><strong id="ksp-accuracy">-</strong><span>정답률</span></div>
+          </div>
+
+          <div class="tool-card">
+            <h3 id="ksp-question">연습 시작을 누르면 문제가 나옵니다.</h3>
+            <div class="tool-row-grid cc-grid">
+              <button id="ksp-option-a" type="button"></button>
+              <button id="ksp-option-b" type="button"></button>
+            </div>
+            <p class="tool-result" id="ksp-feedback">자주 헷갈리는 맞춤법과 띄어쓰기를 짧은 2지선다 퀴즈로 복습해보세요.</p>
+          </div>
+
+          <div id="ksp-missed" class="bw-list"></div>
+        </div>
       {% when 'meeting-action-item-organizer' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">

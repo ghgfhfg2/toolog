@@ -1,3 +1,25 @@
+- id: korean-spelling-practice
+  title: 헷갈리는 맞춤법 연습기
+  title_en: Korean Spelling Practice
+  title_ja: 韓国語つづり練習ツール
+  category: study
+  category_label: 공부/국어 학습
+  category_label_en: Study/Korean Writing
+  category_label_ja: 学習/韓国語表記
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 자주 틀리는 띄어쓰기·표기·외래어 표현을 짧은 2지선다 퀴즈로 풀고 해설과 오답 복습까지 바로 확인해요.
+  description_en: Practice common Korean spelling and spacing mistakes with short two-choice quizzes, instant explanations, and missed-question review.
+  description_ja: よく迷う韓国語の表記や分かち書きを二択クイズで練習し、解説と間違い復習までその場で確認できます。
+  url: /tools/korean-spelling-practice/
+  url_en: /en/tools/korean-spelling-practice/
+  url_ja: /ja/tools/korean-spelling-practice/
+  thumbnail: /assets/thumbs/korean-spelling-practice.svg
+  published_at: 2026-04-22
+  tool_type: learning
+  topic_cluster: language
+
 - id: meeting-action-item-organizer
   title: 회의 액션 아이템 정리기
   title_en: Meeting Action Item Organizer

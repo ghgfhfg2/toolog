@@ -1,0 +1,18 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#0F172A"/>
+  <rect x="64" y="64" width="1072" height="502" rx="28" fill="#111827" stroke="#334155" stroke-width="2"/>
+  <rect x="108" y="112" width="446" height="46" rx="14" fill="#38BDF8" fill-opacity="0.16"/>
+  <text x="108" y="228" fill="#F8FAFC" font-family="Arial, Apple SD Gothic Neo, sans-serif" font-size="62" font-weight="700">웬일 / 왠일 ?</text>
+  <text x="108" y="298" fill="#CBD5E1" font-family="Arial, Apple SD Gothic Neo, sans-serif" font-size="34" font-weight="600">헷갈리는 맞춤법을 짧은 퀴즈로 복습</text>
+  <rect x="108" y="356" width="190" height="78" rx="20" fill="#22C55E"/>
+  <text x="154" y="405" fill="#F8FAFC" font-family="Arial, Apple SD Gothic Neo, sans-serif" font-size="34" font-weight="700">웬일</text>
+  <rect x="322" y="356" width="190" height="78" rx="20" fill="#1E293B" stroke="#475569" stroke-width="2"/>
+  <text x="370" y="405" fill="#E2E8F0" font-family="Arial, Apple SD Gothic Neo, sans-serif" font-size="34" font-weight="700">왠일</text>
+  <rect x="668" y="118" width="380" height="390" rx="28" fill="#0B1220" stroke="#334155" stroke-width="2"/>
+  <text x="710" y="182" fill="#22C55E" font-family="Arial, Apple SD Gothic Neo, sans-serif" font-size="28" font-weight="700">맞춤법 연습기</text>
+  <text x="710" y="244" fill="#E2E8F0" font-family="Arial, Apple SD Gothic Neo, sans-serif" font-size="24">• 2지선다 퀴즈</text>
+  <text x="710" y="292" fill="#E2E8F0" font-family="Arial, Apple SD Gothic Neo, sans-serif" font-size="24">• 바로 해설 확인</text>
+  <text x="710" y="340" fill="#E2E8F0" font-family="Arial, Apple SD Gothic Neo, sans-serif" font-size="24">• 오답 복습 가능</text>
+  <rect x="710" y="390" width="182" height="56" rx="18" fill="#38BDF8" fill-opacity="0.16"/>
+  <text x="748" y="425" fill="#BAE6FD" font-family="Arial, Apple SD Gothic Neo, sans-serif" font-size="24" font-weight="700">KOREAN</text>
+</svg>
