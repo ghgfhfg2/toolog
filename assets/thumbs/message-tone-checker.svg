@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">메시지 톤 점검기</title>
+  <desc id="desc">업무 메시지의 직설 표현, 사과 반복, 요청 명확성, 마감 언급을 점검하는 도구 썸네일</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" rx="36"/>
+  <rect x="76" y="84" width="1048" height="462" rx="30" fill="#eff6ff" opacity="0.97"/>
+  <rect x="124" y="132" width="420" height="62" rx="16" fill="#dbeafe"/>
+  <text x="150" y="174" font-family="Apple SD Gothic Neo, Pretendard, sans-serif" font-size="34" font-weight="700" fill="#1e3a8a">업무/커뮤니케이션</text>
+  <text x="124" y="270" font-family="Apple SD Gothic Neo, Pretendard, sans-serif" font-size="74" font-weight="800" fill="#0f172a">메시지 톤 점검기</text>
+  <text x="126" y="330" font-family="Apple SD Gothic Neo, Pretendard, sans-serif" font-size="30" fill="#334155">직설 표현 · 사과 반복 · 요청/마감 누락 점검</text>
+
+  <rect x="742" y="150" width="286" height="316" rx="26" fill="#ffffff" stroke="#bfdbfe" stroke-width="4"/>
+  <rect x="772" y="186" width="182" height="20" rx="10" fill="#cbd5e1"/>
+  <rect x="772" y="224" width="210" height="20" rx="10" fill="#cbd5e1"/>
+  <rect x="772" y="262" width="164" height="20" rx="10" fill="#cbd5e1"/>
+  <rect x="772" y="320" width="210" height="56" rx="18" fill="#dbeafe"/>
+  <text x="792" y="355" font-family="Apple SD Gothic Neo, Pretendard, sans-serif" font-size="28" font-weight="700" fill="#1d4ed8">점검 결과</text>
+  <circle cx="796" cy="414" r="11" fill="#ef4444"/>
+  <text x="822" y="423" font-family="Apple SD Gothic Neo, Pretendard, sans-serif" font-size="24" fill="#0f172a">직설 표현 2개</text>
+  <circle cx="796" cy="454" r="11" fill="#f59e0b"/>
+  <text x="822" y="463" font-family="Apple SD Gothic Neo, Pretendard, sans-serif" font-size="24" fill="#0f172a">마감 언급 없음</text>
+
+  <circle cx="1070" cy="158" r="54" fill="#2563eb"/>
+  <path d="M1044 157c0-15 12-27 27-27h0c15 0 27 12 27 27v34c0 15-12 27-27 27h0c-15 0-27-12-27-27v-34z" fill="#fff"/>
+  <path d="M1057 205l14 16 14-16" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -270,6 +270,42 @@ layout: default
           <div id="pec-list" class="bw-list"></div>
           <textarea id="pec-output" rows="10" readonly placeholder="마스킹 결과가 여기에 표시됩니다."></textarea>
         </div>
+      {% when 'message-tone-checker' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="mtc-context">상황 기준</label>
+              <select id="mtc-context">
+                <option value="work" selected>업무 협업</option>
+                <option value="external">외부 커뮤니케이션</option>
+                <option value="quick">빠른 내부 메신저</option>
+              </select>
+            </div>
+            <div>
+              <label for="mtc-input">메시지 초안</label>
+              <textarea id="mtc-input" rows="8" maxlength="5000" placeholder="예: 자료 확인 부탁드립니다. 오늘 오후 4시 전까지 가능 여부만 회신 주시면 일정 정리에 도움이 됩니다."></textarea>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="mtc-run" type="button">점검하기</button>
+            <button id="mtc-sample" type="button">예시 넣기</button>
+            <button id="mtc-copy" type="button">결과 복사</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="mtc-status">-</strong><span>톤 요약</span></div>
+            <div><strong id="mtc-direct">0</strong><span>직설 표현</span></div>
+            <div><strong id="mtc-soft">0</strong><span>완충/사과 표현</span></div>
+            <div><strong id="mtc-request">-</strong><span>요청 명확성</span></div>
+            <div><strong id="mtc-deadline">-</strong><span>마감 언급</span></div>
+            <div><strong id="mtc-length">0</strong><span>글자 수</span></div>
+          </div>
+
+          <p class="tool-result" id="mtc-summary">메시지를 넣으면 직설성, 정중함, 요청/마감 언급, 길이 부담을 함께 점검합니다.</p>
+          <div id="mtc-list" class="bw-list"></div>
+          <textarea id="mtc-output" rows="12" readonly placeholder="점검 결과 메모가 여기에 표시됩니다."></textarea>
+        </div>
       {% when 'remote-work-cost-simulator' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">

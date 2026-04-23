@@ -9999,4 +9999,148 @@
   }
 
 
+  if (slug === 'message-tone-checker') {
+    const contextEl = document.getElementById('mtc-context');
+    const inputEl = document.getElementById('mtc-input');
+    const runBtn = document.getElementById('mtc-run');
+    const sampleBtn = document.getElementById('mtc-sample');
+    const copyBtn = document.getElementById('mtc-copy');
+    const statusEl = document.getElementById('mtc-status');
+    const directEl = document.getElementById('mtc-direct');
+    const softEl = document.getElementById('mtc-soft');
+    const requestEl = document.getElementById('mtc-request');
+    const deadlineEl = document.getElementById('mtc-deadline');
+    const lengthEl = document.getElementById('mtc-length');
+    const summaryEl = document.getElementById('mtc-summary');
+    const listEl = document.getElementById('mtc-list');
+    const outputEl = document.getElementById('mtc-output');
+    if (!contextEl || !inputEl || !runBtn || !sampleBtn || !copyBtn || !statusEl || !directEl || !softEl || !requestEl || !deadlineEl || !lengthEl || !summaryEl || !listEl || !outputEl) return;
+
+    const samples = {
+      work: '안녕하세요. 초안 검토 부탁드립니다. 오늘 오후 4시 전까지 가능 여부만 회신 주시면 일정 정리에 도움이 됩니다. 어려우시면 가능한 시간도 함께 알려주세요.',
+      external: '안녕하세요. 전달드린 제안서 관련해 검토 부탁드립니다. 가능하시다면 내일 오전까지 확인 의견을 회신 주시면 후속 일정 안내에 큰 도움이 됩니다.',
+      quick: '왜 아직 공유 안 됐나요? 빨리 보내주세요. 오늘 안에 꼭 필요합니다.'
+    };
+
+    const directPatterns = [/빨리/g, /당장/g, /즉시/g, /왜 아직/g, /왜 안/g, /무조건/g, /지금 바로/g, /꼭 보내/g, /ASAP/gi];
+    const softPatterns = [/죄송/g, /송구/g, /부탁/g, /감사/g, /괜찮으실까요/g, /가능하실까요/g, /혹시/g, /번거로우시겠지만/g];
+    const requestPatterns = [/부탁/g, /확인/g, /회신/g, /알려/g, /공유/g, /검토/g, /전달/g, /정리/g, /보내/g];
+    const deadlinePatterns = [/오늘/g, /내일/g, /모레/g, /이번 주/g, /다음 주/g, /까지/g, /전까지/g, /오전/g, /오후/g, /\d{1,2}시/g, /\d{1,2}:\d{2}/g, /\d+일/g];
+
+    const countMatches = (text, patterns) => patterns.reduce((sum, pattern) => sum + ((text.match(pattern) || []).length), 0);
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const render = () => {
+      const text = (inputEl.value || '').trim();
+      const context = contextEl.value || 'work';
+      const sentenceParts = text.split(/[.!?\n]+/).map((part) => part.trim()).filter(Boolean);
+      const sentenceCount = sentenceParts.length || 1;
+      const avgSentence = text ? text.length / sentenceCount : 0;
+      const directCount = countMatches(text, directPatterns);
+      const softCount = countMatches(text, softPatterns);
+      const requestCount = countMatches(text, requestPatterns);
+      const hasDeadline = deadlinePatterns.some((pattern) => pattern.test(text));
+      const hasRequest = requestCount > 0;
+
+      if (!text) {
+        statusEl.textContent = '-';
+        directEl.textContent = '0';
+        softEl.textContent = '0';
+        requestEl.textContent = '-';
+        deadlineEl.textContent = '-';
+        lengthEl.textContent = '0';
+        summaryEl.textContent = '메시지를 넣으면 직설성, 정중함, 요청/마감 언급, 길이 부담을 함께 점검합니다.';
+        listEl.innerHTML = '<p class="tool-result">아직 점검한 메시지가 없습니다.</p>';
+        outputEl.value = '';
+        return;
+      }
+
+      let status = '균형적';
+      let summary = '전반적으로 무난한 톤입니다.';
+      const notes = [];
+
+      if (directCount >= (context === 'quick' ? 3 : 2)) {
+        status = '직설 강함';
+        summary = '상대가 압박으로 느낄 수 있는 표현이 보여 완충 표현을 조금 섞는 편이 좋습니다.';
+        notes.push('`빨리`, `왜 아직`, `당장`처럼 압박으로 읽히는 표현이 있는지 다시 보세요.');
+      }
+
+      if (softCount >= 4 && status === '균형적') {
+        status = '완곡 과다';
+        summary = '정중하지만 사과·완충 표현이 많아 핵심 요청이 흐려질 수 있습니다.';
+        notes.push('`죄송하지만`, `혹시`, `괜찮으시다면` 같은 표현이 겹치면 핵심 요청을 한 문장으로 분리해보세요.');
+      }
+
+      if (!hasRequest) {
+        status = '요청 모호';
+        summary = '메시지 목적은 보이지만 상대가 무엇을 해야 하는지 조금 더 분명하게 적는 편이 좋습니다.';
+        notes.push('`확인 부탁드립니다`, `회신 부탁드립니다`, `공유 부탁드립니다`처럼 행동 요청을 한 번은 명시해보세요.');
+      }
+
+      if (hasRequest && !hasDeadline) {
+        if (status === '균형적') status = '마감 누락';
+        summary = '요청은 있지만 언제까지 필요한지 드러나지 않아 처리 우선순위가 밀릴 수 있습니다.';
+        notes.push('오늘/내일/오후 4시 전처럼 시점을 넣으면 상대가 처리 우선순위를 잡기 쉬워집니다.');
+      }
+
+      if (text.length >= (context === 'external' ? 260 : 220) || avgSentence >= 55) {
+        if (status === '균형적') status = '조금 김';
+        notes.push('설명이 길다면 핵심 요청 문장을 앞에 두고 배경 설명은 뒤로 정리해보세요.');
+      }
+
+      if (!notes.length) {
+        notes.push('요청과 시점이 비교적 분명합니다. 보내기 전 호칭·첨부 여부만 마지막으로 확인해보세요.');
+      }
+
+      statusEl.textContent = status;
+      directEl.textContent = String(directCount);
+      softEl.textContent = String(softCount);
+      requestEl.textContent = hasRequest ? '명확' : '보완 필요';
+      deadlineEl.textContent = hasDeadline ? '있음' : '없음';
+      lengthEl.textContent = String(text.length);
+      summaryEl.textContent = `${summary} (문장 ${sentenceCount}개 · 평균 ${Math.round(avgSentence)}자)`;
+
+      listEl.innerHTML = notes.map((note) => `<div class="tool-card"><p class="tool-result">${note}</p></div>`).join('');
+      outputEl.value = [
+        '[메시지 톤 점검 결과]',
+        `- 상황 기준: ${contextEl.options[contextEl.selectedIndex].text}`,
+        `- 톤 요약: ${status}`,
+        `- 직설 표현: ${directCount}개`,
+        `- 완충/사과 표현: ${softCount}개`,
+        `- 요청 명확성: ${hasRequest ? '명확' : '보완 필요'}`,
+        `- 마감 언급: ${hasDeadline ? '있음' : '없음'}`,
+        `- 글자 수: ${text.length}자`,
+        '',
+        '개선 메모',
+        ...notes.map((note) => `- ${note}`)
+      ].join('\n');
+    };
+
+    runBtn.addEventListener('click', render);
+    sampleBtn.addEventListener('click', () => {
+      inputEl.value = samples[contextEl.value || 'work'];
+      render();
+    });
+    copyBtn.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) render();
+      await copyText(outputEl.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+    [contextEl, inputEl].forEach((el) => {
+      el.addEventListener('input', render);
+      el.addEventListener('change', render);
+    });
+
+    render();
+  }
+
 })();

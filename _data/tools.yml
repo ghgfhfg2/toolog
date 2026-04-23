@@ -1,3 +1,25 @@
+- id: message-tone-checker
+  title: 메시지 톤 점검기
+  title_en: Message Tone Checker
+  title_ja: メッセージトーンチェッカー
+  category: productivity
+  category_label: 업무/커뮤니케이션
+  category_label_en: Work/Communication
+  category_label_ja: 仕事/コミュニケーション
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 업무 메신저·메일 초안 속 직설 표현, 사과 반복, 요청 명확성, 마감 언급 여부를 한 번에 점검해요.
+  description_en: Check direct phrasing, repeated apologies, request clarity, and deadline mentions in work messages and email drafts.
+  description_ja: 業務メッセージやメール下書きの強い言い回し、謝罪の重なり、依頼の明確さ、締切言及をまとめて点検します。
+  url: /tools/message-tone-checker/
+  url_en: /en/tools/message-tone-checker/
+  url_ja: /ja/tools/message-tone-checker/
+  thumbnail: /assets/thumbs/message-tone-checker.svg
+  published_at: 2026-04-23
+  tool_type: checker
+  topic_cluster: communication
+
 - id: korean-spelling-practice
   title: 헷갈리는 맞춤법 연습기
   title_en: Korean Spelling Practice
