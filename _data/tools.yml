@@ -1,3 +1,15 @@
+- id: secondhand-price-message-generator
+  title: 중고거래 가격 제안 문구 생성기
+  category: lifestyle
+  category_label: 생활/중고거래
+  badge: New
+  description: 구매자·판매자 입장에서 가격 제안, 네고 수락·거절, 예약 요청 문구를 상황별로 정중하게 빠르게 만들어요.
+  url: /tools/secondhand-price-message-generator/
+  thumbnail: /assets/thumbs/secondhand-price-message-generator.svg
+  published_at: 2026-04-24
+  tool_type: generator
+  topic_cluster: shopping
+
 - id: message-tone-checker
   title: 메시지 톤 점검기
   title_en: Message Tone Checker

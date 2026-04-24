@@ -5475,6 +5475,216 @@
     generate();
   }
 
+  if (slug === 'secondhand-price-message-generator') {
+    const roleEl = document.getElementById('spmg-role');
+    const situationEl = document.getElementById('spmg-situation');
+    const toneEl = document.getElementById('spmg-tone');
+    const targetEl = document.getElementById('spmg-target');
+    const itemEl = document.getElementById('spmg-item');
+    const priceEl = document.getElementById('spmg-price');
+    const conditionEl = document.getElementById('spmg-condition');
+    const placeEl = document.getElementById('spmg-place');
+    const extraEl = document.getElementById('spmg-extra');
+    const greetEl = document.getElementById('spmg-greet');
+    const closeEl = document.getElementById('spmg-close');
+    const runBtn = document.getElementById('spmg-run');
+    const sampleBtn = document.getElementById('spmg-sample');
+    const copyBtn = document.getElementById('spmg-copy');
+    const roleOutEl = document.getElementById('spmg-role-out');
+    const toneOutEl = document.getElementById('spmg-tone-out');
+    const situationOutEl = document.getElementById('spmg-situation-out');
+    const variantCountEl = document.getElementById('spmg-variant-count');
+    const helpEl = document.getElementById('spmg-help');
+    const outputEl = document.getElementById('spmg-output');
+    if (!roleEl || !situationEl || !toneEl || !targetEl || !itemEl || !priceEl || !conditionEl || !placeEl || !extraEl || !greetEl || !closeEl || !runBtn || !sampleBtn || !copyBtn || !roleOutEl || !toneOutEl || !situationOutEl || !variantCountEl || !helpEl || !outputEl) return;
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const roleLabels = { buyer: '구매자', seller: '판매자' };
+    const toneLabels = { polite: '정중', neutral: '보통', friendly: '친근' };
+    const situationLabels = {
+      offer: '가격 제안',
+      accept: '제안 수락',
+      decline: '가격 거절',
+      hold: '예약 요청 / 홀드',
+      bundle: '묶음 거래 제안'
+    };
+
+    const greet = (target, tone) => {
+      if (!greetEl.checked) return '';
+      if (target) return `${target} 안녕하세요.`;
+      if (tone === 'friendly') return '안녕하세요!';
+      return '안녕하세요.';
+    };
+
+    const closing = (tone) => {
+      if (!closeEl.checked) return '';
+      if (tone === 'friendly') return '가능하시면 편하게 답 주세요 🙂';
+      if (tone === 'polite') return '가능 여부 편하실 때 답 주시면 감사하겠습니다.';
+      return '가능 여부 답 주시면 감사하겠습니다.';
+    };
+
+    const buildBody = (role, situation, item, price, condition, place, extra, tone) => {
+      const itemText = item || '물품';
+      const priceText = price || '가격';
+      const conditionLine = condition ? `${condition}` : '';
+      const placeLine = place ? `${place}` : '';
+      const extraLine = extra ? `${extra}` : '';
+
+      const map = {
+        buyer: {
+          offer: [
+            `${itemText} 보고 연락드렸어요. ${priceText} 조건으로 거래 가능하실까요?`,
+            conditionLine,
+            placeLine,
+            extraLine
+          ],
+          accept: [
+            `${itemText} ${priceText} 조건으로 진행하고 싶습니다.`,
+            placeLine,
+            extraLine
+          ],
+          decline: [
+            `${itemText} 상태와 조건은 좋지만 이번에는 가격이 조금 부담되어 보류하려고 합니다.`,
+            conditionLine,
+            extraLine
+          ],
+          hold: [
+            `${itemText} 구매 의사가 있는데 ${priceText} 조건으로 잠시 예약 가능할까요?`,
+            placeLine,
+            extraLine
+          ],
+          bundle: [
+            `${itemText} 포함해 묶음으로 보고 있어요. ${priceText} 조건이면 한 번에 진행 가능할까요?`,
+            conditionLine,
+            placeLine,
+            extraLine
+          ]
+        },
+        seller: {
+          offer: [
+            `${itemText} 문의 주셔서 감사합니다. ${priceText} 조건이면 거래 가능합니다.`,
+            conditionLine,
+            placeLine,
+            extraLine
+          ],
+          accept: [
+            `${itemText} 제안해주신 ${priceText} 조건으로 진행 가능합니다.`,
+            placeLine,
+            extraLine
+          ],
+          decline: [
+            `${itemText} 문의 감사합니다. 현재는 ${priceText} 이하로는 진행이 어려운 점 양해 부탁드립니다.`,
+            conditionLine,
+            extraLine
+          ],
+          hold: [
+            `${itemText}는 ${priceText} 조건으로 오늘까지 예약은 가능합니다.`,
+            placeLine,
+            extraLine
+          ],
+          bundle: [
+            `${itemText} 포함 묶음 거래는 ${priceText} 조건이면 가능합니다.`,
+            conditionLine,
+            placeLine,
+            extraLine
+          ]
+        }
+      };
+
+      return (map[role]?.[situation] || []).filter(Boolean).join(' ');
+    };
+
+    const soften = (text, tone) => {
+      if (tone === 'friendly') return text.replace(/감사하겠습니다\./g, '감사해요!').replace(/가능합니다\./g, '가능해요.');
+      if (tone === 'neutral') return text.replace(/양해 부탁드립니다\./g, '양해 부탁드려요.');
+      return text;
+    };
+
+    const generate = () => {
+      const role = roleEl.value || 'buyer';
+      const situation = situationEl.value || 'offer';
+      const tone = toneEl.value || 'polite';
+      const target = (targetEl.value || '').trim();
+      const item = (itemEl.value || '').trim();
+      const price = (priceEl.value || '').trim();
+      const condition = (conditionEl.value || '').trim();
+      const place = (placeEl.value || '').trim();
+      const extra = (extraEl.value || '').trim();
+
+      const head = greet(target, tone);
+      const body = soften(buildBody(role, situation, item, price, condition, place, extra, tone), tone);
+      const tail = closing(tone);
+      const concise = [head, body, tail].filter(Boolean).join(' ');
+      const balanced = [head, body, tail].filter(Boolean).join('\n');
+      const safer = [
+        head,
+        body,
+        situation === 'decline' ? '무리하게 맞추기보다는 서로 편한 조건에서 거래하면 좋겠습니다.' : '조건이 맞으면 빠르게 일정 맞춰 거래 진행하겠습니다.',
+        tail
+      ].filter(Boolean).join('\n');
+
+      outputEl.value = [
+        '[짧은형]',
+        concise,
+        '',
+        '[기본형]',
+        balanced,
+        '',
+        '[완충형]',
+        safer
+      ].join('\n');
+
+      roleOutEl.textContent = roleLabels[role] || '-';
+      toneOutEl.textContent = toneLabels[tone] || '-';
+      situationOutEl.textContent = situationLabels[situation] || '-';
+      variantCountEl.textContent = '3';
+      helpEl.textContent = `${roleLabels[role]} 입장에서 ${situationLabels[situation]} 문구 3가지를 만들었습니다.`;
+    };
+
+    sampleBtn.addEventListener('click', () => {
+      roleEl.value = 'buyer';
+      situationEl.value = 'offer';
+      toneEl.value = 'polite';
+      targetEl.value = '판매자님';
+      itemEl.value = '에어팟 프로 2세대';
+      priceEl.value = '10만 원';
+      conditionEl.value = '사진상 상태가 좋아 보여서 바로 거래 가능해요';
+      placeEl.value = '오늘 저녁 강남역 직거래 가능합니다';
+      extraEl.value = '박스 포함이면 더 좋습니다';
+      greetEl.checked = true;
+      closeEl.checked = true;
+      generate();
+    });
+
+    runBtn.addEventListener('click', generate);
+    copyBtn.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) generate();
+      await copyText(outputEl.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+    [roleEl, situationEl, toneEl, targetEl, itemEl, priceEl, conditionEl, placeEl, extraEl, greetEl, closeEl].forEach((el) => {
+      el.addEventListener('input', generate);
+      el.addEventListener('change', generate);
+    });
+
+    generate();
+  }
+
   if (slug === 'lunch-menu-picker') {
     const timeEl = document.getElementById('lmp-time');
     const companyEl = document.getElementById('lmp-company');

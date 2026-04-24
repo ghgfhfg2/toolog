@@ -974,6 +974,91 @@ layout: default
           <p class="tool-result" id="scmg-help">상황과 시간 후보를 넣으면 바로 보낼 수 있는 일정 조율 문구를 만들어줍니다.</p>
           <textarea id="scmg-output" rows="16" readonly placeholder="생성된 메시지가 여기에 표시됩니다."></textarea>
         </div>
+      {% when 'secondhand-price-message-generator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="spmg-role">입장</label>
+              <select id="spmg-role">
+                <option value="buyer">구매자</option>
+                <option value="seller">판매자</option>
+              </select>
+            </div>
+            <div>
+              <label for="spmg-situation">상황</label>
+              <select id="spmg-situation">
+                <option value="offer">가격 제안</option>
+                <option value="accept">제안 수락</option>
+                <option value="decline">가격 거절</option>
+                <option value="hold">예약 요청 / 홀드</option>
+                <option value="bundle">묶음 거래 제안</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="spmg-tone">말투</label>
+              <select id="spmg-tone">
+                <option value="polite">정중</option>
+                <option value="neutral">보통</option>
+                <option value="friendly">친근</option>
+              </select>
+            </div>
+            <div>
+              <label for="spmg-target">상대 호칭</label>
+              <input id="spmg-target" type="text" maxlength="40" placeholder="예: 판매자님, 구매자님" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="spmg-item">물품명</label>
+              <input id="spmg-item" type="text" maxlength="60" placeholder="예: 에어팟 프로 2세대" />
+            </div>
+            <div>
+              <label for="spmg-price">현재 가격 / 희망 가격</label>
+              <input id="spmg-price" type="text" maxlength="40" placeholder="예: 12만 원 / 10만 원" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="spmg-condition">상태/이유</label>
+              <input id="spmg-condition" type="text" maxlength="80" placeholder="예: 생활기스는 조금 있지만 기능은 정상이에요" />
+            </div>
+            <div>
+              <label for="spmg-place">거래 조건</label>
+              <input id="spmg-place" type="text" maxlength="80" placeholder="예: 오늘 저녁 강남역 직거래 가능" />
+            </div>
+          </div>
+
+          <div class="tool-row">
+            <label for="spmg-extra">추가 메모</label>
+            <input id="spmg-extra" type="text" maxlength="100" placeholder="예: 계좌이체 가능 / 박스 포함 / 선입금은 어려워요" />
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="spmg-greet" type="checkbox" checked /> 인사말 포함</label>
+            <label class="tool-check"><input id="spmg-close" type="checkbox" checked /> 마무리 문장 포함</label>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="spmg-run" type="button">문구 생성</button>
+            <button id="spmg-sample" type="button">예시 넣기</button>
+            <button id="spmg-copy" type="button">결과 복사</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="spmg-role-out">-</strong><span>입장</span></div>
+            <div><strong id="spmg-tone-out">-</strong><span>말투</span></div>
+            <div><strong id="spmg-situation-out">-</strong><span>상황</span></div>
+            <div><strong id="spmg-variant-count">3</strong><span>출력 버전</span></div>
+          </div>
+
+          <p class="tool-result" id="spmg-help">가격 제안, 수락, 거절, 예약 요청 같은 중고거래 메시지를 상황별로 정리해줍니다.</p>
+          <textarea id="spmg-output" rows="16" readonly placeholder="생성된 문구가 여기에 표시됩니다."></textarea>
+        </div>
       {% when 'lunch-menu-picker' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
