@@ -1,11 +1,23 @@
 - id: secondhand-price-message-generator
   title: 중고거래 가격 제안 문구 생성기
+  title_en: Secondhand Price Message Generator
+  title_ja: 中古取引価格メッセージ生成ツール
   category: lifestyle
   category_label: 생활/중고거래
+  category_label_en: Lifestyle/Secondhand Trading
+  category_label_ja: 生活/中古取引
   badge: New
+  badge_en: New
+  badge_ja: 新着
   description: 구매자·판매자 입장에서 가격 제안, 네고 수락·거절, 예약 요청 문구를 상황별로 정중하게 빠르게 만들어요.
+  description_en: Create polite secondhand trading messages for price offers, accepting or declining negotiation, hold requests, and bundle deals.
+  description_ja: 購入者・販売者の立場に合わせて、価格提案、値下げ承諾・辞退、取り置き依頼、まとめ買い提案メッセージをすばやく作成します。
   url: /tools/secondhand-price-message-generator/
+  url_en: /en/tools/secondhand-price-message-generator/
+  url_ja: /ja/tools/secondhand-price-message-generator/
   thumbnail: /assets/thumbs/secondhand-price-message-generator.svg
+  thumbnail_en: /assets/thumbs/en/secondhand-price-message-generator.svg
+  thumbnail_ja: /assets/thumbs/ja/secondhand-price-message-generator.svg
   published_at: 2026-04-24
   tool_type: generator
   topic_cluster: shopping

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Secondhand Price Message Generator</title>
+  <desc id="desc">Thumbnail for a tool that creates secondhand trading price offer and negotiation messages</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff7ed"/>
+      <stop offset="100%" stop-color="#fde68a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <rect x="68" y="72" width="1064" height="486" rx="28" fill="#ffffff" opacity="0.96"/>
+  <rect x="108" y="122" width="240" height="52" rx="26" fill="#fb923c"/>
+  <text x="228" y="156" text-anchor="middle" font-size="28" font-family="Arial, sans-serif" fill="#fff">TOOLOG TOOL</text>
+  <text x="108" y="232" font-size="56" font-weight="700" font-family="Arial, sans-serif" fill="#111827">Secondhand Price</text>
+  <text x="108" y="302" font-size="56" font-weight="700" font-family="Arial, sans-serif" fill="#111827">Message Generator</text>
+  <text x="108" y="378" font-size="28" font-family="Arial, sans-serif" fill="#4b5563">Offers · accept · decline · hold requests</text>
+  <g transform="translate(790 150)">
+    <rect x="0" y="0" width="250" height="300" rx="28" fill="#fff7ed" stroke="#fdba74" stroke-width="4"/>
+    <rect x="26" y="34" width="118" height="38" rx="19" fill="#fed7aa"/>
+    <text x="85" y="59" text-anchor="middle" font-size="20" font-family="Arial, sans-serif" fill="#9a3412">Polite offer</text>
+    <text x="28" y="118" font-size="24" font-family="Arial, sans-serif" fill="#7c2d12">Hi there.</text>
+    <text x="28" y="156" font-size="24" font-family="Arial, sans-serif" fill="#7c2d12">Would 100,000 KRW</text>
+    <text x="28" y="194" font-size="24" font-family="Arial, sans-serif" fill="#7c2d12">work for this item?</text>
+    <text x="28" y="232" font-size="24" font-family="Arial, sans-serif" fill="#7c2d12">I can meet tonight.</text>
+  </g>
+  <g transform="translate(950 408)">
+    <circle cx="0" cy="0" r="54" fill="#fb923c"/>
+    <text x="0" y="12" text-anchor="middle" font-size="58" font-family="Arial, sans-serif" fill="#fff">$</text>
+  </g>
+</svg>

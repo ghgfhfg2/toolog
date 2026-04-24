@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">中古取引価格メッセージ生成ツール</title>
+  <desc id="desc">中古取引の価格提案・承諾・辞退メッセージを作るツールのサムネイル</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fff7ed"/>
+      <stop offset="100%" stop-color="#fde68a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <rect x="68" y="72" width="1064" height="486" rx="28" fill="#ffffff" opacity="0.96"/>
+  <rect x="108" y="122" width="240" height="52" rx="26" fill="#fb923c"/>
+  <text x="228" y="156" text-anchor="middle" font-size="28" font-family="Arial, sans-serif" fill="#fff">TOOLOG TOOL</text>
+  <text x="108" y="232" font-size="56" font-weight="700" font-family="Arial, sans-serif" fill="#111827">中古取引価格</text>
+  <text x="108" y="302" font-size="56" font-weight="700" font-family="Arial, sans-serif" fill="#111827">メッセージ生成</text>
+  <text x="108" y="378" font-size="28" font-family="Arial, sans-serif" fill="#4b5563">価格提案・承諾・辞退・取り置き依頼</text>
+  <g transform="translate(790 150)">
+    <rect x="0" y="0" width="250" height="300" rx="28" fill="#fff7ed" stroke="#fdba74" stroke-width="4"/>
+    <rect x="26" y="34" width="118" height="38" rx="19" fill="#fed7aa"/>
+    <text x="85" y="59" text-anchor="middle" font-size="20" font-family="Arial, sans-serif" fill="#9a3412">丁寧な提案</text>
+    <text x="28" y="118" font-size="24" font-family="Arial, sans-serif" fill="#7c2d12">こんにちは。</text>
+    <text x="28" y="156" font-size="24" font-family="Arial, sans-serif" fill="#7c2d12">10万円条件で</text>
+    <text x="28" y="194" font-size="24" font-family="Arial, sans-serif" fill="#7c2d12">お取引可能ですか。</text>
+    <text x="28" y="232" font-size="24" font-family="Arial, sans-serif" fill="#7c2d12">今夜受け渡し可能です。</text>
+  </g>
+  <g transform="translate(950 408)">
+    <circle cx="0" cy="0" r="54" fill="#fb923c"/>
+    <text x="0" y="12" text-anchor="middle" font-size="58" font-family="Arial, sans-serif" fill="#fff">¥</text>
+  </g>
+</svg>
