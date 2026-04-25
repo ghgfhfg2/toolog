@@ -1,3 +1,27 @@
+- id: hangul-keyboard-layout-converter
+  title: 한영 키 입력 복원기
+  title_en: Hangul Keyboard Layout Converter
+  title_ja: 韓英キー入力復元ツール
+  category: text
+  category_label: 텍스트/변환
+  category_label_en: Text/Converter
+  category_label_ja: テキスト/変換
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 한/영 전환을 놓쳐 영어로 입력한 한글, 한글로 입력한 영어를 빠르게 원래 의도에 가깝게 복원해요.
+  description_en: Recover mistyped text when you typed Korean with an English keyboard layout or English with a Korean layout.
+  description_ja: 韓/英キー切替を間違えて入力した文字列を、元の意図に近い形へすばやく復元します。
+  url: /tools/hangul-keyboard-layout-converter/
+  url_en: /en/tools/hangul-keyboard-layout-converter/
+  url_ja: /ja/tools/hangul-keyboard-layout-converter/
+  thumbnail: /assets/thumbs/hangul-keyboard-layout-converter.svg
+  thumbnail_en: /assets/thumbs/hangul-keyboard-layout-converter.svg
+  thumbnail_ja: /assets/thumbs/hangul-keyboard-layout-converter.svg
+  published_at: 2026-04-25
+  tool_type: converter
+  topic_cluster: language
+
 - id: secondhand-price-message-generator
   title: 중고거래 가격 제안 문구 생성기
   title_en: Secondhand Price Message Generator

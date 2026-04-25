@@ -6419,6 +6419,244 @@
     render();
   }
 
+  if (slug === 'hangul-keyboard-layout-converter') {
+    const input = document.getElementById('hklc-input');
+    const mode = document.getElementById('hklc-mode');
+    const preview = document.getElementById('hklc-preview');
+    const sampleBtn = document.getElementById('hklc-sample');
+    const swapBtn = document.getElementById('hklc-swap');
+    const copyBtn = document.getElementById('hklc-copy');
+    const charsOut = document.getElementById('hklc-chars');
+    const hangulOut = document.getElementById('hklc-hangul');
+    const englishOut = document.getElementById('hklc-english');
+    const modeOut = document.getElementById('hklc-mode-out');
+    const help = document.getElementById('hklc-help');
+    const output = document.getElementById('hklc-output');
+
+    if (!input || !mode || !preview || !sampleBtn || !swapBtn || !copyBtn || !charsOut || !hangulOut || !englishOut || !modeOut || !help || !output) return;
+
+    const textMap = {
+      ko: {
+        idle: '입력 대기',
+        auto: '자동 판별',
+        enToKo: '영어 → 한글 복원',
+        koToEn: '한글 → 영어 복원',
+        helpIdle: '잘못 입력된 텍스트를 넣으면 한/영 키 배열 기준으로 복원합니다.',
+        helpResult: (direction) => `${direction} 기준으로 복원 결과를 만들었습니다. 짧은 혼합 문자열은 방향을 직접 바꾸면 더 정확할 수 있습니다.`,
+        copied: '복사됨',
+        copyDefault: '결과 복사'
+      },
+      en: {
+        idle: 'Waiting',
+        auto: 'Auto detect',
+        enToKo: 'English → Korean',
+        koToEn: 'Korean → English',
+        helpIdle: 'Paste mistyped text to recover it using the Korean/English keyboard layout mapping.',
+        helpResult: (direction) => `Recovered with ${direction}. For short mixed strings, manual direction selection may be more accurate.`,
+        copied: 'Copied',
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        idle: '入力待ち',
+        auto: '自動判定',
+        enToKo: '英語 → ハングル復元',
+        koToEn: 'ハングル → 英語復元',
+        helpIdle: '誤入力テキストを貼り付けると、韓/英キーボード配列 기준で復元します。',
+        helpResult: (direction) => `${direction} 기준으로復元しました。短い混在文字列は方向を 직접 선택すると 더 정확할 수 있습니다。`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー'
+      }
+    }[pageLang] || {
+      idle: '입력 대기', auto: '자동 판별', enToKo: '영어 → 한글 복원', koToEn: '한글 → 영어 복원',
+      helpIdle: '잘못 입력된 텍스트를 넣으면 한/영 키 배열 기준으로 복원합니다.',
+      helpResult: (direction) => `${direction} 기준으로 복원 결과를 만들었습니다.`, copied: '복사됨', copyDefault: '결과 복사'
+    };
+
+    const ENG_TO_JAMO = {
+      r:'ㄱ', R:'ㄲ', s:'ㄴ', e:'ㄷ', E:'ㄸ', f:'ㄹ', a:'ㅁ', q:'ㅂ', Q:'ㅃ', t:'ㅅ', T:'ㅆ', d:'ㅇ', w:'ㅈ', W:'ㅉ', c:'ㅊ', z:'ㅋ', x:'ㅌ', v:'ㅍ', g:'ㅎ',
+      k:'ㅏ', o:'ㅐ', i:'ㅑ', O:'ㅒ', j:'ㅓ', p:'ㅔ', u:'ㅕ', P:'ㅖ', h:'ㅗ', y:'ㅛ', n:'ㅜ', b:'ㅠ', m:'ㅡ', l:'ㅣ'
+    };
+    const JAMO_TO_ENG = Object.fromEntries(Object.entries(ENG_TO_JAMO).map(([k, v]) => [v, k]));
+    Object.assign(JAMO_TO_ENG, {
+      'ㅘ':'hk','ㅙ':'ho','ㅚ':'hl','ㅝ':'nj','ㅞ':'np','ㅟ':'nl','ㅢ':'ml'
+    });
+
+    const CHO = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+    const JUNG = ['ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ'];
+    const JONG = ['', 'ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+
+    const VOWEL_COMBO = {
+      'ㅗㅏ':'ㅘ', 'ㅗㅐ':'ㅙ', 'ㅗㅣ':'ㅚ', 'ㅜㅓ':'ㅝ', 'ㅜㅔ':'ㅞ', 'ㅜㅣ':'ㅟ', 'ㅡㅣ':'ㅢ'
+    };
+    const FINAL_COMBO = {
+      'ㄱㅅ':'ㄳ', 'ㄴㅈ':'ㄵ', 'ㄴㅎ':'ㄶ', 'ㄹㄱ':'ㄺ', 'ㄹㅁ':'ㄻ', 'ㄹㅂ':'ㄼ', 'ㄹㅅ':'ㄽ', 'ㄹㅌ':'ㄾ', 'ㄹㅍ':'ㄿ', 'ㄹㅎ':'ㅀ', 'ㅂㅅ':'ㅄ'
+    };
+    const FINAL_SPLIT = {
+      'ㄳ':['ㄱ','ㅅ'], 'ㄵ':['ㄴ','ㅈ'], 'ㄶ':['ㄴ','ㅎ'], 'ㄺ':['ㄹ','ㄱ'], 'ㄻ':['ㄹ','ㅁ'], 'ㄼ':['ㄹ','ㅂ'], 'ㄽ':['ㄹ','ㅅ'], 'ㄾ':['ㄹ','ㅌ'], 'ㄿ':['ㄹ','ㅍ'], 'ㅀ':['ㄹ','ㅎ'], 'ㅄ':['ㅂ','ㅅ']
+    };
+    const CHO_INDEX = Object.fromEntries(CHO.map((v, i) => [v, i]));
+    const JUNG_INDEX = Object.fromEntries(JUNG.map((v, i) => [v, i]));
+    const JONG_INDEX = Object.fromEntries(JONG.map((v, i) => [v, i]));
+    const isConsonant = (char) => Object.prototype.hasOwnProperty.call(CHO_INDEX, char) || ['ㄳ','ㄵ','ㄶ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅄ'].includes(char);
+    const isVowel = (char) => Object.prototype.hasOwnProperty.call(JUNG_INDEX, char);
+
+    const composeSyllable = (cho, jung, jong = '') => {
+      if (!(cho in CHO_INDEX) || !(jung in JUNG_INDEX)) return `${cho || ''}${jung || ''}${jong || ''}`;
+      const code = 0xAC00 + ((CHO_INDEX[cho] * 21 + JUNG_INDEX[jung]) * 28) + (JONG_INDEX[jong] || 0);
+      return String.fromCharCode(code);
+    };
+
+    const decomposeHangul = (char) => {
+      const code = char.charCodeAt(0);
+      if (code < 0xAC00 || code > 0xD7A3) return [char];
+      const diff = code - 0xAC00;
+      const cho = CHO[Math.floor(diff / 588)];
+      const jung = JUNG[Math.floor((diff % 588) / 28)];
+      const jong = JONG[diff % 28];
+      return [cho, jung, ...(jong ? [jong] : [])];
+    };
+
+    const chooseDirection = (value, selectedMode) => {
+      if (selectedMode !== 'auto') return selectedMode;
+      const englishCount = (value.match(/[A-Za-z]/g) || []).length;
+      const hangulCount = (value.match(/[가-힣ㄱ-ㅎㅏ-ㅣ]/g) || []).length;
+      if (englishCount === 0 && hangulCount === 0) return 'en-to-ko';
+      if (englishCount >= hangulCount) return 'en-to-ko';
+      return 'ko-to-en';
+    };
+
+    const convertEnToKo = (value) => {
+      const mapped = Array.from(value).map((char) => ENG_TO_JAMO[char] || char);
+      let result = '';
+      let i = 0;
+      while (i < mapped.length) {
+        const current = mapped[i];
+        if (!isConsonant(current) && !isVowel(current)) {
+          result += current;
+          i += 1;
+          continue;
+        }
+
+        if (isVowel(current)) {
+          result += current;
+          i += 1;
+          continue;
+        }
+
+        let cho = current;
+        let jung = null;
+        let jong = '';
+        let cursor = i + 1;
+
+        if (cursor < mapped.length && isVowel(mapped[cursor])) {
+          jung = mapped[cursor];
+          cursor += 1;
+          if (cursor < mapped.length && isVowel(mapped[cursor])) {
+            const combo = VOWEL_COMBO[jung + mapped[cursor]];
+            if (combo) {
+              jung = combo;
+              cursor += 1;
+            }
+          }
+        }
+
+        if (!jung) {
+          result += current;
+          i += 1;
+          continue;
+        }
+
+        if (cursor < mapped.length && isConsonant(mapped[cursor])) {
+          const firstFinal = mapped[cursor];
+          const next = mapped[cursor + 1];
+          if (next && isVowel(next)) {
+            // keep consonant as next initial
+          } else {
+            jong = firstFinal;
+            cursor += 1;
+            const comboCandidate = mapped[cursor];
+            const afterCombo = mapped[cursor + 1];
+            if (comboCandidate && isConsonant(comboCandidate) && !(afterCombo && isVowel(afterCombo))) {
+              const combo = FINAL_COMBO[jong + comboCandidate];
+              if (combo) {
+                jong = combo;
+                cursor += 1;
+              }
+            }
+          }
+        }
+
+        result += composeSyllable(cho, jung, jong);
+        i = cursor;
+      }
+      return result;
+    };
+
+    const convertKoToEn = (value) => Array.from(value).map((char) => {
+      if (/[가-힣]/.test(char)) {
+        return decomposeHangul(char).map((jamo) => {
+          if (FINAL_SPLIT[jamo]) return FINAL_SPLIT[jamo].map((part) => JAMO_TO_ENG[part] || part).join('');
+          return JAMO_TO_ENG[jamo] || jamo;
+        }).join('');
+      }
+      if (FINAL_SPLIT[char]) return FINAL_SPLIT[char].map((part) => JAMO_TO_ENG[part] || part).join('');
+      return JAMO_TO_ENG[char] || char;
+    }).join('');
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const render = () => {
+      const value = input.value || '';
+      const englishCount = (value.match(/[A-Za-z]/g) || []).length;
+      const hangulCount = (value.match(/[가-힣ㄱ-ㅎㅏ-ㅣ]/g) || []).length;
+      const direction = chooseDirection(value, mode.value);
+      const converted = direction === 'ko-to-en' ? convertKoToEn(value) : convertEnToKo(value);
+      const directionLabel = direction === 'ko-to-en' ? textMap.koToEn : textMap.enToKo;
+
+      charsOut.textContent = formatNum(value.length);
+      hangulOut.textContent = formatNum(hangulCount);
+      englishOut.textContent = formatNum(englishCount);
+      modeOut.textContent = value ? directionLabel : '-';
+      preview.value = value ? directionLabel : textMap.idle;
+      help.textContent = value ? textMap.helpResult(directionLabel) : textMap.helpIdle;
+      output.value = converted;
+    };
+
+    input.addEventListener('input', render);
+    mode.addEventListener('change', render);
+    sampleBtn.addEventListener('click', () => {
+      input.value = 'dkssudgktpdy\nㅗ디ㅣㅐ\nrkatkgkqslek';
+      mode.value = 'auto';
+      render();
+    });
+    swapBtn.addEventListener('click', () => {
+      if (mode.value === 'auto') mode.value = chooseDirection(input.value || '', 'auto') === 'en-to-ko' ? 'ko-to-en' : 'en-to-ko';
+      else mode.value = mode.value === 'en-to-ko' ? 'ko-to-en' : 'en-to-ko';
+      render();
+    });
+    copyBtn.addEventListener('click', async () => {
+      if (!output.value) return;
+      await copyText(output.value);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = textMap.copied;
+      setTimeout(() => { copyBtn.textContent = old || textMap.copyDefault; }, 900);
+    });
+    render();
+  }
+
   if (slug === 'korean-name-romanizer') {
     const input = document.getElementById('knr-input');
     const caseSel = document.getElementById('knr-case');
