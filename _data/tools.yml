@@ -16,8 +16,8 @@
   url_en: /en/tools/hangul-keyboard-layout-converter/
   url_ja: /ja/tools/hangul-keyboard-layout-converter/
   thumbnail: /assets/thumbs/hangul-keyboard-layout-converter.svg
-  thumbnail_en: /assets/thumbs/hangul-keyboard-layout-converter.svg
-  thumbnail_ja: /assets/thumbs/hangul-keyboard-layout-converter.svg
+  thumbnail_en: /assets/thumbs/en/hangul-keyboard-layout-converter.svg
+  thumbnail_ja: /assets/thumbs/ja/hangul-keyboard-layout-converter.svg
   published_at: 2026-04-25
   tool_type: converter
   topic_cluster: language
