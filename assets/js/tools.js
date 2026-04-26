@@ -6242,6 +6242,154 @@
     analyze();
   }
 
+  if (slug === 'deadline-backward-planner') {
+    const deadlineEl = document.getElementById('dbp-deadline');
+    const hoursEl = document.getElementById('dbp-hours');
+    const dailyHoursEl = document.getElementById('dbp-daily-hours');
+    const bufferEl = document.getElementById('dbp-buffer-days');
+    const sampleBtn = document.getElementById('dbp-sample');
+    const copyBtn = document.getElementById('dbp-copy');
+    const daysEl = document.getElementById('dbp-days');
+    const startEl = document.getElementById('dbp-start');
+    const dailyEl = document.getElementById('dbp-daily');
+    const reviewEl = document.getElementById('dbp-review');
+    const summaryEl = document.getElementById('dbp-summary');
+    const listEl = document.getElementById('dbp-list');
+    if (!deadlineEl || !hoursEl || !dailyHoursEl || !bufferEl || !sampleBtn || !copyBtn || !daysEl || !startEl || !dailyEl || !reviewEl || !summaryEl || !listEl) return;
+
+    const copyByLang = {
+      ko: {
+        empty: '마감일을 입력하면 역산 계획을 만들어줍니다.',
+        copied: '복사됨',
+        copyDefault: '계획 복사',
+        tight: (need, cap) => `일정이 다소 빡빡합니다. 하루 평균 ${need}시간이 필요해 입력한 집중 가능 시간 ${cap}시간을 넘습니다.`,
+        normal: (need, cap) => `하루 평균 ${need}시간 정도면 마감 전까지 진행 가능합니다. 입력한 집중 가능 시간 ${cap}시간 안에 들어옵니다.`,
+        late: '이미 검토 버퍼를 두기 어려운 상태예요. 오늘 바로 핵심 작업부터 시작하는 편이 안전합니다.',
+        phase: ['자료 정리·구조 잡기', '핵심 작업 진행', '빈칸 보완·마무리', '최종 검토·제출 체크'],
+        dayLabel: (date, dday) => `${date} · D-${dday}`,
+        work: (hours, label) => `${hours}시간 · ${label}`,
+        review: (hours) => `${hours}시간 · 최종 검토와 제출 준비`,
+        summaryLine: '생성된 계획은 그대로 복사해 캘린더나 할 일 앱에 붙여 넣어 쓰면 편합니다.'
+      },
+      en: {
+        empty: 'Enter a deadline to build a backward plan.', copied: 'Copied', copyDefault: 'Copy plan',
+        tight: (need, cap) => `This schedule is tight. You need about ${need} hours per day, above your stated ${cap}-hour daily capacity.`,
+        normal: (need, cap) => `About ${need} hours per day should keep this on track before the deadline, within your ${cap}-hour daily capacity.`,
+        late: 'There is almost no room for a review buffer now, so it is safer to start the core work immediately.',
+        phase: ['research and outline', 'main work block', 'gap-filling and refinement', 'final review and submission check'],
+        dayLabel: (date, dday) => `${date} · D-${dday}`,
+        work: (hours, label) => `${hours}h · ${label}`,
+        review: (hours) => `${hours}h · final review and submission prep`,
+        summaryLine: 'You can copy this plan straight into your calendar or task app.'
+      },
+      ja: {
+        empty: '締切を入力すると逆算プランを作成します。', copied: 'コピー完了', copyDefault: '計画をコピー',
+        tight: (need, cap) => `予定がやや厳しめです。1日平均 ${need} 時間が必要で、入力した集中可能時間 ${cap} 時間を上回ります。`,
+        normal: (need, cap) => `1日平均 ${need} 時間ほどで進めれば、締切前までに収まりそうです。入力した集中可能時間 ${cap} 時間の範囲です。`,
+        late: '見直しバッファを確保しにくい状態です。今日すぐに本作業へ入るのが安全です。',
+        phase: ['調査・構成づくり', '本作業を進める', '不足分の補完・仕上げ', '最終確認・提出チェック'],
+        dayLabel: (date, dday) => `${date} · D-${dday}`,
+        work: (hours, label) => `${hours}時間 · ${label}`,
+        review: (hours) => `${hours}時間 · 最終確認と提出準備`,
+        summaryLine: '作成した計画はカレンダーやタスク管理にそのまま移して使えます。'
+      }
+    };
+    const t = copyByLang[pageLang] || copyByLang.ko;
+
+    const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
+    const fmtDate = (date) => new Intl.DateTimeFormat(pageLang === 'en' ? 'en-US' : pageLang === 'ja' ? 'ja-JP' : 'ko-KR', { month: 'short', day: 'numeric', weekday: 'short' }).format(date);
+    const fmtHour = (n) => Number(n).toLocaleString(numberLocale, { maximumFractionDigits: 1 });
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    if (!deadlineEl.value) {
+      const now = new Date();
+      const base = new Date(now.getTime() + (48 * 60 * 60 * 1000));
+      base.setHours(18, 0, 0, 0);
+      deadlineEl.value = new Date(base.getTime() - base.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+    }
+
+    const buildPlan = () => {
+      const now = new Date();
+      const deadline = new Date(deadlineEl.value);
+      const totalHours = clamp(Number(hoursEl.value || 0), 1, 200);
+      const dailyCap = clamp(Number(dailyHoursEl.value || 0), 0.5, 16);
+      const bufferDays = clamp(Number(bufferEl.value || 0), 0, 14);
+      hoursEl.value = totalHours;
+      dailyHoursEl.value = dailyCap;
+      bufferEl.value = bufferDays;
+
+      if (!(deadline instanceof Date) || Number.isNaN(deadline.getTime())) {
+        summaryEl.textContent = t.empty;
+        listEl.innerHTML = '';
+        return;
+      }
+
+      const effectiveEnd = new Date(deadline);
+      effectiveEnd.setDate(effectiveEnd.getDate() - bufferDays);
+      const startDay = new Date(now); startDay.setHours(0, 0, 0, 0);
+      const endDay = new Date(effectiveEnd); endDay.setHours(0, 0, 0, 0);
+      const diffDays = Math.floor((endDay - startDay) / 86400000) + 1;
+      const workDays = Math.max(1, diffDays);
+      const reviewHours = Math.min(Math.max(totalHours * 0.15, 1), Math.min(3, totalHours));
+      const buildDays = Math.max(1, workDays - 1);
+      const buildHours = Math.max(0, totalHours - reviewHours);
+      const dailyNeed = totalHours / workDays;
+      const workPerBuildDay = buildHours / buildDays;
+      const isTight = dailyNeed > dailyCap;
+
+      daysEl.textContent = workDays.toLocaleString(numberLocale);
+      startEl.textContent = fmtDate(startDay);
+      dailyEl.textContent = `${fmtHour(dailyNeed)}h`;
+      reviewEl.textContent = `${fmtHour(reviewHours)}h`;
+      summaryEl.textContent = diffDays <= 0 ? t.late : (isTight ? t.tight(fmtHour(dailyNeed), fmtHour(dailyCap)) : t.normal(fmtHour(dailyNeed), fmtHour(dailyCap)));
+
+      const plan = [];
+      for (let i = 0; i < workDays; i += 1) {
+        const date = new Date(startDay);
+        date.setDate(startDay.getDate() + i);
+        const remaining = workDays - i - 1;
+        const progress = workDays === 1 ? 1 : i / (workDays - 1);
+        const phaseIndex = i === workDays - 1 ? 3 : progress < 0.34 ? 0 : progress < 0.75 ? 1 : 2;
+        const hours = i === workDays - 1 ? reviewHours : workPerBuildDay;
+        const dday = Math.max(0, Math.ceil((endDay - date) / 86400000));
+        plan.push({
+          label: t.dayLabel(fmtDate(date), dday),
+          detail: i === workDays - 1 ? t.review(fmtHour(hours)) : t.work(fmtHour(hours), t.phase[phaseIndex]),
+          tag: remaining === 0 ? 'final' : `${fmtHour(hours)}h`
+        });
+      }
+
+      listEl.innerHTML = plan.map((item) => `<div class="bw-item"><strong>${item.label}<span class="bw-tag">${item.tag}</span></strong><p>${item.detail}</p></div>`).join('');
+      copyBtn.dataset.plan = [summaryEl.textContent, ...plan.map((item) => `- ${item.label}: ${item.detail}`), t.summaryLine].join('\n');
+    };
+
+    [deadlineEl, hoursEl, dailyHoursEl, bufferEl].forEach((el) => el.addEventListener('input', buildPlan));
+    sampleBtn.addEventListener('click', () => {
+      const now = new Date();
+      const sample = new Date(now.getTime() + (5 * 86400000));
+      sample.setHours(18, 0, 0, 0);
+      deadlineEl.value = new Date(sample.getTime() - sample.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+      hoursEl.value = 11;
+      dailyHoursEl.value = 2.5;
+      bufferEl.value = 1;
+      buildPlan();
+    });
+    copyBtn.addEventListener('click', async () => {
+      await copyText(copyBtn.dataset.plan || summaryEl.textContent || '');
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+    buildPlan();
+  }
+
   if (slug === 'privacy-exposure-checker') {
     const input = document.getElementById('pec-input');
     const maskPhone = document.getElementById('pec-mask-phone');

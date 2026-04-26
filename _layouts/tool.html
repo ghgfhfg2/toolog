@@ -240,6 +240,45 @@ layout: default
           <p class="tool-result" id="rc-summary">텍스트를 입력하면 문장 길이와 문단 밀도를 바로 점검합니다.</p>
           <div id="rc-list" class="bw-list"></div>
         </div>
+      {% when 'deadline-backward-planner' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="dbp-deadline">{% if page.lang == 'en' %}Deadline{% elsif page.lang == 'ja' %}締切日時{% else %}마감일시{% endif %}</label>
+              <input id="dbp-deadline" type="datetime-local" />
+            </div>
+            <div>
+              <label for="dbp-hours">{% if page.lang == 'en' %}Total work hours{% elsif page.lang == 'ja' %}総作業時間{% else %}총 작업 시간{% endif %}</label>
+              <input id="dbp-hours" type="number" min="1" max="200" step="0.5" value="8" inputmode="decimal" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="dbp-daily-hours">{% if page.lang == 'en' %}Focus hours per day{% elsif page.lang == 'ja' %}1日の集中可能時間{% else %}하루 집중 가능 시간{% endif %}</label>
+              <input id="dbp-daily-hours" type="number" min="0.5" max="16" step="0.5" value="2.5" inputmode="decimal" />
+            </div>
+            <div>
+              <label for="dbp-buffer-days">{% if page.lang == 'en' %}Review buffer days{% elsif page.lang == 'ja' %}見直しバッファ日数{% else %}검토 버퍼 일수{% endif %}</label>
+              <input id="dbp-buffer-days" type="number" min="0" max="14" step="1" value="1" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="dbp-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 입력{% endif %}</button>
+            <button id="dbp-copy" type="button">{% if page.lang == 'en' %}Copy plan{% elsif page.lang == 'ja' %}計画をコピー{% else %}계획 복사{% endif %}</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="dbp-days">0</strong><span>{% if page.lang == 'en' %}Work days{% elsif page.lang == 'ja' %}作業日数{% else %}작업 가능 일수{% endif %}</span></div>
+            <div><strong id="dbp-start">-</strong><span>{% if page.lang == 'en' %}Recommended start{% elsif page.lang == 'ja' %}開始目安{% else %}시작 권장일{% endif %}</span></div>
+            <div><strong id="dbp-daily">0h</strong><span>{% if page.lang == 'en' %}Avg. daily hours{% elsif page.lang == 'ja' %}1日平均時間{% else %}하루 평균 시간{% endif %}</span></div>
+            <div><strong id="dbp-review">0h</strong><span>{% if page.lang == 'en' %}Final review block{% elsif page.lang == 'ja' %}最終確認時間{% else %}최종 검토 시간{% endif %}</span></div>
+          </div>
+
+          <p class="tool-result" id="dbp-summary">{% if page.lang == 'en' %}Enter a deadline to build a backward plan.{% elsif page.lang == 'ja' %}締切を入力すると逆算プランを作成します。{% else %}마감일을 입력하면 역산 계획을 만들어줍니다.{% endif %}</p>
+          <div id="dbp-list" class="bw-list"></div>
+        </div>
       {% when 'privacy-exposure-checker' %}
         <div class="tool-ui">
           <textarea id="pec-input" rows="10" maxlength="20000" placeholder="메시지, 문서 초안, 공지문 등을 붙여넣어 개인정보 노출 가능성을 점검하세요."></textarea>

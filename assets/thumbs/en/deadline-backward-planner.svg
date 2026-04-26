@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Deadline Backward Planner</title>
+  <desc id="desc">Schedule planning thumbnail with a calendar card and task timeline</desc>
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#0f172a"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient></defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <rect x="76" y="82" width="390" height="466" rx="28" fill="#eff6ff" opacity="0.96"/>
+  <rect x="108" y="124" width="326" height="54" rx="16" fill="#bfdbfe"/>
+  <g fill="#1e3a8a"><rect x="108" y="214" width="72" height="72" rx="14"/><rect x="196" y="214" width="72" height="72" rx="14" opacity="0.75"/><rect x="284" y="214" width="72" height="72" rx="14" opacity="0.55"/><rect x="108" y="302" width="72" height="72" rx="14" opacity="0.75"/><rect x="196" y="302" width="72" height="72" rx="14" opacity="0.55"/><rect x="284" y="302" width="72" height="72" rx="14"/></g>
+  <rect x="532" y="112" width="580" height="110" rx="28" fill="#ffffff" opacity="0.14"/>
+  <text x="568" y="160" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="700" fill="#f8fafc">Deadline Backward Planner</text>
+  <text x="568" y="206" font-family="Arial, Helvetica, sans-serif" font-size="28" fill="#dbeafe">Turn one due date into a daily work plan</text>
+  <rect x="532" y="270" width="528" height="72" rx="22" fill="#ffffff" opacity="0.92"/>
+  <rect x="532" y="362" width="478" height="72" rx="22" fill="#ffffff" opacity="0.82"/>
+  <rect x="532" y="454" width="420" height="72" rx="22" fill="#ffffff" opacity="0.72"/>
+  <g font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#0f172a"><text x="568" y="316">D-5 research · outline · 2.5h</text><text x="568" y="408">D-3 main work · visuals · 3h</text><text x="568" y="500">D-1 review · final submit · 1h</text></g>
+</svg>

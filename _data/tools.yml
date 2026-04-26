@@ -1,3 +1,27 @@
+- id: deadline-backward-planner
+  title: 마감 역산 일정 플래너
+  title_en: Deadline Backward Planner
+  title_ja: 締切逆算プランナー
+  category: productivity
+  category_label: 업무/일정 관리
+  category_label_en: Work/Schedule
+  category_label_ja: 仕事/スケジュール
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 마감일, 예상 소요 시간, 하루 집중 가능 시간, 검토 버퍼를 바탕으로 역산 일정표를 바로 만들어요.
+  description_en: Build a backward plan from the due date using estimated work hours, daily focus capacity, and review buffer days.
+  description_ja: 締切日時、想定作業時間、1日の集中可能時間、見直しバッファ日数から逆算スケジュールを作成します。
+  url: /tools/deadline-backward-planner/
+  url_en: /en/tools/deadline-backward-planner/
+  url_ja: /ja/tools/deadline-backward-planner/
+  thumbnail: /assets/thumbs/deadline-backward-planner.svg
+  thumbnail_en: /assets/thumbs/en/deadline-backward-planner.svg
+  thumbnail_ja: /assets/thumbs/ja/deadline-backward-planner.svg
+  published_at: 2026-04-26
+  tool_type: planner
+  topic_cluster: work
+
 - id: hangul-keyboard-layout-converter
   title: 한영 키 입력 복원기
   title_en: Hangul Keyboard Layout Converter
