@@ -16,8 +16,8 @@
   url_en: /en/tools/filename-sanitizer/
   url_ja: /ja/tools/filename-sanitizer/
   thumbnail: /assets/thumbs/filename-sanitizer.svg
-  thumbnail_en: /assets/thumbs/filename-sanitizer.svg
-  thumbnail_ja: /assets/thumbs/filename-sanitizer.svg
+  thumbnail_en: /assets/thumbs/en/filename-sanitizer.svg
+  thumbnail_ja: /assets/thumbs/ja/filename-sanitizer.svg
   published_at: 2026-04-27
   tool_type: utility
   topic_cluster: work
