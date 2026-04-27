@@ -1,3 +1,27 @@
+- id: filename-sanitizer
+  title: 파일명 정리기
+  title_en: Filename Sanitizer
+  title_ja: ファイル名整理ツール
+  category: text
+  category_label: 텍스트/파일 정리
+  category_label_en: Text/File Naming
+  category_label_ja: テキスト/ファイル整理
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 제목이나 파일명 목록을 붙여넣으면 공백, 특수문자, 반복 구분자, 번호 형식을 정리해 복사하기 쉬운 파일명 목록으로 바꿔줘요.
+  description_en: Paste titles or file names to normalize spaces, special characters, separators, and numbering into cleaner copy-ready file names.
+  description_ja: タイトルやファイル名一覧を貼り付けると、空白・記号・区切り文字・連番を整えて使いやすいファイル名へまとめます。
+  url: /tools/filename-sanitizer/
+  url_en: /en/tools/filename-sanitizer/
+  url_ja: /ja/tools/filename-sanitizer/
+  thumbnail: /assets/thumbs/filename-sanitizer.svg
+  thumbnail_en: /assets/thumbs/filename-sanitizer.svg
+  thumbnail_ja: /assets/thumbs/filename-sanitizer.svg
+  published_at: 2026-04-27
+  tool_type: utility
+  topic_cluster: work
+
 - id: deadline-backward-planner
   title: 마감 역산 일정 플래너
   title_en: Deadline Backward Planner

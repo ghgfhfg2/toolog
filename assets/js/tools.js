@@ -6129,6 +6129,158 @@
     render();
   }
 
+  if (slug === 'filename-sanitizer') {
+    const input = document.getElementById('fs-input');
+    const separatorEl = document.getElementById('fs-separator');
+    const caseEl = document.getElementById('fs-case');
+    const dateEnabledEl = document.getElementById('fs-date-enabled');
+    const dateEl = document.getElementById('fs-date');
+    const numberEnabledEl = document.getElementById('fs-number-enabled');
+    const numberStartEl = document.getElementById('fs-number-start');
+    const removeEmojiEl = document.getElementById('fs-remove-emoji');
+    const keepExtensionEl = document.getElementById('fs-keep-extension');
+    const sampleBtn = document.getElementById('fs-sample');
+    const copyBtn = document.getElementById('fs-copy');
+    const inputCountEl = document.getElementById('fs-input-count');
+    const outputCountEl = document.getElementById('fs-output-count');
+    const changedCountEl = document.getElementById('fs-changed-count');
+    const duplicateCountEl = document.getElementById('fs-duplicate-count');
+    const summaryEl = document.getElementById('fs-summary');
+    const outputEl = document.getElementById('fs-output');
+    if (!input || !separatorEl || !caseEl || !dateEnabledEl || !dateEl || !numberEnabledEl || !numberStartEl || !removeEmojiEl || !keepExtensionEl || !sampleBtn || !copyBtn || !inputCountEl || !outputCountEl || !changedCountEl || !duplicateCountEl || !summaryEl || !outputEl) return;
+
+    const t = {
+      sample: '최종 발표 자료 v3!.pptx\n브랜드 소개서 2026 수정본.pdf\n회의 캡처 😀 04-27.png\n고객전달용 견적서(최종)(진짜최종).xlsx',
+      idle: '파일명 목록을 붙여넣으면 공백, 특수문자, 순번 규칙을 한 번에 정리합니다.',
+      copied: '복사됨',
+      copyDefault: '결과 복사',
+      summary: (changed, dupes) => changed ? `총 ${changed}개 항목을 정리했고, 중복 파일명 후보는 ${dupes}개입니다.` : `이미 비교적 정돈된 파일명입니다. 중복 후보 ${dupes}개를 확인해 보세요.`,
+      empty: '정리된 파일명 목록이 여기에 표시됩니다.'
+    };
+
+    const setToday = () => {
+      if (dateEl.value) return;
+      const now = new Date();
+      const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+      dateEl.value = local;
+    };
+    setToday();
+
+    const pad = (n) => String(n).padStart(2, '0');
+    const formatDatePrefix = (value) => {
+      if (!value) return '';
+      const [y, m, d] = value.split('-');
+      if (!y || !m || !d) return '';
+      return `${y}-${m}-${d}`;
+    };
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const splitExt = (line) => {
+      if (!keepExtensionEl.checked) return { base: line, ext: '' };
+      const match = line.match(/^(.*?)(\.[A-Za-z0-9]{1,8})$/);
+      if (!match) return { base: line, ext: '' };
+      return { base: match[1], ext: match[2] };
+    };
+
+    const sanitizeBase = (text, separator) => {
+      let value = text.normalize('NFKC').trim();
+      if (removeEmojiEl.checked) {
+        value = value.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, ' ');
+      }
+      value = value
+        .replace(/[“”"'`]+/g, ' ')
+        .replace(/[()\[\]{}<>]+/g, ' ')
+        .replace(/[\/\\|:;,+*&^%$#@!?~=]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      if (caseEl.value === 'lower') value = value.toLowerCase();
+      if (caseEl.value === 'upper') value = value.toUpperCase();
+
+      const joiner = separator || '';
+      value = value.replace(/[\s._-]+/g, joiner || '');
+      if (separator) {
+        const escaped = separator.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        value = value.replace(new RegExp(`${escaped}{2,}`, 'g'), separator);
+        value = value.replace(new RegExp(`^${escaped}|${escaped}$`, 'g'), '');
+      }
+
+      value = value.replace(/^[._-]+|[._-]+$/g, '');
+      return value || 'untitled';
+    };
+
+    const analyze = () => {
+      const lines = (input.value || '').split('\n').map((line) => line.trim()).filter(Boolean);
+      inputCountEl.textContent = lines.length.toLocaleString(numberLocale);
+
+      if (!lines.length) {
+        outputCountEl.textContent = '0';
+        changedCountEl.textContent = '0';
+        duplicateCountEl.textContent = '0';
+        summaryEl.textContent = t.idle;
+        outputEl.value = '';
+        return;
+      }
+
+      const separator = separatorEl.value;
+      const start = Math.max(1, Number(numberStartEl.value || 1));
+      numberStartEl.value = String(start);
+      const datePrefix = dateEnabledEl.checked ? formatDatePrefix(dateEl.value) : '';
+
+      const seen = {};
+      let changed = 0;
+
+      const outputs = lines.map((line, index) => {
+        const { base, ext } = splitExt(line);
+        let name = sanitizeBase(base, separator);
+        const parts = [];
+        if (datePrefix) parts.push(datePrefix);
+        if (numberEnabledEl.checked) parts.push(pad(start + index));
+        parts.push(name);
+        name = separator ? parts.filter(Boolean).join(separator) : parts.filter(Boolean).join('');
+        const finalName = `${name}${ext}`;
+        if (finalName !== line) changed += 1;
+        seen[finalName] = (seen[finalName] || 0) + 1;
+        return finalName;
+      });
+
+      const duplicates = Object.values(seen).filter((count) => count > 1).reduce((sum, count) => sum + count, 0);
+      outputEl.value = outputs.join('\n');
+      outputCountEl.textContent = outputs.length.toLocaleString(numberLocale);
+      changedCountEl.textContent = changed.toLocaleString(numberLocale);
+      duplicateCountEl.textContent = duplicates.toLocaleString(numberLocale);
+      summaryEl.textContent = t.summary(changed, duplicates);
+    };
+
+    [input, separatorEl, caseEl, dateEnabledEl, dateEl, numberEnabledEl, numberStartEl, removeEmojiEl, keepExtensionEl].forEach((el) => {
+      el.addEventListener('input', analyze);
+      el.addEventListener('change', analyze);
+    });
+
+    sampleBtn.addEventListener('click', () => {
+      input.value = t.sample;
+      analyze();
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) return;
+      await copyText(outputEl.value);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 1200);
+    });
+
+    analyze();
+  }
+
   if (slug === 'readability-checker') {
     const input = document.getElementById('rc-input');
     const sentenceLimitEl = document.getElementById('rc-sentence-limit');

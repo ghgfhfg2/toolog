@@ -208,6 +208,65 @@ layout: default
           <p class="tool-result" id="tlbc-help">텍스트를 붙여넣고 정리 옵션을 고르면 복붙 흔적을 빠르게 다듬습니다.</p>
           <textarea id="tlbc-output" rows="12" readonly placeholder="정리 결과가 여기에 표시됩니다."></textarea>
         </div>
+      {% when 'filename-sanitizer' %}
+        <div class="tool-ui">
+          <textarea id="fs-input" rows="10" maxlength="20000" placeholder="제목이나 파일명을 한 줄에 하나씩 붙여넣으세요."></textarea>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="fs-separator">구분자 스타일</label>
+              <select id="fs-separator">
+                <option value="-">하이픈 (-)</option>
+                <option value="_">언더스코어 (_)</option>
+                <option value="">붙여쓰기</option>
+              </select>
+            </div>
+            <div>
+              <label for="fs-case">영문 처리</label>
+              <select id="fs-case">
+                <option value="keep">원문 유지</option>
+                <option value="lower">영문 소문자</option>
+                <option value="upper">영문 대문자</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="fs-date-enabled" type="checkbox" /> 날짜 접두어 붙이기</label>
+            <div>
+              <label for="fs-date">날짜</label>
+              <input id="fs-date" type="date" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="fs-number-enabled" type="checkbox" checked /> 순번 붙이기</label>
+            <div>
+              <label for="fs-number-start">시작 번호</label>
+              <input id="fs-number-start" type="number" min="1" max="9999" step="1" value="1" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="fs-remove-emoji" type="checkbox" checked /> 이모지/장식기호 정리</label>
+            <label class="tool-check"><input id="fs-keep-extension" type="checkbox" checked /> 확장자 유지</label>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="fs-sample" type="button">예시 넣기</button>
+            <button id="fs-copy" type="button">결과 복사</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="fs-input-count">0</strong><span>입력 항목 수</span></div>
+            <div><strong id="fs-output-count">0</strong><span>출력 항목 수</span></div>
+            <div><strong id="fs-changed-count">0</strong><span>변경된 항목</span></div>
+            <div><strong id="fs-duplicate-count">0</strong><span>중복 파일명</span></div>
+          </div>
+
+          <p class="tool-result" id="fs-summary">파일명 목록을 붙여넣으면 공백, 특수문자, 순번 규칙을 한 번에 정리합니다.</p>
+          <textarea id="fs-output" rows="12" readonly placeholder="정리된 파일명 목록이 여기에 표시됩니다."></textarea>
+        </div>
       {% when 'readability-checker' %}
         <div class="tool-ui">
           <textarea id="rc-input" rows="10" maxlength="12000" placeholder="문장 가독성을 점검할 글을 붙여넣으세요."></textarea>
