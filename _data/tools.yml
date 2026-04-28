@@ -1,3 +1,27 @@
+- id: gift-idea-picker
+  title: 선물 아이디어 추천기
+  title_en: Gift Idea Picker
+  title_ja: ギフトアイデア推薦ツール
+  category: lifestyle
+  category_label: 생활/선물 선택
+  category_label_en: Lifestyle/Gift Choice
+  category_label_ja: 生活/ギフト選び
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 선물 받을 사람, 상황, 예산, 분위기, 준비 여유를 고르면 지금 조건에 맞는 선물 후보 5개와 선택 이유를 바로 추천해줘요.
+  description_en: Choose the recipient, occasion, budget, vibe, and prep speed to get 5 practical gift ideas with quick reasons.
+  description_ja: 贈る相手、シーン、予算、雰囲気、準備の余裕を選ぶと、今の条件に合うギフト候補5件と理由をすぐ確認できます。
+  url: /tools/gift-idea-picker/
+  url_en: /en/tools/gift-idea-picker/
+  url_ja: /ja/tools/gift-idea-picker/
+  thumbnail: /assets/thumbs/gift-idea-picker.svg
+  thumbnail_en: /assets/thumbs/en/gift-idea-picker.svg
+  thumbnail_ja: /assets/thumbs/ja/gift-idea-picker.svg
+  published_at: 2026-04-28
+  tool_type: picker
+  topic_cluster: shopping
+
 - id: filename-sanitizer
   title: 파일명 정리기
   title_en: Filename Sanitizer

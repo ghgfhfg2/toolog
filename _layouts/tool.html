@@ -267,6 +267,82 @@ layout: default
           <p class="tool-result" id="fs-summary">파일명 목록을 붙여넣으면 공백, 특수문자, 순번 규칙을 한 번에 정리합니다.</p>
           <textarea id="fs-output" rows="12" readonly placeholder="정리된 파일명 목록이 여기에 표시됩니다."></textarea>
         </div>
+      {% when 'gift-idea-picker' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="gip-relation">{% if page.lang == 'en' %}Recipient{% elsif page.lang == 'ja' %}相手{% else %}선물 받을 사람{% endif %}</label>
+              <select id="gip-relation">
+                <option value="friend">{% if page.lang == 'en' %}Friend / peer{% elsif page.lang == 'ja' %}友人・同僚{% else %}친구/동료{% endif %}</option>
+                <option value="partner">{% if page.lang == 'en' %}Partner / spouse{% elsif page.lang == 'ja' %}恋人・配偶者{% else %}연인/배우자{% endif %}</option>
+                <option value="family">{% if page.lang == 'en' %}Parent / family{% elsif page.lang == 'ja' %}家族{% else %}부모님/가족{% endif %}</option>
+                <option value="kid">{% if page.lang == 'en' %}Child / teen{% elsif page.lang == 'ja' %}子ども・学生{% else %}아이/청소년{% endif %}</option>
+                <option value="coworker">{% if page.lang == 'en' %}Coworker / teacher{% elsif page.lang == 'ja' %}職場・先生{% else %}직장동료/선생님{% endif %}</option>
+              </select>
+            </div>
+            <div>
+              <label for="gip-occasion">{% if page.lang == 'en' %}Occasion{% elsif page.lang == 'ja' %}シーン{% else %}상황{% endif %}</label>
+              <select id="gip-occasion">
+                <option value="birthday">{% if page.lang == 'en' %}Birthday{% elsif page.lang == 'ja' %}誕生日{% else %}생일{% endif %}</option>
+                <option value="thanks">{% if page.lang == 'en' %}Thank-you gift{% elsif page.lang == 'ja' %}お礼{% else %}감사 선물{% endif %}</option>
+                <option value="anniversary">{% if page.lang == 'en' %}Anniversary / special day{% elsif page.lang == 'ja' %}記念日{% else %}기념일{% endif %}</option>
+                <option value="congrats">{% if page.lang == 'en' %}Congrats / celebration{% elsif page.lang == 'ja' %}お祝い{% else %}축하 선물{% endif %}</option>
+                <option value="seasonal">{% if page.lang == 'en' %}Holiday / seasonal{% elsif page.lang == 'ja' %}季節ギフト{% else %}시즌/명절{% endif %}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="gip-budget">{% if page.lang == 'en' %}Budget{% elsif page.lang == 'ja' %}予算{% else %}예산{% endif %}</label>
+              <select id="gip-budget">
+                <option value="light">{% if page.lang == 'en' %}Under 20k KRW{% elsif page.lang == 'ja' %}2,000円前後まで{% else %}2만원 이하{% endif %}</option>
+                <option value="mid">{% if page.lang == 'en' %}20k–50k KRW{% elsif page.lang == 'ja' %}2,000〜5,000円台{% else %}2만~5만원{% endif %}</option>
+                <option value="high">{% if page.lang == 'en' %}50k+ KRW{% elsif page.lang == 'ja' %}5,000円以上{% else %}5만원 이상{% endif %}</option>
+              </select>
+            </div>
+            <div>
+              <label for="gip-style">{% if page.lang == 'en' %}Gift vibe{% elsif page.lang == 'ja' %}ギフトの方向性{% else %}선물 분위기{% endif %}</label>
+              <select id="gip-style">
+                <option value="practical">{% if page.lang == 'en' %}Practical{% elsif page.lang == 'ja' %}実用的{% else %}실용적{% endif %}</option>
+                <option value="cozy">{% if page.lang == 'en' %}Warm / cozy{% elsif page.lang == 'ja' %}あたたかい雰囲気{% else %}따뜻한 느낌{% endif %}</option>
+                <option value="fun">{% if page.lang == 'en' %}Fun / casual{% elsif page.lang == 'ja' %}気軽で楽しい{% else %}가볍고 재밌게{% endif %}</option>
+                <option value="luxury">{% if page.lang == 'en' %}Premium / polished{% elsif page.lang == 'ja' %}上質・きちんと感{% else %}고급스럽게{% endif %}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="gip-speed">{% if page.lang == 'en' %}Need it soon?{% elsif page.lang == 'ja' %}急ぎ度{% else %}준비 여유{% endif %}</label>
+              <select id="gip-speed">
+                <option value="rush">{% if page.lang == 'en' %}Need today / fast{% elsif page.lang == 'ja' %}今日中・すぐ必要{% else %}오늘/빨리 필요{% endif %}</option>
+                <option value="normal">{% if page.lang == 'en' %}A few days available{% elsif page.lang == 'ja' %}数日余裕あり{% else %}며칠 여유 있음{% endif %}</option>
+                <option value="planned">{% if page.lang == 'en' %}Can plan ahead{% elsif page.lang == 'ja' %}前もって準備できる{% else %}미리 준비 가능{% endif %}</option>
+              </select>
+            </div>
+            <div>
+              <label class="tool-check"><input id="gip-avoid-food" type="checkbox" /> {% if page.lang == 'en' %}Avoid food/cafe gifts{% elsif page.lang == 'ja' %}食べ物・カフェ系は除外{% else %}먹는 선물 제외{% endif %}</label>
+              <label class="tool-check"><input id="gip-wrap" type="checkbox" checked /> {% if page.lang == 'en' %}Prefer easy-to-wrap picks{% elsif page.lang == 'ja' %}包みやすい候補を優先{% else %}포장 쉬운 후보 우선{% endif %}</label>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="gip-run" type="button">{% if page.lang == 'en' %}Pick gift ideas{% elsif page.lang == 'ja' %}候補を出す{% else %}선물 후보 보기{% endif %}</button>
+            <button id="gip-sample" type="button">{% if page.lang == 'en' %}Try sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 적용{% endif %}</button>
+            <button id="gip-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="gip-count">0</strong><span>{% if page.lang == 'en' %}Recommended ideas{% elsif page.lang == 'ja' %}候補数{% else %}추천 후보 수{% endif %}</span></div>
+            <div><strong id="gip-top">-</strong><span>{% if page.lang == 'en' %}Top style{% elsif page.lang == 'ja' %}最上位タイプ{% else %}상위 타입{% endif %}</span></div>
+            <div><strong id="gip-budget-tag">-</strong><span>{% if page.lang == 'en' %}Budget band{% elsif page.lang == 'ja' %}予算帯{% else %}예산대{% endif %}</span></div>
+            <div><strong id="gip-speed-tag">-</strong><span>{% if page.lang == 'en' %}Prep mode{% elsif page.lang == 'ja' %}準備タイプ{% else %}준비 방식{% endif %}</span></div>
+          </div>
+
+          <p class="tool-result" id="gip-help">{% if page.lang == 'en' %}Choose the recipient and occasion to get 5 gift ideas with why they fit.{% elsif page.lang == 'ja' %}相手とシーンを選ぶと、理由つきで候補5件を提案します。{% else %}받는 사람과 상황을 고르면 이유가 붙은 선물 후보 5개를 추천해요.{% endif %}</p>
+          <textarea id="gip-output" rows="12" readonly placeholder="{% if page.lang == 'en' %}Gift ideas will appear here.{% elsif page.lang == 'ja' %}候補がここに表示されます。{% else %}추천 결과가 여기에 표시됩니다.{% endif %}"></textarea>
+        </div>
       {% when 'readability-checker' %}
         <div class="tool-ui">
           <textarea id="rc-input" rows="10" maxlength="12000" placeholder="문장 가독성을 점검할 글을 붙여넣으세요."></textarea>

@@ -1,0 +1,17 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#FFF7ED"/>
+  <rect x="72" y="72" width="1056" height="486" rx="32" fill="#FFEDD5"/>
+  <rect x="120" y="138" width="412" height="354" rx="28" fill="#FFFFFF"/>
+  <rect x="668" y="128" width="330" height="176" rx="28" fill="#FFFFFF"/>
+  <rect x="668" y="330" width="330" height="162" rx="28" fill="#FFFFFF"/>
+  <rect x="214" y="192" width="224" height="190" rx="24" fill="#FDBA74"/>
+  <path d="M326 192V382" stroke="#9A3412" stroke-width="22" stroke-linecap="round"/>
+  <path d="M214 276H438" stroke="#9A3412" stroke-width="22" stroke-linecap="round"/>
+  <path d="M326 170C300 136 240 138 228 188C222 214 240 244 278 248C300 250 320 238 326 220C332 238 352 250 374 248C412 244 430 214 424 188C412 138 352 136 326 170Z" fill="#EF4444"/>
+  <text x="668" y="208" fill="#9A3412" font-family="Arial, sans-serif" font-size="42" font-weight="700">ギフトアイデア推薦ツール</text>
+  <text x="668" y="264" fill="#C2410C" font-family="Arial, sans-serif" font-size="28">相手・予算・シーンから</text>
+  <text x="668" y="304" fill="#C2410C" font-family="Arial, sans-serif" font-size="28">候補をすばやく絞る</text>
+  <rect x="704" y="366" width="258" height="54" rx="18" fill="#FED7AA"/>
+  <text x="734" y="401" fill="#9A3412" font-family="Arial, sans-serif" font-size="26" font-weight="700">Picker · Shopping</text>
+  <text x="120" y="558" fill="#C2410C" font-family="Arial, sans-serif" font-size="24">TOOLOG</text>
+</svg>

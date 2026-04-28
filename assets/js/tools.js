@@ -8183,6 +8183,130 @@
     });
   }
 
+  if (slug === 'gift-idea-picker') {
+    const relationEl = document.getElementById('gip-relation');
+    const occasionEl = document.getElementById('gip-occasion');
+    const budgetEl = document.getElementById('gip-budget');
+    const styleEl = document.getElementById('gip-style');
+    const speedEl = document.getElementById('gip-speed');
+    const avoidFoodEl = document.getElementById('gip-avoid-food');
+    const wrapEl = document.getElementById('gip-wrap');
+    const runBtn = document.getElementById('gip-run');
+    const sampleBtn = document.getElementById('gip-sample');
+    const copyBtn = document.getElementById('gip-copy');
+    const countEl = document.getElementById('gip-count');
+    const topEl = document.getElementById('gip-top');
+    const budgetTagEl = document.getElementById('gip-budget-tag');
+    const speedTagEl = document.getElementById('gip-speed-tag');
+    const helpEl = document.getElementById('gip-help');
+    const outputEl = document.getElementById('gip-output');
+    if (!relationEl || !occasionEl || !budgetEl || !styleEl || !speedEl || !avoidFoodEl || !wrapEl || !runBtn || !sampleBtn || !copyBtn || !countEl || !topEl || !budgetTagEl || !speedTagEl || !helpEl || !outputEl) return;
+
+    const t = {
+      ko: {
+        copied: '복사됨',
+        copyDefault: '결과 복사',
+        help: (count, top) => `${count}개의 후보를 골랐어요. 지금 조건엔 ${top} 계열이 가장 잘 맞아요.`,
+        none: '조건에 맞는 후보가 부족해요. 예산이나 분위기를 조금 넓혀 다시 골라보세요.'
+      },
+      en: {
+        copied: 'Copied',
+        copyDefault: 'Copy result',
+        help: (count, top) => `Picked ${count} ideas. ${top} fits your current filters best.`,
+        none: 'Not enough matches. Try widening the budget or vibe.'
+      },
+      ja: {
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー',
+        help: (count, top) => `${count}件を選びました。今の条件では ${top} 系が最も相性よさそうです。`,
+        none: '条件に合う候補が少ないです。予算や雰囲気を少し広げてみてください。'
+      }
+    }[pageLang] || {
+      copied: '복사됨', copyDefault: '결과 복사', help: (count, top) => `${count}개의 후보를 골랐어요. 지금 조건엔 ${top} 계열이 가장 잘 맞아요.`, none: '조건에 맞는 후보가 부족해요. 예산이나 분위기를 조금 넓혀 다시 골라보세요.'
+    };
+
+    const ideas = [
+      { name: '핸드크림 + 립밤 세트', type: '실용 소형', relations: ['friend','partner','family','coworker'], occasions: ['birthday','thanks','seasonal'], budgets: ['light'], styles: ['practical','cozy'], speeds: ['rush','normal'], food: false, easyWrap: true, why: '호불호가 비교적 적고 계절감도 챙기기 쉬워요.', caution: '향이 강하면 취향 차이가 있을 수 있어요.' },
+      { name: '디저트/커피 기프티콘', type: '즉시 전달', relations: ['friend','coworker','kid'], occasions: ['thanks','birthday','congrats'], budgets: ['light'], styles: ['fun','practical'], speeds: ['rush'], food: true, easyWrap: true, why: '오늘 바로 보내기 좋고 부담이 적어요.', caution: '카페 취향이나 사용 가능 지역을 확인하면 더 좋아요.' },
+      { name: '텀블러 또는 머그', type: '생활용품', relations: ['friend','family','coworker','partner'], occasions: ['birthday','thanks','congrats'], budgets: ['mid'], styles: ['practical','cozy'], speeds: ['normal','planned'], food: false, easyWrap: true, why: '실사용 빈도가 높아 실패 확률이 낮아요.', caution: '이미 비슷한 제품이 많은 사람에겐 중복될 수 있어요.' },
+      { name: '향초/디퓨저', type: '분위기 선물', relations: ['partner','friend','family'], occasions: ['birthday','anniversary','seasonal'], budgets: ['mid'], styles: ['cozy','luxury'], speeds: ['normal','planned'], food: false, easyWrap: true, why: '집에서 쓰는 순간마다 선물 기억이 남기 쉬워요.', caution: '향 취향이 분명한 사람에겐 무향 대안이 더 안전해요.' },
+      { name: '고급 과일/간식 박스', type: '공유형 선물', relations: ['family','coworker','friend'], occasions: ['thanks','seasonal','congrats'], budgets: ['mid','high'], styles: ['cozy','luxury'], speeds: ['normal','planned'], food: true, easyWrap: false, why: '여럿이 함께 나누기 좋고 예의 있는 느낌이 있어요.', caution: '알레르기나 당 조절이 필요한지 살피면 좋아요.' },
+      { name: '책 + 짧은 메모', type: '취향형', relations: ['friend','partner','kid','family'], occasions: ['birthday','thanks','congrats'], budgets: ['mid'], styles: ['cozy','practical'], speeds: ['normal','planned'], food: false, easyWrap: true, why: '취향이 맞으면 기억에 오래 남는 선물이 됩니다.', caution: '상대 관심사를 어느 정도 알고 있을 때 더 잘 맞아요.' },
+      { name: '무선 충전기/테크 소품', type: '테크 실용', relations: ['partner','friend','coworker'], occasions: ['birthday','congrats'], budgets: ['mid','high'], styles: ['practical','luxury'], speeds: ['normal','planned'], food: false, easyWrap: true, why: '일상에서 바로 쓰기 좋고 만족도가 높은 편이에요.', caution: '기기 규격이나 이미 보유 중인지 확인하면 더 안전해요.' },
+      { name: '꽃다발 + 카드', type: '감성 포인트', relations: ['partner','family','friend'], occasions: ['birthday','anniversary','congrats'], budgets: ['mid','high'], styles: ['cozy','luxury'], speeds: ['rush','normal'], food: false, easyWrap: false, why: '축하와 마음 표현이 가장 직관적으로 전달돼요.', caution: '보관 시간과 이동 동선을 고려하면 좋아요.' },
+      { name: '수면양말/담요/홈웨어', type: '편안함 선물', relations: ['partner','family','friend'], occasions: ['birthday','seasonal','thanks'], budgets: ['light','mid'], styles: ['cozy'], speeds: ['normal','planned'], food: false, easyWrap: true, why: '계절감이 있고 체감 만족도가 높아요.', caution: '사이즈나 소재 선호를 살피면 실패를 줄일 수 있어요.' },
+      { name: '필기구/노트 세트', type: '단정한 실용', relations: ['coworker','kid','friend','family'], occasions: ['thanks','congrats','birthday'], budgets: ['light','mid'], styles: ['practical'], speeds: ['rush','normal'], food: false, easyWrap: true, why: '가볍게 예의를 갖추면서도 활용도가 높아요.', caution: '아주 가까운 사이의 특별한 기념일에는 다소 무난하게 느껴질 수 있어요.' },
+      { name: '취미 소모품 리필', type: '취향 맞춤', relations: ['partner','friend','kid','family'], occasions: ['birthday','anniversary','congrats'], budgets: ['mid','high'], styles: ['practical','fun'], speeds: ['planned'], food: false, easyWrap: true, why: '상대가 이미 즐기는 취미와 연결되면 만족도가 크게 올라가요.', caution: '정확한 취미 정보가 있을 때 추천 강도가 높아집니다.' },
+      { name: '호텔/브런치 식사권', type: '경험 선물', relations: ['partner','family'], occasions: ['anniversary','congrats','birthday'], budgets: ['high'], styles: ['luxury'], speeds: ['planned'], food: true, easyWrap: true, why: '물건보다 시간을 선물하고 싶을 때 잘 맞아요.', caution: '일정 맞추기와 예약 가능일을 함께 확인해야 해요.' }
+    ];
+
+    const relationAlias = { coworker: '직장/격식', partner: '감성/기념일', family: '가족형', friend: '가벼운 친밀형', kid: '학생/키즈형' };
+    const budgetAlias = { light: '가볍게', mid: '중간 예산', high: '조금 넉넉하게' };
+    const speedAlias = { rush: '바로 준비', normal: '며칠 내 준비', planned: '미리 준비' };
+
+    const scoreIdea = (idea) => {
+      let score = 0;
+      if (idea.relations.includes(relationEl.value)) score += 4;
+      if (idea.occasions.includes(occasionEl.value)) score += 4;
+      if (idea.budgets.includes(budgetEl.value)) score += 3;
+      if (idea.styles.includes(styleEl.value)) score += 3;
+      if (idea.speeds.includes(speedEl.value)) score += 2;
+      if (avoidFoodEl.checked && idea.food) score -= 4;
+      if (wrapEl.checked && idea.easyWrap) score += 1;
+      if (styleEl.value === 'luxury' && idea.budgets.includes('high')) score += 1;
+      if (speedEl.value === 'rush' && idea.speeds.includes('rush')) score += 1;
+      return score;
+    };
+
+    const render = () => {
+      const ranked = ideas
+        .map(idea => ({ ...idea, score: scoreIdea(idea) }))
+        .filter(idea => idea.score >= 5)
+        .sort((a, b) => b.score - a.score || a.name.localeCompare(b.name, pageLang === 'ja' ? 'ja' : (pageLang === 'en' ? 'en' : 'ko')))
+        .slice(0, 5);
+
+      if (!ranked.length) {
+        countEl.textContent = '0';
+        topEl.textContent = '-';
+        budgetTagEl.textContent = budgetAlias[budgetEl.value] || '-';
+        speedTagEl.textContent = speedAlias[speedEl.value] || '-';
+        outputEl.value = '';
+        helpEl.textContent = t.none;
+        return;
+      }
+
+      countEl.textContent = String(ranked.length);
+      topEl.textContent = relationAlias[relationEl.value] || ranked[0].type;
+      budgetTagEl.textContent = budgetAlias[budgetEl.value] || '-';
+      speedTagEl.textContent = speedAlias[speedEl.value] || '-';
+      helpEl.textContent = t.help(ranked.length, ranked[0].type);
+      outputEl.value = ranked.map((idea, idx) => `${idx + 1}. ${idea.name}\n- 이유: ${idea.why}\n- 체크: ${idea.caution}`).join('\n\n');
+    };
+
+    const copyText = async () => {
+      if (!outputEl.value) return;
+      try {
+        await navigator.clipboard.writeText(outputEl.value);
+        copyBtn.textContent = t.copied;
+        window.setTimeout(() => { copyBtn.textContent = t.copyDefault; }, 1600);
+      } catch (err) {}
+    };
+
+    runBtn.addEventListener('click', render);
+    sampleBtn.addEventListener('click', () => {
+      relationEl.value = 'partner';
+      occasionEl.value = 'anniversary';
+      budgetEl.value = 'mid';
+      styleEl.value = 'cozy';
+      speedEl.value = 'normal';
+      avoidFoodEl.checked = false;
+      wrapEl.checked = true;
+      render();
+    });
+    copyBtn.addEventListener('click', copyText);
+    render();
+  }
+
   if (slug === 'hourly-monthly-salary-calculator') {
     const hourly = document.getElementById('hms-hourly');
     const weeklyHours = document.getElementById('hms-weekly-hours');
