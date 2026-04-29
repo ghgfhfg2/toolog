@@ -6737,19 +6737,104 @@
     if (!input || !purpose || !showPassword || !allowSpaces || !sampleBtn || !copyBtn || !scoreEl || !gradeEl || !lengthEl || !varietyEl || !riskEl || !summaryEl || !listEl || !outputEl) return;
 
     const t = {
-      idle: '비밀번호를 입력하면 길이, 문자 조합, 반복/연속 패턴, 쉬운 추측 가능성을 함께 점검합니다.',
-      copied: '점검 요약을 복사했어요.',
-      emptyCopy: '복사할 점검 결과가 아직 없어요.',
-      sample: 'Spring2026!Seoul',
-      grade: ['매우 약함', '약함', '보통', '강함', '매우 강함'],
-      purposeLabel: {
-        general: '일반 사이트 로그인',
-        important: '금융/업무/메인 계정',
-        temporary: '임시/1회성 계정'
+      ko: {
+        idle: '비밀번호를 입력하면 길이, 문자 조합, 반복/연속 패턴, 쉬운 추측 가능성을 함께 점검합니다.',
+        copied: '점검 요약을 복사했어요.',
+        emptyCopy: '복사할 점검 결과가 아직 없어요.',
+        sample: 'Spring2026!Seoul',
+        grade: ['매우 약함', '약함', '보통', '강함', '매우 강함'],
+        purposeLabel: { general: '일반 사이트 로그인', important: '금융/업무/메인 계정', temporary: '임시/1회성 계정' },
+        ok: '현재 기준에서 큰 위험 신호는 적습니다. 그래도 중요한 계정은 사이트별로 다른 비밀번호와 2단계 인증을 함께 쓰는 편이 안전합니다.',
+        resultTitle: '점검 결과',
+        noList: '점검 항목이 여기에 표시됩니다.',
+        warnShort: '길이가 10자 미만이라 짧은 편입니다.',
+        tipLength: '최소 12자 이상, 가능하면 16자 안팎으로 늘려보세요.',
+        warnMoreLength: '조금 더 길게 만들면 방어력이 더 좋아집니다.',
+        warnVariety: '문자 종류가 적어 패턴이 단순합니다.',
+        tipVariety: '대문자, 숫자, 특수문자를 3종 이상 섞어보세요.',
+        warnSpaces: '공백 포함 비밀번호를 허용하지 않는 환경에서는 실패할 수 있습니다.',
+        tipSpaces: '공백 없이도 충분히 긴 패스프레이즈로 바꿔보세요.',
+        warnRepeat: '같은 문자가 3번 이상 반복됩니다.',
+        tipRepeat: '반복 구간 대신 다른 단어나 기호를 섞어보세요.',
+        warnSeq: '연속된 숫자/알파벳/키보드 배열 패턴이 보입니다.',
+        tipSeq: '123, abc, qwerty 같은 흐름은 피하는 편이 좋습니다.',
+        warnCommon: (items) => `너무 흔한 단어/패턴이 포함됩니다: ${items}`,
+        tipCommon: '잘 알려진 단어 대신 개인만 아는 조합이나 긴 문장형 구조를 쓰세요.',
+        warnYear: '연도처럼 추측하기 쉬운 숫자 조합이 들어 있습니다.',
+        tipYear: '생년, 기념일, 현재 연도처럼 유추 가능한 숫자는 피하세요.',
+        warnImportant: '중요 계정용으로는 길이가 더 긴 편이 안전합니다.',
+        summaryRisk: (count, important) => `${count}개의 위험 신호가 보여요. ${important ? '특히 중요한 계정이라면 더 강한 조합이 좋습니다.' : '아래 항목을 손보면 강도가 올라갑니다.'}`,
+        danger: '위험 신호',
+        tip: '개선 팁',
+        good: '좋은 점',
+        gradeLabel: (grade, purposeLabel, score) => `${purposeLabel} 기준 점검 점수는 ${score}점입니다.`
       },
-      ok: '현재 기준에서 큰 위험 신호는 적습니다. 그래도 중요한 계정은 사이트별로 다른 비밀번호와 2단계 인증을 함께 쓰는 편이 안전합니다.',
-      resultTitle: '점검 결과',
-      noList: '점검 항목이 여기에 표시됩니다.'
+      en: {
+        idle: 'Enter a password to check length, character mix, repeated or sequential patterns, and guessability signals.',
+        copied: 'Copied the summary.',
+        emptyCopy: 'There is no summary to copy yet.',
+        sample: 'Spring2026!Seoul',
+        grade: ['Very weak', 'Weak', 'Fair', 'Strong', 'Very strong'],
+        purposeLabel: { general: 'General site login', important: 'Finance / work / main account', temporary: 'Temporary / one-time account' },
+        ok: 'There are not many obvious risk signals right now. For important accounts, unique passwords plus 2FA are still the safer default.',
+        resultTitle: 'Check result',
+        noList: 'Check items will appear here.',
+        warnShort: 'The password is shorter than 10 characters.',
+        tipLength: 'Aim for at least 12 characters, and around 16 if possible.',
+        warnMoreLength: 'A little more length would improve resistance.',
+        warnVariety: 'It uses too few character types, so the pattern is simple.',
+        tipVariety: 'Mix at least three types such as uppercase, numbers, and symbols.',
+        warnSpaces: 'Some services may reject passwords with spaces.',
+        tipSpaces: 'Try a long passphrase that stays strong even without spaces.',
+        warnRepeat: 'The same character repeats 3 times or more.',
+        tipRepeat: 'Replace repeated runs with another word or symbol.',
+        warnSeq: 'A sequential number, alphabet, or keyboard pattern is visible.',
+        tipSeq: 'Avoid flows like 123, abc, or qwerty.',
+        warnCommon: (items) => `Common words or patterns were found: ${items}`,
+        tipCommon: 'Use a less obvious combination or a longer phrase that only you would know.',
+        warnYear: 'It includes an easy-to-guess year-like number.',
+        tipYear: 'Avoid birth years, anniversaries, or the current year when possible.',
+        warnImportant: 'For important accounts, a longer password is safer.',
+        summaryRisk: (count, important) => `${count} risk signal(s) appeared. ${important ? 'Because this is an important account, a stronger structure is recommended.' : 'Fixing the items below should improve the score.'}`,
+        danger: 'Risk signal',
+        tip: 'Improvement tip',
+        good: 'What looks good',
+        gradeLabel: (grade, purposeLabel, score) => `For ${purposeLabel}, the check score is ${score}.`
+      },
+      ja: {
+        idle: 'パスワードを入力すると、長さ、文字構成、繰り返し/連続パターン、推測されやすさをまとめて点検します。',
+        copied: '点検結果をコピーしました。',
+        emptyCopy: 'まだコピーする点検結果がありません。',
+        sample: 'Spring2026!Seoul',
+        grade: ['とても弱い', '弱い', '普通', '強い', 'とても強い'],
+        purposeLabel: { general: '一般サイトのログイン', important: '金融・業務・メインアカウント', temporary: '一時・使い捨てアカウント' },
+        ok: '今のところ大きな危険シグナルは多くありません。重要アカウントでは、サイトごとに別のパスワードと2段階認証を併用するほうが安全です。',
+        resultTitle: '点検結果',
+        noList: '点検項目がここに表示されます。',
+        warnShort: '10文字未満でやや短めです。',
+        tipLength: '最低12文字以上、できれば16文字前後まで伸ばしてみてください。',
+        warnMoreLength: 'もう少し長くすると強度が上がります。',
+        warnVariety: '文字種類が少なく、パターンが単純です。',
+        tipVariety: '大文字、数字、記号など3種類以上を混ぜてみてください。',
+        warnSpaces: '空白入りパスワードを受け付けない環境では失敗することがあります。',
+        tipSpaces: '空白なしでも十分長いパスフレーズにしてみてください。',
+        warnRepeat: '同じ文字が3回以上繰り返されています。',
+        tipRepeat: '繰り返し部分の代わりに別の単語や記号を混ぜてみてください。',
+        warnSeq: '連続した数字・アルファベット・キーボード配列パターンが見えます。',
+        tipSeq: '123、abc、qwerty のような並びは避けるほうが安全です。',
+        warnCommon: (items) => `よくある単語・パターンが含まれています: ${items}`,
+        tipCommon: 'よく知られた単語の代わりに、自分だけが分かる組み合わせや長めのフレーズを使ってください。',
+        warnYear: '年号のような推測しやすい数字が含まれています。',
+        tipYear: '生年、記念日、今年の年号のような推測しやすい数字は避けましょう。',
+        warnImportant: '重要アカウント用としては、もう少し長いほうが安全です。',
+        summaryRisk: (count, important) => `${count}件の注意シグナルがあります。${important ? '重要アカウントなら、さらに強い構成がおすすめです。' : '下の項目を直すと強度が上がります。'}`,
+        danger: '注意シグナル',
+        tip: '改善ヒント',
+        good: '良い点',
+        gradeLabel: (grade, purposeLabel, score) => `${purposeLabel} 기준では点検スコアは ${score} 点です。`
+      }
+    }[pageLang] || {
+      idle: '비밀번호를 입력하면 길이, 문자 조합, 반복/연속 패턴, 쉬운 추측 가능성을 함께 점검합니다.', copied: '점검 요약을 복사했어요.', emptyCopy: '복사할 점검 결과가 아직 없어요.', sample: 'Spring2026!Seoul', grade: ['매우 약함', '약함', '보통', '강함', '매우 강함'], purposeLabel: { general: '일반 사이트 로그인', important: '금융/업무/메인 계정', temporary: '임시/1회성 계정' }, ok: '현재 기준에서 큰 위험 신호는 적습니다. 그래도 중요한 계정은 사이트별로 다른 비밀번호와 2단계 인증을 함께 쓰는 편이 안전합니다.', resultTitle: '점검 결과', noList: '점검 항목이 여기에 표시됩니다.', warnShort: '길이가 10자 미만이라 짧은 편입니다.', tipLength: '최소 12자 이상, 가능하면 16자 안팎으로 늘려보세요.', warnMoreLength: '조금 더 길게 만들면 방어력이 더 좋아집니다.', warnVariety: '문자 종류가 적어 패턴이 단순합니다.', tipVariety: '대문자, 숫자, 특수문자를 3종 이상 섞어보세요.', warnSpaces: '공백 포함 비밀번호를 허용하지 않는 환경에서는 실패할 수 있습니다.', tipSpaces: '공백 없이도 충분히 긴 패스프레이즈로 바꿔보세요.', warnRepeat: '같은 문자가 3번 이상 반복됩니다.', tipRepeat: '반복 구간 대신 다른 단어나 기호를 섞어보세요.', warnSeq: '연속된 숫자/알파벳/키보드 배열 패턴이 보입니다.', tipSeq: '123, abc, qwerty 같은 흐름은 피하는 편이 좋습니다.', warnCommon: (items) => `너무 흔한 단어/패턴이 포함됩니다: ${items}`, tipCommon: '잘 알려진 단어 대신 개인만 아는 조합이나 긴 문장형 구조를 쓰세요.', warnYear: '연도처럼 추측하기 쉬운 숫자 조합이 들어 있습니다.', tipYear: '생년, 기념일, 현재 연도처럼 유추 가능한 숫자는 피하세요.', warnImportant: '중요 계정용으로는 길이가 더 긴 편이 안전합니다.', summaryRisk: (count, important) => `${count}개의 위험 신호가 보여요. ${important ? '특히 중요한 계정이라면 더 강한 조합이 좋습니다.' : '아래 항목을 손보면 강도가 올라갑니다.'}`, danger: '위험 신호', tip: '개선 팁', good: '좋은 점', gradeLabel: (grade, purposeLabel, score) => `${purposeLabel} 기준 점검 점수는 ${score}점입니다.`
     };
 
     const copyText = async (text) => {
@@ -6818,34 +6903,34 @@
 
       if (value.length < 10) {
         score -= 18;
-        warnings.push('길이가 10자 미만이라 짧은 편입니다.');
-        tips.push('최소 12자 이상, 가능하면 16자 안팎으로 늘려보세요.');
+        warnings.push(t.warnShort);
+        tips.push(t.tipLength);
       } else if (value.length < 12) {
-        warnings.push('조금 더 길게 만들면 방어력이 더 좋아집니다.');
+        warnings.push(t.warnMoreLength);
       }
 
       if (variety <= 2) {
         score -= 12;
-        warnings.push('문자 종류가 적어 패턴이 단순합니다.');
-        tips.push('대문자, 숫자, 특수문자를 3종 이상 섞어보세요.');
+        warnings.push(t.warnVariety);
+        tips.push(t.tipVariety);
       }
 
       if (classes.space && !allowSpaces.checked) {
         score -= 8;
-        warnings.push('공백 포함 비밀번호를 허용하지 않는 환경에서는 실패할 수 있습니다.');
-        tips.push('공백 없이도 충분히 긴 패스프레이즈로 바꿔보세요.');
+        warnings.push(t.warnSpaces);
+        tips.push(t.tipSpaces);
       }
 
       if (runs(value) >= 3) {
         score -= 10;
-        warnings.push('같은 문자가 3번 이상 반복됩니다.');
-        tips.push('반복 구간 대신 다른 단어나 기호를 섞어보세요.');
+        warnings.push(t.warnRepeat);
+        tips.push(t.tipRepeat);
       }
 
       if (hasSequential(value)) {
         score -= 12;
-        warnings.push('연속된 숫자/알파벳/키보드 배열 패턴이 보입니다.');
-        tips.push('123, abc, qwerty 같은 흐름은 피하는 편이 좋습니다.');
+        warnings.push(t.warnSeq);
+        tips.push(t.tipSeq);
       }
 
       const lowered = value.toLowerCase();
@@ -6853,26 +6938,26 @@
       const hitCommon = commonWords.filter((word) => lowered.includes(word));
       if (hitCommon.length) {
         score -= 16;
-        warnings.push(`너무 흔한 단어/패턴이 포함됩니다: ${hitCommon.slice(0, 3).join(', ')}`);
-        tips.push('잘 알려진 단어 대신 개인만 아는 조합이나 긴 문장형 구조를 쓰세요.');
+        warnings.push(t.warnCommon(hitCommon.slice(0, 3).join(', ')));
+        tips.push(t.tipCommon);
       }
 
       const yearMatch = value.match(/19\d{2}|20\d{2}/g) || [];
       if (yearMatch.length) {
         score -= 8;
-        warnings.push('연도처럼 추측하기 쉬운 숫자 조합이 들어 있습니다.');
-        tips.push('생년, 기념일, 현재 연도처럼 유추 가능한 숫자는 피하세요.');
+        warnings.push(t.warnYear);
+        tips.push(t.tipYear);
       }
 
       if (purpose.value === 'important' && value.length < 14) {
         score -= 10;
-        warnings.push('중요 계정용으로는 길이가 더 긴 편이 안전합니다.');
+        warnings.push(t.warnImportant);
       }
       if (purpose.value === 'temporary' && value.length >= 12 && variety >= 3) score += 4;
 
       score = Math.max(0, Math.min(100, score));
       const gradeIndex = score >= 85 ? 4 : score >= 70 ? 3 : score >= 50 ? 2 : score >= 30 ? 1 : 0;
-      const summary = warnings.length ? `${warnings.length}개의 위험 신호가 보여요. ${purpose.value === 'important' ? '특히 중요한 계정이라면 더 강한 조합이 좋습니다.' : '아래 항목을 손보면 강도가 올라갑니다.'}` : t.ok;
+      const summary = warnings.length ? t.summaryRisk(warnings.length, purpose.value === 'important') : t.ok;
       return { value, score, grade: t.grade[gradeIndex], variety, risks: warnings.length, warnings, tips: [...new Set(tips)].slice(0, 4), summary };
     };
 
@@ -6893,14 +6978,14 @@
       }
 
       const items = [];
-      items.push(`<div class="tool-card"><strong>강도 등급: ${escapeHtml(result.grade)}</strong><p>${escapeHtml(t.purposeLabel[purpose.value] || t.purposeLabel.general)} 기준 점검 점수는 <b>${escapeHtml(String(result.score))}</b>점입니다.</p></div>`);
+      items.push(`<div class="tool-card"><strong>${escapeHtml(result.grade)}</strong><p>${escapeHtml(t.gradeLabel(result.grade, t.purposeLabel[purpose.value] || t.purposeLabel.general, result.score))}</p></div>`);
       if (result.warnings.length) {
-        items.push(...result.warnings.map((warning) => `<div class="tool-card"><strong>위험 신호</strong><p>${escapeHtml(warning)}</p></div>`));
+        items.push(...result.warnings.map((warning) => `<div class="tool-card"><strong>${escapeHtml(t.danger)}</strong><p>${escapeHtml(warning)}</p></div>`));
       } else {
-        items.push(`<div class="tool-card"><strong>좋은 점</strong><p>${escapeHtml(t.ok)}</p></div>`);
+        items.push(`<div class="tool-card"><strong>${escapeHtml(t.good)}</strong><p>${escapeHtml(t.ok)}</p></div>`);
       }
       if (result.tips.length) {
-        items.push(...result.tips.map((tip) => `<div class="tool-card"><strong>개선 팁</strong><p>${escapeHtml(tip)}</p></div>`));
+        items.push(...result.tips.map((tip) => `<div class="tool-card"><strong>${escapeHtml(t.tip)}</strong><p>${escapeHtml(tip)}</p></div>`));
       }
       listEl.innerHTML = items.join('');
 
