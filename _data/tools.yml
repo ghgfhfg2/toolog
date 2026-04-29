@@ -1,3 +1,27 @@
+- id: password-strength-checker
+  title: 비밀번호 강도 점검기
+  title_en: Password Strength Checker
+  title_ja: パスワード強度チェッカー
+  category: text
+  category_label: 텍스트/보안점검
+  category_label_en: Text/Security Check
+  category_label_ja: テキスト/セキュリティ点検
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 비밀번호 길이, 문자 조합, 반복 문자, 연속 패턴, 흔한 단어 포함 여부를 빠르게 점검하고 개선 팁까지 확인해요.
+  description_en: Check password length, character mix, repeated characters, sequential patterns, and common words with quick improvement tips.
+  description_ja: パスワードの長さ、文字の組み合わせ、繰り返し、連続パターン、よくある単語をすばやく点検し、改善ヒントまで確認できます。
+  url: /tools/password-strength-checker/
+  url_en: /tools/password-strength-checker/
+  url_ja: /tools/password-strength-checker/
+  thumbnail: /assets/thumbs/password-strength-checker.svg
+  thumbnail_en: /assets/thumbs/password-strength-checker.svg
+  thumbnail_ja: /assets/thumbs/password-strength-checker.svg
+  published_at: 2026-04-29
+  tool_type: checker
+  topic_cluster: privacy
+
 - id: gift-idea-picker
   title: 선물 아이디어 추천기
   title_en: Gift Idea Picker

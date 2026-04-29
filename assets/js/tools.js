@@ -6719,6 +6719,218 @@
     render();
   }
 
+  if (slug === 'password-strength-checker') {
+    const input = document.getElementById('psc-password');
+    const purpose = document.getElementById('psc-purpose');
+    const showPassword = document.getElementById('psc-show-password');
+    const allowSpaces = document.getElementById('psc-allow-spaces');
+    const sampleBtn = document.getElementById('psc-sample');
+    const copyBtn = document.getElementById('psc-copy');
+    const scoreEl = document.getElementById('psc-score');
+    const gradeEl = document.getElementById('psc-grade');
+    const lengthEl = document.getElementById('psc-length');
+    const varietyEl = document.getElementById('psc-variety');
+    const riskEl = document.getElementById('psc-risk');
+    const summaryEl = document.getElementById('psc-summary');
+    const listEl = document.getElementById('psc-list');
+    const outputEl = document.getElementById('psc-output');
+    if (!input || !purpose || !showPassword || !allowSpaces || !sampleBtn || !copyBtn || !scoreEl || !gradeEl || !lengthEl || !varietyEl || !riskEl || !summaryEl || !listEl || !outputEl) return;
+
+    const t = {
+      idle: '비밀번호를 입력하면 길이, 문자 조합, 반복/연속 패턴, 쉬운 추측 가능성을 함께 점검합니다.',
+      copied: '점검 요약을 복사했어요.',
+      emptyCopy: '복사할 점검 결과가 아직 없어요.',
+      sample: 'Spring2026!Seoul',
+      grade: ['매우 약함', '약함', '보통', '강함', '매우 강함'],
+      purposeLabel: {
+        general: '일반 사이트 로그인',
+        important: '금융/업무/메인 계정',
+        temporary: '임시/1회성 계정'
+      },
+      ok: '현재 기준에서 큰 위험 신호는 적습니다. 그래도 중요한 계정은 사이트별로 다른 비밀번호와 2단계 인증을 함께 쓰는 편이 안전합니다.',
+      resultTitle: '점검 결과',
+      noList: '점검 항목이 여기에 표시됩니다.'
+    };
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const escapeHtml = (value) => value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    const runs = (text) => {
+      if (text.length < 3) return 0;
+      let longest = 1;
+      let current = 1;
+      for (let i = 1; i < text.length; i += 1) {
+        if (text[i] === text[i - 1]) current += 1;
+        else current = 1;
+        longest = Math.max(longest, current);
+      }
+      return longest;
+    };
+
+    const hasSequential = (text) => {
+      const lower = text.toLowerCase();
+      const sequences = ['0123456789', '9876543210', 'abcdefghijklmnopqrstuvwxyz', 'zyxwvutsrqponmlkjihgfedcba', 'qwertyuiop', 'poiuytrewq', 'asdfghjkl', 'lkjhgfdsa'];
+      return sequences.some((seq) => {
+        for (let i = 0; i <= seq.length - 3; i += 1) {
+          if (lower.includes(seq.slice(i, i + 3))) return true;
+        }
+        return false;
+      });
+    };
+
+    const analyze = (raw) => {
+      const value = raw || '';
+      const classes = {
+        lower: /[a-z]/.test(value),
+        upper: /[A-Z]/.test(value),
+        number: /\d/.test(value),
+        symbol: /[^A-Za-z0-9\s]/.test(value),
+        space: /\s/.test(value)
+      };
+      const variety = [classes.lower, classes.upper, classes.number, classes.symbol, classes.space && allowSpaces.checked].filter(Boolean).length;
+      let score = Math.min(40, value.length * 3);
+      score += Math.min(24, variety * 6);
+      if (value.length >= 16) score += 10;
+      else if (value.length >= 12) score += 6;
+
+      const warnings = [];
+      const tips = [];
+
+      if (!value.trim()) {
+        return { value, score: 0, grade: '-', variety: 0, risks: 0, warnings: [], tips: [], summary: t.idle };
+      }
+
+      if (value.length < 10) {
+        score -= 18;
+        warnings.push('길이가 10자 미만이라 짧은 편입니다.');
+        tips.push('최소 12자 이상, 가능하면 16자 안팎으로 늘려보세요.');
+      } else if (value.length < 12) {
+        warnings.push('조금 더 길게 만들면 방어력이 더 좋아집니다.');
+      }
+
+      if (variety <= 2) {
+        score -= 12;
+        warnings.push('문자 종류가 적어 패턴이 단순합니다.');
+        tips.push('대문자, 숫자, 특수문자를 3종 이상 섞어보세요.');
+      }
+
+      if (classes.space && !allowSpaces.checked) {
+        score -= 8;
+        warnings.push('공백 포함 비밀번호를 허용하지 않는 환경에서는 실패할 수 있습니다.');
+        tips.push('공백 없이도 충분히 긴 패스프레이즈로 바꿔보세요.');
+      }
+
+      if (runs(value) >= 3) {
+        score -= 10;
+        warnings.push('같은 문자가 3번 이상 반복됩니다.');
+        tips.push('반복 구간 대신 다른 단어나 기호를 섞어보세요.');
+      }
+
+      if (hasSequential(value)) {
+        score -= 12;
+        warnings.push('연속된 숫자/알파벳/키보드 배열 패턴이 보입니다.');
+        tips.push('123, abc, qwerty 같은 흐름은 피하는 편이 좋습니다.');
+      }
+
+      const lowered = value.toLowerCase();
+      const commonWords = ['password', 'admin', 'qwer', 'welcome', 'letmein', 'iloveyou', 'abc123', '0000', '1111', '1234', '12345', '123456', 'korea', 'seoul'];
+      const hitCommon = commonWords.filter((word) => lowered.includes(word));
+      if (hitCommon.length) {
+        score -= 16;
+        warnings.push(`너무 흔한 단어/패턴이 포함됩니다: ${hitCommon.slice(0, 3).join(', ')}`);
+        tips.push('잘 알려진 단어 대신 개인만 아는 조합이나 긴 문장형 구조를 쓰세요.');
+      }
+
+      const yearMatch = value.match(/19\d{2}|20\d{2}/g) || [];
+      if (yearMatch.length) {
+        score -= 8;
+        warnings.push('연도처럼 추측하기 쉬운 숫자 조합이 들어 있습니다.');
+        tips.push('생년, 기념일, 현재 연도처럼 유추 가능한 숫자는 피하세요.');
+      }
+
+      if (purpose.value === 'important' && value.length < 14) {
+        score -= 10;
+        warnings.push('중요 계정용으로는 길이가 더 긴 편이 안전합니다.');
+      }
+      if (purpose.value === 'temporary' && value.length >= 12 && variety >= 3) score += 4;
+
+      score = Math.max(0, Math.min(100, score));
+      const gradeIndex = score >= 85 ? 4 : score >= 70 ? 3 : score >= 50 ? 2 : score >= 30 ? 1 : 0;
+      const summary = warnings.length ? `${warnings.length}개의 위험 신호가 보여요. ${purpose.value === 'important' ? '특히 중요한 계정이라면 더 강한 조합이 좋습니다.' : '아래 항목을 손보면 강도가 올라갑니다.'}` : t.ok;
+      return { value, score, grade: t.grade[gradeIndex], variety, risks: warnings.length, warnings, tips: [...new Set(tips)].slice(0, 4), summary };
+    };
+
+    const render = () => {
+      input.type = showPassword.checked ? 'text' : 'password';
+      const result = analyze(input.value || '');
+      scoreEl.textContent = formatNum(result.score);
+      gradeEl.textContent = result.grade;
+      lengthEl.textContent = formatNum(result.value.length);
+      varietyEl.textContent = formatNum(result.variety);
+      riskEl.textContent = formatNum(result.risks);
+      summaryEl.textContent = result.summary;
+
+      if (!result.value.trim()) {
+        listEl.innerHTML = `<div class="tool-card"><p>${t.noList}</p></div>`;
+        outputEl.value = '';
+        return;
+      }
+
+      const items = [];
+      items.push(`<div class="tool-card"><strong>강도 등급: ${escapeHtml(result.grade)}</strong><p>${escapeHtml(t.purposeLabel[purpose.value] || t.purposeLabel.general)} 기준 점검 점수는 <b>${escapeHtml(String(result.score))}</b>점입니다.</p></div>`);
+      if (result.warnings.length) {
+        items.push(...result.warnings.map((warning) => `<div class="tool-card"><strong>위험 신호</strong><p>${escapeHtml(warning)}</p></div>`));
+      } else {
+        items.push(`<div class="tool-card"><strong>좋은 점</strong><p>${escapeHtml(t.ok)}</p></div>`);
+      }
+      if (result.tips.length) {
+        items.push(...result.tips.map((tip) => `<div class="tool-card"><strong>개선 팁</strong><p>${escapeHtml(tip)}</p></div>`));
+      }
+      listEl.innerHTML = items.join('');
+
+      outputEl.value = [
+        `[${t.resultTitle}]`,
+        `- 사용 목적: ${t.purposeLabel[purpose.value] || t.purposeLabel.general}`,
+        `- 보안 점수: ${result.score}/100`,
+        `- 강도 등급: ${result.grade}`,
+        `- 길이: ${result.value.length}자`,
+        `- 문자 종류: ${result.variety}종`,
+        `- 위험 신호 수: ${result.risks}개`,
+        result.warnings.length ? `- 위험 신호: ${result.warnings.join(' / ')}` : '- 위험 신호: 큰 경고 없음',
+        result.tips.length ? `- 개선 팁: ${result.tips.join(' / ')}` : '- 개선 팁: 현재 조합 유지 + 2단계 인증 권장'
+      ].join('\n');
+    };
+
+    [input, purpose].forEach((el) => el.addEventListener('input', render));
+    [showPassword, allowSpaces].forEach((el) => el.addEventListener('change', render));
+    sampleBtn.addEventListener('click', () => { input.value = t.sample; render(); });
+    copyBtn.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) {
+        summaryEl.textContent = t.emptyCopy;
+        return;
+      }
+      await copyText(outputEl.value);
+      summaryEl.textContent = t.copied;
+    });
+    render();
+  }
+
   if (slug === 'hangul-keyboard-layout-converter') {
     const input = document.getElementById('hklc-input');
     const mode = document.getElementById('hklc-mode');
