@@ -13,11 +13,11 @@
   description_en: Simulate when to start getting ready and when to leave based on appointment time, travel time, prep time, weather, and location familiarity.
   description_ja: 約束時刻、移動時間、準備時間、天気、場所の慣れをもとに、何時に支度を始めていつ出発すると余裕があるかをシミュレーションします。
   url: /tools/appointment-departure-buffer-simulator/
-  url_en: /tools/appointment-departure-buffer-simulator/
-  url_ja: /tools/appointment-departure-buffer-simulator/
+  url_en: /en/tools/appointment-departure-buffer-simulator/
+  url_ja: /ja/tools/appointment-departure-buffer-simulator/
   thumbnail: /assets/thumbs/appointment-departure-buffer-simulator.svg
-  thumbnail_en: /assets/thumbs/appointment-departure-buffer-simulator.svg
-  thumbnail_ja: /assets/thumbs/appointment-departure-buffer-simulator.svg
+  thumbnail_en: /assets/thumbs/en/appointment-departure-buffer-simulator.svg
+  thumbnail_ja: /assets/thumbs/ja/appointment-departure-buffer-simulator.svg
   published_at: 2026-04-30
   tool_type: simulator
   topic_cluster: travel
