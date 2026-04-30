@@ -3002,6 +3002,61 @@ layout: default
           <p class="tool-result" id="up-help">{% if page.lang == 'en' %}Enter total price and quantity to compare unit prices.{% elsif page.lang == 'ja' %}総価格と数量を入力すると単価を比較できます。{% else %}총 가격과 수량을 입력하면 단가를 비교할 수 있습니다.{% endif %}</p>
         </div>
 
+      {% when 'appointment-departure-buffer-simulator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="adbs-appointment">약속 날짜와 시간</label>
+              <input id="adbs-appointment" type="datetime-local" />
+            </div>
+            <div>
+              <label for="adbs-travel">기본 이동시간(분)</label>
+              <input id="adbs-travel" type="number" min="1" max="600" step="1" value="35" inputmode="numeric" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="adbs-ready">집에서 준비시간(분)</label>
+              <input id="adbs-ready" type="number" min="0" max="240" step="5" value="25" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="adbs-style">버퍼 스타일</label>
+              <select id="adbs-style">
+                <option value="tight">타이트</option>
+                <option value="normal" selected>보통</option>
+                <option value="relaxed">여유 있게</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="adbs-transfer" type="checkbox" /> 환승/갈아타기 많음</label>
+            <label class="tool-check"><input id="adbs-weather" type="checkbox" /> 비·눈·악천후 가능성</label>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="adbs-newplace" type="checkbox" /> 초행길 / 건물 찾기 어려움</label>
+            <label class="tool-check"><input id="adbs-packing" type="checkbox" /> 챙길 물건 많음</label>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="adbs-copy" type="button">결과 복사</button>
+            <button id="adbs-sample" type="button">예시 넣기</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="adbs-start">-</strong><span>준비 시작</span></div>
+            <div><strong id="adbs-leave">-</strong><span>집에서 출발</span></div>
+            <div><strong id="adbs-arrive">-</strong><span>권장 도착 목표</span></div>
+            <div><strong id="adbs-buffer">-</strong><span>추가 버퍼</span></div>
+            <div><strong id="adbs-total">-</strong><span>총 소요 예상</span></div>
+            <div><strong id="adbs-risk">-</strong><span>지각 리스크</span></div>
+          </div>
+
+          <p class="tool-result" id="adbs-help">약속 시각과 이동/준비시간을 입력하면 준비 시작과 출발 시각을 현실적으로 시뮬레이션합니다.</p>
+        </div>
+
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
     {% endcase %}

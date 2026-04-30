@@ -2036,6 +2036,142 @@
     render();
   }
 
+  if (slug === 'appointment-departure-buffer-simulator') {
+    const appointment = document.getElementById('adbs-appointment');
+    const travel = document.getElementById('adbs-travel');
+    const ready = document.getElementById('adbs-ready');
+    const style = document.getElementById('adbs-style');
+    const transfer = document.getElementById('adbs-transfer');
+    const weather = document.getElementById('adbs-weather');
+    const newplace = document.getElementById('adbs-newplace');
+    const packing = document.getElementById('adbs-packing');
+    const copyBtn = document.getElementById('adbs-copy');
+    const sampleBtn = document.getElementById('adbs-sample');
+    const startOut = document.getElementById('adbs-start');
+    const leaveOut = document.getElementById('adbs-leave');
+    const arriveOut = document.getElementById('adbs-arrive');
+    const bufferOut = document.getElementById('adbs-buffer');
+    const totalOut = document.getElementById('adbs-total');
+    const riskOut = document.getElementById('adbs-risk');
+    const help = document.getElementById('adbs-help');
+
+    if (!appointment || !travel || !ready || !style || !startOut || !leaveOut || !arriveOut || !bufferOut || !totalOut || !riskOut || !help) return;
+
+    const fmtTime = (date) => new Intl.DateTimeFormat('ko-KR', {
+      month: 'numeric',
+      day: 'numeric',
+      weekday: 'short',
+      hour: 'numeric',
+      minute: '2-digit'
+    }).format(date);
+
+    const toDate = (value) => {
+      if (!value) return null;
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? null : date;
+    };
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const render = () => {
+      const when = toDate(appointment.value);
+      const travelMin = Number(travel.value || 0);
+      const readyMin = Number(ready.value || 0);
+      const styleBase = ({ tight: 5, normal: 12, relaxed: 20 })[style.value] ?? 12;
+
+      if (!when || !(travelMin > 0) || readyMin < 0) {
+        startOut.textContent = '-';
+        leaveOut.textContent = '-';
+        arriveOut.textContent = '-';
+        bufferOut.textContent = '-';
+        totalOut.textContent = '-';
+        riskOut.textContent = '-';
+        help.textContent = '약속 시각, 이동시간, 준비시간을 입력하면 결과가 계산됩니다.';
+        return;
+      }
+
+      let variableBuffer = styleBase;
+      if (transfer.checked) variableBuffer += 8;
+      if (weather.checked) variableBuffer += 10;
+      if (newplace.checked) variableBuffer += 12;
+      if (packing.checked) variableBuffer += 7;
+
+      const arrivalLead = style.value === 'relaxed' ? 12 : (style.value === 'tight' ? 3 : 7);
+      const leaveTime = new Date(when.getTime() - (travelMin + variableBuffer + arrivalLead) * 60000);
+      const startTime = new Date(leaveTime.getTime() - readyMin * 60000);
+      const arriveGoal = new Date(when.getTime() - arrivalLead * 60000);
+      const totalMinutes = readyMin + travelMin + variableBuffer + arrivalLead;
+
+      const riskScore = [style.value === 'tight' ? 2 : 0, transfer.checked ? 2 : 0, weather.checked ? 2 : 0, newplace.checked ? 2 : 0, packing.checked ? 1 : 0].reduce((a, b) => a + b, 0);
+      const riskLabel = riskScore >= 6 ? '높음' : (riskScore >= 3 ? '보통' : '낮음');
+
+      startOut.textContent = fmtTime(startTime);
+      leaveOut.textContent = fmtTime(leaveTime);
+      arriveOut.textContent = `${fmtTime(arriveGoal)} (${arrivalLead}분 전)`;
+      bufferOut.textContent = `${variableBuffer}분`;
+      totalOut.textContent = `${totalMinutes}분`;
+      riskOut.textContent = riskLabel;
+      help.textContent = `준비 ${readyMin}분 + 이동 ${travelMin}분 + 추가 버퍼 ${variableBuffer}분 + 조기 도착 ${arrivalLead}분 기준으로 계산했어요.`;
+    };
+
+    sampleBtn?.addEventListener('click', () => {
+      const now = new Date();
+      const target = new Date(now.getTime() + 1000 * 60 * 60 * 20);
+      target.setMinutes(30, 0, 0);
+      appointment.value = new Date(target.getTime() - target.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+      travel.value = 42;
+      ready.value = 35;
+      style.value = 'normal';
+      transfer.checked = true;
+      weather.checked = false;
+      newplace.checked = true;
+      packing.checked = true;
+      render();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (startOut.textContent === '-') return;
+      const text = [
+        `준비 시작: ${startOut.textContent}`,
+        `출발 시각: ${leaveOut.textContent}`,
+        `권장 도착: ${arriveOut.textContent}`,
+        `추가 버퍼: ${bufferOut.textContent}`,
+        `총 소요: ${totalOut.textContent}`,
+        `리스크: ${riskOut.textContent}`
+      ].join(' | ');
+      await copyText(text);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    if (!appointment.value) {
+      const base = new Date();
+      base.setHours(base.getHours() + 3, 0, 0, 0);
+      appointment.value = new Date(base.getTime() - base.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+    }
+
+    [appointment, travel, ready, style, transfer, weather, newplace, packing].forEach((el) => {
+      el?.addEventListener('input', render);
+      el?.addEventListener('change', render);
+    });
+
+    render();
+  }
+
 
   if (slug === 'loan-calculator') {
     const amount = document.getElementById('loan-amount');

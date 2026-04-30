@@ -1,3 +1,27 @@
+- id: appointment-departure-buffer-simulator
+  title: 약속 출발 시간 버퍼 시뮬레이터
+  title_en: Appointment Departure Buffer Simulator
+  title_ja: 約束出発バッファシミュレーター
+  category: lifestyle
+  category_label: 생활/이동 준비
+  category_label_en: Lifestyle/Trip Prep
+  category_label_ja: 生活/移動準備
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 약속 시간, 이동시간, 준비시간, 길찾기 난이도와 날씨 변수를 반영해 몇 시에 준비를 시작하고 언제 나가야 덜 급한지 시뮬레이션해요.
+  description_en: Simulate when to start getting ready and when to leave based on appointment time, travel time, prep time, weather, and location familiarity.
+  description_ja: 約束時刻、移動時間、準備時間、天気、場所の慣れをもとに、何時に支度を始めていつ出発すると余裕があるかをシミュレーションします。
+  url: /tools/appointment-departure-buffer-simulator/
+  url_en: /tools/appointment-departure-buffer-simulator/
+  url_ja: /tools/appointment-departure-buffer-simulator/
+  thumbnail: /assets/thumbs/appointment-departure-buffer-simulator.svg
+  thumbnail_en: /assets/thumbs/appointment-departure-buffer-simulator.svg
+  thumbnail_ja: /assets/thumbs/appointment-departure-buffer-simulator.svg
+  published_at: 2026-04-30
+  tool_type: simulator
+  topic_cluster: travel
+
 - id: password-strength-checker
   title: 비밀번호 강도 점검기
   title_en: Password Strength Checker
