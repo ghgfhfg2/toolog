@@ -13,11 +13,11 @@
   description_en: Generate five likely interview follow-up questions and answer points from your role, seniority, interview type, and core answer.
   description_ja: 職種、経験段階、面接タイプ、回答の要点をもとに、続けて聞かれやすい質問5件と回答ポイントをすばやく整理します。
   url: /tools/interview-followup-question-generator/
-  url_en: /tools/interview-followup-question-generator/
-  url_ja: /tools/interview-followup-question-generator/
+  url_en: /en/tools/interview-followup-question-generator/
+  url_ja: /ja/tools/interview-followup-question-generator/
   thumbnail: /assets/thumbs/interview-followup-question-generator.svg
-  thumbnail_en: /assets/thumbs/interview-followup-question-generator.svg
-  thumbnail_ja: /assets/thumbs/interview-followup-question-generator.svg
+  thumbnail_en: /assets/thumbs/en/interview-followup-question-generator.svg
+  thumbnail_ja: /assets/thumbs/ja/interview-followup-question-generator.svg
   published_at: 2026-05-01
   tool_type: generator
   topic_cluster: career
