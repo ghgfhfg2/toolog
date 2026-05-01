@@ -1,3 +1,27 @@
+- id: interview-followup-question-generator
+  title: 면접 꼬리질문 생성기
+  title_en: Interview Follow-up Question Generator
+  title_ja: 面接フォローアップ質問ジェネレーター
+  category: study
+  category_label: 취업/면접 연습
+  category_label_en: Career/Interview Practice
+  category_label_ja: 就職/面接練習
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 직무, 경력 단계, 면접 유형, 핵심 답변을 바탕으로 실제 면접에서 이어질 만한 꼬리질문 5개와 답변 포인트를 빠르게 정리해요.
+  description_en: Generate five likely interview follow-up questions and answer points from your role, seniority, interview type, and core answer.
+  description_ja: 職種、経験段階、面接タイプ、回答の要点をもとに、続けて聞かれやすい質問5件と回答ポイントをすばやく整理します。
+  url: /tools/interview-followup-question-generator/
+  url_en: /tools/interview-followup-question-generator/
+  url_ja: /tools/interview-followup-question-generator/
+  thumbnail: /assets/thumbs/interview-followup-question-generator.svg
+  thumbnail_en: /assets/thumbs/interview-followup-question-generator.svg
+  thumbnail_ja: /assets/thumbs/interview-followup-question-generator.svg
+  published_at: 2026-05-01
+  tool_type: generator
+  topic_cluster: career
+
 - id: appointment-departure-buffer-simulator
   title: 약속 출발 시간 버퍼 시뮬레이터
   title_en: Appointment Departure Buffer Simulator

@@ -5611,6 +5611,153 @@
     generate();
   }
 
+  if (slug === 'interview-followup-question-generator') {
+    const role = document.getElementById('ifqg-role');
+    const level = document.getElementById('ifqg-level');
+    const type = document.getElementById('ifqg-type');
+    const focus = document.getElementById('ifqg-focus');
+    const input = document.getElementById('ifqg-input');
+    const metric = document.getElementById('ifqg-include-metric');
+    const risk = document.getElementById('ifqg-include-risk');
+    const run = document.getElementById('ifqg-run');
+    const sample = document.getElementById('ifqg-sample');
+    const copy = document.getElementById('ifqg-copy');
+    const output = document.getElementById('ifqg-output');
+    const count = document.getElementById('ifqg-count');
+    const roleOut = document.getElementById('ifqg-role-out');
+    const focusOut = document.getElementById('ifqg-focus-out');
+    const depth = document.getElementById('ifqg-depth');
+    const help = document.getElementById('ifqg-help');
+    if (!role || !input || !output) return;
+
+    const roleMap = {
+      pm: { label: 'PM / 기획', lens: '우선순위 판단과 이해관계자 조율', specifics: ['왜 그 문제를 먼저 풀어야 했나요?', '다른 이해관계자의 반대는 어떻게 조율했나요?', '실행 전후의 핵심 지표는 무엇이었나요?'] },
+      dev: { label: '개발', lens: '원인 분석과 기술적 판단', specifics: ['원인을 어떻게 좁혀 갔나요?', '해당 방식 대신 다른 기술 선택지는 왜 제외했나요?', '배포 후 재발 방지는 어떻게 했나요?'] },
+      design: { label: '디자인', lens: '사용자 맥락과 설계 근거', specifics: ['사용자 문제를 어떤 근거로 정의했나요?', '시안 선택 기준은 무엇이었나요?', '협업 중 디자인 의도를 어떻게 설득했나요?'] },
+      marketing: { label: '마케팅', lens: '메시지 전략과 성과 해석', specifics: ['어떤 타깃 가설로 시작했나요?', '성과가 좋았던 이유를 어떻게 해석하나요?', '예상보다 성과가 낮았을 때 어떤 수정안을 냈나요?'] },
+      ops: { label: '운영 / 비즈니스', lens: '프로세스 개선과 실행 안정성', specifics: ['병목을 어떻게 발견했나요?', '현장 혼선을 줄이기 위해 어떤 기준을 세웠나요?', '개선 효과를 어떤 방식으로 확인했나요?'] }
+    };
+    const levelMap = {
+      junior: { label: '신입 / 주니어', ask: '직접 기여 범위', pressure: '내가 직접 한 일과 배운 점' },
+      mid: { label: '경력 3~7년', ask: '판단 근거와 재현 가능성', pressure: '판단 기준과 협업 설득력' },
+      senior: { label: '시니어 / 리드', ask: '조직 영향과 의사결정 책임', pressure: '우선순위·리스크·사람 관리' }
+    };
+    const typeMap = {
+      behavior: { label: '경험 / 인성 면접', asks: ['당시 가장 어려웠던 순간은 무엇이었나요?', '그 상황에서 본인 판단 기준은 무엇이었나요?'] },
+      project: { label: '프로젝트 설명 면접', asks: ['프로젝트 전체 맥락에서 본인 역할은 어디까지였나요?', '결과를 수치나 사용자 변화로 설명할 수 있나요?'] },
+      problem: { label: '문제해결 / 케이스 면접', asks: ['문제를 구조화할 때 어떤 순서로 접근했나요?', '제약조건이 바뀌면 같은 답을 유지하겠나요?'] },
+      culture: { label: '협업 / 조직적합 면접', asks: ['의견이 다른 사람과는 어떻게 맞췄나요?', '같은 팀에서 신뢰를 얻기 위해 어떤 방식을 쓰나요?'] }
+    };
+    const focusMap = {
+      impact: { label: '성과와 수치', point: '결과 수치와 전후 비교를 바로 말할 준비' },
+      ownership: { label: '주도성과 책임', point: '누가 시켜서가 아니라 왜 직접 움직였는지 설명' },
+      collaboration: { label: '협업과 조율', point: '갈등, 설득, 합의 방식까지 구체화' },
+      learning: { label: '실패와 학습', point: '실수 인정 + 다음 행동 변화까지 연결' }
+    };
+
+    const makeQuestionBlock = (idx, q, intent, tip) => `${idx}. 예상 꼬리질문\n- 질문: ${q}\n- 질문 의도: ${intent}\n- 답변 포인트: ${tip}`;
+
+    const build = () => {
+      const raw = (input.value || '').trim();
+      if (!raw) {
+        output.value = '';
+        count.textContent = '0';
+        roleOut.textContent = '-';
+        focusOut.textContent = '-';
+        depth.textContent = '-';
+        help.textContent = '먼저 핵심 답변이나 경험 요약을 입력하세요.';
+        return;
+      }
+      const roleInfo = roleMap[role.value] || roleMap.pm;
+      const levelInfo = levelMap[level.value] || levelMap.junior;
+      const typeInfo = typeMap[type.value] || typeMap.behavior;
+      const focusInfo = focusMap[focus.value] || focusMap.impact;
+      const hasNumber = /\d/.test(raw);
+      const hasTeam = /(팀|협업|디자인|개발|운영|마케팅|stakeholder|동료|부서)/i.test(raw);
+      const hasProblem = /(문제|장애|갈등|이슈|실패|지연|리스크|오류)/i.test(raw);
+
+      const questions = [];
+      questions.push({
+        q: roleInfo.specifics[0],
+        intent: `${roleInfo.lens} 관점에서 실제 판단 근거를 확인하려는 질문`,
+        tip: `${levelInfo.ask}를 1~2문장으로 먼저 말하고, 상황-행동-결과 순으로 짧게 정리하세요.`
+      });
+      questions.push({
+        q: typeInfo.asks[0],
+        intent: `${typeInfo.label}에서 맥락과 난도를 검증하려는 질문`,
+        tip: `당시 제약조건, 선택지, 최종 판단 이유를 빠르게 연결하세요.`
+      });
+      questions.push({
+        q: hasTeam ? '협업 과정에서 가장 의견이 갈렸던 지점은 무엇이었고 어떻게 정리했나요?' : '이 과정에서 다른 사람의 도움 없이 본인이 직접 주도한 부분은 정확히 어디였나요?',
+        intent: '본인 기여 범위와 협업 설득력을 확인하려는 질문',
+        tip: `${hasTeam ? '누구와 어떤 관점이 달랐는지, 최종 합의 기준이 무엇이었는지' : '직접 분석·실행·조정한 행동'}를 구체적으로 말하세요.`
+      });
+      if (metric.checked) {
+        questions.push({
+          q: hasNumber ? '방금 말한 수치가 의미 있는 개선이라고 볼 수 있는 기준은 무엇이었나요?' : '성과를 수치로 바꾸면 어떤 지표로 설명할 수 있나요?',
+          intent: '결과를 객관적 근거로 설명할 수 있는지 확인하려는 질문',
+          tip: `${hasNumber ? '비교 기준과 측정 기간' : '전환율, 시간 단축, 오류 감소, 만족도 등'} 중 하나로 환산해 답변을 준비하세요.`
+        });
+      }
+      if (risk.checked) {
+        questions.push({
+          q: hasProblem ? '그 문제를 처리하면서 놓쳤던 부분이나 아쉬운 판단은 무엇이었나요?' : '같은 상황이 다시 오면 이번에는 무엇을 다르게 하겠나요?',
+          intent: '실패 인식, 리스크 감도, 학습 능력을 확인하려는 질문',
+          tip: '변명보다 배운 점과 다음 행동 변화를 분리해서 말하면 좋습니다.'
+        });
+      }
+      while (questions.length < 5) {
+        questions.push({
+          q: typeInfo.asks[1] || roleInfo.specifics[1],
+          intent: `${focusInfo.label} 관점에서 답변 깊이를 더 보려는 질문`,
+          tip: `${focusInfo.point}.` 
+        });
+      }
+
+      const uniqueQuestions = questions.slice(0, 5);
+      const summaryLines = [
+        `면접 포커스: ${roleInfo.label} / ${levelInfo.label} / ${typeInfo.label}`,
+        `강조 포인트: ${focusInfo.label}`,
+        `핵심 답변 요약: ${raw}`,
+        '',
+        ...uniqueQuestions.map((item, index) => makeQuestionBlock(index + 1, item.q, item.intent, item.tip)),
+        '',
+        '[셀프 체크]',
+        `- 수치, 본인 기여, 선택 근거, 아쉬운 점 중 바로 답이 안 나오는 항목이 있는지 확인하세요.`,
+        `- 예상 압박 포인트: ${levelInfo.pressure}`
+      ];
+
+      output.value = summaryLines.join('\n');
+      count.textContent = String(uniqueQuestions.length);
+      roleOut.textContent = roleInfo.label;
+      focusOut.textContent = focusInfo.label;
+      depth.textContent = levelInfo.pressure;
+      help.textContent = '생성된 질문을 보고 30초 답변과 1분 답변을 각각 말해보세요.';
+    };
+
+    run.addEventListener('click', build);
+    sample.addEventListener('click', () => {
+      role.value = 'pm';
+      level.value = 'mid';
+      type.value = 'project';
+      focus.value = 'impact';
+      metric.checked = true;
+      risk.checked = true;
+      input.value = '결제 단계 이탈이 높던 서비스를 맡아 퍼널 데이터를 다시 분석했고, 체크아웃 단계를 5단계에서 3단계로 줄였습니다. 디자인과 개발 일정이 충돌했지만 핵심 가설부터 먼저 검증하도록 우선순위를 조정했고, 2주 뒤 AB 테스트에서 전환율이 12% 상승했습니다.';
+      build();
+    });
+    copy.addEventListener('click', async () => {
+      if (!output.value) build();
+      if (!output.value) return;
+      try {
+        await navigator.clipboard.writeText(output.value);
+        help.textContent = '결과를 복사했어요. 소리 내어 모의답변해보면 더 좋습니다.';
+      } catch (err) {
+        help.textContent = '복사에 실패했어요. 결과창에서 직접 복사해 주세요.';
+      }
+    });
+  }
+
   if (slug === 'secondhand-price-message-generator') {
     const roleEl = document.getElementById('spmg-role');
     const situationEl = document.getElementById('spmg-situation');

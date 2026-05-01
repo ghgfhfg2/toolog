@@ -1187,6 +1187,77 @@ layout: default
           <p class="tool-result" id="scmg-help">상황과 시간 후보를 넣으면 바로 보낼 수 있는 일정 조율 문구를 만들어줍니다.</p>
           <textarea id="scmg-output" rows="16" readonly placeholder="생성된 메시지가 여기에 표시됩니다."></textarea>
         </div>
+      {% when 'interview-followup-question-generator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="ifqg-role">지원 직무</label>
+              <select id="ifqg-role">
+                <option value="pm">PM / 기획</option>
+                <option value="dev">개발</option>
+                <option value="design">디자인</option>
+                <option value="marketing">마케팅</option>
+                <option value="ops">운영 / 비즈니스</option>
+              </select>
+            </div>
+            <div>
+              <label for="ifqg-level">경력 단계</label>
+              <select id="ifqg-level">
+                <option value="junior">신입 / 주니어</option>
+                <option value="mid">경력 3~7년</option>
+                <option value="senior">시니어 / 리드</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="ifqg-type">면접 유형</label>
+              <select id="ifqg-type">
+                <option value="behavior">경험 / 인성 면접</option>
+                <option value="project">프로젝트 설명 면접</option>
+                <option value="problem">문제해결 / 케이스 면접</option>
+                <option value="culture">협업 / 조직적합 면접</option>
+              </select>
+            </div>
+            <div>
+              <label for="ifqg-focus">강조 포인트</label>
+              <select id="ifqg-focus">
+                <option value="impact">성과와 수치</option>
+                <option value="ownership">주도성과 책임</option>
+                <option value="collaboration">협업과 조율</option>
+                <option value="learning">실패와 학습</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row">
+            <label for="ifqg-input">핵심 답변 / 경험 요약</label>
+            <textarea id="ifqg-input" rows="8" maxlength="3000" placeholder="예: 결제 이탈이 높던 구간을 분석해 체크아웃 단계를 5단계에서 3단계로 줄였고, AB 테스트 후 전환율을 12% 높였습니다. 개발/디자인과 일정 충돌이 있었지만 우선순위를 재정렬해 2주 안에 배포했습니다."></textarea>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="ifqg-include-metric" type="checkbox" checked /> 수치 검증 질문 포함</label>
+            <label class="tool-check"><input id="ifqg-include-risk" type="checkbox" checked /> 실패 / 리스크 질문 포함</label>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="ifqg-run" type="button">꼬리질문 생성</button>
+            <button id="ifqg-sample" type="button">예시 넣기</button>
+            <button id="ifqg-copy" type="button">결과 복사</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="ifqg-count">0</strong><span>생성 질문 수</span></div>
+            <div><strong id="ifqg-role-out">-</strong><span>직무 포커스</span></div>
+            <div><strong id="ifqg-focus-out">-</strong><span>강조 포인트</span></div>
+            <div><strong id="ifqg-depth">-</strong><span>예상 압박 포인트</span></div>
+          </div>
+
+          <p class="tool-result" id="ifqg-help">답변 요약을 넣으면 실제 면접에서 이어질 만한 꼬리질문과 답변 포인트를 생성합니다.</p>
+          <textarea id="ifqg-output" rows="18" readonly placeholder="생성된 꼬리질문이 여기에 표시됩니다."></textarea>
+        </div>
+
       {% when 'secondhand-price-message-generator' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
