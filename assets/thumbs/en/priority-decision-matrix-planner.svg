@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" rx="36" fill="#0F172A"/>
+  <rect x="72" y="72" width="1056" height="486" rx="28" fill="#111827" stroke="#334155" stroke-width="4"/>
+  <text x="96" y="146" fill="#E2E8F0" font-size="42" font-family="Arial, sans-serif" font-weight="700">Priority Decision Matrix Planner</text>
+  <text x="96" y="194" fill="#94A3B8" font-size="24" font-family="Arial, sans-serif">Sort urgency, impact, effort, and confidence in one view</text>
+  <line x1="390" y1="250" x2="390" y2="500" stroke="#475569" stroke-width="3"/>
+  <line x1="140" y1="375" x2="940" y2="375" stroke="#475569" stroke-width="3"/>
+  <text x="210" y="234" fill="#CBD5E1" font-size="22" font-family="Arial, sans-serif">High impact</text>
+  <text x="720" y="234" fill="#CBD5E1" font-size="22" font-family="Arial, sans-serif">Lower impact</text>
+  <text x="974" y="300" fill="#CBD5E1" font-size="22" font-family="Arial, sans-serif">Urgent</text>
+  <text x="974" y="462" fill="#CBD5E1" font-size="22" font-family="Arial, sans-serif">Later</text>
+  <rect x="170" y="275" width="170" height="70" rx="18" fill="#22C55E" fill-opacity="0.2" stroke="#22C55E" stroke-width="3"/>
+  <text x="210" y="319" fill="#BBF7D0" font-size="28" font-family="Arial, sans-serif" font-weight="700">Do now</text>
+  <rect x="455" y="270" width="170" height="70" rx="18" fill="#F59E0B" fill-opacity="0.18" stroke="#F59E0B" stroke-width="3"/>
+  <text x="488" y="314" fill="#FDE68A" font-size="28" font-family="Arial, sans-serif" font-weight="700">Fast track</text>
+  <rect x="170" y="405" width="170" height="70" rx="18" fill="#3B82F6" fill-opacity="0.18" stroke="#3B82F6" stroke-width="3"/>
+  <text x="196" y="449" fill="#BFDBFE" font-size="28" font-family="Arial, sans-serif" font-weight="700">Plan next</text>
+  <rect x="455" y="405" width="170" height="70" rx="18" fill="#64748B" fill-opacity="0.2" stroke="#64748B" stroke-width="3"/>
+  <text x="500" y="449" fill="#E2E8F0" font-size="28" font-family="Arial, sans-serif" font-weight="700">Hold</text>
+  <rect x="858" y="118" width="196" height="64" rx="18" fill="#8B5CF6"/>
+  <text x="894" y="159" fill="white" font-size="28" font-family="Arial, sans-serif" font-weight="700">TOOLOG</text>
+</svg>
