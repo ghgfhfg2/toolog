@@ -1,3 +1,15 @@
+- id: priority-decision-matrix-planner
+  title: 우선순위 결정 매트릭스 정리기
+  category: productivity
+  category_label: 업무/우선순위 정리
+  badge: New
+  description: 해야 할 일이나 선택지를 최대 5개까지 넣고 긴급도, 영향도, 노력 대비 효율을 체크하면 지금 먼저 할 일 순서를 빠르게 정리해요.
+  url: /tools/priority-decision-matrix-planner/
+  thumbnail: /assets/thumbs/priority-decision-matrix-planner.svg
+  published_at: 2026-05-02
+  tool_type: planner
+  topic_cluster: work
+
 - id: interview-followup-question-generator
   title: 면접 꼬리질문 생성기
   title_en: Interview Follow-up Question Generator

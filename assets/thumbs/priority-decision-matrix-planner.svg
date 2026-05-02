@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" rx="36" fill="#0F172A"/>
+  <rect x="72" y="72" width="1056" height="486" rx="28" fill="#111827" stroke="#334155" stroke-width="4"/>
+  <text x="96" y="146" fill="#E2E8F0" font-size="42" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">우선순위 결정 매트릭스 정리기</text>
+  <text x="96" y="194" fill="#94A3B8" font-size="24" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">급한 일 · 중요한 일 · 노력 대비 효율을 한 번에 정렬</text>
+  <line x1="390" y1="250" x2="390" y2="500" stroke="#475569" stroke-width="3"/>
+  <line x1="140" y1="375" x2="940" y2="375" stroke="#475569" stroke-width="3"/>
+  <text x="210" y="234" fill="#CBD5E1" font-size="22" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">중요도 높음</text>
+  <text x="720" y="234" fill="#CBD5E1" font-size="22" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">중요도 낮음</text>
+  <text x="974" y="300" fill="#CBD5E1" font-size="22" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">긴급도 높음</text>
+  <text x="974" y="462" fill="#CBD5E1" font-size="22" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">긴급도 낮음</text>
+  <rect x="170" y="275" width="170" height="70" rx="18" fill="#22C55E" fill-opacity="0.2" stroke="#22C55E" stroke-width="3"/>
+  <text x="198" y="319" fill="#BBF7D0" font-size="28" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">지금 실행</text>
+  <rect x="455" y="270" width="170" height="70" rx="18" fill="#F59E0B" fill-opacity="0.18" stroke="#F59E0B" stroke-width="3"/>
+  <text x="480" y="314" fill="#FDE68A" font-size="28" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">빠른 대응</text>
+  <rect x="170" y="405" width="170" height="70" rx="18" fill="#3B82F6" fill-opacity="0.18" stroke="#3B82F6" stroke-width="3"/>
+  <text x="192" y="449" fill="#BFDBFE" font-size="28" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">계획 후 진행</text>
+  <rect x="455" y="405" width="170" height="70" rx="18" fill="#64748B" fill-opacity="0.2" stroke="#64748B" stroke-width="3"/>
+  <text x="486" y="449" fill="#E2E8F0" font-size="28" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">보류 검토</text>
+  <rect x="858" y="118" width="196" height="64" rx="18" fill="#8B5CF6"/>
+  <text x="894" y="159" fill="white" font-size="28" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-weight="700">TOOLOG</text>
+</svg>

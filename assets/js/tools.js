@@ -11595,4 +11595,123 @@
     render();
   }
 
+  if (slug === 'priority-decision-matrix-planner') {
+    const rows = Array.from({ length: 5 }, (_, idx) => ({
+      name: document.getElementById(`pdm-name-${idx + 1}`),
+      urgency: document.getElementById(`pdm-urgency-${idx + 1}`),
+      impact: document.getElementById(`pdm-impact-${idx + 1}`),
+      effort: document.getElementById(`pdm-effort-${idx + 1}`),
+      confidence: document.getElementById(`pdm-confidence-${idx + 1}`),
+      note: document.getElementById(`pdm-note-${idx + 1}`)
+    }));
+    const sampleBtn = document.getElementById('pdm-sample');
+    const copyBtn = document.getElementById('pdm-copy');
+    const countEl = document.getElementById('pdm-count');
+    const topEl = document.getElementById('pdm-top');
+    const nowEl = document.getElementById('pdm-now');
+    const weekEl = document.getElementById('pdm-week');
+    const holdEl = document.getElementById('pdm-hold');
+    const summaryEl = document.getElementById('pdm-summary');
+    const outputEl = document.getElementById('pdm-output');
+    if (rows.some((row) => !row.name || !row.urgency || !row.impact || !row.effort || !row.confidence || !row.note) || !sampleBtn || !copyBtn || !countEl || !topEl || !nowEl || !weekEl || !holdEl || !summaryEl || !outputEl) return;
+
+    const sampleData = [
+      { name: '결제 오류 재현 및 수정', urgency: 5, impact: 5, effort: 3, confidence: 4, note: '오늘 안에 CS 문의 대응 필요' },
+      { name: '다음 주 제안서 마무리', urgency: 4, impact: 4, effort: 4, confidence: 4, note: '자료는 거의 모였음' },
+      { name: '뉴스레터 초안 정리', urgency: 3, impact: 3, effort: 2, confidence: 5, note: '1시간 안에 끝낼 수 있음' },
+      { name: '새 분석 대시보드 탐색', urgency: 2, impact: 4, effort: 5, confidence: 2, note: '요구사항 추가 확인 필요' },
+      { name: '회의록 정리 후 공유', urgency: 4, impact: 3, effort: 1, confidence: 5, note: '빠르게 처리 가능' }
+    ];
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const getBucket = (score, urgency, impact) => {
+      if (score >= 4.1 || (urgency >= 4 && impact >= 4)) return '지금 실행';
+      if (score >= 3 || impact >= 4) return '이번 주 진행';
+      return '보류 검토';
+    };
+
+    const build = () => {
+      const items = rows.map((row, idx) => {
+        const name = (row.name.value || '').trim();
+        if (!name) return null;
+        const urgency = Number(row.urgency.value || 3);
+        const impact = Number(row.impact.value || 3);
+        const effort = Number(row.effort.value || 3);
+        const confidence = Number(row.confidence.value || 3);
+        const note = (row.note.value || '').trim();
+        const score = (urgency * 0.35) + (impact * 0.4) + ((6 - effort) * 0.15) + (confidence * 0.1);
+        const bucket = getBucket(score, urgency, impact);
+        const reason = [];
+        if (urgency >= 4) reason.push('마감 압박 높음');
+        if (impact >= 4) reason.push('결과 영향 큼');
+        if (effort <= 2) reason.push('비교적 빠르게 처리 가능');
+        if (confidence <= 2) reason.push('진행 전 확인 필요');
+        if (!reason.length) reason.push('전체 균형은 보통');
+        return { idx, name, urgency, impact, effort, confidence, note, score, bucket, reason: reason.join(', ') };
+      }).filter(Boolean).sort((a, b) => b.score - a.score || b.impact - a.impact || b.urgency - a.urgency);
+
+      countEl.textContent = String(items.length);
+      topEl.textContent = items[0]?.name || '-';
+      nowEl.textContent = String(items.filter((item) => item.bucket === '지금 실행').length);
+      weekEl.textContent = String(items.filter((item) => item.bucket === '이번 주 진행').length);
+      holdEl.textContent = String(items.filter((item) => item.bucket === '보류 검토').length);
+
+      if (!items.length) {
+        summaryEl.textContent = '항목을 1개 이상 입력하면 우선순위 추천 결과가 여기에 표시됩니다.';
+        outputEl.value = '';
+        return;
+      }
+
+      summaryEl.textContent = `${items[0].name}을(를) 가장 먼저 보는 흐름이 유리해 보여요. 총 ${items.length}개 항목을 우선순위 순으로 정리했습니다.`;
+      outputEl.value = [
+        '[우선순위 결정 매트릭스 결과]',
+        ...items.map((item, index) => `${index + 1}. ${item.name} | ${item.bucket} | 점수 ${item.score.toFixed(2)}\n- 긴급도 ${item.urgency} / 영향도 ${item.impact} / 노력도 ${item.effort} / 확신도 ${item.confidence}\n- 판단 메모: ${item.reason}${item.note ? `\n- 추가 메모: ${item.note}` : ''}`)
+      ].join('\n\n');
+    };
+
+    sampleBtn.addEventListener('click', () => {
+      rows.forEach((row, idx) => {
+        const sample = sampleData[idx];
+        row.name.value = sample.name;
+        row.urgency.value = String(sample.urgency);
+        row.impact.value = String(sample.impact);
+        row.effort.value = String(sample.effort);
+        row.confidence.value = String(sample.confidence);
+        row.note.value = sample.note;
+      });
+      build();
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) build();
+      if (!outputEl.value.trim()) return;
+      await copyText(outputEl.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    rows.forEach((row) => {
+      Object.values(row).forEach((el) => {
+        el.addEventListener('input', build);
+        el.addEventListener('change', build);
+      });
+    });
+
+    build();
+  }
+
 })();
