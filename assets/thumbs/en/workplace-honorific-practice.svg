@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Workplace Honorific Practice</title>
+  <desc id="desc">Thumbnail for a web tool that practices polite phrasing for work chat and email</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <rect x="72" y="72" width="456" height="486" rx="28" fill="#eff6ff" opacity="0.96"/>
+  <rect x="108" y="124" width="250" height="34" rx="17" fill="#bfdbfe"/>
+  <rect x="108" y="186" width="336" height="28" rx="14" fill="#1e3a8a" opacity="0.14"/>
+  <rect x="108" y="230" width="290" height="28" rx="14" fill="#1e3a8a" opacity="0.14"/>
+  <rect x="108" y="298" width="312" height="70" rx="24" fill="#dbeafe"/>
+  <rect x="108" y="388" width="312" height="70" rx="24" fill="#dbeafe"/>
+  <circle cx="476" cy="333" r="26" fill="#2563eb"/>
+  <path d="M463 333l10 10 18-22" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="590" y="214" fill="#dbeafe" font-size="32" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">TOOLOG WEB TOOL</text>
+  <text x="590" y="300" fill="#ffffff" font-size="68" font-weight="700" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">Workplace Honorific</text>
+  <text x="590" y="372" fill="#ffffff" font-size="68" font-weight="700" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">Practice</text>
+  <text x="590" y="438" fill="#bfdbfe" font-size="34" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">Polite phrasing quiz for chat and email</text>
+  <text x="590" y="492" fill="#e2e8f0" font-size="28" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">Train softer, more natural work language</text>
+</svg>
