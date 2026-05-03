@@ -1328,6 +1328,180 @@
     renderMissed();
   }
 
+  if (slug === 'workplace-honorific-practice') {
+    const category = document.getElementById('whp-category');
+    const count = document.getElementById('whp-count');
+    const startBtn = document.getElementById('whp-start');
+    const nextBtn = document.getElementById('whp-next');
+    const resetBtn = document.getElementById('whp-reset');
+    const optionA = document.getElementById('whp-option-a');
+    const optionB = document.getElementById('whp-option-b');
+    const question = document.getElementById('whp-question');
+    const feedback = document.getElementById('whp-feedback');
+    const missed = document.getElementById('whp-missed');
+    const totalOut = document.getElementById('whp-total');
+    const currentOut = document.getElementById('whp-current');
+    const correctOut = document.getElementById('whp-correct');
+    const wrongOut = document.getElementById('whp-wrong');
+    const accuracyOut = document.getElementById('whp-accuracy');
+
+    if (!category || !count || !startBtn || !nextBtn || !resetBtn || !optionA || !optionB || !question || !feedback || !missed) return;
+
+    const bank = [
+      { category: 'messenger', situation: '메신저', prompt: '팀장에게 빠른 확인을 부탁할 때 더 자연스러운 표현은?', options: ['확인 부탁드립니다.', '확인 바랍니다.'], answer: 0, explain: '`확인 부탁드립니다`가 메신저에서 더 부드럽고 협업형으로 들립니다. `확인 바랍니다`는 문맥에 따라 다소 딱딱하거나 일방적으로 느껴질 수 있습니다.' },
+      { category: 'messenger', situation: '메신저', prompt: '자료 전달 후 한마디로 더 무난한 표현은?', options: ['자료 공유드립니다.', '자료 송부드리오니 확인 바랍니다.'], answer: 0, explain: '메신저에서는 짧고 명확한 표현이 더 자연스럽습니다. 두 번째 문장은 메일 문체에 가깝고 다소 무겁습니다.' },
+      { category: 'messenger', situation: '메신저', prompt: '상대가 늦은 답장을 했을 때 더 부담이 적은 표현은?', options: ['확인해주셔서 감사합니다.', '답변이 늦으셨네요.'], answer: 0, explain: '감사 표현이 관계를 부드럽게 유지합니다. 늦음을 직접 지적하는 문장은 불필요하게 날카롭게 들릴 수 있습니다.' },
+      { category: 'email', situation: '이메일', prompt: '메일 첫 문장으로 더 자연스러운 표현은?', options: ['안녕하세요. 요청 주신 내용 정리해 전달드립니다.', '안녕하십니까. 요청하신 바를 하기와 같이 송부하오니 검토 바랍니다.'], answer: 0, explain: '지나치게 관료적인 문체보다 자연스럽고 명확한 문장이 읽기 부담이 적습니다.' },
+      { category: 'email', situation: '이메일', prompt: '회신 요청 문장으로 더 부드러운 표현은?', options: ['가능 여부를 알려주시면 일정 조정에 도움이 됩니다.', '가능 여부를 빠르게 회신 바랍니다.'], answer: 0, explain: '왜 회신이 필요한지 맥락을 주면 요청 강도가 낮아지고 협조를 얻기 쉬워집니다.' },
+      { category: 'email', situation: '이메일', prompt: '첨부파일 안내 문장으로 더 자연스러운 표현은?', options: ['관련 파일을 첨부드립니다.', '관련 파일을 첨부하였사오니 참조 부탁드립니다.'], answer: 0, explain: '짧고 분명한 표현이 현재 업무 메일 톤에 더 잘 맞습니다. 두 번째 문장은 너무 무거운 느낌을 줄 수 있습니다.' },
+      { category: 'schedule', situation: '일정 조율', prompt: '일정 변경을 부탁할 때 더 부담이 덜한 표현은?', options: ['혹시 가능하시다면 시간을 조금 조정할 수 있을까요?', '시간 변경 부탁드립니다.'], answer: 0, explain: '정중한 완충 표현이 들어가면 상대가 선택권을 가진 느낌을 받아 부담이 줄어듭니다.' },
+      { category: 'schedule', situation: '일정 조율', prompt: '회의 시간 후보를 보낼 때 더 자연스러운 표현은?', options: ['가능하신 시간을 알려주시면 그에 맞춰 조정하겠습니다.', '가능 시간 회신 바랍니다.'], answer: 0, explain: '조정 의사를 함께 밝히면 일방 지시처럼 들리지 않고 협업 톤이 살아납니다.' },
+      { category: 'schedule', situation: '일정 조율', prompt: '늦을 가능성을 알릴 때 더 좋은 표현은?', options: ['도착이 10분 정도 늦어질 것 같아 먼저 양해 부탁드립니다.', '10분 늦습니다.'], answer: 0, explain: '지연 안내 자체보다도 먼저 양해를 구하는 구조가 더 공손합니다.' },
+      { category: 'messenger', situation: '메신저', prompt: '추가 검토를 부탁할 때 더 자연스러운 표현은?', options: ['한 번 더 봐주실 수 있을까요?', '다시 검토해주세요.'], answer: 0, explain: '부탁형 의문문이 메신저 협업 상황에서 더 부드럽게 들립니다.' },
+      { category: 'email', situation: '이메일', prompt: '메일 마무리로 더 무난한 표현은?', options: ['확인 후 편하실 때 회신 부탁드립니다. 감사합니다.', '검토 후 회답 바랍니다.'], answer: 0, explain: '끝맺음이 부드럽고, 상대의 시간을 존중하는 뉘앙스가 있습니다.' },
+      { category: 'schedule', situation: '일정 조율', prompt: '면접 일정 회신으로 더 자연스러운 표현은?', options: ['안내 주신 시간 중 화요일 오후 2시가 가능합니다.', '화요일 오후 2시로 하겠습니다.'], answer: 0, explain: '확정 전 단계에서는 가능 여부를 공손하게 밝히는 표현이 더 안전합니다.' }
+    ];
+
+    let quiz = [];
+    let index = 0;
+    let correct = 0;
+    let wrong = 0;
+    let answered = false;
+    let wrongNotes = [];
+
+    const shuffle = (arr) => {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    };
+
+    const setButtonsDisabled = (value) => {
+      optionA.disabled = value;
+      optionB.disabled = value;
+    };
+
+    const renderStats = () => {
+      totalOut.textContent = quiz.length;
+      currentOut.textContent = quiz.length ? Math.min(index + 1, quiz.length) : 0;
+      correctOut.textContent = correct;
+      wrongOut.textContent = wrong;
+      const done = correct + wrong;
+      accuracyOut.textContent = done ? `${Math.round((correct / done) * 100)}%` : '-';
+    };
+
+    const renderMissed = () => {
+      if (!wrongNotes.length) {
+        missed.innerHTML = '<p class="tool-result">오답이 생기면 상황별 복습 목록이 여기에 쌓입니다.</p>';
+        return;
+      }
+      missed.innerHTML = wrongNotes.map((item) => `
+        <div class="tool-card">
+          <strong>[${item.situation}] ${item.question}</strong>
+          <p class="tool-result">내 선택: ${item.picked}</p>
+          <p class="tool-result">정답: ${item.answer}</p>
+          <p class="tool-result">해설: ${item.explain}</p>
+        </div>
+      `).join('');
+    };
+
+    const renderQuestion = () => {
+      renderStats();
+      if (!quiz.length) {
+        question.textContent = '연습 시작을 누르면 상황 문제가 나옵니다.';
+        optionA.textContent = '보기 A';
+        optionB.textContent = '보기 B';
+        feedback.textContent = '더 자연스럽고 부담이 덜한 표현을 고르며 업무용 높임말 감각을 익혀보세요.';
+        setButtonsDisabled(true);
+        return;
+      }
+
+      if (index >= quiz.length) {
+        question.textContent = '연습이 끝났습니다.';
+        optionA.textContent = '완료';
+        optionB.textContent = '완료';
+        feedback.textContent = `총 ${quiz.length}문제 중 ${correct}문제 정답입니다. 틀린 표현은 아래에서 다시 볼 수 있습니다.`;
+        setButtonsDisabled(true);
+        renderMissed();
+        currentOut.textContent = quiz.length;
+        return;
+      }
+
+      const item = quiz[index];
+      question.textContent = `${index + 1}. [${item.situation}] ${item.prompt}`;
+      optionA.textContent = item.options[0];
+      optionB.textContent = item.options[1];
+      feedback.textContent = '두 표현 중 더 자연스러운 높임말을 골라보세요.';
+      answered = false;
+      setButtonsDisabled(false);
+    };
+
+    const answer = (picked) => {
+      if (answered || index >= quiz.length) return;
+      answered = true;
+      const item = quiz[index];
+      const isCorrect = picked === item.answer;
+      if (isCorrect) {
+        correct += 1;
+        feedback.textContent = `정답! ${item.explain}`;
+      } else {
+        wrong += 1;
+        feedback.textContent = `오답입니다. 더 자연스러운 표현은 “${item.options[item.answer]}”입니다. ${item.explain}`;
+        wrongNotes.push({
+          situation: item.situation,
+          question: item.prompt,
+          picked: item.options[picked],
+          answer: item.options[item.answer],
+          explain: item.explain
+        });
+      }
+      renderStats();
+      setButtonsDisabled(true);
+      renderMissed();
+    };
+
+    const start = () => {
+      const selectedCategory = category.value || 'all';
+      const selectedCount = Number(count.value || 8);
+      const pool = selectedCategory === 'all' ? bank : bank.filter((item) => item.category === selectedCategory);
+      quiz = shuffle(pool).slice(0, Math.min(selectedCount, pool.length));
+      index = 0;
+      correct = 0;
+      wrong = 0;
+      wrongNotes = [];
+      answered = false;
+      renderQuestion();
+      renderMissed();
+    };
+
+    optionA.addEventListener('click', () => answer(0));
+    optionB.addEventListener('click', () => answer(1));
+    startBtn.addEventListener('click', start);
+    nextBtn.addEventListener('click', () => {
+      if (!quiz.length) {
+        start();
+        return;
+      }
+      if (index < quiz.length) index += 1;
+      renderQuestion();
+    });
+    resetBtn.addEventListener('click', () => {
+      quiz = [];
+      index = 0;
+      correct = 0;
+      wrong = 0;
+      wrongNotes = [];
+      answered = false;
+      renderQuestion();
+      renderMissed();
+    });
+
+    renderQuestion();
+    renderMissed();
+  }
+
   if (slug === 'pyeong-calculator') {
     const FACTOR = 3.305785;
     const m2Input = document.getElementById('py-m2');
