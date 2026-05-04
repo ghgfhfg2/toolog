@@ -1534,6 +1534,52 @@ layout: default
           <p class="tool-result" id="knr-help">한글 입력을 로마자 표기 초안으로 빠르게 바꿉니다. 공식 서류 제출 전에는 기존 등록 영문명과 기관 기준을 꼭 다시 확인하세요.</p>
           <textarea id="knr-output" rows="8" readonly placeholder="변환 결과가 여기에 표시됩니다."></textarea>
         </div>
+      {% when 'date-format-normalizer' %}
+        <div class="tool-ui">
+          <div class="tool-row">
+            <label for="dfn-input">날짜가 섞인 텍스트 또는 날짜 목록</label>
+            <textarea id="dfn-input" rows="10" maxlength="20000" placeholder="예: 2026.5.4\n2026년 5월 4일\nMay 4, 2026\n20260504"></textarea>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="dfn-format">출력 형식</label>
+              <select id="dfn-format">
+                <option value="iso">2026-05-04</option>
+                <option value="dot">2026. 5. 4.</option>
+                <option value="slash">2026/05/04</option>
+                <option value="korean">2026년 5월 4일 (월)</option>
+              </select>
+            </div>
+            <div>
+              <label for="dfn-slash-order">슬래시 날짜 해석</label>
+              <select id="dfn-slash-order">
+                <option value="mdy">MM/DD/YYYY 우선</option>
+                <option value="dmy">DD/MM/YYYY 우선</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="dfn-extract" type="checkbox" checked /> 문장 속 날짜도 찾아 변환</label>
+            <label class="tool-check"><input id="dfn-keep-invalid" type="checkbox" checked /> 해석 불가 줄은 원문 유지</label>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="dfn-sample" type="button">예시 넣기</button>
+            <button id="dfn-copy" type="button">결과 복사</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="dfn-lines">0</strong><span>입력 줄 수</span></div>
+            <div><strong id="dfn-converted">0</strong><span>변환 성공</span></div>
+            <div><strong id="dfn-ambiguous">0</strong><span>해석 주의</span></div>
+            <div><strong id="dfn-format-out">-</strong><span>출력 형식</span></div>
+          </div>
+
+          <p class="tool-result" id="dfn-summary">날짜가 섞인 텍스트를 넣으면 통일된 형식으로 정리합니다.</p>
+          <textarea id="dfn-output" rows="12" readonly placeholder="정리 결과가 여기에 표시됩니다."></textarea>
+        </div>
       {% when 'json-merge' %}
         <div class="tool-ui">
           <input id="jm-files" type="file" accept="application/json,.json" multiple />

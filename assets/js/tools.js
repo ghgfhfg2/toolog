@@ -1502,6 +1502,189 @@
     renderMissed();
   }
 
+  if (slug === 'date-format-normalizer') {
+    const input = document.getElementById('dfn-input');
+    const format = document.getElementById('dfn-format');
+    const slashOrder = document.getElementById('dfn-slash-order');
+    const extract = document.getElementById('dfn-extract');
+    const keepInvalid = document.getElementById('dfn-keep-invalid');
+    const sampleBtn = document.getElementById('dfn-sample');
+    const copyBtn = document.getElementById('dfn-copy');
+    const output = document.getElementById('dfn-output');
+    const linesOut = document.getElementById('dfn-lines');
+    const convertedOut = document.getElementById('dfn-converted');
+    const ambiguousOut = document.getElementById('dfn-ambiguous');
+    const formatOut = document.getElementById('dfn-format-out');
+    const summary = document.getElementById('dfn-summary');
+
+    if (!input || !format || !slashOrder || !extract || !keepInvalid || !output || !linesOut || !convertedOut || !ambiguousOut || !formatOut || !summary) return;
+
+    const monthMap = {
+      january: 1, jan: 1, february: 2, feb: 2, march: 3, mar: 3, april: 4, apr: 4,
+      may: 5, june: 6, jun: 6, july: 7, jul: 7, august: 8, aug: 8,
+      september: 9, sept: 9, sep: 9, october: 10, oct: 10, november: 11, nov: 11, december: 12, dec: 12
+    };
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const pad = (n) => String(n).padStart(2, '0');
+    const weekday = ['일', '월', '화', '수', '목', '금', '토'];
+
+    const makeDate = (y, m, d) => {
+      const year = Number(y), month = Number(m), day = Number(d);
+      if (!year || !month || !day) return null;
+      const dt = new Date(year, month - 1, day);
+      if (dt.getFullYear() !== year || dt.getMonth() !== month - 1 || dt.getDate() !== day) return null;
+      return dt;
+    };
+
+    const formatDate = (date) => {
+      const y = date.getFullYear();
+      const m = date.getMonth() + 1;
+      const d = date.getDate();
+      const mode = format.value || 'iso';
+      if (mode === 'dot') return `${y}. ${m}. ${d}.`;
+      if (mode === 'slash') return `${y}/${pad(m)}/${pad(d)}`;
+      if (mode === 'korean') return `${y}년 ${m}월 ${d}일 (${weekday[date.getDay()]})`;
+      return `${y}-${pad(m)}-${pad(d)}`;
+    };
+
+    const parseCandidate = (text) => {
+      const raw = (text || '').trim();
+      if (!raw) return { date: null, ambiguous: false };
+
+      let match = raw.match(/^(\d{4})[.\/-](\d{1,2})[.\/-](\d{1,2})\.?$/);
+      if (match) return { date: makeDate(match[1], match[2], match[3]), ambiguous: false };
+
+      match = raw.match(/^(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일$/);
+      if (match) return { date: makeDate(match[1], match[2], match[3]), ambiguous: false };
+
+      match = raw.match(/^(\d{4})(\d{2})(\d{2})$/);
+      if (match) return { date: makeDate(match[1], match[2], match[3]), ambiguous: false };
+
+      match = raw.match(/^([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})$/);
+      if (match) return { date: makeDate(match[3], monthMap[match[1].toLowerCase()], match[2]), ambiguous: false };
+
+      match = raw.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/);
+      if (match) return { date: makeDate(match[3], monthMap[match[2].toLowerCase()], match[1]), ambiguous: false };
+
+      match = raw.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/);
+      if (match) {
+        const a = Number(match[1]);
+        const b = Number(match[2]);
+        const order = slashOrder.value || 'mdy';
+        const month = order === 'mdy' ? a : b;
+        const day = order === 'mdy' ? b : a;
+        const ambiguous = a <= 12 && b <= 12;
+        return { date: makeDate(match[3], month, day), ambiguous };
+      }
+
+      return { date: null, ambiguous: false };
+    };
+
+    const replaceInlineDates = (line) => {
+      const patterns = [
+        /(\d{4}[.\/-]\d{1,2}[.\/-]\d{1,2}\.?)/g,
+        /(\d{4}년\s*\d{1,2}월\s*\d{1,2}일)/g,
+        /(\d{8})(?!\d)/g,
+        /([A-Za-z]+\s+\d{1,2},\s*\d{4})/g,
+        /(\d{1,2}\s+[A-Za-z]+\s+\d{4})/g,
+        /(\d{1,2}[\/.-]\d{1,2}[\/.-]\d{4})/g
+      ];
+
+      let converted = 0;
+      let ambiguous = 0;
+      let out = line;
+
+      patterns.forEach((pattern) => {
+        out = out.replace(pattern, (token) => {
+          const parsed = parseCandidate(token);
+          if (!parsed.date) return token;
+          converted += 1;
+          if (parsed.ambiguous) ambiguous += 1;
+          return formatDate(parsed.date);
+        });
+      });
+
+      return { text: out, converted, ambiguous };
+    };
+
+    const render = () => {
+      const rows = input.value.split('\n');
+      let converted = 0;
+      let ambiguous = 0;
+
+      const result = rows.map((line) => {
+        const trimmed = line.trim();
+        if (!trimmed) return '';
+
+        if (extract.checked) {
+          const inline = replaceInlineDates(line);
+          converted += inline.converted;
+          ambiguous += inline.ambiguous;
+          if (inline.converted > 0) return inline.text;
+        }
+
+        const parsed = parseCandidate(trimmed);
+        if (parsed.date) {
+          converted += 1;
+          if (parsed.ambiguous) ambiguous += 1;
+          return formatDate(parsed.date);
+        }
+
+        return keepInvalid.checked ? line : '';
+      });
+
+      output.value = result.filter((line, index) => line !== '' || rows[index].trim() !== '').join('\n');
+      linesOut.textContent = rows.filter((line) => line.trim()).length;
+      convertedOut.textContent = converted;
+      ambiguousOut.textContent = ambiguous;
+      formatOut.textContent = format.options[format.selectedIndex]?.text || '-';
+      summary.textContent = converted
+        ? `총 ${converted}개의 날짜 표현을 정리했고, 그중 ${ambiguous}개는 월/일 해석에 주의가 필요한 형식이었어요.`
+        : '인식 가능한 날짜를 찾지 못했어요. yyyy-mm-dd, yyyy년 m월 d일, May 4, 2026 같은 형식을 써보세요.';
+    };
+
+    sampleBtn?.addEventListener('click', () => {
+      input.value = [
+        '공지 초안: 2026.5.4 업데이트',
+        '제출일 2026년 5월 6일',
+        '영문 표기: May 8, 2026',
+        '압축 입력: 20260509',
+        '해외 문서: 05/10/2026'
+      ].join('\n');
+      render();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (!output.value.trim()) return;
+      await copyText(output.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    [input, format, slashOrder, extract, keepInvalid].forEach((el) => {
+      el?.addEventListener('input', render);
+      el?.addEventListener('change', render);
+    });
+
+    render();
+  }
+
   if (slug === 'pyeong-calculator') {
     const FACTOR = 3.305785;
     const m2Input = document.getElementById('py-m2');

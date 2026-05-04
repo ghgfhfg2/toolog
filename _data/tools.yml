@@ -1,3 +1,27 @@
+- id: date-format-normalizer
+  title: 날짜 표현 통일 변환기
+  title_en: Date Format Normalizer
+  title_ja: 日付表記統一コンバーター
+  category: text
+  category_label: 텍스트/날짜 정리
+  category_label_en: Text/Date Cleanup
+  category_label_ja: テキスト/日付整理
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 문서·공지·메모에 섞여 있는 날짜 표기를 한 번에 읽어 통일된 형식으로 정리해요. yyyy-mm-dd, yyyy년 m월 d일, 영문 월 표기 등도 빠르게 맞춰볼 수 있어요.
+  description_en: Normalize mixed date formats from notes, documents, and announcements into one consistent style.
+  description_ja: メモ・文書・お知らせに混ざった日付表記を読み取り、1つの統一形式にまとめます。
+  url: /tools/date-format-normalizer/
+  url_en: /en/tools/date-format-normalizer/
+  url_ja: /ja/tools/date-format-normalizer/
+  thumbnail: /assets/thumbs/date-format-normalizer.svg
+  thumbnail_en: /assets/thumbs/en/date-format-normalizer.svg
+  thumbnail_ja: /assets/thumbs/ja/date-format-normalizer.svg
+  published_at: 2026-05-04
+  tool_type: converter
+  topic_cluster: text
+
 - id: workplace-honorific-practice
   title: 상황별 높임말 연습기
   title_en: Workplace Honorific Practice
