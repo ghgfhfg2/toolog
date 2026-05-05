@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Secondhand Scam Signal Checker | Spot risky trade patterns before paying
-description: Check secondhand trade conditions for warning signs like full prepayment requests, unrealistic pricing, and refusal of safe payment.
+title: Secondhand Scam Signal Checker | Quickly review warning signs before a used-item deal
+description: Enter the listing conditions and seller behavior to quickly review warning signs like full prepayment requests, unrealistically low pricing, and refusal of protected payment.
 lang: en
 permalink: /en/tools/secondhand-scam-signal-checker/
 canonical_url: /en/tools/secondhand-scam-signal-checker/
@@ -30,20 +30,44 @@ faq:
 ---
 
 ## Why use this tool?
-Secondhand trades often go wrong when people judge only one thing at a time: price, profile age, or tone.
-This tool helps you review multiple warning signs together before you pay.
+Secondhand marketplaces are convenient, but fraud risk is easy to miss when you judge only one thing at a time.
+A listing may look cheap, the seller may sound friendly, or the profile may seem normal on the surface.
+The real risk often appears when several signals overlap together.
+
+Common warning combinations include:
+- a price far below market value
+- a demand for bank transfer or full prepayment only
+- repeated refusal of safe payment or in-person verification
+- pressure like “pay now or it’s gone”
+- a new or weak account pushing you to move outside the platform
+
+This tool helps you structure those signals in one place so you can quickly decide whether to proceed, verify more, or walk away.
 
 ## How to use it
-1. Choose the item type and how cheap it looks versus market price.
-2. Select the requested payment method and pressure level.
-3. Check profile trust and whether item verification is possible.
-4. Mark warning signs like outside-messenger requests or refusal of safe payment.
-5. Optionally paste the other person's message for extra signal checks.
+1. Choose the item type and how the asking price feels versus market price.
+2. Select the payment method the other person wants and how much pressure they apply.
+3. Check account trust level and whether real-item verification is possible.
+4. Mark extra warning signs like outside-messenger requests, refusal of protected payment, or weak photos.
+5. If needed, paste the seller's message to detect risky phrasing too.
+
+Then the tool summarizes:
+- risk score
+- risk level
+- detected warning signs
+- suggested next action
 
 ## Good use cases
-- A listing is much cheaper than expected
-- The seller pushes you to pay right now
-- Safe payment or in-person verification keeps getting avoided
+### 1) A listing looks suspiciously cheap
+A good deal can also be bait.
+This tool helps you compare the low price with payment method and account history instead of judging price alone.
+
+### 2) The seller keeps rushing the payment
+Scams often work by cutting down your decision time.
+It becomes much easier to judge the situation when urgency, off-platform contact, and verification avoidance are reviewed together.
+
+### 3) You are buying expensive electronics, tickets, or collectible items
+These categories tend to attract more scams and disputes.
+The tool reflects item-level risk too, so you can review the trade more conservatively.
 
 ## Related tools
 - [Secondhand Price Message Generator]({{ '/en/tools/secondhand-price-message-generator/' | relative_url }})
@@ -51,4 +75,4 @@ This tool helps you review multiple warning signs together before you pay.
 - [Gift Idea Picker]({{ '/en/tools/gift-idea-picker/' | relative_url }})
 
 ## Summary
-Secondhand Scam Signal Checker is a **checker-type tool** that organizes pricing, payment, profile trust, pressure, and verification risk before a used-item deal.
+Secondhand Scam Signal Checker is a **checker-type tool** that reviews pricing, payment method, account trust, pressure language, and verification risk together before a used-item deal.

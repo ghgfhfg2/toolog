@@ -4,14 +4,14 @@
   title_ja: 中古取引詐欺シグナルチェッカー
   category: lifestyle
   category_label: 생활/중고거래 점검
-  category_label_en: Lifestyle/Secondhand Safety
-  category_label_ja: 生活/中古取引点検
+  category_label_en: Lifestyle/Secondhand Scam Check
+  category_label_ja: 生活/中古取引安全点検
   badge: New
   badge_en: New
   badge_ja: 新着
   description: 중고거래 조건과 상대 반응을 넣으면 선입금 요구, 시세보다 과하게 싼 가격, 안전결제 거부 같은 사기 신호를 빠르게 점검해요.
-  description_en: Check secondhand trade conditions for warning signs like full prepayment requests, unrealistic pricing, and refusal of safe payment.
-  description_ja: 全額先払い要求、相場より極端に安い価格、安全決済拒否など、中古取引でよくある危険シグナルをまとめて確認します。
+  description_en: Enter listing conditions and seller behavior to quickly review warning signs like full prepayment requests, unrealistic pricing, and refusal of protected payment.
+  description_ja: 出品条件や相手の反応を入力すると、全額先払い要求、相場より極端に安い価格、安全決済拒否などの危険サインをまとめて確認できます。
   url: /tools/secondhand-scam-signal-checker/
   url_en: /en/tools/secondhand-scam-signal-checker/
   url_ja: /ja/tools/secondhand-scam-signal-checker/
