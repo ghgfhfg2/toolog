@@ -12071,4 +12071,169 @@
     build();
   }
 
+  if (slug === 'secondhand-scam-signal-checker') {
+    const item = document.getElementById('sssc-item');
+    const priceGap = document.getElementById('sssc-price-gap');
+    const payment = document.getElementById('sssc-payment');
+    const pressure = document.getElementById('sssc-pressure');
+    const profile = document.getElementById('sssc-profile');
+    const meet = document.getElementById('sssc-meet');
+    const outside = document.getElementById('sssc-outside');
+    const refuseSafe = document.getElementById('sssc-refuse-safe');
+    const stockPhoto = document.getElementById('sssc-stock-photo');
+    const excuse = document.getElementById('sssc-excuse');
+    const message = document.getElementById('sssc-message');
+    const sampleBtn = document.getElementById('sssc-sample');
+    const copyBtn = document.getElementById('sssc-copy');
+    const scoreEl = document.getElementById('sssc-score');
+    const levelEl = document.getElementById('sssc-level');
+    const signalsEl = document.getElementById('sssc-signals');
+    const actionEl = document.getElementById('sssc-action');
+    const summaryEl = document.getElementById('sssc-summary');
+    const listEl = document.getElementById('sssc-list');
+    const outputEl = document.getElementById('sssc-output');
+
+    if (!item || !priceGap || !payment || !pressure || !profile || !meet || !outside || !refuseSafe || !stockPhoto || !excuse || !message || !scoreEl || !levelEl || !signalsEl || !actionEl || !summaryEl || !listEl || !outputEl) return;
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const build = () => {
+      let score = 0;
+      const signals = [];
+      const actions = [];
+      const text = (message.value || '').toLowerCase();
+
+      const add = (points, label, action) => {
+        score += points;
+        signals.push(label);
+        if (action) actions.push(action);
+      };
+
+      if (item.value === 'ticket') add(12, '티켓·예약권·디지털 코드는 회수/취소 위험이 높아 확인이 더 어렵습니다.', '플랫폼 보호가 없는 거래라면 보수적으로 보세요.');
+      if (item.value === 'digital') add(8, '전자기기·고가 IT 기기는 사기 타깃이 되기 쉬운 품목입니다.', '직거래 테스트 또는 안전결제 우선으로 조건을 좁히세요.');
+      if (item.value === 'fashion') add(6, '명품·한정판은 가품/사진 도용 위험이 함께 붙습니다.', '구매 영수증·시리얼·실사 각도 추가 확인이 좋습니다.');
+
+      if (priceGap.value === 'low') add(12, '시세보다 꽤 낮은 가격은 급매처럼 보여도 미끼일 수 있습니다.', '같은 모델 최근 거래가를 다시 비교해 보세요.');
+      if (priceGap.value === 'very-low') add(24, '시세보다 지나치게 싼 가격은 대표적인 경고 신호입니다.', '입금 전 거래를 멈추고 진위부터 다시 확인하세요.');
+
+      if (payment.value === 'mixed') add(16, '선입금 일부 요구는 책임 소재가 흐려질 수 있습니다.', '안전결제 또는 대면 확인 후 결제로 전환을 제안하세요.');
+      if (payment.value === 'prepay') add(28, '전액 선입금만 요구하면 사기 위험이 크게 올라갑니다.', '거절하고 보호 가능한 결제 방식만 허용하세요.');
+
+      if (pressure.value === 'some') add(10, '빠른 결정을 재촉하는 말투는 판단을 흐리게 만들 수 있습니다.', '급해 보여도 추가 확인 전에는 결제하지 마세요.');
+      if (pressure.value === 'high') add(18, '강한 압박 판매는 사기/분쟁 상황에서 매우 흔한 패턴입니다.', '시간을 끌어도 거래가 유지되는지부터 보세요.');
+
+      if (profile.value === 'unclear') add(8, '계정 이력과 활동 정보가 부족합니다.', '후기·가입 시점·이전 판매 흔적을 더 확인하세요.');
+      if (profile.value === 'new') add(18, '새 계정 또는 정보가 거의 없는 계정은 경계가 필요합니다.', '대면 거래나 보호 결제 외 방식은 피하는 편이 안전합니다.');
+
+      if (meet.value === 'limited') add(8, '실물 확인이 제한되면 하자·사진 도용 여부를 놓치기 쉽습니다.', '테스트 영상, 오늘 날짜 메모와 함께 찍은 실사 등을 추가 요청하세요.');
+      if (meet.value === 'no') add(20, '실물 확인을 계속 회피하면 신뢰도가 크게 떨어집니다.', '확인 거부가 계속되면 거래를 접는 쪽이 낫습니다.');
+
+      if (outside.checked) add(14, '플랫폼 밖 메신저로 유도하면 신고·분쟁 기록이 약해집니다.', '가능하면 플랫폼 채팅 안에서만 대화 기록을 남기세요.');
+      if (refuseSafe.checked) add(16, '안전결제/직거래 제안을 거부하면 보호 장치를 피하려는 신호일 수 있습니다.', '보호 장치를 거부하면 거래 중단을 우선 검토하세요.');
+      if (stockPhoto.checked) add(10, '사진이 적거나 퍼온 느낌이면 실물 보유 여부부터 의심해야 합니다.', '배경 포함 실사, 특정 각도, 시리얼 일부 가린 사진을 요청해 보세요.');
+      if (excuse.checked) add(12, '군인/해외/대리발송 같은 반복 사유는 확인 회피 패턴으로 자주 쓰입니다.', '확인 불가 사유가 길어질수록 거래 강행보다 중단이 안전합니다.');
+
+      const keywordRules = [
+        { re: /안전결제.*안|안전결제 불가|안전결제는 안/, points: 18, label: '메시지에서 안전결제를 직접 거부하는 표현이 보입니다.', action: '안전결제 거부 사유보다 보호 가능 여부를 우선 보세요.' },
+        { re: /오늘 안|지금 입금|바로 입금|지금 보내/, points: 10, label: '즉시 입금을 압박하는 표현이 보입니다.', action: '압박 문구가 있어도 결제 전 확인 항목을 줄이지 마세요.' },
+        { re: /군부대|해외|출장 중|대리 발송/, points: 10, label: '직접 확인을 피하는 단서가 메시지에 있습니다.', action: '실물 확인 불가 거래는 보수적으로 판단하세요.' },
+        { re: /계좌만|현금만|문자 주세요|오픈채팅/, points: 10, label: '기록이 약한 결제·연락 수단을 선호하는 표현이 보입니다.', action: '플랫폼 내부 기록과 보호 결제를 유지하세요.' }
+      ];
+
+      keywordRules.forEach((rule) => {
+        if (rule.re.test(text)) add(rule.points, rule.label, rule.action);
+      });
+
+      const uniqueActions = [...new Set(actions)];
+      let level = '낮음';
+      let action = '기본 확인 유지';
+      if (score >= 70) {
+        level = '매우 높음';
+        action = '거래 중단 권장';
+      } else if (score >= 45) {
+        level = '높음';
+        action = '결제 보류 후 추가 확인';
+      } else if (score >= 25) {
+        level = '주의';
+        action = '보호 장치 있는 방식만 진행';
+      }
+
+      scoreEl.textContent = String(score);
+      levelEl.textContent = level;
+      signalsEl.textContent = String(signals.length);
+      actionEl.textContent = action;
+      summaryEl.textContent = signals.length
+        ? `위험 신호 ${signals.length}개를 기준으로 ${level} 단계로 봤어요. 특히 ${signals[0].replace('.', '')}`
+        : '뚜렷한 위험 신호는 적지만, 시세·실사·결제 보호 여부는 계속 확인하는 편이 좋아요.';
+
+      listEl.innerHTML = `
+        <div class="tool-card">
+          <strong>감지된 위험 신호</strong>
+          <ul>${(signals.length ? signals : ['입력된 조건에서 즉시 큰 경고 신호는 많지 않습니다.']).map((signal) => `<li>${signal}</li>`).join('')}</ul>
+        </div>
+        <div class="tool-card">
+          <strong>지금 권장되는 대응</strong>
+          <ul>${(uniqueActions.length ? uniqueActions.slice(0, 5) : ['시세 비교, 실사 추가 확인, 플랫폼 내 기록 유지, 안전결제 가능 여부를 기본으로 확인하세요.']).map((tip) => `<li>${tip}</li>`).join('')}</ul>
+        </div>
+      `;
+
+      outputEl.value = [
+        '[중고거래 사기 신호 점검 결과]',
+        `- 위험 점수: ${score}`,
+        `- 위험 등급: ${level}`,
+        `- 권장 대응: ${action}`,
+        '',
+        '[감지 신호]',
+        ...(signals.length ? signals.map((signal, index) => `${index + 1}. ${signal}`) : ['1. 큰 경고 신호는 적지만, 기본 보호 절차는 유지하세요.']),
+        '',
+        '[권장 대응]',
+        ...(uniqueActions.length ? uniqueActions.slice(0, 5).map((tip, index) => `${index + 1}. ${tip}`) : ['1. 시세 비교, 실사 확인, 안전결제 유지'])
+      ].join('\n');
+    };
+
+    sampleBtn.addEventListener('click', () => {
+      item.value = 'digital';
+      priceGap.value = 'very-low';
+      payment.value = 'prepay';
+      pressure.value = 'high';
+      profile.value = 'new';
+      meet.value = 'no';
+      outside.checked = true;
+      refuseSafe.checked = true;
+      stockPhoto.checked = true;
+      excuse.checked = true;
+      message.value = '오늘 안 보내면 다른 분께 넘겨요. 안전결제는 안 되고 계좌로만 받아요. 군부대라 통화 어렵고 오픈채팅으로 주세요.';
+      build();
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) build();
+      if (!outputEl.value.trim()) return;
+      await copyText(outputEl.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    [item, priceGap, payment, pressure, profile, meet, outside, refuseSafe, stockPhoto, excuse, message].forEach((el) => {
+      el.addEventListener('input', build);
+      el.addEventListener('change', build);
+    });
+
+    build();
+  }
+
 })();

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">중고거래 사기 신호 점검기</title>
+  <desc id="desc">중고거래 전 사기 위험 신호를 점검하는 웹툴 썸네일</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#111827"/>
+      <stop offset="100%" stop-color="#b91c1c"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <rect x="84" y="86" width="420" height="458" rx="28" fill="#fff7ed" opacity="0.96"/>
+  <rect x="122" y="132" width="220" height="30" rx="15" fill="#fecaca"/>
+  <rect x="122" y="188" width="308" height="24" rx="12" fill="#7f1d1d" opacity="0.12"/>
+  <rect x="122" y="228" width="278" height="24" rx="12" fill="#7f1d1d" opacity="0.12"/>
+  <rect x="122" y="292" width="290" height="70" rx="24" fill="#fee2e2"/>
+  <rect x="122" y="382" width="290" height="70" rx="24" fill="#fee2e2"/>
+  <circle cx="458" cy="327" r="34" fill="#dc2626"/>
+  <path d="M458 302v36" stroke="#fff" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="458" cy="352" r="6" fill="#fff"/>
+  <text x="570" y="210" fill="#fecaca" font-size="32" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">TOOLOG WEB TOOL</text>
+  <text x="570" y="304" fill="#ffffff" font-size="68" font-weight="700" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">중고거래 사기 신호 점검기</text>
+  <text x="570" y="380" fill="#fee2e2" font-size="34" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">선입금 · 안전결제 거부 · 압박 문구 체크</text>
+  <text x="570" y="448" fill="#e5e7eb" font-size="28" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">거래 전 위험도를 빠르게 구조화</text>
+</svg>

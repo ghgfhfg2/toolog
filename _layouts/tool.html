@@ -3301,6 +3301,97 @@ layout: default
           <textarea id="pdm-output" rows="16" readonly placeholder="정렬 결과가 여기에 표시됩니다."></textarea>
         </div>
 
+      {% when 'secondhand-scam-signal-checker' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="sssc-item">거래 품목</label>
+              <select id="sssc-item">
+                <option value="digital">전자기기 / 고가 IT 기기</option>
+                <option value="fashion">명품 / 패션 / 한정판</option>
+                <option value="ticket">티켓 / 예약권 / 디지털 코드</option>
+                <option value="general">일반 생활용품</option>
+              </select>
+            </div>
+            <div>
+              <label for="sssc-price-gap">시세 대비 가격</label>
+              <select id="sssc-price-gap">
+                <option value="normal">비슷하거나 약간 저렴함</option>
+                <option value="low">꽤 저렴함</option>
+                <option value="very-low">지나치게 저렴함</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="sssc-payment">결제 요구 방식</label>
+              <select id="sssc-payment">
+                <option value="safe">안전결제 / 대면 후 결제 가능</option>
+                <option value="mixed">선입금 일부 또는 애매한 방식</option>
+                <option value="prepay">전액 선입금만 요구</option>
+              </select>
+            </div>
+            <div>
+              <label for="sssc-pressure">거래 압박 정도</label>
+              <select id="sssc-pressure">
+                <option value="none">보통</option>
+                <option value="some">빨리 결정하라고 재촉함</option>
+                <option value="high">지금 입금 안 하면 끝이라고 강하게 압박</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="sssc-profile">상대 계정 신뢰도</label>
+              <select id="sssc-profile">
+                <option value="good">거래 이력/후기/활동이 충분함</option>
+                <option value="unclear">이력은 적지만 완전 새 계정은 아님</option>
+                <option value="new">새 계정이거나 정보가 거의 없음</option>
+              </select>
+            </div>
+            <div>
+              <label for="sssc-meet">실물 확인 가능 여부</label>
+              <select id="sssc-meet">
+                <option value="yes">직거래 / 테스트 가능</option>
+                <option value="limited">부분 확인만 가능</option>
+                <option value="no">확인 불가 / 핑계로 계속 회피</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="sssc-outside" type="checkbox" /> 플랫폼 채팅 대신 오픈채팅·문자·다른 메신저로 유도</label>
+            <label class="tool-check"><input id="sssc-refuse-safe" type="checkbox" /> 안전결제/직거래 제안을 거부함</label>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="sssc-stock-photo" type="checkbox" /> 사진이 너무 적거나 퍼온 듯함</label>
+            <label class="tool-check"><input id="sssc-excuse" type="checkbox" /> 군인/해외/대리발송 등 반복적인 사유로 확인을 피함</label>
+          </div>
+
+          <div class="tool-row">
+            <label for="sssc-message">상대 메시지 메모 (선택)</label>
+            <textarea id="sssc-message" rows="6" maxlength="2000" placeholder="예: 오늘 안 보내면 다른 분께 넘겨요. 안전결제는 안 되고 계좌로만 받아요. 군부대라 통화가 어렵습니다."></textarea>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="sssc-sample" type="button">예시 넣기</button>
+            <button id="sssc-copy" type="button">결과 복사</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="sssc-score">0</strong><span>위험 점수</span></div>
+            <div><strong id="sssc-level">-</strong><span>위험 등급</span></div>
+            <div><strong id="sssc-signals">0</strong><span>감지 신호 수</span></div>
+            <div><strong id="sssc-action">-</strong><span>권장 대응</span></div>
+          </div>
+
+          <p class="tool-result" id="sssc-summary">거래 조건을 넣으면 사기 위험 신호와 지금 취해야 할 대응을 빠르게 정리합니다.</p>
+          <div id="sssc-list" class="bw-list"></div>
+          <textarea id="sssc-output" rows="16" readonly placeholder="점검 결과 요약이 여기에 표시됩니다."></textarea>
+        </div>
+
       {% else %}
       <div class="tool-placeholder"><p>이 도구는 현재 제작 중입니다.</p></div>
     {% endcase %}
