@@ -10,7 +10,7 @@ alternate_urls:
   en: /en/tools/secondhand-scam-signal-checker/
   ja: /ja/tools/secondhand-scam-signal-checker/
 category: lifestyle
-category_label: 生活/中古取引点検
+category_label: 生活/中古取引安全点検
 thumbnail: /assets/thumbs/ja/secondhand-scam-signal-checker.svg
 image:
   path: /assets/thumbs/ja/secondhand-scam-signal-checker.svg

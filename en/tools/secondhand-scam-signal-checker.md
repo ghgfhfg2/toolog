@@ -10,7 +10,7 @@ alternate_urls:
   en: /en/tools/secondhand-scam-signal-checker/
   ja: /ja/tools/secondhand-scam-signal-checker/
 category: lifestyle
-category_label: Lifestyle/Secondhand Safety
+category_label: Lifestyle/Secondhand Scam Check
 thumbnail: /assets/thumbs/en/secondhand-scam-signal-checker.svg
 image:
   path: /assets/thumbs/en/secondhand-scam-signal-checker.svg
