@@ -30,23 +30,47 @@ faq:
 ---
 
 ## Why use Link List Cleaner?
-Links inside chat logs, notes, and drafts get messy fast.
-This tool extracts URLs, removes duplicate entries, strips common tracking parameters, and gives you a cleaner list for sharing or documentation.
+When you work with meeting notes, chat logs, announcements, or research drafts, links often get buried inside paragraphs. That makes it surprisingly hard to pull out only the URLs you actually need.
+
+Common situations include:
+
+- reference links scattered across multiple paragraphs
+- the same URL repeated several times in a messenger thread
+- share links cluttered with tracking parameters such as `utm_source` or `fbclid`
+- needing to group links by domain before pasting them into a document or note
+
+This tool extracts only the URLs from mixed text, reduces duplicates, removes common tracking parameters, and turns them into a cleaner list that is easier to share.
 
 ## How to use it
-1. Paste text that contains links.
-2. Choose whether to deduplicate, remove tracking parameters, and sort by domain.
-3. Copy the cleaned link list.
+1. Paste the text that contains links.
+2. Turn on the options you want: deduplicate, remove tracking parameters, and sort by domain.
+3. Review the cleaned list and domain summary.
+4. Copy the result into Notion, docs, chat, or a reference section.
 
-## Good use cases
-- Pulling reference links out of meeting notes
-- Cleaning repeated URLs from chat threads
-- Sharing neater URLs without common tracking tags
+## Especially useful for these cases
+### 1) Organizing meeting notes or research notes
+You can build a reference section quickly without rereading the entire document.
+
+### 2) Cleaning shared links from chat threads
+Even if the same link appears multiple times, you can deduplicate it into one tidy list.
+
+### 3) Removing tracking parameters before external sharing
+You can strip common tags like `utm_*`, `fbclid`, and `gclid` to make URLs look cleaner.
 
 ## Related tools
-- [Privacy Exposure Checker]({{ '/en/tools/privacy-exposure-checker/' | relative_url }})
-- [Text Line Break Cleaner]({{ '/en/tools/text-line-break-cleaner/' | relative_url }})
-- [Filename Sanitizer]({{ '/en/tools/filename-sanitizer/' | relative_url }})
+- If you want to check whether sensitive information is mixed in first: [Privacy Exposure Checker]({{ '/en/tools/privacy-exposure-checker/' | relative_url }})
+- If you also want to clean pasted line breaks in the source text: [Text Line Break Cleaner]({{ '/en/tools/text-line-break-cleaner/' | relative_url }})
+- If you want to turn extracted titles into file-name style text: [Filename Sanitizer]({{ '/en/tools/filename-sanitizer/' | relative_url }})
+
+## FAQ
+### Can it handle multiple links on one line?
+Yes. It scans links in order even when several URLs appear in the same line.
+
+### Will removing tracking parameters break the original link?
+Usually not for normal sharing links. Still, some services may depend on certain parameters, so it is safest to test important links once after cleaning.
+
+### Why would I group links by domain?
+It makes sources easier to scan and helps you see how many links came from the same site. That is especially useful for research and reference organization.
 
 ## Summary
-Link List Cleaner is a **utility-type tool** that extracts URLs and turns messy mixed text into a cleaner, share-ready link list.
+Link List Cleaner is a **utility-type tool** that extracts URLs from mixed text and handles deduplication, tracking-parameter cleanup, and domain-based organization in one place.
