@@ -1,3 +1,27 @@
+- id: link-list-cleaner
+  title: 링크 추출 정리기
+  title_en: Link List Cleaner
+  title_ja: リンク抽出整理ツール
+  category: text
+  category_label: 텍스트/링크 정리
+  category_label_en: Text/Link Cleanup
+  category_label_ja: テキスト/リンク整理
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 글·채팅·문서에 섞인 URL을 한 번에 추출하고, 중복 제거·추적 파라미터 삭제·도메인별 정리를 빠르게 해요.
+  description_en: Extract URLs from text, remove duplicates, strip tracking parameters, and organize links by domain.
+  description_ja: テキスト内のURLをまとめて抽出し、重複削除・追跡パラメータ削除・ドメイン別整理まで素早く行います。
+  url: /tools/link-list-cleaner/
+  url_en: /en/tools/link-list-cleaner/
+  url_ja: /ja/tools/link-list-cleaner/
+  thumbnail: /assets/thumbs/link-list-cleaner.svg
+  thumbnail_en: /assets/thumbs/en/link-list-cleaner.svg
+  thumbnail_ja: /assets/thumbs/ja/link-list-cleaner.svg
+  published_at: 2026-05-06
+  tool_type: utility
+  topic_cluster: text
+
 - id: secondhand-scam-signal-checker
   title: 중고거래 사기 신호 점검기
   title_en: Secondhand Scam Signal Checker

@@ -12236,4 +12236,151 @@
     build();
   }
 
+
+  if (slug === 'link-list-cleaner') {
+    const input = document.getElementById('llc-input');
+    const dedupe = document.getElementById('llc-dedupe');
+    const strip = document.getElementById('llc-strip');
+    const sortDomain = document.getElementById('llc-sort-domain');
+    const lowerHost = document.getElementById('llc-lower-host');
+    const sampleBtn = document.getElementById('llc-sample');
+    const copyBtn = document.getElementById('llc-copy');
+    const output = document.getElementById('llc-output');
+    const foundOut = document.getElementById('llc-found');
+    const uniqueOut = document.getElementById('llc-unique');
+    const domainsOut = document.getElementById('llc-domains');
+    const trackingOut = document.getElementById('llc-tracking');
+    const summary = document.getElementById('llc-summary');
+    const domainList = document.getElementById('llc-domain-list');
+
+    if (!input || !output || !foundOut || !uniqueOut || !domainsOut || !trackingOut || !summary || !domainList) return;
+
+    const TRACKING_KEYS = new Set([
+      'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+      'utm_id', 'utm_name', 'fbclid', 'gclid', 'igshid', 'mc_cid', 'mc_eid',
+      'si', 'feature', 'ref_src'
+    ]);
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const cleanToken = (token) => token.replace(/[)>\],.!?]+$/g, '');
+
+    const normalizeUrl = (raw) => {
+      const cleaned = cleanToken(raw.trim());
+      try {
+        const url = new URL(cleaned);
+        let removed = 0;
+        if (lowerHost.checked) url.hostname = url.hostname.toLowerCase();
+        if (strip.checked) {
+          const keys = Array.from(url.searchParams.keys());
+          keys.forEach((key) => {
+            if (TRACKING_KEYS.has(key.toLowerCase())) {
+              removed += url.searchParams.getAll(key).length || 1;
+              url.searchParams.delete(key);
+            }
+          });
+        }
+        if (!url.search) url.search = '';
+        return { href: url.toString(), host: url.hostname || '-', removed };
+      } catch (_) {
+        return null;
+      }
+    };
+
+    const renderDomainCards = (items) => {
+      const counts = new Map();
+      items.forEach((item) => counts.set(item.host, (counts.get(item.host) || 0) + 1));
+      const entries = Array.from(counts.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+      if (!entries.length) {
+        domainList.innerHTML = '<p class="tool-result">도메인 요약이 여기에 표시됩니다.</p>';
+        return;
+      }
+      domainList.innerHTML = entries.map(([host, count]) => `
+        <div class="tool-card">
+          <strong>${host}</strong>
+          <p class="tool-result">${count}개 링크</p>
+        </div>
+      `).join('');
+    };
+
+    const render = () => {
+      const matches = (input.value.match(/https?:\/\/[^\s"'<>]+/g) || []);
+      foundOut.textContent = matches.length.toLocaleString(numberLocale);
+
+      const normalized = [];
+      let removedTotal = 0;
+      matches.forEach((match) => {
+        const parsed = normalizeUrl(match);
+        if (!parsed) return;
+        removedTotal += parsed.removed;
+        normalized.push(parsed);
+      });
+
+      let items = normalized;
+      if (dedupe.checked) {
+        const seen = new Set();
+        items = items.filter((item) => {
+          if (seen.has(item.href)) return false;
+          seen.add(item.href);
+          return true;
+        });
+      }
+
+      if (sortDomain.checked) {
+        items = [...items].sort((a, b) => a.host.localeCompare(b.host) || a.href.localeCompare(b.href));
+      }
+
+      const uniqueDomains = new Set(items.map((item) => item.host));
+      uniqueOut.textContent = items.length.toLocaleString(numberLocale);
+      domainsOut.textContent = uniqueDomains.size.toLocaleString(numberLocale);
+      trackingOut.textContent = removedTotal.toLocaleString(numberLocale);
+      output.value = items.map((item) => item.href).join('\n');
+      renderDomainCards(items);
+
+      if (!matches.length) {
+        summary.textContent = '텍스트 안에서 http:// 또는 https:// 링크를 찾지 못했어요.';
+      } else {
+        summary.textContent = `링크 ${matches.length}개를 읽어 ${items.length}개로 정리했고, 추적 파라미터 ${removedTotal}개를 제거했어요.`;
+      }
+    };
+
+    sampleBtn?.addEventListener('click', () => {
+      input.value = [
+        '기사 참고 https://Example.com/news?id=52&utm_source=telegram&utm_medium=chat',
+        '문서 링크 https://docs.example.org/report?fbclid=test123',
+        '같은 링크 다시 공유 https://example.com/news?id=52&utm_campaign=spring',
+        '영상 링크 https://video.example.net/watch?v=abc123&gclid=demo'
+      ].join('\n');
+      render();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (!output.value.trim()) return;
+      await copyText(output.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    [input, dedupe, strip, sortDomain, lowerHost].forEach((el) => {
+      el?.addEventListener('input', render);
+      el?.addEventListener('change', render);
+    });
+
+    render();
+  }
+
 })();

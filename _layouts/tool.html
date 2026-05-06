@@ -1534,6 +1534,42 @@ layout: default
           <p class="tool-result" id="knr-help">한글 입력을 로마자 표기 초안으로 빠르게 바꿉니다. 공식 서류 제출 전에는 기존 등록 영문명과 기관 기준을 꼭 다시 확인하세요.</p>
           <textarea id="knr-output" rows="8" readonly placeholder="변환 결과가 여기에 표시됩니다."></textarea>
         </div>
+      {% when 'link-list-cleaner' %}
+        <div class="tool-ui">
+          <div class="tool-row">
+            <label for="llc-input">링크가 섞인 텍스트</label>
+            <textarea id="llc-input" rows="10" maxlength="30000" placeholder="예: 참고 기사 https://example.com/a?utm_source=chat
+문서 링크 https://docs.example.org/report
+같은 링크 다시 공유 https://example.com/a?utm_medium=dm"></textarea>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="llc-dedupe" type="checkbox" checked /> 중복 제거</label>
+            <label class="tool-check"><input id="llc-strip" type="checkbox" checked /> 추적 파라미터 삭제</label>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="llc-sort-domain" type="checkbox" checked /> 도메인별 정렬</label>
+            <label class="tool-check"><input id="llc-lower-host" type="checkbox" checked /> 도메인 소문자 정리</label>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="llc-sample" type="button">예시 넣기</button>
+            <button id="llc-copy" type="button">결과 복사</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="llc-found">0</strong><span>추출 링크 수</span></div>
+            <div><strong id="llc-unique">0</strong><span>정리 후 링크 수</span></div>
+            <div><strong id="llc-domains">0</strong><span>도메인 수</span></div>
+            <div><strong id="llc-tracking">0</strong><span>삭제된 추적 파라미터</span></div>
+          </div>
+
+          <p class="tool-result" id="llc-summary">텍스트를 넣으면 URL만 추출해 중복, 추적 파라미터, 도메인 순서를 정리합니다.</p>
+          <textarea id="llc-output" rows="12" readonly placeholder="정리된 링크 목록이 여기에 표시됩니다."></textarea>
+          <div id="llc-domain-list" class="bw-list"></div>
+        </div>
+
       {% when 'date-format-normalizer' %}
         <div class="tool-ui">
           <div class="tool-row">
