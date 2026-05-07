@@ -12383,4 +12383,125 @@
     render();
   }
 
+
+  if (slug === 'household-chore-picker') {
+    const peopleEl = document.getElementById('hcp-people');
+    const choresEl = document.getElementById('hcp-chores');
+    const modeEl = document.getElementById('hcp-mode');
+    const intensityEl = document.getElementById('hcp-intensity');
+    const fairnessEl = document.getElementById('hcp-fairness');
+    const checklistEl = document.getElementById('hcp-copy-format');
+    const runBtn = document.getElementById('hcp-run');
+    const sampleBtn = document.getElementById('hcp-sample');
+    const copyBtn = document.getElementById('hcp-copy');
+    const peopleCount = document.getElementById('hcp-people-count');
+    const choreCount = document.getElementById('hcp-chore-count');
+    const heavyCount = document.getElementById('hcp-heavy-count');
+    const modeOut = document.getElementById('hcp-mode-out');
+    const help = document.getElementById('hcp-help');
+    const output = document.getElementById('hcp-output');
+    if (!peopleEl || !choresEl || !modeEl || !output) return;
+
+    const i18n = {
+      ko: {
+        title: '집안일 분담표', idle: '참여자와 집안일을 넣으면 채팅에 바로 붙일 수 있는 분담표를 만듭니다.', need: '참여자 2명 이상과 집안일 1개 이상을 입력하세요.',
+        balanced: '균형', random: '랜덤', rotate: '로테이션', none: '(없음)', note: '메모', fairness: '이번 분담은 개수 균형을 우선으로 만든 초안입니다. 지난번에 힘든 일을 맡은 사람이 있다면 한 번 더 바꿔보세요.', copied: '복사됨', copyDefault: '결과 복사',
+        samplePeople: ['수야', '민지', '현우'], sampleChores: ['설거지', '거실 청소', '분리수거', '욕실 청소', '빨래 개기', '음식물 쓰레기 버리기'],
+        resultLine: (person, chores, checklist) => `${person}\n${chores.map(c => `${checklist ? '- [ ]' : '-'} ${c}`).join('\n')}`,
+        summary: (p,c,h,m) => `${p}명이 ${c}개 집안일을 나눴습니다. ${h}개는 힘든 일로 보고 분산을 시도했습니다. (${m})`
+      },
+      en: {
+        title: 'Household chore assignment', idle: 'Enter people and chores, then pick an assignment list you can paste into chat.', need: 'Enter at least 2 people and 1 chore.',
+        balanced: 'Balanced', random: 'Random', rotate: 'Rotation', none: '(none)', note: 'Note', fairness: 'This is a balanced draft. If someone handled the hard tasks last time, swap one item before confirming.', copied: 'Copied', copyDefault: 'Copy result',
+        samplePeople: ['Alex', 'Jamie', 'Taylor'], sampleChores: ['Dishes', 'Vacuum living room', 'Recycling', 'Clean bathroom', 'Fold laundry', 'Take out food waste'],
+        resultLine: (person, chores, checklist) => `${person}\n${chores.map(c => `${checklist ? '- [ ]' : '-'} ${c}`).join('\n')}`,
+        summary: (p,c,h,m) => `${p} people split ${c} chores. ${h} task(s) were treated as heavy and spread where possible. (${m})`
+      },
+      ja: {
+        title: '家事分担表', idle: 'メンバーと家事を入力すると、チャットに貼れる分担表を作れます。', need: 'メンバー2人以上と家事1件以上を入力してください。',
+        balanced: '均等', random: 'ランダム', rotate: 'ローテーション', none: '(なし)', note: 'メモ', fairness: 'これは件数バランスを優先した下書きです。前回大変な家事を担当した人がいれば、確定前に1つ入れ替えてください。', copied: 'コピー完了', copyDefault: '結果をコピー',
+        samplePeople: ['みな', 'けん', 'ゆい'], sampleChores: ['皿洗い', 'リビング掃除', '資源ごみ', '浴室掃除', '洗濯物たたみ', '生ごみ出し'],
+        resultLine: (person, chores, checklist) => `${person}\n${chores.map(c => `${checklist ? '- [ ]' : '-'} ${c}`).join('\n')}`,
+        summary: (p,c,h,m) => `${p}人で${c}件の家事を分担しました。${h}件は重い家事としてできるだけ分散しました。(${m})`
+      }
+    };
+    const t = i18n[pageLang] || i18n.ko;
+    const heavyWords = /청소|욕실|화장실|쓰레기|분리수거|laundry|bath|trash|vacuum|clean|recycling|掃除|浴室|ゴミ|ごみ|洗濯/iu;
+    const lines = (v) => (v || '').split(/\n+/).map(s => s.trim()).filter(Boolean);
+    const shuffle = (arr) => arr.map(v => [Math.random(), v]).sort((a,b) => a[0] - b[0]).map(([,v]) => v);
+    const modeLabel = () => modeEl.value === 'random' ? t.random : (modeEl.value === 'rotate' ? t.rotate : t.balanced);
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+    };
+
+    const assign = () => {
+      const people = lines(peopleEl.value);
+      let chores = lines(choresEl.value);
+      const heavy = chores.filter(c => heavyWords.test(c));
+      peopleCount.textContent = formatNum(people.length);
+      choreCount.textContent = formatNum(chores.length);
+      heavyCount.textContent = formatNum(heavy.length);
+      modeOut.textContent = modeLabel();
+      if (people.length < 2 || chores.length < 1) {
+        output.value = '';
+        help.textContent = t.need;
+        return;
+      }
+      const buckets = people.map(name => ({ name, chores: [], heavy: 0 }));
+      if (modeEl.value === 'random') chores = shuffle(chores);
+      if (modeEl.value === 'balanced') chores = shuffle(chores).sort((a,b) => Number(heavyWords.test(b)) - Number(heavyWords.test(a)));
+
+      chores.forEach((chore, idx) => {
+        const isHeavy = heavyWords.test(chore);
+        let target;
+        if (modeEl.value === 'rotate') {
+          target = buckets[idx % buckets.length];
+        } else if (modeEl.value === 'balanced') {
+          const sorted = [...buckets].sort((a,b) => {
+            if (intensityEl?.value === 'spread' && isHeavy && a.heavy !== b.heavy) return a.heavy - b.heavy;
+            if (a.chores.length !== b.chores.length) return a.chores.length - b.chores.length;
+            return Math.random() - 0.5;
+          });
+          target = sorted[0];
+        } else {
+          target = buckets[Math.floor(Math.random() * buckets.length)];
+        }
+        target.chores.push(chore);
+        if (isHeavy) target.heavy += 1;
+      });
+
+      const checklist = !!checklistEl?.checked;
+      const parts = [`# ${t.title}`, ...buckets.map(b => t.resultLine(b.name, b.chores.length ? b.chores : [t.none], checklist))];
+      if (fairnessEl?.checked) parts.push(`${t.note}: ${t.fairness}`);
+      output.value = parts.join('\n\n');
+      help.textContent = t.summary(people.length, chores.length, heavy.length, modeLabel());
+    };
+
+    sampleBtn?.addEventListener('click', () => {
+      peopleEl.value = t.samplePeople.join('\n');
+      choresEl.value = t.sampleChores.join('\n');
+      assign();
+    });
+    runBtn?.addEventListener('click', assign);
+    copyBtn?.addEventListener('click', async () => {
+      if (!output.value.trim()) return;
+      await copyText(output.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    });
+    [peopleEl, choresEl, modeEl, intensityEl, fairnessEl, checklistEl].forEach(el => {
+      el?.addEventListener('input', assign);
+      el?.addEventListener('change', assign);
+    });
+    help.textContent = t.idle;
+    assign();
+  }
+
 })();

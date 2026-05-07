@@ -779,6 +779,58 @@ layout: default
 
           <div id="whp-missed" class="bw-list"></div>
         </div>
+      {% when 'household-chore-picker' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="hcp-people">{% if page.lang == 'en' %}People (one per line){% elsif page.lang == 'ja' %}メンバー（1行に1人）{% else %}참여자 (한 줄에 한 명){% endif %}</label>
+              <textarea id="hcp-people" rows="5" maxlength="2000" placeholder="{% if page.lang == 'en' %}Alex&#10;Jamie&#10;Taylor{% elsif page.lang == 'ja' %}みな&#10;けん&#10;ゆい{% else %}수야&#10;민지&#10;현우{% endif %}"></textarea>
+            </div>
+            <div>
+              <label for="hcp-chores">{% if page.lang == 'en' %}Chores (one per line){% elsif page.lang == 'ja' %}家事（1行に1つ）{% else %}집안일 (한 줄에 하나){% endif %}</label>
+              <textarea id="hcp-chores" rows="5" maxlength="4000" placeholder="{% if page.lang == 'en' %}Dishes&#10;Vacuum living room&#10;Take out trash{% elsif page.lang == 'ja' %}皿洗い&#10;リビング掃除&#10;ゴミ出し{% else %}설거지&#10;거실 청소&#10;분리수거{% endif %}"></textarea>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="hcp-mode">{% if page.lang == 'en' %}Assignment mode{% elsif page.lang == 'ja' %}分担方式{% else %}분담 방식{% endif %}</label>
+              <select id="hcp-mode">
+                <option value="balanced">{% if page.lang == 'en' %}Balanced count{% elsif page.lang == 'ja' %}件数を均等に{% else %}개수 균형 우선{% endif %}</option>
+                <option value="random">{% if page.lang == 'en' %}Fully random{% elsif page.lang == 'ja' %}完全ランダム{% else %}완전 랜덤{% endif %}</option>
+                <option value="rotate">{% if page.lang == 'en' %}Rotation order{% elsif page.lang == 'ja' %}順番ローテーション{% else %}순서대로 로테이션{% endif %}</option>
+              </select>
+            </div>
+            <div>
+              <label for="hcp-intensity">{% if page.lang == 'en' %}Heavy-task handling{% elsif page.lang == 'ja' %}重い家事の扱い{% else %}무거운 집안일 처리{% endif %}</label>
+              <select id="hcp-intensity">
+                <option value="spread">{% if page.lang == 'en' %}Spread heavy tasks{% elsif page.lang == 'ja' %}重い家事を分散{% else %}힘든 일은 분산{% endif %}</option>
+                <option value="normal">{% if page.lang == 'en' %}Do not distinguish{% elsif page.lang == 'ja' %}区別しない{% else %}구분하지 않음{% endif %}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="hcp-fairness" type="checkbox" checked /> {% if page.lang == 'en' %}Add fairness note{% elsif page.lang == 'ja' %}公平メモを追加{% else %}공평성 메모 추가{% endif %}</label>
+            <label class="tool-check"><input id="hcp-copy-format" type="checkbox" checked /> {% if page.lang == 'en' %}Use chat-friendly checklist format{% elsif page.lang == 'ja' %}チャット向けチェックリスト形式{% else %}채팅용 체크리스트 형식{% endif %}</label>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="hcp-run" type="button">{% if page.lang == 'en' %}Pick assignments{% elsif page.lang == 'ja' %}分担を決める{% else %}분담 뽑기{% endif %}</button>
+            <button id="hcp-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
+            <button id="hcp-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="hcp-people-count">0</strong><span>{% if page.lang == 'en' %}People{% elsif page.lang == 'ja' %}人数{% else %}참여자{% endif %}</span></div>
+            <div><strong id="hcp-chore-count">0</strong><span>{% if page.lang == 'en' %}Chores{% elsif page.lang == 'ja' %}家事件数{% else %}집안일{% endif %}</span></div>
+            <div><strong id="hcp-heavy-count">0</strong><span>{% if page.lang == 'en' %}Heavy tasks{% elsif page.lang == 'ja' %}重い家事{% else %}힘든 일{% endif %}</span></div>
+            <div><strong id="hcp-mode-out">-</strong><span>{% if page.lang == 'en' %}Mode{% elsif page.lang == 'ja' %}方式{% else %}방식{% endif %}</span></div>
+          </div>
+
+          <p class="tool-result" id="hcp-help">{% if page.lang == 'en' %}Enter people and chores, then pick an assignment list you can paste into chat.{% elsif page.lang == 'ja' %}メンバーと家事を入力すると、チャットに貼れる分担表を作れます。{% else %}참여자와 집안일을 넣으면 채팅에 바로 붙일 수 있는 분담표를 만듭니다.{% endif %}</p>
+          <textarea id="hcp-output" rows="16" readonly placeholder="{% if page.lang == 'en' %}Assignments will appear here.{% elsif page.lang == 'ja' %}分担結果がここに表示されます。{% else %}분담 결과가 여기에 표시됩니다.{% endif %}"></textarea>
+        </div>
       {% when 'meeting-action-item-organizer' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">

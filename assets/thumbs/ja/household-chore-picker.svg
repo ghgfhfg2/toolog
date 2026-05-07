@@ -1,0 +1,20 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="36" fill="#F0FDF4"/>
+  <rect x="72" y="72" width="1056" height="486" rx="32" fill="#DCFCE7"/>
+  <rect x="128" y="126" width="410" height="378" rx="28" fill="#FFFFFF"/>
+  <rect x="660" y="128" width="352" height="176" rx="28" fill="#FFFFFF"/>
+  <rect x="660" y="330" width="352" height="162" rx="28" fill="#FFFFFF"/>
+  <circle cx="248" cy="218" r="44" fill="#22C55E"/>
+  <circle cx="350" cy="218" r="44" fill="#16A34A"/>
+  <circle cx="452" cy="218" r="44" fill="#15803D"/>
+  <rect x="190" y="308" width="286" height="40" rx="20" fill="#BBF7D0"/>
+  <rect x="190" y="372" width="230" height="40" rx="20" fill="#86EFAC"/>
+  <rect x="190" y="436" width="258" height="40" rx="20" fill="#4ADE80"/>
+  <path d="M208 309L234 335L286 282" stroke="#166534" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="660" y="206" fill="#14532D" font-family="Noto Sans JP, sans-serif" font-size="42" font-weight="700">家事ランダム分担ツール</text>
+  <text x="660" y="264" fill="#166534" font-family="Noto Sans JP, sans-serif" font-size="28">メンバーと家事を入力して</text>
+  <text x="660" y="304" fill="#166534" font-family="Noto Sans JP, sans-serif" font-size="28">公平な分担表を作成</text>
+  <rect x="696" y="366" width="240" height="54" rx="18" fill="#BBF7D0"/>
+  <text x="728" y="401" fill="#14532D" font-family="Noto Sans JP, sans-serif" font-size="26" font-weight="700">Picker · Lifestyle</text>
+  <text x="120" y="558" fill="#166534" font-family="Noto Sans JP, sans-serif" font-size="24">TOOLOG</text>
+</svg>

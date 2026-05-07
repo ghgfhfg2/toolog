@@ -1,3 +1,27 @@
+- id: household-chore-picker
+  title: 집안일 랜덤 분담기
+  title_en: Household Chore Picker
+  title_ja: 家事ランダム分担ツール
+  category: lifestyle
+  category_label: 생활/집안일 분담
+  category_label_en: Lifestyle/Chore Sharing
+  category_label_ja: 生活/家事分担
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 함께 사는 사람과 해야 할 집안일을 넣으면 설거지, 청소, 빨래 같은 항목을 무작위·균형 기준으로 빠르게 나눠요.
+  description_en: Enter people and chores to quickly split dishes, cleaning, laundry, and other household tasks by random or balanced rules.
+  description_ja: メンバーと家事を入力すると、皿洗い・掃除・洗濯などをランダムまたはバランス重視で素早く分担できます。
+  url: /tools/household-chore-picker/
+  url_en: /en/tools/household-chore-picker/
+  url_ja: /ja/tools/household-chore-picker/
+  thumbnail: /assets/thumbs/household-chore-picker.svg
+  thumbnail_en: /assets/thumbs/en/household-chore-picker.svg
+  thumbnail_ja: /assets/thumbs/ja/household-chore-picker.svg
+  published_at: 2026-05-07
+  tool_type: picker
+  topic_cluster: lifestyle
+
 - id: link-list-cleaner
   title: 링크 추출 정리기
   title_en: Link List Cleaner
