@@ -1,3 +1,27 @@
+- id: ingredient-expiry-priority-checker
+  title: 식재료 소비기한 우선순위 체커
+  title_en: Ingredient Expiry Priority Checker
+  title_ja: 食材消費期限優先度チェッカー
+  category: food
+  category_label: 음식/냉장고 정리
+  category_label_en: Food/Fridge Cleanup
+  category_label_ja: 食べ物/冷蔵庫整理
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 냉장고 속 식재료의 남은 소비기한, 보관 상태, 양, 사용 계획을 넣으면 오늘 먼저 써야 할 재료와 보관 팁을 빠르게 점검해요.
+  description_en: Enter ingredients, days left, storage condition, amount, and plan to see what to use first and how to reduce waste.
+  description_ja: 食材、残り日数、保存状態、量、使用予定を入力し、先に使うべき食材と廃棄を減らすヒントを確認できます。
+  url: /tools/ingredient-expiry-priority-checker/
+  url_en: /en/tools/ingredient-expiry-priority-checker/
+  url_ja: /ja/tools/ingredient-expiry-priority-checker/
+  thumbnail: /assets/thumbs/ingredient-expiry-priority-checker.svg
+  thumbnail_en: /assets/thumbs/en/ingredient-expiry-priority-checker.svg
+  thumbnail_ja: /assets/thumbs/ja/ingredient-expiry-priority-checker.svg
+  published_at: 2026-05-08
+  tool_type: checker
+  topic_cluster: food
+
 - id: household-chore-picker
   title: 집안일 랜덤 분담기
   title_en: Household Chore Picker

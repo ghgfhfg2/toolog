@@ -12071,6 +12071,152 @@
     build();
   }
 
+
+  if (slug === 'ingredient-expiry-priority-checker') {
+    const rows = Array.from({ length: 5 }, (_, idx) => {
+      const n = idx + 1;
+      return {
+        name: document.getElementById(`iepc-name-${n}`),
+        days: document.getElementById(`iepc-days-${n}`),
+        storage: document.getElementById(`iepc-storage-${n}`),
+        amount: document.getElementById(`iepc-amount-${n}`),
+        plan: document.getElementById(`iepc-plan-${n}`),
+        note: document.getElementById(`iepc-note-${n}`)
+      };
+    });
+    const sampleBtn = document.getElementById('iepc-sample');
+    const copyBtn = document.getElementById('iepc-copy');
+    const countEl = document.getElementById('iepc-count');
+    const urgentEl = document.getElementById('iepc-urgent');
+    const weekEl = document.getElementById('iepc-week');
+    const topEl = document.getElementById('iepc-top');
+    const summaryEl = document.getElementById('iepc-summary');
+    const outputEl = document.getElementById('iepc-output');
+
+    if (!rows[0].name || !summaryEl || !outputEl) return;
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const storageLabel = { fridge: '냉장', frozen: '냉동', room: '실온', opened: '개봉 후 냉장' };
+    const amountLabel = { small: '조금', medium: '보통', large: '많이' };
+    const planLabel = { none: '계획 없음', today: '오늘 사용 예정', week: '이번 주 사용 예정' };
+
+    const getBucket = (score, days) => {
+      if (days < 0 || score >= 80) return '오늘 확인';
+      if (score >= 55) return '1~2일 안에 사용';
+      if (score >= 35) return '이번 주 사용';
+      return '여유 있음';
+    };
+
+    const tipFor = (item) => {
+      if (item.days < 0) return '소비기한이 지났다면 냄새·색·곰팡이·포장 팽창을 확인하고, 이상하면 섭취하지 마세요.';
+      if (item.storage === 'opened') return '개봉 후 재료는 밀폐하고, 물기 많은 채소·두부·유제품은 상태 확인을 먼저 하세요.';
+      if (item.storage === 'frozen') return '냉동 상태라 급하지는 않지만, 양이 많다면 소분하거나 이번 주 메뉴에 배치하세요.';
+      if (item.amount === 'large' && item.plan === 'none') return '양이 많은데 계획이 없으니 볶음·국·샐러드처럼 한 번에 쓰는 메뉴를 먼저 잡아보세요.';
+      return '오늘 조리 계획에 넣거나 눈에 보이는 칸으로 옮겨 잊히지 않게 하세요.';
+    };
+
+    const build = () => {
+      const items = rows.map((row, idx) => {
+        const name = (row.name.value || '').trim();
+        if (!name) return null;
+        const rawDays = row.days.value === '' ? 7 : Number(row.days.value || 0);
+        const days = Number.isFinite(rawDays) ? rawDays : 7;
+        let score = 0;
+        if (days < 0) score += 80;
+        else if (days === 0) score += 70;
+        else if (days <= 2) score += 55;
+        else if (days <= 5) score += 35;
+        else if (days <= 10) score += 18;
+        else score += 6;
+
+        if (row.storage.value === 'opened') score += 18;
+        if (row.storage.value === 'room') score += 12;
+        if (row.storage.value === 'frozen') score -= 18;
+        if (row.amount.value === 'large') score += 10;
+        if (row.amount.value === 'small') score -= 4;
+        if (row.plan.value === 'today') score -= 18;
+        if (row.plan.value === 'week') score -= 8;
+        if (row.plan.value === 'none') score += 8;
+        score = Math.max(0, Math.min(100, score));
+        const bucket = getBucket(score, days);
+        const note = (row.note.value || '').trim();
+        return { idx, name, days, storage: row.storage.value, amount: row.amount.value, plan: row.plan.value, note, score, bucket };
+      }).filter(Boolean).sort((a, b) => b.score - a.score || a.days - b.days);
+
+      countEl.textContent = String(items.length);
+      urgentEl.textContent = String(items.filter((item) => item.bucket === '오늘 확인').length);
+      weekEl.textContent = String(items.filter((item) => item.bucket === '1~2일 안에 사용' || item.bucket === '이번 주 사용').length);
+      topEl.textContent = items[0]?.name || '-';
+
+      if (!items.length) {
+        summaryEl.textContent = '재료를 1개 이상 입력하면 먼저 확인할 순서와 보관 팁을 정리합니다.';
+        outputEl.value = '';
+        return;
+      }
+
+      const top = items[0];
+      summaryEl.textContent = `${top.name}을(를) 먼저 확인하는 것이 좋아요. 총 ${items.length}개 재료를 소비기한 우선순위로 정리했습니다.`;
+      outputEl.value = [
+        '[식재료 소비기한 우선순위 점검 결과]',
+        ...items.map((item, index) => `${index + 1}. ${item.name} | ${item.bucket} | 점수 ${Math.round(item.score)}
+- 남은 소비기한: ${item.days}일 / 보관: ${storageLabel[item.storage]} / 양: ${amountLabel[item.amount]} / 계획: ${planLabel[item.plan]}
+- 팁: ${tipFor(item)}${item.note ? `
+- 메모: ${item.note}` : ''}`)
+      ].join('\n\n');
+    };
+
+    sampleBtn?.addEventListener('click', () => {
+      const samples = [
+        ['두부', '0', 'opened', 'medium', 'none', '개봉함'],
+        ['상추', '2', 'fridge', 'large', 'none', '숨이 조금 죽음'],
+        ['우유', '3', 'opened', 'small', 'today', '아침에 쓸 예정'],
+        ['닭가슴살', '12', 'frozen', 'large', 'week', '소분 필요'],
+        ['양파', '10', 'room', 'medium', 'none', '망에 보관']
+      ];
+      rows.forEach((row, idx) => {
+        const sample = samples[idx];
+        row.name.value = sample[0];
+        row.days.value = sample[1];
+        row.storage.value = sample[2];
+        row.amount.value = sample[3];
+        row.plan.value = sample[4];
+        row.note.value = sample[5];
+      });
+      build();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) build();
+      if (!outputEl.value.trim()) return;
+      await copyText(outputEl.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    rows.forEach((row) => {
+      Object.values(row).forEach((el) => {
+        el?.addEventListener('input', build);
+        el?.addEventListener('change', build);
+      });
+    });
+
+    build();
+  }
+
   if (slug === 'secondhand-scam-signal-checker') {
     const item = document.getElementById('sssc-item');
     const priceGap = document.getElementById('sssc-price-gap');
