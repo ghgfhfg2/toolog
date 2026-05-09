@@ -3389,6 +3389,72 @@ layout: default
           <textarea id="pdm-output" rows="16" readonly placeholder="정렬 결과가 여기에 표시됩니다."></textarea>
         </div>
 
+      {% when 'customer-support-message-generator' %}
+        <div class="tool-ui">
+          <p class="tool-result">문제 상황과 원하는 처리를 입력하면 고객센터에 보낼 정중한 문의 문구를 만듭니다.</p>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="csmg-item">제품·서비스명</label>
+              <input id="csmg-item" type="text" maxlength="80" placeholder="예: 무선 이어폰, 쇼핑몰 주문, 구독 서비스" />
+            </div>
+            <div>
+              <label for="csmg-type">문의 유형</label>
+              <select id="csmg-type">
+                <option value="refund">환불 요청</option>
+                <option value="exchange">교환 요청</option>
+                <option value="delivery">배송 지연·누락</option>
+                <option value="error">앱·웹 오류</option>
+                <option value="as">AS·수리 문의</option>
+                <option value="billing">결제·청구 문의</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="csmg-order">주문번호·구매일(선택)</label>
+              <input id="csmg-order" type="text" maxlength="120" placeholder="예: 주문번호 1234, 5월 7일 구매" />
+            </div>
+            <div>
+              <label for="csmg-tone">문구 톤</label>
+              <select id="csmg-tone">
+                <option value="polite" selected>정중하고 차분하게</option>
+                <option value="firm">단호하지만 예의 있게</option>
+                <option value="brief">짧고 간단하게</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row">
+            <label for="csmg-problem">문제 상황</label>
+            <textarea id="csmg-problem" rows="5" maxlength="1000" placeholder="예: 상품을 받았는데 오른쪽 이어버드에서 소리가 나지 않습니다."></textarea>
+          </div>
+          <div class="tool-row">
+            <label for="csmg-request">원하는 처리</label>
+            <textarea id="csmg-request" rows="4" maxlength="800" placeholder="예: 불량 확인 후 교환 또는 환불 가능 여부를 안내받고 싶습니다."></textarea>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="csmg-proof" type="checkbox" checked /> 사진·스크린샷 등 증빙 첨부 가능</label>
+            <label class="tool-check"><input id="csmg-deadline" type="checkbox" /> 답변 희망 기한 포함</label>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="csmg-sample" type="button">예시 넣기</button>
+            <button id="csmg-copy" type="button">결과 복사</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="csmg-lines">0</strong><span>문장 수</span></div>
+            <div><strong id="csmg-chars">0</strong><span>글자 수</span></div>
+            <div><strong id="csmg-info">0</strong><span>포함 정보</span></div>
+          </div>
+
+          <p class="tool-result" id="csmg-summary">입력하면 문의 문구가 여기에 표시됩니다.</p>
+          <textarea id="csmg-output" rows="14" readonly placeholder="생성된 고객센터 문의 문구가 여기에 표시됩니다."></textarea>
+        </div>
+
       {% when 'ingredient-expiry-priority-checker' %}
         <div class="tool-ui">
           <p class="tool-result">식재료 5개까지 남은 소비기한과 보관 상태를 넣으면 먼저 확인할 순서와 보관 팁을 정리합니다.</p>

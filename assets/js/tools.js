@@ -12072,6 +12072,125 @@
   }
 
 
+  if (slug === 'customer-support-message-generator') {
+    const itemEl = document.getElementById('csmg-item');
+    const typeEl = document.getElementById('csmg-type');
+    const orderEl = document.getElementById('csmg-order');
+    const toneEl = document.getElementById('csmg-tone');
+    const problemEl = document.getElementById('csmg-problem');
+    const requestEl = document.getElementById('csmg-request');
+    const proofEl = document.getElementById('csmg-proof');
+    const deadlineEl = document.getElementById('csmg-deadline');
+    const sampleBtn = document.getElementById('csmg-sample');
+    const copyBtn = document.getElementById('csmg-copy');
+    const linesEl = document.getElementById('csmg-lines');
+    const charsEl = document.getElementById('csmg-chars');
+    const infoEl = document.getElementById('csmg-info');
+    const summaryEl = document.getElementById('csmg-summary');
+    const outputEl = document.getElementById('csmg-output');
+
+    if (!itemEl || !outputEl || !summaryEl) return;
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const typeLabels = {
+      refund: '환불 요청',
+      exchange: '교환 요청',
+      delivery: '배송 지연·누락 문의',
+      error: '오류 신고',
+      as: 'AS·수리 문의',
+      billing: '결제·청구 문의'
+    };
+
+    const toneOpeners = {
+      polite: '안녕하세요. 아래 건에 대해 확인 부탁드립니다.',
+      firm: '안녕하세요. 아래 문제에 대해 빠른 확인과 명확한 안내를 부탁드립니다.',
+      brief: '안녕하세요. 문의드립니다.'
+    };
+
+    const normalize = (value) => (value || '').trim().replace(/\s+\n/g, '\n').replace(/\n{3,}/g, '\n\n');
+
+    const build = () => {
+      const item = normalize(itemEl.value) || '해당 제품/서비스';
+      const type = typeEl.value || 'refund';
+      const order = normalize(orderEl.value);
+      const problem = normalize(problemEl.value) || '문제 상황을 입력해 주세요.';
+      const request = normalize(requestEl.value) || '가능한 처리 방법을 안내 부탁드립니다.';
+      const tone = toneEl.value || 'polite';
+      const lines = [
+        toneOpeners[tone] || toneOpeners.polite,
+        '',
+        `- 문의 유형: ${typeLabels[type] || '문의'}`,
+        `- 제품/서비스: ${item}`
+      ];
+
+      if (order) lines.push(`- 주문/구매 정보: ${order}`);
+      lines.push('', '[문제 상황]', problem, '', '[요청 사항]', request);
+
+      if (proofEl.checked) {
+        lines.push('', '필요하시면 사진, 스크린샷, 영수증 등 확인 가능한 자료를 첨부하겠습니다.');
+      }
+      if (deadlineEl.checked) {
+        lines.push('가능하다면 영업일 기준 2~3일 이내에 답변 부탁드립니다.');
+      }
+
+      if (tone === 'firm') {
+        lines.push('', '동일 문제가 반복되지 않도록 원인과 처리 가능 범위를 함께 안내해 주시면 감사하겠습니다.');
+      }
+      lines.push('', '확인 후 답변 부탁드립니다. 감사합니다.');
+
+      const text = lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+      const sentenceCount = (text.match(/[.!?。]|다\.|요\.|니다\./g) || []).length || text.split('\n').filter(Boolean).length;
+      const infoCount = [itemEl.value, type, order, problemEl.value, requestEl.value, proofEl.checked, deadlineEl.checked].filter(Boolean).length;
+      outputEl.value = text;
+      linesEl.textContent = formatNum(sentenceCount);
+      charsEl.textContent = formatNum(text.length);
+      infoEl.textContent = formatNum(infoCount);
+      summaryEl.textContent = `${typeLabels[type] || '문의'} 문구를 ${text.length.toLocaleString(numberLocale)}자 분량으로 만들었습니다. 보내기 전 개인정보와 주문 정보를 한 번 확인하세요.`;
+    };
+
+    sampleBtn.addEventListener('click', () => {
+      itemEl.value = '무선 이어폰';
+      typeEl.value = 'exchange';
+      orderEl.value = '주문번호 20260509-1234, 5월 8일 수령';
+      toneEl.value = 'polite';
+      problemEl.value = '상품을 개봉해 사용해 보니 오른쪽 이어버드에서 소리가 나지 않습니다. 충전과 재연결을 여러 번 시도했지만 같은 증상이 반복됩니다.';
+      requestEl.value = '초기 불량 여부를 확인한 뒤 교환 또는 환불 절차를 안내받고 싶습니다.';
+      proofEl.checked = true;
+      deadlineEl.checked = true;
+      build();
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) build();
+      if (!outputEl.value.trim()) return;
+      await copyText(outputEl.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    [itemEl, typeEl, orderEl, toneEl, problemEl, requestEl, proofEl, deadlineEl].forEach((el) => {
+      el.addEventListener('input', build);
+      el.addEventListener('change', build);
+    });
+
+    build();
+  }
+
+
   if (slug === 'ingredient-expiry-priority-checker') {
     const rows = Array.from({ length: 5 }, (_, idx) => {
       const n = idx + 1;

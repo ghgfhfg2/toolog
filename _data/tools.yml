@@ -1,3 +1,27 @@
+- id: customer-support-message-generator
+  title: 고객센터 문의 문구 생성기
+  title_en: Customer Support Message Generator
+  title_ja: カスタマーサポート問い合わせ文ジェネレーター
+  category: communication
+  category_label: 생활/고객센터 문의
+  category_label_en: Lifestyle/Customer Support
+  category_label_ja: 生活/カスタマーサポート
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 제품·서비스명, 문제 상황, 원하는 처리, 주문 정보를 넣으면 고객센터에 보낼 환불·교환·오류 문의 문구를 정중한 톤으로 바로 만들어요.
+  description_en: Enter a product or service, issue, desired resolution, and order details to generate a polite support message.
+  description_ja: 商品・サービス名、問題、希望する対応、注文情報を入力して、丁寧な問い合わせ文を作成します。
+  url: /tools/customer-support-message-generator/
+  url_en: /en/tools/customer-support-message-generator/
+  url_ja: /ja/tools/customer-support-message-generator/
+  thumbnail: /assets/thumbs/customer-support-message-generator.svg
+  thumbnail_en: /assets/thumbs/en/customer-support-message-generator.svg
+  thumbnail_ja: /assets/thumbs/ja/customer-support-message-generator.svg
+  published_at: 2026-05-09
+  tool_type: generator
+  topic_cluster: communication
+
 - id: ingredient-expiry-priority-checker
   title: 식재료 소비기한 우선순위 체커
   title_en: Ingredient Expiry Priority Checker
