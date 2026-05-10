@@ -12191,6 +12191,161 @@
   }
 
 
+
+  if (slug === 'movie-seat-choice-simulator') {
+    const preferenceEl = document.getElementById('mscs-preference');
+    const groupEl = document.getElementById('mscs-group');
+    const rows = Array.from({ length: 4 }, (_, idx) => {
+      const n = idx + 1;
+      return {
+        name: document.getElementById(`mscs-name-${n}`),
+        distance: document.getElementById(`mscs-distance-${n}`),
+        center: document.getElementById(`mscs-center-${n}`),
+        aisle: document.getElementById(`mscs-aisle-${n}`),
+        note: document.getElementById(`mscs-note-${n}`)
+      };
+    });
+    const sampleBtn = document.getElementById('mscs-sample');
+    const copyBtn = document.getElementById('mscs-copy');
+    const countEl = document.getElementById('mscs-count');
+    const topEl = document.getElementById('mscs-top');
+    const immersionEl = document.getElementById('mscs-immersion');
+    const comfortEl = document.getElementById('mscs-comfort');
+    const summaryEl = document.getElementById('mscs-summary');
+    const outputEl = document.getElementById('mscs-output');
+
+    if (!preferenceEl || !rows[0].name || !summaryEl || !outputEl) return;
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const distanceLabel = { front: '앞쪽', mid: '중간', back: '뒤쪽', far: '맨 뒤쪽' };
+    const centerLabel = { center: '거의 중앙', near: '중앙에서 조금 벗어남', side: '사이드' };
+    const aisleLabel = { aisle: '통로 바로 옆', near: '통로와 가까움', middle: '줄 가운데' };
+
+    const classify = (item) => {
+      if (item.center === 'center' && (item.distance === 'front' || item.distance === 'mid')) return '몰입형';
+      if ((item.distance === 'mid' || item.distance === 'back') && item.center !== 'side') return '편안한 관람형';
+      if (item.aisle === 'aisle') return '출입 편의형';
+      return '무난한 후보';
+    };
+
+    const scoreItem = (item, preference, group) => {
+      let score = 60;
+      if (item.distance === 'mid') score += 18;
+      if (item.distance === 'back') score += 12;
+      if (item.distance === 'front') score += preference === 'immersion' ? 12 : -8;
+      if (item.distance === 'far') score += preference === 'comfort' ? 6 : -6;
+
+      if (item.center === 'center') score += 20;
+      if (item.center === 'near') score += 8;
+      if (item.center === 'side') score -= group === 'group' ? 18 : 10;
+
+      if (item.aisle === 'aisle') score += preference === 'exit' ? 18 : 8;
+      if (item.aisle === 'near') score += 6;
+      if (item.aisle === 'middle') score += preference === 'immersion' ? 6 : -4;
+
+      if (preference === 'comfort' && item.distance === 'front') score -= 14;
+      if (preference === 'immersion' && item.center === 'center') score += 8;
+      if (group === 'group' && item.aisle === 'middle') score -= 8;
+      return Math.max(0, Math.min(100, score));
+    };
+
+    const reasonFor = (item, preference, group) => {
+      const reasons = [];
+      if (item.center === 'center') reasons.push('화면 중심에 가까움');
+      if (item.center === 'side') reasons.push('사이드라 시야 균형은 약함');
+      if (item.distance === 'mid') reasons.push('목 편안함과 몰입감 균형이 좋음');
+      if (item.distance === 'front') reasons.push(preference === 'immersion' ? '앞쪽 몰입감이 강함' : '앞쪽이라 목 피로를 확인해야 함');
+      if (item.aisle === 'aisle') reasons.push('출입이 편함');
+      if (group === 'group' && item.aisle === 'middle') reasons.push('여러 명이면 이동이 불편할 수 있음');
+      if (!reasons.length) reasons.push('전체 조건이 무난함');
+      return reasons.join(', ');
+    };
+
+    const build = () => {
+      const preference = preferenceEl.value || 'balanced';
+      const group = groupEl.value || 'pair';
+      const items = rows.map((row, idx) => {
+        const name = (row.name.value || '').trim();
+        if (!name) return null;
+        const item = { idx, name, distance: row.distance.value, center: row.center.value, aisle: row.aisle.value, note: (row.note.value || '').trim() };
+        item.score = scoreItem(item, preference, group);
+        item.kind = classify(item);
+        item.reason = reasonFor(item, preference, group);
+        return item;
+      }).filter(Boolean).sort((a, b) => b.score - a.score || a.idx - b.idx);
+
+      countEl.textContent = String(items.length);
+      topEl.textContent = items[0]?.name || '-';
+      immersionEl.textContent = String(items.filter((item) => item.kind === '몰입형').length);
+      comfortEl.textContent = String(items.filter((item) => item.kind === '편안한 관람형').length);
+
+      if (!items.length) {
+        summaryEl.textContent = '좌석 후보를 1개 이상 입력하면 추천 순서와 이유를 정리합니다.';
+        outputEl.value = '';
+        return;
+      }
+
+      summaryEl.textContent = `${items[0].name}을(를) 1순위로 추천합니다. 총 ${items.length}개 좌석 후보를 비교했어요.`;
+      outputEl.value = [
+        '[영화관 좌석 선택 시뮬레이션 결과]',
+        `기준: ${preferenceEl.options[preferenceEl.selectedIndex].text} / 인원: ${groupEl.options[groupEl.selectedIndex].text}`,
+        ...items.map((item, index) => `${index + 1}. ${item.name} | ${item.kind} | 점수 ${Math.round(item.score)}
+- 조건: ${distanceLabel[item.distance]} / ${centerLabel[item.center]} / ${aisleLabel[item.aisle]}
+- 이유: ${item.reason}${item.note ? `
+- 메모: ${item.note}` : ''}`)
+      ].join('\n\n');
+    };
+
+    sampleBtn?.addEventListener('click', () => {
+      const samples = [
+        ['G열 8번', 'mid', 'center', 'middle', '남은 중앙 좌석'],
+        ['H열 3번 통로', 'mid', 'near', 'aisle', '출입 편함'],
+        ['D열 중앙', 'front', 'center', 'middle', '몰입감 좋음'],
+        ['J열 사이드', 'back', 'side', 'near', '목은 편할 듯']
+      ];
+      rows.forEach((row, idx) => {
+        const sample = samples[idx];
+        row.name.value = sample[0];
+        row.distance.value = sample[1];
+        row.center.value = sample[2];
+        row.aisle.value = sample[3];
+        row.note.value = sample[4];
+      });
+      preferenceEl.value = 'balanced';
+      groupEl.value = 'pair';
+      build();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) build();
+      if (!outputEl.value.trim()) return;
+      await copyText(outputEl.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    [preferenceEl, groupEl, ...rows.flatMap((row) => Object.values(row))].forEach((el) => {
+      el?.addEventListener('input', build);
+      el?.addEventListener('change', build);
+    });
+
+    build();
+  }
+
   if (slug === 'ingredient-expiry-priority-checker') {
     const rows = Array.from({ length: 5 }, (_, idx) => {
       const n = idx + 1;

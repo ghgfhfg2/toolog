@@ -3455,6 +3455,88 @@ layout: default
           <textarea id="csmg-output" rows="14" readonly placeholder="생성된 고객센터 문의 문구가 여기에 표시됩니다."></textarea>
         </div>
 
+      {% when 'movie-seat-choice-simulator' %}
+        <div class="tool-ui">
+          <p class="tool-result">좌석 후보 4개까지 화면 거리, 중앙 위치, 통로 접근성, 관람 선호도를 비교해 추천 순서를 정리합니다.</p>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="mscs-preference">가장 중시하는 기준</label>
+              <select id="mscs-preference">
+                <option value="balanced" selected>전체 균형</option>
+                <option value="immersion">화면 몰입감</option>
+                <option value="comfort">목 편안함</option>
+                <option value="exit">출입 편의</option>
+              </select>
+            </div>
+            <div>
+              <label for="mscs-group">관람 인원</label>
+              <select id="mscs-group">
+                <option value="solo">혼자</option>
+                <option value="pair" selected>2명</option>
+                <option value="group">3명 이상</option>
+              </select>
+            </div>
+          </div>
+
+          {% for i in (1..4) %}
+          <div class="tool-card">
+            <div class="tool-row-grid pct-grid">
+              <div>
+                <label for="mscs-name-{{ i }}">좌석 후보 {{ i }}</label>
+                <input id="mscs-name-{{ i }}" type="text" maxlength="60" placeholder="예: G열 8번, H열 중앙, J열 통로" />
+              </div>
+              <div>
+                <label for="mscs-distance-{{ i }}">화면과의 거리</label>
+                <select id="mscs-distance-{{ i }}">
+                  <option value="front">앞쪽</option>
+                  <option value="mid" selected>중간</option>
+                  <option value="back">뒤쪽</option>
+                  <option value="far">맨 뒤쪽</option>
+                </select>
+              </div>
+            </div>
+            <div class="tool-row-grid pct-grid">
+              <div>
+                <label for="mscs-center-{{ i }}">중앙 위치</label>
+                <select id="mscs-center-{{ i }}">
+                  <option value="center" selected>거의 중앙</option>
+                  <option value="near">중앙에서 조금 벗어남</option>
+                  <option value="side">사이드</option>
+                </select>
+              </div>
+              <div>
+                <label for="mscs-aisle-{{ i }}">통로 접근성</label>
+                <select id="mscs-aisle-{{ i }}">
+                  <option value="aisle">통로 바로 옆</option>
+                  <option value="near" selected>통로와 가까움</option>
+                  <option value="middle">줄 가운데</option>
+                </select>
+              </div>
+            </div>
+            <div class="tool-row">
+              <label for="mscs-note-{{ i }}">메모(선택)</label>
+              <input id="mscs-note-{{ i }}" type="text" maxlength="80" placeholder="예: 예매 가능 좌석, 커플석, 스피커 가까움" />
+            </div>
+          </div>
+          {% endfor %}
+
+          <div class="tool-row-grid pct-actions">
+            <button id="mscs-sample" type="button">예시 넣기</button>
+            <button id="mscs-copy" type="button">결과 복사</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="mscs-count">0</strong><span>비교 좌석</span></div>
+            <div><strong id="mscs-top">-</strong><span>추천 1순위</span></div>
+            <div><strong id="mscs-immersion">0</strong><span>몰입형 후보</span></div>
+            <div><strong id="mscs-comfort">0</strong><span>편안한 후보</span></div>
+          </div>
+
+          <p class="tool-result" id="mscs-summary">좌석 후보를 입력하면 추천 순서와 이유가 여기에 표시됩니다.</p>
+          <textarea id="mscs-output" rows="14" readonly placeholder="좌석 비교 결과가 여기에 표시됩니다."></textarea>
+        </div>
+
       {% when 'ingredient-expiry-priority-checker' %}
         <div class="tool-ui">
           <p class="tool-result">식재료 5개까지 남은 소비기한과 보관 상태를 넣으면 먼저 확인할 순서와 보관 팁을 정리합니다.</p>

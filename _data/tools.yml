@@ -1,3 +1,27 @@
+- id: movie-seat-choice-simulator
+  title: 영화관 좌석 선택 시뮬레이터
+  title_en: Movie Theater Seat Choice Simulator
+  title_ja: 映画館座席選びシミュレーター
+  category: entertainment
+  category_label: 생활/영화관 좌석 선택
+  category_label_en: Lifestyle/Movie Seat Choice
+  category_label_ja: 生活/映画館座席選び
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 영화관 좌석 후보의 화면 거리, 중앙 위치, 통로 접근성, 동행 인원, 선호도를 넣으면 어떤 자리가 더 편한지 빠르게 비교해요.
+  description_en: Compare movie theater seat candidates by distance, center position, aisle access, group size, and viewing preference.
+  description_ja: 映画館の座席候補を、スクリーン距離・中央位置・通路・同行人数・好みで比較します。
+  url: /tools/movie-seat-choice-simulator/
+  url_en: /en/tools/movie-seat-choice-simulator/
+  url_ja: /ja/tools/movie-seat-choice-simulator/
+  thumbnail: /assets/thumbs/movie-seat-choice-simulator.svg
+  thumbnail_en: /assets/thumbs/en/movie-seat-choice-simulator.svg
+  thumbnail_ja: /assets/thumbs/ja/movie-seat-choice-simulator.svg
+  published_at: 2026-05-10
+  tool_type: simulator
+  topic_cluster: entertainment
+
 - id: customer-support-message-generator
   title: 고객센터 문의 문구 생성기
   title_en: Customer Support Message Generator
