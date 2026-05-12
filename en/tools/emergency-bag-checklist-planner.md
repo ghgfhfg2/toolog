@@ -1,65 +1,71 @@
 ---
-lang: en
-permalink: /en/tools/emergency-bag-checklist-planner/
+layout: tool
 title: Emergency Bag Checklist Planner | Prepare for family, pets, and medicine needs
 description: Build a practical emergency bag checklist based on family members, pets, medicine needs, evacuation time, and season.
+lang: en
+permalink: /en/tools/emergency-bag-checklist-planner/
+canonical_url: /en/tools/emergency-bag-checklist-planner/
+alternate_urls:
+  ko: /tools/emergency-bag-checklist-planner/
+  en: /en/tools/emergency-bag-checklist-planner/
+  ja: /ja/tools/emergency-bag-checklist-planner/
 category: lifestyle
 category_label: Lifestyle/Emergency Bag
-thumbnail: /assets/thumbs/emergency-bag-checklist-planner.svg
+thumbnail: /assets/thumbs/en/emergency-bag-checklist-planner.svg
 image:
-  path: /assets/thumbs/emergency-bag-checklist-planner.svg
-  alt: Emergency bag checklist planner thumbnail
+  path: /assets/thumbs/en/emergency-bag-checklist-planner.svg
+  alt: Emergency Bag Checklist Planner thumbnail
 tool_key: emergency-bag-checklist-planner
 tool_type: planner
 topic_cluster: safety
 keywords: [emergency bag checklist, disaster kit, go bag, family emergency supplies, pet emergency bag]
 related_tools: [deadline-backward-planner, ingredient-expiry-priority-checker, appointment-departure-buffer-simulator]
 faq:
-  - q: 실제 재난 대응 지침을 대체하나요?
-    a: 아니요. 개인 준비를 돕는 체크리스트 도구입니다. 지역 재난 문자, 지자체 안내, 정부 안전 지침을 우선 확인하세요.
-  - q: 며칠치 물품을 기준으로 하나요?
-    a: 기본은 24~72시간을 버틸 수 있는 휴대용 가방 기준으로 안내합니다. 가족 상황과 이동 수단에 맞춰 조정하세요.
-  - q: 개인정보를 입력해야 하나요?
-    a: 아니요. 가족 수, 반려동물 여부, 복용약 필요 여부처럼 체크리스트 계산에 필요한 조건만 선택하면 됩니다.
+  - q: Does this replace official disaster response guidance?
+    a: No. This is a checklist tool for personal preparation. Always prioritize local emergency alerts, municipal guidance, and official safety instructions.
+  - q: How many days of supplies does it assume?
+    a: It is based on a portable bag that can support roughly 24 to 72 hours. Adjust it for your family situation and transportation plan.
+  - q: Do I need to enter personal information?
+    a: No. You only choose conditions needed for the checklist, such as family size, whether you have pets, and whether regular medicine is needed.
 ---
 
-## Why use an emergency bag checklist planner?
-정전, 단수, 태풍, 지진, 갑작스러운 대피처럼 평소에는 드문 상황도 막상 닥치면 **무엇을 먼저 챙겨야 하는지** 떠올리기 어렵습니다. 물, 보조배터리, 상비약처럼 기본 물품은 물론 가족 구성원, 반려동물, 복용약, 계절에 따라 필요한 물품이 달라집니다.
+## Why use the Emergency Bag Checklist Planner?
+In situations that are uncommon in daily life—power outages, water outages, typhoons, earthquakes, or sudden evacuation—it can be hard to remember **what to pack first**. Basic items such as water, a power bank, and first-aid supplies matter, but the right list also changes depending on family members, pets, regular medicine, and the season.
 
-이 도구는 가족 수와 상황을 선택하면 **필수 물품, 개인 맞춤 물품, 보강해야 할 항목**을 한 번에 정리해 비상가방을 빠르게 점검할 수 있게 도와줍니다.
+This tool lets you select your family size and situation, then organizes **essential items, personalized items, and items that need reinforcement** so you can review an emergency bag quickly.
 
-## 어떻게 쓰나요?
-1. 성인·아이 인원수와 반려동물 여부를 선택합니다.
-2. 복용약, 안경·렌즈, 유아용품처럼 개인 조건을 체크합니다.
-3. 예상 대피 시간과 계절을 고릅니다.
-4. 이미 준비한 물품을 체크해 부족한 항목을 확인합니다.
-5. 결과 체크리스트를 복사해 장보기 메모나 가족 공유용으로 사용합니다.
+## How to use it
+1. Choose the number of adults, children, or older family members, and whether pets are included.
+2. Check personal conditions such as regular medicine, glasses or contacts, and baby supplies.
+3. Select the expected evacuation duration and season.
+4. Enter items you already have to see what is still missing.
+5. Copy the result checklist for a shopping memo or family sharing.
 
-## 이런 상황에서 특히 유용해요
-### 1) 비상가방을 처음 만들 때
-기본 물품과 개인 맞춤 물품을 나눠 보여주기 때문에 “무조건 많이 사기”보다 필요한 것부터 준비할 수 있습니다.
+## Especially useful when
+### 1) Building an emergency bag for the first time
+Because basic items and personalized items are shown separately, you can prepare what you actually need first instead of buying too much at once.
 
-### 2) 가족 구성원이 바뀌었을 때
-아이, 고령자, 반려동물, 정기 복용약 여부에 따라 추가 항목이 달라집니다. 이사를 했거나 가족 상황이 바뀌었다면 다시 점검해보세요.
+### 2) Your household situation has changed
+Additional items change depending on children, older adults, pets, and regular medication. If you moved or your family situation changed, it is worth checking again.
 
-### 3) 계절별로 가방을 교체할 때
-여름에는 위생·탈수 대비, 겨울에는 보온 대비처럼 계절에 따라 놓치기 쉬운 항목을 따로 알려줍니다.
+### 3) Updating the bag by season
+The planner calls out seasonal items that are easy to miss, such as hygiene and dehydration preparation in summer or warmth protection in winter.
 
-## 함께 쓰면 좋은 도구
-- 준비 일정을 거꾸로 나누려면: [마감 역산 일정 플래너]({{ '/tools/deadline-backward-planner/' | relative_url }})
-- 냉장고 식재료를 먼저 정리하려면: [식재료 소비기한 우선순위 체커]({{ '/tools/ingredient-expiry-priority-checker/' | relative_url }})
-- 이동 시간을 넉넉히 잡으려면: [약속 출발 시간 버퍼 시뮬레이터]({{ '/tools/appointment-departure-buffer-simulator/' | relative_url }})
+## Related tools
+- Need to work backward from a preparation deadline? [Deadline Backward Planner]({{ '/en/tools/deadline-backward-planner/' | relative_url }})
+- Need to use up refrigerator ingredients first? [Ingredient Expiry Priority Checker]({{ '/en/tools/ingredient-expiry-priority-checker/' | relative_url }})
+- Need to leave with enough travel buffer? [Appointment Departure Buffer Simulator]({{ '/en/tools/appointment-departure-buffer-simulator/' | relative_url }})
 
 ## FAQ
-### 비상가방 무게는 어느 정도가 적당한가요?
-오래 들고 이동할 수 있어야 하므로 한 사람이 무리 없이 멜 수 있는 무게가 좋습니다. 물품을 전부 한 가방에 넣기보다 가족별 작은 가방으로 나누는 방법도 있습니다.
+### How heavy should an emergency bag be?
+It should be light enough to carry for a long time. Instead of putting everything into one bag, you can split supplies into smaller bags for each family member.
 
-### 현금이나 신분증 사본도 넣어야 하나요?
-소액 현금, 비상 연락처, 중요 서류 사본은 도움이 될 수 있습니다. 단, 개인정보가 들어간 문서는 방수 봉투에 넣고 분실 위험을 고려하세요.
+### Should I include cash or copies of ID documents?
+Small cash, emergency contacts, and copies of important documents can help. If documents include personal information, keep them in a waterproof pouch and consider the risk of loss.
 
-### 한 번 준비하면 계속 둬도 되나요?
-아니요. 생수, 간식, 약, 배터리, 계절용품은 주기적으로 교체해야 합니다. 최소 분기마다 한 번은 확인하는 편이 안전합니다.
+### Can I prepare it once and leave it alone?
+No. Water, snacks, medicine, batteries, and seasonal items need periodic replacement or checks. Reviewing the bag at least once each quarter is safer.
 
-## 요약
-비상가방 체크리스트 플래너는 **가족 구성과 상황에 맞춰 재난 대비 물품을 정리하는 planner형 도구**입니다.
-최근 발행 5개가 simulator·generator·checker·picker·utility로 분산되어 있어 계산기 편향은 낮지만, 이번 툴은 안전·생활 맥락의 계획형 포맷을 추가해 최근 흐름과 다른 사용 목적을 보강합니다.
+## Summary
+Emergency Bag Checklist Planner is a **planner-style tool that organizes disaster-preparedness supplies around family composition and personal conditions**.
+Recent releases were distributed across simulator, generator, checker, picker, and utility formats, so this safety-focused planning tool adds a different use case instead of duplicating the latest flow.
