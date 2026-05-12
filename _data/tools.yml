@@ -1,3 +1,27 @@
+- id: emergency-bag-checklist-planner
+  title: 비상가방 체크리스트 플래너
+  title_en: Emergency Bag Checklist Planner
+  title_ja: 非常用持ち出し袋チェックリストプランナー
+  category: lifestyle
+  category_label: 생활/비상가방 준비
+  category_label_en: Lifestyle/Emergency Bag
+  category_label_ja: 生活/非常用袋準備
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 가족 구성, 반려동물, 복용약, 대피 시간, 계절을 넣으면 비상가방에 먼저 챙길 물품과 보강해야 할 항목을 체크리스트로 정리해요.
+  description_en: Build an emergency bag checklist based on family members, pets, medicine needs, evacuation time, and season.
+  description_ja: 家族構成、ペット、服薬、避難時間、季節に合わせて非常用持ち出し袋のチェックリストを整理します。
+  url: /tools/emergency-bag-checklist-planner/
+  url_en: /en/tools/emergency-bag-checklist-planner/
+  url_ja: /ja/tools/emergency-bag-checklist-planner/
+  thumbnail: /assets/thumbs/emergency-bag-checklist-planner.svg
+  thumbnail_en: /assets/thumbs/en/emergency-bag-checklist-planner.svg
+  thumbnail_ja: /assets/thumbs/ja/emergency-bag-checklist-planner.svg
+  published_at: 2026-05-12
+  tool_type: planner
+  topic_cluster: safety
+
 - id: movie-seat-choice-simulator
   title: 영화관 좌석 선택 시뮬레이터
   title_en: Movie Theater Seat Choice Simulator

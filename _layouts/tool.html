@@ -3389,6 +3389,69 @@ layout: default
           <textarea id="pdm-output" rows="16" readonly placeholder="정렬 결과가 여기에 표시됩니다."></textarea>
         </div>
 
+      {% when 'emergency-bag-checklist-planner' %}
+        <div class="tool-ui">
+          <p class="tool-result">가족 구성과 상황을 선택하면 비상가방 필수·맞춤 준비물을 체크리스트로 정리합니다.</p>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="ebcp-adults">성인 인원</label>
+              <input id="ebcp-adults" type="number" min="1" max="10" value="1" />
+            </div>
+            <div>
+              <label for="ebcp-children">아이·고령자 인원</label>
+              <input id="ebcp-children" type="number" min="0" max="10" value="0" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="ebcp-hours">예상 대비 시간</label>
+              <select id="ebcp-hours">
+                <option value="24">24시간 기본</option>
+                <option value="48" selected>48시간 권장</option>
+                <option value="72">72시간 넉넉히</option>
+              </select>
+            </div>
+            <div>
+              <label for="ebcp-season">계절</label>
+              <select id="ebcp-season">
+                <option value="normal" selected>일반</option>
+                <option value="summer">여름</option>
+                <option value="winter">겨울</option>
+                <option value="rain">장마·태풍</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="ebcp-pet" type="checkbox" /> 반려동물 동반</label>
+            <label class="tool-check"><input id="ebcp-medicine" type="checkbox" /> 정기 복용약 필요</label>
+            <label class="tool-check"><input id="ebcp-glasses" type="checkbox" /> 안경·렌즈 필요</label>
+            <label class="tool-check"><input id="ebcp-baby" type="checkbox" /> 유아용품 필요</label>
+          </div>
+
+          <div class="tool-row">
+            <label for="ebcp-ready">이미 준비한 물품(쉼표 또는 줄바꿈)</label>
+            <textarea id="ebcp-ready" rows="5" maxlength="1500" placeholder="예: 생수, 보조배터리, 손전등, 상비약"></textarea>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="ebcp-sample" type="button">예시 넣기</button>
+            <button id="ebcp-copy" type="button">결과 복사</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="ebcp-total">0</strong><span>권장 항목</span></div>
+            <div><strong id="ebcp-ready-count">0</strong><span>준비됨</span></div>
+            <div><strong id="ebcp-missing-count">0</strong><span>보강 필요</span></div>
+            <div><strong id="ebcp-water">0L</strong><span>권장 생수</span></div>
+          </div>
+
+          <p class="tool-result" id="ebcp-summary">조건을 선택하면 비상가방 체크리스트가 여기에 표시됩니다.</p>
+          <textarea id="ebcp-output" rows="16" readonly placeholder="비상가방 체크리스트가 여기에 표시됩니다."></textarea>
+        </div>
+
       {% when 'customer-support-message-generator' %}
         <div class="tool-ui">
           <p class="tool-result">문제 상황과 원하는 처리를 입력하면 고객센터에 보낼 정중한 문의 문구를 만듭니다.</p>

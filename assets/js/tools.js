@@ -12924,4 +12924,123 @@
     assign();
   }
 
+
+  if (slug === 'emergency-bag-checklist-planner') {
+    const $ = (id) => document.getElementById(id);
+    const adultsEl = $('ebcp-adults');
+    const childrenEl = $('ebcp-children');
+    const hoursEl = $('ebcp-hours');
+    const seasonEl = $('ebcp-season');
+    const petEl = $('ebcp-pet');
+    const medicineEl = $('ebcp-medicine');
+    const glassesEl = $('ebcp-glasses');
+    const babyEl = $('ebcp-baby');
+    const readyEl = $('ebcp-ready');
+    const output = $('ebcp-output');
+    const summary = $('ebcp-summary');
+    const totalEl = $('ebcp-total');
+    const readyCountEl = $('ebcp-ready-count');
+    const missingCountEl = $('ebcp-missing-count');
+    const waterEl = $('ebcp-water');
+    const sampleBtn = $('ebcp-sample');
+    const copyBtn = $('ebcp-copy');
+    if (!adultsEl || !output) return;
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+      }
+    };
+
+    const item = (name, group, reason, aliases = []) => ({ name, group, reason, aliases: [name, ...aliases].map(v => v.toLowerCase()) });
+    const baseItems = [
+      item('생수', '필수', '1인당 하루 2L 안팎을 기준으로 준비합니다.', ['물', 'water']),
+      item('비상식량', '필수', '조리 없이 먹을 수 있는 에너지바·통조림·견과류가 좋습니다.', ['간식', '통조림', '에너지바']),
+      item('보조배터리와 충전 케이블', '필수', '정전이나 이동 중 연락 수단을 유지합니다.', ['보조배터리', '충전기', '케이블']),
+      item('손전등 또는 헤드랜턴', '필수', '야간 이동과 정전 상황에 필요합니다.', ['손전등', '랜턴']),
+      item('휴대용 라디오 또는 재난 알림 수단', '필수', '통신 장애 시 공지 확인에 도움이 됩니다.', ['라디오']),
+      item('상비약과 응급처치 키트', '필수', '소독제, 밴드, 진통제 등 기본 처치용입니다.', ['상비약', '구급상자', '밴드']),
+      item('마스크와 위생용품', '필수', '먼지, 감염, 화장실 이용 상황에 대비합니다.', ['마스크', '물티슈', '휴지']),
+      item('소액 현금과 비상 연락처', '필수', '카드 결제가 안 될 때와 연락처 확인에 필요합니다.', ['현금', '연락처']),
+      item('방수 지퍼백', '필수', '서류, 약, 전자기기를 습기에서 보호합니다.', ['지퍼백', '방수팩']),
+      item('여벌 옷과 양말', '필수', '비·땀·추위에 젖었을 때 체온 유지에 필요합니다.', ['옷', '양말'])
+    ];
+
+    const build = () => {
+      const adults = Math.max(1, Number(adultsEl.value || 1));
+      const children = Math.max(0, Number(childrenEl.value || 0));
+      const people = adults + children;
+      const hours = Number(hoursEl.value || 48);
+      const days = Math.max(1, Math.ceil(hours / 24));
+      const season = seasonEl.value || 'normal';
+      const items = [...baseItems];
+
+      if (children > 0) items.push(item('아이·고령자용 간식과 개인 물품', '맞춤', '나이와 건강 상태에 맞는 식품, 보온용품, 보조기구를 따로 챙깁니다.', ['아이 간식', '고령자 물품']));
+      if (petEl.checked) items.push(item('반려동물 사료·물그릇·배변봉투', '맞춤', '동반 대피 시 평소 먹는 사료와 리드줄, 배변용품이 필요합니다.', ['사료', '배변봉투', '리드줄']));
+      if (medicineEl.checked) items.push(item('정기 복용약 3일분과 처방 정보', '맞춤', '평소 먹는 약은 대체가 어려우므로 별도 방수 보관합니다.', ['복용약', '처방전', '약']));
+      if (glassesEl.checked) items.push(item('예비 안경·렌즈와 세척용품', '맞춤', '시력 보조 도구가 없으면 이동과 정보 확인이 어려울 수 있습니다.', ['안경', '렌즈']));
+      if (babyEl.checked) items.push(item('기저귀·분유·아기 물티슈', '맞춤', '유아는 식사와 위생용품을 성인 물품과 별도로 준비해야 합니다.', ['기저귀', '분유', '아기 물티슈']));
+      if (season === 'summer') items.push(item('전해질 음료와 냉감 수건', '계절', '더위와 탈수에 대비합니다.', ['전해질', '냉감 수건']));
+      if (season === 'winter') items.push(item('핫팩·보온포·장갑', '계절', '저체온 예방을 위해 가볍고 따뜻한 물품을 추가합니다.', ['핫팩', '보온포', '장갑']));
+      if (season === 'rain') items.push(item('우비·방수 신발 커버', '계절', '젖은 상태로 이동할 때 체온 저하와 물품 손상을 줄입니다.', ['우비', '방수']));
+
+      const readyRaw = (readyEl.value || '').toLowerCase().split(/[\n,]/).map(v => v.trim()).filter(Boolean);
+      const rows = items.map(it => {
+        const ready = readyRaw.some(r => it.aliases.some(a => r.includes(a) || a.includes(r)));
+        return { ...it, ready };
+      });
+      const readyCount = rows.filter(r => r.ready).length;
+      const missing = rows.filter(r => !r.ready);
+      const water = people * days * 2;
+      totalEl.textContent = formatNum(rows.length);
+      readyCountEl.textContent = formatNum(readyCount);
+      missingCountEl.textContent = formatNum(missing.length);
+      waterEl.textContent = `${water}L`;
+      summary.textContent = `${people}명 기준 ${hours}시간 대비: ${rows.length}개 권장 항목 중 ${missing.length}개를 보강하면 좋습니다.`;
+      const lines = [
+        '# 비상가방 체크리스트',
+        `- 기준: ${people}명 / ${hours}시간 / 권장 생수 약 ${water}L`,
+        '',
+        '## 먼저 보강할 항목',
+        ...(missing.length ? missing.map(r => `- [ ] ${r.name} (${r.group}) — ${r.reason}`) : ['- 모든 권장 항목이 준비된 것으로 보입니다. 유통기한과 배터리 잔량을 확인하세요.']),
+        '',
+        '## 준비된 항목',
+        ...(rows.filter(r => r.ready).length ? rows.filter(r => r.ready).map(r => `- [x] ${r.name}`) : ['- 아직 입력된 준비 물품이 없습니다.']),
+        '',
+        '## 점검 팁',
+        '- 생수·간식·약·배터리는 분기마다 교체하거나 상태를 확인하세요.',
+        '- 가족별 작은 가방으로 나누면 한 사람이 모든 무게를 부담하지 않아도 됩니다.',
+        '- 실제 대피 판단은 재난 문자와 지자체 안내를 우선하세요.'
+      ];
+      output.value = lines.join('\n');
+    };
+
+    sampleBtn?.addEventListener('click', () => {
+      adultsEl.value = '2'; childrenEl.value = '1'; hoursEl.value = '72'; seasonEl.value = 'rain';
+      petEl.checked = true; medicineEl.checked = true; glassesEl.checked = false; babyEl.checked = false;
+      readyEl.value = '생수, 보조배터리, 손전등, 마스크, 현금';
+      build();
+    });
+    copyBtn?.addEventListener('click', async () => {
+      if (!output.value.trim()) return;
+      await copyText(output.value.trim());
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사 완료';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+    [adultsEl, childrenEl, hoursEl, seasonEl, petEl, medicineEl, glassesEl, babyEl, readyEl].forEach(el => {
+      el?.addEventListener('input', build);
+      el?.addEventListener('change', build);
+    });
+    build();
+  }
+
 })();
