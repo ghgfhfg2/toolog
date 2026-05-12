@@ -8,7 +8,7 @@
   <path d="M270 210v-30c0-30 24-54 54-54s54 24 54 54v30" fill="none" stroke="#fff7ed" stroke-width="24" stroke-linecap="round"/>
   <rect x="245" y="300" width="155" height="34" rx="17" fill="#fff7ed"/>
   <path d="M305 270v94M258 317h94" stroke="#0f766e" stroke-width="22" stroke-linecap="round"/>
-  <text x="560" y="250" font-family="Arial, sans-serif" font-size="70" font-weight="800" fill="#ffffff">비상가방</text>
-  <text x="560" y="335" font-family="Arial, sans-serif" font-size="70" font-weight="800" fill="#ffffff">체크리스트</text>
-  <text x="565" y="420" font-family="Arial, sans-serif" font-size="34" fill="#ffedd5">가족 · 반려동물 · 복용약 맞춤 준비</text>
+  <text x="560" y="250" font-family="Arial, sans-serif" font-size="70" font-weight="800" fill="#ffffff">Emergency</text>
+  <text x="560" y="335" font-family="Arial, sans-serif" font-size="70" font-weight="800" fill="#ffffff">Bag Kit</text>
+  <text x="565" y="420" font-family="Arial, sans-serif" font-size="34" fill="#ffedd5">Family · Pets · Medicine Ready</text>
 </svg>
