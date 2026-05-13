@@ -12925,6 +12925,95 @@
   }
 
 
+
+  if (slug === 'meeting-action-item-extractor') {
+    const input = document.getElementById('maie-input');
+    const namesEl = document.getElementById('maie-names');
+    const includeDecisions = document.getElementById('maie-include-decisions');
+    const includeQuestions = document.getElementById('maie-include-questions');
+    const runBtn = document.getElementById('maie-run');
+    const sampleBtn = document.getElementById('maie-sample');
+    const copyBtn = document.getElementById('maie-copy');
+    const output = document.getElementById('maie-output');
+    const summary = document.getElementById('maie-summary');
+    const actionsOut = document.getElementById('maie-actions');
+    const decisionsOut = document.getElementById('maie-decisions');
+    const datesOut = document.getElementById('maie-dates');
+    const ownersOut = document.getElementById('maie-owners');
+    if (!input || !output || !runBtn) return;
+
+    const i18n = {
+      ko: {
+        untitled: '미지정', noDue: '기한 미정', noOwner: '담당 미정', actionTitle: '## 액션아이템', decisionTitle: '## 결정사항', questionTitle: '## 미해결 질문', none: '- 추출된 항목이 없습니다. `해야 함`, `담당`, `까지`, `결정`처럼 더 구체적인 표현을 넣어보세요.', summary: (a,d,q) => `할 일 ${a}개, 결정사항 ${d}개, 미해결 질문 ${q}개를 정리했습니다.`, copyDone: '복사 완료', sample: `5/13 서비스 개선 회의\n- 민지: 온보딩 화면 문구를 금요일까지 수정\n- 현우는 고객센터 FAQ 초안을 다음 주 월요일까지 작성하기\n- 결정: 베타 공지는 이번 주에는 보내지 않음\n- TODO 결제 실패 로그를 다시 확인\n- 질문: 무료 체험 종료 알림은 며칠 전에 보내야 하나?\n- 디자인팀 @수정 시안 내일까지 공유` },
+      en: {
+        untitled: 'Unspecified', noDue: 'No due date', noOwner: 'No owner', actionTitle: '## Action items', decisionTitle: '## Decisions', questionTitle: '## Open questions', none: '- No clear items found. Try adding words like todo, owner, by Friday, decided, or question.', summary: (a,d,q) => `Extracted ${a} action item(s), ${d} decision(s), and ${q} open question(s).`, copyDone: 'Copied', sample: `May 13 product meeting\n- Mina: revise onboarding copy by Friday\n- Alex to draft support FAQ by next Monday\n- Decision: do not send the beta announcement this week\n- TODO review payment failure logs again\n- Question: how many days before trial end should we notify users?\n- Design team @Jamie share revised mockups tomorrow` },
+      ja: {
+        untitled: '未指定', noDue: '期限未定', noOwner: '担当未定', actionTitle: '## アクション項目', decisionTitle: '## 決定事項', questionTitle: '## 未解決の質問', none: '- 明確な項目が見つかりませんでした。TODO、担当、まで、決定、質問などの表現を入れてみてください。', summary: (a,d,q) => `アクション${a}件、決定事項${d}件、未解決質問${q}件を整理しました。`, copyDone: 'コピー完了', sample: `5/13 サービス改善会議\n- ミナ: オンボーディング文言を金曜まで修正\n- ケンはFAQ草案を来週月曜まで作成\n- 決定: ベータ告知は今週送らない\n- TODO 決済失敗ログを再確認\n- 質問: 無料トライアル終了通知は何日前に送る？\n- デザインチーム @ユイ 明日までに修正版を共有` }
+    }[pageLang] || null;
+
+    const normalizeLine = (line) => line.replace(/^\s*[-*•\d.)\]]+\s*/, '').trim();
+    const ownerFromLine = (line, known) => {
+      const at = line.match(/@([\p{L}\p{N}_-]+)/u);
+      if (at) return at[1];
+      const colon = line.match(/^([\p{L}\p{N}_\s]{2,18})\s*[:：]/u);
+      if (colon) return colon[1].trim();
+      const hit = known.find(name => name && line.toLowerCase().includes(name.toLowerCase()));
+      return hit || i18n.noOwner;
+    };
+    const dueFromLine = (line) => {
+      const patterns = [
+        /(\d{1,2}[./-]\d{1,2})(?:\s*까지|\s*by)?/,
+        /(오늘|내일|모레|이번\s*주|다음\s*주|금요일|월요일|화요일|수요일|목요일|토요일|일요일)\s*까지?/,
+        /(today|tomorrow|this\s+week|next\s+week|by\s+[A-Za-z]+|Friday|Monday|Tuesday|Wednesday|Thursday|Saturday|Sunday)/i,
+        /(今日|明日|今週|来週|月曜|火曜|水曜|木曜|金曜|土曜|日曜)まで?/
+      ];
+      for (const p of patterns) { const m = line.match(p); if (m) return m[0].trim(); }
+      return i18n.noDue;
+    };
+    const isDecision = (line) => /\b(decision|decided|agree[ds]?)\b/i.test(line) || /(결정|확정|합의|보류하기로|진행하기로|하지 않음|하기로 함|決定|確定|合意)/.test(line);
+    const isQuestion = (line) => /\?|\b(question|open issue|unclear)\b/i.test(line) || /(질문|확인 필요|논의 필요|미정|検討|質問|確認必要)/.test(line);
+    const isAction = (line) => /\b(todo|to do|action|follow up|owner|by\b|due)\b/i.test(line) || /(해야|하기|수정|작성|공유|확인|정리|전달|검토|담당|까지|TODO|액션|対応|修正|作成|共有|確認|担当|まで)/i.test(line);
+
+    const extract = () => {
+      const known = (namesEl?.value || '').split(/\n+/).map(v => v.trim()).filter(Boolean);
+      const lines = (input.value || '').split(/\n+/).map(normalizeLine).filter(Boolean);
+      const actions = [], decisions = [], questions = [];
+      lines.forEach(line => {
+        if (isDecision(line)) decisions.push(line);
+        if (isQuestion(line)) questions.push(line);
+        if (isAction(line) && !isDecision(line)) {
+          actions.push({ text: line, owner: ownerFromLine(line, known), due: dueFromLine(line) });
+        }
+      });
+      const actionLines = actions.map((it, idx) => `- [ ] ${it.text}\n  - ${pageLang === 'en' ? 'Owner' : pageLang === 'ja' ? '担当' : '담당'}: ${it.owner}\n  - ${pageLang === 'en' ? 'Due' : pageLang === 'ja' ? '期限' : '기한'}: ${it.due}`);
+      const chunks = [];
+      chunks.push(i18n.actionTitle);
+      chunks.push(actionLines.length ? actionLines.join('\n') : i18n.none);
+      if (includeDecisions?.checked) { chunks.push('', i18n.decisionTitle, decisions.length ? decisions.map(x => `- ${x}`).join('\n') : '- ' + i18n.untitled); }
+      if (includeQuestions?.checked) { chunks.push('', i18n.questionTitle, questions.length ? questions.map(x => `- ${x}`).join('\n') : '- ' + i18n.untitled); }
+      output.value = chunks.join('\n');
+      const ownerCount = actions.filter(x => x.owner !== i18n.noOwner).length;
+      const dueCount = actions.filter(x => x.due !== i18n.noDue).length;
+      actionsOut.textContent = formatNum(actions.length);
+      decisionsOut.textContent = formatNum(decisions.length);
+      datesOut.textContent = formatNum(dueCount);
+      ownersOut.textContent = formatNum(ownerCount);
+      summary.textContent = i18n.summary(actions.length, decisions.length, questions.length);
+    };
+
+    sampleBtn?.addEventListener('click', () => { input.value = i18n.sample; namesEl.value = pageLang === 'en' ? 'Mina\nAlex\nJamie\nDesign team' : pageLang === 'ja' ? 'ミナ\nケン\nユイ\nデザインチーム' : '민지\n현우\n수정\n디자인팀'; extract(); });
+    runBtn.addEventListener('click', extract);
+    [input, namesEl, includeDecisions, includeQuestions].forEach(el => { el?.addEventListener('input', extract); el?.addEventListener('change', extract); });
+    copyBtn?.addEventListener('click', async () => {
+      if (!output.value.trim()) return;
+      if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(output.value.trim());
+      else { output.focus(); output.select(); document.execCommand('copy'); }
+      const old = copyBtn.textContent;
+      copyBtn.textContent = i18n.copyDone;
+      setTimeout(() => { copyBtn.textContent = old; }, 900);
+    });
+  }
+
   if (slug === 'emergency-bag-checklist-planner') {
     const $ = (id) => document.getElementById(id);
     const adultsEl = $('ebcp-adults');

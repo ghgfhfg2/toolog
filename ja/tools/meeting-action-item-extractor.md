@@ -1,0 +1,70 @@
+---
+layout: tool
+title: 会議メモアクションアイテム整理ツール | 担当者・期限・決定事項を抽出
+description: 会議メモを貼り付けると、担当者候補、期限ヒント、決定事項、未解決の質問をフォローアップ用チェックリストに整理します。
+lang: ja
+permalink: /ja/tools/meeting-action-item-extractor/
+canonical_url: /ja/tools/meeting-action-item-extractor/
+alternate_urls:
+  ko: /tools/meeting-action-item-extractor/
+  en: /en/tools/meeting-action-item-extractor/
+  ja: /ja/tools/meeting-action-item-extractor/
+category: productivity
+category_label: 仕事/会議メモ整理
+thumbnail: /assets/thumbs/ja/meeting-action-item-extractor.svg
+image:
+  path: /assets/thumbs/ja/meeting-action-item-extractor.svg
+  alt: 会議メモアクションアイテム整理ツールのサムネイル
+tool_key: meeting-action-item-extractor
+tool_type: utility
+topic_cluster: work
+keywords: [会議 アクションアイテム, 会議メモ整理, 議事録チェックリスト, 担当者 期限, フォローアップ]
+related_tools: [priority-decision-matrix-planner, deadline-backward-planner, schedule-coordination-message-generator]
+faq:
+  - q: AI議事録のように完全に理解しますか？
+    a: いいえ。ブラウザ内でキーワードと行パターンを使ってフォローアップ候補を整理する軽量ツールです。重要な議事録は人が確認してください。
+  - q: 会議メモはサーバーに送信されますか？
+    a: いいえ。入力内容は現在のブラウザ内だけで処理され、保存やアップロードは行いません。
+  - q: どんな書き方が向いていますか？
+    a: 担当者名、TODO、決定、質問、金曜まで、期限などが行ごとに書かれていると抽出しやすくなります。
+---
+
+## なぜ会議メモアクションアイテム整理ツールが必要ですか？
+会議後によく起きる問題は、「誰が、いつまでに、何をするのか」が曖昧になることです。ラフなメモには決定事項、質問、フォローアップ作業が混ざり、重要な対応が抜けやすくなります。
+
+このツールは貼り付けたメモから **担当者候補、期限ヒント、決定事項、未解決の質問** を取り出し、共有しやすいチェックリストに整理します。完全なAI議事録ではなく、会議直後の軽い整理に向いたユーティリティです。
+
+## 使い方
+1. 会議メモ、チャットログ、簡単な議事録を貼り付けます。
+2. 担当者候補が分かる場合は1行に1名ずつ入力します。
+3. 決定事項と未解決質問を含めるか選びます。
+4. アクション項目を抽出して結果を確認します。
+5. 結果をSlack、Notion、メール、業務チャットにコピーします。
+
+## 特に便利な場面
+### 1) 会議直後に次の作業を共有したい時
+担当者や期限がある行を優先して整理するため、記憶が新しいうちに次のステップを共有できます。
+
+### 2) チャット会議のログを整える時
+TODO、決定、質問、期限の表現をまとめ、長いログを読み返す負担を減らします。
+
+### 3) 担当者や期限の抜けを見つけたい時
+担当未定・期限未定の表示を見ることで、追加確認が必要な項目を発見できます。
+
+## 関連ツール
+- 複数タスクの優先順位を決めるなら: [優先順位決定マトリクス整理ツール]({ '/ja/tools/priority-decision-matrix-planner/' | relative_url })
+- 期限から逆算したいなら: [締切逆算スケジュールプランナー]({ '/ja/tools/deadline-backward-planner/' | relative_url })
+- 会議後の日程調整文を作るなら: [日程調整メッセージジェネレーター]({ '/ja/tools/schedule-coordination-message-generator/' | relative_url })
+
+## FAQ
+### どの形式の会議メモにも対応しますか？
+各行に1つの内容がある箇条書き、TODO、決定事項、質問形式のメモで最も使いやすくなります。
+
+### 担当者はどう認識しますか？
+`ミナ:`、`@ケン`、担当者候補リストにある名前など、明確な表現を優先して認識します。曖昧な行は担当未定になります。
+
+### 結果をそのまま共有してもいいですか？
+共有前に担当者、期限、決定事項が実際の内容と合っているか確認してください。外部共有時は機密情報も削除しましょう。
+
+## まとめ
+会議メモアクションアイテム整理ツールは、**ラフな会議メモをフォローアップ用チェックリストに変えるutility型ツール**です。
