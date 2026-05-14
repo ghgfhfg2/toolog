@@ -1,3 +1,27 @@
+- id: recycling-sorting-practice
+  title: 분리배출 퀴즈 연습기
+  title_en: Recycling Sorting Practice
+  title_ja: 分別排出クイズ練習ツール
+  category: lifestyle
+  category_label: 생활/분리배출 학습
+  category_label_en: Lifestyle/Recycling Practice
+  category_label_ja: 生活/分別学習
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 헷갈리는 생활 쓰레기 품목을 퀴즈로 풀며 종이, 플라스틱, 캔, 유리, 음식물, 일반쓰레기 분리 기준을 빠르게 연습해요.
+  description_en: Practice confusing household waste sorting with quick quizzes across paper, plastic, cans, glass, food waste, and general trash.
+  description_ja: 迷いやすい家庭ごみの分別を、紙・プラスチック・缶・びん・生ごみ・一般ごみのクイズで練習できます。
+  url: /tools/recycling-sorting-practice/
+  url_en: /en/tools/recycling-sorting-practice/
+  url_ja: /ja/tools/recycling-sorting-practice/
+  thumbnail: /assets/thumbs/recycling-sorting-practice.svg
+  thumbnail_en: /assets/thumbs/en/recycling-sorting-practice.svg
+  thumbnail_ja: /assets/thumbs/ja/recycling-sorting-practice.svg
+  published_at: 2026-05-14
+  tool_type: learning
+  topic_cluster: lifestyle
+
 - id: meeting-action-item-extractor
   title: 회의 메모 액션아이템 정리기
   title_en: Meeting Action Item Extractor

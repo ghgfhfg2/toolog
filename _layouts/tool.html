@@ -3389,6 +3389,56 @@ layout: default
           <textarea id="pdm-output" rows="16" readonly placeholder="정렬 결과가 여기에 표시됩니다."></textarea>
         </div>
 
+      {% when 'recycling-sorting-practice' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="rsp-difficulty">{% if page.lang == 'en' %}Difficulty{% elsif page.lang == 'ja' %}難易度{% else %}난이도{% endif %}</label>
+              <select id="rsp-difficulty">
+                <option value="easy">{% if page.lang == 'en' %}Easy: common items{% elsif page.lang == 'ja' %}やさしい: よくある品目{% else %}쉬움: 자주 보는 품목{% endif %}</option>
+                <option value="mixed" selected>{% if page.lang == 'en' %}Mixed: everyday confusing items{% elsif page.lang == 'ja' %}ミックス: 迷いやすい品目{% else %}섞어서: 헷갈리는 생활 품목{% endif %}</option>
+                <option value="hard">{% if page.lang == 'en' %}Hard: tricky exceptions{% elsif page.lang == 'ja' %}難しい: 例外 중심{% else %}어려움: 예외 품목 중심{% endif %}</option>
+              </select>
+            </div>
+            <div>
+              <label for="rsp-range">{% if page.lang == 'en' %}Question range{% elsif page.lang == 'ja' %}出題範囲{% else %}출제 범위{% endif %}</label>
+              <select id="rsp-range">
+                <option value="all">{% if page.lang == 'en' %}All categories{% elsif page.lang == 'ja' %}すべて{% else %}전체 분류{% endif %}</option>
+                <option value="recycle">{% if page.lang == 'en' %}Recyclables only{% elsif page.lang == 'ja' %}資源ごみ 중심{% else %}재활용품 중심{% endif %}</option>
+                <option value="food">{% if page.lang == 'en' %}Food/general trash focus{% elsif page.lang == 'ja' %}生ごみ/一般ごみ 중심{% else %}음식물·일반쓰레기 중심{% endif %}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tool-result" id="rsp-card">
+            <strong id="rsp-item">-</strong>
+            <span id="rsp-hint">{% if page.lang == 'en' %}Choose the best sorting category.{% elsif page.lang == 'ja' %}適切な分別カテゴリを選んでください。{% else %}알맞은 배출 분류를 고르세요.{% endif %}</span>
+          </div>
+
+          <div class="tool-row-grid pct-actions rsp-choices" id="rsp-choices">
+            <button type="button" data-answer="paper">{% if page.lang == 'en' %}Paper{% elsif page.lang == 'ja' %}紙{% else %}종이{% endif %}</button>
+            <button type="button" data-answer="plastic">{% if page.lang == 'en' %}Plastic{% elsif page.lang == 'ja' %}プラスチック{% else %}플라스틱{% endif %}</button>
+            <button type="button" data-answer="can">{% if page.lang == 'en' %}Can / metal{% elsif page.lang == 'ja' %}缶/金属{% else %}캔·금속{% endif %}</button>
+            <button type="button" data-answer="glass">{% if page.lang == 'en' %}Glass bottle{% elsif page.lang == 'ja' %}びん{% else %}유리병{% endif %}</button>
+            <button type="button" data-answer="food">{% if page.lang == 'en' %}Food waste{% elsif page.lang == 'ja' %}生ごみ{% else %}음식물쓰레기{% endif %}</button>
+            <button type="button" data-answer="general">{% if page.lang == 'en' %}General trash{% elsif page.lang == 'ja' %}一般ごみ{% else %}일반쓰레기{% endif %}</button>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="rsp-next" type="button">{% if page.lang == 'en' %}Next question{% elsif page.lang == 'ja' %}次の問題{% else %}다음 문제{% endif %}</button>
+            <button id="rsp-review" type="button">{% if page.lang == 'en' %}Review missed{% elsif page.lang == 'ja' %}間違い復習{% else %}틀린 문제 다시 풀기{% endif %}</button>
+            <button id="rsp-reset" type="button">{% if page.lang == 'en' %}Reset score{% elsif page.lang == 'ja' %}スコアリセット{% else %}점수 초기화{% endif %}</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="rsp-correct">0</strong><span>{% if page.lang == 'en' %}Correct{% elsif page.lang == 'ja' %}正解{% else %}정답{% endif %}</span></div>
+            <div><strong id="rsp-total">0</strong><span>{% if page.lang == 'en' %}Answered{% elsif page.lang == 'ja' %}回答{% else %}풀이 수{% endif %}</span></div>
+            <div><strong id="rsp-rate">0%</strong><span>{% if page.lang == 'en' %}Accuracy{% elsif page.lang == 'ja' %}正答率{% else %}정답률{% endif %}</span></div>
+            <div><strong id="rsp-missed">0</strong><span>{% if page.lang == 'en' %}Missed set{% elsif page.lang == 'ja' %}復習候補{% else %}복습 후보{% endif %}</span></div>
+          </div>
+
+          <p class="tool-result" id="rsp-feedback">{% if page.lang == 'en' %}Start with the first item and choose a category.{% elsif page.lang == 'ja' %}最初の品目から分別カテゴリを選んでください。{% else %}첫 품목을 보고 배출 분류를 골라보세요.{% endif %}</p>
+        </div>
       {% when 'meeting-action-item-extractor' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">

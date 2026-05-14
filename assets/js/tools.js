@@ -12926,6 +12926,122 @@
 
 
 
+
+  if (slug === 'recycling-sorting-practice') {
+    const $ = (id) => document.getElementById(id);
+    const difficultyEl = $('rsp-difficulty');
+    const rangeEl = $('rsp-range');
+    const itemEl = $('rsp-item');
+    const hintEl = $('rsp-hint');
+    const feedbackEl = $('rsp-feedback');
+    const nextBtn = $('rsp-next');
+    const reviewBtn = $('rsp-review');
+    const resetBtn = $('rsp-reset');
+    const correctEl = $('rsp-correct');
+    const totalEl = $('rsp-total');
+    const rateEl = $('rsp-rate');
+    const missedEl = $('rsp-missed');
+    const choiceBtns = Array.from(document.querySelectorAll('#rsp-choices [data-answer]'));
+    if (!itemEl || !feedbackEl || !choiceBtns.length) return;
+
+    const t = {
+      ko: {
+        labels: { paper: '종이', plastic: '플라스틱', can: '캔·금속', glass: '유리병', food: '음식물쓰레기', general: '일반쓰레기' },
+        correct: (label, why) => `정답입니다. ${label}로 분류해요. ${why}`,
+        wrong: (picked, label, why) => `아쉬워요. 선택: ${picked} / 정답: ${label}. ${why}`,
+        reviewEmpty: '아직 복습할 오답이 없습니다.',
+        reset: '점수를 초기화했습니다. 새 문제를 풀어보세요.',
+        hint: '알맞은 배출 분류를 고르세요.'
+      },
+      en: {
+        labels: { paper: 'Paper', plastic: 'Plastic', can: 'Can / metal', glass: 'Glass bottle', food: 'Food waste', general: 'General trash' },
+        correct: (label, why) => `Correct. Sort it as ${label}. ${why}`,
+        wrong: (picked, label, why) => `Not quite. Your choice: ${picked} / Answer: ${label}. ${why}`,
+        reviewEmpty: 'No missed items to review yet.',
+        reset: 'Score reset. Try a new question.',
+        hint: 'Choose the best sorting category.'
+      },
+      ja: {
+        labels: { paper: '紙', plastic: 'プラスチック', can: '缶/金属', glass: 'びん', food: '生ごみ', general: '一般ごみ' },
+        correct: (label, why) => `正解です。${label}として分別します。${why}`,
+        wrong: (picked, label, why) => `惜しいです。選択: ${picked} / 正解: ${label}。${why}`,
+        reviewEmpty: '復習する間違いはまだありません。',
+        reset: 'スコアをリセットしました。新しい問題を解いてみましょう。',
+        hint: '適切な分別カテゴリを選んでください。'
+      }
+    }[pageLang] || null;
+
+    const questions = [
+      { item: { ko:'깨끗한 신문지', en:'Clean newspaper', ja:'きれいな新聞紙' }, answer:'paper', level:'easy', range:'recycle', why:{ ko:'물기와 음식물이 없으면 종이류로 묶어 배출할 수 있어요.', en:'Clean and dry newspaper can be bundled with paper recyclables.', ja:'汚れや水分がなければ紙類として出せます。' } },
+      { item: { ko:'기름 묻은 피자 박스', en:'Greasy pizza box', ja:'油汚れのピザ箱' }, answer:'general', level:'mixed', range:'all', why:{ ko:'기름과 음식물이 많이 묻은 종이는 재활용 품질을 떨어뜨려 일반쓰레기로 봐요.', en:'Heavy grease and food residue make paper hard to recycle.', ja:'油や食べ物汚れが強い紙はリサイクルしにくいため一般ごみ扱いです。' } },
+      { item: { ko:'내용물을 비운 페트병', en:'Empty PET bottle', ja:'中身を空にしたペットボトル' }, answer:'plastic', level:'easy', range:'recycle', why:{ ko:'비우고 헹군 뒤 라벨을 제거하면 플라스틱류로 배출하기 좋아요.', en:'Empty, rinse, and remove labels when possible before recycling as plastic.', ja:'中身を空にして洗い、ラベルを外すとプラスチックとして出しやすいです。' } },
+      { item: { ko:'영수증 감열지', en:'Thermal receipt paper', ja:'レシート感熱紙' }, answer:'general', level:'hard', range:'all', why:{ ko:'감열지는 코팅·약품 처리로 일반 종이 재활용에 섞지 않는 편이 안전해요.', en:'Thermal receipts are chemically coated and usually kept out of paper recycling.', ja:'感熱紙は薬品処理されているため紙リサイクルに混ぜない方が安全です。' } },
+      { item: { ko:'알루미늄 음료 캔', en:'Aluminum drink can', ja:'アルミ飲料缶' }, answer:'can', level:'easy', range:'recycle', why:{ ko:'내용물을 비우고 가능한 한 눌러 캔·금속류로 배출해요.', en:'Empty it and recycle with cans/metals.', ja:'中身を空にして缶・金属類として出します。' } },
+      { item: { ko:'깨진 유리컵', en:'Broken drinking glass', ja:'割れたコップ' }, answer:'general', level:'hard', range:'all', why:{ ko:'유리병과 재질이 다르고 위험하므로 신문지 등에 싸서 일반쓰레기 또는 지역 지침에 따라 배출해요.', en:'Broken drinking glass is not the same as bottles and should be wrapped and handled as general trash or per local rules.', ja:'ガラスびんとは材質が異なり危険なので、包んで一般ごみまたは地域ルールに従います。' } },
+      { item: { ko:'잼 병처럼 깨끗이 헹군 유리병', en:'Rinsed jam jar', ja:'洗ったジャムのびん' }, answer:'glass', level:'easy', range:'recycle', why:{ ko:'내용물을 비우고 헹군 유리병은 병류로 분리배출해요.', en:'Empty and rinsed jars can go with glass bottles/jars.', ja:'中身を空にして洗ったびんはびん類として出せます。' } },
+      { item: { ko:'치킨 뼈', en:'Chicken bones', ja:'鶏の骨' }, answer:'general', level:'mixed', range:'food', why:{ ko:'뼈는 음식물 처리 과정에 적합하지 않아 일반쓰레기로 보는 경우가 많아요.', en:'Bones are usually unsuitable for food-waste processing.', ja:'骨は生ごみ処理に向かないため一般ごみ扱いが多いです。' } },
+      { item: { ko:'먹다 남은 밥', en:'Leftover cooked rice', ja:'残ったご飯' }, answer:'food', level:'easy', range:'food', why:{ ko:'일반적으로 음식물쓰레기로 분류하지만 물기는 최대한 빼고 배출해요.', en:'Cooked rice is generally food waste; drain excess moisture first.', ja:'ご飯は一般的に生ごみですが、水分をできるだけ切ります。' } },
+      { item: { ko:'티백과 커피 캡슐', en:'Tea bag and coffee capsule', ja:'ティーバッグとコーヒーカプセル' }, answer:'general', level:'hard', range:'food', why:{ ko:'필터·캡슐·내용물이 섞인 복합재는 분리하기 어렵다면 일반쓰레기로 처리해요.', en:'Mixed materials are hard to process unless fully separated.', ja:'素材が混ざって分けにくいものは一般ごみ扱いが無難です。' } },
+      { item: { ko:'스티로폼 완충재', en:'Clean foam packaging', ja:'きれいな発泡スチロール緩衝材' }, answer:'plastic', level:'mixed', range:'recycle', why:{ ko:'깨끗한 스티로폼 포장재는 플라스틱/스티로폼 분리배출 대상인 경우가 많아요.', en:'Clean foam packaging is often collected with plastics/foam, depending on local rules.', ja:'きれいな発泡スチロールはプラスチック/発泡材として回収されることが多いです。' } },
+      { item: { ko:'코팅된 종이컵', en:'Coated paper cup', ja:'コーティング紙コップ' }, answer:'general', level:'hard', range:'all', why:{ ko:'안쪽 코팅 때문에 일반 종이와 다르게 처리될 수 있어, 별도 수거함이 없으면 일반쓰레기로 보는 편이 안전해요.', en:'Inner coating makes it different from plain paper; use a dedicated bin if available.', ja:'内側コーティングがあるため、専用回収がなければ一般ごみが無難です。' } }
+    ];
+
+    let current = null;
+    let correct = 0;
+    let total = 0;
+    const missed = [];
+
+    const localize = (obj) => obj?.[pageLang] || obj?.ko || '';
+    const pool = () => {
+      const diff = difficultyEl?.value || 'mixed';
+      const range = rangeEl?.value || 'all';
+      return questions.filter(q => (diff === 'mixed' || q.level === diff || (diff === 'easy' && q.level === 'mixed')) && (range === 'all' || q.range === range || (range === 'food' && q.range === 'all')));
+    };
+    const updateStats = () => {
+      correctEl.textContent = formatNum(correct);
+      totalEl.textContent = formatNum(total);
+      rateEl.textContent = total ? `${Math.round(correct / total * 100)}%` : '0%';
+      missedEl.textContent = formatNum(missed.length);
+    };
+    const nextQuestion = (fromMissed = false) => {
+      const source = fromMissed && missed.length ? missed : pool();
+      current = source[Math.floor(Math.random() * source.length)] || questions[0];
+      itemEl.textContent = localize(current.item);
+      hintEl.textContent = t.hint;
+      feedbackEl.textContent = t.hint;
+      choiceBtns.forEach(btn => { btn.disabled = false; btn.style.opacity = '1'; });
+    };
+
+    choiceBtns.forEach(btn => btn.addEventListener('click', () => {
+      if (!current) return;
+      const picked = btn.dataset.answer;
+      const label = t.labels[current.answer];
+      const pickedLabel = t.labels[picked] || picked;
+      total += 1;
+      if (picked === current.answer) {
+        correct += 1;
+        feedbackEl.textContent = t.correct(label, localize(current.why));
+        const idx = missed.indexOf(current);
+        if (idx >= 0) missed.splice(idx, 1);
+      } else {
+        feedbackEl.textContent = t.wrong(pickedLabel, label, localize(current.why));
+        if (!missed.includes(current)) missed.push(current);
+      }
+      choiceBtns.forEach(b => { b.disabled = true; b.style.opacity = b.dataset.answer === current.answer ? '1' : '0.65'; });
+      updateStats();
+    }));
+
+    nextBtn?.addEventListener('click', () => nextQuestion(false));
+    reviewBtn?.addEventListener('click', () => {
+      if (!missed.length) { feedbackEl.textContent = t.reviewEmpty; return; }
+      nextQuestion(true);
+    });
+    resetBtn?.addEventListener('click', () => { correct = 0; total = 0; missed.length = 0; updateStats(); feedbackEl.textContent = t.reset; nextQuestion(false); });
+    [difficultyEl, rangeEl].forEach(el => el?.addEventListener('change', () => nextQuestion(false)));
+    updateStats();
+    nextQuestion(false);
+  }
+
   if (slug === 'meeting-action-item-extractor') {
     const input = document.getElementById('maie-input');
     const namesEl = document.getElementById('maie-names');

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">分別排出クイズ練習ツール</title>
+  <desc id="desc">ごみ分別をクイズで学ぶウェブツールのサムネイル</desc>
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#064e3b"/><stop offset="100%" stop-color="#84cc16"/></linearGradient></defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <circle cx="230" cy="212" r="106" fill="#dcfce7" opacity="0.96"/>
+  <path d="M190 208c26-58 88-74 136-36M326 172l-4-52 46 26M318 280c-62 16-111-23-126-75M192 205l-42 31 1-54M238 324c-7-64 39-110 93-122M331 202l49 20-41 31" fill="none" stroke="#15803d" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="84" y="378" width="360" height="88" rx="28" fill="#ecfccb" opacity="0.96"/>
+  <text x="126" y="434" fill="#365314" font-size="34" font-weight="700" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">QUIZ · CHECK · LEARN</text>
+  <text x="540" y="198" fill="#d9f99d" font-size="32" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">TOOLOG WEB TOOL</text>
+  <text x="540" y="308" fill="#ffffff" font-size="72" font-weight="800" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">分別排出
+クイズ練習</text>
+  <text x="540" y="384" fill="#ecfccb" font-size="34" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">紙 · プラスチック · 生ごみ · 一般ごみ</text>
+  <text x="540" y="454" fill="#f7fee7" font-size="28" font-family="Pretendard, Apple SD Gothic Neo, sans-serif">短いクイズと解説で分別基準を学習</text>
+</svg>
