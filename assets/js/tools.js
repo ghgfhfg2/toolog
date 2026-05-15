@@ -12927,6 +12927,107 @@
 
 
 
+  if (slug === 'grocery-budget-checker') {
+    const budgetEl = document.getElementById('gbc-budget');
+    const modeEl = document.getElementById('gbc-mode');
+    const input = document.getElementById('gbc-input');
+    const runBtn = document.getElementById('gbc-run');
+    const sampleBtn = document.getElementById('gbc-sample');
+    const copyBtn = document.getElementById('gbc-copy');
+    const totalEl = document.getElementById('gbc-total');
+    const essentialEl = document.getElementById('gbc-essential');
+    const optionalEl = document.getElementById('gbc-optional');
+    const gapEl = document.getElementById('gbc-gap');
+    const summary = document.getElementById('gbc-summary');
+    const output = document.getElementById('gbc-output');
+    if (!budgetEl || !input) return;
+
+    const i18n = {
+      ko: {
+        sample: '쌀 10kg 32900 필수\n우유 3200 필수\n달걀 7800 필수\n샐러드채소 4500 선택\n과자 2500 선택\n세제 8900 보류\n행사 냉동식품 12900 나중',
+        over: (n) => `예산보다 ${formatNum(n)}원 초과했어요. 선택/보류 품목부터 줄여보세요.`,
+        left: (n) => `예산 안에 들어와요. 약 ${formatNum(n)}원 여유가 있습니다.`,
+        noPrice: '가격 없음', must: '필수', optional: '선택/보류', normal: '일반', cut: '줄일 후보', keep: '구매 유지 후보', copied: '결과를 복사했어요.'
+      },
+      en: {
+        sample: 'Rice 32900 must\nMilk 3200 must\nEggs 7800 must\nSalad greens 4500 optional\nSnack 2500 optional\nDetergent 8900 later\nFrozen meal deal 12900 later',
+        over: (n) => `You are over budget by ${formatNum(n)}. Cut optional/later items first.`,
+        left: (n) => `This fits your budget with about ${formatNum(n)} left.`,
+        noPrice: 'no price', must: 'must-buy', optional: 'optional/later', normal: 'regular', cut: 'cut candidates', keep: 'keep candidates', copied: 'Result copied.'
+      },
+      ja: {
+        sample: '米 32900 必須\n牛乳 3200 必須\n卵 7800 必須\nサラダ野菜 4500 任意\nお菓子 2500 任意\n洗剤 8900 あとで\n冷凍食品セール 12900 あとで',
+        over: (n) => `予算を${formatNum(n)}超えています。任意・あとで項目から減らしましょう。`,
+        left: (n) => `予算内です。約${formatNum(n)}の余裕があります。`,
+        noPrice: '価格なし', must: '必須', optional: '任意/あとで', normal: '通常', cut: '削減候補', keep: '購入候補', copied: '結果をコピーしました。'
+      }
+    }[pageLang] || null;
+    const t = i18n || { sample: '', over: (n) => `${n}`, left: (n) => `${n}`, noPrice: 'no price', must: 'must', optional: 'optional', normal: 'normal', cut: 'cut', keep: 'keep', copied: 'copied' };
+    const currency = pageLang === 'en' ? ' KRW' : (pageLang === 'ja' ? '円' : '원');
+    const money = (n) => `${formatNum(n)}${currency}`;
+    const mustRe = /(필수|꼭|반드시|must|essential|必須|必要)/i;
+    const optionalRe = /(선택|보류|나중|옵션|optional|later|hold|任意|あとで|保留)/i;
+
+    const parse = () => input.value.split(/\n+/).map((raw) => {
+      const line = raw.trim();
+      if (!line) return null;
+      const nums = [...line.matchAll(/(?:₩|￦)?\s*(\d[\d,\.]*)(?:\s*(?:원|krw|円))?/gi)];
+      const last = nums[nums.length - 1];
+      const price = last ? Number(last[1].replace(/[,]/g, '')) : 0;
+      let name = line;
+      if (last) name = line.replace(last[0], '').trim().replace(/[-–—:,]+$/, '').trim();
+      const type = mustRe.test(line) ? 'must' : (optionalRe.test(line) ? 'optional' : 'normal');
+      name = name.replace(mustRe, '').replace(optionalRe, '').trim() || line;
+      return { raw: line, name, price: Number.isFinite(price) ? price : 0, type };
+    }).filter(Boolean);
+
+    const render = () => {
+      const items = parse();
+      const budget = Number(budgetEl.value || 0);
+      const totals = items.reduce((a, it) => {
+        a.total += it.price;
+        if (it.type === 'must') a.must += it.price;
+        if (it.type === 'optional') a.optional += it.price;
+        return a;
+      }, { total: 0, must: 0, optional: 0 });
+      const gap = budget - totals.total;
+      totalEl.textContent = money(totals.total);
+      essentialEl.textContent = money(totals.must);
+      optionalEl.textContent = money(totals.optional);
+      gapEl.textContent = gap >= 0 ? `+${money(gap)}` : `-${money(Math.abs(gap))}`;
+      summary.textContent = gap >= 0 ? t.left(gap) : t.over(Math.abs(gap));
+
+      const sorted = [...items].sort((a, b) => {
+        if ((modeEl.value || 'optional') === 'expensive') return b.price - a.price;
+        const rank = { optional: 0, normal: 1, must: 2 };
+        return (rank[a.type] - rank[b.type]) || (b.price - a.price);
+      });
+      const cut = sorted.filter(it => it.type !== 'must').slice(0, 6);
+      const keep = items.filter(it => it.type === 'must').concat(items.filter(it => it.type === 'normal')).slice(0, 12);
+      const label = (it) => it.type === 'must' ? t.must : (it.type === 'optional' ? t.optional : t.normal);
+      const line = (it) => `- [${label(it)}] ${it.name} · ${it.price ? money(it.price) : t.noPrice}`;
+      output.value = [
+        `${summary.textContent}`,
+        ``,
+        `${t.keep}`,
+        ...(keep.length ? keep.map(line) : ['-']),
+        ``,
+        `${t.cut}`,
+        ...(cut.length ? cut.map(line) : ['-'])
+      ].join('\n');
+    };
+
+    runBtn?.addEventListener('click', render);
+    [budgetEl, modeEl, input].forEach(el => el.addEventListener('input', render));
+    sampleBtn?.addEventListener('click', () => { input.value = t.sample; render(); });
+    copyBtn?.addEventListener('click', async () => {
+      render();
+      try { await navigator.clipboard.writeText(output.value || ''); summary.textContent = t.copied; } catch (e) {}
+    });
+    if (!input.value) input.value = t.sample;
+    render();
+  }
+
   if (slug === 'recycling-sorting-practice') {
     const $ = (id) => document.getElementById(id);
     const difficultyEl = $('rsp-difficulty');

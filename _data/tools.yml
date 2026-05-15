@@ -1,3 +1,27 @@
+- id: grocery-budget-checker
+  title: 장보기 예산 초과 점검기
+  title_en: Grocery Budget Checker
+  title_ja: 買い物予算オーバーチェッカー
+  category: food
+  category_label: 생활/장보기 예산 점검
+  category_label_en: Food/Grocery Budget
+  category_label_ja: 食べ物/買い物予算
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 장보기 목록과 예상 가격, 예산을 넣으면 필수·선택 품목을 나누고 예산 초과 여부와 줄일 후보를 빠르게 점검해요.
+  description_en: Check a grocery list against your budget, split must-buy and optional items, and find quick candidates to cut.
+  description_ja: 買い物リストと予算を入力し、必須・任意項目、予算超過額、削減候補をすばやく確認できます。
+  url: /tools/grocery-budget-checker/
+  url_en: /en/tools/grocery-budget-checker/
+  url_ja: /ja/tools/grocery-budget-checker/
+  thumbnail: /assets/thumbs/grocery-budget-checker.svg
+  thumbnail_en: /assets/thumbs/en/grocery-budget-checker.svg
+  thumbnail_ja: /assets/thumbs/ja/grocery-budget-checker.svg
+  published_at: 2026-05-15
+  tool_type: checker
+  topic_cluster: shopping
+
 - id: recycling-sorting-practice
   title: 분리배출 퀴즈 연습기
   title_en: Recycling Sorting Practice

@@ -3389,6 +3389,36 @@ layout: default
           <textarea id="pdm-output" rows="16" readonly placeholder="정렬 결과가 여기에 표시됩니다."></textarea>
         </div>
 
+      {% when 'grocery-budget-checker' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="gbc-budget">{% if page.lang == 'en' %}Budget{% elsif page.lang == 'ja' %}予算{% else %}이번 장보기 예산{% endif %}</label>
+              <input id="gbc-budget" type="number" min="0" step="100" value="80000" inputmode="numeric" />
+            </div>
+            <div>
+              <label for="gbc-mode">{% if page.lang == 'en' %}Cut suggestion mode{% elsif page.lang == 'ja' %}削減候補モード{% else %}줄일 후보 기준{% endif %}</label>
+              <select id="gbc-mode">
+                <option value="optional">{% if page.lang == 'en' %}Optional items first{% elsif page.lang == 'ja' %}任意項目を優先{% else %}선택/보류 품목 우선{% endif %}</option>
+                <option value="expensive">{% if page.lang == 'en' %}Expensive items first{% elsif page.lang == 'ja' %}高額項目を優先{% else %}비싼 품목 우선{% endif %}</option>
+              </select>
+            </div>
+          </div>
+          <textarea id="gbc-input" rows="11" maxlength="20000" placeholder="{% if page.lang == 'en' %}Milk 3,200 must&#10;Snack 2,500 optional&#10;Detergent 8,900 later{% elsif page.lang == 'ja' %}牛乳 3200 必須&#10;お菓子 2500 任意&#10;洗剤 8900 あとで{% else %}우유 3200 필수&#10;과자 2500 선택&#10;세제 8900 보류{% endif %}"></textarea>
+          <div class="tool-row-grid pct-actions">
+            <button id="gbc-run" type="button">{% if page.lang == 'en' %}Check budget{% elsif page.lang == 'ja' %}予算チェック{% else %}예산 점검{% endif %}</button>
+            <button id="gbc-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
+            <button id="gbc-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果コピー{% else %}결과 복사{% endif %}</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="gbc-total">0</strong><span>{% if page.lang == 'en' %}Estimated total{% elsif page.lang == 'ja' %}予想合計{% else %}예상 합계{% endif %}</span></div>
+            <div><strong id="gbc-essential">0</strong><span>{% if page.lang == 'en' %}Must-buy{% elsif page.lang == 'ja' %}必須{% else %}필수 품목{% endif %}</span></div>
+            <div><strong id="gbc-optional">0</strong><span>{% if page.lang == 'en' %}Optional{% elsif page.lang == 'ja' %}任意{% else %}선택/보류{% endif %}</span></div>
+            <div><strong id="gbc-gap">0</strong><span>{% if page.lang == 'en' %}Over / left{% elsif page.lang == 'ja' %}超過/残り{% else %}초과/남은 금액{% endif %}</span></div>
+          </div>
+          <p class="tool-result" id="gbc-summary">{% if page.lang == 'en' %}Enter a grocery list to check it against your budget.{% elsif page.lang == 'ja' %}買い物リストを入力すると予算に合うか確認できます。{% else %}장보기 목록을 넣으면 예산 초과 여부와 줄일 후보를 보여줍니다.{% endif %}</p>
+          <textarea id="gbc-output" rows="12" readonly placeholder="{% if page.lang == 'en' %}Result appears here.{% elsif page.lang == 'ja' %}結果がここに表示されます。{% else %}정리 결과가 여기에 표시됩니다.{% endif %}"></textarea>
+        </div>
       {% when 'recycling-sorting-practice' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
