@@ -1,3 +1,27 @@
+- id: group-announcement-generator
+  title: 모임 공지 문구 생성기
+  title_en: Group Announcement Generator
+  title_ja: 集まりのお知らせ文ジェネレーター
+  category: communication
+  category_label: 생활/모임 공지 작성
+  category_label_en: Lifestyle/Group Announcements
+  category_label_ja: 生活/集まりのお知らせ
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 모임 종류, 날짜, 장소, 준비물, 톤을 넣으면 단톡방이나 문자에 바로 보낼 공지 문구를 깔끔하게 만들어줘요.
+  description_en: Create a clean group chat or message announcement from the event type, date, place, items to bring, and tone.
+  description_ja: 集まりの種類、日時、場所、持ち物、トーンを入力して、グループチャットに送れるお知らせ文を作れます。
+  url: /tools/group-announcement-generator/
+  url_en: /en/tools/group-announcement-generator/
+  url_ja: /ja/tools/group-announcement-generator/
+  thumbnail: /assets/thumbs/group-announcement-generator.svg
+  thumbnail_en: /assets/thumbs/en/group-announcement-generator.svg
+  thumbnail_ja: /assets/thumbs/ja/group-announcement-generator.svg
+  published_at: 2026-05-16
+  tool_type: generator
+  topic_cluster: communication
+
 - id: grocery-budget-checker
   title: 장보기 예산 초과 점검기
   title_en: Grocery Budget Checker

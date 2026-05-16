@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Group Notice Maker">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs>
+  <rect width="1200" height="630" rx="48" fill="url(#g)"/>
+  <circle cx="1010" cy="120" r="150" fill="rgba(255,255,255,.14)"/>
+  <circle cx="145" cy="510" r="120" fill="rgba(255,255,255,.12)"/>
+  <rect x="110" y="120" width="440" height="360" rx="34" fill="rgba(255,255,255,.92)"/>
+  <rect x="165" y="178" width="280" height="30" rx="15" fill="#4f46e5"/>
+  <rect x="165" y="245" width="310" height="22" rx="11" fill="#c7d2fe"/>
+  <rect x="165" y="303" width="240" height="22" rx="11" fill="#ddd6fe"/>
+  <rect x="165" y="361" width="330" height="22" rx="11" fill="#c7d2fe"/>
+  <path d="M760 200h210c38 0 70 30 70 67v70c0 37-32 67-70 67h-84l-58 58v-58h-68c-38 0-70-30-70-67v-70c0-37 32-67 70-67z" fill="rgba(255,255,255,.9)"/>
+  <circle cx="777" cy="302" r="12" fill="#7c3aed"/><circle cx="865" cy="302" r="12" fill="#7c3aed"/><circle cx="953" cy="302" r="12" fill="#7c3aed"/>
+  <text x="610" y="458" font-family="Arial, sans-serif" font-size="58" font-weight="800" fill="#fff">Group Notice Maker</text>
+  <text x="614" y="518" font-family="Arial, sans-serif" font-size="30" fill="rgba(255,255,255,.88)">Clear announcements for chats</text>
+</svg>

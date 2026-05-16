@@ -3389,6 +3389,56 @@ layout: default
           <textarea id="pdm-output" rows="16" readonly placeholder="정렬 결과가 여기에 표시됩니다."></textarea>
         </div>
 
+      {% when 'group-announcement-generator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="gag-title">{% if page.lang == 'en' %}Event name{% elsif page.lang == 'ja' %}集まりの名前{% else %}모임 이름{% endif %}</label>
+              <input id="gag-title" type="text" maxlength="80" placeholder="{% if page.lang == 'en' %}Friday team dinner{% elsif page.lang == 'ja' %}金曜の食事会{% else %}금요일 팀 저녁 모임{% endif %}" />
+            </div>
+            <div>
+              <label for="gag-tone">{% if page.lang == 'en' %}Tone{% elsif page.lang == 'ja' %}トーン{% else %}문구 톤{% endif %}</label>
+              <select id="gag-tone">
+                <option value="friendly">{% if page.lang == 'en' %}Friendly group chat{% elsif page.lang == 'ja' %}親しみやすいチャット{% else %}친근한 단톡방 톤{% endif %}</option>
+                <option value="polite">{% if page.lang == 'en' %}Polite notice{% elsif page.lang == 'ja' %}丁寧なお知らせ{% else %}정중한 안내 톤{% endif %}</option>
+                <option value="reminder">{% if page.lang == 'en' %}Short reminder{% elsif page.lang == 'ja' %}短いリマインダー{% else %}짧은 리마인더{% endif %}</option>
+              </select>
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="gag-date">{% if page.lang == 'en' %}Date / time{% elsif page.lang == 'ja' %}日時{% else %}날짜·시간{% endif %}</label>
+              <input id="gag-date" type="text" maxlength="80" placeholder="{% if page.lang == 'en' %}May 22, 7 PM{% elsif page.lang == 'ja' %}5月22日 19:00{% else %}5월 22일 저녁 7시{% endif %}" />
+            </div>
+            <div>
+              <label for="gag-place">{% if page.lang == 'en' %}Place / link{% elsif page.lang == 'ja' %}場所 / リンク{% else %}장소·링크{% endif %}</label>
+              <input id="gag-place" type="text" maxlength="120" placeholder="{% if page.lang == 'en' %}Cafe Near Station{% elsif page.lang == 'ja' %}駅前カフェ{% else %}강남역 3번 출구 근처{% endif %}" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="gag-bring">{% if page.lang == 'en' %}Bring / prepare{% elsif page.lang == 'ja' %}持ち物{% else %}준비물{% endif %}</label>
+              <input id="gag-bring" type="text" maxlength="140" placeholder="{% if page.lang == 'en' %}ID, umbrella{% elsif page.lang == 'ja' %}身分証、傘{% else %}신분증, 우산{% endif %}" />
+            </div>
+            <div>
+              <label for="gag-rsvp">{% if page.lang == 'en' %}Reply deadline{% elsif page.lang == 'ja' %}返信期限{% else %}참석 회신 마감{% endif %}</label>
+              <input id="gag-rsvp" type="text" maxlength="80" placeholder="{% if page.lang == 'en' %}Reply by Wednesday{% elsif page.lang == 'ja' %}水曜までに返信{% else %}수요일까지 참석 여부 회신{% endif %}" />
+            </div>
+          </div>
+          <textarea id="gag-note" rows="4" maxlength="2000" placeholder="{% if page.lang == 'en' %}Extra notes, cost, contact, parking info...{% elsif page.lang == 'ja' %}補足、費用、連絡先、駐車案内など{% else %}추가 안내, 비용, 연락 방법, 주차 정보 등을 적어보세요.{% endif %}"></textarea>
+          <div class="tool-row-grid pct-actions">
+            <button id="gag-run" type="button">{% if page.lang == 'en' %}Generate announcement{% elsif page.lang == 'ja' %}お知らせ文を生成{% else %}공지 문구 생성{% endif %}</button>
+            <button id="gag-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
+            <button id="gag-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果コピー{% else %}결과 복사{% endif %}</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="gag-lines">0</strong><span>{% if page.lang == 'en' %}Lines{% elsif page.lang == 'ja' %}行数{% else %}줄 수{% endif %}</span></div>
+            <div><strong id="gag-chars">0</strong><span>{% if page.lang == 'en' %}Characters{% elsif page.lang == 'ja' %}文字数{% else %}글자 수{% endif %}</span></div>
+            <div><strong id="gag-filled">0</strong><span>{% if page.lang == 'en' %}Filled fields{% elsif page.lang == 'ja' %}入力項目{% else %}입력 항목{% endif %}</span></div>
+          </div>
+          <p class="tool-result" id="gag-summary">{% if page.lang == 'en' %}Enter event details to generate a clear announcement.{% elsif page.lang == 'ja' %}集まりの情報を入力すると案内文を作成します。{% else %}모임 정보를 입력하면 단톡방에 보낼 공지 문구를 만들어줍니다.{% endif %}</p>
+          <textarea id="gag-output" rows="12" readonly placeholder="{% if page.lang == 'en' %}Generated announcement appears here.{% elsif page.lang == 'ja' %}生成結果がここに表示されます。{% else %}생성된 공지 문구가 여기에 표시됩니다.{% endif %}"></textarea>
+        </div>
       {% when 'grocery-budget-checker' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">

@@ -12927,6 +12927,91 @@
 
 
 
+
+  if (slug === 'group-announcement-generator') {
+    const $ = (id) => document.getElementById(id);
+    const titleEl = $('gag-title');
+    const toneEl = $('gag-tone');
+    const dateEl = $('gag-date');
+    const placeEl = $('gag-place');
+    const bringEl = $('gag-bring');
+    const rsvpEl = $('gag-rsvp');
+    const noteEl = $('gag-note');
+    const runBtn = $('gag-run');
+    const sampleBtn = $('gag-sample');
+    const copyBtn = $('gag-copy');
+    const output = $('gag-output');
+    const summary = $('gag-summary');
+    const linesEl = $('gag-lines');
+    const charsEl = $('gag-chars');
+    const filledEl = $('gag-filled');
+    if (!titleEl || !output) return;
+
+    const i18n = {
+      ko: {
+        sample: { title:'금요일 팀 저녁 모임', date:'5월 22일 금요일 저녁 7시', place:'강남역 3번 출구 근처 한식당', bring:'개인 우산, 편한 복장', rsvp:'수요일 오후 6시까지 참석 여부 회신', note:'예약 인원 확인이 필요해서 불참/지각 예정이면 미리 알려주세요. 1인 예상 비용은 2만 원대입니다.' },
+        copied:'공지 문구를 복사했어요.', ready:'공지 문구를 만들었어요. 보내기 전 날짜와 장소를 한 번 더 확인하세요.',
+        labels:{ date:'일시', place:'장소', bring:'준비물', rsvp:'회신', note:'안내' },
+        friendly:(v, lines)=>[`📢 ${v.title || '모임 공지'} 안내드려요!`, ...lines, '참석하시는 분들은 확인 부탁드려요 🙂'].join('\n'),
+        polite:(v, lines)=>[`[${v.title || '모임'} 안내]`, ...lines, '위 내용 확인 부탁드립니다. 변경 사항이 있으면 다시 안내드리겠습니다.'].join('\n'),
+        reminder:(v, lines)=>[`⏰ ${v.title || '모임'} 리마인더`, ...lines, '늦지 않게 확인 부탁드려요!'].join('\n')
+      },
+      en: {
+        sample: { title:'Friday team dinner', date:'Friday, May 22 at 7 PM', place:'Korean restaurant near Gangnam Station Exit 3', bring:'Umbrella, comfortable clothes', rsvp:'Please reply by Wednesday 6 PM', note:'We need to confirm the reservation count. Please tell us early if you cannot join or will be late.' },
+        copied:'Announcement copied.', ready:'Announcement generated. Check the date and place before sending.',
+        labels:{ date:'When', place:'Where', bring:'Bring', rsvp:'RSVP', note:'Note' },
+        friendly:(v, lines)=>[`📢 ${v.title || 'Group event'} notice!`, ...lines, 'Please check and reply when you can 🙂'].join('\n'),
+        polite:(v, lines)=>[`[${v.title || 'Group event'} Notice]`, ...lines, 'Please review the details above. We will share updates if anything changes.'].join('\n'),
+        reminder:(v, lines)=>[`⏰ ${v.title || 'Group event'} reminder`, ...lines, 'Please check before you head out!'].join('\n')
+      },
+      ja: {
+        sample: { title:'金曜の食事会', date:'5月22日（金）19:00', place:'駅前のレストラン', bring:'傘、楽な服装', rsvp:'水曜18時までに出欠返信', note:'予約人数を確認したいので、欠席や遅れる場合は早めに知らせてください。' },
+        copied:'お知らせ文をコピーしました。', ready:'お知らせ文を作成しました。送信前に日時と場所を確認してください。',
+        labels:{ date:'日時', place:'場所', bring:'持ち物', rsvp:'返信', note:'案内' },
+        friendly:(v, lines)=>[`📢 ${v.title || '集まり'}のお知らせです！`, ...lines, '参加する方は確認をお願いします 🙂'].join('\n'),
+        polite:(v, lines)=>[`[${v.title || '集まり'}のお知らせ]`, ...lines, '上記内容をご確認ください。変更があれば改めて案内します。'].join('\n'),
+        reminder:(v, lines)=>[`⏰ ${v.title || '集まり'}リマインダー`, ...lines, '忘れずにご確認ください！'].join('\n')
+      }
+    }[pageLang] || null;
+    const t = i18n || {};
+    const getValues = () => ({ title:titleEl.value.trim(), date:dateEl.value.trim(), place:placeEl.value.trim(), bring:bringEl.value.trim(), rsvp:rsvpEl.value.trim(), note:noteEl.value.trim() });
+    const makeLines = (v) => {
+      const rows = [];
+      if (v.date) rows.push(`- ${t.labels.date}: ${v.date}`);
+      if (v.place) rows.push(`- ${t.labels.place}: ${v.place}`);
+      if (v.bring) rows.push(`- ${t.labels.bring}: ${v.bring}`);
+      if (v.rsvp) rows.push(`- ${t.labels.rsvp}: ${v.rsvp}`);
+      if (v.note) rows.push(`- ${t.labels.note}: ${v.note}`);
+      return rows;
+    };
+    const render = () => {
+      const v = getValues();
+      const lines = makeLines(v);
+      const tone = toneEl.value || 'friendly';
+      output.value = (t[tone] || t.friendly)(v, lines.length ? lines : [`- ${t.labels.note}: ${v.note || ''}`]);
+      const nonEmpty = Object.values(v).filter(Boolean).length;
+      linesEl.textContent = formatNum(output.value.split('\n').filter(Boolean).length);
+      charsEl.textContent = formatNum(output.value.length);
+      filledEl.textContent = formatNum(nonEmpty);
+      summary.textContent = t.ready;
+    };
+    sampleBtn?.addEventListener('click', () => {
+      const s = t.sample;
+      titleEl.value = s.title; dateEl.value = s.date; placeEl.value = s.place; bringEl.value = s.bring; rsvpEl.value = s.rsvp; noteEl.value = s.note;
+      render();
+    });
+    runBtn?.addEventListener('click', render);
+    [titleEl, toneEl, dateEl, placeEl, bringEl, rsvpEl, noteEl].forEach(el => {
+      el?.addEventListener('input', render);
+      el?.addEventListener('change', render);
+    });
+    copyBtn?.addEventListener('click', async () => {
+      render();
+      try { await navigator.clipboard.writeText(output.value || ''); summary.textContent = t.copied; } catch (e) {}
+    });
+    if (!titleEl.value) sampleBtn?.click(); else render();
+  }
+
   if (slug === 'grocery-budget-checker') {
     const budgetEl = document.getElementById('gbc-budget');
     const modeEl = document.getElementById('gbc-mode');
