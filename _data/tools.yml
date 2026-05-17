@@ -1,3 +1,27 @@
+- id: list-format-converter
+  title: 목록 형식 변환기
+  title_en: List Format Converter
+  title_ja: リスト形式変換ツール
+  category: productivity
+  category_label: 업무/목록 형식 변환
+  category_label_en: Work/List Formatting
+  category_label_ja: 仕事/リスト形式変換
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 줄글 목록을 붙여넣으면 CSV, 마크다운 표, JSON 배열, 번호 목록으로 바로 바꿔 복사할 수 있어요.
+  description_en: Paste a plain line list and convert it into CSV, a Markdown table, a JSON array, or a numbered list for quick copying.
+  description_ja: 行ごとのリストを貼り付けて、CSV、Markdown表、JSON配列、番号付きリストへすばやく変換できます。
+  url: /tools/list-format-converter/
+  url_en: /en/tools/list-format-converter/
+  url_ja: /ja/tools/list-format-converter/
+  thumbnail: /assets/thumbs/list-format-converter.svg
+  thumbnail_en: /assets/thumbs/en/list-format-converter.svg
+  thumbnail_ja: /assets/thumbs/ja/list-format-converter.svg
+  published_at: 2026-05-17
+  tool_type: converter
+  topic_cluster: text
+
 - id: group-announcement-generator
   title: 모임 공지 문구 생성기
   title_en: Group Announcement Generator

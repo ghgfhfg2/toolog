@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="リスト形式変換">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#14b8a6"/></linearGradient></defs>
+  <rect width="1200" height="630" rx="48" fill="url(#g)"/>
+  <circle cx="1020" cy="115" r="155" fill="rgba(255,255,255,.14)"/>
+  <circle cx="150" cy="520" r="125" fill="rgba(255,255,255,.12)"/>
+  <rect x="110" y="115" width="410" height="385" rx="32" fill="rgba(255,255,255,.94)"/>
+  <rect x="165" y="175" width="235" height="24" rx="12" fill="#0284c7"/>
+  <rect x="165" y="240" width="285" height="22" rx="11" fill="#bae6fd"/>
+  <rect x="165" y="300" width="235" height="22" rx="11" fill="#99f6e4"/>
+  <rect x="165" y="360" width="305" height="22" rx="11" fill="#bae6fd"/>
+  <path d="M580 300h125" stroke="#fff" stroke-width="28" stroke-linecap="round"/><path d="M690 250l72 50-72 50" fill="none" stroke="#fff" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="805" y="145" width="285" height="320" rx="30" fill="rgba(15,23,42,.82)"/>
+  <text x="845" y="215" font-family="Arial, sans-serif" font-size="34" font-weight="800" fill="#e0f2fe">CSV</text>
+  <text x="845" y="282" font-family="Arial, sans-serif" font-size="34" font-weight="800" fill="#ccfbf1">MD</text>
+  <text x="845" y="349" font-family="Arial, sans-serif" font-size="34" font-weight="800" fill="#e0f2fe">JSON</text>
+  <text x="610" y="492" font-family="Arial, sans-serif" font-size="56" font-weight="800" fill="#fff">リスト形式変換</text>
+  <text x="614" y="550" font-family="Arial, sans-serif" font-size="30" fill="rgba(255,255,255,.9)">CSV・Markdown・JSONへ整理</text>
+</svg>

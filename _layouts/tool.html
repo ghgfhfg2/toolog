@@ -3389,6 +3389,42 @@ layout: default
           <textarea id="pdm-output" rows="16" readonly placeholder="정렬 결과가 여기에 표시됩니다."></textarea>
         </div>
 
+      {% when 'list-format-converter' %}
+        <div class="tool-ui">
+          <textarea id="lfc-input" rows="11" maxlength="30000" placeholder="{% if page.lang == 'en' %}One item per line&#10;Alpha project&#10;Beta launch&#10;Gamma review{% elsif page.lang == 'ja' %}1行に1項目&#10;アルファ企画&#10;ベータ公開&#10;ガンマ確認{% else %}한 줄에 하나씩 입력하세요&#10;알파 프로젝트&#10;베타 출시&#10;감마 검토{% endif %}"></textarea>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="lfc-format">{% if page.lang == 'en' %}Output format{% elsif page.lang == 'ja' %}出力形式{% else %}결과 형식{% endif %}</label>
+              <select id="lfc-format">
+                <option value="csv">CSV</option>
+                <option value="markdown">{% if page.lang == 'en' %}Markdown table{% elsif page.lang == 'ja' %}Markdown表{% else %}마크다운 표{% endif %}</option>
+                <option value="json">JSON array</option>
+                <option value="numbered">{% if page.lang == 'en' %}Numbered list{% elsif page.lang == 'ja' %}番号付きリスト{% else %}번호 목록{% endif %}</option>
+              </select>
+            </div>
+            <div>
+              <label for="lfc-header">{% if page.lang == 'en' %}Header / key name{% elsif page.lang == 'ja' %}ヘッダー / キー名{% else %}헤더·키 이름{% endif %}</label>
+              <input id="lfc-header" type="text" maxlength="40" value="{% if page.lang == 'en' %}item{% elsif page.lang == 'ja' %}項目{% else %}항목{% endif %}" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="lfc-trim" type="checkbox" checked /> {% if page.lang == 'en' %}Trim spaces{% elsif page.lang == 'ja' %}前後の空白を削除{% else %}앞뒤 공백 제거{% endif %}</label>
+            <label class="tool-check"><input id="lfc-blank" type="checkbox" checked /> {% if page.lang == 'en' %}Remove blank lines{% elsif page.lang == 'ja' %}空行を除外{% else %}빈 줄 제외{% endif %}</label>
+            <label class="tool-check"><input id="lfc-dedupe" type="checkbox" /> {% if page.lang == 'en' %}Remove duplicates{% elsif page.lang == 'ja' %}重複を削除{% else %}중복 제거{% endif %}</label>
+          </div>
+          <div class="tool-row-grid pct-actions">
+            <button id="lfc-run" type="button">{% if page.lang == 'en' %}Convert list{% elsif page.lang == 'ja' %}リスト変換{% else %}목록 변환{% endif %}</button>
+            <button id="lfc-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
+            <button id="lfc-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果コピー{% else %}결과 복사{% endif %}</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="lfc-count">0</strong><span>{% if page.lang == 'en' %}Items{% elsif page.lang == 'ja' %}項目数{% else %}항목 수{% endif %}</span></div>
+            <div><strong id="lfc-removed">0</strong><span>{% if page.lang == 'en' %}Removed{% elsif page.lang == 'ja' %}除外{% else %}제외 항목{% endif %}</span></div>
+            <div><strong id="lfc-chars">0</strong><span>{% if page.lang == 'en' %}Result chars{% elsif page.lang == 'ja' %}結果文字数{% else %}결과 글자 수{% endif %}</span></div>
+          </div>
+          <p class="tool-result" id="lfc-summary">{% if page.lang == 'en' %}Paste a line list and convert it to a structured format.{% elsif page.lang == 'ja' %}行リストを貼り付けると構造化形式に変換します。{% else %}줄글 목록을 붙여넣으면 원하는 형식으로 바꿔줍니다.{% endif %}</p>
+          <textarea id="lfc-output" rows="12" readonly placeholder="{% if page.lang == 'en' %}Converted result appears here.{% elsif page.lang == 'ja' %}変換結果がここに表示されます。{% else %}변환 결과가 여기에 표시됩니다.{% endif %}"></textarea>
+        </div>
       {% when 'group-announcement-generator' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
