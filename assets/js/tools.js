@@ -12192,6 +12192,181 @@
 
 
 
+  if (slug === 'cafe-work-seat-simulator') {
+    const purposeEl = document.getElementById('cwss-purpose');
+    const durationEl = document.getElementById('cwss-duration');
+    const chargeEl = document.getElementById('cwss-charge');
+    const quietEl = document.getElementById('cwss-quiet');
+    const rows = Array.from({ length: 4 }, (_, idx) => {
+      const n = idx + 1;
+      return {
+        name: document.getElementById(`cwss-name-${n}`),
+        power: document.getElementById(`cwss-power-${n}`),
+        noise: document.getElementById(`cwss-noise-${n}`),
+        seat: document.getElementById(`cwss-seat-${n}`),
+        light: document.getElementById(`cwss-light-${n}`),
+        traffic: document.getElementById(`cwss-traffic-${n}`)
+      };
+    });
+    const sampleBtn = document.getElementById('cwss-sample');
+    const copyBtn = document.getElementById('cwss-copy');
+    const countEl = document.getElementById('cwss-count');
+    const topEl = document.getElementById('cwss-top');
+    const powerScoreEl = document.getElementById('cwss-power-score');
+    const focusScoreEl = document.getElementById('cwss-focus-score');
+    const summaryEl = document.getElementById('cwss-summary');
+    const outputEl = document.getElementById('cwss-output');
+
+    if (!purposeEl || !rows[0].name || !summaryEl || !outputEl) return;
+
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
+    const labels = {
+      power: { table: '자리에서 바로 사용', near: '가까이에 있음', far: '멀거나 애매함', none: '없음' },
+      noise: { quiet: '조용함', normal: '보통', busy: '소음 많음' },
+      seat: { table: '일반 테이블', bar: '바/높은 테이블', sofa: '소파·낮은 테이블', window: '창가 좌석' },
+      light: { soft: '적당함', bright: '밝음', glare: '눈부심 있음', dark: '어두움' },
+      traffic: { low: '동선 적음', mid: '동선 보통', high: '동선 많음' }
+    };
+
+    const scoreItem = (item, purpose, duration, needCharge, preferQuiet) => {
+      let score = 55;
+      let powerScore = 0;
+      let focusScore = 0;
+
+      if (item.power === 'table') { score += 20; powerScore = 100; }
+      if (item.power === 'near') { score += 12; powerScore = 75; }
+      if (item.power === 'far') { score -= needCharge ? 14 : 3; powerScore = 35; }
+      if (item.power === 'none') { score -= needCharge ? 28 : 8; powerScore = 5; }
+      if (duration === 'long' && (item.power === 'far' || item.power === 'none')) score -= 12;
+
+      if (item.noise === 'quiet') { score += preferQuiet ? 18 : 10; focusScore += 45; }
+      if (item.noise === 'normal') { score += 6; focusScore += 25; }
+      if (item.noise === 'busy') { score -= preferQuiet ? 18 : 8; focusScore += 5; }
+
+      if (item.seat === 'table') score += 12;
+      if (item.seat === 'window') score += purpose === 'reading' ? 14 : 6;
+      if (item.seat === 'bar') score += duration === 'short' ? 8 : -6;
+      if (item.seat === 'sofa') score += purpose === 'reading' ? 8 : -8;
+
+      if (item.light === 'soft') { score += 10; focusScore += 30; }
+      if (item.light === 'bright') { score += purpose === 'study' ? 8 : 3; focusScore += 20; }
+      if (item.light === 'glare') score -= 12;
+      if (item.light === 'dark') score -= purpose === 'reading' || purpose === 'study' ? 14 : 7;
+
+      if (item.traffic === 'low') { score += 10; focusScore += 25; }
+      if (item.traffic === 'mid') score += 2;
+      if (item.traffic === 'high') score -= purpose === 'call' ? 6 : 16;
+      if (purpose === 'call' && item.noise === 'quiet' && item.traffic === 'low') score -= 4;
+      if (duration === 'long' && item.seat === 'bar') score -= 8;
+
+      return {
+        score: Math.max(0, Math.min(100, Math.round(score))),
+        powerScore: Math.max(0, Math.min(100, Math.round(powerScore))),
+        focusScore: Math.max(0, Math.min(100, Math.round(focusScore)))
+      };
+    };
+
+    const reasonFor = (item, purpose, duration, needCharge, preferQuiet) => {
+      const reasons = [];
+      if (needCharge && (item.power === 'table' || item.power === 'near')) reasons.push('충전 접근성이 좋음');
+      if (needCharge && (item.power === 'far' || item.power === 'none')) reasons.push('충전이 필요하면 불리함');
+      if (preferQuiet && item.noise === 'quiet') reasons.push('집중하기 조용함');
+      if (item.noise === 'busy') reasons.push('주변 소음이 많음');
+      if (item.seat === 'table') reasons.push('노트북을 놓기 안정적임');
+      if (duration === 'long' && item.seat === 'bar') reasons.push('오래 앉기에는 피로할 수 있음');
+      if (item.light === 'glare') reasons.push('눈부심을 확인해야 함');
+      if (item.traffic === 'high') reasons.push('사람 동선이 잦음');
+      if (purpose === 'reading' && item.seat === 'window') reasons.push('독서·메모에 분위기가 좋음');
+      if (!reasons.length) reasons.push('전체 조건이 무난함');
+      return reasons.join(', ');
+    };
+
+    const build = () => {
+      const purpose = purposeEl.value || 'work';
+      const duration = durationEl.value || 'medium';
+      const needCharge = !!chargeEl.checked;
+      const preferQuiet = !!quietEl.checked;
+      const items = rows.map((row, idx) => {
+        const name = (row.name.value || '').trim();
+        if (!name) return null;
+        const item = {
+          index: idx + 1,
+          name,
+          power: row.power.value,
+          noise: row.noise.value,
+          seat: row.seat.value,
+          light: row.light.value,
+          traffic: row.traffic.value
+        };
+        return { ...item, ...scoreItem(item, purpose, duration, needCharge, preferQuiet) };
+      }).filter(Boolean).sort((a, b) => b.score - a.score);
+
+      countEl.textContent = String(items.length);
+      if (!items.length) {
+        topEl.textContent = '-';
+        powerScoreEl.textContent = '0';
+        focusScoreEl.textContent = '0';
+        summaryEl.textContent = '후보 자리를 입력하면 추천 순위가 표시됩니다.';
+        outputEl.value = '';
+        return;
+      }
+
+      const top = items[0];
+      topEl.textContent = top.name.length > 12 ? `${top.name.slice(0, 12)}…` : top.name;
+      powerScoreEl.textContent = String(top.powerScore);
+      focusScoreEl.textContent = String(top.focusScore);
+      summaryEl.textContent = `1순위는 ${top.name}입니다. 점수 ${top.score}점 — ${reasonFor(top, purpose, duration, needCharge, preferQuiet)}`;
+
+      outputEl.value = ['카페 작업 자리 비교 결과', ...items.map((item, idx) => {
+        return `${idx + 1}. ${item.name} - ${item.score}점\n   조건: 콘센트 ${labels.power[item.power]}, 소음 ${labels.noise[item.noise]}, 좌석 ${labels.seat[item.seat]}, 조명 ${labels.light[item.light]}, ${labels.traffic[item.traffic]}\n   이유: ${reasonFor(item, purpose, duration, needCharge, preferQuiet)}`;
+      })].join('\n\n');
+    };
+
+    sampleBtn?.addEventListener('click', () => {
+      const samples = [
+        ['벽쪽 콘센트 2인석', 'table', 'normal', 'table', 'soft', 'mid'],
+        ['창가 바 테이블', 'near', 'quiet', 'bar', 'bright', 'low'],
+        ['중앙 소파 자리', 'none', 'busy', 'sofa', 'glare', 'high'],
+        ['구석 작은 테이블', 'far', 'quiet', 'table', 'dark', 'low']
+      ];
+      samples.forEach((s, idx) => {
+        const row = rows[idx];
+        row.name.value = s[0]; row.power.value = s[1]; row.noise.value = s[2]; row.seat.value = s[3]; row.light.value = s[4]; row.traffic.value = s[5];
+      });
+      build();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (!outputEl.value.trim()) build();
+      if (!outputEl.value.trim()) return;
+      await copyText(outputEl.value);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = '복사됨';
+      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    [purposeEl, durationEl, chargeEl, quietEl, ...rows.flatMap(row => Object.values(row))].forEach((el) => {
+      el?.addEventListener('input', build);
+      el?.addEventListener('change', build);
+    });
+
+    build();
+  }
+
+
   if (slug === 'movie-seat-choice-simulator') {
     const preferenceEl = document.getElementById('mscs-preference');
     const groupEl = document.getElementById('mscs-group');

@@ -1,3 +1,27 @@
+- id: cafe-work-seat-simulator
+  title: 카페 작업 자리 선택 시뮬레이터
+  title_en: Cafe Work Seat Simulator
+  title_ja: カフェ作業席選びシミュレーター
+  category: productivity
+  category_label: 업무/카페 작업 자리 선택
+  category_label_en: Work/Cafe Seat Choice
+  category_label_ja: 仕事/カフェ席選び
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 카페에서 노트북 작업이나 공부를 할 때 콘센트, 소음, 조명, 동선, 체류 시간을 기준으로 어떤 자리가 더 편한지 비교해요.
+  description_en: Compare cafe seat candidates for laptop work or study by outlet access, noise, lighting, traffic, and stay length.
+  description_ja: カフェで作業や勉強をするとき、電源・騒音・照明・人の動線・滞在時間で席候補を比較できます。
+  url: /tools/cafe-work-seat-simulator/
+  url_en: /en/tools/cafe-work-seat-simulator/
+  url_ja: /ja/tools/cafe-work-seat-simulator/
+  thumbnail: /assets/thumbs/cafe-work-seat-simulator.svg
+  thumbnail_en: /assets/thumbs/en/cafe-work-seat-simulator.svg
+  thumbnail_ja: /assets/thumbs/ja/cafe-work-seat-simulator.svg
+  published_at: 2026-05-18
+  tool_type: simulator
+  topic_cluster: work
+
 - id: list-format-converter
   title: 목록 형식 변환기
   title_en: List Format Converter
