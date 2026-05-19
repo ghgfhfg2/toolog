@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="退勤後 ルーティン">
+  <defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#312e81"/><stop offset="0.55" stop-color="#7c3aed"/><stop offset="1" stop-color="#f97316"/></linearGradient></defs>
+  <rect width="1200" height="630" rx="56" fill="url(#g)"/>
+  <circle cx="970" cy="120" r="96" fill="#fde68a" opacity="0.9"/>
+  <rect x="92" y="92" width="1016" height="446" rx="40" fill="#ffffff" opacity="0.13" stroke="#ffffff" stroke-opacity="0.32"/>
+  <text x="120" y="190" fill="#ffffff" font-size="54" font-family="Arial, 'Noto Sans KR', sans-serif" font-weight="800">退勤後</text>
+  <text x="120" y="270" fill="#ffffff" font-size="78" font-family="Arial, 'Noto Sans KR', sans-serif" font-weight="900">ルーティン</text>
+  <text x="124" y="338" fill="#fef3c7" font-size="34" font-family="Arial, 'Noto Sans KR', sans-serif" font-weight="700">今夜の選択</text>
+  <g transform="translate(128 392)">
+    <rect width="208" height="76" rx="22" fill="#ffffff" opacity="0.92"/><text x="32" y="49" fill="#312e81" font-size="28" font-family="Arial, sans-serif" font-weight="800">REST</text>
+    <rect x="232" width="208" height="76" rx="22" fill="#ffffff" opacity="0.86"/><text x="264" y="49" fill="#312e81" font-size="28" font-family="Arial, sans-serif" font-weight="800">FOCUS</text>
+    <rect x="464" width="208" height="76" rx="22" fill="#ffffff" opacity="0.80"/><text x="496" y="49" fill="#312e81" font-size="28" font-family="Arial, sans-serif" font-weight="800">MOVE</text>
+  </g>
+</svg>

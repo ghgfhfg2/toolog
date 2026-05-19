@@ -779,6 +779,69 @@ layout: default
 
           <div id="whp-missed" class="bw-list"></div>
         </div>
+      {% when 'after-work-routine-picker' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="awrp-time">{% if page.lang == 'en' %}Free time tonight{% elsif page.lang == 'ja' %}今夜の自由時間{% else %}오늘 남은 자유 시간{% endif %}</label>
+              <select id="awrp-time">
+                <option value="30">30{% if page.lang == 'en' %} min{% elsif page.lang == 'ja' %}分{% else %}분{% endif %}</option>
+                <option value="60" selected>60{% if page.lang == 'en' %} min{% elsif page.lang == 'ja' %}分{% else %}분{% endif %}</option>
+                <option value="90">90{% if page.lang == 'en' %} min{% elsif page.lang == 'ja' %}分{% else %}분{% endif %}</option>
+                <option value="120">120{% if page.lang == 'en' %} min+{% elsif page.lang == 'ja' %}分以上{% else %}분 이상{% endif %}</option>
+              </select>
+            </div>
+            <div>
+              <label for="awrp-energy">{% if page.lang == 'en' %}Energy level{% elsif page.lang == 'ja' %}元気度{% else %}에너지 수준{% endif %}</label>
+              <input id="awrp-energy" type="range" min="1" max="5" value="3" />
+            </div>
+          </div>
+
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="awrp-mood">{% if page.lang == 'en' %}Current mood{% elsif page.lang == 'ja' %}今の気分{% else %}현재 기분{% endif %}</label>
+              <select id="awrp-mood">
+                <option value="tired">{% if page.lang == 'en' %}Tired{% elsif page.lang == 'ja' %}疲れた{% else %}피곤함{% endif %}</option>
+                <option value="neutral" selected>{% if page.lang == 'en' %}Neutral{% elsif page.lang == 'ja' %}普通{% else %}보통{% endif %}</option>
+                <option value="restless">{% if page.lang == 'en' %}Restless{% elsif page.lang == 'ja' %}そわそわする{% else %}몸이 근질근질함{% endif %}</option>
+                <option value="focused">{% if page.lang == 'en' %}Focused{% elsif page.lang == 'ja' %}集中できそう{% else %}집중 가능{% endif %}</option>
+              </select>
+            </div>
+            <div>
+              <label for="awrp-goal">{% if page.lang == 'en' %}Tonight's goal{% elsif page.lang == 'ja' %}今夜の目標{% else %}오늘 밤 목표{% endif %}</label>
+              <select id="awrp-goal">
+                <option value="recover">{% if page.lang == 'en' %}Recover{% elsif page.lang == 'ja' %}回復{% else %}회복{% endif %}</option>
+                <option value="clear" selected>{% if page.lang == 'en' %}Clear must-do tasks{% elsif page.lang == 'ja' %}必須タスク処理{% else %}필수 작업 처리{% endif %}</option>
+                <option value="grow">{% if page.lang == 'en' %}Learn or improve{% elsif page.lang == 'ja' %}学習・成長{% else %}학습/성장{% endif %}</option>
+                <option value="enjoy">{% if page.lang == 'en' %}Enjoy the evening{% elsif page.lang == 'ja' %}楽しむ{% else %}즐기기{% endif %}</option>
+              </select>
+            </div>
+          </div>
+
+          <label for="awrp-tasks">{% if page.lang == 'en' %}Must-do tasks (one per line){% elsif page.lang == 'ja' %}必須タスク（1行に1つ）{% else %}꼭 해야 할 일 (한 줄에 하나){% endif %}</label>
+          <textarea id="awrp-tasks" rows="6" maxlength="3000" placeholder="{% if page.lang == 'en' %}Reply to email&#10;Laundry&#10;Prepare tomorrow's bag{% elsif page.lang == 'ja' %}メール返信&#10;洗濯&#10;明日の準備{% else %}메일 답장&#10;빨래 돌리기&#10;내일 가방 챙기기{% endif %}"></textarea>
+
+          <div class="tool-row-grid pct-grid">
+            <label class="tool-check"><input id="awrp-soft-start" type="checkbox" checked /> {% if page.lang == 'en' %}Start gently{% elsif page.lang == 'ja' %}軽く始める{% else %}가볍게 시작하기{% endif %}</label>
+            <label class="tool-check"><input id="awrp-include-rest" type="checkbox" checked /> {% if page.lang == 'en' %}Always include recovery{% elsif page.lang == 'ja' %}回復時間を入れる{% else %}회복 시간 포함{% endif %}</label>
+          </div>
+
+          <div class="tool-row-grid pct-actions">
+            <button id="awrp-run" type="button">{% if page.lang == 'en' %}Pick routine{% elsif page.lang == 'ja' %}ルーティンを選ぶ{% else %}루틴 고르기{% endif %}</button>
+            <button id="awrp-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
+            <button id="awrp-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+          </div>
+
+          <div class="tool-stats">
+            <div><strong id="awrp-energy-out">3/5</strong><span>{% if page.lang == 'en' %}Energy{% elsif page.lang == 'ja' %}元気度{% else %}에너지{% endif %}</span></div>
+            <div><strong id="awrp-task-count">0</strong><span>{% if page.lang == 'en' %}Tasks{% elsif page.lang == 'ja' %}タスク{% else %}할 일{% endif %}</span></div>
+            <div><strong id="awrp-top-type">-</strong><span>{% if page.lang == 'en' %}Top pick{% elsif page.lang == 'ja' %}おすすめ{% else %}추천 유형{% endif %}</span></div>
+            <div><strong id="awrp-load">-</strong><span>{% if page.lang == 'en' %}Load{% elsif page.lang == 'ja' %}負荷{% else %}부담도{% endif %}</span></div>
+          </div>
+
+          <p class="tool-result" id="awrp-help">{% if page.lang == 'en' %}Set your condition and pick a realistic evening routine.{% elsif page.lang == 'ja' %}今の状態に合わせて、無理なく始められる夜ルーティンを選びます。{% else %}현재 컨디션에 맞춰 무리 없이 시작할 저녁 루틴을 고릅니다.{% endif %}</p>
+          <textarea id="awrp-output" rows="15" readonly placeholder="{% if page.lang == 'en' %}Your routine recommendation will appear here.{% elsif page.lang == 'ja' %}おすすめルーティンがここに表示されます。{% else %}추천 루틴이 여기에 표시됩니다.{% endif %}"></textarea>
+        </div>
       {% when 'household-chore-picker' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">

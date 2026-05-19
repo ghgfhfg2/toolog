@@ -1,3 +1,27 @@
+- id: after-work-routine-picker
+  title: 퇴근 후 저녁 루틴 피커
+  title_en: After-Work Evening Routine Picker
+  title_ja: 退勤後の夜ルーティンピッカー
+  category: lifestyle
+  category_label: 생활/저녁 루틴 선택
+  category_label_en: Lifestyle/Evening Routine
+  category_label_ja: 生活/夜ルーティン選び
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 남은 시간, 에너지, 꼭 해야 할 일, 오늘 기분을 넣으면 쉬기·운동·집안일·공부·취미 중 오늘 맞는 저녁 루틴을 추천해요.
+  description_en: Pick an evening routine after work based on remaining time, energy, must-do tasks, mood, and your preferred goal for tonight.
+  description_ja: 残り時間、元気度、必須タスク、気分をもとに、休息・運動・家事・勉強・趣味から今夜のルーティンを選べます。
+  url: /tools/after-work-routine-picker/
+  url_en: /en/tools/after-work-routine-picker/
+  url_ja: /ja/tools/after-work-routine-picker/
+  thumbnail: /assets/thumbs/after-work-routine-picker.svg
+  thumbnail_en: /assets/thumbs/en/after-work-routine-picker.svg
+  thumbnail_ja: /assets/thumbs/ja/after-work-routine-picker.svg
+  published_at: 2026-05-19
+  tool_type: picker
+  topic_cluster: lifestyle
+
 - id: cafe-work-seat-simulator
   title: 카페 작업 자리 선택 시뮬레이터
   title_en: Cafe Work Seat Simulator

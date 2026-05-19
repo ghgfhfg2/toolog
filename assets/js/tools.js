@@ -6473,19 +6473,19 @@
       ko: {
         idle: '텍스트를 붙여넣고 정리 옵션을 고르면 복붙 흔적을 빠르게 다듬습니다.',
         copied: '복사됨',
-        copyDefault: '결과 복사',
+        copyDefault: '결과 복사', mustDo: '필수 작업',
         summary: (n) => `선택한 정리 옵션 ${n}개를 적용했습니다. 결과를 한 번 더 눈으로 확인해 보세요.`
       },
       en: {
         idle: 'Paste text and choose cleanup options to tidy copied formatting quickly.',
         copied: 'Copied',
-        copyDefault: 'Copy result',
+        copyDefault: 'Copy result', mustDo: 'Must-do',
         summary: (n) => `Applied ${n} selected cleanup option(s). Review the result once before using it.`
       },
       ja: {
         idle: 'テキストを貼り付けて整形オプションを選ぶと、コピー時の崩れをすばやく整えます。',
         copied: 'コピー完了',
-        copyDefault: '結果をコピー',
+        copyDefault: '結果をコピー', mustDo: '必須タスク',
         summary: (n) => `選択した整形オプション ${n} 件を適用しました。使用前に一度結果を確認してください。`
       }
     }[pageLang] || {
@@ -12978,6 +12978,122 @@
     render();
   }
 
+
+
+  if (slug === 'after-work-routine-picker') {
+    const timeEl = document.getElementById('awrp-time');
+    const energyEl = document.getElementById('awrp-energy');
+    const moodEl = document.getElementById('awrp-mood');
+    const goalEl = document.getElementById('awrp-goal');
+    const tasksEl = document.getElementById('awrp-tasks');
+    const softEl = document.getElementById('awrp-soft-start');
+    const restEl = document.getElementById('awrp-include-rest');
+    const runBtn = document.getElementById('awrp-run');
+    const sampleBtn = document.getElementById('awrp-sample');
+    const copyBtn = document.getElementById('awrp-copy');
+    const energyOut = document.getElementById('awrp-energy-out');
+    const taskCount = document.getElementById('awrp-task-count');
+    const topType = document.getElementById('awrp-top-type');
+    const loadOut = document.getElementById('awrp-load');
+    const help = document.getElementById('awrp-help');
+    const output = document.getElementById('awrp-output');
+    if (!timeEl || !energyEl || !output) return;
+
+    const i18n = {
+      ko: {
+        names: { rest: '회복 루틴', chores: '처리 루틴', move: '가벼운 운동 루틴', focus: '집중 루틴', hobby: '취미 루틴' },
+        load: ['낮음', '보통', '높음'], title: '오늘 밤 추천 루틴', top: '1순위', alternatives: '다른 후보', copied: '복사됨', copyDefault: '결과 복사', mustDo: '필수 작업',
+        summary: (name, min, energy, tasks) => `${name}을 추천해요. ${min}분 안에서 시작하고, 현재 에너지 ${energy}/5와 필수 작업 ${tasks}개를 반영했습니다.`,
+        sampleTasks: '메일 답장\n빨래 돌리기\n내일 가방 챙기기',
+        steps: {
+          rest: ['물 마시고 샤워 또는 세안으로 전환하기', '휴대폰 알림을 줄이고 20분 쉬기', '내일 아침을 편하게 할 준비 1가지만 하기'],
+          chores: ['가장 짧은 필수 작업 1개부터 끝내기', '빨래·정리처럼 손을 움직이는 일을 25분 처리하기', '남은 일은 내일 목록으로 분리하기'],
+          move: ['5분 스트레칭으로 몸 풀기', '산책·홈트·요가 중 하나를 20~30분 하기', '샤워 후 화면 밝기를 낮추고 마무리하기'],
+          focus: ['책상 위를 3분 정리하기', '뽀모도로 1세트로 공부·사이드프로젝트 진행하기', '다음 행동 1줄만 적고 종료하기'],
+          hobby: ['하고 싶은 콘텐츠나 취미를 하나만 고르기', '타이머를 맞추고 죄책감 없이 즐기기', '잠들기 30분 전에는 마무리 루틴으로 전환하기']
+        }
+      },
+      en: {
+        names: { rest: 'recovery routine', chores: 'clear-the-list routine', move: 'light movement routine', focus: 'focus routine', hobby: 'hobby routine' },
+        load: ['low', 'medium', 'high'], title: 'Tonight\'s routine pick', top: 'Top pick', alternatives: 'Other options', copied: 'Copied', copyDefault: 'Copy result', mustDo: 'Must-do',
+        summary: (name, min, energy, tasks) => `Recommended: ${name}. It fits within ${min} minutes and reflects energy ${energy}/5 plus ${tasks} must-do task(s).`,
+        sampleTasks: 'Reply to email\nStart laundry\nPack tomorrow\'s bag',
+        steps: {
+          rest: ['Drink water and switch out of work mode', 'Reduce notifications and rest for 20 minutes', 'Do one small thing that makes tomorrow easier'],
+          chores: ['Finish the shortest must-do task first', 'Handle laundry or cleanup for 25 minutes', 'Move the rest into tomorrow\'s list'],
+          move: ['Warm up with 5 minutes of stretching', 'Walk, do a home workout, or try gentle yoga for 20–30 minutes', 'Shower and lower screen brightness afterward'],
+          focus: ['Clear your desk for 3 minutes', 'Run one Pomodoro for study or a side project', 'Write one next action before stopping'],
+          hobby: ['Choose one hobby or piece of content', 'Set a timer and enjoy it without guilt', 'Switch to wind-down mode 30 minutes before sleep']
+        }
+      },
+      ja: {
+        names: { rest: '回復ルーティン', chores: 'タスク処理ルーティン', move: '軽い運動ルーティン', focus: '集中ルーティン', hobby: '趣味ルーティン' },
+        load: ['低め', '普通', '高め'], title: '今夜のおすすめルーティン', top: '1番おすすめ', alternatives: '他の候補', copied: 'コピー完了', copyDefault: '結果をコピー', mustDo: '必須タスク',
+        summary: (name, min, energy, tasks) => `${name}がおすすめです。${min}分以内で始められ、元気度${energy}/5と必須タスク${tasks}件を反映しました。`,
+        sampleTasks: 'メール返信\n洗濯\n明日の準備',
+        steps: {
+          rest: ['水を飲んで仕事モードを切り替える', '通知を減らして20分休む', '明日の朝が楽になる準備を1つだけする'],
+          chores: ['一番短い必須タスクから終わらせる', '洗濯や片付けを25分だけ進める', '残りは明日のリストへ分ける'],
+          move: ['5分ストレッチで体をほぐす', '散歩・自宅運動・ヨガを20〜30分する', 'シャワー後に画面の明るさを下げる'],
+          focus: ['机を3分片付ける', 'ポモドーロ1セットで勉強や作業を進める', '次の行動を1行書いて終える'],
+          hobby: ['趣味やコンテンツを1つだけ選ぶ', 'タイマーをセットして罪悪感なく楽しむ', '寝る30分前にクールダウンへ切り替える']
+        }
+      }
+    };
+    const t = i18n[pageLang] || i18n.ko;
+    const lines = (v) => (v || '').split(/\n+/).map(s => s.trim()).filter(Boolean);
+    const copyText = async (text) => {
+      try { await navigator.clipboard.writeText(text); }
+      catch (_) { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); }
+    };
+
+    const score = () => {
+      const min = Number(timeEl.value || 60);
+      const energy = Number(energyEl.value || 3);
+      const tasks = lines(tasksEl.value);
+      const taskLoad = tasks.length >= 3 ? 2 : (tasks.length >= 1 ? 1 : 0);
+      const mood = moodEl.value;
+      const goal = goalEl.value;
+      const scores = { rest: 20, chores: 20, move: 20, focus: 20, hobby: 20 };
+      if (energy <= 2) { scores.rest += 35; scores.move -= 8; scores.focus -= 10; }
+      if (energy >= 4) { scores.move += 18; scores.focus += 12; scores.chores += 8; }
+      if (min <= 30) { scores.rest += 12; scores.chores += 8; scores.focus -= 8; }
+      if (min >= 90) { scores.focus += 10; scores.hobby += 10; scores.move += 8; }
+      if (taskLoad === 1) scores.chores += 18;
+      if (taskLoad === 2) { scores.chores += 28; scores.rest += 10; }
+      if (mood === 'tired') scores.rest += 24;
+      if (mood === 'restless') scores.move += 24;
+      if (mood === 'focused') scores.focus += 24;
+      if (goal === 'recover') scores.rest += 32;
+      if (goal === 'clear') scores.chores += 28;
+      if (goal === 'grow') scores.focus += 28;
+      if (goal === 'enjoy') scores.hobby += 30;
+      if (softEl?.checked) { scores.rest += 5; scores.chores += 3; }
+      if (restEl?.checked && goal !== 'recover') scores.rest += 8;
+      return { min, energy, tasks, taskLoad, ranked: Object.entries(scores).sort((a,b) => b[1] - a[1]) };
+    };
+
+    const render = () => {
+      const { min, energy, tasks, taskLoad, ranked } = score();
+      const top = ranked[0][0];
+      energyOut.textContent = `${energy}/5`;
+      taskCount.textContent = formatNum(tasks.length);
+      topType.textContent = t.names[top];
+      loadOut.textContent = t.load[taskLoad];
+      const stepMin = min <= 30 ? '30' : (min <= 60 ? '45–60' : '60–90');
+      const parts = [`# ${t.title}`, `${t.top}: ${t.names[top]}`, '', t.summary(t.names[top], stepMin, energy, tasks.length), '', ...t.steps[top].map((s, i) => `${i + 1}. ${s}`)];
+      if (tasks.length) parts.push('', `${t.mustDo}:`, ...tasks.slice(0, 6).map(x => `- ${x}`));
+      parts.push('', `${t.alternatives}: ${ranked.slice(1, 4).map(([k]) => t.names[k]).join(' / ')}`);
+      output.value = parts.join('\n');
+      help.textContent = t.summary(t.names[top], stepMin, energy, tasks.length);
+    };
+
+    sampleBtn?.addEventListener('click', () => { tasksEl.value = t.sampleTasks; energyEl.value = '2'; moodEl.value = 'tired'; goalEl.value = 'recover'; render(); });
+    runBtn?.addEventListener('click', render);
+    copyBtn?.addEventListener('click', async () => { if (!output.value.trim()) return; await copyText(output.value.trim()); const old = copyBtn.textContent; copyBtn.textContent = t.copied; setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900); });
+    [timeEl, energyEl, moodEl, goalEl, tasksEl, softEl, restEl].forEach(el => { el?.addEventListener('input', render); el?.addEventListener('change', render); });
+    render();
+  }
 
   if (slug === 'household-chore-picker') {
     const peopleEl = document.getElementById('hcp-people');
