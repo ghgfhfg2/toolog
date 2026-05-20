@@ -779,6 +779,79 @@ layout: default
 
           <div id="whp-missed" class="bw-list"></div>
         </div>
+      {% when 'rainy-day-outing-planner' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="rdop-rain">{% if page.lang == 'en' %}Rain intensity{% elsif page.lang == 'ja' %}雨の強さ{% else %}비 강도{% endif %}</label>
+              <select id="rdop-rain">
+                <option value="light">{% if page.lang == 'en' %}Light rain{% elsif page.lang == 'ja' %}小雨{% else %}약한 비{% endif %}</option>
+                <option value="steady" selected>{% if page.lang == 'en' %}Steady rain{% elsif page.lang == 'ja' %}本降り{% else %}보통 비{% endif %}</option>
+                <option value="heavy">{% if page.lang == 'en' %}Heavy rain{% elsif page.lang == 'ja' %}強い雨{% else %}강한 비{% endif %}</option>
+              </select>
+            </div>
+            <div>
+              <label for="rdop-wind">{% if page.lang == 'en' %}Wind{% elsif page.lang == 'ja' %}風{% else %}바람{% endif %}</label>
+              <select id="rdop-wind">
+                <option value="calm">{% if page.lang == 'en' %}Calm{% elsif page.lang == 'ja' %}弱い{% else %}약함{% endif %}</option>
+                <option value="normal" selected>{% if page.lang == 'en' %}Noticeable{% elsif page.lang == 'ja' %}普通{% else %}보통{% endif %}</option>
+                <option value="strong">{% if page.lang == 'en' %}Strong wind{% elsif page.lang == 'ja' %}強風{% else %}강함{% endif %}</option>
+              </select>
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="rdop-transport">{% if page.lang == 'en' %}Main transport{% elsif page.lang == 'ja' %}主な移動手段{% else %}주 이동수단{% endif %}</label>
+              <select id="rdop-transport">
+                <option value="walk">{% if page.lang == 'en' %}Mostly walking{% elsif page.lang == 'ja' %}徒歩中心{% else %}도보 중심{% endif %}</option>
+                <option value="transit" selected>{% if page.lang == 'en' %}Public transit{% elsif page.lang == 'ja' %}公共交通{% else %}대중교통{% endif %}</option>
+                <option value="car">{% if page.lang == 'en' %}Car or taxi{% elsif page.lang == 'ja' %}車・タクシー{% else %}차/택시{% endif %}</option>
+                <option value="bike">{% if page.lang == 'en' %}Bike or scooter{% elsif page.lang == 'ja' %}自転車・キックボード{% else %}자전거/킥보드{% endif %}</option>
+              </select>
+            </div>
+            <div>
+              <label for="rdop-hours">{% if page.lang == 'en' %}Outing length{% elsif page.lang == 'ja' %}外出時間{% else %}외출 시간{% endif %}</label>
+              <select id="rdop-hours">
+                <option value="short">{% if page.lang == 'en' %}Under 2 hours{% elsif page.lang == 'ja' %}2時間未満{% else %}2시간 이하{% endif %}</option>
+                <option value="half" selected>{% if page.lang == 'en' %}Half day{% elsif page.lang == 'ja' %}半日{% else %}반나절{% endif %}</option>
+                <option value="full">{% if page.lang == 'en' %}All day{% elsif page.lang == 'ja' %}一日{% else %}하루 종일{% endif %}</option>
+              </select>
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="rdop-shoes">{% if page.lang == 'en' %}Shoes{% elsif page.lang == 'ja' %}靴{% else %}오늘 신발{% endif %}</label>
+              <select id="rdop-shoes">
+                <option value="waterproof">{% if page.lang == 'en' %}Water-resistant shoes{% elsif page.lang == 'ja' %}防水寄りの靴{% else %}방수/레인 신발{% endif %}</option>
+                <option value="normal" selected>{% if page.lang == 'en' %}Regular sneakers{% elsif page.lang == 'ja' %}普通のスニーカー{% else %}일반 운동화{% endif %}</option>
+                <option value="delicate">{% if page.lang == 'en' %}Delicate shoes{% elsif page.lang == 'ja' %}濡らしたくない靴{% else %}젖으면 곤란한 신발{% endif %}</option>
+              </select>
+            </div>
+            <div>
+              <label for="rdop-bag">{% if page.lang == 'en' %}Bag protection{% elsif page.lang == 'ja' %}バッグ防水{% else %}가방 방수{% endif %}</label>
+              <select id="rdop-bag">
+                <option value="covered">{% if page.lang == 'en' %}Rain cover or waterproof bag{% elsif page.lang == 'ja' %}カバー・防水バッグあり{% else %}커버/방수 가방 있음{% endif %}</option>
+                <option value="normal" selected>{% if page.lang == 'en' %}Regular bag{% elsif page.lang == 'ja' %}普通のバッグ{% else %}일반 가방{% endif %}</option>
+                <option value="open">{% if page.lang == 'en' %}Open tote or paper bag{% elsif page.lang == 'ja' %}トート・紙袋{% else %}토트/종이 쇼핑백{% endif %}</option>
+              </select>
+            </div>
+          </div>
+          <label for="rdop-items">{% if page.lang == 'en' %}Important belongings (one per line){% elsif page.lang == 'ja' %}大事な持ち物（1行に1つ）{% else %}중요한 소지품 (한 줄에 하나){% endif %}</label>
+          <textarea id="rdop-items" rows="5" maxlength="3000" placeholder="{% if page.lang == 'en' %}Laptop&#10;Documents&#10;Gift bag{% elsif page.lang == 'ja' %}ノートPC&#10;書類&#10;プレゼント{% else %}노트북&#10;서류&#10;선물 쇼핑백{% endif %}"></textarea>
+          <div class="tool-row-grid pct-actions">
+            <button id="rdop-run" type="button">{% if page.lang == 'en' %}Make plan{% elsif page.lang == 'ja' %}準備プラン作成{% else %}준비 플랜 만들기{% endif %}</button>
+            <button id="rdop-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
+            <button id="rdop-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="rdop-umbrella">-</strong><span>{% if page.lang == 'en' %}Umbrella{% elsif page.lang == 'ja' %}傘{% else %}우산{% endif %}</span></div>
+            <div><strong id="rdop-buffer">-</strong><span>{% if page.lang == 'en' %}Buffer{% elsif page.lang == 'ja' %}余裕{% else %}여유시간{% endif %}</span></div>
+            <div><strong id="rdop-risk">-</strong><span>{% if page.lang == 'en' %}Wet risk{% elsif page.lang == 'ja' %}濡れリスク{% else %}젖음 위험{% endif %}</span></div>
+            <div><strong id="rdop-count">0</strong><span>{% if page.lang == 'en' %}Items{% elsif page.lang == 'ja' %}持ち物{% else %}소지품{% endif %}</span></div>
+          </div>
+          <p class="tool-result" id="rdop-help">{% if page.lang == 'en' %}Choose today’s conditions to build a practical rainy-day checklist.{% elsif page.lang == 'ja' %}今日の条件を選ぶと、雨の日の準備チェックリストを作れます。{% else %}오늘 조건을 고르면 비 오는 날 외출 체크리스트를 만듭니다.{% endif %}</p>
+          <textarea id="rdop-output" rows="15" readonly placeholder="{% if page.lang == 'en' %}Your rainy-day outing plan will appear here.{% elsif page.lang == 'ja' %}雨の日の準備プランがここに表示されます。{% else %}비 오는 날 외출 준비 플랜이 여기에 표시됩니다.{% endif %}"></textarea>
+        </div>
       {% when 'after-work-routine-picker' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">

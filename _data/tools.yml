@@ -1,3 +1,28 @@
+- id: rainy-day-outing-planner
+  title: 비 오는 날 외출 준비 플래너
+  title_en: Rainy Day Outing Planner
+  title_ja: 雨の日のお出かけ準備プランナー
+  category: lifestyle
+  category_label: 생활/비 오는 날 외출 준비
+  category_label_en: Lifestyle/Rainy Day Outing
+  category_label_ja: 生活/雨の日のお出かけ準備
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 강수 강도, 이동수단, 외출 시간, 신발·가방 조건을 넣으면 우산·신발·짐 보호·출발 여유시간 체크리스트를 정리해요.
+  description_en: Plan what to bring for a rainy-day outing based on rain intensity, transport, outing length, shoes, and
+    bag protection.
+  description_ja: 雨の強さ、移動手段、外出時間、靴やバッグ条件から、傘・靴・荷物保護・出発余裕のチェックリストを作れます。
+  url: /tools/rainy-day-outing-planner/
+  url_en: /en/tools/rainy-day-outing-planner/
+  url_ja: /ja/tools/rainy-day-outing-planner/
+  thumbnail: /assets/thumbs/rainy-day-outing-planner.svg
+  thumbnail_en: /assets/thumbs/en/rainy-day-outing-planner.svg
+  thumbnail_ja: /assets/thumbs/ja/rainy-day-outing-planner.svg
+  published_at: '2026-05-20'
+  tool_type: planner
+  topic_cluster: lifestyle
+
 - id: after-work-routine-picker
   title: 퇴근 후 저녁 루틴 피커
   title_en: After-Work Evening Routine Picker

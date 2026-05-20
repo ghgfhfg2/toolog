@@ -12980,6 +12980,103 @@
 
 
 
+  if (slug === 'rainy-day-outing-planner') {
+    const rainEl = document.getElementById('rdop-rain');
+    const windEl = document.getElementById('rdop-wind');
+    const transportEl = document.getElementById('rdop-transport');
+    const hoursEl = document.getElementById('rdop-hours');
+    const shoesEl = document.getElementById('rdop-shoes');
+    const bagEl = document.getElementById('rdop-bag');
+    const itemsEl = document.getElementById('rdop-items');
+    const runBtn = document.getElementById('rdop-run');
+    const sampleBtn = document.getElementById('rdop-sample');
+    const copyBtn = document.getElementById('rdop-copy');
+    const umbrellaOut = document.getElementById('rdop-umbrella');
+    const bufferOut = document.getElementById('rdop-buffer');
+    const riskOut = document.getElementById('rdop-risk');
+    const countOut = document.getElementById('rdop-count');
+    const help = document.getElementById('rdop-help');
+    const output = document.getElementById('rdop-output');
+    if (!rainEl || !output) return;
+
+    const text = {
+      ko: {
+        title: '비 오는 날 외출 준비 플랜', umbrella: { light: '접이식', steady: '일반 우산', heavy: '튼튼한 우산' }, risk: ['낮음', '보통', '높음'], min: '분', copied: '복사됨', copyDefault: '결과 복사', important: '중요 소지품', sample: '노트북\n계약서\n선물 쇼핑백',
+        summary: (u,b,r) => `${u}을 챙기고 출발 여유시간은 ${b}분 정도로 잡으세요. 젖음 위험은 ${r}입니다.`,
+        basics: ['휴대폰 배터리와 교통앱 확인', '작은 수건이나 휴지 챙기기', '젖은 우산을 넣을 비닐 또는 우산 커버 준비'],
+        heavy: ['방수 외투나 여벌 겉옷 고려', '양말 여분을 가방 안쪽에 넣기', '물웅덩이가 많은 길은 피해서 동선 조정'],
+        wind: ['강풍이면 큰 우산보다 튼튼한 접이식 또는 우비가 안전합니다'],
+        bag: ['전자기기와 종이류는 지퍼백·파우치에 한 번 더 넣기'],
+        shoes: ['젖으면 곤란한 신발은 피하고 미끄럼 적은 신발로 바꾸기'],
+        transit: ['역·정류장 혼잡과 지연을 감안해 환승 시간을 넉넉히 잡기'],
+        bike: ['자전거·킥보드는 미끄럼 위험이 커 대체 이동수단을 먼저 검토하기']
+      },
+      en: {
+        title: 'Rainy day outing plan', umbrella: { light: 'folding', steady: 'regular umbrella', heavy: 'sturdy umbrella' }, risk: ['low', 'medium', 'high'], min: 'min', copied: 'Copied', copyDefault: 'Copy result', important: 'Important belongings', sample: 'Laptop\nDocuments\nGift bag',
+        summary: (u,b,r) => `Bring a ${u} and leave about ${b} minutes early. Wet-risk level: ${r}.`,
+        basics: ['Check phone battery and transit apps', 'Pack a small towel or tissues', 'Prepare a plastic bag or cover for a wet umbrella'],
+        heavy: ['Consider a rain jacket or spare outer layer', 'Put spare socks inside the bag', 'Adjust your route to avoid puddle-heavy streets'],
+        wind: ['With strong wind, a sturdy folding umbrella or raincoat is safer than a large umbrella'],
+        bag: ['Put electronics and papers in an extra zip bag or pouch'],
+        shoes: ['Avoid delicate shoes and switch to grippier footwear'],
+        transit: ['Allow extra time for station crowds, stops, and transfers'],
+        bike: ['Bike or scooter travel is slippery; check an alternate route first']
+      },
+      ja: {
+        title: '雨の日のお出かけ準備プラン', umbrella: { light: '折りたたみ傘', steady: '普通の傘', heavy: '丈夫な傘' }, risk: ['低め', '普通', '高め'], min: '分', copied: 'コピー完了', copyDefault: '結果をコピー', important: '大事な持ち物', sample: 'ノートPC\n書類\nプレゼント',
+        summary: (u,b,r) => `${u}を用意し、出発余裕は約${b}分見てください。濡れリスクは${r}です。`,
+        basics: ['スマホ電池と交通アプリを確認', '小さなタオルやティッシュを入れる', '濡れた傘用の袋やカバーを準備'],
+        heavy: ['レインコートや替えの上着を検討', '替えの靴下をバッグの内側へ', '水たまりの多い道を避ける'],
+        wind: ['強風なら大きな傘より丈夫な折りたたみ傘やレインコートが安全です'],
+        bag: ['電子機器や紙類はジッパー袋・ポーチに入れる'],
+        shoes: ['濡らしたくない靴を避け、滑りにくい靴に替える'],
+        transit: ['駅や停留所の混雑、乗換遅れを見込む'],
+        bike: ['自転車・キックボードは滑りやすいため代替手段を確認']
+      }
+    };
+    const t = text[pageLang] || text.ko;
+    const lines = (v) => (v || '').split(/\n+/).map(s => s.trim()).filter(Boolean);
+    const copyText = async (val) => { try { await navigator.clipboard.writeText(val); } catch (_) { const ta=document.createElement('textarea'); ta.value=val; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } };
+
+    const plan = () => {
+      const rain = rainEl.value;
+      const wind = windEl.value;
+      const transport = transportEl.value;
+      const hours = hoursEl.value;
+      const shoes = shoesEl.value;
+      const bag = bagEl.value;
+      const items = lines(itemsEl.value);
+      let risk = rain === 'heavy' ? 2 : (rain === 'steady' ? 1 : 0);
+      if (wind === 'strong') risk += 1;
+      if (transport === 'walk' || transport === 'bike') risk += 1;
+      if (shoes === 'delicate') risk += 1;
+      if (bag === 'open') risk += 1;
+      risk = Math.min(2, risk);
+      let buffer = 5 + (rain === 'heavy' ? 15 : rain === 'steady' ? 10 : 5) + (transport === 'transit' ? 10 : transport === 'walk' ? 8 : transport === 'bike' ? 15 : 3) + (hours === 'full' ? 5 : 0);
+      const umbrella = wind === 'strong' && rain !== 'light' ? t.umbrella.heavy : t.umbrella[rain];
+      umbrellaOut.textContent = umbrella;
+      bufferOut.textContent = `${buffer}${t.min}`;
+      riskOut.textContent = t.risk[risk];
+      countOut.textContent = formatNum(items.length);
+      const checklist = [...t.basics];
+      if (rain === 'heavy' || hours === 'full') checklist.push(...t.heavy);
+      if (wind === 'strong') checklist.push(...t.wind);
+      if (bag !== 'covered' || items.length) checklist.push(...t.bag);
+      if (shoes !== 'waterproof') checklist.push(...t.shoes);
+      if (transport === 'transit') checklist.push(...t.transit);
+      if (transport === 'bike') checklist.push(...t.bike);
+      const parts = [`# ${t.title}`, '', t.summary(umbrella, buffer, t.risk[risk]), '', 'Checklist:', ...checklist.map(x => `- [ ] ${x}`)];
+      if (items.length) parts.push('', `${t.important}:`, ...items.slice(0, 8).map(x => `- ${x}`));
+      output.value = parts.join('\n');
+      help.textContent = t.summary(umbrella, buffer, t.risk[risk]);
+    };
+    sampleBtn?.addEventListener('click', () => { rainEl.value='heavy'; windEl.value='strong'; transportEl.value='transit'; hoursEl.value='half'; shoesEl.value='normal'; bagEl.value='normal'; itemsEl.value=t.sample; plan(); });
+    runBtn?.addEventListener('click', plan);
+    copyBtn?.addEventListener('click', async () => { if (!output.value.trim()) return; await copyText(output.value.trim()); const old=copyBtn.textContent; copyBtn.textContent=t.copied; setTimeout(()=>{ copyBtn.textContent=old||t.copyDefault; },900); });
+    [rainEl, windEl, transportEl, hoursEl, shoesEl, bagEl, itemsEl].forEach(el => { el?.addEventListener('input', plan); el?.addEventListener('change', plan); });
+    plan();
+  }
+
   if (slug === 'after-work-routine-picker') {
     const timeEl = document.getElementById('awrp-time');
     const energyEl = document.getElementById('awrp-energy');
