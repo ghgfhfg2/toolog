@@ -44,9 +44,9 @@ faq:
 강한 비, 바람, 대중교통·도보 조건에서는 출발 여유시간을 더 크게 잡아 체크리스트에 반영합니다.
 
 ## 함께 쓰면 좋은 도구
-- 약속 장소까지 출발 시간을 더 자세히 잡으려면: [약속 출발 시간 버퍼 시뮬레이터]({ '/tools/appointment-departure-buffer-simulator/' | relative_url })
-- 비상용 준비물을 장기적으로 정리하려면: [비상가방 체크리스트 플래너]({ '/tools/emergency-bag-checklist-planner/' | relative_url })
-- 퇴근 후 비 오는 저녁 루틴을 정하려면: [퇴근 후 저녁 루틴 피커]({ '/tools/after-work-routine-picker/' | relative_url })
+- 약속 장소까지 출발 시간을 더 자세히 잡으려면: [약속 출발 시간 버퍼 시뮬레이터]({{ '/tools/appointment-departure-buffer-simulator/' | relative_url }})
+- 비상용 준비물을 장기적으로 정리하려면: [비상가방 체크리스트 플래너]({{ '/tools/emergency-bag-checklist-planner/' | relative_url }})
+- 퇴근 후 비 오는 저녁 루틴을 정하려면: [퇴근 후 저녁 루틴 피커]({{ '/tools/after-work-routine-picker/' | relative_url }})
 
 ## FAQ
 ### 날씨 예보를 따로 확인해야 하나요?
