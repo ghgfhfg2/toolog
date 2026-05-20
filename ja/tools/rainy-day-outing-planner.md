@@ -2,7 +2,7 @@
 layout: tool
 lang: ja
 title: 雨の日のお出かけ準備プランナー | 傘・靴・バッグのチェックリスト
-description: 雨の強さ、移動手段、外出時間、靴やバッグ条件から、傘・靴・荷物保護・出発余裕のチェックリストを作れます。
+description: 雨の強さ、移動手段、外出時間、靴やバッグの条件を入れると、傘・靴・荷物保護・出発余裕時間のチェックリストを整理できます。
 category: lifestyle
 category_label: 生活/雨の日のお出かけ準備
 thumbnail: /assets/thumbs/ja/rainy-day-outing-planner.svg
@@ -18,23 +18,53 @@ alternate_urls:
   ko: /tools/rainy-day-outing-planner/
   en: /en/tools/rainy-day-outing-planner/
   ja: /ja/tools/rainy-day-outing-planner/
-keywords: [rainy day checklist, outing planner, umbrella checklist, waterproof bag]
+keywords: [雨の日 持ち物, 傘 チェックリスト, 梅雨 外出準備, 雨の日 靴, お出かけ チェックリスト]
 related_tools: [appointment-departure-buffer-simulator, emergency-bag-checklist-planner, after-work-routine-picker]
 faq:
-  - q: Does this load live weather data?
-    a: No. Enter the rain level you already checked and the tool turns it into preparation steps.
-  - q: Is my outing information saved?
-    a: No. Everything runs in your browser only.
+  - q: 実際の天気予報を自動で読み込みますか？
+    a: いいえ。ユーザーが確認した雨の強さと外出条件を入力して、準備チェックリストを作るツールです。
+  - q: 梅雨時期の通勤準備にも使えますか？
+    a: はい。移動手段と外出時間を通勤状況に合わせると、靴、替えの靴下、バッグの防水、出発余裕時間を一緒に確認できます。
+  - q: 入力した予定や外出情報は保存されますか？
+    a: いいえ。入力と結果生成は現在のブラウザ内だけで処理され、サーバーへ送信・保存されません。
 ---
 
-## Overview
-雨の日の予報を、傘・靴・バッグ保護・出発余裕の具体的な準備リストに変えるプランナーです。
+## なぜ雨の日のお出かけ準備プランナーが必要ですか？
+雨の日の外出は、少しの準備差で疲れやすさが大きく変わります。傘は持ったのに靴が濡れたり、バッグの中の電子機器が心配になったり、公共交通機関の遅れを考えずに約束に遅れてしまうこともあります。
 
-## How to use
-1. Choose rain intensity, wind, transport, and outing length.
-2. Select shoes and bag protection.
-3. Add important belongings such as a laptop or documents.
-4. Generate a checklist and copy it before leaving.
+このツールは、雨の強さ、移動手段、外出時間、靴とバッグの条件をもとに、**今日出かける前に用意するものと出発の余裕時間**を整理するplanner型ツールです。天気予報の代わりではありませんが、すでに確認した雨の情報を実際の準備行動に変えることに重点を置いています。
 
-## Summary
-This planner adds a non-calculator daily-life preparation format for rainy-day outings.
+## 使い方
+1. 雨の強さと風の状態を選びます。
+2. 移動手段と予想される外出時間を選択します。
+3. 今日履く靴、バッグの防水有無、大事な持ち物を入力します。
+4. `準備プランを作る`を押します。
+5. 傘・靴・荷物保護・出発余裕時間のチェックリストをコピーして、外出前に確認します。
+
+## 特に便利な場面
+### 1) 梅雨時期の通勤や通学前
+公共交通機関の混雑、濡れた靴、替えの靴下など、繰り返し忘れやすい項目をすばやく確認できます。
+
+### 2) ノートパソコンや書類を持って出かける時
+大事な持ち物を入力すると、ジッパーバッグ、防水ポーチ、バッグカバーのような荷物保護項目を優先して表示します。
+
+### 3) 約束の時間に遅れやすい日
+強い雨、風、公共交通機関、徒歩移動の条件では、出発余裕時間を大きめに取り、チェックリストに反映します。
+
+## 関連ツール
+- 約束場所までの出発時間をもっと詳しく決めたい時: [約束出発時間バッファシミュレーター]({{ '/ja/tools/appointment-departure-buffer-simulator/' | relative_url }})
+- 非常用の持ち物を長期的に整理したい時: [非常用バッグチェックリストプランナー]({{ '/ja/tools/emergency-bag-checklist-planner/' | relative_url }})
+- 退勤後の雨の夜ルーティンを決めたい時: [退勤後の夜ルーティンピッカー]({{ '/ja/tools/after-work-routine-picker/' | relative_url }})
+
+## FAQ
+### 天気予報を別に確認する必要がありますか？
+はい。このツールは予報APIを読み込みません。天気アプリで雨の強さと風の状態を確認したあと、その情報を準備行動に変える用途で使うのがおすすめです。
+
+### 必ず傘をすすめますか？
+弱い雨で短い屋内移動が中心なら、折りたたみ傘やレインコートのような軽めの準備を提案します。強い雨や風がある場合は、丈夫な傘、防水アウター、靴の対策をより強調します。
+
+### 旅行準備にも使えますか？
+短い外出を基準にしていますが、日帰り旅行、会場への移動、屋外の約束など、雨が大きな変数になる予定にも参考として使えます。
+
+## まとめ
+雨の日のお出かけ準備プランナーは、**雨の強さと移動条件を基準に、傘、靴、バッグ保護、出発余裕時間を整理するplanner型ツール**です。計算なしですぐ行動に移せる生活準備フローを追加し、最近発行したツールの形式の幅を広げます。
