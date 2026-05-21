@@ -1,3 +1,27 @@
+- id: online-return-package-checker
+  title: 온라인 쇼핑 반품 준비 체커
+  title_en: Online Return Package Checker
+  title_ja: オンライン返品準備チェッカー
+  category: shopping
+  category_label: 생활/온라인 반품 준비
+  category_label_en: Shopping/Online Return Prep
+  category_label_ja: 買い物/オンライン返品準備
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 반품 사유, 남은 기한, 포장 상태, 회수 방법을 넣으면 사진 촬영, 구성품 확인, 포장, 접수 전 체크리스트를 정리해요.
+  description_en: Build a return-prep checklist for photos, components, packaging, and pickup based on reason, deadline, and package state.
+  description_ja: 返品理由、残り期限、梱包状態、回収方法から、写真・付属品・梱包・申請前チェックを整理します。
+  url: /tools/online-return-package-checker/
+  url_en: /en/tools/online-return-package-checker/
+  url_ja: /ja/tools/online-return-package-checker/
+  thumbnail: /assets/thumbs/online-return-package-checker.svg
+  thumbnail_en: /assets/thumbs/en/online-return-package-checker.svg
+  thumbnail_ja: /assets/thumbs/ja/online-return-package-checker.svg
+  published_at: '2026-05-21'
+  tool_type: checker
+  topic_cluster: shopping
+
 - id: rainy-day-outing-planner
   title: 비 오는 날 외출 준비 플래너
   title_en: Rainy Day Outing Planner

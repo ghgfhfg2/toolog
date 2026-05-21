@@ -12980,6 +12980,98 @@
 
 
 
+  if (slug === 'online-return-package-checker') {
+    const itemsEl = document.getElementById('orpc-items');
+    const reasonEl = document.getElementById('orpc-reason');
+    const daysEl = document.getElementById('orpc-days');
+    const packageEl = document.getElementById('orpc-package');
+    const pickupEl = document.getElementById('orpc-pickup');
+    const photoEl = document.getElementById('orpc-photo');
+    const runBtn = document.getElementById('orpc-run');
+    const sampleBtn = document.getElementById('orpc-sample');
+    const copyBtn = document.getElementById('orpc-copy');
+    const countOut = document.getElementById('orpc-count');
+    const urgencyOut = document.getElementById('orpc-urgency');
+    const photosOut = document.getElementById('orpc-photos');
+    const stepsOut = document.getElementById('orpc-steps');
+    const help = document.getElementById('orpc-help');
+    const output = document.getElementById('orpc-output');
+    if (!itemsEl || !output) return;
+
+    const i18n = {
+      ko: {
+        title: '온라인 쇼핑 반품 준비 체크리스트', copied: '복사됨', copyDefault: '결과 복사', sample: '재킷\n택/라벨\n사은품 파우치', urgency: ['여유', '주의', '긴급'],
+        summary: (u,d) => `반품 기한까지 ${d}일 남았습니다. 긴급도는 ${u}입니다.`,
+        basics: ['쇼핑몰 반품 가능 기간과 배송비 조건 확인', '주문번호·상품명·옵션을 반품 접수 화면과 대조', '구성품을 모두 모아 누락 여부 확인'],
+        photos: ['상품 전체 상태 사진 촬영', '택·라벨·구성품 사진 촬영', '포장 전 최종 구성 사진 남기기'],
+        defect: ['불량·파손 부위를 가까이서 촬영', '수령 당시 박스 훼손이나 송장 사진 보관', '판매자 문의가 필요하면 증상 설명을 한 문장으로 정리'],
+        wrong: ['주문한 옵션과 실제 수령 상품 차이를 캡처·사진으로 남기기', '오배송이면 사용 흔적이 생기기 전 재포장'],
+        change: ['택 제거, 사용 흔적, 향수·오염 여부 확인', '단순 변심 배송비 차감 여부 확인'],
+        pkg: { original: '원박스와 완충재를 최대한 그대로 사용', partial: '부족한 완충재를 신문지·에어캡 등으로 보강', none: '튼튼한 박스와 완충재를 새로 준비' },
+        pickup: { pickup: '회수 방문일에 문 앞 보관 위치와 연락 가능 상태 확인', dropoff: '접수 가능한 편의점·지점과 운송장 출력 필요 여부 확인', direct: '직접 발송 주소, 택배비 선불/착불 조건 확인' },
+        components: '구성품'
+      },
+      en: {
+        title: 'Online return preparation checklist', copied: 'Copied', copyDefault: 'Copy result', sample: 'Jacket\nTag/label\nGift pouch', urgency: ['Low', 'Watch', 'Urgent'],
+        summary: (u,d) => `${d} day(s) left before the return deadline. Urgency: ${u}.`,
+        basics: ['Check the store return window and shipping-fee rules', 'Match order number, item name, and option with the return form', 'Gather every component and check for missing parts'],
+        photos: ['Take a full product-condition photo', 'Photograph tags, labels, and components', 'Take one final photo before sealing the package'],
+        defect: ['Photograph the defect or damage close up', 'Keep box damage and shipping-label photos if relevant', 'Write one clear sentence describing the issue'],
+        wrong: ['Save proof of the ordered option versus received item', 'Repack before any use marks appear'],
+        change: ['Check tag removal, use marks, scent, or stains', 'Confirm whether change-of-mind return shipping is deducted'],
+        pkg: { original: 'Use the original box and padding when possible', partial: 'Add paper, bubble wrap, or padding where packaging is missing', none: 'Prepare a sturdy new box and padding' },
+        pickup: { pickup: 'Confirm pickup date, door location, and reachable contact', dropoff: 'Check drop-off location and label/waybill requirements', direct: 'Confirm return address and prepaid/collect shipping rule' },
+        components: 'Components'
+      },
+      ja: {
+        title: 'オンライン返品準備チェックリスト', copied: 'コピー完了', copyDefault: '結果をコピー', sample: 'ジャケット\nタグ・ラベル\nノベルティポーチ', urgency: ['余裕', '注意', '緊急'],
+        summary: (u,d) => `返品期限まで${d}日です。緊急度は${u}です。`,
+        basics: ['ショップの返品期間と送料条件を確認', '注文番号・商品名・オプションを返品申請画面と照合', '付属品をすべて集め、欠品がないか確認'],
+        photos: ['商品の全体状態を撮影', 'タグ・ラベル・付属品を撮影', '梱包前に最終構成を撮影'],
+        defect: ['不良・破損部分を近くで撮影', '箱の破損や送り状写真を保存', '問い合わせ用に症状を一文で整理'],
+        wrong: ['注文内容と届いた商品との差を画像で残す', '誤配送なら使用跡が付く前に再梱包'],
+        change: ['タグ外れ、使用跡、におい、汚れを確認', '自己都合返品の送料差し引きを確認'],
+        pkg: { original: '元箱と緩衝材をできるだけ使用', partial: '不足した緩衝材を紙やエアキャップで補強', none: '丈夫な箱と緩衝材を新しく準備' },
+        pickup: { pickup: '集荷日、置き場所、連絡可能状態を確認', dropoff: '持込先と送り状・ラベルの要否を確認', direct: '返送先住所と送料の元払い/着払い条件を確認' },
+        components: '付属品'
+      }
+    };
+    const t = i18n[pageLang] || i18n.ko;
+    const lines = (v) => (v || '').split(/\n+/).map((s) => s.trim()).filter(Boolean);
+    const copyText = async (val) => { try { await navigator.clipboard.writeText(val); } catch (_) { const ta=document.createElement('textarea'); ta.value=val; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } };
+
+    const render = () => {
+      const items = lines(itemsEl.value);
+      const reason = reasonEl.value;
+      const days = Math.max(0, Number(daysEl.value || 0));
+      const urgencyIndex = days <= 1 ? 2 : days <= 3 ? 1 : 0;
+      const photoList = photoEl.checked ? [...t.photos] : [];
+      if (photoEl.checked && reason === 'defect') photoList.push(...t.defect);
+      if (photoEl.checked && reason === 'wrong') photoList.push(...t.wrong);
+      const checks = [...t.basics];
+      if (reason === 'change') checks.push(...t.change);
+      if (reason === 'defect' && !photoEl.checked) checks.push(t.defect[2]);
+      if (reason === 'wrong' && !photoEl.checked) checks.push(t.wrong[1]);
+      checks.push(t.pkg[packageEl.value], t.pickup[pickupEl.value]);
+      if (days <= 1) checks.unshift(pageLang === 'en' ? 'Submit the return request today before packing is delayed' : pageLang === 'ja' ? '梱包が遅れる前に今日中に返品申請を完了' : '포장이 늦어지기 전에 오늘 안에 반품 접수부터 완료');
+      countOut.textContent = formatNum(items.length);
+      urgencyOut.textContent = t.urgency[urgencyIndex];
+      photosOut.textContent = formatNum(photoList.length);
+      stepsOut.textContent = formatNum(checks.length + photoList.length + items.length);
+      const parts = [`# ${t.title}`, '', t.summary(t.urgency[urgencyIndex], days), '', 'Checklist:', ...checks.map((x) => `- [ ] ${x}`)];
+      if (photoList.length) parts.push('', 'Photos:', ...photoList.map((x) => `- [ ] ${x}`));
+      if (items.length) parts.push('', `${t.components}:`, ...items.slice(0, 12).map((x) => `- [ ] ${x}`));
+      output.value = parts.join('\n');
+      help.textContent = t.summary(t.urgency[urgencyIndex], days);
+    };
+    sampleBtn?.addEventListener('click', () => { itemsEl.value = t.sample; reasonEl.value='defect'; daysEl.value='2'; packageEl.value='partial'; pickupEl.value='pickup'; photoEl.checked=true; render(); });
+    runBtn?.addEventListener('click', render);
+    copyBtn?.addEventListener('click', async () => { if (!output.value.trim()) return; await copyText(output.value.trim()); const old=copyBtn.textContent; copyBtn.textContent=t.copied; setTimeout(()=>{ copyBtn.textContent=old||t.copyDefault; },900); });
+    [itemsEl, reasonEl, daysEl, packageEl, pickupEl, photoEl].forEach((el) => { el?.addEventListener('input', render); el?.addEventListener('change', render); });
+    render();
+  }
+
+
   if (slug === 'rainy-day-outing-planner') {
     const rainEl = document.getElementById('rdop-rain');
     const windEl = document.getElementById('rdop-wind');
