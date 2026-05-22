@@ -1,3 +1,27 @@
+- id: shortcut-key-practice
+  title: 단축키 기억 퀴즈 연습기
+  title_en: Shortcut Key Practice Quiz
+  title_ja: ショートカットキー練習クイズ
+  category: productivity
+  category_label: 업무/단축키 학습
+  category_label_en: Work/Shortcut Practice
+  category_label_ja: 仕事/ショートカット練習
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 브라우저, 문서 편집, 운영체제 기본 동작을 고르면 자주 쓰는 단축키를 퀴즈로 풀고 오답을 다시 복습해요.
+  description_en: Practice common browser, editing, and system shortcuts with quick quizzes and review the shortcuts you missed.
+  description_ja: ブラウザ、文章編集、OS基本操作のショートカットをクイズで練習し、間違えた項目を復習できます。
+  url: /tools/shortcut-key-practice/
+  url_en: /en/tools/shortcut-key-practice/
+  url_ja: /ja/tools/shortcut-key-practice/
+  thumbnail: /assets/thumbs/shortcut-key-practice.svg
+  thumbnail_en: /assets/thumbs/en/shortcut-key-practice.svg
+  thumbnail_ja: /assets/thumbs/ja/shortcut-key-practice.svg
+  published_at: '2026-05-22'
+  tool_type: learning
+  topic_cluster: work
+
 - id: online-return-package-checker
   title: 온라인 쇼핑 반품 준비 체커
   title_en: Online Return Package Checker

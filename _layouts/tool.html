@@ -779,6 +779,50 @@ layout: default
 
           <div id="whp-missed" class="bw-list"></div>
         </div>
+      {% when 'shortcut-key-practice' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="skp-os">{% if page.lang == 'en' %}Shortcut set{% elsif page.lang == 'ja' %}ショートカット環境{% else %}단축키 환경{% endif %}</label>
+              <select id="skp-os">
+                <option value="all">{% if page.lang == 'en' %}All{% elsif page.lang == 'ja' %}すべて{% else %}전체{% endif %}</option>
+                <option value="mac">Mac</option>
+                <option value="win">Windows</option>
+                <option value="common">{% if page.lang == 'en' %}Common{% elsif page.lang == 'ja' %}共通{% else %}공통{% endif %}</option>
+              </select>
+            </div>
+            <div>
+              <label for="skp-category">{% if page.lang == 'en' %}Practice area{% elsif page.lang == 'ja' %}練習範囲{% else %}연습 범위{% endif %}</label>
+              <select id="skp-category">
+                <option value="all">{% if page.lang == 'en' %}All{% elsif page.lang == 'ja' %}すべて{% else %}전체{% endif %}</option>
+                <option value="browser">{% if page.lang == 'en' %}Browser{% elsif page.lang == 'ja' %}ブラウザ{% else %}브라우저{% endif %}</option>
+                <option value="editing">{% if page.lang == 'en' %}Editing{% elsif page.lang == 'ja' %}文章編集{% else %}문서 편집{% endif %}</option>
+                <option value="system">{% if page.lang == 'en' %}System{% elsif page.lang == 'ja' %}システム{% else %}시스템{% endif %}</option>
+              </select>
+            </div>
+          </div>
+          <div class="tool-row-grid pct-actions">
+            <button id="skp-next" type="button">{% if page.lang == 'en' %}New question{% elsif page.lang == 'ja' %}新しい問題{% else %}새 문제{% endif %}</button>
+            <button id="skp-review" type="button">{% if page.lang == 'en' %}Review missed{% elsif page.lang == 'ja' %}間違いを復習{% else %}오답 복습{% endif %}</button>
+            <button id="skp-reset" type="button">{% if page.lang == 'en' %}Reset score{% elsif page.lang == 'ja' %}リセット{% else %}점수 초기화{% endif %}</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="skp-correct">0</strong><span>{% if page.lang == 'en' %}Correct{% elsif page.lang == 'ja' %}正解{% else %}정답{% endif %}</span></div>
+            <div><strong id="skp-total">0</strong><span>{% if page.lang == 'en' %}Total{% elsif page.lang == 'ja' %}合計{% else %}풀이 수{% endif %}</span></div>
+            <div><strong id="skp-rate">0%</strong><span>{% if page.lang == 'en' %}Accuracy{% elsif page.lang == 'ja' %}正答率{% else %}정답률{% endif %}</span></div>
+            <div><strong id="skp-missed">0</strong><span>{% if page.lang == 'en' %}Missed{% elsif page.lang == 'ja' %}間違い{% else %}오답{% endif %}</span></div>
+          </div>
+          <div class="tool-card">
+            <p class="tool-result" id="skp-prompt">{% if page.lang == 'en' %}Press New question to start practicing shortcuts.{% elsif page.lang == 'ja' %}新しい問題を押してショートカット練習を始めましょう。{% else %}새 문제를 눌러 단축키 연습을 시작하세요.{% endif %}</p>
+            <div id="skp-options" class="tool-row-grid cc-grid">
+              <button type="button" data-choice="0"></button>
+              <button type="button" data-choice="1"></button>
+              <button type="button" data-choice="2"></button>
+              <button type="button" data-choice="3"></button>
+            </div>
+            <p class="tool-result" id="skp-feedback">{% if page.lang == 'en' %}Choose the shortcut that matches the action.{% elsif page.lang == 'ja' %}操作に合うショートカットを選んでください。{% else %}동작에 맞는 단축키를 골라보세요.{% endif %}</p>
+          </div>
+        </div>
       {% when 'online-return-package-checker' %}
         <div class="tool-ui">
           <label for="orpc-items">{% if page.lang == 'en' %}Return items/components (one per line){% elsif page.lang == 'ja' %}返品する商品・付属品（1行に1つ）{% else %}반품 상품·구성품 (한 줄에 하나){% endif %}</label>

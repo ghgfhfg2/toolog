@@ -12980,6 +12980,97 @@
 
 
 
+
+  if (slug === 'shortcut-key-practice') {
+    const $ = (id) => document.getElementById(id);
+    const osEl = $('skp-os');
+    const catEl = $('skp-category');
+    const promptEl = $('skp-prompt');
+    const feedbackEl = $('skp-feedback');
+    const nextBtn = $('skp-next');
+    const reviewBtn = $('skp-review');
+    const resetBtn = $('skp-reset');
+    const correctEl = $('skp-correct');
+    const totalEl = $('skp-total');
+    const rateEl = $('skp-rate');
+    const missedEl = $('skp-missed');
+    const optionBtns = Array.from(document.querySelectorAll('#skp-options [data-choice]'));
+    if (!osEl || !promptEl || !optionBtns.length) return;
+
+    const i18n = {
+      ko: { ready:'동작에 맞는 단축키를 골라보세요.', empty:'선택한 조건에 맞는 문제가 부족해 전체 문제에서 냅니다.', correct:'정답입니다.', wrong:(a)=>`아쉬워요. 정답은 ${a} 입니다.`, reviewEmpty:'아직 복습할 오답이 없습니다.', reset:'점수를 초기화했습니다.', action:'다음 동작의 단축키는?', explain:'해설' },
+      en: { ready:'Choose the shortcut that matches the action.', empty:'Not enough questions for this filter, so using the full pool.', correct:'Correct.', wrong:(a)=>`Not quite. The answer is ${a}.`, reviewEmpty:'No missed questions to review yet.', reset:'Score reset.', action:'Which shortcut matches this action?', explain:'Note' },
+      ja: { ready:'操作に合うショートカットを選んでください。', empty:'この条件の問題が少ないため、全体から出題します。', correct:'正解です。', wrong:(a)=>`惜しいです。正解は ${a} です。`, reviewEmpty:'復習する間違いはまだありません。', reset:'スコアをリセットしました。', action:'この操作のショートカットは?', explain:'解説' }
+    }[pageLang] || null;
+
+    const L = (obj) => obj?.[pageLang] || obj?.ko || '';
+    const questions = [
+      { os:'common', cat:'browser', action:{ko:'새 탭 열기', en:'Open a new tab', ja:'新しいタブを開く'}, answer:'Ctrl/Cmd + T', explain:{ko:'대부분의 브라우저에서 Ctrl+T 또는 Command+T를 씁니다.', en:'Most browsers use Ctrl+T or Command+T.', ja:'多くのブラウザでCtrl+TまたはCommand+Tを使います。'} },
+      { os:'common', cat:'browser', action:{ko:'닫은 탭 다시 열기', en:'Reopen the last closed tab', ja:'閉じたタブを再度開く'}, answer:'Ctrl/Cmd + Shift + T', explain:{ko:'실수로 닫은 탭을 되돌릴 때 가장 자주 쓰입니다.', en:'Useful when you accidentally close a tab.', ja:'誤って閉じたタブを戻すときによく使います。'} },
+      { os:'common', cat:'browser', action:{ko:'주소창으로 바로 이동', en:'Focus the address bar', ja:'アドレスバーに移動'}, answer:'Ctrl/Cmd + L', explain:{ko:'검색어나 URL을 바로 입력할 수 있습니다.', en:'Lets you type a search or URL immediately.', ja:'検索語やURLをすぐ入力できます。'} },
+      { os:'common', cat:'browser', action:{ko:'페이지 안에서 검색', en:'Find on the current page', ja:'ページ内検索'}, answer:'Ctrl/Cmd + F', explain:{ko:'긴 문서나 웹페이지에서 단어를 빠르게 찾습니다.', en:'Find words quickly in long pages.', ja:'長いページで単語をすばやく探せます。'} },
+      { os:'common', cat:'editing', action:{ko:'실행 취소', en:'Undo the previous action', ja:'前の操作を取り消す'}, answer:'Ctrl/Cmd + Z', explain:{ko:'편집 실수를 되돌릴 때 가장 기본이 되는 단축키입니다.', en:'The basic shortcut for reversing an edit.', ja:'編集ミスを戻す基本ショートカットです。'} },
+      { os:'common', cat:'editing', action:{ko:'다시 실행', en:'Redo the undone action', ja:'やり直し'}, answer:'Ctrl/Cmd + Shift + Z', explain:{ko:'앱에 따라 Ctrl+Y를 쓰기도 하지만 Shift+Z 조합도 널리 쓰입니다.', en:'Some apps use Ctrl+Y, but Shift+Z is widely used too.', ja:'アプリによってCtrl+Yもありますが、Shift+Zもよく使われます。'} },
+      { os:'common', cat:'editing', action:{ko:'전체 선택', en:'Select all', ja:'すべて選択'}, answer:'Ctrl/Cmd + A', explain:{ko:'문서, 입력창, 파일 목록 전체를 한 번에 선택합니다.', en:'Selects all text, fields, or files in context.', ja:'文書や入力欄、ファイル一覧をまとめて選択します。'} },
+      { os:'common', cat:'editing', action:{ko:'복사하기', en:'Copy', ja:'コピー'}, answer:'Ctrl/Cmd + C', explain:{ko:'선택한 내용을 클립보드에 복사합니다.', en:'Copies selected content to the clipboard.', ja:'選択した内容をクリップボードにコピーします。'} },
+      { os:'common', cat:'editing', action:{ko:'붙여넣기', en:'Paste', ja:'貼り付け'}, answer:'Ctrl/Cmd + V', explain:{ko:'클립보드 내용을 현재 위치에 넣습니다.', en:'Pastes clipboard content at the current position.', ja:'クリップボードの内容を現在位置に貼り付けます。'} },
+      { os:'mac', cat:'system', action:{ko:'앱 전환', en:'Switch apps', ja:'アプリを切り替える'}, answer:'Cmd + Tab', explain:{ko:'맥에서 열려 있는 앱 사이를 빠르게 이동합니다.', en:'Moves between open apps on Mac.', ja:'Macで開いているアプリ間を移動します。'} },
+      { os:'win', cat:'system', action:{ko:'앱 전환', en:'Switch apps', ja:'アプリを切り替える'}, answer:'Alt + Tab', explain:{ko:'윈도우에서 열린 창 사이를 빠르게 이동합니다.', en:'Moves between open windows on Windows.', ja:'Windowsで開いているウィンドウ間を移動します。'} },
+      { os:'mac', cat:'system', action:{ko:'스포트라이트 검색 열기', en:'Open Spotlight search', ja:'Spotlight検索を開く'}, answer:'Cmd + Space', explain:{ko:'앱, 파일, 설정을 빠르게 검색합니다.', en:'Search apps, files, and settings quickly.', ja:'アプリ、ファイル、設定をすばやく検索します。'} },
+      { os:'win', cat:'system', action:{ko:'파일 탐색기 열기', en:'Open File Explorer', ja:'エクスプローラーを開く'}, answer:'Win + E', explain:{ko:'폴더와 파일을 바로 확인할 때 유용합니다.', en:'Useful for opening folders and files quickly.', ja:'フォルダやファイルをすぐ確認できます。'} },
+      { os:'win', cat:'system', action:{ko:'화면 잠금', en:'Lock the screen', ja:'画面をロック'}, answer:'Win + L', explain:{ko:'자리를 비울 때 즉시 화면을 잠급니다.', en:'Locks your screen immediately when stepping away.', ja:'席を外すときにすぐ画面をロックします。'} },
+      { os:'mac', cat:'system', action:{ko:'현재 앱 설정 열기', en:'Open current app settings', ja:'現在のアプリ設定を開く'}, answer:'Cmd + ,', explain:{ko:'많은 맥 앱에서 환경설정을 여는 단축키입니다.', en:'Many Mac apps use this to open preferences.', ja:'多くのMacアプリで環境設定を開きます。'} },
+      { os:'common', cat:'editing', action:{ko:'저장하기', en:'Save', ja:'保存'}, answer:'Ctrl/Cmd + S', explain:{ko:'문서나 작업 내용을 자주 저장하는 습관에 좋습니다.', en:'Good for saving documents or work frequently.', ja:'文書や作業内容をこまめに保存できます。'} }
+    ];
+    const distractors = ['Ctrl/Cmd + P','Ctrl/Cmd + W','Ctrl/Cmd + R','Ctrl/Cmd + N','Alt + F4','Ctrl/Cmd + B','Ctrl/Cmd + H','Shift + Space','Ctrl/Cmd + D','Esc'];
+    let current = null, correct = 0, total = 0;
+    const missed = [];
+    const pool = () => {
+      const os = osEl.value || 'all';
+      const cat = catEl.value || 'all';
+      let list = questions.filter(q => (os === 'all' || q.os === os || q.os === 'common') && (cat === 'all' || q.cat === cat));
+      if (list.length < 4) { feedbackEl.textContent = i18n.empty; list = questions; }
+      return list;
+    };
+    const shuffle = (arr) => arr.map(v => [Math.random(), v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]);
+    const updateStats = () => {
+      correctEl.textContent = formatNum(correct);
+      totalEl.textContent = formatNum(total);
+      rateEl.textContent = total ? `${Math.round(correct / total * 100)}%` : '0%';
+      missedEl.textContent = formatNum(missed.length);
+    };
+    const showQuestion = (fromMissed = false) => {
+      const source = fromMissed && missed.length ? missed : pool();
+      if (fromMissed && !missed.length) { feedbackEl.textContent = i18n.reviewEmpty; return; }
+      current = source[Math.floor(Math.random() * source.length)] || questions[0];
+      promptEl.textContent = `${i18n.action} ${L(current.action)}`;
+      const options = shuffle([current.answer, ...shuffle(distractors.filter(x => x !== current.answer)).slice(0,3)]);
+      optionBtns.forEach((btn, idx) => { btn.textContent = options[idx]; btn.disabled = false; btn.style.opacity = '1'; });
+      feedbackEl.textContent = i18n.ready;
+    };
+    optionBtns.forEach(btn => btn.addEventListener('click', () => {
+      if (!current) return;
+      total += 1;
+      const picked = btn.textContent;
+      if (picked === current.answer) {
+        correct += 1;
+        feedbackEl.textContent = `${i18n.correct} ${i18n.explain}: ${L(current.explain)}`;
+        const idx = missed.indexOf(current); if (idx >= 0) missed.splice(idx, 1);
+      } else {
+        feedbackEl.textContent = `${i18n.wrong(current.answer)} ${i18n.explain}: ${L(current.explain)}`;
+        if (!missed.includes(current)) missed.push(current);
+      }
+      optionBtns.forEach(b => { b.disabled = true; b.style.opacity = b.textContent === current.answer ? '1' : '0.65'; });
+      updateStats();
+    }));
+    nextBtn?.addEventListener('click', () => showQuestion(false));
+    reviewBtn?.addEventListener('click', () => showQuestion(true));
+    resetBtn?.addEventListener('click', () => { correct = 0; total = 0; missed.length = 0; updateStats(); feedbackEl.textContent = i18n.reset; showQuestion(false); });
+    [osEl, catEl].forEach(el => el?.addEventListener('change', () => showQuestion(false)));
+    updateStats();
+    showQuestion(false);
+  }
+
   if (slug === 'online-return-package-checker') {
     const itemsEl = document.getElementById('orpc-items');
     const reasonEl = document.getElementById('orpc-reason');
