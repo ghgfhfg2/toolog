@@ -13071,6 +13071,79 @@
     showQuestion(false);
   }
 
+
+  if (slug === 'privacy-masker') {
+    const $ = (id) => document.getElementById(id);
+    const input = $('pm-input');
+    const output = $('pm-output');
+    const runBtn = $('pm-run');
+    const sampleBtn = $('pm-sample');
+    const copyBtn = $('pm-copy');
+    const checks = { phone: $('pm-phone'), email: $('pm-email'), card: $('pm-card'), account: $('pm-account') };
+    const counts = { phone: $('pm-phone-count'), email: $('pm-email-count'), card: $('pm-card-count'), account: $('pm-account-count') };
+    const help = $('pm-help');
+    if (!input || !output) return;
+
+    const i18n = {
+      ko: { copied:'복사됨', copyDefault:'결과 복사', none:'마스킹할 텍스트를 입력하세요.', done:(n)=>`${n}개 후보를 마스킹했습니다. 이름·주소처럼 문맥 확인이 필요한 정보는 직접 확인하세요.`, sample:'김수야 고객님 연락처는 010-1234-5678, 이메일은 sooya@example.com 입니다. 결제 카드 1234-5678-9012-3456, 환불 계좌 국민 123456-78-901234 로 접수되었습니다.' },
+      en: { copied:'Copied', copyDefault:'Copy result', none:'Enter text to mask.', done:(n)=>`Masked ${n} candidate(s). Review context-specific details such as names and addresses manually.`, sample:'Customer Suya Kim can be reached at 010-1234-5678 or sooya@example.com. Payment card 1234-5678-9012-3456 and refund account 123456-78-901234 were included.' },
+      ja: { copied:'コピー完了', copyDefault:'結果をコピー', none:'マスキングするテキストを入力してください。', done:(n)=>`${n}件の候補をマスキングしました。氏名・住所など文脈依存の情報は目視確認してください。`, sample:'スヤ様の連絡先は010-1234-5678、メールはsooya@example.comです。決済カード1234-5678-9012-3456、返金口座123456-78-901234が含まれています。' }
+    }[pageLang] || null;
+
+    const bump = (key, amount = 1) => { counts[key].textContent = String((Number(counts[key].textContent) || 0) + amount); };
+    const resetCounts = () => Object.values(counts).forEach(el => { if (el) el.textContent = '0'; });
+    const maskEmail = (value) => value.replace(/([^@\s]{1,2})[^@\s]*(@)([^@\s.]{1,2})[^@\s]*(\.[^@\s]+)/, (_, a, at, d, rest) => `${a}***${at}${d}***${rest}`);
+    const maskDigits = (value, visibleStart = 3, visibleEnd = 2) => {
+      const digits = value.replace(/\D/g, '');
+      if (digits.length <= visibleStart + visibleEnd) return value.replace(/\d/g, '*');
+      let seen = 0;
+      const tailStart = digits.length - visibleEnd;
+      return value.replace(/\d/g, (d) => {
+        const keep = seen < visibleStart || seen >= tailStart;
+        seen += 1;
+        return keep ? d : '*';
+      });
+    };
+
+    const render = () => {
+      resetCounts();
+      let text = input.value || '';
+      let total = 0;
+      if (!text.trim()) {
+        output.value = '';
+        help.textContent = i18n.none;
+        return;
+      }
+      if (checks.email?.checked) {
+        text = text.replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, (m) => { total += 1; bump('email'); return maskEmail(m); });
+      }
+      if (checks.card?.checked) {
+        const maskCard = (m) => { const digits=m.replace(/\D/g,''); if (digits.length < 13 || digits.length > 19) return m; total += 1; bump('card'); return maskDigits(m, 4, 4); };
+        text = text.replace(/\b\d{13,19}\b/g, maskCard);
+        text = text.replace(/\b\d{4}[- ]\d{4}[- ]\d{4}[- ]\d{4}(?:[- ]\d{1,3})?\b/g, maskCard);
+      }
+      if (checks.phone?.checked) {
+        text = text.replace(/\b(?:\+?82[-\s]?)?0?1[016789][-\s]?\d{3,4}[-\s]?\d{4}\b/g, (m) => { total += 1; bump('phone'); return maskDigits(m, 3, 2); });
+      }
+      if (checks.account?.checked) {
+        text = text.replace(/\b\d{2,6}[-\s]\d{2,6}[-\s]\d{2,8}\b/g, (m) => {
+          const digits = m.replace(/\D/g, '');
+          if (digits.length < 9 || digits.length > 16 || /\*+/.test(m)) return m;
+          total += 1; bump('account'); return maskDigits(m, 3, 2);
+        });
+      }
+      output.value = text;
+      help.textContent = i18n.done(total);
+    };
+    const copyText = async (val) => { try { await navigator.clipboard.writeText(val); } catch (_) { const ta=document.createElement('textarea'); ta.value=val; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } };
+    runBtn?.addEventListener('click', render);
+    sampleBtn?.addEventListener('click', () => { input.value = i18n.sample; render(); });
+    copyBtn?.addEventListener('click', async () => { if (!output.value.trim()) return; await copyText(output.value); const old = copyBtn.textContent; copyBtn.textContent = i18n.copied; setTimeout(() => { copyBtn.textContent = old || i18n.copyDefault; }, 900); });
+    input.addEventListener('input', render);
+    Object.values(checks).forEach(el => el?.addEventListener('change', render));
+    render();
+  }
+
   if (slug === 'online-return-package-checker') {
     const itemsEl = document.getElementById('orpc-items');
     const reasonEl = document.getElementById('orpc-reason');

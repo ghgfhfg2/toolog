@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e0f2fe"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
+  <rect width="1200" height="630" rx="42" fill="url(#g)"/>
+  <circle cx="1010" cy="130" r="92" fill="#ffffff" opacity=".22"/>
+  <rect x="235" y="210" width="730" height="260" rx="34" fill="#0f172a" opacity=".92"/>
+  <rect x="300" y="275" width="420" height="32" rx="16" fill="#bfdbfe" opacity=".95"/>
+  <rect x="300" y="335" width="590" height="32" rx="16" fill="#f8fafc" opacity=".35"/>
+  <rect x="300" y="395" width="500" height="32" rx="16" fill="#f8fafc" opacity=".35"/>
+  <g fill="#ffffff" font-family="Arial, sans-serif" font-weight="700">
+    <text x="90" y="120" font-size="54">個人情報マスキング</text>
+    <text x="92" y="185" font-size="30" opacity=".9">電話番号・メール・数字情報を隠す</text>
+  </g>
+  <g font-family="Arial, sans-serif" font-weight="700" font-size="34">
+    <rect x="760" y="265" width="145" height="54" rx="18" fill="#f97316"/>
+    <text x="790" y="303" fill="#fff7ed">***</text>
+    <rect x="760" y="385" width="145" height="54" rx="18" fill="#22c55e"/>
+    <text x="786" y="423" fill="#ecfdf5">MASK</text>
+  </g>
+  <rect x="84" y="500" width="1032" height="72" rx="24" fill="#ffffff" opacity=".86"/>
+  <text x="120" y="547" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#1d4ed8">Toolog</text>
+</svg>

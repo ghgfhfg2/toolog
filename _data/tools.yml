@@ -1,3 +1,27 @@
+- id: privacy-masker
+  title: 개인정보 마스킹 도구
+  title_en: Privacy Masker
+  title_ja: 個人情報マスキングツール
+  category: productivity
+  category_label: 업무/개인정보 마스킹
+  category_label_en: Work/Privacy Masking
+  category_label_ja: 仕事/個人情報マスキング
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 텍스트를 붙여넣으면 전화번호, 이메일, 카드번호, 계좌번호처럼 공유 전에 가려야 할 개인정보를 브라우저 안에서 마스킹해요.
+  description_en: Paste text and mask phone numbers, emails, card numbers, and account-like numbers in your browser before sharing.
+  description_ja: 共有前のテキストを貼り付けて、電話番号、メール、カード番号、口座番号らしき数字をブラウザ内でマスキングできます。
+  url: /tools/privacy-masker/
+  url_en: /en/tools/privacy-masker/
+  url_ja: /ja/tools/privacy-masker/
+  thumbnail: /assets/thumbs/privacy-masker.svg
+  thumbnail_en: /assets/thumbs/en/privacy-masker.svg
+  thumbnail_ja: /assets/thumbs/ja/privacy-masker.svg
+  published_at: '2026-05-23'
+  tool_type: utility
+  topic_cluster: privacy
+
 - id: shortcut-key-practice
   title: 단축키 기억 퀴즈 연습기
   title_en: Shortcut Key Practice Quiz
