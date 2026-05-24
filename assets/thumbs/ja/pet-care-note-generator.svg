@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="ペットお世話メモ">
+  <rect width="1200" height="630" rx="48" fill="#db2777"/>
+  <circle cx="210" cy="210" r="72" fill="#ffffff" opacity="0.18"/>
+  <circle cx="318" cy="178" r="44" fill="#ffffff" opacity="0.16"/>
+  <path d="M250 350c0-70 58-124 134-124s134 54 134 124c0 54-34 92-78 92-28 0-38-18-56-18s-28 18-56 18c-44 0-78-38-78-92Z" fill="#fff" opacity="0.92"/>
+  <circle cx="318" cy="206" r="34" fill="#fff" opacity="0.92"/>
+  <circle cx="450" cy="206" r="34" fill="#fff" opacity="0.92"/>
+  <circle cx="286" cy="284" r="30" fill="#fff" opacity="0.92"/>
+  <circle cx="482" cy="284" r="30" fill="#fff" opacity="0.92"/>
+  <rect x="585" y="165" width="410" height="300" rx="32" fill="#fff" opacity="0.94"/>
+  <rect x="635" y="218" width="310" height="22" rx="11" fill="#db2777" opacity="0.85"/>
+  <rect x="635" y="276" width="250" height="18" rx="9" fill="#db2777" opacity="0.45"/>
+  <rect x="635" y="326" width="286" height="18" rx="9" fill="#db2777" opacity="0.45"/>
+  <rect x="635" y="376" width="220" height="18" rx="9" fill="#db2777" opacity="0.45"/>
+  <text x="96" y="535" fill="#fff" font-family="Arial, 'Noto Sans KR', sans-serif" font-size="56" font-weight="800">ペットお世話メモ</text>
+  <text x="100" y="585" fill="#fff" opacity="0.86" font-family="Arial, 'Noto Sans KR', sans-serif" font-size="28">食事 · 散歩 · 薬 · 注意事項</text>
+</svg>

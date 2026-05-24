@@ -13072,6 +13072,98 @@
   }
 
 
+  if (slug === 'pet-care-note-generator') {
+    const $ = (id) => document.getElementById(id);
+    const fields = {
+      name: $('pcng-name'), type: $('pcng-type'), period: $('pcng-period'), contact: $('pcng-contact'),
+      personality: $('pcng-personality'), meals: $('pcng-meals'), activity: $('pcng-activity'), medicine: $('pcng-medicine'), cautions: $('pcng-cautions')
+    };
+    const output = $('pcng-output');
+    const runBtn = $('pcng-run');
+    const sampleBtn = $('pcng-sample');
+    const copyBtn = $('pcng-copy');
+    const sectionsOut = $('pcng-sections');
+    const checksOut = $('pcng-checks');
+    const riskOut = $('pcng-risk');
+    const charsOut = $('pcng-chars');
+    const help = $('pcng-help');
+    if (!fields.name || !output) return;
+
+    const i18n = {
+      ko: {
+        copied: '복사됨', copyDefault: '메모 복사', empty: '이름이나 루틴을 입력하면 돌봄 메모를 만들 수 있어요.',
+        type: { dog: '강아지', cat: '고양이', small: '소동물', other: '반려동물' }, risk: ['낮음', '보통', '높음'],
+        title: (n,t) => `# ${n || t} 돌봄 메모`, period: '돌봄 기간', contact: '비상 연락처',
+        headings: { personality:'성격/안심 포인트', meals:'식사와 물', activity:'산책·놀이·배변/화장실', medicine:'약/건강 주의사항', cautions:'주의사항/집 메모' },
+        checklist: ['식사와 물 확인', '배변·화장실 상태 확인', '문단속과 위험 물건 확인'],
+        medicineNotice: '※ 약, 용량, 시간은 보호자가 확인한 내용대로만 진행해주세요.',
+        done: (s,c) => `${s}개 섹션과 ${c}개 체크 항목으로 돌봄 메모를 만들었습니다. 전달 전 약·연락처는 한 번 더 확인하세요.`,
+        sample: { name:'모모', type:'cat', period:'5/24 저녁~5/25 밤', contact:'보호자 010-1234-5678 / 우리동물병원 02-000-0000', personality:'낯선 사람을 처음엔 피하지만 간식 봉지를 흔들면 나옵니다. 큰 소리와 갑작스러운 손길을 싫어해요.', meals:'아침 8시, 저녁 7시에 사료 40g씩 주세요. 물그릇은 식사 때마다 새 물로 갈아주세요. 츄르는 하루 1개만 가능합니다.', activity:'화장실은 하루 2번 모래 상태를 확인하고 뭉친 부분만 치워주세요. 창문은 방충망까지 꼭 닫아주세요.', medicine:'저녁 식사 후 처방약 1알을 간식에 섞어 주세요. 먹지 않으면 억지로 먹이지 말고 보호자에게 연락해주세요.', cautions:'현관문 열 때 따라나오지 않게 먼저 위치를 확인해주세요. 실 끈 장난감은 사용 후 서랍에 넣어주세요.' }
+      },
+      en: {
+        copied: 'Copied', copyDefault: 'Copy note', empty: 'Enter a name or routine to generate a care note.',
+        type: { dog: 'dog', cat: 'cat', small: 'small pet', other: 'pet' }, risk: ['Low', 'Medium', 'High'],
+        title: (n,t) => `# ${n || t} care note`, period: 'Care period', contact: 'Emergency contact',
+        headings: { personality:'Personality / comfort notes', meals:'Meals and water', activity:'Walk/play and potty/litter', medicine:'Medicine / health cautions', cautions:'Cautions / home notes' },
+        checklist: ['Check meals and water', 'Check potty/litter condition', 'Check doors and hazards'],
+        medicineNotice: '※ Follow only the medicine name, dose, and timing confirmed by the guardian.',
+        done: (s,c) => `Created a care note with ${s} section(s) and ${c} checklist item(s). Review medicine and contacts before sending.`,
+        sample: { name:'Momo', type:'cat', period:'May 24 evening - May 25 night', contact:'Guardian 010-1234-5678 / Local vet 02-000-0000', personality:'Shy at first, but comes out for treats. Avoid loud sounds and sudden touching.', meals:'Food 40g at 8 AM and 7 PM. Refresh water at each meal. One tube treat per day max.', activity:'Check litter twice a day and remove clumps. Keep windows and screens closed.', medicine:'One prescribed tablet after dinner, mixed with a treat. If refused, do not force it; contact the guardian.', cautions:'Check location before opening the front door. Put string toys away after use.' }
+      },
+      ja: {
+        copied: 'コピー完了', copyDefault: 'メモをコピー', empty: '名前やルーティンを入力すると、お世話メモを作成できます。',
+        type: { dog: '犬', cat: '猫', small: '小動物', other: 'ペット' }, risk: ['低め', '普通', '高め'],
+        title: (n,t) => `# ${n || t} お世話メモ`, period: '預ける期間', contact: '緊急連絡先',
+        headings: { personality:'性格・安心ポイント', meals:'食事・水', activity:'散歩・遊び・トイレ', medicine:'薬・健康上の注意', cautions:'注意事項・家のメモ' },
+        checklist: ['食事と水を確認', 'トイレ状態を確認', '戸締まりと危険物を確認'],
+        medicineNotice: '※ 薬名・量・時間は飼い主が確認した内容だけに従ってください。',
+        done: (s,c) => `${s}項目と${c}個のチェック項目でお世話メモを作成しました。送る前に薬と連絡先を再確認してください。`,
+        sample: { name:'モモ', type:'cat', period:'5/24夜〜5/25夜', contact:'飼い主 010-1234-5678 / かかりつけ病院 02-000-0000', personality:'最初は隠れますが、おやつの音で出てきます。大きな音と急な接触が苦手です。', meals:'朝8時、夜7時にフード40g。水は食事ごとに新しくしてください。おやつは1日1本まで。', activity:'トイレは1日2回確認し、固まった部分を取り除いてください。窓と網戸は必ず閉めてください。', medicine:'夕食後に処方薬1錠をおやつに混ぜてください。食べない場合は無理に与えず飼い主へ連絡してください。', cautions:'玄関を開ける前に居場所を確認してください。ひも状のおもちゃは使用後にしまってください。' }
+      }
+    }[pageLang] || null;
+
+    const cleanLines = (text) => (text || '').split(/\n+/).map(s => s.trim()).filter(Boolean);
+    const render = () => {
+      const name = fields.name.value.trim();
+      const petType = i18n.type[fields.type.value] || i18n.type.other;
+      const values = ['personality','meals','activity','medicine','cautions'].map(k => [k, fields[k].value.trim()]).filter(([,v]) => v);
+      if (!name && values.length === 0) {
+        output.value = ''; help.textContent = i18n.empty; sectionsOut.textContent = '0'; checksOut.textContent = '0'; riskOut.textContent = '-'; charsOut.textContent = '0'; return;
+      }
+      const lines = [i18n.title(name, petType), ''];
+      if (fields.period.value.trim()) lines.push(`- ${i18n.period}: ${fields.period.value.trim()}`);
+      if (fields.contact.value.trim()) lines.push(`- ${i18n.contact}: ${fields.contact.value.trim()}`);
+      if (fields.period.value.trim() || fields.contact.value.trim()) lines.push('');
+      values.forEach(([key, value]) => {
+        lines.push(`## ${i18n.headings[key]}`);
+        cleanLines(value).forEach(v => lines.push(`- ${v}`));
+        if (key === 'medicine') lines.push(i18n.medicineNotice);
+        lines.push('');
+      });
+      lines.push('## Quick checklist');
+      const checklist = [...i18n.checklist];
+      if (fields.medicine.value.trim()) checklist.push(i18n.headings.medicine);
+      if (fields.contact.value.trim()) checklist.push(i18n.contact);
+      checklist.forEach(v => lines.push(`- [ ] ${v}`));
+      const result = lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+      output.value = result;
+      const cautionWords = `${fields.medicine.value} ${fields.cautions.value}`.match(/약|병원|처방|알레르기|탈출|공격|medicine|vet|allergy|escape|薬|病院|アレルギー|脱走/g) || [];
+      const riskIdx = cautionWords.length >= 3 ? 2 : (cautionWords.length >= 1 ? 1 : 0);
+      sectionsOut.textContent = String(values.length);
+      checksOut.textContent = String(checklist.length);
+      riskOut.textContent = i18n.risk[riskIdx];
+      charsOut.textContent = formatNum(result.length);
+      help.textContent = i18n.done(values.length, checklist.length);
+    };
+    const copyText = async (val) => { try { await navigator.clipboard.writeText(val); } catch (_) { const ta=document.createElement('textarea'); ta.value=val; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } };
+    runBtn?.addEventListener('click', render);
+    sampleBtn?.addEventListener('click', () => { Object.entries(i18n.sample).forEach(([k,v]) => { if (fields[k]) fields[k].value = v; }); render(); });
+    copyBtn?.addEventListener('click', async () => { if (!output.value.trim()) render(); if (!output.value.trim()) return; await copyText(output.value); const old=copyBtn.textContent; copyBtn.textContent=i18n.copied; setTimeout(() => { copyBtn.textContent = old || i18n.copyDefault; }, 900); });
+    Object.values(fields).forEach(el => el?.addEventListener('input', render));
+    fields.type?.addEventListener('change', render);
+    render();
+  }
+
   if (slug === 'privacy-masker') {
     const $ = (id) => document.getElementById(id);
     const input = $('pm-input');

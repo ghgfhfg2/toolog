@@ -1,3 +1,27 @@
+- id: pet-care-note-generator
+  title: 반려동물 돌봄 메모 생성기
+  title_en: Pet Care Note Generator
+  title_ja: ペットお世話メモジェネレーター
+  category: lifestyle
+  category_label: 생활/반려동물 돌봄 메모
+  category_label_en: Lifestyle/Pet Care Notes
+  category_label_ja: 生活/ペットお世話メモ
+  badge: New
+  badge_en: New
+  badge_ja: 新着
+  description: 반려동물을 가족이나 펫시터에게 맡길 때 식사, 산책, 약, 주의사항, 연락처를 빠짐없이 정리한 돌봄 메모를 만들어요.
+  description_en: Create a clear handoff note for family or pet sitters with meals, walks, medicine, cautions, and contacts.
+  description_ja: 家族やペットシッターに預けるとき、食事・散歩・薬・注意事項・連絡先を整理したお世話メモを作れます。
+  url: /tools/pet-care-note-generator/
+  url_en: /en/tools/pet-care-note-generator/
+  url_ja: /ja/tools/pet-care-note-generator/
+  thumbnail: /assets/thumbs/pet-care-note-generator.svg
+  thumbnail_en: /assets/thumbs/en/pet-care-note-generator.svg
+  thumbnail_ja: /assets/thumbs/ja/pet-care-note-generator.svg
+  published_at: '2026-05-24'
+  tool_type: generator
+  topic_cluster: pet
+
 - id: privacy-masker
   title: 개인정보 마스킹 도구
   title_en: Privacy Masker

@@ -823,6 +823,58 @@ layout: default
             <p class="tool-result" id="skp-feedback">{% if page.lang == 'en' %}Choose the shortcut that matches the action.{% elsif page.lang == 'ja' %}操作に合うショートカットを選んでください。{% else %}동작에 맞는 단축키를 골라보세요.{% endif %}</p>
           </div>
         </div>
+      {% when 'pet-care-note-generator' %}
+        <div class="tool-ui">
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="pcng-name">{% if page.lang == 'en' %}Pet name{% elsif page.lang == 'ja' %}ペットの名前{% else %}반려동물 이름{% endif %}</label>
+              <input id="pcng-name" type="text" maxlength="60" placeholder="{% if page.lang == 'en' %}e.g., Momo{% elsif page.lang == 'ja' %}例: モモ{% else %}예: 모모{% endif %}" />
+            </div>
+            <div>
+              <label for="pcng-type">{% if page.lang == 'en' %}Pet type{% elsif page.lang == 'ja' %}種類{% else %}종류{% endif %}</label>
+              <select id="pcng-type">
+                <option value="dog">{% if page.lang == 'en' %}Dog{% elsif page.lang == 'ja' %}犬{% else %}강아지{% endif %}</option>
+                <option value="cat">{% if page.lang == 'en' %}Cat{% elsif page.lang == 'ja' %}猫{% else %}고양이{% endif %}</option>
+                <option value="small">{% if page.lang == 'en' %}Small animal{% elsif page.lang == 'ja' %}小動物{% else %}소동물{% endif %}</option>
+                <option value="other">{% if page.lang == 'en' %}Other{% elsif page.lang == 'ja' %}その他{% else %}기타{% endif %}</option>
+              </select>
+            </div>
+          </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="pcng-period">{% if page.lang == 'en' %}Care period{% elsif page.lang == 'ja' %}預ける期間{% else %}돌봄 기간{% endif %}</label>
+              <input id="pcng-period" type="text" maxlength="80" placeholder="{% if page.lang == 'en' %}May 24 evening - May 25 night{% elsif page.lang == 'ja' %}5/24夜〜5/25夜{% else %}5/24 저녁~5/25 밤{% endif %}" />
+            </div>
+            <div>
+              <label for="pcng-contact">{% if page.lang == 'en' %}Emergency contact{% elsif page.lang == 'ja' %}緊急連絡先{% else %}비상 연락처{% endif %}</label>
+              <input id="pcng-contact" type="text" maxlength="120" placeholder="{% if page.lang == 'en' %}Guardian / vet / phone{% elsif page.lang == 'ja' %}飼い主・病院・電話{% else %}보호자/병원/전화{% endif %}" />
+            </div>
+          </div>
+          <label for="pcng-personality">{% if page.lang == 'en' %}Personality and comfort notes{% elsif page.lang == 'ja' %}性格・安心する対応{% else %}성격과 안심시키는 방법{% endif %}</label>
+          <textarea id="pcng-personality" rows="3" maxlength="1000"></textarea>
+          <label for="pcng-meals">{% if page.lang == 'en' %}Meals and water{% elsif page.lang == 'ja' %}食事・水{% else %}식사와 물{% endif %}</label>
+          <textarea id="pcng-meals" rows="4" maxlength="1600" placeholder="{% if page.lang == 'en' %}Time, amount, treats to avoid{% elsif page.lang == 'ja' %}時間、量、避けるおやつ{% else %}시간, 양, 피해야 할 간식{% endif %}"></textarea>
+          <label for="pcng-activity">{% if page.lang == 'en' %}Walk/play and potty/litter{% elsif page.lang == 'ja' %}散歩・遊び・トイレ{% else %}산책·놀이와 배변·화장실{% endif %}</label>
+          <textarea id="pcng-activity" rows="4" maxlength="1600"></textarea>
+          <label for="pcng-medicine">{% if page.lang == 'en' %}Medicine or health cautions{% elsif page.lang == 'ja' %}薬・健康上の注意{% else %}약 또는 건강 주의사항{% endif %}</label>
+          <textarea id="pcng-medicine" rows="4" maxlength="1600" placeholder="{% if page.lang == 'en' %}Write only confirmed instructions.{% elsif page.lang == 'ja' %}確認済みの指示だけを書いてください。{% else %}확인된 지시만 적어주세요.{% endif %}"></textarea>
+          <label for="pcng-cautions">{% if page.lang == 'en' %}Cautions, dislikes, home notes{% elsif page.lang == 'ja' %}注意事項・苦手なこと・家のメモ{% else %}주의사항·싫어하는 것·집 메모{% endif %}</label>
+          <textarea id="pcng-cautions" rows="4" maxlength="1600"></textarea>
+          <div class="tool-row-grid pct-actions">
+            <button id="pcng-run" type="button">{% if page.lang == 'en' %}Generate note{% elsif page.lang == 'ja' %}メモを作成{% else %}메모 생성{% endif %}</button>
+            <button id="pcng-sample" type="button">{% if page.lang == 'en' %}Fill sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 입력{% endif %}</button>
+            <button id="pcng-copy" type="button">{% if page.lang == 'en' %}Copy note{% elsif page.lang == 'ja' %}メモをコピー{% else %}메모 복사{% endif %}</button>
+          </div>
+          <div class="tool-stats">
+            <div><strong id="pcng-sections">0</strong><span>{% if page.lang == 'en' %}Sections{% elsif page.lang == 'ja' %}項目{% else %}정리 항목{% endif %}</span></div>
+            <div><strong id="pcng-checks">0</strong><span>{% if page.lang == 'en' %}Checklist items{% elsif page.lang == 'ja' %}チェック項目{% else %}체크 항목{% endif %}</span></div>
+            <div><strong id="pcng-risk">-</strong><span>{% if page.lang == 'en' %}Caution level{% elsif page.lang == 'ja' %}注意度{% else %}주의도{% endif %}</span></div>
+            <div><strong id="pcng-chars">0</strong><span>{% if page.lang == 'en' %}Characters{% elsif page.lang == 'ja' %}文字数{% else %}글자 수{% endif %}</span></div>
+          </div>
+          <p class="tool-result" id="pcng-help">{% if page.lang == 'en' %}Enter the routine and generate a copy-ready care note.{% elsif page.lang == 'ja' %}ルーティンを入力すると、コピーしやすいお世話メモを作成します。{% else %}루틴을 입력하면 바로 복사할 수 있는 돌봄 메모를 만듭니다.{% endif %}</p>
+          <textarea id="pcng-output" rows="14" readonly></textarea>
+        </div>
+
       {% when 'privacy-masker' %}
         <div class="tool-ui">
           <label for="pm-input">{% if page.lang == 'en' %}Text to mask{% elsif page.lang == 'ja' %}マスキングするテキスト{% else %}마스킹할 텍스트{% endif %}</label>
