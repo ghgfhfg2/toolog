@@ -13243,6 +13243,8 @@
     const contamEl = document.getElementById('rsc-contam');
     const partsEl = document.getElementById('rsc-parts');
     const placeEl = document.getElementById('rsc-place');
+    const specialEl = document.getElementById('rsc-special');
+    const localNoteEl = document.getElementById('rsc-local-note');
     const localEl = document.getElementById('rsc-local');
     const runBtn = document.getElementById('rsc-run');
     const sampleBtn = document.getElementById('rsc-sample');
@@ -13258,30 +13260,42 @@
     const i18n = {
       ko: {
         title: '재활용 분리배출 체크리스트', copied: '복사됨', copyDefault: '결과 복사', sample: '페트병\n배달 플라스틱 용기\n종이컵', items: '품목', checklist: '체크리스트', review: '재확인', local: '거주지·건물별 배출 요일과 수거 가능 품목을 최종 확인',
+        empty: '품목을 한 줄에 하나 이상 입력하면 체크리스트를 만들 수 있습니다.',
+        tooMany: (shown, total) => `품목이 ${total}개라 결과에는 먼저 ${shown}개만 표시했습니다. 나머지는 같은 기준으로 나누어 확인하세요.`,
+        localNote: (note) => `지역/건물 메모: ${note}`,
         summary: (decision) => `현재 조건의 권장 방향은 “${decision}”입니다. 지자체·건물 규칙은 마지막에 다시 확인하세요.`,
         decision: { recycle: '분리 후 재활용 배출', rinse: '비우고 헹군 뒤 재활용 검토', trash: '일반쓰레기 또는 전용 배출 검토', review: '지역 규칙 확인 후 배출' },
         material: { plastic: ['내용물을 완전히 비우기', '페트병은 가능하면 투명 페트 전용함 여부 확인'], paper: ['젖은 종이와 음식물 묻은 종이는 분리', '종이팩은 펼쳐 말린 뒤 전용 수거함 여부 확인'], can: ['캔 내부를 비우고 가볍게 헹구기', '날카로운 뚜껑이나 금속 조각은 안전하게 처리'], glass: ['유리병은 내용물을 비우고 병 수거함 확인', '깨진 유리는 재활용함 대신 안전 포장 후 지역 안내 확인'], mixed: ['몸체 재질과 부속품 재질을 각각 확인', '혼합 재질은 무리하게 재활용함에 넣지 말고 안내를 확인'] },
         contam: { clean: ['깨끗한 상태를 유지해 같은 재질끼리 모으기'], rinse: ['남은 내용물을 버리고 물로 한 번 헹구기'], heavy: ['음식물·기름기가 많이 남으면 재활용 품질이 떨어짐', '세척이 어렵다면 일반쓰레기 전환을 검토'], chemical: ['약품·페인트·세제 잔여물은 일반 재활용함에 넣지 않기', '유해 폐기물 또는 전용 수거 안내 확인'] },
         parts: { separated: ['라벨·뚜껑·펌프 등 부속품을 재질별로 따로 배출'], possible: ['배출 전 라벨·뚜껑·펌프를 분리'], stuck: ['부속품이 떨어지지 않으면 혼합 재질로 보고 지역 규칙 확인'] },
-        place: { apartment: ['분리함 표기와 투명 페트 별도함 여부 확인'], house: ['수거 요일과 배출 봉투·묶음 방식 확인'], office: ['사무실 공용 분리함 기준과 청소 담당 안내 확인'] }
+        place: { apartment: ['분리함 표기와 투명 페트 별도함 여부 확인'], house: ['수거 요일과 배출 봉투·묶음 방식 확인'], office: ['사무실 공용 분리함 기준과 청소 담당 안내 확인'] },
+        special: { none: [], sharp: ['깨지거나 날카로운 부분은 두꺼운 종이·신문지로 감싸고 겉면에 표시', '안전 위험이 있으면 일반 재활용함 대신 지역 폐기물 안내 확인'], battery: ['배터리는 일반 재활용품과 섞지 말고 폐건전지·전자제품 전용 수거함 확인', '부풀거나 손상된 배터리는 만지지 말고 전용 회수 안내 확인'], large: ['대형폐기물 신고, 스티커, 예약 수거가 필요한지 먼저 확인', '분해 가능한 재질도 임의 배출하지 말고 건물·지자체 규칙 확인'] }
       },
       en: {
         title: 'Recycling sorting checklist', copied: 'Copied', copyDefault: 'Copy result', sample: 'PET bottle\nTakeout plastic container\nPaper cup', items: 'Items', checklist: 'Checklist', review: 'Review', local: 'Confirm collection days and accepted items for your city, building, or provider',
+        empty: 'Enter at least one item, one per line, to generate a checklist.',
+        tooMany: (shown, total) => `You entered ${total} items, so the result shows the first ${shown}. Apply the same checks to the rest.`,
+        localNote: (note) => `Local/building note: ${note}`,
         summary: (decision) => `Recommended direction: “${decision}”. Confirm local and building rules before disposal.`,
         decision: { recycle: 'Recycle after separation', rinse: 'Empty and rinse, then review recycling', trash: 'Consider trash or special disposal', review: 'Check local rules before disposal' },
         material: { plastic: ['Empty all contents', 'For PET bottles, check whether a clear-PET-only bin is required'], paper: ['Separate wet or food-stained paper', 'For cartons, flatten and dry, then check a dedicated carton bin'], can: ['Empty and lightly rinse cans', 'Handle sharp lids or metal pieces safely'], glass: ['Empty glass bottles and check the bottle bin', 'For broken glass, wrap safely and follow local guidance'], mixed: ['Check the main body and attached parts separately', 'Do not force mixed materials into recycling; review guidance'] },
         contam: { clean: ['Keep clean items grouped with the same material'], rinse: ['Empty residue and rinse once with water'], heavy: ['Heavy food or oil residue lowers recycling quality', 'If cleaning is impractical, consider trash disposal'], chemical: ['Do not put chemical, paint, or detergent residue in regular recycling', 'Check hazardous or special collection guidance'] },
         parts: { separated: ['Dispose labels, caps, pumps, and parts by material'], possible: ['Separate labels, caps, and pumps before disposal'], stuck: ['If parts are stuck, treat as mixed material and check local rules'] },
-        place: { apartment: ['Check bin labels and clear-PET separation rules'], house: ['Confirm pickup day, bag, and bundling rules'], office: ['Follow office shared-bin labels and facility guidance'] }
+        place: { apartment: ['Check bin labels and clear-PET separation rules'], house: ['Confirm pickup day, bag, and bundling rules'], office: ['Follow office shared-bin labels and facility guidance'] },
+        special: { none: [], sharp: ['Wrap broken or sharp parts in thick paper and mark the outside clearly', 'For safety risks, check local disposal guidance instead of regular recycling bins'], battery: ['Do not mix batteries with regular recyclables; use battery or electronics collection points', 'For swollen or damaged batteries, avoid handling and check special collection guidance'], large: ['Check whether a bulky-waste request, sticker, or pickup reservation is required', 'Even if materials can be separated, follow city or building rules before disposal'] }
       },
       ja: {
         title: 'リサイクル分別チェックリスト', copied: 'コピー完了', copyDefault: '結果をコピー', sample: 'PETボトル\nテイクアウト容器\n紙コップ', items: '品目', checklist: 'チェックリスト', review: '再確認', local: '自治体・建物ごとの回収日と対象品目を最終確認',
+        empty: '品目を1行に1つ以上入力するとチェックリストを作成できます。',
+        tooMany: (shown, total) => `${total}件入力されたため、結果には先頭${shown}件を表示しました。残りも同じ基準で確認してください。`,
+        localNote: (note) => `地域・建物メモ: ${note}`,
         summary: (decision) => `現在条件のおすすめは「${decision}」です。出す前に地域・建物ルールを確認してください。`,
         decision: { recycle: '分離して資源回収へ', rinse: '空にしてすすいだ後リサイクル確認', trash: '一般ごみまたは専用回収を検討', review: '地域ルール確認後に排出' },
         material: { plastic: ['中身を完全に空にする', 'PETボトルは透明PET専用回収の有無を確認'], paper: ['濡れた紙や食品汚れの紙を分ける', '紙パックは開いて乾かし専用回収を確認'], can: ['缶の中を空にして軽くすすぐ', '鋭いフタや金属片は安全に処理'], glass: ['びんは中身を空にしてびん回収を確認', '割れたガラスは資源箱ではなく安全に包んで地域案内を確認'], mixed: ['本体素材と付属部品を別々に確認', '複合素材は無理に資源箱へ入れず案内を確認'] },
         contam: { clean: ['きれいな状態を保ち同じ素材でまとめる'], rinse: ['残りを捨てて水で一度すすぐ'], heavy: ['食品・油汚れが多いとリサイクル品質が下がります', '洗浄が難しければ一般ごみを検討'], chemical: ['薬品・塗料・洗剤の残りは通常資源に入れない', '有害ごみや専用回収案内を確認'] },
         parts: { separated: ['ラベル・フタ・ポンプなどを素材別に出す'], possible: ['出す前にラベル・フタ・ポンプを外す'], stuck: ['外れない部品は複合素材として地域ルール確認'] },
-        place: { apartment: ['分別箱表示と透明PETの別回収を確認'], house: ['回収日、袋、束ね方のルールを確認'], office: ['オフィス共用分別箱と施設案内に従う'] }
+        place: { apartment: ['分別箱表示と透明PETの別回収を確認'], house: ['回収日、袋、束ね方のルールを確認'], office: ['オフィス共用分別箱と施設案内に従う'] },
+        special: { none: [], sharp: ['割れた物や鋭利な部分は厚紙・新聞紙で包み、外側に表示', '安全リスクがある場合は通常資源箱ではなく地域案内を確認'], battery: ['電池は通常資源と混ぜず、電池・電子機器の専用回収を確認', '膨張・破損した電池は触らず専用回収案内を確認'], large: ['粗大ごみ申請、シール、予約回収が必要か確認', '分解できる素材でも自治体・建物ルールに従う'] }
       }
     };
     const t = i18n[pageLang] || i18n.ko;
@@ -13294,11 +13308,15 @@
       const contam = contamEl.value;
       const parts = partsEl.value;
       const place = placeEl.value;
+      const special = specialEl?.value || 'none';
+      const localNote = (localNoteEl?.value || '').trim();
       let decisionKey = 'recycle';
       if (contam === 'rinse') decisionKey = 'rinse';
       if (contam === 'heavy' || contam === 'chemical') decisionKey = 'trash';
       if (material === 'mixed' || parts === 'stuck') decisionKey = decisionKey === 'trash' ? 'trash' : 'review';
-      const checks = [...t.material[material], ...t.contam[contam], ...t.parts[parts], ...t.place[place]];
+      if (special !== 'none') decisionKey = 'trash';
+      const checks = [...t.material[material], ...t.contam[contam], ...t.parts[parts], ...t.place[place], ...t.special[special]];
+      if (localNote) checks.push(t.localNote(localNote));
       if (localEl.checked) checks.push(t.local);
       const rinseCount = (contam === 'rinse' ? 1 : 0) + checks.filter((x) => /헹|씻|rinse|すす/.test(x)).length;
       const reviewCount = (decisionKey === 'review' ? 1 : 0) + (decisionKey === 'trash' ? 2 : 0) + checks.filter((x) => /확인|검토|check|review|確認|検討/.test(x)).length;
@@ -13306,17 +13324,24 @@
       rinseOut.textContent = formatNum(rinseCount);
       reviewOut.textContent = formatNum(reviewCount);
       stepsOut.textContent = formatNum(checks.length + items.length);
+      if (!items.length) {
+        output.value = '';
+        help.textContent = t.empty;
+        return;
+      }
       const decision = t.decision[decisionKey];
       const result = [`# ${t.title}`, '', t.summary(decision), '', `${t.checklist}:`, ...checks.map((x) => `- [ ] ${x}`)];
-      if (items.length) result.push('', `${t.items}:`, ...items.slice(0, 15).map((x) => `- [ ] ${x}`));
+      const shownItems = items.slice(0, 20);
+      result.push('', `${t.items}:`, ...shownItems.map((x) => `- [ ] ${x}`));
+      if (items.length > shownItems.length) result.push('', t.tooMany(shownItems.length, items.length));
       if (decisionKey === 'trash' || decisionKey === 'review') result.push('', `${t.review}: ${decision}`);
       output.value = result.join('\n');
       help.textContent = t.summary(decision);
     };
-    sampleBtn?.addEventListener('click', () => { itemsEl.value = t.sample; materialEl.value='plastic'; contamEl.value='rinse'; partsEl.value='possible'; placeEl.value='apartment'; localEl.checked=true; render(); });
+    sampleBtn?.addEventListener('click', () => { itemsEl.value = t.sample; materialEl.value='plastic'; contamEl.value='rinse'; partsEl.value='possible'; placeEl.value='apartment'; if (specialEl) specialEl.value='none'; if (localNoteEl) localNoteEl.value=''; localEl.checked=true; render(); });
     runBtn?.addEventListener('click', render);
     copyBtn?.addEventListener('click', async () => { if (!output.value.trim()) return; await copyText(output.value.trim()); const old=copyBtn.textContent; copyBtn.textContent=t.copied; setTimeout(()=>{ copyBtn.textContent=old||t.copyDefault; },900); });
-    [itemsEl, materialEl, contamEl, partsEl, placeEl, localEl].forEach((el) => { el?.addEventListener('input', render); el?.addEventListener('change', render); });
+    [itemsEl, materialEl, contamEl, partsEl, placeEl, specialEl, localNoteEl, localEl].forEach((el) => { el?.addEventListener('input', render); el?.addEventListener('change', render); });
     render();
   }
 
