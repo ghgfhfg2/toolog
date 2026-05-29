@@ -485,7 +485,7 @@ layout: default
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="psc-password">{% if page.lang == 'en' %}Password{% elsif page.lang == 'ja' %}パスワード{% else %}비밀번호 입력{% endif %}</label>
-              <input id="psc-password" type="text" maxlength="100" autocomplete="off" spellcheck="false" placeholder="{% if page.lang == 'en' %}Enter a password to check.{% elsif page.lang == 'ja' %}点検するパスワードを入力してください。{% else %}점검할 비밀번호를 입력하세요.{% endif %}" />
+              <input id="psc-password" type="password" maxlength="128" autocomplete="new-password" autocapitalize="off" spellcheck="false" inputmode="text" aria-describedby="psc-summary psc-output" placeholder="{% if page.lang == 'en' %}Enter a password to check.{% elsif page.lang == 'ja' %}点検するパスワードを入力してください。{% else %}점검할 비밀번호를 입력하세요.{% endif %}" />
             </div>
             <div>
               <label for="psc-purpose">{% if page.lang == 'en' %}Account type{% elsif page.lang == 'ja' %}用途{% else %}사용 목적{% endif %}</label>
@@ -502,6 +502,10 @@ layout: default
             <label class="tool-check"><input id="psc-allow-spaces" type="checkbox" checked /> {% if page.lang == 'en' %}Allow passwords with spaces{% elsif page.lang == 'ja' %}空白入りパスワードも許容{% else %}공백 포함 비밀번호도 허용{% endif %}</label>
           </div>
 
+          <div class="psc-meter" aria-hidden="true">
+            <span id="psc-meter-bar"></span>
+          </div>
+
           <div class="tool-row-grid pct-actions">
             <button id="psc-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 넣기{% endif %}</button>
             <button id="psc-copy" type="button">{% if page.lang == 'en' %}Copy summary{% elsif page.lang == 'ja' %}点検結果をコピー{% else %}점검 요약 복사{% endif %}</button>
@@ -516,7 +520,8 @@ layout: default
           </div>
 
           <p class="tool-result" id="psc-summary">{% if page.lang == 'en' %}Enter a password to check length, character mix, repeated or sequential patterns, and guessability signals.{% elsif page.lang == 'ja' %}パスワードを入力すると、長さ、文字構成、繰り返し/連続パターン、推測されやすさをまとめて点検します。{% else %}비밀번호를 입력하면 길이, 문자 조합, 반복/연속 패턴, 쉬운 추측 가능성을 함께 점검합니다.{% endif %}</p>
-          <div id="psc-list" class="bw-list"></div>
+          <div id="psc-list" class="bw-list" aria-live="polite"></div>
+          <label for="psc-output">{% if page.lang == 'en' %}Check summary{% elsif page.lang == 'ja' %}点検結果メモ{% else %}점검 결과 메모{% endif %}</label>
           <textarea id="psc-output" rows="11" readonly placeholder="{% if page.lang == 'en' %}The summary will appear here.{% elsif page.lang == 'ja' %}点検結果がここに表示されます。{% else %}점검 요약이 여기에 표시됩니다.{% endif %}"></textarea>
         </div>
       {% when 'remote-work-cost-simulator' %}

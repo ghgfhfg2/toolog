@@ -7372,9 +7372,10 @@
     const varietyEl = document.getElementById('psc-variety');
     const riskEl = document.getElementById('psc-risk');
     const summaryEl = document.getElementById('psc-summary');
+    const meterBar = document.getElementById('psc-meter-bar');
     const listEl = document.getElementById('psc-list');
     const outputEl = document.getElementById('psc-output');
-    if (!input || !purpose || !showPassword || !allowSpaces || !sampleBtn || !copyBtn || !scoreEl || !gradeEl || !lengthEl || !varietyEl || !riskEl || !summaryEl || !listEl || !outputEl) return;
+    if (!input || !purpose || !showPassword || !allowSpaces || !sampleBtn || !copyBtn || !scoreEl || !gradeEl || !lengthEl || !varietyEl || !riskEl || !summaryEl || !meterBar || !listEl || !outputEl) return;
 
     const t = {
       ko: {
@@ -7407,7 +7408,22 @@
         danger: '위험 신호',
         tip: '개선 팁',
         good: '좋은 점',
-        gradeLabel: (grade, purposeLabel, score) => `${purposeLabel} 기준 점검 점수는 ${score}점입니다.`
+        gradeLabel: (grade, purposeLabel, score) => `${purposeLabel} 기준 점검 점수는 ${score}점입니다.`,
+        output: {
+          purpose: '사용 목적',
+          score: '보안 점수',
+          grade: '강도 등급',
+          length: '길이',
+          lengthUnit: '자',
+          variety: '문자 종류',
+          varietyUnit: '종',
+          riskCount: '위험 신호 수',
+          riskUnit: '개',
+          risks: '위험 신호',
+          noRisk: '큰 경고 없음',
+          tips: '개선 팁',
+          defaultTip: '현재 조합 유지 + 2단계 인증 권장'
+        }
       },
       en: {
         idle: 'Enter a password to check length, character mix, repeated or sequential patterns, and guessability signals.',
@@ -7439,7 +7455,22 @@
         danger: 'Risk signal',
         tip: 'Improvement tip',
         good: 'What looks good',
-        gradeLabel: (grade, purposeLabel, score) => `For ${purposeLabel}, the check score is ${score}.`
+        gradeLabel: (grade, purposeLabel, score) => `For ${purposeLabel}, the check score is ${score}.`,
+        output: {
+          purpose: 'Account type',
+          score: 'Security score',
+          grade: 'Strength grade',
+          length: 'Length',
+          lengthUnit: ' chars',
+          variety: 'Character types',
+          varietyUnit: ' types',
+          riskCount: 'Risk signals',
+          riskUnit: ' items',
+          risks: 'Risk signals',
+          noRisk: 'No major warning',
+          tips: 'Improvement tips',
+          defaultTip: 'Keep the current structure and use 2FA where possible'
+        }
       },
       ja: {
         idle: 'パスワードを入力すると、長さ、文字構成、繰り返し/連続パターン、推測されやすさをまとめて点検します。',
@@ -7471,10 +7502,25 @@
         danger: '注意シグナル',
         tip: '改善ヒント',
         good: '良い点',
-        gradeLabel: (grade, purposeLabel, score) => `${purposeLabel} 기준では点検スコアは ${score} 点です。`
+        gradeLabel: (grade, purposeLabel, score) => `${purposeLabel} 基準の点検スコアは ${score} 点です。`,
+        output: {
+          purpose: '用途',
+          score: '安全スコア',
+          grade: '強度ランク',
+          length: '長さ',
+          lengthUnit: '文字',
+          variety: '文字種類',
+          varietyUnit: '種類',
+          riskCount: '注意シグナル数',
+          riskUnit: '件',
+          risks: '注意シグナル',
+          noRisk: '大きな警告なし',
+          tips: '改善ヒント',
+          defaultTip: '現在の構成を維持し、可能なら2段階認証を使う'
+        }
       }
     }[pageLang] || {
-      idle: '비밀번호를 입력하면 길이, 문자 조합, 반복/연속 패턴, 쉬운 추측 가능성을 함께 점검합니다.', copied: '점검 요약을 복사했어요.', emptyCopy: '복사할 점검 결과가 아직 없어요.', sample: 'Spring2026!Seoul', grade: ['매우 약함', '약함', '보통', '강함', '매우 강함'], purposeLabel: { general: '일반 사이트 로그인', important: '금융/업무/메인 계정', temporary: '임시/1회성 계정' }, ok: '현재 기준에서 큰 위험 신호는 적습니다. 그래도 중요한 계정은 사이트별로 다른 비밀번호와 2단계 인증을 함께 쓰는 편이 안전합니다.', resultTitle: '점검 결과', noList: '점검 항목이 여기에 표시됩니다.', warnShort: '길이가 10자 미만이라 짧은 편입니다.', tipLength: '최소 12자 이상, 가능하면 16자 안팎으로 늘려보세요.', warnMoreLength: '조금 더 길게 만들면 방어력이 더 좋아집니다.', warnVariety: '문자 종류가 적어 패턴이 단순합니다.', tipVariety: '대문자, 숫자, 특수문자를 3종 이상 섞어보세요.', warnSpaces: '공백 포함 비밀번호를 허용하지 않는 환경에서는 실패할 수 있습니다.', tipSpaces: '공백 없이도 충분히 긴 패스프레이즈로 바꿔보세요.', warnRepeat: '같은 문자가 3번 이상 반복됩니다.', tipRepeat: '반복 구간 대신 다른 단어나 기호를 섞어보세요.', warnSeq: '연속된 숫자/알파벳/키보드 배열 패턴이 보입니다.', tipSeq: '123, abc, qwerty 같은 흐름은 피하는 편이 좋습니다.', warnCommon: (items) => `너무 흔한 단어/패턴이 포함됩니다: ${items}`, tipCommon: '잘 알려진 단어 대신 개인만 아는 조합이나 긴 문장형 구조를 쓰세요.', warnYear: '연도처럼 추측하기 쉬운 숫자 조합이 들어 있습니다.', tipYear: '생년, 기념일, 현재 연도처럼 유추 가능한 숫자는 피하세요.', warnImportant: '중요 계정용으로는 길이가 더 긴 편이 안전합니다.', summaryRisk: (count, important) => `${count}개의 위험 신호가 보여요. ${important ? '특히 중요한 계정이라면 더 강한 조합이 좋습니다.' : '아래 항목을 손보면 강도가 올라갑니다.'}`, danger: '위험 신호', tip: '개선 팁', good: '좋은 점', gradeLabel: (grade, purposeLabel, score) => `${purposeLabel} 기준 점검 점수는 ${score}점입니다.`
+      idle: '비밀번호를 입력하면 길이, 문자 조합, 반복/연속 패턴, 쉬운 추측 가능성을 함께 점검합니다.', copied: '점검 요약을 복사했어요.', emptyCopy: '복사할 점검 결과가 아직 없어요.', sample: 'Spring2026!Seoul', grade: ['매우 약함', '약함', '보통', '강함', '매우 강함'], purposeLabel: { general: '일반 사이트 로그인', important: '금융/업무/메인 계정', temporary: '임시/1회성 계정' }, ok: '현재 기준에서 큰 위험 신호는 적습니다. 그래도 중요한 계정은 사이트별로 다른 비밀번호와 2단계 인증을 함께 쓰는 편이 안전합니다.', resultTitle: '점검 결과', noList: '점검 항목이 여기에 표시됩니다.', warnShort: '길이가 10자 미만이라 짧은 편입니다.', tipLength: '최소 12자 이상, 가능하면 16자 안팎으로 늘려보세요.', warnMoreLength: '조금 더 길게 만들면 방어력이 더 좋아집니다.', warnVariety: '문자 종류가 적어 패턴이 단순합니다.', tipVariety: '대문자, 숫자, 특수문자를 3종 이상 섞어보세요.', warnSpaces: '공백 포함 비밀번호를 허용하지 않는 환경에서는 실패할 수 있습니다.', tipSpaces: '공백 없이도 충분히 긴 패스프레이즈로 바꿔보세요.', warnRepeat: '같은 문자가 3번 이상 반복됩니다.', tipRepeat: '반복 구간 대신 다른 단어나 기호를 섞어보세요.', warnSeq: '연속된 숫자/알파벳/키보드 배열 패턴이 보입니다.', tipSeq: '123, abc, qwerty 같은 흐름은 피하는 편이 좋습니다.', warnCommon: (items) => `너무 흔한 단어/패턴이 포함됩니다: ${items}`, tipCommon: '잘 알려진 단어 대신 개인만 아는 조합이나 긴 문장형 구조를 쓰세요.', warnYear: '연도처럼 추측하기 쉬운 숫자 조합이 들어 있습니다.', tipYear: '생년, 기념일, 현재 연도처럼 유추 가능한 숫자는 피하세요.', warnImportant: '중요 계정용으로는 길이가 더 긴 편이 안전합니다.', summaryRisk: (count, important) => `${count}개의 위험 신호가 보여요. ${important ? '특히 중요한 계정이라면 더 강한 조합이 좋습니다.' : '아래 항목을 손보면 강도가 올라갑니다.'}`, danger: '위험 신호', tip: '개선 팁', good: '좋은 점', gradeLabel: (grade, purposeLabel, score) => `${purposeLabel} 기준 점검 점수는 ${score}점입니다.`, output: { purpose: '사용 목적', score: '보안 점수', grade: '강도 등급', length: '길이', lengthUnit: '자', variety: '문자 종류', varietyUnit: '종', riskCount: '위험 신호 수', riskUnit: '개', risks: '위험 신호', noRisk: '큰 경고 없음', tips: '개선 팁', defaultTip: '현재 조합 유지 + 2단계 인증 권장' }
     };
 
     const copyText = async (text) => {
@@ -7610,35 +7656,37 @@
       varietyEl.textContent = formatNum(result.variety);
       riskEl.textContent = formatNum(result.risks);
       summaryEl.textContent = result.summary;
+      meterBar.style.width = `${result.score}%`;
+      meterBar.dataset.grade = result.score >= 70 ? 'good' : (result.score >= 50 ? 'fair' : 'weak');
 
       if (!result.value.trim()) {
-        listEl.innerHTML = `<div class="tool-card"><p>${t.noList}</p></div>`;
+        listEl.innerHTML = `<div class="bw-item"><p>${escapeHtml(t.noList)}</p></div>`;
         outputEl.value = '';
         return;
       }
 
       const items = [];
-      items.push(`<div class="tool-card"><strong>${escapeHtml(result.grade)}</strong><p>${escapeHtml(t.gradeLabel(result.grade, t.purposeLabel[purpose.value] || t.purposeLabel.general, result.score))}</p></div>`);
+      items.push(`<div class="bw-item"><strong>${escapeHtml(result.grade)}</strong><p>${escapeHtml(t.gradeLabel(result.grade, t.purposeLabel[purpose.value] || t.purposeLabel.general, result.score))}</p></div>`);
       if (result.warnings.length) {
-        items.push(...result.warnings.map((warning) => `<div class="tool-card"><strong>${escapeHtml(t.danger)}</strong><p>${escapeHtml(warning)}</p></div>`));
+        items.push(...result.warnings.map((warning) => `<div class="bw-item"><strong>${escapeHtml(t.danger)}</strong><p>${escapeHtml(warning)}</p></div>`));
       } else {
-        items.push(`<div class="tool-card"><strong>${escapeHtml(t.good)}</strong><p>${escapeHtml(t.ok)}</p></div>`);
+        items.push(`<div class="bw-item"><strong>${escapeHtml(t.good)}</strong><p>${escapeHtml(t.ok)}</p></div>`);
       }
       if (result.tips.length) {
-        items.push(...result.tips.map((tip) => `<div class="tool-card"><strong>${escapeHtml(t.tip)}</strong><p>${escapeHtml(tip)}</p></div>`));
+        items.push(...result.tips.map((tip) => `<div class="bw-item"><strong>${escapeHtml(t.tip)}</strong><p>${escapeHtml(tip)}</p></div>`));
       }
       listEl.innerHTML = items.join('');
 
       outputEl.value = [
         `[${t.resultTitle}]`,
-        `- 사용 목적: ${t.purposeLabel[purpose.value] || t.purposeLabel.general}`,
-        `- 보안 점수: ${result.score}/100`,
-        `- 강도 등급: ${result.grade}`,
-        `- 길이: ${result.value.length}자`,
-        `- 문자 종류: ${result.variety}종`,
-        `- 위험 신호 수: ${result.risks}개`,
-        result.warnings.length ? `- 위험 신호: ${result.warnings.join(' / ')}` : '- 위험 신호: 큰 경고 없음',
-        result.tips.length ? `- 개선 팁: ${result.tips.join(' / ')}` : '- 개선 팁: 현재 조합 유지 + 2단계 인증 권장'
+        `- ${t.output.purpose}: ${t.purposeLabel[purpose.value] || t.purposeLabel.general}`,
+        `- ${t.output.score}: ${result.score}/100`,
+        `- ${t.output.grade}: ${result.grade}`,
+        `- ${t.output.length}: ${result.value.length}${t.output.lengthUnit}`,
+        `- ${t.output.variety}: ${result.variety}${t.output.varietyUnit}`,
+        `- ${t.output.riskCount}: ${result.risks}${t.output.riskUnit}`,
+        result.warnings.length ? `- ${t.output.risks}: ${result.warnings.join(' / ')}` : `- ${t.output.risks}: ${t.output.noRisk}`,
+        result.tips.length ? `- ${t.output.tips}: ${result.tips.join(' / ')}` : `- ${t.output.tips}: ${t.output.defaultTip}`
       ].join('\n');
     };
 

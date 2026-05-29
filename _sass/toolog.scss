@@ -658,6 +658,23 @@ textarea:focus-visible {
   accent-color: #3b82f6;
 }
 .tool-result { margin: 0; color: var(--muted); }
+.psc-meter {
+  height: 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #10192c;
+  overflow: hidden;
+}
+.psc-meter span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: #ef4444;
+  transition: width .18s ease, background-color .18s ease;
+}
+.psc-meter span[data-grade="fair"] { background: #f59e0b; }
+.psc-meter span[data-grade="good"] { background: #22c55e; }
 .tool-stats { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: .5rem; }
 .tool-stats > div { border: 1px solid var(--line); border-radius: 10px; padding: .65rem; background: #1f2937; }
 .tool-stats strong { display:block; font-size: 1.05rem; }

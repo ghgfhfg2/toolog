@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Password Strength Checker | Catch short, repeated, and guessable patterns fast
-description: Check password length, character mix, repeated characters, sequential patterns, and common words with quick improvement tips.
+description: Check short length, character mix, repeated characters, sequential patterns, common words, and year-like numbers in your browser before using a password.
 lang: en
 permalink: /en/tools/password-strength-checker/
 canonical_url: /en/tools/password-strength-checker/
@@ -39,8 +39,16 @@ This tool gives you a quick local check for:
 ## How to use it
 1. Enter the password you want to review.
 2. Pick whether it is for a general, important, or temporary account.
-3. Review the score, grade, and warning list.
-4. Use the improvement tips to make the password harder to guess.
+3. Toggle password visibility or space handling only when you need to.
+4. Review the score, grade, meter, and warning list.
+5. Use the improvement tips to make the password harder to guess.
+
+## FAQ
+### What weak patterns does it check first?
+It checks short length, low character variety, repeated characters, sequences such as `123`, `abc`, or `qwerty`, common words, and year-like numbers.
+
+### Is this a full security audit?
+No. It is a fast local check for obvious password weaknesses. Reuse, breach history, two-factor authentication, and the site’s own security still matter.
 
 ## Especially useful for
 ### 1) New account signups
