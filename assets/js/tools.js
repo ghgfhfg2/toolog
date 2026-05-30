@@ -13219,20 +13219,55 @@
     const runBtn = $('pm-run');
     const sampleBtn = $('pm-sample');
     const copyBtn = $('pm-copy');
+    const clearBtn = $('pm-clear');
     const checks = { phone: $('pm-phone'), email: $('pm-email'), card: $('pm-card'), account: $('pm-account') };
     const counts = { phone: $('pm-phone-count'), email: $('pm-email-count'), card: $('pm-card-count'), account: $('pm-account-count') };
     const help = $('pm-help');
+    const detectionsEl = $('pm-detections');
     if (!input || !output) return;
 
     const i18n = {
-      ko: { copied:'복사됨', copyDefault:'결과 복사', none:'마스킹할 텍스트를 입력하세요.', done:(n)=>`${n}개 후보를 마스킹했습니다. 이름·주소처럼 문맥 확인이 필요한 정보는 직접 확인하세요.`, sample:'김수야 고객님 연락처는 010-1234-5678, 이메일은 sooya@example.com 입니다. 결제 카드 1234-5678-9012-3456, 환불 계좌 국민 123456-78-901234 로 접수되었습니다.' },
-      en: { copied:'Copied', copyDefault:'Copy result', none:'Enter text to mask.', done:(n)=>`Masked ${n} candidate(s). Review context-specific details such as names and addresses manually.`, sample:'Customer Suya Kim can be reached at 010-1234-5678 or sooya@example.com. Payment card 1234-5678-9012-3456 and refund account 123456-78-901234 were included.' },
-      ja: { copied:'コピー完了', copyDefault:'結果をコピー', none:'マスキングするテキストを入力してください。', done:(n)=>`${n}件の候補をマスキングしました。氏名・住所など文脈依存の情報は目視確認してください。`, sample:'スヤ様の連絡先は010-1234-5678、メールはsooya@example.comです。決済カード1234-5678-9012-3456、返金口座123456-78-901234が含まれています。' }
+      ko: {
+        copied:'복사됨', copyDefault:'결과 복사', none:'마스킹할 텍스트를 입력하세요.', noneSelected:'마스킹할 항목을 하나 이상 선택하세요.', noMatch:'선택한 항목에서 마스킹 후보를 찾지 못했습니다. 원문을 그대로 표시했습니다.',
+        done:(n)=>`${n}개 후보를 마스킹했습니다. 이름·주소·주문번호처럼 문맥 확인이 필요한 정보는 직접 확인하세요.`,
+        labels:{ phone:'전화번호', email:'이메일', card:'카드번호', account:'계좌번호 후보' },
+        sample:'김수야 고객님 연락처는 010-1234-5678, 이메일은 sooya@example.com 입니다. 미국 지점 번호는 +1 415-555-1212입니다. 결제 카드 1234-5678-9012-3456, 환불 계좌 국민 123456-78-901234 로 접수되었습니다.'
+      },
+      en: {
+        copied:'Copied', copyDefault:'Copy result', none:'Enter text to mask.', noneSelected:'Select at least one masking category.', noMatch:'No selected privacy candidates were found. The original text is shown unchanged.',
+        done:(n)=>`Masked ${n} candidate(s). Review context-specific details such as names, addresses, and order IDs manually.`,
+        labels:{ phone:'Phone', email:'Email', card:'Card number', account:'Account candidate' },
+        sample:'Customer Suya Kim can be reached at 010-1234-5678, +1 415-555-1212, or sooya@example.com. Payment card 1234-5678-9012-3456 and refund account 123456-78-901234 were included.'
+      },
+      ja: {
+        copied:'コピー完了', copyDefault:'結果をコピー', none:'マスキングするテキストを入力してください。', noneSelected:'マスキング対象を1つ以上選択してください。', noMatch:'選択した項目では候補が見つかりませんでした。原文をそのまま表示しています。',
+        done:(n)=>`${n}件の候補をマスキングしました。氏名・住所・注文番号など文脈依存の情報は目視確認してください。`,
+        labels:{ phone:'電話番号', email:'メール', card:'カード番号', account:'口座番号候補' },
+        sample:'スヤ様の連絡先は010-1234-5678、海外拠点は+1 415-555-1212、メールはsooya@example.comです。決済カード1234-5678-9012-3456、返金口座123456-78-901234が含まれています。'
+      }
     }[pageLang] || null;
 
     const bump = (key, amount = 1) => { counts[key].textContent = String((Number(counts[key].textContent) || 0) + amount); };
     const resetCounts = () => Object.values(counts).forEach(el => { if (el) el.textContent = '0'; });
-    const maskEmail = (value) => value.replace(/([^@\s]{1,2})[^@\s]*(@)([^@\s.]{1,2})[^@\s]*(\.[^@\s]+)/, (_, a, at, d, rest) => `${a}***${at}${d}***${rest}`);
+    const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (ch) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[ch]));
+    const detectionRows = [];
+    const addDetection = (key, before, after) => {
+      if (before === after || detectionRows.length >= 30) return;
+      detectionRows.push({ key, before, after });
+    };
+    const renderDetections = () => {
+      if (!detectionsEl) return;
+      detectionsEl.innerHTML = detectionRows.map((row) => (
+        `<div class="bw-item"><strong>${escapeHtml(i18n.labels[row.key] || row.key)}</strong><span class="bw-tag">${escapeHtml(row.after)}</span><p>${escapeHtml(row.before)}</p></div>`
+      )).join('');
+    };
+    const maskEmail = (value) => {
+      const [local, domain = ''] = value.split('@');
+      const [host, ...rest] = domain.split('.');
+      const safeLocal = local.length <= 2 ? `${local[0] || '*'}***` : `${local.slice(0, 2)}***`;
+      const safeHost = host.length <= 2 ? `${host[0] || '*'}***` : `${host.slice(0, 2)}***`;
+      return `${safeLocal}@${safeHost}${rest.length ? `.${rest.join('.')}` : ''}`;
+    };
     const maskDigits = (value, visibleStart = 3, visibleEnd = 2) => {
       const digits = value.replace(/\D/g, '');
       if (digits.length <= visibleStart + visibleEnd) return value.replace(/\d/g, '*');
@@ -13244,41 +13279,83 @@
         return keep ? d : '*';
       });
     };
+    const luhnOk = (digits) => {
+      let sum = 0;
+      let doubleIt = false;
+      for (let i = digits.length - 1; i >= 0; i -= 1) {
+        let n = Number(digits[i]);
+        if (doubleIt) {
+          n *= 2;
+          if (n > 9) n -= 9;
+        }
+        sum += n;
+        doubleIt = !doubleIt;
+      }
+      return sum > 0 && sum % 10 === 0;
+    };
+    const replaceCandidate = (text, key, pattern, masker) => text.replace(pattern, (match, ...args) => {
+      const masked = masker(match, ...args);
+      if (masked === match) return match;
+      bump(key);
+      addDetection(key, match, masked);
+      return masked;
+    });
 
     const render = () => {
       resetCounts();
+      detectionRows.length = 0;
+      if (detectionsEl) detectionsEl.innerHTML = '';
       let text = input.value || '';
-      let total = 0;
       if (!text.trim()) {
         output.value = '';
         help.textContent = i18n.none;
         return;
       }
+      if (!Object.values(checks).some((el) => el?.checked)) {
+        output.value = text;
+        help.textContent = i18n.noneSelected;
+        return;
+      }
       if (checks.email?.checked) {
-        text = text.replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, (m) => { total += 1; bump('email'); return maskEmail(m); });
+        text = replaceCandidate(text, 'email', /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, maskEmail);
       }
       if (checks.card?.checked) {
-        const maskCard = (m) => { const digits=m.replace(/\D/g,''); if (digits.length < 13 || digits.length > 19) return m; total += 1; bump('card'); return maskDigits(m, 4, 4); };
-        text = text.replace(/\b\d{13,19}\b/g, maskCard);
-        text = text.replace(/\b\d{4}[- ]\d{4}[- ]\d{4}[- ]\d{4}(?:[- ]\d{1,3})?\b/g, maskCard);
+        const maskCard = (m) => {
+          const digits = m.replace(/\D/g, '');
+          const groupedCard = /\d{4}[- ]\d{4}[- ]\d{4}[- ]\d{4}/.test(m);
+          if (digits.length < 13 || digits.length > 19 || (!groupedCard && !luhnOk(digits))) return m;
+          return maskDigits(m, 4, 4);
+        };
+        text = replaceCandidate(text, 'card', /\b\d{4}[- ]\d{4}[- ]\d{4}[- ]\d{4}(?:[- ]\d{1,3})?\b/g, maskCard);
+        text = replaceCandidate(text, 'card', /\b\d{13,19}\b/g, maskCard);
       }
       if (checks.phone?.checked) {
-        text = text.replace(/\b(?:\+?82[-\s]?)?0?1[016789][-\s]?\d{3,4}[-\s]?\d{4}\b/g, (m) => { total += 1; bump('phone'); return maskDigits(m, 3, 2); });
+        const maskPhone = (m) => {
+          const digits = m.replace(/\D/g, '');
+          if (digits.length < 9 || digits.length > 15 || (digits.length >= 13 && luhnOk(digits))) return m;
+          return maskDigits(m, 3, 2);
+        };
+        text = replaceCandidate(text, 'phone', /\b(?:\+?82[-.\s]?)?0?1[016789][-\s.]?\d{3,4}[-\s.]?\d{4}\b/g, maskPhone);
+        text = replaceCandidate(text, 'phone', /\+\d{1,3}[-.\s]?(?:\(?\d{2,4}\)?[-.\s]?){2,4}\d{3,4}\b/g, maskPhone);
       }
       if (checks.account?.checked) {
-        text = text.replace(/\b\d{2,6}[-\s]\d{2,6}[-\s]\d{2,8}\b/g, (m) => {
+        const maskAccount = (m) => {
           const digits = m.replace(/\D/g, '');
           if (digits.length < 9 || digits.length > 16 || /\*+/.test(m)) return m;
-          total += 1; bump('account'); return maskDigits(m, 3, 2);
-        });
+          return maskDigits(m, 3, 2);
+        };
+        text = replaceCandidate(text, 'account', /\b\d{2,6}[-\s]\d{2,6}[-\s]\d{2,8}\b/g, maskAccount);
       }
+      const total = Object.values(counts).reduce((sum, el) => sum + (Number(el?.textContent) || 0), 0);
       output.value = text;
-      help.textContent = i18n.done(total);
+      renderDetections();
+      help.textContent = total ? i18n.done(total) : i18n.noMatch;
     };
     const copyText = async (val) => { try { await navigator.clipboard.writeText(val); } catch (_) { const ta=document.createElement('textarea'); ta.value=val; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } };
     runBtn?.addEventListener('click', render);
     sampleBtn?.addEventListener('click', () => { input.value = i18n.sample; render(); });
     copyBtn?.addEventListener('click', async () => { if (!output.value.trim()) return; await copyText(output.value); const old = copyBtn.textContent; copyBtn.textContent = i18n.copied; setTimeout(() => { copyBtn.textContent = old || i18n.copyDefault; }, 900); });
+    clearBtn?.addEventListener('click', () => { input.value = ''; output.value = ''; resetCounts(); if (detectionsEl) detectionsEl.innerHTML = ''; help.textContent = i18n.none; input.focus(); });
     input.addEventListener('input', render);
     Object.values(checks).forEach(el => el?.addEventListener('change', render));
     render();
