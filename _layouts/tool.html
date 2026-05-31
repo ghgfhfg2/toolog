@@ -58,13 +58,40 @@ layout: default
           <p class="tool-result" id="uc-result">{% if page.lang == 'en' %}Result will appear here.{% elsif page.lang == 'ja' %}結果がここに表示されます。{% else %}결과가 여기에 표시됩니다.{% endif %}</p>
         </div>
       {% when 'timezone-converter' %}
-        <div class="tool-ui">
+        <div class="tool-ui tz-ui">
           <div class="tool-row-grid tz-grid">
-            <select id="tz-from"><option value="Asia/Seoul">{% if page.lang == 'en' %}Seoul (KST){% elsif page.lang == 'ja' %}ソウル (KST){% else %}서울 (KST){% endif %}</option><option value="America/New_York">{% if page.lang == 'en' %}New York (EST/EDT){% elsif page.lang == 'ja' %}ニューヨーク (EST/EDT){% else %}뉴욕 (EST/EDT){% endif %}</option><option value="Europe/London">{% if page.lang == 'en' %}London{% elsif page.lang == 'ja' %}ロンドン{% else %}런던{% endif %}</option><option value="Asia/Tokyo">{% if page.lang == 'en' %}Tokyo{% elsif page.lang == 'ja' %}東京{% else %}도쿄{% endif %}</option></select>
-            <input id="tz-datetime" type="datetime-local" />
-            <select id="tz-to"><option value="America/Los_Angeles">{% if page.lang == 'en' %}Los Angeles{% elsif page.lang == 'ja' %}ロサンゼルス{% else %}로스앤젤레스{% endif %}</option><option value="Asia/Seoul">{% if page.lang == 'en' %}Seoul{% elsif page.lang == 'ja' %}ソウル{% else %}서울{% endif %}</option><option value="Europe/Paris">{% if page.lang == 'en' %}Paris{% elsif page.lang == 'ja' %}パリ{% else %}파리{% endif %}</option><option value="Asia/Singapore">{% if page.lang == 'en' %}Singapore{% elsif page.lang == 'ja' %}シンガポール{% else %}싱가포르{% endif %}</option></select>
+            <div>
+              <label for="tz-from">{% if page.lang == 'en' %}From time zone{% elsif page.lang == 'ja' %}基準タイムゾーン{% else %}기준 시간대{% endif %}</label>
+              <select id="tz-from"></select>
+            </div>
+            <div>
+              <label for="tz-datetime">{% if page.lang == 'en' %}Date and time{% elsif page.lang == 'ja' %}日付と時刻{% else %}날짜와 시간{% endif %}</label>
+              <input id="tz-datetime" type="datetime-local" aria-describedby="tz-help" />
+            </div>
+            <div>
+              <label for="tz-to">{% if page.lang == 'en' %}To time zone{% elsif page.lang == 'ja' %}変換先タイムゾーン{% else %}대상 시간대{% endif %}</label>
+              <select id="tz-to"></select>
+            </div>
           </div>
-          <p class="tool-result" id="tz-result">{% if page.lang == 'en' %}Converted time appears here.{% elsif page.lang == 'ja' %}変換後の時刻がここに表示されます。{% else %}결과 시간이 여기에 표시됩니다.{% endif %}</p>
+          <div class="tool-row-grid tz-actions">
+            <button id="tz-now" type="button">{% if page.lang == 'en' %}Use current time{% elsif page.lang == 'ja' %}現在時刻を入力{% else %}현재 시간 넣기{% endif %}</button>
+            <button id="tz-swap" type="button">{% if page.lang == 'en' %}Swap zones{% elsif page.lang == 'ja' %}入れ替え{% else %}시간대 바꾸기{% endif %}</button>
+            <button id="tz-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+          </div>
+          <div class="tool-row-grid tz-presets" aria-label="{% if page.lang == 'en' %}Common timezone pairs{% elsif page.lang == 'ja' %}よく使うタイムゾーン組み合わせ{% else %}자주 쓰는 시간대 조합{% endif %}">
+            <button type="button" data-from="Asia/Seoul" data-to="America/Los_Angeles">Seoul → LA</button>
+            <button type="button" data-from="Asia/Seoul" data-to="America/New_York">Seoul → New York</button>
+            <button type="button" data-from="Asia/Seoul" data-to="Europe/London">Seoul → London</button>
+            <button type="button" data-from="America/New_York" data-to="Asia/Seoul">New York → Seoul</button>
+          </div>
+          <p class="tool-result" id="tz-result" aria-live="polite">{% if page.lang == 'en' %}Choose a date and time to see the converted local time.{% elsif page.lang == 'ja' %}日付と時刻を選ぶと、変換先の現地時刻を表示します。{% else %}날짜와 시간을 고르면 대상 지역의 현지 시간이 표시됩니다.{% endif %}</p>
+          <div class="tool-stats tz-stats">
+            <div><strong id="tz-source">-</strong><span>{% if page.lang == 'en' %}Source time{% elsif page.lang == 'ja' %}基準時刻{% else %}기준 시각{% endif %}</span></div>
+            <div><strong id="tz-target">-</strong><span>{% if page.lang == 'en' %}Converted time{% elsif page.lang == 'ja' %}変換後{% else %}변환 결과{% endif %}</span></div>
+            <div><strong id="tz-offset">-</strong><span>{% if page.lang == 'en' %}UTC offset{% elsif page.lang == 'ja' %}UTC差{% else %}UTC 오프셋{% endif %}</span></div>
+            <div><strong id="tz-daydiff">-</strong><span>{% if page.lang == 'en' %}Date shift{% elsif page.lang == 'ja' %}日付差{% else %}날짜 차이{% endif %}</span></div>
+          </div>
+          <p class="tool-result" id="tz-help">{% if page.lang == 'en' %}The input is interpreted as local time in the source zone. DST is handled by browser time-zone data.{% elsif page.lang == 'ja' %}入力値は基準タイムゾーンの現地時刻として扱います。DSTはブラウザのタイムゾーンデータに基づきます。{% else %}입력한 시간은 기준 시간대의 현지 시각으로 해석합니다. DST는 브라우저 타임존 데이터 기준으로 반영합니다.{% endif %}</p>
         </div>
       {% when 'case-converter' %}
         <div class="tool-ui">

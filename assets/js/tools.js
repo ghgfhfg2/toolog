@@ -123,22 +123,80 @@
     const to = document.getElementById('tz-to');
     const dt = document.getElementById('tz-datetime');
     const out = document.getElementById('tz-result');
+    const sourceOut = document.getElementById('tz-source');
+    const targetOut = document.getElementById('tz-target');
+    const offsetOut = document.getElementById('tz-offset');
+    const dayDiffOut = document.getElementById('tz-daydiff');
+    const nowBtn = document.getElementById('tz-now');
+    const swapBtn = document.getElementById('tz-swap');
+    const copyBtn = document.getElementById('tz-copy');
 
     const tzI18n = {
       ko: {
         locale: 'ko-KR',
-        result: (fromText, toText, timeText) => `${fromText} 기준 → ${toText}: ${timeText}`
+        empty: '날짜와 시간을 입력하면 대상 지역의 현지 시간이 표시됩니다.',
+        invalid: '날짜나 시간 형식을 확인해 주세요.',
+        copied: '변환 결과를 복사했습니다.',
+        copyFail: '복사할 변환 결과가 아직 없습니다.',
+        sameDay: '같은 날짜',
+        prevDay: '전날',
+        nextDay: '다음날',
+        diffDays: (n) => n > 0 ? `${n}일 뒤` : `${Math.abs(n)}일 전`,
+        result: (fromText, toText, timeText, offset, dayDiff) => `${fromText} 기준 → ${toText}: ${timeText} (${offset}, ${dayDiff})`
       },
       en: {
         locale: 'en-US',
-        result: (fromText, toText, timeText) => `${fromText} → ${toText}: ${timeText}`
+        empty: 'Enter a date and time to see the converted local time.',
+        invalid: 'Check the date and time format.',
+        copied: 'Copied the converted time.',
+        copyFail: 'There is no converted result to copy yet.',
+        sameDay: 'Same date',
+        prevDay: 'Previous day',
+        nextDay: 'Next day',
+        diffDays: (n) => n > 0 ? `${n} days later` : `${Math.abs(n)} days earlier`,
+        result: (fromText, toText, timeText, offset, dayDiff) => `${fromText} → ${toText}: ${timeText} (${offset}, ${dayDiff})`
       },
       ja: {
         locale: 'ja-JP',
-        result: (fromText, toText, timeText) => `${fromText} 基準 → ${toText}: ${timeText}`
+        empty: '日付と時刻を入力すると、変換先の現地時刻を表示します。',
+        invalid: '日付または時刻の形式を確認してください。',
+        copied: '変換結果をコピーしました。',
+        copyFail: 'コピーできる変換結果がまだありません。',
+        sameDay: '同じ日付',
+        prevDay: '前日',
+        nextDay: '翌日',
+        diffDays: (n) => n > 0 ? `${n}日後` : `${Math.abs(n)}日前`,
+        result: (fromText, toText, timeText, offset, dayDiff) => `${fromText} 基準 → ${toText}: ${timeText} (${offset}, ${dayDiff})`
       }
     };
     const tzText = tzI18n[pageLang] || tzI18n.ko;
+    const zones = [
+      ['Asia/Seoul', 'Seoul (KST)'],
+      ['Asia/Tokyo', 'Tokyo (JST)'],
+      ['Asia/Shanghai', 'Shanghai/Beijing (CST)'],
+      ['Asia/Singapore', 'Singapore (SGT)'],
+      ['Asia/Bangkok', 'Bangkok (ICT)'],
+      ['Asia/Dubai', 'Dubai (GST)'],
+      ['Europe/London', 'London (GMT/BST)'],
+      ['Europe/Paris', 'Paris/Berlin (CET/CEST)'],
+      ['America/New_York', 'New York (EST/EDT)'],
+      ['America/Chicago', 'Chicago (CST/CDT)'],
+      ['America/Denver', 'Denver (MST/MDT)'],
+      ['America/Los_Angeles', 'Los Angeles (PST/PDT)'],
+      ['America/Sao_Paulo', 'Sao Paulo (BRT)'],
+      ['Australia/Sydney', 'Sydney (AEST/AEDT)'],
+      ['Pacific/Auckland', 'Auckland (NZST/NZDT)'],
+      ['UTC', 'UTC']
+    ];
+
+    const fillZones = (select, selected) => {
+      if (!select) return;
+      select.innerHTML = zones.map(([value, label]) => `<option value="${value}">${label}</option>`).join('');
+      select.value = selected;
+    };
+
+    fillZones(from, 'Asia/Seoul');
+    fillZones(to, 'America/Los_Angeles');
 
     if (dt && !dt.value) {
       const n = new Date();
@@ -162,6 +220,7 @@
       if (!d || !t) return null;
       const [Y, M, D] = d.split('-').map(Number);
       const [h, m] = t.split(':').map(Number);
+      if (![Y, M, D, h, m].every(Number.isFinite)) return null;
       let utc = Date.UTC(Y, M - 1, D, h, m, 0);
 
       for (let i = 0; i < 3; i++) {
@@ -176,19 +235,97 @@
       return new Date(utc);
     };
 
-    const run = () => {
-      if (!dt.value) return;
-      const utcDate = zonedToUtc(dt.value, from.value);
-      if (!utcDate) return;
-      const text = new Intl.DateTimeFormat(tzText.locale, {
-        dateStyle: 'full',
-        timeStyle: 'short',
-        timeZone: to.value
-      }).format(utcDate);
-      out.textContent = tzText.result(from.options[from.selectedIndex].text, to.options[to.selectedIndex].text, text);
+    const formatDateTime = (date, timeZone, options = {}) => new Intl.DateTimeFormat(tzText.locale, {
+      dateStyle: options.dateStyle || 'medium',
+      timeStyle: options.timeStyle || 'short',
+      timeZone
+    }).format(date);
+
+    const getOffsetLabel = (date, timeZone) => {
+      const parts = getParts(date, timeZone);
+      const localAsUTC = Date.UTC(
+        Number(parts.year), Number(parts.month) - 1, Number(parts.day),
+        Number(parts.hour), Number(parts.minute), Number(parts.second || 0)
+      );
+      const offsetMinutes = Math.round((localAsUTC - date.getTime()) / 60000);
+      const sign = offsetMinutes >= 0 ? '+' : '-';
+      const abs = Math.abs(offsetMinutes);
+      return `UTC${sign}${String(Math.floor(abs / 60)).padStart(2, '0')}:${String(abs % 60).padStart(2, '0')}`;
     };
 
-    [from, to, dt].forEach(el => el.addEventListener('input', run));
+    const getDayDiffText = (date, fromZone, toZone) => {
+      const a = getParts(date, fromZone);
+      const b = getParts(date, toZone);
+      const fromDay = Date.UTC(Number(a.year), Number(a.month) - 1, Number(a.day));
+      const toDay = Date.UTC(Number(b.year), Number(b.month) - 1, Number(b.day));
+      const diff = Math.round((toDay - fromDay) / 86400000);
+      if (diff === 0) return tzText.sameDay;
+      if (diff === -1) return tzText.prevDay;
+      if (diff === 1) return tzText.nextDay;
+      return tzText.diffDays(diff);
+    };
+
+    const setStats = (source = '-', target = '-', offset = '-', dayDiff = '-') => {
+      if (sourceOut) sourceOut.textContent = source;
+      if (targetOut) targetOut.textContent = target;
+      if (offsetOut) offsetOut.textContent = offset;
+      if (dayDiffOut) dayDiffOut.textContent = dayDiff;
+    };
+
+    const run = () => {
+      if (!dt.value) {
+        out.textContent = tzText.empty;
+        setStats();
+        return;
+      }
+      const utcDate = zonedToUtc(dt.value, from.value);
+      if (!utcDate || Number.isNaN(utcDate.getTime())) {
+        out.textContent = tzText.invalid;
+        setStats();
+        return;
+      }
+      const sourceText = formatDateTime(utcDate, from.value);
+      const targetText = formatDateTime(utcDate, to.value);
+      const resultText = formatDateTime(utcDate, to.value, { dateStyle: 'full' });
+      const offset = getOffsetLabel(utcDate, to.value);
+      const dayDiff = getDayDiffText(utcDate, from.value, to.value);
+      out.textContent = tzText.result(from.options[from.selectedIndex].text, to.options[to.selectedIndex].text, resultText, offset, dayDiff);
+      setStats(sourceText, targetText, offset, dayDiff);
+    };
+
+    const setNow = () => {
+      const n = new Date();
+      dt.value = new Date(n.getTime() - n.getTimezoneOffset() * 60000).toISOString().slice(0,16);
+      run();
+    };
+
+    [from, to, dt].forEach(el => el?.addEventListener('input', run));
+    [from, to].forEach(el => el?.addEventListener('change', run));
+    nowBtn?.addEventListener('click', setNow);
+    swapBtn?.addEventListener('click', () => {
+      const oldFrom = from.value;
+      from.value = to.value;
+      to.value = oldFrom;
+      run();
+    });
+    copyBtn?.addEventListener('click', async () => {
+      const text = out.textContent || '';
+      if (!text || text === tzText.empty || text === tzText.invalid) {
+        out.textContent = tzText.copyFail;
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(text);
+        out.textContent = `${tzText.copied} ${text}`;
+      } catch (_) {
+        out.textContent = text;
+      }
+    });
+    document.querySelectorAll('.tz-presets button').forEach(btn => btn.addEventListener('click', () => {
+      from.value = btn.dataset.from || from.value;
+      to.value = btn.dataset.to || to.value;
+      run();
+    }));
     run();
   }
 

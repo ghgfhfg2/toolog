@@ -1723,9 +1723,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 국가별 시차를 계산해 회의 시간을 정확히 맞춰요.
-  description_en: Convert dates and times across global time zones to schedule meetings accurately.
-  description_ja: 各国の時差を計算し、会議日時を正確に調整できます。
+  description: 서울, 뉴욕, 런던, LA 등 주요 시간대를 DST와 날짜 변경까지 확인하며 회의 시간으로 변환해요.
+  description_en: Convert meeting times across Seoul, New York, London, LA, and other major zones with DST and date-shift checks.
+  description_ja: ソウル、ニューヨーク、ロンドン、LAなど主要タイムゾーンをDSTと日付差も含めて変換できます。
   url: /tools/timezone-converter/
   url_en: /en/tools/timezone-converter/
   url_ja: /ja/tools/timezone-converter/
