@@ -43,10 +43,17 @@ Processing happens in your browser, so it is useful for thumbnails, social share
 - Shows original, target, output size, and fit mode
 
 ## How to use
-1. Upload an image.
-2. Choose a preset or enter custom pixel size.
-3. Choose whether to fit, crop, or stretch the image.
-4. Run resize and download the output.
+### 1) Upload an image
+Upload the image you want to resize. The original dimensions are filled in automatically.
+
+### 2) Pick a preset or enter a custom size
+Choose a preset for your use case or type the exact pixel width and height. Very large values are limited to protect browser memory.
+
+### 3) Choose the fit mode
+Use fit mode when the whole image must remain visible, crop mode when the target frame should be filled, or stretch mode when exact pixels matter more than preserving proportions.
+
+### 4) Resize and download
+Check the canvas preview and output details, then download the resized image.
 
 ## Practical tips
 - Blog cover images are easy to manage at 16:9 (e.g., 800×450).
@@ -55,7 +62,12 @@ Processing happens in your browser, so it is useful for thumbnails, social share
 - After resizing, use [PNG Compressor]({{ '/en/tools/png-compressor/' | relative_url }}) to reduce file size further.
 - For YouTube thumbnails, banners, and icons, try the [YouTube Image Kit Maker]({{ '/en/tools/youtube-image-kit/' | relative_url }}).
 
-## Related tools
-- Compression and format conversion: [PNG Compressor]({{ '/en/tools/png-compressor/' | relative_url }})
-- YouTube asset presets: [YouTube Image Kit Maker]({{ '/en/tools/youtube-image-kit/' | relative_url }})
-- Caption length check: [Text Counter]({{ '/en/tools/text-counter/' | relative_url }})
+## SEO checklist
+Right-sized images can reduce unnecessary resource loading, which helps page speed and user experience.
+
+- Reference: [Google Search Central - Image SEO](https://developers.google.com/search/docs/appearance/google-images)
+- Internal workflow: finish with [PNG Compressor]({{ '/en/tools/png-compressor/' | relative_url }}) when you need a lighter upload.
+
+## Summary
+Image Resizer is a basic utility for avoiding upload failures, distorted ratios, and slow-loading oversized images.
+Matching the required dimensions before publishing can make a post, product image, or share card feel much more polished.
