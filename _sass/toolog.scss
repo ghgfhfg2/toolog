@@ -681,6 +681,18 @@ textarea:focus-visible {
 .tool-stats > div { border: 1px solid var(--line); border-radius: 10px; padding: .65rem; background: #1f2937; }
 .tool-stats strong { display:block; font-size: 1.05rem; }
 .tool-stats span { font-size: .78rem; color: var(--muted); }
+.ir-size-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(140px, .55fr);
+}
+.ir-size-grid > div {
+  display: grid;
+  gap: .35rem;
+}
+.ir-stats strong {
+  font-size: .95rem;
+  line-height: 1.35;
+  word-break: keep-all;
+}
 #ir-canvas,#pc-canvas,#iu-canvas {
   display: block;
   width: 100% !important;

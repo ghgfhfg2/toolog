@@ -1533,9 +1533,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 인스타·블로그·OG 규격으로 사진 크기를 정확히 맞춰요.
-  description_en: Resize photos to exact dimensions for Instagram, blogs, and OG cards.
-  description_ja: Instagram・ブログ・OG向けに画像サイズを正確に調整できます。
+  description: 인스타·블로그·OG 규격에 맞춰 사진을 리사이즈하고, 전체 맞춤·크롭·늘리기 방식과 오류 방어까지 확인해요.
+  description_en: Resize photos for Instagram, blogs, and OG cards with fit, crop, and stretch modes plus safer size checks.
+  description_ja: Instagram・ブログ・OG向けに、全体表示・切り抜き・引き伸ばし方式とサイズチェック付きで画像を調整できます。
   url: /tools/image-resizer/
   url_en: /en/tools/image-resizer/
   url_ja: /ja/tools/image-resizer/
