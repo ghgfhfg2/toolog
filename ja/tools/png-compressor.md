@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: PNG圧縮ツール | WebP・JPEG変換で画像を軽量化
-description: PNG圧縮とWebP/JPEG変換で画像容量をすばやく削減。元サイズ・出力サイズ・削減率をその場で確認できます。
+description: ブラウザ内でPNG/JPEG/WebP画像を圧縮し、出力形式、品質、削減率、プレビュー、大きすぎる画像のエラー案内まで確認できます。
 lang: ja
 permalink: /ja/tools/png-compressor/
 canonical_url: /ja/tools/png-compressor/
@@ -12,8 +12,8 @@ image:
   path: /assets/thumbs/png-compressor.svg
   alt: PNG圧縮ツールの結果プレビュー
 tool_key: png-compressor
-keywords: [PNG圧縮, 画像容量削減, WebP変換, JPEG変換, 画像最適化]
-related_tools: [image-resizer, text-counter]
+keywords: [PNG圧縮, 画像容量削減, WebP変換, JPEG変換, 画像最適化, 写真圧縮]
+related_tools: [image-resizer, image-upscaler, youtube-image-kit, text-counter]
 alternate_urls:
   ko: /tools/png-compressor/
   en: /en/tools/png-compressor/
@@ -23,6 +23,8 @@ faq:
     a: 必須ではありません。写真系はWebP/JPEGのほうが小さくなることが多いです。
   - q: 品質設定はどれくらいが目安？
     a: 一般的には0.7〜0.85で画質と容量のバランスが取りやすいです。
+  - q: PNG出力では品質スライダーがあまり効かないのはなぜ？
+    a: PNGは可逆形式のため、ブラウザの品質値の影響が小さいです。写真はWebPやJPEGを先に試すのがおすすめです。
   - q: アップロード画像はサーバーに保存されますか？
     a: いいえ。ブラウザ内処理で、結果ファイルのみダウンロードされます。
 ---
@@ -30,24 +32,38 @@ faq:
 ## こんなときに便利
 ブログ・EC・LPで画像が重いと、表示速度低下や離脱につながります。
 このツールはブラウザ上で画像を軽量化し、アップロードと表示を速くします。
+PNG、JPEG、WebPファイルを読み込み、出力形式と品質を選んで、プレビュー・出力サイズ・削減率を確認できます。
 
 ## 仕組み
 - アップロード画像をブラウザ内で再エンコード
 - 出力形式は **WebP / JPEG / PNG** から選択
 - 品質スライダーで画質と容量のバランス調整
 - 元サイズ・圧縮後サイズ・削減率を表示
+- 空ファイル、非対応形式、大きすぎる画像はメッセージで案内
 
 ## 使いどころ
 - 記事画像を公開前に最適化
 - 商品画像が多いページの初期表示改善
 - 投稿サイズ上限に合わせた緊急圧縮
 
+## 形式の選び方
+- **WebP**: 写真、ブログ画像、商品ページにまずおすすめです。
+- **JPEG**: WebP非対応のサービスに投稿するときに使いやすい形式です。
+- **PNG**: ロゴ、アイコン、スクリーンショット、透過が必要な画像に向いていますが、削減幅は小さい場合があります。
+
+大きな写真は先に[画像リサイズツール]({{ '/ja/tools/image-resizer/' | relative_url }})でピクセル数を下げてから圧縮すると、ブラウザ負荷が下がり結果容量も安定します。
+
 ## SEO観点
 画像最適化はページ速度とUX改善に直結し、検索評価にも良い影響があります。
 
 - 参考: [Google PageSpeed Insights](https://pagespeed.web.dev/)
 - 先にサイズ調整: [画像リサイズツール]({{ '/ja/tools/image-resizer/' | relative_url }})
+- YouTube用画像の作成: [YouTube画像セットメーカー]({{ '/ja/tools/youtube-image-kit/' | relative_url }})
 - キャプション確認: [文字数カウンター]({{ '/ja/tools/text-counter/' | relative_url }})
+
+## FAQ
+### PNG出力で容量が増えることはありますか？
+元画像がすでに最適化されている場合、PNG再出力で大きくなることがあります。透過やくっきりしたUI画像が不要ならWebPまたはJPEGを試してください。
 
 ## まとめ
 圧縮とフォーマット変換を組み合わせると、画像中心ページの体感速度を大きく改善できます。
