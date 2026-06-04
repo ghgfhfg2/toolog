@@ -1515,8 +1515,8 @@
   badge_en: Hot
   badge_ja: 注目
   description: PNG/JPEG/WebP 변환, 품질 조절, 절감률 확인으로 이미지 용량을 브라우저에서 안전하게 줄여요.
-  description_en: Compress images in your browser with PNG/JPEG/WebP output, quality control, and savings stats.
-  description_ja: PNG/JPEG/WebP出力、品質調整、削減率表示で画像容量をブラウザ内で軽量化できます。
+  description_en: Compress PNG/JPEG/WebP images in your browser with format output, quality control, preview, savings stats, and safer file guidance.
+  description_ja: PNG/JPEG/WebP画像をブラウザ内で圧縮し、形式選択、品質調整、プレビュー、削減率、大きい画像の案内まで確認できます。
   url: /tools/png-compressor/
   url_en: /en/tools/png-compressor/
   url_ja: /ja/tools/png-compressor/

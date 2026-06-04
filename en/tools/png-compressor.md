@@ -41,10 +41,17 @@ You can load PNG, JPEG, or WebP files, choose the output format and quality, the
 - Shows original size, compressed size, and reduction rate
 - Clear guidance for empty files, unsupported file types, and oversized images
 
+> Uploaded files are not sent to a server. The image is processed in your current browser session.
+
 ## Practical use cases
-- Optimize blog content images before publishing
-- Reduce heavy product images for faster storefront loading
-- Meet messenger/community upload size limits quickly
+### 1. Optimize blog post images
+Turn multi-megabyte photos into lighter files before publishing so image-heavy posts load faster.
+
+### 2. Prepare storefront detail images
+Compress product photos before upload to reduce the first-load burden on ecommerce pages.
+
+### 3. Fit upload size limits
+Quickly make an image small enough for community, messenger, or form upload limits.
 
 ## Format guide
 - **WebP**: usually the best first choice for photos, blog images, and product pages.
@@ -62,8 +69,20 @@ Image optimization improves page speed and user experience, which helps overall 
 - Check caption length together: [Text Counter]({{ '/en/tools/text-counter/' | relative_url }})
 
 ## FAQ
+### Do I have to keep PNG output?
+No. Photo-like images are often smaller as WebP or JPEG.
+
+### What quality range should I start with?
+In most cases, 0.7 to 0.85 is a practical balance between visual quality and file size.
+
+### Why does PNG output sometimes shrink very little?
+PNG is lossless, so the savings can be small for photos. If you do not need transparency, try WebP or JPEG.
+
 ### Why did PNG output get larger?
 PNG is lossless and can be larger than the original if the source was already optimized. Try WebP or JPEG unless you need transparency or crisp UI edges.
+
+### Are uploaded files stored on a server?
+No. The original file stays in your browser, and a separate compressed file is created for download.
 
 ## Summary
 Using compression plus format conversion can significantly improve image-heavy page performance.
