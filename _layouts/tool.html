@@ -184,18 +184,50 @@ layout: default
           <a id="pc-download" class="open-link" download="compressed.webp" aria-disabled="true">{% if page.lang == 'en' %}Download compressed image{% elsif page.lang == 'ja' %}圧縮画像をダウンロード{% else %}압축 이미지 다운로드{% endif %}</a>
         </div>
       {% when 'youtube-image-kit' %}
-        <div class="tool-ui">
-          <input id="ytk-file" type="file" accept="image/*" />
-          <div class="tool-row-grid">
-            <select id="ytk-fit">
+        <div class="tool-ui ytk-ui">
+          <div class="tool-row">
+            <label for="ytk-file">{% if page.lang == 'en' %}Source image{% elsif page.lang == 'ja' %}元画像{% else %}기준 이미지{% endif %}</label>
+            <input id="ytk-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif" aria-describedby="ytk-result ytk-help" />
+          </div>
+          <div class="tool-row-grid ytk-controls">
+            <div>
+              <label for="ytk-fit">{% if page.lang == 'en' %}Framing mode{% elsif page.lang == 'ja' %}フレーミング{% else %}프레이밍 방식{% endif %}</label>
+              <select id="ytk-fit">
               <option value="cover">{% if page.lang == 'en' %}Framing: Fill frame (cover){% elsif page.lang == 'ja' %}フレーミング: 枠いっぱい (cover){% else %}프레이밍: 꽉 채우기(cover){% endif %}</option>
               <option value="contain">{% if page.lang == 'en' %}Framing: Show full image (contain){% elsif page.lang == 'ja' %}フレーミング: 全体表示 (contain){% else %}프레이밍: 원본 전체 보이기(contain){% endif %}</option>
-            </select>
-            <input id="ytk-bg" type="color" value="#0f172a" />
-            <button id="ytk-run" type="button">{% if page.lang == 'en' %}Generate YouTube set{% elsif page.lang == 'ja' %}YouTubeセット生成{% else %}유튜브 세트 생성{% endif %}</button>
+              </select>
+            </div>
+            <div>
+              <label for="ytk-format">{% if page.lang == 'en' %}Output format{% elsif page.lang == 'ja' %}出力形式{% else %}출력 포맷{% endif %}</label>
+              <select id="ytk-format">
+                <option value="image/webp">WebP {% if page.lang == 'en' %}(recommended){% elsif page.lang == 'ja' %}(推奨){% else %}(권장){% endif %}</option>
+                <option value="image/png">PNG</option>
+                <option value="image/jpeg">JPEG</option>
+              </select>
+            </div>
           </div>
-          <p class="tool-result" id="ytk-result">{% if page.lang == 'en' %}Choose an image and click Generate to create a full YouTube upload image set.{% elsif page.lang == 'ja' %}画像を選択して生成を押すと、YouTube投稿用画像セットを作成します。{% else %}이미지를 선택하고 생성 버튼을 누르면 유튜브 업로드용 이미지 세트가 만들어집니다.{% endif %}</p>
-          <button id="ytk-download-all" type="button">{% if page.lang == 'en' %}Download all{% elsif page.lang == 'ja' %}一括ダウンロード{% else %}전체 다운로드{% endif %}</button>
+          <div class="tool-row-grid ytk-controls">
+            <div>
+              <label for="ytk-bg">{% if page.lang == 'en' %}Margin/background color{% elsif page.lang == 'ja' %}余白・背景色{% else %}여백/배경색{% endif %}</label>
+              <input id="ytk-bg" type="color" value="#0f172a" />
+            </div>
+            <div>
+              <label for="ytk-quality">{% if page.lang == 'en' %}Quality{% elsif page.lang == 'ja' %}品質{% else %}품질{% endif %} <span id="ytk-quality-label">86%</span></label>
+              <input id="ytk-quality" type="range" min="0.5" max="1" step="0.02" value="0.86" />
+            </div>
+          </div>
+          <div class="tool-row-grid ytk-actions">
+            <button id="ytk-run" type="button">{% if page.lang == 'en' %}Generate YouTube set{% elsif page.lang == 'ja' %}YouTubeセット生成{% else %}유튜브 세트 생성{% endif %}</button>
+            <button id="ytk-download-all" type="button" disabled>{% if page.lang == 'en' %}Download all{% elsif page.lang == 'ja' %}一括ダウンロード{% else %}전체 다운로드{% endif %}</button>
+          </div>
+          <p class="tool-result" id="ytk-result" role="status" aria-live="polite">{% if page.lang == 'en' %}Choose an image and click Generate to create a full YouTube upload image set.{% elsif page.lang == 'ja' %}画像を選択して生成を押すと、YouTube投稿用画像セットを作成します。{% else %}이미지를 선택하고 생성 버튼을 누르면 유튜브 업로드용 이미지 세트가 만들어집니다.{% endif %}</p>
+          <div class="tool-stats ytk-stats" aria-label="{% if page.lang == 'en' %}YouTube image kit summary{% elsif page.lang == 'ja' %}YouTube画像セット概要{% else %}유튜브 이미지 세트 요약{% endif %}">
+            <div><strong id="ytk-original">-</strong><span>{% if page.lang == 'en' %}Original{% elsif page.lang == 'ja' %}元画像{% else %}원본{% endif %}</span></div>
+            <div><strong id="ytk-count">0</strong><span>{% if page.lang == 'en' %}Outputs{% elsif page.lang == 'ja' %}出力数{% else %}출력 수{% endif %}</span></div>
+            <div><strong id="ytk-format-label">WebP</strong><span>{% if page.lang == 'en' %}Format{% elsif page.lang == 'ja' %}形式{% else %}포맷{% endif %}</span></div>
+            <div><strong id="ytk-total-size">-</strong><span>{% if page.lang == 'en' %}Total size{% elsif page.lang == 'ja' %}合計容量{% else %}총 용량{% endif %}</span></div>
+          </div>
+          <p class="tool-result" id="ytk-help">{% if page.lang == 'en' %}Recommended source: at least 1280×720. WebP is usually smaller; PNG preserves sharp text and transparent logo edges.{% elsif page.lang == 'ja' %}推奨元画像は1280×720以上です。WebPは軽量化しやすく、PNGは文字やロゴの輪郭を保ちやすいです。{% else %}권장 원본은 최소 1280×720입니다. WebP는 대체로 가볍고, PNG는 글자·로고 가장자리 보존에 유리합니다.{% endif %}</p>
           <div id="ytk-list" class="ytk-grid"></div>
         </div>
       {% when 'image-upscaler' %}

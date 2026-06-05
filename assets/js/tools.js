@@ -778,10 +778,17 @@
     const file = document.getElementById('ytk-file');
     const fit = document.getElementById('ytk-fit');
     const bg = document.getElementById('ytk-bg');
+    const format = document.getElementById('ytk-format');
+    const quality = document.getElementById('ytk-quality');
+    const qualityLabel = document.getElementById('ytk-quality-label');
     const run = document.getElementById('ytk-run');
     const wrap = document.getElementById('ytk-list');
     const result = document.getElementById('ytk-result');
     const allBtn = document.getElementById('ytk-download-all');
+    const originalOut = document.getElementById('ytk-original');
+    const countOut = document.getElementById('ytk-count');
+    const formatOut = document.getElementById('ytk-format-label');
+    const totalOut = document.getElementById('ytk-total-size');
 
     const ytkText = {
       ko: {
@@ -792,10 +799,18 @@
           'channel-icon': '채널 아이콘',
           watermark: '워터마크'
         },
+        idle: '이미지를 선택하면 유튜브 업로드 이미지 세트를 브라우저에서 생성합니다.',
+        empty: '먼저 기준 이미지를 선택해 주세요.',
+        badType: 'PNG, JPEG, WebP, GIF 이미지만 사용할 수 있습니다.',
+        tooLarge: '이미지 해상도가 너무 큽니다. 8000만 픽셀 이하 이미지로 줄인 뒤 다시 시도해 주세요.',
+        loading: '이미지를 불러오는 중입니다...',
+        failed: '이미지를 읽지 못했습니다. 다른 파일로 다시 시도해 주세요.',
         ready: (w, h) => `원본: ${w}x${h}px · 생성 준비 완료`,
+        generating: '출력 이미지를 생성하는 중입니다...',
         download: (label) => `${label} 다운로드`,
         previewAlt: (label) => `${label} 미리보기`,
-        done: (count) => `${count}개 출력 이미지를 생성했습니다.`
+        done: (count, size, formatLabel) => `${count}개 ${formatLabel} 출력 이미지를 생성했습니다. 총 ${size}.`,
+        formatLabel: { 'image/webp': 'WebP', 'image/png': 'PNG', 'image/jpeg': 'JPEG' }
       },
       en: {
         labels: {
@@ -805,10 +820,18 @@
           'channel-icon': 'Channel Icon',
           watermark: 'Watermark'
         },
+        idle: 'Choose an image to generate a YouTube upload image set in your browser.',
+        empty: 'Choose a source image first.',
+        badType: 'Use a PNG, JPEG, WebP, or GIF image.',
+        tooLarge: 'The image resolution is too large. Resize it below 80 million pixels and try again.',
+        loading: 'Loading image...',
+        failed: 'Could not read the image. Try another file.',
         ready: (w, h) => `Original: ${w}x${h}px · Ready to generate`,
+        generating: 'Generating output images...',
         download: (label) => `Download ${label}`,
         previewAlt: (label) => `${label} preview`,
-        done: (count) => `Generated ${count} output images.`
+        done: (count, size, formatLabel) => `Generated ${count} ${formatLabel} output images. Total ${size}.`,
+        formatLabel: { 'image/webp': 'WebP', 'image/png': 'PNG', 'image/jpeg': 'JPEG' }
       },
       ja: {
         labels: {
@@ -818,10 +841,18 @@
           'channel-icon': 'チャンネルアイコン',
           watermark: '透かし'
         },
+        idle: '画像を選ぶと、YouTube投稿用画像セットをブラウザ内で生成できます。',
+        empty: '先に元画像を選択してください。',
+        badType: 'PNG、JPEG、WebP、GIF画像を使用してください。',
+        tooLarge: '画像解像度が大きすぎます。8000万ピクセル以下に縮小してから再試行してください。',
+        loading: '画像を読み込んでいます...',
+        failed: '画像を読み込めませんでした。別のファイルで再試行してください。',
         ready: (w, h) => `元画像: ${w}x${h}px · 生成準備完了`,
+        generating: '出力画像を生成しています...',
         download: (label) => `${label} をダウンロード`,
         previewAlt: (label) => `${label} プレビュー`,
-        done: (count) => `${count}個の出力画像を生成しました。`
+        done: (count, size, formatLabel) => `${count}個の${formatLabel}出力画像を生成しました。合計 ${size}。`,
+        formatLabel: { 'image/webp': 'WebP', 'image/png': 'PNG', 'image/jpeg': 'JPEG' }
       }
     }[pageLang] || {
       labels: {
@@ -831,10 +862,18 @@
         'channel-icon': '채널 아이콘',
         watermark: '워터마크'
       },
+      idle: '이미지를 선택하면 유튜브 업로드 이미지 세트를 브라우저에서 생성합니다.',
+      empty: '먼저 기준 이미지를 선택해 주세요.',
+      badType: 'PNG, JPEG, WebP, GIF 이미지만 사용할 수 있습니다.',
+      tooLarge: '이미지 해상도가 너무 큽니다. 8000만 픽셀 이하 이미지로 줄인 뒤 다시 시도해 주세요.',
+      loading: '이미지를 불러오는 중입니다...',
+      failed: '이미지를 읽지 못했습니다. 다른 파일로 다시 시도해 주세요.',
       ready: (w, h) => `원본: ${w}x${h}px · 생성 준비 완료`,
+      generating: '출력 이미지를 생성하는 중입니다...',
       download: (label) => `${label} 다운로드`,
       previewAlt: (label) => `${label} 미리보기`,
-      done: (count) => `${count}개 출력 이미지를 생성했습니다.`
+      done: (count, size, formatLabel) => `${count}개 ${formatLabel} 출력 이미지를 생성했습니다. 총 ${size}.`,
+      formatLabel: { 'image/webp': 'WebP', 'image/png': 'PNG', 'image/jpeg': 'JPEG' }
     };
 
     const targets = [
@@ -847,6 +886,33 @@
 
     let img = null;
     let renders = [];
+    let objectUrls = [];
+
+    const formatBytes = (bytes) => {
+      if (!Number.isFinite(bytes) || bytes <= 0) return '-';
+      if (bytes < 1024) return `${Math.round(bytes)} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+    };
+
+    const resetOutputs = () => {
+      objectUrls.forEach((url) => URL.revokeObjectURL(url));
+      objectUrls = [];
+      renders = [];
+      if (wrap) wrap.innerHTML = '';
+      if (countOut) countOut.textContent = '0';
+      if (totalOut) totalOut.textContent = '-';
+      if (allBtn) allBtn.disabled = true;
+    };
+
+    const getFormatLabel = () => ytkText.formatLabel?.[format?.value || 'image/webp'] || 'WebP';
+
+    const updateControls = () => {
+      const mime = format?.value || 'image/webp';
+      if (formatOut) formatOut.textContent = getFormatLabel();
+      if (qualityLabel) qualityLabel.textContent = `${Math.round(Number(quality?.value || 0.86) * 100)}%`;
+      if (quality) quality.disabled = mime === 'image/png';
+    };
 
     const drawFrame = (ctx, image, w, h, mode, bgColor) => {
       ctx.fillStyle = bgColor;
@@ -861,24 +927,64 @@
       ctx.drawImage(image, dx, dy, dw, dh);
     };
 
+    const canvasToBlob = (canvas, mime, q) => new Promise((resolve) => {
+      canvas.toBlob((blob) => resolve(blob), mime, mime === 'image/png' ? undefined : q);
+    });
+
     file?.addEventListener('change', () => {
       const f = file.files?.[0];
-      if (!f) return;
+      resetOutputs();
+      img = null;
+      if (originalOut) originalOut.textContent = '-';
+      if (!f) {
+        if (result) result.textContent = ytkText.idle;
+        return;
+      }
+      if (!/^image\/(png|jpe?g|webp|gif)$/i.test(f.type || '')) {
+        if (result) result.textContent = ytkText.badType;
+        file.value = '';
+        return;
+      }
+      if (result) result.textContent = ytkText.loading;
       const u = URL.createObjectURL(f);
       const i = new Image();
       i.onload = () => {
+        if (i.width * i.height > 80000000) {
+          URL.revokeObjectURL(u);
+          if (result) result.textContent = ytkText.tooLarge;
+          file.value = '';
+          return;
+        }
         img = i;
         URL.revokeObjectURL(u);
+        if (originalOut) originalOut.textContent = `${i.width}x${i.height}`;
         if (result) result.textContent = ytkText.ready(i.width, i.height);
+      };
+      i.onerror = () => {
+        URL.revokeObjectURL(u);
+        if (result) result.textContent = ytkText.failed;
       };
       i.src = u;
     });
 
-    run?.addEventListener('click', () => {
-      if (!img || !wrap) return;
-      wrap.innerHTML = '';
-      renders = [];
-      targets.forEach((t) => {
+    [format, quality].forEach((el) => {
+      el?.addEventListener('input', updateControls);
+      el?.addEventListener('change', updateControls);
+    });
+    updateControls();
+
+    run?.addEventListener('click', async () => {
+      if (!img || !wrap) {
+        if (result) result.textContent = ytkText.empty;
+        return;
+      }
+      resetOutputs();
+      if (result) result.textContent = ytkText.generating;
+      const mime = format?.value || 'image/webp';
+      const q = Math.max(0.5, Math.min(1, Number(quality?.value || 0.86)));
+      const ext = mime === 'image/png' ? 'png' : (mime === 'image/jpeg' ? 'jpg' : 'webp');
+      let totalBytes = 0;
+      for (const t of targets) {
         const label = ytkText.labels[t.key] || t.key;
 
         const card = document.createElement('div');
@@ -889,20 +995,25 @@
         canvas.height = t.h;
         const ctx = canvas.getContext('2d');
         drawFrame(ctx, img, t.w, t.h, fit.value || 'cover', bg?.value || '#0f172a');
-        const dataUrl = canvas.toDataURL('image/png');
+        const blob = await canvasToBlob(canvas, mime, q);
+        if (!blob) continue;
+        totalBytes += blob.size;
+        const url = URL.createObjectURL(blob);
+        objectUrls.push(url);
 
         const previewCanvas = document.createElement('canvas');
-        previewCanvas.width = t.w;
-        previewCanvas.height = t.h;
+        const previewScale = Math.min(1, 520 / Math.max(t.w, t.h));
+        previewCanvas.width = Math.max(1, Math.round(t.w * previewScale));
+        previewCanvas.height = Math.max(1, Math.round(t.h * previewScale));
         const pctx = previewCanvas.getContext('2d');
-        drawFrame(pctx, img, t.w, t.h, fit.value || 'cover', bg?.value || '#0f172a');
+        drawFrame(pctx, img, previewCanvas.width, previewCanvas.height, fit.value || 'cover', bg?.value || '#0f172a');
         const previewUrl = previewCanvas.toDataURL('image/png');
 
         const link = document.createElement('a');
         link.className = 'open-link';
         link.textContent = ytkText.download(label);
-        link.download = `${t.key}-${t.w}x${t.h}.png`;
-        link.href = dataUrl;
+        link.download = `${t.key}-${t.w}x${t.h}.${ext}`;
+        link.href = url;
 
         const title = document.createElement('strong');
         title.textContent = `${label} (${t.w}x${t.h})`;
@@ -921,11 +1032,18 @@
         wrap.appendChild(card);
 
         renders.push(link);
-      });
-      if (result) result.textContent = ytkText.done(targets.length);
+      }
+      if (countOut) countOut.textContent = formatNum(renders.length);
+      if (totalOut) totalOut.textContent = formatBytes(totalBytes);
+      if (allBtn) allBtn.disabled = renders.length === 0;
+      if (result) result.textContent = ytkText.done(renders.length, formatBytes(totalBytes), getFormatLabel());
     });
 
     allBtn?.addEventListener('click', async () => {
+      if (!renders.length) {
+        if (result) result.textContent = ytkText.empty;
+        return;
+      }
       for (const a of renders) {
         a.click();
         await new Promise((r) => setTimeout(r, 180));
