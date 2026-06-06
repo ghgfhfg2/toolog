@@ -94,16 +94,34 @@ layout: default
           <p class="tool-result" id="tz-help">{% if page.lang == 'en' %}The input is interpreted as local time in the source zone. DST is handled by browser time-zone data.{% elsif page.lang == 'ja' %}入力値は基準タイムゾーンの現地時刻として扱います。DSTはブラウザのタイムゾーンデータに基づきます。{% else %}입력한 시간은 기준 시간대의 현지 시각으로 해석합니다. DST는 브라우저 타임존 데이터 기준으로 반영합니다.{% endif %}</p>
         </div>
       {% when 'case-converter' %}
-        <div class="tool-ui">
-          <textarea id="cc-input" placeholder="{% if page.lang == 'en' %}Enter text to convert{% elsif page.lang == 'ja' %}変換するテキストを入力{% else %}변환할 텍스트 입력{% endif %}"></textarea>
-          <div class="tool-row-grid cc-grid">
-            <button type="button" data-mode="upper">UPPER</button>
-            <button type="button" data-mode="lower">lower</button>
-            <button type="button" data-mode="title">Title</button>
-            <button type="button" data-mode="camel">camelCase</button>
-            <button type="button" data-mode="snake">snake_case</button>
+        <div class="tool-ui cc-ui">
+          <div class="tool-row">
+            <label for="cc-input">{% if page.lang == 'en' %}Source text{% elsif page.lang == 'ja' %}変換するテキスト{% else %}변환할 텍스트{% endif %}</label>
+            <textarea id="cc-input" maxlength="50000" aria-describedby="cc-status cc-limit" placeholder="{% if page.lang == 'en' %}e.g. customerOrder ID{% elsif page.lang == 'ja' %}例: customerOrder ID{% else %}예: customerOrder ID{% endif %}"></textarea>
           </div>
-          <textarea id="cc-output" placeholder="{% if page.lang == 'en' %}Result{% elsif page.lang == 'ja' %}結果{% else %}결과{% endif %}" readonly></textarea>
+          <div class="tool-row-grid cc-grid" aria-label="{% if page.lang == 'en' %}Case conversion options{% elsif page.lang == 'ja' %}変換形式{% else %}변환 형식{% endif %}">
+            <button type="button" data-mode="upper" aria-pressed="false">UPPER</button>
+            <button type="button" data-mode="lower" aria-pressed="false">lower</button>
+            <button type="button" data-mode="title" aria-pressed="false">Title Case</button>
+            <button type="button" data-mode="camel" aria-pressed="false">camelCase</button>
+            <button type="button" data-mode="snake" aria-pressed="false">snake_case</button>
+            <button type="button" data-mode="kebab" aria-pressed="false">kebab-case</button>
+          </div>
+          <p class="tool-result" id="cc-status" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter text, then choose a conversion style.{% elsif page.lang == 'ja' %}テキストを入力して変換形式を選んでください。{% else %}텍스트를 입력한 뒤 변환 형식을 선택하세요.{% endif %}</p>
+          <div class="tool-stats cc-stats" aria-label="{% if page.lang == 'en' %}Input summary{% elsif page.lang == 'ja' %}入力概要{% else %}입력 요약{% endif %}">
+            <div><strong id="cc-chars">0</strong><span>{% if page.lang == 'en' %}Characters{% elsif page.lang == 'ja' %}文字数{% else %}글자 수{% endif %}</span></div>
+            <div><strong id="cc-words">0</strong><span>{% if page.lang == 'en' %}Detected words{% elsif page.lang == 'ja' %}検出単語数{% else %}인식 단어 수{% endif %}</span></div>
+          </div>
+          <p class="tool-result" id="cc-limit">{% if page.lang == 'en' %}Up to 50,000 characters. Conversion runs only in your browser.{% elsif page.lang == 'ja' %}最大50,000文字。変換はブラウザ内だけで行われます。{% else %}최대 50,000자까지 입력할 수 있으며 변환은 브라우저 안에서만 처리됩니다.{% endif %}</p>
+          <div class="tool-row">
+            <label for="cc-output">{% if page.lang == 'en' %}Converted result{% elsif page.lang == 'ja' %}変換結果{% else %}변환 결과{% endif %}</label>
+            <textarea id="cc-output" placeholder="{% if page.lang == 'en' %}The converted result appears here.{% elsif page.lang == 'ja' %}変換結果がここに表示されます。{% else %}변환 결과가 여기에 표시됩니다.{% endif %}" readonly></textarea>
+          </div>
+          <div class="tool-row-grid cc-actions">
+            <button id="cc-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
+            <button id="cc-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="cc-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
+          </div>
         </div>
       {% when 'image-resizer' %}
         <div class="tool-ui">

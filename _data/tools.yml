@@ -1649,9 +1649,9 @@
   badge: Update
   badge_en: Update
   badge_ja: 更新
-  description: UPPER/lower/Title/camel/snake 케이스를 즉시 변환해요.
-  description_en: Instantly convert text between UPPERCASE, lowercase, Title Case, camelCase, and snake_case.
-  description_ja: UPPERCASE・lowercase・Title Case・camelCase・snake_case をすぐに相互変換できます。
+  description: UPPER, lower, Title Case, camelCase, snake_case, kebab-case 변환과 결합어 분리, 결과 복사를 한 화면에서 처리해요.
+  description_en: Convert UPPERCASE, lowercase, Title Case, camelCase, snake_case, and kebab-case with compound-word splitting and result copying.
+  description_ja: UPPERCASE・lowercase・Title Case・camelCase・snake_case・kebab-caseの変換、結合語の分割、結果コピーに対応します。
   url: /tools/case-converter/
   url_en: /en/tools/case-converter/
   url_ja: /ja/tools/case-converter/

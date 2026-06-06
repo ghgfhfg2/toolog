@@ -1,11 +1,11 @@
 ---
-title: 대소문자 변환기 | camelCase·snake_case 자동 변환
-description: 대소문자 변환기로 UPPER/lower/Title/camelCase/snake_case를 즉시 변환하세요. 코드·문서 필드명을 빠르게 통일하고 반복 작업을 줄일 수 있습니다.
+title: 대소문자 변환기 | camelCase·snake_case·kebab-case 변환
+description: 대소문자 변환기로 UPPER, lower, Title Case, camelCase, snake_case, kebab-case를 즉시 변환하고 코드·문서 필드명을 빠르게 통일하세요.
 category: text
 category_label: 텍스트/편집
 thumbnail: /assets/thumbs/case-converter.svg
 tool_key: case-converter
-keywords: [대소문자 변환기, camelCase 변환, snake_case 변환, 텍스트 포맷 정리]
+keywords: [대소문자 변환기, camelCase 변환, snake_case 변환, kebab-case 변환, 텍스트 포맷 정리]
 related_tools: [text-counter, unit-converter]
 faq:
   - q: camelCase와 snake_case는 언제 쓰나요?
@@ -14,6 +14,8 @@ faq:
     a: 한글은 대소문자 개념이 없어 영문 중심 케이스 규칙만 변환됩니다.
   - q: 변환 후 붙어 있는 기호는 어떻게 처리되나요?
     a: 공백/특수문자는 구분자로 인식해 단어를 분리한 뒤 규칙에 맞춰 재조합합니다.
+  - q: camelCase로 붙어 있는 단어도 다시 분리되나요?
+    a: 네. customerOrder 같은 camelCase와 APIResponse 같은 결합어 경계를 인식해 다른 형식으로 바꿀 수 있습니다.
 ---
 
 ## 대소문자 변환기, 왜 필요한가요?
@@ -25,16 +27,17 @@ faq:
 - Title Case
 - camelCase
 - snake_case
+- kebab-case
 
 ## 사용 방법
 ### 1) 원문 입력
 변환할 텍스트를 붙여넣습니다.
 
 ### 2) 규칙 선택
-원하는 케이스 버튼을 클릭해 즉시 결과를 확인합니다.
+원하는 케이스 버튼을 클릭해 즉시 결과를 확인합니다. camelCase나 APIResponse처럼 붙어 있는 영문 결합어도 단어 경계를 인식합니다.
 
 ### 3) 결과 복사
-문서/코드/스프레드시트에 그대로 붙여넣어 사용합니다.
+`결과 복사` 버튼으로 문서, 코드, 스프레드시트에 붙여넣어 사용합니다.
 
 ## 실전 예시
 ### API 필드명 통일

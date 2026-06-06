@@ -332,18 +332,115 @@
   if (slug === 'case-converter') {
     const input = document.getElementById('cc-input');
     const output = document.getElementById('cc-output');
-    document.querySelectorAll('.cc-grid button').forEach(btn => btn.addEventListener('click', () => {
-      const t = input.value || '';
-      const mode = btn.dataset.mode;
-      const words = t.trim().split(/[^A-Za-z0-9가-힣]+/).filter(Boolean);
-      let r = t;
-      if (mode === 'upper') r = t.toUpperCase();
-      if (mode === 'lower') r = t.toLowerCase();
-      if (mode === 'title') r = t.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
-      if (mode === 'camel') r = words.map((w,i)=> i? w[0].toUpperCase()+w.slice(1).toLowerCase(): w.toLowerCase()).join('');
-      if (mode === 'snake') r = words.map(w=>w.toLowerCase()).join('_');
-      output.value = r;
-    }));
+    const status = document.getElementById('cc-status');
+    const chars = document.getElementById('cc-chars');
+    const wordsOut = document.getElementById('cc-words');
+    const copy = document.getElementById('cc-copy');
+    const clear = document.getElementById('cc-clear');
+    const sample = document.getElementById('cc-sample');
+    const buttons = [...document.querySelectorAll('.cc-grid button')];
+    if (!input || !output || !status) return;
+
+    const ccText = {
+      ko: {
+        empty: '변환할 텍스트를 먼저 입력해 주세요.',
+        ready: '텍스트를 입력한 뒤 변환 형식을 선택하세요.',
+        converted: (mode) => `${mode} 형식으로 변환했습니다.`,
+        copied: '변환 결과를 복사했습니다.',
+        copyEmpty: '복사할 변환 결과가 없습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다. 결과를 직접 선택해 복사해 주세요.',
+        sample: 'customerOrder ID API_response',
+        cleared: '입력과 결과를 초기화했습니다.'
+      },
+      en: {
+        empty: 'Enter text before choosing a conversion style.',
+        ready: 'Enter text, then choose a conversion style.',
+        converted: (mode) => `Converted to ${mode}.`,
+        copied: 'Copied the converted result.',
+        copyEmpty: 'There is no converted result to copy.',
+        copyFail: 'Automatic copy is unavailable. Select and copy the result manually.',
+        sample: 'customerOrder ID API_response',
+        cleared: 'Cleared the input and result.'
+      },
+      ja: {
+        empty: '変換するテキストを先に入力してください。',
+        ready: 'テキストを入力して変換形式を選んでください。',
+        converted: (mode) => `${mode}形式に変換しました。`,
+        copied: '変換結果をコピーしました。',
+        copyEmpty: 'コピーする変換結果がありません。',
+        copyFail: '自動コピーを利用できません。結果を選択してコピーしてください。',
+        sample: 'customerOrder ID API_response',
+        cleared: '入力と結果をクリアしました。'
+      }
+    }[pageLang];
+
+    const splitWords = (text) => text
+      .replace(/([\p{Ll}\p{N}])(\p{Lu})/gu, '$1 $2')
+      .replace(/(\p{Lu})(\p{Lu}\p{Ll})/gu, '$1 $2')
+      .match(/[\p{L}\p{N}]+/gu) || [];
+    const capitalize = (word) => word ? word[0].toUpperCase() + word.slice(1).toLowerCase() : '';
+    const updateStats = () => {
+      const text = input.value || '';
+      chars.textContent = formatNum([...text].length);
+      wordsOut.textContent = formatNum(splitWords(text).length);
+      if (!text.trim()) {
+        output.value = '';
+        buttons.forEach(btn => btn.setAttribute('aria-pressed', 'false'));
+        status.textContent = ccText.ready;
+      }
+    };
+    const convert = (mode) => {
+      const text = input.value || '';
+      if (!text.trim()) {
+        output.value = '';
+        status.textContent = ccText.empty;
+        input.focus();
+        return;
+      }
+      const words = splitWords(text);
+      const lowerWords = words.map(word => word.toLowerCase());
+      const results = {
+        upper: () => text.toUpperCase(),
+        lower: () => text.toLowerCase(),
+        title: () => words.map(capitalize).join(' '),
+        camel: () => lowerWords.map((word, index) => index ? capitalize(word) : word).join(''),
+        snake: () => lowerWords.join('_'),
+        kebab: () => lowerWords.join('-')
+      };
+      output.value = (results[mode] || results.lower)();
+      buttons.forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.mode === mode)));
+      status.textContent = ccText.converted(buttons.find(btn => btn.dataset.mode === mode)?.textContent || mode);
+    };
+
+    buttons.forEach(btn => btn.addEventListener('click', () => convert(btn.dataset.mode)));
+    input.addEventListener('input', updateStats);
+    sample?.addEventListener('click', () => {
+      input.value = ccText.sample;
+      updateStats();
+      convert('camel');
+    });
+    clear?.addEventListener('click', () => {
+      input.value = '';
+      output.value = '';
+      updateStats();
+      status.textContent = ccText.cleared;
+      input.focus();
+    });
+    copy?.addEventListener('click', async () => {
+      if (!output.value) {
+        status.textContent = ccText.copyEmpty;
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(output.value);
+        status.textContent = ccText.copied;
+      } catch (_) {
+        output.focus();
+        output.select();
+        status.textContent = ccText.copyFail;
+      }
+    });
+    updateStats();
   }
 
   const drawResize = (fileInputId, wId, hId, runId, canvasId, linkId, mime='image/png', quality=0.92) => {
