@@ -1401,54 +1401,112 @@
     const canvas = document.getElementById('iu-canvas');
     const link = document.getElementById('iu-download');
     const result = document.getElementById('iu-result');
+    const originalOut = document.getElementById('iu-original');
+    const targetOut = document.getElementById('iu-target');
+    const sizeOut = document.getElementById('iu-size');
+    const modeOut = document.getElementById('iu-mode');
+    if (!file || !scaleSel || !run || !canvas || !link || !result) return;
 
     const iuI18n = {
       ko: {
-        original: (w, h, b) => `원본: ${w}x${h}px / ${b} bytes`,
-        result: (w, h, outBytes, ratio, mode) => `결과: ${w}x${h}px / ${outBytes} bytes (원본 대비 ${ratio}%) · ${mode}`,
+        ready: '이미지를 확인했습니다. 배율과 보정 옵션을 고른 뒤 실행하세요.',
+        empty: 'PNG, JPEG, WebP 이미지를 먼저 선택해 주세요.',
+        invalid: '이미지를 읽을 수 없습니다. 손상되지 않은 PNG, JPEG, WebP 파일인지 확인해 주세요.',
+        tooLarge: (w, h) => `선택한 배율의 결과(${w}×${h})가 1,200만 화소를 넘습니다. 더 낮은 배율을 선택해 주세요.`,
+        processing: '이미지를 보정하고 있습니다. 큰 이미지는 잠시 걸릴 수 있습니다.',
+        failed: '이미지 처리에 실패했습니다. 더 작은 이미지나 낮은 배율로 다시 시도해 주세요.',
+        done: (w, h) => `${w}×${h}px 보정이 끝났습니다. 미리보기를 확인하고 PNG를 다운로드하세요.`,
         mode1x: '1x 보정',
         modeUpscale: (scale) => `${scale}x 업스케일`,
-        denoiseOn: '노이즈 감소 ON',
-        denoiseOff: '노이즈 감소 OFF',
-        sharpOn: '샤픈 ON',
-        sharpOff: '샤픈 OFF'
+        denoiseOn: '노이즈 감소',
+        sharpOn: '선명도 보정',
+        noFilter: '추가 보정 없음'
       },
       en: {
-        original: (w, h, b) => `Original: ${w}x${h}px / ${b} bytes`,
-        result: (w, h, outBytes, ratio, mode) => `Result: ${w}x${h}px / ${outBytes} bytes (${ratio}% of original) · ${mode}`,
+        ready: 'Image loaded. Choose a scale and enhancement options, then run.',
+        empty: 'Choose a PNG, JPEG, or WebP image first.',
+        invalid: 'This image could not be read. Check that it is a valid PNG, JPEG, or WebP file.',
+        tooLarge: (w, h) => `The selected output (${w}×${h}) exceeds 12 megapixels. Choose a lower scale.`,
+        processing: 'Enhancing the image. Large images may take a moment.',
+        failed: 'Image processing failed. Try a smaller image or lower scale.',
+        done: (w, h) => `${w}×${h}px enhancement complete. Review the preview and download the PNG.`,
         mode1x: '1x enhance',
         modeUpscale: (scale) => `${scale}x upscale`,
-        denoiseOn: 'Denoise ON',
-        denoiseOff: 'Denoise OFF',
-        sharpOn: 'Sharpen ON',
-        sharpOff: 'Sharpen OFF'
+        denoiseOn: 'Denoise',
+        sharpOn: 'Sharpen',
+        noFilter: 'No extra filter'
       },
       ja: {
-        original: (w, h, b) => `元画像: ${w}x${h}px / ${b} bytes`,
-        result: (w, h, outBytes, ratio, mode) => `結果: ${w}x${h}px / ${outBytes} bytes（元画像比 ${ratio}%）・${mode}`,
+        ready: '画像を読み込みました。倍率と補正オプションを選んで実行してください。',
+        empty: 'PNG、JPEG、WebP画像を選択してください。',
+        invalid: '画像を読み込めません。破損していないPNG、JPEG、WebPファイルか確認してください。',
+        tooLarge: (w, h) => `選択した出力（${w}×${h}）は1,200万画素を超えます。低い倍率を選択してください。`,
+        processing: '画像を補正しています。大きな画像は少し時間がかかります。',
+        failed: '画像処理に失敗しました。小さい画像または低い倍率で再試行してください。',
+        done: (w, h) => `${w}×${h}pxの補正が完了しました。プレビューを確認してPNGを保存できます。`,
         mode1x: '1x 補正',
         modeUpscale: (scale) => `${scale}x アップスケール`,
-        denoiseOn: 'ノイズ低減 ON',
-        denoiseOff: 'ノイズ低減 OFF',
-        sharpOn: 'シャープ ON',
-        sharpOff: 'シャープ OFF'
+        denoiseOn: 'ノイズ低減',
+        sharpOn: 'シャープ補正',
+        noFilter: '追加補正なし'
       }
     };
     const iuText = iuI18n[pageLang] || iuI18n.ko;
 
     let img = null;
     let originBytes = 0;
+    let outputUrl = '';
+    const maxPixels = 12000000;
+    const formatBytes = (bytes) => bytes < 1024 * 1024
+      ? `${(bytes / 1024).toLocaleString(numberLocale, { maximumFractionDigits: 1 })} KB`
+      : `${(bytes / 1024 / 1024).toLocaleString(numberLocale, { maximumFractionDigits: 1 })} MB`;
+    const setDownload = (url = '') => {
+      if (outputUrl) URL.revokeObjectURL(outputUrl);
+      outputUrl = url;
+      link.removeAttribute('href');
+      link.setAttribute('aria-disabled', url ? 'false' : 'true');
+      if (url) link.href = url;
+    };
+    const modeText = () => {
+      const scale = Number(scaleSel.value || 1);
+      const filters = [denoise?.checked ? iuText.denoiseOn : '', sharp?.checked ? iuText.sharpOn : ''].filter(Boolean);
+      return [scale === 1 ? iuText.mode1x : iuText.modeUpscale(scale), filters.join(' + ') || iuText.noFilter].join(' · ');
+    };
+    const updateTarget = () => {
+      if (!img) return;
+      const scale = Number(scaleSel.value || 1);
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+      if (targetOut) targetOut.textContent = `${formatNum(w)}×${formatNum(h)}px`;
+      if (modeOut) modeOut.textContent = modeText();
+      run.disabled = w * h > maxPixels;
+      if (w * h > maxPixels) result.textContent = iuText.tooLarge(formatNum(w), formatNum(h));
+      else if (!outputUrl) result.textContent = iuText.ready;
+    };
 
     file?.addEventListener('change', () => {
       const f = file.files?.[0];
-      if (!f) return;
+      img = null;
+      run.disabled = true;
+      canvas.hidden = true;
+      setDownload();
+      if (sizeOut) sizeOut.textContent = '-';
+      if (!f) {
+        result.textContent = iuText.empty;
+        return;
+      }
       originBytes = f.size || 0;
       const u = URL.createObjectURL(f);
       const i = new Image();
       i.onload = () => {
         img = i;
         URL.revokeObjectURL(u);
-        if (result) result.textContent = iuText.original(i.width, i.height, formatNum(originBytes));
+        if (originalOut) originalOut.textContent = `${formatNum(i.width)}×${formatNum(i.height)}px · ${formatBytes(originBytes)}`;
+        updateTarget();
+      };
+      i.onerror = () => {
+        URL.revokeObjectURL(u);
+        result.textContent = iuText.invalid;
       };
       i.src = u;
     });
@@ -1458,6 +1516,7 @@
       const out = ctx.createImageData(w, h);
       const d = src.data;
       const o = out.data;
+      o.set(d);
       const k = [0, -1, 0, -1, 5, -1, 0, -1, 0];
       for (let y = 1; y < h - 1; y++) {
         for (let x = 1; x < w - 1; x++) {
@@ -1485,6 +1544,7 @@
       const out = ctx.createImageData(w, h);
       const d = src.data;
       const o = out.data;
+      o.set(d);
       for (let y = 1; y < h - 1; y++) {
         for (let x = 1; x < w - 1; x++) {
           for (let c = 0; c < 3; c++) {
@@ -1507,11 +1567,28 @@
       ctx.putImageData(out, 0, 0);
     };
 
+    [scaleSel, sharp, denoise].forEach((el) => el?.addEventListener('change', () => {
+      setDownload();
+      canvas.hidden = true;
+      if (sizeOut) sizeOut.textContent = '-';
+      updateTarget();
+    }));
+
     run?.addEventListener('click', () => {
-      if (!img) return;
+      if (!img) {
+        result.textContent = iuText.empty;
+        return;
+      }
       const scale = Number(scaleSel?.value || 2);
       const w = Math.max(1, Math.round(img.width * scale));
       const h = Math.max(1, Math.round(img.height * scale));
+      if (w * h > maxPixels) {
+        result.textContent = iuText.tooLarge(formatNum(w), formatNum(h));
+        return;
+      }
+      run.disabled = true;
+      result.textContent = iuText.processing;
+      setDownload();
       canvas.width = w;
       canvas.height = h;
 
@@ -1550,16 +1627,18 @@
       if (denoise?.checked) applyDenoise(ctx, w, h);
       if (sharp?.checked) applySharpen(ctx, w, h);
 
-      const data = canvas.toDataURL('image/png');
-      link.href = data;
-      const outBytes = Math.floor((data.length * 3) / 4);
-      const ratio = originBytes ? ((outBytes / originBytes) * 100).toFixed(1) : '0';
-      const mode = [
-        scale === 1 ? iuText.mode1x : iuText.modeUpscale(scale),
-        denoise?.checked ? iuText.denoiseOn : iuText.denoiseOff,
-        sharp?.checked ? iuText.sharpOn : iuText.sharpOff
-      ].join(' · ');
-      if (result) result.textContent = iuText.result(w, h, formatNum(outBytes), ratio, mode);
+      canvas.toBlob((blob) => {
+        run.disabled = false;
+        if (!blob) {
+          result.textContent = iuText.failed;
+          return;
+        }
+        setDownload(URL.createObjectURL(blob));
+        canvas.hidden = false;
+        if (sizeOut) sizeOut.textContent = formatBytes(blob.size);
+        if (modeOut) modeOut.textContent = modeText();
+        result.textContent = iuText.done(formatNum(w), formatNum(h));
+      }, 'image/png');
     });
   }
 

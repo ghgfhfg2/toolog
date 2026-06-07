@@ -711,10 +711,26 @@ textarea:focus-visible {
   accent-color: #3b82f6;
 }
 .ir-stats strong,
-.pc-stats strong {
+.pc-stats strong,
+.iu-stats strong {
   font-size: .95rem;
   line-height: 1.35;
   word-break: keep-all;
+}
+.iu-controls {
+  grid-template-columns: minmax(0, 1fr) minmax(180px, .55fr);
+}
+.iu-controls > div {
+  display: grid;
+  gap: .35rem;
+}
+.iu-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1rem;
+}
+.iu-ui canvas[hidden] {
+  display: none !important;
 }
 #ir-canvas,#pc-canvas,#iu-canvas {
   display: block;
