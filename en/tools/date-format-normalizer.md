@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Date Format Normalizer | Convert mixed document date styles
-description: Convert mixed date formats such as yyyy-mm-dd, May 4, 2026, 20260504, and 05/10/2026 into one consistent style, with ambiguous slash dates flagged for review.
+title: Date Format Normalizer | Standardize dates in docs, notes, and announcements
+description: Use Date Format Normalizer to convert mixed yyyy-mm-dd, yyyy년 m월 d일, May 4, 2026, 20260504, and 05/10/2026 date styles into one format, with ambiguous month/day dates flagged for review.
 lang: en
 permalink: /en/tools/date-format-normalizer/
 canonical_url: /en/tools/date-format-normalizer/
@@ -18,7 +18,7 @@ image:
 tool_key: date-format-normalizer
 tool_type: converter
 topic_cluster: text
-keywords: [date format normalizer, date style converter, normalize yyyy-mm-dd, document date cleanup, mixed date formats, slash date parser]
+keywords: [date format normalizer, date style converter, normalize yyyy-mm-dd, document date cleanup, mixed date formats, slash date parser, standardize dates in documents]
 related_tools: [filename-sanitizer, text-line-break-cleaner, hangul-keyboard-layout-converter]
 faq:
   - q: What formats can it read?
@@ -30,19 +30,20 @@ faq:
 ---
 
 ## Why use Date Format Normalizer?
-Mixed date styles make notes, announcements, and shared docs look messy fast.
-This tool reads several common date formats and converts them into one consistent output style. It also flags slash dates that may mean either month/day or day/month.
+When you clean up documents, announcements, meeting notes, or spreadsheet drafts, inconsistent date notation is a small issue that quickly makes the whole file feel unfinished.
+
+- `2026.5.4`
+- `2026년 5월 4일`
+- `May 4, 2026`
+- `20260504`
+
+Date Format Normalizer reads these common date expressions and converts them into one consistent output style. It can also find dates inside full sentences and flags slash dates such as `05/10/2026` when the order could be month/day or day/month.
 
 ## How to use it
 1. Paste date-only lines or text that contains dates.
-2. Choose one target format.
-3. Set the slash-date interpretation rule if needed.
-4. Copy the normalized result.
-
-## Good use cases
-- Cleaning announcement drafts with mixed date styles
-- Standardizing memo exports before sharing
-- Converting English month dates into a Korean or ISO-friendly format
+2. Choose an output format: `2026-05-04`, `2026. 5. 4.`, `2026/05/04`, or a localized weekday format.
+3. Set the slash-date interpretation rule if your text includes dates such as `05/10/2026`.
+4. Copy the normalized result into announcements, docs, Notion pages, spreadsheets, or shared notes.
 
 ## Supported input examples
 - Numeric dates: `2026-05-04`, `2026.5.4`, `20260504`
@@ -50,9 +51,25 @@ This tool reads several common date formats and converts them into one consisten
 - English month dates: `May 4, 2026`, `4 May 2026`
 - Slash dates: `05/10/2026`, with the parsing rule shown in the result summary
 
+## Good use cases
+### 1. Polishing announcements or operating docs
+When multiple people have edited the same document, this helps standardize date styles before publishing.
+
+### 2. Cleaning up Excel, memo, or email text
+You can convert one-date-per-line lists or turn on inline extraction to normalize dates inside sentences.
+
+### 3. Mixing English month names with Korean or ISO-style dates
+English month dates such as `May 4, 2026` can be converted into a Korean-style weekday format or a clean ISO date.
+
 ## FAQ
+### Why are some slash dates marked for review?
+Dates such as `05/10/2026` can reasonably be read as either month/day or day/month depending on the source, so the tool counts them separately for manual review.
+
 ### What happens to invalid dates?
 Impossible dates such as `2026-02-30` are not converted. You can keep unparsed lines in the output or omit them.
+
+### What does the empty-state message mean?
+If the tool says no recognizable date was found, try a supported pattern such as `yyyy-mm-dd`, `May 4, 2026`, `4 May 2026`, or `20260504`.
 
 ### Does it convert times too?
 No. This tool focuses on date formatting. Use a timezone or time calculator when the time of day matters.
@@ -63,4 +80,4 @@ No. This tool focuses on date formatting. Use a timezone or time calculator when
 - [Hangul Keyboard Layout Converter]({{ '/en/tools/hangul-keyboard-layout-converter/' | relative_url }})
 
 ## Summary
-Date Format Normalizer is a **converter-type tool** that turns mixed date expressions into one clean and reusable format.
+Date Format Normalizer is a **converter-type tool** for standardizing mixed date expressions in documents, announcements, memos, and spreadsheet drafts while keeping ambiguous slash dates visible for review.
