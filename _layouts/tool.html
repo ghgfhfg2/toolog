@@ -2101,50 +2101,53 @@ layout: default
         </div>
 
       {% when 'date-format-normalizer' %}
-        <div class="tool-ui">
+        <div class="tool-ui dfn-ui">
           <div class="tool-row">
-            <label for="dfn-input">날짜가 섞인 텍스트 또는 날짜 목록</label>
-            <textarea id="dfn-input" rows="10" maxlength="20000" placeholder="예: 2026.5.4\n2026년 5월 4일\nMay 4, 2026\n20260504"></textarea>
+            <label for="dfn-input">{% if page.lang == 'en' %}Text or list containing dates{% elsif page.lang == 'ja' %}日付を含むテキストまたは一覧{% else %}날짜가 섞인 텍스트 또는 날짜 목록{% endif %}</label>
+            <textarea id="dfn-input" rows="10" maxlength="20000" aria-describedby="dfn-summary dfn-help" placeholder="{% if page.lang == 'en' %}Example: 2026.5.4\nMay 4, 2026\n20260504\n05/10/2026{% elsif page.lang == 'ja' %}例: 2026.5.4\nMay 4, 2026\n20260504\n05/10/2026{% else %}예: 2026.5.4\n2026년 5월 4일\nMay 4, 2026\n20260504{% endif %}"></textarea>
           </div>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="dfn-format">출력 형식</label>
+              <label for="dfn-format">{% if page.lang == 'en' %}Output format{% elsif page.lang == 'ja' %}出力形式{% else %}출력 형식{% endif %}</label>
               <select id="dfn-format">
                 <option value="iso">2026-05-04</option>
                 <option value="dot">2026. 5. 4.</option>
                 <option value="slash">2026/05/04</option>
-                <option value="korean">2026년 5월 4일 (월)</option>
+                <option value="korean">{% if page.lang == 'en' %}2026. 5. 4. (Mon){% elsif page.lang == 'ja' %}2026年 5月 4日 (月){% else %}2026년 5월 4일 (월){% endif %}</option>
               </select>
             </div>
             <div>
-              <label for="dfn-slash-order">슬래시 날짜 해석</label>
+              <label for="dfn-slash-order">{% if page.lang == 'en' %}Slash date parsing{% elsif page.lang == 'ja' %}スラッシュ日付の解釈{% else %}슬래시 날짜 해석{% endif %}</label>
               <select id="dfn-slash-order">
-                <option value="mdy">MM/DD/YYYY 우선</option>
-                <option value="dmy">DD/MM/YYYY 우선</option>
+                <option value="mdy">{% if page.lang == 'en' %}Prefer MM/DD/YYYY{% elsif page.lang == 'ja' %}MM/DD/YYYY 優先{% else %}MM/DD/YYYY 우선{% endif %}</option>
+                <option value="dmy">{% if page.lang == 'en' %}Prefer DD/MM/YYYY{% elsif page.lang == 'ja' %}DD/MM/YYYY 優先{% else %}DD/MM/YYYY 우선{% endif %}</option>
               </select>
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="dfn-extract" type="checkbox" checked /> 문장 속 날짜도 찾아 변환</label>
-            <label class="tool-check"><input id="dfn-keep-invalid" type="checkbox" checked /> 해석 불가 줄은 원문 유지</label>
+            <label class="tool-check"><input id="dfn-extract" type="checkbox" checked /> {% if page.lang == 'en' %}Find dates inside full sentences{% elsif page.lang == 'ja' %}文章内の日付も探して変換{% else %}문장 속 날짜도 찾아 변환{% endif %}</label>
+            <label class="tool-check"><input id="dfn-keep-invalid" type="checkbox" checked /> {% if page.lang == 'en' %}Keep lines that cannot be parsed{% elsif page.lang == 'ja' %}解釈できない行は原文を維持{% else %}해석 불가 줄은 원문 유지{% endif %}</label>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="dfn-sample" type="button">예시 넣기</button>
-            <button id="dfn-copy" type="button">결과 복사</button>
+            <button id="dfn-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
+            <button id="dfn-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="dfn-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
           <div class="tool-stats">
-            <div><strong id="dfn-lines">0</strong><span>입력 줄 수</span></div>
-            <div><strong id="dfn-converted">0</strong><span>변환 성공</span></div>
-            <div><strong id="dfn-ambiguous">0</strong><span>해석 주의</span></div>
-            <div><strong id="dfn-format-out">-</strong><span>출력 형식</span></div>
+            <div><strong id="dfn-lines">0</strong><span>{% if page.lang == 'en' %}Input lines{% elsif page.lang == 'ja' %}入力行数{% else %}입력 줄 수{% endif %}</span></div>
+            <div><strong id="dfn-converted">0</strong><span>{% if page.lang == 'en' %}Converted dates{% elsif page.lang == 'ja' %}変換成功{% else %}변환 성공{% endif %}</span></div>
+            <div><strong id="dfn-ambiguous">0</strong><span>{% if page.lang == 'en' %}Needs review{% elsif page.lang == 'ja' %}要確認{% else %}해석 주의{% endif %}</span></div>
+            <div><strong id="dfn-format-out">-</strong><span>{% if page.lang == 'en' %}Output format{% elsif page.lang == 'ja' %}出力形式{% else %}출력 형식{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="dfn-summary">날짜가 섞인 텍스트를 넣으면 통일된 형식으로 정리합니다.</p>
-          <textarea id="dfn-output" rows="12" readonly placeholder="정리 결과가 여기에 표시됩니다."></textarea>
+          <p class="tool-result" id="dfn-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Paste mixed date text to normalize it into one format.{% elsif page.lang == 'ja' %}混在した日付テキストを貼り付けると、1つの形式に整えます。{% else %}날짜가 섞인 텍스트를 넣으면 통일된 형식으로 정리합니다.{% endif %}</p>
+          <p class="tool-result" id="dfn-help">{% if page.lang == 'en' %}Ambiguous slash dates such as 05/10/2026 are counted separately so you can review them before sharing.{% elsif page.lang == 'ja' %}05/10/2026 のように迷いやすい日付は別途カウントし、共有前に確認できます。{% else %}05/10/2026처럼 월/일 해석이 헷갈리는 날짜는 별도로 표시해 공유 전에 확인할 수 있습니다.{% endif %}</p>
+          <textarea id="dfn-output" rows="12" readonly placeholder="{% if page.lang == 'en' %}Normalized dates appear here.{% elsif page.lang == 'ja' %}整理結果がここに表示されます。{% else %}정리 결과가 여기에 표시됩니다.{% endif %}"></textarea>
+          <div id="dfn-warning-list" class="bw-list" aria-live="polite"></div>
         </div>
       {% when 'json-merge' %}
         <div class="tool-ui">

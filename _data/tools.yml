@@ -490,9 +490,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 문서·공지·메모에 섞여 있는 날짜 표기를 한 번에 읽어 통일된 형식으로 정리해요. yyyy-mm-dd, yyyy년 m월 d일, 영문 월 표기 등도 빠르게 맞춰볼 수 있어요.
-  description_en: Normalize mixed date formats from notes, documents, and announcements into one consistent style.
-  description_ja: メモ・文書・お知らせに混ざった日付表記を読み取り、1つの統一形式にまとめます。
+  description: 문서·공지·메모에 섞인 yyyy-mm-dd, yyyy년 m월 d일, May 4, 2026, 05/10/2026 날짜 표기를 한 번에 통일하고 모호한 월/일 표기도 확인해요.
+  description_en: Convert mixed dates such as yyyy-mm-dd, May 4, 2026, 20260504, and 05/10/2026 into one consistent style with ambiguous slash dates flagged.
+  description_ja: yyyy-mm-dd、May 4, 2026、20260504、05/10/2026 など混在した日付を統一し、迷いやすいスラッシュ日付も確認できます。
   url: /tools/date-format-normalizer/
   url_en: /en/tools/date-format-normalizer/
   url_ja: /ja/tools/date-format-normalizer/
