@@ -49,26 +49,27 @@
     const from = document.getElementById('uc-from');
     const to = document.getElementById('uc-to');
     const out = document.getElementById('uc-result');
+    const swap = document.getElementById('uc-swap');
 
     const maps = {
-      length: { m:1, cm:0.01, km:1000, inch:0.0254, ft:0.3048 },
+      length: { mm:0.001, cm:0.01, m:1, km:1000, inch:0.0254, ft:0.3048, yd:0.9144, mile:1609.344 },
       weight: { kg:1, g:0.001, lb:0.45359237, oz:0.028349523125 },
       temperature: { c: 'c', f: 'f', k: 'k' }
     };
 
     const unitLabelsByLang = {
       ko: {
-        length: [['m','m'],['cm','cm'],['km','km'],['inch','인치'],['ft','피트']],
+        length: [['mm','mm'],['cm','cm'],['m','m'],['km','km'],['inch','인치'],['ft','피트'],['yd','야드(yd)'],['mile','마일(mile)']],
         weight: [['kg','kg'],['g','g'],['lb','파운드(lb)'],['oz','온스(oz)']],
         temperature: [['c','℃'],['f','℉'],['k','K']]
       },
       en: {
-        length: [['m','m'],['cm','cm'],['km','km'],['inch','inch'],['ft','ft']],
+        length: [['mm','mm'],['cm','cm'],['m','m'],['km','km'],['inch','inch'],['ft','ft'],['yd','yd'],['mile','mile']],
         weight: [['kg','kg'],['g','g'],['lb','lb'],['oz','oz']],
         temperature: [['c','℃'],['f','℉'],['k','K']]
       },
       ja: {
-        length: [['m','m'],['cm','cm'],['km','km'],['inch','インチ'],['ft','フィート']],
+        length: [['mm','mm'],['cm','cm'],['m','m'],['km','km'],['inch','インチ'],['ft','フィート'],['yd','ヤード'],['mile','マイル']],
         weight: [['kg','kg'],['g','g'],['lb','ポンド(lb)'],['oz','オンス(oz)']],
         temperature: [['c','℃'],['f','℉'],['k','K']]
       }
@@ -76,9 +77,9 @@
     const labels = unitLabelsByLang[pageLang] || unitLabelsByLang.ko;
 
     const ucText = {
-      ko: { result: '결과' },
-      en: { result: 'Result' },
-      ja: { result: '結果' }
+      ko: { empty: '변환할 값을 입력해 주세요.', invalid: '유효한 숫자를 입력해 주세요.', absoluteZero: '절대영도보다 낮은 온도는 계산할 수 없습니다.' },
+      en: { empty: 'Enter a value to convert.', invalid: 'Enter a valid number.', absoluteZero: 'Temperatures below absolute zero cannot be converted.' },
+      ja: { empty: '変換する値を入力してください。', invalid: '有効な数値を入力してください。', absoluteZero: '絶対零度未満の温度は計算できません。' }
     }[pageLang] || { result: '결과' };
 
     const fillUnits = () => {
@@ -99,9 +100,32 @@
       return c;
     };
 
+    const isBelowAbsoluteZero = (v, unit) => (
+      (unit === 'c' && v < -273.15) ||
+      (unit === 'f' && v < -459.67) ||
+      (unit === 'k' && v < 0)
+    );
+
+    const showMessage = (message, invalid = false) => {
+      out.textContent = message;
+      value.setAttribute('aria-invalid', invalid ? 'true' : 'false');
+    };
+
     const run = () => {
       const t = type.value || 'length';
-      const v = Number(value.value || 0);
+      if (value.value.trim() === '') {
+        showMessage(ucText.empty);
+        return;
+      }
+      const v = Number(value.value);
+      if (!Number.isFinite(v)) {
+        showMessage(ucText.invalid, true);
+        return;
+      }
+      if (t === 'temperature' && isBelowAbsoluteZero(v, from.value)) {
+        showMessage(ucText.absoluteZero, true);
+        return;
+      }
       let result = 0;
       if (t === 'temperature') {
         result = convertTemp(v, from.value, to.value);
@@ -110,11 +134,22 @@
         const base = v * (map[from.value] || 1);
         result = base / (map[to.value] || 1);
       }
-      out.textContent = `${ucText.result}: ${result.toLocaleString(numberLocale, { maximumFractionDigits: 6 })} ${to.options[to.selectedIndex]?.text || ''}`;
+      const fromLabel = from.options[from.selectedIndex]?.text || '';
+      const toLabel = to.options[to.selectedIndex]?.text || '';
+      const source = v.toLocaleString(numberLocale, { maximumFractionDigits: 10 });
+      const converted = result.toLocaleString(numberLocale, { maximumFractionDigits: 10 });
+      showMessage(`${source} ${fromLabel} = ${converted} ${toLabel}`);
     };
 
-    [type, value, from, to].forEach(el => el?.addEventListener('input', run));
+    [value, from, to].forEach(el => el?.addEventListener('input', run));
     type?.addEventListener('change', fillUnits);
+    swap?.addEventListener('click', () => {
+      const oldFrom = from.value;
+      from.value = to.value;
+      to.value = oldFrom;
+      run();
+      value.focus();
+    });
     fillUnits();
   }
 

@@ -40,9 +40,9 @@ layout: default
           </div>
         </div>
       {% when 'unit-converter' %}
-        <div class="tool-ui">
+        <div class="tool-ui uc-ui">
           <div class="tool-row">
-            <label>{% if page.lang == 'en' %}Conversion type{% elsif page.lang == 'ja' %}変換タイプ{% else %}변환 타입{% endif %}</label>
+            <label for="uc-type">{% if page.lang == 'en' %}Conversion type{% elsif page.lang == 'ja' %}変換タイプ{% else %}변환 타입{% endif %}</label>
             <select id="uc-type">
               <option value="length">{% if page.lang == 'en' %}Length{% elsif page.lang == 'ja' %}長さ{% else %}길이{% endif %}</option>
               <option value="weight">{% if page.lang == 'en' %}Weight{% elsif page.lang == 'ja' %}重さ{% else %}무게{% endif %}</option>
@@ -50,12 +50,22 @@ layout: default
             </select>
           </div>
           <div class="tool-row-grid">
-            <input id="uc-value" type="number" step="any" value="1" />
-            <select id="uc-from"></select>
-            <span>→</span>
-            <select id="uc-to"></select>
+            <div>
+              <label for="uc-value">{% if page.lang == 'en' %}Value{% elsif page.lang == 'ja' %}値{% else %}변환할 값{% endif %}</label>
+              <input id="uc-value" type="number" step="any" value="1" inputmode="decimal" aria-describedby="uc-result uc-help" />
+            </div>
+            <div>
+              <label for="uc-from">{% if page.lang == 'en' %}From unit{% elsif page.lang == 'ja' %}変換元{% else %}기준 단위{% endif %}</label>
+              <select id="uc-from" aria-describedby="uc-result"></select>
+            </div>
+            <button id="uc-swap" type="button" aria-label="{% if page.lang == 'en' %}Swap from and to units{% elsif page.lang == 'ja' %}変換元と変換先を入れ替える{% else %}기준 단위와 대상 단위 바꾸기{% endif %}">⇄</button>
+            <div>
+              <label for="uc-to">{% if page.lang == 'en' %}To unit{% elsif page.lang == 'ja' %}変換先{% else %}대상 단위{% endif %}</label>
+              <select id="uc-to" aria-describedby="uc-result"></select>
+            </div>
           </div>
-          <p class="tool-result" id="uc-result">{% if page.lang == 'en' %}Result will appear here.{% elsif page.lang == 'ja' %}結果がここに表示されます。{% else %}결과가 여기에 표시됩니다.{% endif %}</p>
+          <p class="tool-result" id="uc-result" role="status" aria-live="polite">{% if page.lang == 'en' %}Result will appear here.{% elsif page.lang == 'ja' %}結果がここに表示されます。{% else %}결과가 여기에 표시됩니다.{% endif %}</p>
+          <p class="tool-result" id="uc-help">{% if page.lang == 'en' %}Temperature values below absolute zero are rejected. Results are rounded to a maximum of 10 decimal places.{% elsif page.lang == 'ja' %}絶対零度未満の温度は計算できません。結果は小数点以下最大10桁で表示します。{% else %}절대영도보다 낮은 온도는 계산할 수 없습니다. 결과는 소수점 아래 최대 10자리까지 표시합니다.{% endif %}</p>
         </div>
       {% when 'timezone-converter' %}
         <div class="tool-ui tz-ui">

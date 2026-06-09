@@ -1,26 +1,26 @@
 ---
 title: 단위 변환기 | 길이·무게·온도 변환
-description: 단위 변환기로 길이·무게·온도 단위를 즉시 변환하세요. m/cm/km, kg/lb/oz, ℃/℉/K를 한 화면에서 정확하게 계산할 수 있습니다.
+description: 단위 변환기로 mm·cm·m·km·inch·mile, kg·lb·oz, ℃·℉·K를 즉시 변환하세요. 절대영도 오류도 확인하고 단위를 빠르게 바꿀 수 있습니다.
 category: data
 category_label: 데이터/계산
 thumbnail: /assets/thumbs/unit-converter.svg
 tool_key: unit-converter
-keywords: [단위 변환기, 길이 변환, 무게 변환, 온도 변환, lb kg 변환]
-related_tools: [vat-calculator, timezone-converter]
+keywords: [단위 변환기, 길이 변환, 무게 변환, 온도 변환, lb kg 변환, inch cm 변환, mile km 변환]
+related_tools: [timezone-converter, ratio-split-calculator, average-calculator]
 faq:
   - q: 어떤 단위를 지원하나요?
-    a: 길이(m, cm, km, inch, ft), 무게(kg, g, lb, oz), 온도(℃, ℉, K)를 지원합니다.
+    a: 길이(mm, cm, m, km, inch, ft, yd, mile), 무게(kg, g, lb, oz), 온도(℃, ℉, K)를 지원합니다.
   - q: 온도 변환과 길이/무게 변환의 방식이 다른가요?
     a: 길이/무게는 비율 변환, 온도는 기준점이 있어 별도 공식으로 계산됩니다.
   - q: 소수점은 몇 자리까지 표시되나요?
-    a: 현재 결과는 최대 6자리 소수점까지 표시됩니다.
+    a: 결과는 최대 10자리 소수점까지 표시되며, 불필요한 끝자리 0은 생략됩니다.
 ---
 
 ## 단위 변환기, 어떤 상황에서 쓰나요?
 **단위 변환기**는 `lb to kg`, `inch cm 변환`, `화씨 섭씨 변환`처럼 단위 불일치 문제를 즉시 해결하려는 검색 의도에 맞는 도구입니다.
 
 ## 지원 범위
-- 길이: m, cm, km, inch, ft
+- 길이: mm, cm, m, km, inch, ft, yd, mile
 - 무게: kg, g, lb, oz
 - 온도: ℃, ℉, K
 
@@ -28,10 +28,12 @@ faq:
 1. 변환 타입(길이/무게/온도)을 선택합니다.
 2. 기준 단위와 대상 단위를 선택합니다.
 3. 값을 입력하면 즉시 변환 결과가 표시됩니다.
+4. 가운데 교환 버튼으로 기준 단위와 대상 단위를 빠르게 바꿀 수 있습니다.
 
 ## 실전 예시
 - 해외 제품 스펙의 inch를 cm로 변환
 - 파운드(lb) 수치를 kg로 변환해 발주 자료 작성
+- 마일(mile) 이동 거리를 km로 변환
 - 화씨(℉) 날씨 데이터를 섭씨(℃)로 환산
 
 ## 내부/외부 참고 링크
@@ -47,7 +49,7 @@ faq:
 온도는 0점 기준이 단위마다 달라 단순 비율 계산이 불가능합니다.
 
 ### 결과 정밀도는 어느 정도인가요?
-최대 6자리까지 표기하며, 일반 실무/일상 용도로 충분한 정밀도를 제공합니다.
+최대 10자리까지 표기하며, 일반 실무/일상 용도로 충분한 정밀도를 제공합니다.
 
 ## 요약
 단위 변환기는 수작업 계산 실수를 줄이고,

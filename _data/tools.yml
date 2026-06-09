@@ -1708,13 +1708,15 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 길이·무게·온도 단위를 한 화면에서 정확히 변환해요.
-  description_en: Convert length, weight, and temperature units accurately on one screen.
-  description_ja: 長さ・重さ・温度の単位を1画面で正確に換算できます。
+  description: mm·cm·m·km·inch·mile, kg·lb, ℃·℉·K 등 길이·무게·온도 단위를 즉시 변환해요.
+  description_en: Instantly convert length, weight, and temperature units including mm, miles, kg, lb, °C, °F, and K.
+  description_ja: mm・mile・kg・lb・℃・℉・Kなど、長さ・重さ・温度の単位をすぐに換算できます。
   url: /tools/unit-converter/
   url_en: /en/tools/unit-converter/
   url_ja: /ja/tools/unit-converter/
   thumbnail: /assets/thumbs/unit-converter.svg
+  tool_type: converter
+  topic_cluster: data
 
 - id: timezone-converter
   title: 시간대 변환기
