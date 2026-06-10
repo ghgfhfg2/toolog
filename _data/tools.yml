@@ -1670,7 +1670,7 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 여러 JSON 파일을 한 번에 업로드해 하나의 JSON으로 병합하고 다운로드해요.
+  description: 여러 JSON 배열·객체 파일을 브라우저에서 병합하고 중복 항목과 키 충돌을 확인해 다운로드해요.
   description_en: Upload multiple JSON files, merge them into one output, and download the result in your browser.
   description_ja: 複数のJSONファイルをアップロードし、1つに結合してブラウザでダウンロードできます。
   url: /tools/json-merge/

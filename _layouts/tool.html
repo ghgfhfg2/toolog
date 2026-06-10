@@ -2161,11 +2161,13 @@ layout: default
         </div>
       {% when 'json-merge' %}
         <div class="tool-ui">
-          <input id="jm-files" type="file" accept="application/json,.json" multiple />
+          <label for="jm-files">{% if page.lang == 'en' %}JSON files to merge{% elsif page.lang == 'ja' %}結合するJSONファイル{% else %}합칠 JSON 파일{% endif %}</label>
+          <input id="jm-files" type="file" accept="application/json,.json" multiple aria-describedby="jm-files-summary jm-help" />
+          <p id="jm-files-summary" class="tool-result">{% if page.lang == 'en' %}Select up to 50 JSON files (20 MB total). Files are processed only in this browser.{% elsif page.lang == 'ja' %}JSONファイルを最大50個（合計20 MB）選択できます。処理はブラウザ内だけで行われます。{% else %}JSON 파일을 최대 50개(합계 20MB)까지 선택할 수 있습니다. 파일은 브라우저 안에서만 처리됩니다.{% endif %}</p>
 
           <div class="tool-row">
             <label for="jm-mode">{% if page.lang == 'en' %}Merge mode{% elsif page.lang == 'ja' %}マージ方式{% else %}병합 방식{% endif %}</label>
-            <select id="jm-mode">
+            <select id="jm-mode" aria-describedby="jm-help">
               <option value="auto">{% if page.lang == 'en' %}Auto (recommended){% elsif page.lang == 'ja' %}自動（推奨）{% else %}자동(권장){% endif %}</option>
               <option value="array-concat">{% if page.lang == 'en' %}Concatenate arrays{% elsif page.lang == 'ja' %}配列を連結{% else %}배열 이어붙이기{% endif %}</option>
               <option value="object-merge">{% if page.lang == 'en' %}Merge object keys (later files win){% elsif page.lang == 'ja' %}オブジェクトキー統合（後のファイル優先）{% else %}객체 키 병합(뒤 파일 우선){% endif %}</option>
@@ -2177,8 +2179,8 @@ layout: default
           <label class="tool-check"><input id="jm-dedupe" type="checkbox" /> {% if page.lang == 'en' %}Remove duplicates when merging arrays{% elsif page.lang == 'ja' %}配列マージ時に重複を除去{% else %}배열 병합 시 중복 제거{% endif %}</label>
 
           <div class="tool-row-grid pct-actions">
-            <button id="jm-run" type="button">{% if page.lang == 'en' %}Merge JSON{% elsif page.lang == 'ja' %}JSONをマージ{% else %}JSON 합치기{% endif %}</button>
-            <button id="jm-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="jm-run" type="button" disabled>{% if page.lang == 'en' %}Merge JSON{% elsif page.lang == 'ja' %}JSONをマージ{% else %}JSON 합치기{% endif %}</button>
+            <button id="jm-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
           </div>
 
           <div class="tool-stats">
@@ -2188,9 +2190,10 @@ layout: default
             <div><strong id="jm-size">-</strong><span>{% if page.lang == 'en' %}Output size (bytes){% elsif page.lang == 'ja' %}結果サイズ（bytes）{% else %}결과 용량(bytes){% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="jm-help">{% if page.lang == 'en' %}Upload multiple JSON files with similar format and merge/download them at once.{% elsif page.lang == 'ja' %}同じ形式のJSONファイルを複数アップロードし、一括でマージしてダウンロードできます。{% else %}같은 양식의 JSON 파일 여러 개를 한 번에 업로드해 병합하고 다운로드할 수 있습니다.{% endif %}</p>
-          <textarea id="jm-output" rows="10" readonly placeholder="{% if page.lang == 'en' %}Merged JSON preview appears here.{% elsif page.lang == 'ja' %}マージ後のJSONプレビューがここに表示されます。{% else %}병합 결과 JSON 미리보기가 여기에 표시됩니다.{% endif %}"></textarea>
-          <a id="jm-download" class="open-link" download="merged.json">{% if page.lang == 'en' %}Download merged.json{% elsif page.lang == 'ja' %}merged.json をダウンロード{% else %}merged.json 다운로드{% endif %}</a>
+          <p class="tool-result" id="jm-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Upload multiple JSON files with similar format and merge/download them at once.{% elsif page.lang == 'ja' %}同じ形式のJSONファイルを複数アップロードし、一括でマージしてダウンロードできます。{% else %}같은 양식의 JSON 파일 여러 개를 한 번에 업로드해 병합하고 다운로드할 수 있습니다.{% endif %}</p>
+          <label for="jm-output">{% if page.lang == 'en' %}Merged JSON preview{% elsif page.lang == 'ja' %}結合結果プレビュー{% else %}병합 결과 미리보기{% endif %}</label>
+          <textarea id="jm-output" rows="10" readonly aria-describedby="jm-help" placeholder="{% if page.lang == 'en' %}Merged JSON preview appears here.{% elsif page.lang == 'ja' %}マージ後のJSONプレビューがここに表示されます。{% else %}병합 결과 JSON 미리보기가 여기에 표시됩니다.{% endif %}"></textarea>
+          <a id="jm-download" class="open-link" download="merged.json" aria-disabled="true">{% if page.lang == 'en' %}Download merged.json{% elsif page.lang == 'ja' %}merged.json をダウンロード{% else %}merged.json 다운로드{% endif %}</a>
         </div>
       {% when 'font-change' %}
         <div class="tool-ui font-change-ui">

@@ -8934,14 +8934,22 @@
     const itemCount = document.getElementById('jm-item-count');
     const conflictCount = document.getElementById('jm-conflict-count');
     const sizeOut = document.getElementById('jm-size');
+    const filesSummary = document.getElementById('jm-files-summary');
 
-    if (!filesInput || !modeSel || !runBtn || !copyBtn || !output || !download || !help || !fileCount || !itemCount || !conflictCount || !sizeOut) return;
+    if (!filesInput || !modeSel || !runBtn || !copyBtn || !output || !download || !help || !fileCount || !itemCount || !conflictCount || !sizeOut || !filesSummary) return;
 
     const jmI18n = {
       ko: {
         readFail: (name) => `파일 읽기 실패: ${name}`,
         parseFail: (name) => `JSON 파싱 실패: ${name}`,
         needFiles: '먼저 JSON 파일을 1개 이상 선택하세요.',
+        tooManyFiles: (count) => `파일이 ${count}개 선택되었습니다. 한 번에 최대 50개까지 합칠 수 있습니다.`,
+        tooLarge: (size) => `선택한 파일의 합계가 ${size}MB입니다. 브라우저 보호를 위해 20MB 이하로 줄여 주세요.`,
+        filesReady: (count, size) => `${count}개 파일 선택됨 · 합계 ${size}MB · 파일은 브라우저 안에서만 처리됩니다.`,
+        invalidObjectMode: '객체 키 병합은 모든 파일의 루트가 JSON 객체일 때만 사용할 수 있습니다.',
+        invalidObjectArrayMode: '공통 배열 이어붙이기는 모든 파일이 같은 이름의 배열 키를 가진 JSON 객체여야 합니다.',
+        optionChanged: '병합 옵션이 변경되었습니다. JSON 합치기를 다시 실행하세요.',
+        working: (count) => `${count}개 JSON 파일을 읽고 병합하는 중입니다.`,
         mergeDone: (count, mode) => `${count}개 파일 병합 완료 (${mode}). 다운로드 버튼으로 저장하세요.`,
         mergeError: '병합 중 오류가 발생했습니다.',
         noCopy: '복사할 병합 결과가 없습니다. 먼저 JSON 합치기를 실행하세요.',
@@ -8958,6 +8966,13 @@
         readFail: (name) => `Failed to read file: ${name}`,
         parseFail: (name) => `JSON parse failed: ${name}`,
         needFiles: 'Select at least one JSON file first.',
+        tooManyFiles: (count) => `${count} files selected. You can merge up to 50 files at once.`,
+        tooLarge: (size) => `Selected files total ${size} MB. Reduce the total to 20 MB or less to protect browser memory.`,
+        filesReady: (count, size) => `${count} file(s) selected · ${size} MB total · Files stay in this browser.`,
+        invalidObjectMode: 'Object key merge requires every file root to be a JSON object.',
+        invalidObjectArrayMode: 'Common-array merge requires JSON objects that share an array key with the same name.',
+        optionChanged: 'Merge options changed. Run JSON merge again.',
+        working: (count) => `Reading and merging ${count} JSON file(s).`,
         mergeDone: (count, mode) => `Merged ${count} file(s) (${mode}). Use the download button to save.`,
         mergeError: 'An error occurred while merging.',
         noCopy: 'No merged result to copy. Run JSON merge first.',
@@ -8974,6 +8989,13 @@
         readFail: (name) => `ファイルの読み込みに失敗しました: ${name}`,
         parseFail: (name) => `JSONの解析に失敗しました: ${name}`,
         needFiles: '先にJSONファイルを1つ以上選択してください。',
+        tooManyFiles: (count) => `${count}個のファイルが選択されています。一度に結合できるのは最大50個です。`,
+        tooLarge: (size) => `選択ファイルの合計は${size}MBです。ブラウザ保護のため20MB以下に減らしてください。`,
+        filesReady: (count, size) => `${count}個選択 · 合計${size}MB · ファイルはブラウザ内だけで処理されます。`,
+        invalidObjectMode: 'オブジェクトキー結合は、すべてのファイルのルートがJSONオブジェクトの場合のみ使用できます。',
+        invalidObjectArrayMode: '共通配列の連結には、同じ名前の配列キーを持つJSONオブジェクトが必要です。',
+        optionChanged: '結合オプションが変更されました。JSON結合をもう一度実行してください。',
+        working: (count) => `${count}個のJSONファイルを読み込んで結合しています。`,
         mergeDone: (count, mode) => `${count}個のファイルをマージしました（${mode}）。ダウンロードで保存してください。`,
         mergeError: 'マージ中にエラーが発生しました。',
         noCopy: 'コピーするマージ結果がありません。先にJSONマージを実行してください。',
@@ -8988,8 +9010,24 @@
       }
     };
     const jmText = jmI18n[pageLang] || jmI18n.ko;
+    const MAX_FILES = 50;
+    const MAX_TOTAL_BYTES = 20 * 1024 * 1024;
+    let downloadUrl = '';
 
     const fmt = (n) => Number(n || 0).toLocaleString(numberLocale);
+    const formatMb = (bytes) => (bytes / (1024 * 1024)).toLocaleString(numberLocale, { maximumFractionDigits: 2 });
+
+    const clearResult = () => {
+      if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+      downloadUrl = '';
+      output.value = '';
+      download.removeAttribute('href');
+      download.setAttribute('aria-disabled', 'true');
+      copyBtn.disabled = true;
+      itemCount.textContent = '-';
+      conflictCount.textContent = '-';
+      sizeOut.textContent = '-';
+    };
 
     const copyText = async (text) => {
       try {
@@ -9051,17 +9089,42 @@
       return out;
     };
 
+    const validateFiles = (files) => {
+      if (!files.length) return jmText.needFiles;
+      if (files.length > MAX_FILES) return jmText.tooManyFiles(files.length);
+      const totalBytes = files.reduce((sum, file) => sum + file.size, 0);
+      if (totalBytes > MAX_TOTAL_BYTES) return jmText.tooLarge(formatMb(totalBytes));
+      return '';
+    };
+
     filesInput.addEventListener('change', () => {
-      fileCount.textContent = fmt(filesInput.files?.length || 0);
+      const files = Array.from(filesInput.files || []);
+      const totalBytes = files.reduce((sum, file) => sum + file.size, 0);
+      const error = validateFiles(files);
+      clearResult();
+      fileCount.textContent = fmt(files.length);
+      runBtn.disabled = !!error;
+      filesSummary.textContent = error || jmText.filesReady(files.length, formatMb(totalBytes));
+      help.textContent = error || jmText.filesReady(files.length, formatMb(totalBytes));
     });
+
+    [modeSel, dedupeChk].forEach((control) => control?.addEventListener('change', () => {
+      if (!output.value) return;
+      clearResult();
+      help.textContent = jmText.optionChanged;
+    }));
 
     runBtn.addEventListener('click', async () => {
       const files = Array.from(filesInput.files || []);
-      if (!files.length) {
-        help.textContent = jmText.needFiles;
+      const fileError = validateFiles(files);
+      if (fileError) {
+        help.textContent = fileError;
         return;
       }
 
+      clearResult();
+      runBtn.disabled = true;
+      help.textContent = jmText.working(files.length);
       try {
         const texts = await Promise.all(files.map(readText));
         const parsed = texts.map((txt, idx) => {
@@ -9075,6 +9138,8 @@
         const selected = modeSel.value || 'auto';
         const mode = selected === 'auto' ? detectMode(parsed) : selected;
         const dedupeEnabled = !!dedupeChk?.checked;
+        const allObjects = parsed.every((value) => value && typeof value === 'object' && !Array.isArray(value));
+        if (mode === 'object-merge' && !allObjects) throw new Error(jmText.invalidObjectMode);
 
         let merged;
         let conflicts = 0;
@@ -9083,9 +9148,11 @@
           const arr = parsed.flatMap((v) => Array.isArray(v) ? v : [v]);
           merged = dedupeEnabled ? dedupeArray(arr) : arr;
         } else if (mode === 'object-array-concat') {
+          if (!allObjects) throw new Error(jmText.invalidObjectArrayMode);
           const keySets = parsed.map((obj) => Object.keys(obj));
           const commonKeys = keySets.reduce((acc, keys) => acc.filter((k) => keys.includes(k)), keySets[0] || []);
           const arrayKey = commonKeys.find((k) => parsed.every((obj) => Array.isArray(obj[k])));
+          if (!arrayKey) throw new Error(jmText.invalidObjectArrayMode);
           merged = { ...(parsed[0] || {}) };
           const arr = parsed.flatMap((obj) => Array.isArray(obj[arrayKey]) ? obj[arrayKey] : []);
           merged[arrayKey] = dedupeEnabled ? dedupeArray(arr) : arr;
@@ -9113,9 +9180,11 @@
         output.value = pretty;
 
         const blob = new Blob([pretty], { type: 'application/json;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        download.href = url;
+        downloadUrl = URL.createObjectURL(blob);
+        download.href = downloadUrl;
         download.download = `merged-${new Date().toISOString().slice(0, 10)}.json`;
+        download.setAttribute('aria-disabled', 'false');
+        copyBtn.disabled = false;
 
         itemCount.textContent = fmt(getCount(merged));
         conflictCount.textContent = fmt(conflicts);
@@ -9127,6 +9196,8 @@
         conflictCount.textContent = '-';
         sizeOut.textContent = '-';
         help.textContent = err?.message || jmText.mergeError;
+      } finally {
+        runBtn.disabled = false;
       }
     });
 
