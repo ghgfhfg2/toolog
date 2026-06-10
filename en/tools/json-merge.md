@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: JSON Merge | Combine Multiple JSON Files at Once
-description: Upload multiple JSON files and merge them into a single downloadable JSON output in your browser.
+title: JSON Merge | Combine Arrays and Objects, Remove Duplicates
+description: Safely merge multiple JSON files in your browser. Concatenate arrays, merge object keys or shared arrays, remove duplicates, and review key conflicts.
 lang: en
 permalink: /en/tools/json-merge/
 canonical_url: /en/tools/json-merge/
@@ -18,6 +18,8 @@ faq:
     a: In object-merge mode, keys are merged and duplicate keys are overwritten by later files.
   - q: What if file structures are mixed?
     a: Auto mode wraps roots into an array when structures differ, so source shape is preserved.
+  - q: Are uploaded JSON files sent to a server?
+    a: No. File reading, merging, and output generation all happen locally in your current browser.
 alternate_urls:
   ko: /tools/json-merge/
   en: /en/tools/json-merge/
@@ -34,6 +36,8 @@ Examples: paged API exports, chunked logs, and batch output files.
 - Auto mode detects array/object structure
 - Manual modes: array concat, object key merge, wrap roots into array
 - Preview + `merged.json` download
+- Optional array deduplication + object key conflict count
+- Clear errors for invalid JSON, incompatible manual modes, and excessive file size
 
 ## How to use
 1. Upload multiple JSON files.
@@ -43,7 +47,9 @@ Examples: paged API exports, chunked logs, and batch output files.
 
 ## Notes
 - In object-merge mode, duplicate keys are overwritten by later files.
-- Very large files can increase browser memory usage.
+- Manual object-merge mode requires every file root to be a JSON object. Incompatible structures are rejected with an error.
+- To protect browser memory, each run accepts up to 50 files with a combined size of 20 MB.
+- Uploaded files and merged results stay in your current browser and are never sent to a server.
 
 ## Related tools
 - Text length check: [Text Counter]({{ '/en/tools/text-counter/' | relative_url }})
