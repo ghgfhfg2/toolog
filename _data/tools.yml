@@ -1977,7 +1977,7 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 두 분수의 덧셈·뺄셈·곱셈·나눗셈 결과를 약분, 대분수, 소수, 백분율로 바로 계산해요.
+  description: 두 분수의 사칙연산을 정확하게 계산하고 약분, 대분수, 소수, 백분율 결과와 입력 오류를 바로 확인해요.
   description_en: Add, subtract, multiply, or divide two fractions and instantly see simplified, mixed-number, decimal, and percent results.
   description_ja: 2つの分数の加減乗除を行い、約分結果・帯分数・小数・百分率をすぐ確認できます。
   url: /tools/fraction-calculator/
@@ -1985,6 +1985,8 @@
   url_ja: /ja/tools/fraction-calculator/
   thumbnail: /assets/thumbs/fraction-calculator.svg
   published_at: 2026-03-21
+  tool_type: calculator
+  topic_cluster: math
 
 - id: split-bill-calculator
   title: N빵 계산기

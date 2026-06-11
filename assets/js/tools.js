@@ -10656,6 +10656,7 @@
     const outDecimal = document.getElementById('frac-decimal');
     const outPercent = document.getElementById('frac-percent');
     const help = document.getElementById('frac-help');
+    const swapBtn = document.getElementById('frac-swap');
     const copyBtn = document.getElementById('frac-copy');
     const resetBtn = document.getElementById('frac-reset');
 
@@ -10664,7 +10665,10 @@
     const text = {
       ko: {
         idle: '분수 2개를 입력하면 사칙연산과 약분 결과를 바로 확인할 수 있습니다.',
-        invalid: '분모는 0이 될 수 없습니다.',
+        empty: '네 칸에 분자와 분모를 모두 입력해 주세요.',
+        invalid: '분수에는 정수만 입력할 수 있습니다.',
+        tooLarge: '정확한 계산을 위해 각 값은 -10,000,000부터 10,000,000까지 입력해 주세요.',
+        zeroDenominator: '분모는 0이 될 수 없습니다.',
         divZero: '0으로 나누는 연산은 할 수 없습니다.',
         mixedNone: '해당 없음',
         copy: (r, m, d, p) => `분수 계산 결과 | 약분 결과 ${r} | 대분수 ${m} | 소수값 ${d} | 백분율 ${p}`,
@@ -10673,7 +10677,10 @@
       },
       en: {
         idle: 'Enter two fractions to calculate and simplify the result instantly.',
-        invalid: 'Denominator cannot be 0.',
+        empty: 'Enter a numerator and denominator in all four fields.',
+        invalid: 'Fractions must use whole-number inputs.',
+        tooLarge: 'For an exact result, enter each value from -10,000,000 to 10,000,000.',
+        zeroDenominator: 'Denominator cannot be 0.',
         divZero: 'Division by zero is not allowed.',
         mixedNone: 'N/A',
         copy: (r, m, d, p) => `Fraction result | Simplified ${r} | Mixed ${m} | Decimal ${d} | Percent ${p}`,
@@ -10682,7 +10689,10 @@
       },
       ja: {
         idle: '2つの分数を入力すると、四則演算と約分結果をすぐ確認できます。',
-        invalid: '分母に 0 は使えません。',
+        empty: '4つの欄に分子と分母をすべて入力してください。',
+        invalid: '分数には整数のみ入力できます。',
+        tooLarge: '正確に計算するため、各値は -10,000,000 から 10,000,000 の範囲で入力してください。',
+        zeroDenominator: '分母に 0 は使えません。',
         divZero: '0 で割ることはできません。',
         mixedNone: '該当なし',
         copy: (r, m, d, p) => `分数計算結果 | 約分結果 ${r} | 帯分数 ${m} | 小数 ${d} | 百分率 ${p}`,
@@ -10691,7 +10701,10 @@
       }
     }[pageLang] || {
       idle: '분수 2개를 입력하면 사칙연산과 약분 결과를 바로 확인할 수 있습니다.',
-      invalid: '분모는 0이 될 수 없습니다.',
+      empty: '네 칸에 분자와 분모를 모두 입력해 주세요.',
+      invalid: '분수에는 정수만 입력할 수 있습니다.',
+      tooLarge: '정확한 계산을 위해 각 값은 -10,000,000부터 10,000,000까지 입력해 주세요.',
+      zeroDenominator: '분모는 0이 될 수 없습니다.',
       divZero: '0으로 나누는 연산은 할 수 없습니다.',
       mixedNone: '해당 없음',
       copy: (r, m, d, p) => `분수 계산 결과 | 약분 결과 ${r} | 대분수 ${m} | 소수값 ${d} | 백분율 ${p}`,
@@ -10718,20 +10731,47 @@
         document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
       }
     };
-    const setIdle = (msg) => {
+    const inputs = [aNum, aDen, bNum, bDen];
+    const setInvalid = (invalidInputs = []) => {
+      inputs.forEach((input) => input.setAttribute('aria-invalid', invalidInputs.includes(input) ? 'true' : 'false'));
+    };
+    const setIdle = (msg, invalidInputs = []) => {
       outResult.textContent = '-';
       outMixed.textContent = '-';
       outDecimal.textContent = '-';
       outPercent.textContent = '-';
       help.textContent = msg;
+      setInvalid(invalidInputs);
+      if (copyBtn) copyBtn.disabled = true;
+    };
+    const readInteger = (input) => {
+      if (input.value.trim() === '') return { error: 'empty' };
+      const value = Number(input.value);
+      if (!Number.isFinite(value) || !Number.isInteger(value)) return { error: 'invalid' };
+      if (Math.abs(value) > 10000000) return { error: 'tooLarge' };
+      return { value };
     };
     const render = () => {
-      const an = Math.trunc(Number(aNum.value || 0));
-      const ad = Math.trunc(Number(aDen.value || 0));
-      const bn = Math.trunc(Number(bNum.value || 0));
-      const bd = Math.trunc(Number(bDen.value || 0));
-      if (!ad || !bd) {
-        setIdle(text.invalid);
+      const parsed = inputs.map(readInteger);
+      const emptyInputs = inputs.filter((_, index) => parsed[index].error === 'empty');
+      if (emptyInputs.length) {
+        setIdle(text.empty, emptyInputs);
+        return;
+      }
+      const invalidInputs = inputs.filter((_, index) => parsed[index].error === 'invalid');
+      if (invalidInputs.length) {
+        setIdle(text.invalid, invalidInputs);
+        return;
+      }
+      const largeInputs = inputs.filter((_, index) => parsed[index].error === 'tooLarge');
+      if (largeInputs.length) {
+        setIdle(text.tooLarge, largeInputs);
+        return;
+      }
+      const [an, ad, bn, bd] = parsed.map(({ value }) => value);
+      const zeroDenominators = [aDen, bDen].filter((input) => Number(input.value) === 0);
+      if (zeroDenominators.length) {
+        setIdle(text.zeroDenominator, zeroDenominators);
         return;
       }
       let rn = 0, rd = 1;
@@ -10743,7 +10783,7 @@
         rn = an * bn; rd = ad * bd;
       } else {
         if (bn === 0) {
-          setIdle(text.divZero);
+          setIdle(text.divZero, [bNum]);
           return;
         }
         rn = an * bd; rd = ad * bn;
@@ -10757,8 +10797,16 @@
       outDecimal.textContent = fmt(dec, 8);
       outPercent.textContent = `${fmt(dec * 100, 4)}%`;
       help.textContent = `${an}/${ad} ${op.options[op.selectedIndex].text} ${bn}/${bd} = ${outResult.textContent}`;
+      setInvalid();
+      if (copyBtn) copyBtn.disabled = false;
     };
-    [aNum, aDen, bNum, bDen, op].forEach((el) => el.addEventListener('input', render));
+    [...inputs, op].forEach((el) => el.addEventListener('input', render));
+    swapBtn?.addEventListener('click', () => {
+      [aNum.value, bNum.value] = [bNum.value, aNum.value];
+      [aDen.value, bDen.value] = [bDen.value, aDen.value];
+      render();
+      aNum.focus();
+    });
     resetBtn?.addEventListener('click', () => {
       aNum.value = 1; aDen.value = 2; bNum.value = 1; bDen.value = 3; op.value = 'add'; render();
     });

@@ -3540,14 +3540,14 @@ layout: default
           <p class="tool-result" id="td-help">{% if page.lang == 'en' %}Enter start and end times to calculate the difference instantly.{% elsif page.lang == 'ja' %}開始時刻と終了時刻を入力すると差を即時計算します。{% else %}시작 시각과 종료 시각을 입력하면 시간 차이를 즉시 계산합니다.{% endif %}</p>
         </div>
       {% when 'fraction-calculator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
-            <div>
-              <label for="frac-a-num">{% if page.lang == 'en' %}First fraction{% elsif page.lang == 'ja' %}1つ目の分数{% else %}첫 번째 분수{% endif %}</label>
-              <div class="tool-row-grid pct-grid">
-                <input id="frac-a-num" type="number" step="1" placeholder="1" inputmode="numeric" />
-                <span>/</span>
-                <input id="frac-a-den" type="number" step="1" placeholder="2" inputmode="numeric" />
+        <div class="tool-ui frac-ui">
+          <div class="tool-row-grid frac-main-grid">
+            <div class="frac-field">
+              <label id="frac-a-label" for="frac-a-num">{% if page.lang == 'en' %}First fraction{% elsif page.lang == 'ja' %}1つ目の分数{% else %}첫 번째 분수{% endif %}</label>
+              <div class="frac-pair" role="group" aria-labelledby="frac-a-label">
+                <input id="frac-a-num" type="number" min="-10000000" max="10000000" step="1" placeholder="1" inputmode="numeric" aria-label="{% if page.lang == 'en' %}First numerator{% elsif page.lang == 'ja' %}1つ目の分子{% else %}첫 번째 분자{% endif %}" aria-describedby="frac-help" />
+                <span aria-hidden="true">/</span>
+                <input id="frac-a-den" type="number" min="-10000000" max="10000000" step="1" placeholder="2" inputmode="numeric" aria-label="{% if page.lang == 'en' %}First denominator{% elsif page.lang == 'ja' %}1つ目の分母{% else %}첫 번째 분모{% endif %}" aria-describedby="frac-help" />
               </div>
             </div>
             <div>
@@ -3559,28 +3559,27 @@ layout: default
                 <option value="div">÷</option>
               </select>
             </div>
-          </div>
-          <div class="tool-row-grid pct-grid">
-            <div>
-              <label for="frac-b-num">{% if page.lang == 'en' %}Second fraction{% elsif page.lang == 'ja' %}2つ目の分数{% else %}두 번째 분수{% endif %}</label>
-              <div class="tool-row-grid pct-grid">
-                <input id="frac-b-num" type="number" step="1" placeholder="1" inputmode="numeric" />
-                <span>/</span>
-                <input id="frac-b-den" type="number" step="1" placeholder="3" inputmode="numeric" />
+            <div class="frac-field">
+              <label id="frac-b-label" for="frac-b-num">{% if page.lang == 'en' %}Second fraction{% elsif page.lang == 'ja' %}2つ目の分数{% else %}두 번째 분수{% endif %}</label>
+              <div class="frac-pair" role="group" aria-labelledby="frac-b-label">
+                <input id="frac-b-num" type="number" min="-10000000" max="10000000" step="1" placeholder="1" inputmode="numeric" aria-label="{% if page.lang == 'en' %}Second numerator{% elsif page.lang == 'ja' %}2つ目の分子{% else %}두 번째 분자{% endif %}" aria-describedby="frac-help" />
+                <span aria-hidden="true">/</span>
+                <input id="frac-b-den" type="number" min="-10000000" max="10000000" step="1" placeholder="3" inputmode="numeric" aria-label="{% if page.lang == 'en' %}Second denominator{% elsif page.lang == 'ja' %}2つ目の分母{% else %}두 번째 분모{% endif %}" aria-describedby="frac-help" />
               </div>
             </div>
           </div>
-          <div class="tool-row-grid pct-actions">
-            <button id="frac-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+          <div class="tool-row-grid frac-actions">
+            <button id="frac-swap" type="button">{% if page.lang == 'en' %}Swap fractions{% elsif page.lang == 'ja' %}分数を入れ替え{% else %}분수 위치 바꾸기{% endif %}</button>
+            <button id="frac-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
             <button id="frac-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
-          <div class="tool-stats">
+          <div class="tool-stats" aria-label="{% if page.lang == 'en' %}Fraction calculation results{% elsif page.lang == 'ja' %}分数計算結果{% else %}분수 계산 결과{% endif %}">
             <div><strong id="frac-result">-</strong><span>{% if page.lang == 'en' %}Simplified result{% elsif page.lang == 'ja' %}約分結果{% else %}약분 결과{% endif %}</span></div>
             <div><strong id="frac-mixed">-</strong><span>{% if page.lang == 'en' %}Mixed number{% elsif page.lang == 'ja' %}帯分数{% else %}대분수{% endif %}</span></div>
             <div><strong id="frac-decimal">-</strong><span>{% if page.lang == 'en' %}Decimal{% elsif page.lang == 'ja' %}小数{% else %}소수값{% endif %}</span></div>
             <div><strong id="frac-percent">-</strong><span>{% if page.lang == 'en' %}Percent{% elsif page.lang == 'ja' %}百分率{% else %}백분율{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="frac-help">{% if page.lang == 'en' %}Enter two fractions to add, subtract, multiply, or divide them instantly.{% elsif page.lang == 'ja' %}2つの分数を入力すると、加減乗除と約分結果をすぐ確認できます。{% else %}분수 2개를 입력하면 사칙연산과 약분 결과를 바로 확인할 수 있습니다.{% endif %}</p>
+          <p class="tool-result" id="frac-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter two fractions to add, subtract, multiply, or divide them instantly.{% elsif page.lang == 'ja' %}2つの分数を入力すると、加減乗除と約分結果をすぐ確認できます。{% else %}분수 2개를 입력하면 사칙연산과 약분 결과를 바로 확인할 수 있습니다.{% endif %}</p>
         </div>
       {% when 'electricity-cost-calculator' %}
         <div class="tool-ui">
