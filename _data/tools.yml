@@ -1978,8 +1978,8 @@
   badge_en: New
   badge_ja: 新着
   description: 두 분수의 사칙연산을 정확하게 계산하고 약분, 대분수, 소수, 백분율 결과와 입력 오류를 바로 확인해요.
-  description_en: Add, subtract, multiply, or divide two fractions and instantly see simplified, mixed-number, decimal, and percent results.
-  description_ja: 2つの分数の加減乗除を行い、約分結果・帯分数・小数・百分率をすぐ確認できます。
+  description_en: Calculate two fractions exactly and instantly see simplified, mixed-number, decimal, percent, and input error results.
+  description_ja: 2つの分数を正確に四則演算し、約分結果・帯分数・小数・百分率・入力エラーをすぐ確認できます。
   url: /tools/fraction-calculator/
   url_en: /en/tools/fraction-calculator/
   url_ja: /ja/tools/fraction-calculator/
