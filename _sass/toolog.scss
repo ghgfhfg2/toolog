@@ -650,6 +650,31 @@ textarea:focus-visible {
 .cc-grid { grid-template-columns: repeat(3, 1fr); }
 .cc-actions { grid-template-columns: repeat(3, 1fr); }
 .cc-stats { grid-template-columns: repeat(2, 1fr); }
+.tc-limit-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.tc-limit-grid > div { display: grid; gap: .4rem; }
+.tc-actions { grid-template-columns: repeat(3, 1fr); }
+.tc-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.tc-meter {
+  height: 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #10192c;
+  overflow: hidden;
+}
+.tc-meter span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: #3b82f6;
+  transition: width .18s ease, background-color .18s ease;
+}
+.tc-meter span[data-state="exact"] { background: #22c55e; }
+.tc-meter span[data-state="over"] { background: #ef4444; }
+.tc-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.tc-ui #tc-status[data-state="exact"] { color: #86efac; }
+.tc-ui #tc-status[data-state="over"],
+.tc-ui #tc-status[data-state="error"] { color: #fca5a5; }
 .cc-grid button[aria-pressed="true"] {
   border-color: var(--hover);
   background: var(--hover);
@@ -957,6 +982,8 @@ textarea:focus-visible {
   .frac-actions { grid-template-columns: 1fr; }
   .cc-grid { grid-template-columns: 1fr 1fr; }
   .cc-actions { grid-template-columns: 1fr; }
+  .tc-limit-grid,.tc-actions { grid-template-columns: 1fr; }
+  .tc-stats { grid-template-columns: 1fr 1fr; }
   .tool-stats { grid-template-columns: 1fr 1fr; }
   .tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .related-grid { grid-template-columns: 1fr; }

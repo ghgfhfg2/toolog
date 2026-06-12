@@ -11,15 +11,138 @@
     const chars = document.getElementById('tc-chars');
     const noSpaces = document.getElementById('tc-no-spaces');
     const words = document.getElementById('tc-words');
+    const lines = document.getElementById('tc-lines');
     const bytes = document.getElementById('tc-bytes');
+    const limit = document.getElementById('tc-limit');
+    const limitType = document.getElementById('tc-limit-type');
+    const status = document.getElementById('tc-status');
+    const meter = document.querySelector('.tc-meter');
+    const meterBar = document.getElementById('tc-meter-bar');
+    const sample = document.getElementById('tc-sample');
+    const copy = document.getElementById('tc-copy');
+    const clear = document.getElementById('tc-clear');
+    const tcText = {
+      ko: {
+        empty: '텍스트를 입력하면 글자 수를 바로 계산합니다.',
+        counted: (count) => `${formatNum(count)}자를 계산했습니다.`,
+        invalidLimit: '제한 수치는 1 이상 10,000,000 이하의 정수로 입력해 주세요.',
+        remaining: (n) => `제한까지 ${formatNum(n)} 남았습니다.`,
+        exact: '설정한 제한에 정확히 맞았습니다.',
+        exceeded: (n) => `설정한 제한을 ${formatNum(n)} 초과했습니다.`,
+        copied: '결과 요약을 복사했습니다.',
+        copyEmpty: '복사할 계산 결과가 없습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력과 제한을 초기화했습니다.',
+        sample: '좋은 글은 핵심을 먼저 말하고, 필요한 근거를 짧고 분명하게 덧붙입니다.',
+        summary: (v) => `공백 포함 ${v.chars}자 / 공백 제외 ${v.noSpaces}자 / 단어 ${v.words}개 / ${v.lines}줄 / UTF-8 ${v.bytes}바이트`
+      },
+      en: {
+        empty: 'Enter text to see the count instantly.',
+        counted: (count) => `Counted ${formatNum(count)} characters.`,
+        invalidLimit: 'Enter a whole-number limit from 1 to 10,000,000.',
+        remaining: (n) => `${formatNum(n)} remaining before the limit.`,
+        exact: 'The text exactly matches the limit.',
+        exceeded: (n) => `The text exceeds the limit by ${formatNum(n)}.`,
+        copied: 'Copied the count summary.',
+        copyEmpty: 'There is no count summary to copy yet.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared the text and limit.',
+        sample: 'Clear writing puts the main point first and supports it with concise evidence.',
+        summary: (v) => `${v.chars} characters with spaces / ${v.noSpaces} without spaces / ${v.words} words / ${v.lines} lines / ${v.bytes} UTF-8 bytes`
+      },
+      ja: {
+        empty: 'テキストを入力するとすぐに集計します。',
+        counted: (count) => `${formatNum(count)}文字を集計しました。`,
+        invalidLimit: '上限は1〜10,000,000の整数で入力してください。',
+        remaining: (n) => `上限まで残り${formatNum(n)}です。`,
+        exact: '設定した上限と一致しています。',
+        exceeded: (n) => `設定した上限を${formatNum(n)}超えています。`,
+        copied: '集計結果をコピーしました。',
+        copyEmpty: 'コピーできる集計結果がまだありません。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力と上限をクリアしました。',
+        sample: '読みやすい文章は、要点を先に示し、必要な根拠を簡潔に補足します。',
+        summary: (v) => `空白含む${v.chars}文字 / 空白除く${v.noSpaces}文字 / ${v.words}単語 / ${v.lines}行 / UTF-8 ${v.bytes}バイト`
+      }
+    }[pageLang] || {};
+    let current = { chars: 0, noSpaces: 0, words: 0, lines: 0, bytes: 0 };
+
+    const setStatus = (message, state = '') => {
+      status.textContent = message;
+      status.dataset.state = state;
+    };
+
     const update = () => {
       const v = input.value || '';
-      chars.textContent = formatNum(v.length);
-      noSpaces.textContent = formatNum(v.replace(/\s/g, '').length);
-      words.textContent = formatNum((v.trim().match(/\S+/g) || []).length);
-      bytes.textContent = formatNum(new TextEncoder().encode(v).length);
+      current = {
+        chars: [...v].length,
+        noSpaces: [...v.replace(/\s/gu, '')].length,
+        words: (v.trim().match(/\S+/gu) || []).length,
+        lines: v ? v.split(/\r\n|\r|\n/).length : 0,
+        bytes: new TextEncoder().encode(v).length
+      };
+      chars.textContent = formatNum(current.chars);
+      noSpaces.textContent = formatNum(current.noSpaces);
+      words.textContent = formatNum(current.words);
+      lines.textContent = formatNum(current.lines);
+      bytes.textContent = formatNum(current.bytes);
+
+      const rawLimit = limit.value.trim();
+      const limitValue = Number(rawLimit);
+      if (!rawLimit) {
+        meter.hidden = true;
+        limit.setAttribute('aria-invalid', 'false');
+        setStatus(v ? tcText.counted(current.chars) : tcText.empty);
+        return;
+      }
+      if (!Number.isInteger(limitValue) || limitValue < 1 || limitValue > 10000000) {
+        meter.hidden = true;
+        limit.setAttribute('aria-invalid', 'true');
+        setStatus(tcText.invalidLimit, 'error');
+        return;
+      }
+
+      limit.setAttribute('aria-invalid', 'false');
+      const used = current[limitType.value] || 0;
+      const diff = limitValue - used;
+      const percent = Math.min(100, Math.round((used / limitValue) * 100));
+      meter.hidden = false;
+      meter.setAttribute('aria-valuenow', String(percent));
+      meterBar.style.width = `${percent}%`;
+      meterBar.dataset.state = diff < 0 ? 'over' : (diff === 0 ? 'exact' : 'within');
+      if (diff > 0) setStatus(tcText.remaining(diff), 'within');
+      else if (diff === 0) setStatus(tcText.exact, 'exact');
+      else setStatus(tcText.exceeded(Math.abs(diff)), 'over');
     };
-    input.addEventListener('input', update); update();
+    [input, limit, limitType].forEach(el => el?.addEventListener('input', update));
+    limitType?.addEventListener('change', update);
+    sample?.addEventListener('click', () => {
+      input.value = tcText.sample;
+      update();
+      input.focus();
+    });
+    clear?.addEventListener('click', () => {
+      input.value = '';
+      limit.value = '';
+      update();
+      setStatus(tcText.cleared);
+      input.focus();
+    });
+    copy?.addEventListener('click', async () => {
+      if (!input.value) {
+        setStatus(tcText.copyEmpty, 'error');
+        input.focus();
+        return;
+      }
+      const summary = tcText.summary(current);
+      try {
+        await navigator.clipboard.writeText(summary);
+        setStatus(tcText.copied);
+      } catch (_) {
+        setStatus(tcText.copyFail, 'error');
+      }
+    });
+    update();
   }
 
   if (slug === 'vat-calculator') {

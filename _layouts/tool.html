@@ -14,14 +14,40 @@ layout: default
   <section class="tool-page__run">
     {% case page.tool_key %}
       {% when 'text-counter' %}
-        <div class="tool-ui">
-          <textarea id="tc-input" placeholder="{% if page.lang == 'en' %}Enter text{% elsif page.lang == 'ja' %}テキストを入力{% else %}텍스트를 입력하세요{% endif %}"></textarea>
-          <div class="tool-stats">
+        <div class="tool-ui tc-ui">
+          <div class="tool-row">
+            <label for="tc-input">{% if page.lang == 'en' %}Text to count{% elsif page.lang == 'ja' %}カウントするテキスト{% else %}글자 수를 확인할 텍스트{% endif %}</label>
+            <textarea id="tc-input" maxlength="100000" aria-describedby="tc-status tc-help" placeholder="{% if page.lang == 'en' %}Paste an essay, caption, or manuscript here.{% elsif page.lang == 'ja' %}応募書類、投稿文、原稿などを貼り付けてください。{% else %}자기소개서, 게시글, 원고 등을 붙여넣으세요.{% endif %}"></textarea>
+          </div>
+          <div class="tool-row-grid tc-limit-grid">
+            <div>
+              <label for="tc-limit">{% if page.lang == 'en' %}Optional limit{% elsif page.lang == 'ja' %}文字数・バイト数の上限（任意）{% else %}제한 수치 (선택){% endif %}</label>
+              <input id="tc-limit" type="number" min="1" max="10000000" step="1" inputmode="numeric" placeholder="{% if page.lang == 'en' %}e.g. 500{% elsif page.lang == 'ja' %}例: 500{% else %}예: 500{% endif %}" />
+            </div>
+            <div>
+              <label for="tc-limit-type">{% if page.lang == 'en' %}Limit basis{% elsif page.lang == 'ja' %}上限の基準{% else %}제한 기준{% endif %}</label>
+              <select id="tc-limit-type">
+                <option value="chars">{% if page.lang == 'en' %}Characters with spaces{% elsif page.lang == 'ja' %}文字数（空白含む）{% else %}공백 포함 글자 수{% endif %}</option>
+                <option value="noSpaces">{% if page.lang == 'en' %}Characters without spaces{% elsif page.lang == 'ja' %}文字数（空白除く）{% else %}공백 제외 글자 수{% endif %}</option>
+                <option value="bytes">UTF-8 {% if page.lang == 'en' %}bytes{% elsif page.lang == 'ja' %}バイト数{% else %}바이트{% endif %}</option>
+              </select>
+            </div>
+          </div>
+          <div class="tc-meter" role="progressbar" aria-label="{% if page.lang == 'en' %}Limit usage{% elsif page.lang == 'ja' %}上限使用率{% else %}제한 사용률{% endif %}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden><span id="tc-meter-bar"></span></div>
+          <p class="tool-result" id="tc-status" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter text to see the count instantly.{% elsif page.lang == 'ja' %}テキストを入力するとすぐに集計します。{% else %}텍스트를 입력하면 글자 수를 바로 계산합니다.{% endif %}</p>
+          <div class="tool-stats tc-stats" aria-label="{% if page.lang == 'en' %}Text count summary{% elsif page.lang == 'ja' %}文字数集計{% else %}글자 수 계산 결과{% endif %}">
             <div><strong id="tc-chars">0</strong><span>{% if page.lang == 'en' %}Characters (with spaces){% elsif page.lang == 'ja' %}文字数（空白含む）{% else %}글자수(공백포함){% endif %}</span></div>
             <div><strong id="tc-no-spaces">0</strong><span>{% if page.lang == 'en' %}Characters (no spaces){% elsif page.lang == 'ja' %}文字数（空白除く）{% else %}글자수(공백제외){% endif %}</span></div>
             <div><strong id="tc-words">0</strong><span>{% if page.lang == 'en' %}Words{% elsif page.lang == 'ja' %}単語数{% else %}단어수{% endif %}</span></div>
+            <div><strong id="tc-lines">0</strong><span>{% if page.lang == 'en' %}Lines{% elsif page.lang == 'ja' %}行数{% else %}줄 수{% endif %}</span></div>
             <div><strong id="tc-bytes">0</strong><span>{% if page.lang == 'en' %}Bytes (UTF-8){% elsif page.lang == 'ja' %}バイト数（UTF-8）{% else %}바이트(UTF-8){% endif %}</span></div>
           </div>
+          <div class="tool-row-grid tc-actions">
+            <button id="tc-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
+            <button id="tc-copy" type="button">{% if page.lang == 'en' %}Copy summary{% elsif page.lang == 'ja' %}集計結果をコピー{% else %}결과 요약 복사{% endif %}</button>
+            <button id="tc-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
+          </div>
+          <p class="tool-result" id="tc-help">{% if page.lang == 'en' %}Counts Unicode characters so an emoji counts as one character. Input stays in your browser and is limited to 100,000 characters.{% elsif page.lang == 'ja' %}絵文字も1文字として数えます。入力内容はブラウザ内だけで処理され、最大100,000文字です。{% else %}이모지도 1자로 계산합니다. 입력 내용은 브라우저 안에서만 처리되며 최대 100,000자까지 지원합니다.{% endif %}</p>
         </div>
       {% when 'vat-calculator' %}
         <div class="tool-ui">

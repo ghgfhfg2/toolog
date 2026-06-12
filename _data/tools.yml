@@ -1632,9 +1632,9 @@
   badge: Popular
   badge_en: Popular
   badge_ja: 人気
-  description: 공백 포함/제외, 단어 수, 바이트를 한 번에 확인해요.
-  description_en: Count characters with and without spaces, words, and UTF-8 bytes in one view.
-  description_ja: 空白あり/なしの文字数、単語数、UTF-8バイト数をまとめて確認できます。
+  description: 공백 포함·제외 글자 수, 단어·줄 수, UTF-8 바이트와 제한 초과 여부를 한 번에 확인해요.
+  description_en: Count characters, words, lines, UTF-8 bytes, and check whether text exceeds a chosen limit.
+  description_ja: 空白あり・なしの文字数、単語数、行数、UTF-8バイト数、設定した上限超過をまとめて確認できます。
   url: /tools/text-counter/
   url_en: /en/tools/text-counter/
   url_ja: /ja/tools/text-counter/
