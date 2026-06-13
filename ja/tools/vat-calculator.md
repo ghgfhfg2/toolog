@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: VAT計算機 | 税抜・消費税・税込金額を自動計算
-description: 税抜金額からVATを計算、または税込総額から税抜/VATを逆算。請求書・見積書・精算チェックに使えます。
+title: VAT計算機 | 税抜・税込合計から10%を逆算
+description: 税抜価格または税込合計からVAT 10%を計算・逆算し、1円単位の四捨五入・切り捨て・切り上げを選んで見積・精算額を確認できます。
 lang: ja
 permalink: /ja/tools/vat-calculator/
 canonical_url: /ja/tools/vat-calculator/
@@ -10,26 +10,38 @@ category_label: データ/計算
 thumbnail: /assets/thumbs/vat-calculator.svg
 tool_key: vat-calculator
 keywords: [VAT計算, 税抜計算, 税込計算, 消費税計算, 請求書]
-related_tools: [percent-calculator, unit-converter, timezone-converter]
+related_tools: [percent-calculator, profit-margin-calculator, discount-calculator]
 alternate_urls:
   ko: /tools/vat-calculator/
   en: /en/tools/vat-calculator/
   ja: /ja/tools/vat-calculator/
+faq:
+  - q: 税抜基準と税込基準の違いは何ですか？
+    a: 税抜基準は税抜価格にVATを加算し、税込基準はVAT込みの総額から税抜価格とVATを逆算します。
+  - q: 10%以外の税率も計算できますか？
+    a: 現在は10%固定です。ゼロ税率・非課税・異なる税率が適用される取引は、該当する税務ルールを別途確認してください。
+  - q: 端数はどのように処理されますか？
+    a: 精算ルールに合わせて四捨五入・切り捨て・切り上げを選べます。税込基準では税抜価格を先に処理し、残額をVATとして計算します。
 ---
 
-## 実務向けのVAT計算
-次の確認をすばやく行えます。
-- 税抜金額からVAT額を算出
-- 税込総額から税抜/VATを逆算
+## 税抜・税込合計を確認できるVAT計算機
+この無料の**VAT計算機**は、税抜価格からVATと税込合計を計算したり、VAT込みの税込合計から税抜価格とVATを逆算したりできます。1円単位の四捨五入・切り捨て・切り上げを選べるため、見積書・請求書・精算額の確認に便利です。
 
 ## 計算モード
 - **税抜基準**: 税抜 → VAT + 税込
 - **税込基準**: 税込 → 税抜 + VAT
+- **1円単位の処理**: 四捨五入・切り捨て・切り上げ
+- **結果コピー**: 税抜・VAT・税込の内訳をコピー
 
 ## 使い方
-1. 基準モードを選択
-2. 金額を入力
-3. 税抜・VAT・税込の内訳を確認
+### 1. 計算基準を選択
+税抜価格が分かっている場合は税抜基準、VAT込みの総額が分かっている場合は税込基準を選択します。
+
+### 2. 金額を入力
+0以上の整数金額を入力すると、結果が自動で更新されます。
+
+### 3. 端数処理を選び、結果を確認
+精算ルールに合わせて四捨五入・切り捨て・切り上げを選び、税抜・VAT・税込の内訳を確認します。税込基準では税抜価格を先に処理し、残額をVATとするため、入力した税込合計が維持されます。
 
 ## 活用例
 - 見積書・請求書の作成
@@ -37,6 +49,19 @@ alternate_urls:
 - 取引先との内訳共有
 
 ## 関連ツール
-- 比率計算: [パーセント計算機]({{ '/ja/tools/percent-calculator/' | relative_url }})
-- 単位変換: [単位変換ツール]({{ '/ja/tools/unit-converter/' | relative_url }})
-- 時差確認: [タイムゾーン変換]({{ '/ja/tools/timezone-converter/' | relative_url }})
+- 割合を確認: [パーセント計算機]({{ '/ja/tools/percent-calculator/' | relative_url }})
+- 販売価格と利益率を比較: [利益率計算機]({{ '/ja/tools/profit-margin-calculator/' | relative_url }})
+- 割引後の価格を確認: [割引計算機]({{ '/ja/tools/discount-calculator/' | relative_url }})
+
+## FAQ
+### 税抜基準と税込基準の違いは何ですか？
+基準となる入力金額が異なります。税抜価格を入力するのか、VAT込みの税込合計を入力するのかを先に確認してください。
+
+### 10%以外の税率も計算できますか？
+このページは標準的な課税取引で使われる10%固定で計算します。ゼロ税率・非課税・異なる税率が適用される取引は、条件と証憑を別途確認してください。
+
+### 端数はどのように処理されますか？
+精算ルールに合わせて四捨五入・切り捨て・切り上げを選べます。請求書や契約書を作成する前に、取引先の端数処理ルールと最終金額を再確認してください。
+
+## まとめ
+VAT計算機を使うと、税抜・VAT・税込合計をすばやく分け、1円単位の端数処理による違いを確認して、見積・請求・精算時の金額ミスを減らせます。
