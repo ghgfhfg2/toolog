@@ -495,6 +495,13 @@ a:hover { color: #fff; text-decoration: none; }
 .tc-ui #tc-status[data-state="exact"] { color: #86efac; }
 .tc-ui #tc-status[data-state="over"],
 .tc-ui #tc-status[data-state="error"] { color: #fca5a5; }
+.vat-input-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.vat-input-grid > div { display: grid; gap: .4rem; min-width: 0; }
+.vat-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.vat-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.vat-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.vat-ui #vat-status[data-state="error"] { color: #fca5a5; }
+.vat-ui #vat-status[data-state="success"] { color: #86efac; }
 .cc-grid button[aria-pressed="true"] {
   border-color: var(--hover);
   background: var(--hover);

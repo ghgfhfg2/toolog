@@ -1689,13 +1689,15 @@
   badge: Hot
   badge_en: Hot
   badge_ja: 注目
-  description: 공급가/합계 기준 VAT 10%를 빠르고 정확하게 계산해요.
-  description_en: Quickly calculate VAT 10% from net price or reverse-calculate net and VAT from gross total.
-  description_ja: 税抜基準・税込基準でVAT 10%を素早く正確に計算できます。
+  description: 공급가 또는 합계에서 VAT 10%를 역산하고 원 단위 반올림·버림·올림 기준까지 선택해요.
+  description_en: Calculate or reverse-calculate 10% VAT from net price or gross total with selectable whole-unit rounding.
+  description_ja: 税抜価格・税込合計からVAT 10%を計算し、1円単位の四捨五入・切り捨て・切り上げを選べます。
   url: /tools/vat-calculator/
   url_en: /en/tools/vat-calculator/
   url_ja: /ja/tools/vat-calculator/
   thumbnail: /assets/thumbs/vat-calculator.svg
+  tool_type: calculator
+  topic_cluster: finance
 
 - id: unit-converter
   title: 단위 변환기

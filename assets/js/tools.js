@@ -148,22 +148,134 @@
   if (slug === 'vat-calculator') {
     const mode = document.getElementById('vat-mode');
     const amt = document.getElementById('vat-amount');
+    const rounding = document.getElementById('vat-rounding');
     const s = document.getElementById('vat-supply');
     const t = document.getElementById('vat-tax');
     const total = document.getElementById('vat-total');
+    const status = document.getElementById('vat-status');
+    const example = document.getElementById('vat-example');
+    const copy = document.getElementById('vat-copy');
+    const clear = document.getElementById('vat-clear');
+    const vatText = {
+      ko: {
+        empty: '0원 이상의 정수 금액을 입력하세요.',
+        invalid: '금액은 0원 이상의 정수로 입력해 주세요.',
+        tooLarge: '금액은 1,000조 원 이하로 입력해 주세요.',
+        calculated: (base) => `${base} 기준으로 부가세 10%를 계산했습니다.`,
+        supplyBase: '공급가',
+        totalBase: '합계',
+        copied: '계산 결과를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력값을 초기화했습니다.',
+        summary: (v) => `공급가 ${v.supply}원 / 부가세(10%) ${v.tax}원 / 합계 ${v.total}원`
+      },
+      en: {
+        empty: 'Enter a non-negative whole-unit amount.',
+        invalid: 'Enter a non-negative whole-unit amount.',
+        tooLarge: 'Enter an amount no greater than 1 quadrillion.',
+        calculated: (base) => `Calculated 10% VAT from the ${base}.`,
+        supplyBase: 'net price',
+        totalBase: 'gross total',
+        copied: 'Copied the calculation result.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared the amount.',
+        summary: (v) => `Net price ${v.supply} / VAT (10%) ${v.tax} / gross total ${v.total}`
+      },
+      ja: {
+        empty: '0以上の整数金額を入力してください。',
+        invalid: '金額は0以上の整数で入力してください。',
+        tooLarge: '金額は1,000兆以下で入力してください。',
+        calculated: (base) => `${base}を基準にVAT 10%を計算しました。`,
+        supplyBase: '税抜価格',
+        totalBase: '税込合計',
+        copied: '計算結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '金額をクリアしました。',
+        summary: (v) => `税抜 ${v.supply} / VAT (10%) ${v.tax} / 税込合計 ${v.total}`
+      }
+    }[pageLang];
+    let current = null;
+
+    const setStatus = (message, state = '') => {
+      status.textContent = message;
+      status.dataset.state = state;
+    };
+
+    const resetResult = () => {
+      [s, t, total].forEach(el => { el.textContent = '-'; });
+      copy.disabled = true;
+      current = null;
+    };
+
+    const roundAmount = (value) => {
+      if (rounding.value === 'floor') return Math.floor(value);
+      if (rounding.value === 'ceil') return Math.ceil(value);
+      return Math.round(value);
+    };
+
     const calc = () => {
-      const v = Number(amt.value || 0);
+      const raw = amt.value.trim();
+      if (!raw) {
+        amt.setAttribute('aria-invalid', 'false');
+        resetResult();
+        setStatus(vatText.empty);
+        return;
+      }
+      const v = Number(raw);
+      if (!Number.isFinite(v) || v < 0 || !Number.isInteger(v)) {
+        amt.setAttribute('aria-invalid', 'true');
+        resetResult();
+        setStatus(vatText.invalid, 'error');
+        return;
+      }
+      if (v > 1000000000000000) {
+        amt.setAttribute('aria-invalid', 'true');
+        resetResult();
+        setStatus(vatText.tooLarge, 'error');
+        return;
+      }
+
+      amt.setAttribute('aria-invalid', 'false');
       let supply = 0, tax = 0, sum = 0;
       if ((mode.value || 'supply') === 'supply') {
-        supply = v; tax = v * 0.1; sum = supply + tax;
+        supply = v;
+        tax = roundAmount(v * 0.1);
+        sum = supply + tax;
       } else {
-        sum = v; supply = v / 1.1; tax = sum - supply;
+        sum = v;
+        supply = roundAmount(v / 1.1);
+        tax = sum - supply;
       }
       s.textContent = formatNum(supply);
       t.textContent = formatNum(tax);
       total.textContent = formatNum(sum);
+      current = { supply: formatNum(supply), tax: formatNum(tax), total: formatNum(sum) };
+      copy.disabled = false;
+      setStatus(vatText.calculated(mode.value === 'supply' ? vatText.supplyBase : vatText.totalBase), 'success');
     };
-    mode.addEventListener('change', calc); amt.addEventListener('input', calc); calc();
+    [mode, rounding].forEach(el => el.addEventListener('change', calc));
+    amt.addEventListener('input', calc);
+    example.addEventListener('click', () => {
+      amt.value = '110000';
+      calc();
+      amt.focus();
+    });
+    clear.addEventListener('click', () => {
+      amt.value = '';
+      calc();
+      setStatus(vatText.cleared);
+      amt.focus();
+    });
+    copy.addEventListener('click', async () => {
+      if (!current) return;
+      try {
+        await navigator.clipboard.writeText(vatText.summary(current));
+        setStatus(vatText.copied, 'success');
+      } catch (_) {
+        setStatus(vatText.copyFail, 'error');
+      }
+    });
+    calc();
   }
 
   if (slug === 'unit-converter') {
