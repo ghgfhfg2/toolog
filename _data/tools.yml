@@ -1601,6 +1601,8 @@
   url_en: /en/tools/font-change/
   url_ja: /ja/tools/font-change/
   thumbnail: /assets/thumbs/font-change.svg
+  tool_type: generator
+  topic_cluster: text
 
 - id: blog-banned-word-checker
   title: 금칙어 검사기

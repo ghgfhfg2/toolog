@@ -9451,11 +9451,14 @@
 
   if (slug === 'font-change') {
     const input = document.getElementById('fc-input');
+    const filter = document.getElementById('fc-filter');
     const list = document.getElementById('fc-list');
+    const status = document.getElementById('fc-status');
     const toast = document.getElementById('fc-toast');
     const showFavBtn = document.getElementById('fc-show-fav');
     const showAllBtn = document.getElementById('fc-show-all');
     const clearFavBtn = document.getElementById('fc-clear-fav');
+    const clearInputBtn = document.getElementById('fc-clear-input');
     if (!input || !list) return;
 
     const favStoreKey = 'toolog-font-favorites-v1';
@@ -9721,25 +9724,77 @@
       'overline','underline-overline','long-strike','double-slash','superscript','subscript','thai-comb-1a5a','wing-only','mini-bottom-align','bottom-mix'
     ]);
 
+    const fcText = {
+      ko: {
+        visible: (n) => `${formatNum(n)}개 스타일을 표시하고 있습니다. 스타일을 선택하면 결과를 복사합니다.`,
+        empty: '입력 전에는 예시 문구로 스타일을 미리 볼 수 있습니다.',
+        noMatch: '검색 조건에 맞는 스타일이 없습니다.',
+        noFav: '즐겨찾기된 폰트가 없습니다.',
+        copied: (label) => `${label} 스타일을 복사했습니다.`,
+        copyFail: '자동 복사에 실패했습니다. 브라우저의 클립보드 권한을 확인해 주세요.',
+        cleared: '입력과 스타일 검색을 초기화했습니다.',
+        favCleared: '즐겨찾기를 초기화했습니다.',
+        copyLabel: (label) => `${label} 스타일 결과 복사`
+      },
+      en: {
+        visible: (n) => `Showing ${formatNum(n)} styles. Select a style to copy its result.`,
+        empty: 'Previewing styles with sample text until you enter your own.',
+        noMatch: 'No styles match your search.',
+        noFav: 'No favorite styles yet.',
+        copied: (label) => `Copied the ${label} style.`,
+        copyFail: 'Copy failed. Check your browser clipboard permission.',
+        cleared: 'Cleared the text and style search.',
+        favCleared: 'Reset favorites.',
+        copyLabel: (label) => `Copy ${label} style result`
+      },
+      ja: {
+        visible: (n) => `${formatNum(n)}件のスタイルを表示しています。選択すると結果をコピーします。`,
+        empty: '入力前はサンプル文でスタイルをプレビューできます。',
+        noMatch: '検索条件に一致するスタイルがありません。',
+        noFav: 'お気に入り登録されたスタイルがありません。',
+        copied: (label) => `${label}スタイルをコピーしました。`,
+        copyFail: 'コピーに失敗しました。ブラウザのクリップボード権限を確認してください。',
+        cleared: '入力とスタイル検索をクリアしました。',
+        favCleared: 'お気に入りをリセットしました。',
+        copyLabel: (label) => `${label}スタイルの結果をコピー`
+      }
+    }[pageLang] || {};
+
+    const setStatus = (message, state = '') => {
+      if (!status) return;
+      status.textContent = message;
+      status.dataset.state = state;
+    };
+
     const copyText = async (text) => {
       try {
         await navigator.clipboard.writeText(text);
-      } catch (e) {
+        return true;
+      } catch (_) {
         const ta = document.createElement('textarea');
         ta.value = text;
         ta.style.position = 'fixed'; ta.style.opacity = '0';
         document.body.appendChild(ta);
         ta.select();
-        document.execCommand('copy');
+        let copied = false;
+        try {
+          copied = document.execCommand('copy');
+        } catch (_) {}
         document.body.removeChild(ta);
+        return copied;
       }
     };
 
-    const saveFav = () => localStorage.setItem(favStoreKey, JSON.stringify(Array.from(favorites)));
+    const saveFav = () => {
+      try {
+        localStorage.setItem(favStoreKey, JSON.stringify(Array.from(favorites)));
+      } catch (_) {}
+    };
 
     let t;
-    const showToast = () => {
+    const showToast = (message) => {
       if (!toast) return;
+      toast.textContent = message;
       toast.classList.add('show');
       clearTimeout(t);
       t = setTimeout(() => toast.classList.remove('show'), 800);
@@ -9760,12 +9815,19 @@
 
     const render = () => {
       const value = (input.value || '').slice(0, 500);
+      const query = (filter?.value || '').trim().toLocaleLowerCase(pageLang === 'ja' ? 'ja-JP' : (pageLang === 'en' ? 'en-US' : 'ko-KR'));
       list.innerHTML = '';
       let targets = showAll ? fontMap : fontMap.filter((f) => safeKeys.has(f.key));
       if (onlyFav) targets = targets.filter((f) => favorites.has(f.key));
+      if (query) targets = targets.filter((f) => `${f.key} ${f.label} ${getStyleLabel(f)}`.toLocaleLowerCase().includes(query));
 
       if (!targets.length) {
-        list.innerHTML = `<div class="empty-state">${pageLang === 'en' ? 'No favorite styles yet.' : (pageLang === 'ja' ? 'お気に入り登録されたスタイルがありません。' : '즐겨찾기된 폰트가 없습니다.')}</div>`;
+        const message = query ? fcText.noMatch : fcText.noFav;
+        const empty = document.createElement('div');
+        empty.className = 'empty-state';
+        empty.textContent = message;
+        list.appendChild(empty);
+        setStatus(message, 'error');
         return;
       }
 
@@ -9781,9 +9843,14 @@
         favBtn.className = `font-fav-btn ${favorites.has(font.key) ? 'active' : ''}`;
         favBtn.textContent = favorites.has(font.key) ? '★' : '☆';
         favBtn.title = pageLang === 'en' ? 'Favorite' : (pageLang === 'ja' ? 'お気に入り' : '즐겨찾기');
+        favBtn.setAttribute('aria-label', `${favBtn.title}: ${getStyleLabel(font)}`);
+        favBtn.setAttribute('aria-pressed', favorites.has(font.key) ? 'true' : 'false');
 
         const body = document.createElement('div');
         body.className = 'font-preview-body';
+        body.setAttribute('role', 'button');
+        body.tabIndex = 0;
+        body.setAttribute('aria-label', fcText.copyLabel(getStyleLabel(font)));
 
         const name = document.createElement('span');
         name.className = 'font-preview-name';
@@ -9801,11 +9868,25 @@
           render();
         });
 
-        item.addEventListener('click', async () => {
-          await copyText(out);
+        const copyResult = async () => {
+          const copied = await copyText(out);
+          if (!copied) {
+            setStatus(fcText.copyFail, 'error');
+            showToast(fcText.copyFail);
+            return;
+          }
           item.classList.add('copied');
           setTimeout(() => item.classList.remove('copied'), 650);
-          showToast();
+          const message = fcText.copied(getStyleLabel(font));
+          setStatus(message, 'success');
+          showToast(message);
+        };
+
+        body.addEventListener('click', copyResult);
+        body.addEventListener('keydown', (event) => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          copyResult();
         });
 
         body.appendChild(name);
@@ -9814,6 +9895,7 @@
         item.appendChild(body);
         list.appendChild(item);
       });
+      setStatus(value ? fcText.visible(targets.length) : fcText.empty);
     };
 
     let timer;
@@ -9821,6 +9903,7 @@
       clearTimeout(timer);
       timer = setTimeout(render, 80);
     });
+    filter?.addEventListener('input', render);
 
     showFavBtn?.addEventListener('click', () => {
       onlyFav = !onlyFav;
@@ -9838,6 +9921,15 @@
       favorites.clear();
       saveFav();
       render();
+      setStatus(fcText.favCleared);
+    });
+
+    clearInputBtn?.addEventListener('click', () => {
+      input.value = '';
+      if (filter) filter.value = '';
+      render();
+      setStatus(fcText.cleared);
+      input.focus();
     });
 
     updateButtonsText();

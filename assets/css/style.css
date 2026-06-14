@@ -667,6 +667,12 @@ a:hover { color: #fff; text-decoration: none; }
 .font-change-controls button {
   width: auto;
 }
+.fc-filter-grid {
+  align-items: end;
+}
+.fc-filter-grid button {
+  min-height: 42px;
+}
 
 .font-preview-list {
   display: grid;
@@ -710,7 +716,18 @@ a:hover { color: #fff; text-decoration: none; }
 }
 .font-preview-body {
   display: block;
+  width: 100%;
   padding-right: 2rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.font-preview-body:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 .font-preview-name {
   display: block;
@@ -831,6 +848,8 @@ a:hover { color: #fff; text-decoration: none; }
   .cc-actions { grid-template-columns: 1fr; }
   .tc-limit-grid,.tc-actions { grid-template-columns: 1fr; }
   .tc-stats { grid-template-columns: 1fr 1fr; }
+  .fc-filter-grid { grid-template-columns: 1fr; }
+  .font-change-controls button { width: 100%; }
   .tool-stats { grid-template-columns: 1fr 1fr; }
   .tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .related-grid { grid-template-columns: 1fr; }

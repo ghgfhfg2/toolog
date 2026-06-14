@@ -2240,14 +2240,25 @@ layout: default
         </div>
       {% when 'font-change' %}
         <div class="tool-ui font-change-ui">
-          <textarea id="fc-input" maxlength="500" placeholder="{% if page.lang == 'en' %}Enter text{% elsif page.lang == 'ja' %}テキストを入力{% else %}텍스트를 입력하세요{% endif %}"></textarea>
+          <div class="tool-row">
+            <label for="fc-input">{% if page.lang == 'en' %}Text to style{% elsif page.lang == 'ja' %}変換するテキスト{% else %}변환할 텍스트{% endif %}</label>
+            <textarea id="fc-input" maxlength="500" aria-describedby="fc-status fc-help" placeholder="{% if page.lang == 'en' %}Enter a profile name or short caption{% elsif page.lang == 'ja' %}プロフィール名や短い文章を入力{% else %}프로필 이름이나 짧은 문구를 입력하세요{% endif %}"></textarea>
+          </div>
+          <div class="tool-row-grid fc-filter-grid">
+            <div>
+              <label for="fc-filter">{% if page.lang == 'en' %}Find a style{% elsif page.lang == 'ja' %}スタイルを検索{% else %}스타일 검색{% endif %}</label>
+              <input id="fc-filter" type="search" maxlength="50" autocomplete="off" aria-describedby="fc-status" placeholder="{% if page.lang == 'en' %}e.g. bold, circled, underline{% elsif page.lang == 'ja' %}例: 太字、丸囲み、下線{% else %}예: bold, circled, underline{% endif %}" />
+            </div>
+            <button id="fc-clear-input" type="button">{% if page.lang == 'en' %}Clear text and search{% elsif page.lang == 'ja' %}入力と検索をクリア{% else %}입력·검색 초기화{% endif %}</button>
+          </div>
           <div class="font-change-controls">
             <button id="fc-show-fav" type="button">{% if page.lang == 'en' %}★ Favorites only: OFF{% elsif page.lang == 'ja' %}★ お気に入りのみ: OFF{% else %}★ 즐겨찾기만 보기: OFF{% endif %}</button>
             <button id="fc-show-all" type="button">{% if page.lang == 'en' %}Show extended styles: OFF{% elsif page.lang == 'ja' %}拡張スタイル表示: OFF{% else %}확장 폰트 보기: OFF{% endif %}</button>
             <button id="fc-clear-fav" type="button">{% if page.lang == 'en' %}Reset favorites{% elsif page.lang == 'ja' %}お気に入りをリセット{% else %}즐겨찾기 초기화{% endif %}</button>
           </div>
-          <p class="tool-result">{% if page.lang == 'en' %}All styles update instantly. Click an item to copy, and use ★ to save favorites.{% elsif page.lang == 'ja' %}入力と同時に全スタイルが更新されます。項目をクリックするとコピーされ、★でお気に入り保存できます。{% else %}입력 즉시 모든 스타일이 변환됩니다. 항목 클릭 시 복사되고, ★로 즐겨찾기 저장됩니다.{% endif %}</p>
-          <div id="fc-list" class="font-preview-list"></div>
+          <p class="tool-result" id="fc-status" role="status" aria-live="polite"></p>
+          <p class="tool-result" id="fc-help">{% if page.lang == 'en' %}Unicode styles mainly change Latin letters and numbers. Korean and some symbols may stay unchanged, and support varies by platform.{% elsif page.lang == 'ja' %}Unicodeスタイルは主に英字と数字を変換します。日本語や一部記号は変わらない場合があり、表示対応はサービスごとに異なります。{% else %}유니코드 스타일은 주로 영문과 숫자를 바꿉니다. 한글과 일부 기호는 그대로일 수 있고 플랫폼마다 표시 지원이 다릅니다.{% endif %}</p>
+          <div id="fc-list" class="font-preview-list" aria-label="{% if page.lang == 'en' %}Converted font styles{% elsif page.lang == 'ja' %}変換されたフォントスタイル{% else %}변환된 폰트 스타일{% endif %}"></div>
           <div id="fc-toast" class="copy-toast" aria-live="polite">{% if page.lang == 'en' %}Copied{% elsif page.lang == 'ja' %}コピーしました{% else %}복사되었습니다{% endif %}</div>
         </div>
       {% when 'percent-calculator' %}
