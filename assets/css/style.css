@@ -455,7 +455,7 @@ a:hover { color: #fff; text-decoration: none; }
   color: var(--muted);
   font-size: .78rem;
 }
-.tz-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.tz-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .tz-presets { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .tz-actions button,
 .tz-presets button {
@@ -467,6 +467,8 @@ a:hover { color: #fff; text-decoration: none; }
   line-height: 1.35;
   word-break: keep-all;
 }
+.tz-ui .tool-result[data-state="error"] { border-color: #ef4444; }
+.tz-ui .tool-result[data-state="warning"] { border-color: #f59e0b; }
 .cc-grid { grid-template-columns: repeat(3, 1fr); }
 .cc-actions { grid-template-columns: repeat(3, 1fr); }
 .cc-stats { grid-template-columns: repeat(2, 1fr); }

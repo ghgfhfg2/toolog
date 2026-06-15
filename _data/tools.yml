@@ -1733,7 +1733,7 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 서울, 뉴욕, 런던, LA 등 주요 시간대를 DST와 날짜 변경까지 확인하며 회의 시간으로 변환해요.
+  description: 서울, 뉴욕, 런던, LA 등 주요 시간대를 DST 전환 오류, UTC 오프셋, 날짜 변경까지 확인하며 회의 시간으로 변환해요.
   description_en: Convert Seoul, New York, London, LA, and other major time zones with DST, UTC offset, and date-shift checks.
   description_ja: ソウル、ニューヨーク、ロンドン、LAなど主要タイムゾーンをDST、UTC差、日付差まで確認しながら変換できます。
   url: /tools/timezone-converter/

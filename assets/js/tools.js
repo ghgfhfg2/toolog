@@ -400,14 +400,19 @@
     const nowBtn = document.getElementById('tz-now');
     const swapBtn = document.getElementById('tz-swap');
     const copyBtn = document.getElementById('tz-copy');
+    const clearBtn = document.getElementById('tz-clear');
 
     const tzI18n = {
       ko: {
         locale: 'ko-KR',
         empty: '날짜와 시간을 입력하면 대상 지역의 현지 시간이 표시됩니다.',
         invalid: '날짜나 시간 형식을 확인해 주세요.',
+        nonexistent: '선택한 기준 시간대에서 DST 전환으로 존재하지 않는 현지 시각입니다. 다른 시각을 입력해 주세요.',
+        ambiguous: 'DST 종료로 두 번 반복되는 현지 시각입니다. 이른 시각 기준 결과를 표시합니다.',
         copied: '변환 결과를 복사했습니다.',
         copyFail: '복사할 변환 결과가 아직 없습니다.',
+        copyUnavailable: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력 시간을 초기화했습니다.',
         sameDay: '같은 날짜',
         prevDay: '전날',
         nextDay: '다음날',
@@ -418,8 +423,12 @@
         locale: 'en-US',
         empty: 'Enter a date and time to see the converted local time.',
         invalid: 'Check the date and time format.',
+        nonexistent: 'This local time does not exist in the source zone because of a DST transition. Choose another time.',
+        ambiguous: 'This local time repeats when DST ends. Showing the earlier occurrence.',
         copied: 'Copied the converted time.',
         copyFail: 'There is no converted result to copy yet.',
+        copyUnavailable: 'Automatic copy is unavailable.',
+        cleared: 'Cleared the input time.',
         sameDay: 'Same date',
         prevDay: 'Previous day',
         nextDay: 'Next day',
@@ -430,8 +439,12 @@
         locale: 'ja-JP',
         empty: '日付と時刻を入力すると、変換先の現地時刻を表示します。',
         invalid: '日付または時刻の形式を確認してください。',
+        nonexistent: 'DST切替により、基準タイムゾーンに存在しない現地時刻です。別の時刻を選んでください。',
+        ambiguous: 'DST終了で2回繰り返される現地時刻です。早い方の時刻を表示します。',
         copied: '変換結果をコピーしました。',
         copyFail: 'コピーできる変換結果がまだありません。',
+        copyUnavailable: '自動コピーを利用できません。',
+        cleared: '入力時刻をクリアしました。',
         sameDay: '同じ日付',
         prevDay: '前日',
         nextDay: '翌日',
@@ -468,29 +481,43 @@
     fillZones(from, 'Asia/Seoul');
     fillZones(to, 'America/Los_Angeles');
 
-    if (dt && !dt.value) {
-      const n = new Date();
-      dt.value = new Date(n.getTime() - n.getTimezoneOffset() * 60000).toISOString().slice(0,16);
-    }
-
     const getParts = (date, timeZone) => {
       const parts = new Intl.DateTimeFormat('en-US', {
         timeZone,
         year: 'numeric', month: '2-digit', day: '2-digit',
         hour: '2-digit', minute: '2-digit', second: '2-digit',
-        hour12: false
+        hourCycle: 'h23'
       }).formatToParts(date);
       const map = {};
       parts.forEach(p => { if (p.type !== 'literal') map[p.type] = p.value; });
       return map;
     };
 
+    const parseLocalInput = (dateStr) => {
+      const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(dateStr || '');
+      if (!match) return null;
+      const values = match.slice(1).map(Number);
+      const [Y, M, D, h, m] = values;
+      const check = new Date(Date.UTC(Y, M - 1, D, h, m));
+      if (
+        check.getUTCFullYear() !== Y || check.getUTCMonth() !== M - 1 || check.getUTCDate() !== D ||
+        check.getUTCHours() !== h || check.getUTCMinutes() !== m
+      ) return null;
+      return { Y, M, D, h, m };
+    };
+
+    const partsMatch = (parts, target) => (
+      Number(parts.year) === target.Y &&
+      Number(parts.month) === target.M &&
+      Number(parts.day) === target.D &&
+      Number(parts.hour) === target.h &&
+      Number(parts.minute) === target.m
+    );
+
     const zonedToUtc = (dateStr, timeZone) => {
-      const [d, t] = dateStr.split('T');
-      if (!d || !t) return null;
-      const [Y, M, D] = d.split('-').map(Number);
-      const [h, m] = t.split(':').map(Number);
-      if (![Y, M, D, h, m].every(Number.isFinite)) return null;
+      const targetParts = parseLocalInput(dateStr);
+      if (!targetParts) return null;
+      const { Y, M, D, h, m } = targetParts;
       let utc = Date.UTC(Y, M - 1, D, h, m, 0);
 
       for (let i = 0; i < 3; i++) {
@@ -502,7 +529,13 @@
         const target = Date.UTC(Y, M - 1, D, h, m, 0);
         utc += target - asUTC;
       }
-      return new Date(utc);
+      const candidates = [-120, -60, -30, 0, 30, 60, 120]
+        .map(minutes => new Date(utc + minutes * 60000))
+        .filter(candidate => partsMatch(getParts(candidate, timeZone), targetParts))
+        .sort((a, b) => a.getTime() - b.getTime());
+      const unique = candidates.filter((candidate, index) => index === 0 || candidate.getTime() !== candidates[index - 1].getTime());
+      if (!unique.length) return { nonexistent: true };
+      return { date: unique[0], ambiguous: unique.length > 1 };
     };
 
     const formatDateTime = (date, timeZone, options = {}) => new Intl.DateTimeFormat(tzText.locale, {
@@ -542,36 +575,67 @@
       if (dayDiffOut) dayDiffOut.textContent = dayDiff;
     };
 
+    const setStatus = (message, state = '') => {
+      out.textContent = message;
+      out.dataset.state = state;
+    };
+
+    const resetResult = (message, state = '') => {
+      setStatus(message, state);
+      setStats();
+      copyBtn.disabled = true;
+    };
+
+    const formatInputForZone = (date, timeZone) => {
+      const parts = getParts(date, timeZone);
+      return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
+    };
+
     const run = () => {
       if (!dt.value) {
-        out.textContent = tzText.empty;
-        setStats();
+        dt.setAttribute('aria-invalid', 'false');
+        resetResult(tzText.empty);
         return;
       }
-      const utcDate = zonedToUtc(dt.value, from.value);
-      if (!utcDate || Number.isNaN(utcDate.getTime())) {
-        out.textContent = tzText.invalid;
-        setStats();
+      const conversion = zonedToUtc(dt.value, from.value);
+      if (!conversion) {
+        dt.setAttribute('aria-invalid', 'true');
+        resetResult(tzText.invalid, 'error');
         return;
       }
+      if (conversion.nonexistent) {
+        dt.setAttribute('aria-invalid', 'true');
+        resetResult(tzText.nonexistent, 'error');
+        return;
+      }
+      const utcDate = conversion.date;
+      dt.setAttribute('aria-invalid', 'false');
       const sourceText = formatDateTime(utcDate, from.value);
       const targetText = formatDateTime(utcDate, to.value);
       const resultText = formatDateTime(utcDate, to.value, { dateStyle: 'full' });
       const offset = getOffsetLabel(utcDate, to.value);
       const dayDiff = getDayDiffText(utcDate, from.value, to.value);
-      out.textContent = tzText.result(from.options[from.selectedIndex].text, to.options[to.selectedIndex].text, resultText, offset, dayDiff);
+      const result = tzText.result(from.options[from.selectedIndex].text, to.options[to.selectedIndex].text, resultText, offset, dayDiff);
+      setStatus(conversion.ambiguous ? `${tzText.ambiguous} ${result}` : result, conversion.ambiguous ? 'warning' : 'success');
       setStats(sourceText, targetText, offset, dayDiff);
+      copyBtn.disabled = false;
     };
 
     const setNow = () => {
-      const n = new Date();
-      dt.value = new Date(n.getTime() - n.getTimezoneOffset() * 60000).toISOString().slice(0,16);
+      dt.value = formatInputForZone(new Date(), from.value);
       run();
+      dt.focus();
     };
 
     [from, to, dt].forEach(el => el?.addEventListener('input', run));
     [from, to].forEach(el => el?.addEventListener('change', run));
     nowBtn?.addEventListener('click', setNow);
+    clearBtn?.addEventListener('click', () => {
+      dt.value = '';
+      resetResult(tzText.cleared);
+      dt.setAttribute('aria-invalid', 'false');
+      dt.focus();
+    });
     swapBtn?.addEventListener('click', () => {
       const oldFrom = from.value;
       from.value = to.value;
@@ -586,9 +650,9 @@
       }
       try {
         await navigator.clipboard.writeText(text);
-        out.textContent = `${tzText.copied} ${text}`;
+        setStatus(`${tzText.copied} ${text}`, out.dataset.state);
       } catch (_) {
-        out.textContent = text;
+        setStatus(tzText.copyUnavailable, 'error');
       }
     });
     document.querySelectorAll('.tz-presets button').forEach(btn => btn.addEventListener('click', () => {
@@ -596,7 +660,7 @@
       to.value = btn.dataset.to || to.value;
       run();
     }));
-    run();
+    setNow();
   }
 
   if (slug === 'case-converter') {
