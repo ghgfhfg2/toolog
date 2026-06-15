@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Timezone Converter | World Time Difference & Meeting Time Planner
-description: Convert Seoul, New York, London, LA, and other major time zones with DST, UTC offset, and date-shift checks. Reduce scheduling mistakes for global meetings, launches, and deadlines.
+description: Convert times across Seoul, New York, London, LA, and other major cities while checking DST transition errors, UTC offsets, and date shifts. Reduce mistakes in global meetings and deadline notices.
 lang: en
 permalink: /en/tools/timezone-converter/
 canonical_url: /en/tools/timezone-converter/
@@ -16,7 +16,7 @@ keywords: [timezone converter, time difference calculator, meeting time converte
 related_tools: ['d-day-calculator', 'pomodoro-timer', 'unit-converter']
 faq:
   - q: Does this timezone converter handle daylight saving time?
-    a: Yes. It uses browser IANA timezone data, so DST is applied for zones and dates where it exists.
+    a: Yes. It uses browser IANA timezone data. It rejects local times that do not exist when DST starts and warns when a local time repeats as DST ends.
   - q: What does the source time zone mean?
     a: The date and time you enter are interpreted as local time in the selected source zone.
   - q: Can I copy the converted meeting time?
@@ -40,6 +40,8 @@ The tool uses browser timezone data for DST-aware conversion. The result also sh
 3. Choose the target time zone and check the converted local time.
 4. Copy the result for a calendar invite, chat message, or release note.
 
+`Use current time` enters the current local time in the selected **source time zone**, not your device's time zone. The converter rejects local times skipped when DST starts. When a local time occurs twice as DST ends, it displays a warning and uses the earlier occurrence.
+
 ## Practical examples
 - Confirm a weekly meeting time between a Seoul headquarters and a North American branch
 - Check a partner meeting invite before sending it overseas
@@ -49,6 +51,7 @@ The tool uses browser timezone data for DST-aware conversion. The result also sh
 ## Scheduling tips
 - Include the timezone abbreviation or city name with the time in announcements.
 - Recheck key meetings during DST transition weeks.
+- For repeated local times when DST ends, verify the UTC offset in the calendar invite.
 - When sharing a schedule, write both dates when needed, such as "May 31, 9:00 PM Korea time / May 31, 8:00 AM New York time."
 
 ## Related tools
@@ -59,7 +62,7 @@ The tool uses browser timezone data for DST-aware conversion. The result also sh
 
 ## FAQ
 ### Does this timezone converter handle daylight saving time?
-Yes. It uses browser IANA timezone data, so DST is applied for zones and dates where it exists.
+Yes. It uses browser IANA timezone data and identifies local times that do not exist or occur twice during DST transitions.
 
 ### What does the source time zone mean?
 The date and time you enter are interpreted as local time in the selected source zone.
