@@ -787,6 +787,10 @@
     const lock = document.getElementById('ir-lock');
     const preset = document.getElementById('ir-preset');
     const fit = document.getElementById('ir-fit');
+    const format = document.getElementById('ir-format');
+    const qualityInput = document.getElementById('ir-quality');
+    const qualityLabel = document.getElementById('ir-quality-label');
+    const bg = document.getElementById('ir-bg');
     const result = document.getElementById('ir-result');
     const originalStat = document.getElementById('ir-original');
     const targetStat = document.getElementById('ir-target');
@@ -796,59 +800,80 @@
     let img = null;
     let ratio = 1;
     let originBytes = 0;
+    let objectUrl = '';
+    let downloadUrl = '';
     const maxEdge = 4096;
     const maxPixels = 12000000;
+    const maxSourcePixels = 50000000;
 
     const resizeText = {
       ko: {
         empty: '이미지를 먼저 선택해 주세요.',
-        invalidFile: '이미지 파일을 불러오지 못했습니다. JPG, PNG, WebP 등 일반 이미지로 다시 시도해 주세요.',
+        invalidFile: '이미지 파일을 불러오지 못했습니다. JPG, PNG, WebP 파일로 다시 시도해 주세요.',
         invalidSize: '너비와 높이는 1~4096px 사이 숫자로 입력해 주세요.',
         tooLarge: '출력 픽셀 수가 너무 큽니다. 가로×세로가 1,200만 픽셀 이하가 되도록 줄여 주세요.',
+        sourceTooLarge: '원본 이미지가 너무 큽니다. 5,000만 픽셀 이하 이미지로 다시 시도해 주세요.',
+        exportFail: '브라우저에서 결과 파일을 만들지 못했습니다. 크기를 줄이거나 다른 출력 포맷을 선택해 주세요.',
         original: (w, h, b) => `원본: ${w}×${h}px / ${b} bytes`,
         result: (ow, oh, w, h, b) => `원본: ${ow}×${oh}px → 결과: ${w}×${h}px / ${b} bytes`,
         ready: (w, h) => `${w}×${h}px 이미지가 준비되었습니다. 목표 크기를 확인한 뒤 리사이즈하세요.`,
         done: (w, h, b) => `${w}×${h}px 이미지로 리사이즈했습니다. 다운로드 버튼을 사용할 수 있습니다.`,
+        quality: (n) => `품질 ${n}%`,
         fitLabels: { contain: '전체 맞춤', cover: '채우기/자르기', stretch: '늘리기' }
       },
       en: {
         empty: 'Choose an image first.',
-        invalidFile: 'Could not load this image. Try a common JPG, PNG, or WebP file.',
+        invalidFile: 'Could not load this image. Try a JPG, PNG, or WebP file.',
         invalidSize: 'Enter width and height as numbers from 1 to 4096 px.',
         tooLarge: 'The output is too large. Keep width × height at 12 million pixels or less.',
+        sourceTooLarge: 'The source image is too large. Try an image at or below 50 million pixels.',
+        exportFail: 'The browser could not create the output file. Try a smaller size or another output format.',
         original: (w, h, b) => `Original: ${w}×${h}px / ${b} bytes`,
         result: (ow, oh, w, h, b) => `Original: ${ow}×${oh}px → Result: ${w}×${h}px / ${b} bytes`,
         ready: (w, h) => `${w}×${h}px image loaded. Check the target size, then resize.`,
         done: (w, h, b) => `Resized to ${w}×${h}px. The download button is ready.`,
+        quality: (n) => `Quality ${n}%`,
         fitLabels: { contain: 'Fit inside', cover: 'Fill/crop', stretch: 'Stretch' }
       },
       ja: {
         empty: '先に画像を選択してください。',
-        invalidFile: '画像を読み込めませんでした。JPG、PNG、WebPなど一般的な画像で再試行してください。',
+        invalidFile: '画像を読み込めませんでした。JPG、PNG、WebPファイルで再試行してください。',
         invalidSize: '幅と高さは1〜4096pxの数字で入力してください。',
         tooLarge: '出力サイズが大きすぎます。幅×高さを1,200万ピクセル以下にしてください。',
+        sourceTooLarge: '元画像が大きすぎます。5,000万ピクセル以下の画像で再試行してください。',
+        exportFail: 'ブラウザで出力ファイルを作成できませんでした。サイズを下げるか別の形式を選んでください。',
         original: (w, h, b) => `元画像: ${w}×${h}px / ${b} bytes`,
         result: (ow, oh, w, h, b) => `元画像: ${ow}×${oh}px → 出力: ${w}×${h}px / ${b} bytes`,
         ready: (w, h) => `${w}×${h}pxの画像を読み込みました。目標サイズを確認してリサイズしてください。`,
         done: (w, h, b) => `${w}×${h}pxにリサイズしました。ダウンロードできます。`,
+        quality: (n) => `品質 ${n}%`,
         fitLabels: { contain: '全体表示', cover: '切り抜き', stretch: '引き伸ばし' }
       }
     }[pageLang] || {
       empty: '이미지를 먼저 선택해 주세요.',
-      invalidFile: '이미지 파일을 불러오지 못했습니다. JPG, PNG, WebP 등 일반 이미지로 다시 시도해 주세요.',
+      invalidFile: '이미지 파일을 불러오지 못했습니다. JPG, PNG, WebP 파일로 다시 시도해 주세요.',
       invalidSize: '너비와 높이는 1~4096px 사이 숫자로 입력해 주세요.',
       tooLarge: '출력 픽셀 수가 너무 큽니다. 가로×세로가 1,200만 픽셀 이하가 되도록 줄여 주세요.',
+      sourceTooLarge: '원본 이미지가 너무 큽니다. 5,000만 픽셀 이하 이미지로 다시 시도해 주세요.',
+      exportFail: '브라우저에서 결과 파일을 만들지 못했습니다. 크기를 줄이거나 다른 출력 포맷을 선택해 주세요.',
       original: (w, h, b) => `원본: ${w}×${h}px / ${b} bytes`,
       result: (ow, oh, w, h, b) => `원본: ${ow}×${oh}px → 결과: ${w}×${h}px / ${b} bytes`,
       ready: (w, h) => `${w}×${h}px 이미지가 준비되었습니다. 목표 크기를 확인한 뒤 리사이즈하세요.`,
       done: (w, h, b) => `${w}×${h}px 이미지로 리사이즈했습니다. 다운로드 버튼을 사용할 수 있습니다.`,
+      quality: (n) => `품질 ${n}%`,
       fitLabels: { contain: '전체 맞춤', cover: '채우기/자르기', stretch: '늘리기' }
+    };
+
+    const revokeDownload = () => {
+      if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+      downloadUrl = '';
     };
 
     const setDownloadReady = (ready) => {
       if (ready) {
         link.removeAttribute('aria-disabled');
       } else {
+        revokeDownload();
         link.removeAttribute('href');
         link.setAttribute('aria-disabled', 'true');
       }
@@ -861,8 +886,33 @@
       if (fitStat) fitStat.textContent = fitMode;
     };
 
-    const setMessage = (message) => {
-      if (result) result.textContent = message;
+    const setMessage = (message, state = '') => {
+      if (!result) return;
+      result.textContent = message;
+      result.dataset.state = state;
+    };
+
+    const setInvalid = (invalid) => {
+      [w, h].forEach(el => el?.setAttribute('aria-invalid', invalid ? 'true' : 'false'));
+    };
+
+    const getMime = () => format?.value || mime;
+    const getQuality = () => {
+      const q = Number(qualityInput?.value || quality);
+      return Number.isFinite(q) ? Math.min(1, Math.max(0.45, q)) : quality;
+    };
+    const extensionFor = (type) => {
+      if (type === 'image/jpeg') return 'jpg';
+      if (type === 'image/webp') return 'webp';
+      return 'png';
+    };
+    const isOpaqueOutput = () => getMime() === 'image/jpeg';
+    const backgroundColor = () => bg?.value || '#ffffff';
+
+    const updateQualityLabel = () => {
+      const percent = Math.round(getQuality() * 100);
+      if (qualityLabel) qualityLabel.textContent = `${percent}%`;
+      if (qualityInput) qualityInput.setAttribute('aria-label', resizeText.quality(percent));
     };
 
     const updateResult = (width, height, outBytes = 0) => {
@@ -895,8 +945,10 @@
     const drawImageToCanvas = (ctx, width, height) => {
       const mode = fit?.value || 'contain';
       ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, width, height);
+      if (mode === 'contain' || isOpaqueOutput()) {
+        ctx.fillStyle = backgroundColor();
+        ctx.fillRect(0, 0, width, height);
+      }
 
       if (mode === 'stretch') {
         ctx.drawImage(img, 0, 0, width, height);
@@ -915,41 +967,55 @@
 
     setDownloadReady(false);
     setStats();
+    updateQualityLabel();
 
     f.addEventListener('change', () => {
       const file = f.files?.[0];
       setDownloadReady(false);
+      canvas.removeAttribute('width');
+      canvas.removeAttribute('height');
       if (!file) {
         img = null;
         setStats();
         setMessage(resizeText.empty);
         return;
       }
-      if (!file.type || !file.type.startsWith('image/')) {
+      if (!['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(file.type)) {
         img = null;
         setStats();
-        setMessage(resizeText.invalidFile);
+        setMessage(resizeText.invalidFile, 'error');
         return;
       }
       originBytes = file.size || 0;
-      const u = URL.createObjectURL(file);
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+      objectUrl = URL.createObjectURL(file);
       const i = new Image();
       i.onload = () => {
+        if (i.width * i.height > maxSourcePixels) {
+          img = null;
+          setStats();
+          setMessage(resizeText.sourceTooLarge, 'error');
+          URL.revokeObjectURL(objectUrl);
+          objectUrl = '';
+          return;
+        }
         img = i;
         ratio = i.width / i.height;
         if (w) w.value = i.width;
         if (h) h.value = i.height;
         updateResult(i.width, i.height);
         setMessage(resizeText.ready(i.width, i.height));
-        URL.revokeObjectURL(u);
+        URL.revokeObjectURL(objectUrl);
+        objectUrl = '';
       };
       i.onerror = () => {
         img = null;
         setStats();
-        setMessage(resizeText.invalidFile);
-        URL.revokeObjectURL(u);
+        setMessage(resizeText.invalidFile, 'error');
+        URL.revokeObjectURL(objectUrl);
+        objectUrl = '';
       };
-      i.src = u;
+      i.src = objectUrl;
     });
 
     preset?.addEventListener('change', () => {
@@ -957,12 +1023,17 @@
       const [pw, ph] = preset.value.split('x').map(Number);
       if (w) w.value = pw;
       if (h) h.value = ph;
+      setInvalid(false);
       syncTargetStats();
     });
 
     w?.addEventListener('input', () => {
       if (!img || !lock?.checked) return;
       const width = Number(w.value || img.width);
+      if (!Number.isFinite(width) || width < 1) {
+        syncTargetStats();
+        return;
+      }
       if (h) h.value = Math.max(1, Math.round(width / ratio));
       syncTargetStats();
     });
@@ -970,11 +1041,16 @@
     h?.addEventListener('input', () => {
       if (!img || !lock?.checked) return;
       const height = Number(h.value || img.height);
+      if (!Number.isFinite(height) || height < 1) {
+        syncTargetStats();
+        return;
+      }
       if (w) w.value = Math.max(1, Math.round(height * ratio));
       syncTargetStats();
     });
 
-    [w, h, fit].forEach(el => el?.addEventListener('change', syncTargetStats));
+    [w, h, fit, bg, format].forEach(el => el?.addEventListener('change', syncTargetStats));
+    qualityInput?.addEventListener('input', updateQualityLabel);
 
     run.addEventListener('click', () => {
       setDownloadReady(false);
@@ -984,23 +1060,35 @@
       }
       const size = getTargetSize();
       if (size === false) {
-        setMessage(resizeText.tooLarge);
+        setInvalid(true);
+        setMessage(resizeText.tooLarge, 'error');
         return;
       }
       if (!size) {
-        setMessage(resizeText.invalidSize);
+        setInvalid(true);
+        setMessage(resizeText.invalidSize, 'error');
         return;
       }
+      setInvalid(false);
       const { width, height } = size;
       canvas.width = width; canvas.height = height;
       drawImageToCanvas(canvas.getContext('2d'), width, height);
-      const data = canvas.toDataURL(mime, quality);
-      link.href = data;
-      link.download = `resized-${width}x${height}.png`;
-      setDownloadReady(true);
-      const outBytes = Math.floor((data.length * 3) / 4);
-      updateResult(width, height, outBytes);
-      setMessage(resizeText.done(width, height, outBytes));
+      const exportMime = getMime();
+      const exportQuality = exportMime === 'image/png' ? undefined : getQuality();
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          setDownloadReady(false);
+          setMessage(resizeText.exportFail, 'error');
+          return;
+        }
+        revokeDownload();
+        downloadUrl = URL.createObjectURL(blob);
+        link.href = downloadUrl;
+        link.download = `resized-${width}x${height}.${extensionFor(exportMime)}`;
+        setDownloadReady(true);
+        updateResult(width, height, blob.size);
+        setMessage(resizeText.done(width, height, blob.size), 'success');
+      }, exportMime, exportQuality);
     });
   };
 

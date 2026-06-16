@@ -1535,13 +1535,15 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 인스타·블로그·OG 규격에 맞춰 사진을 리사이즈하고, 전체 맞춤·크롭·늘리기 방식과 오류 방어까지 확인해요.
-  description_en: Resize photos for Instagram, blogs, and OG cards with fit, crop, and stretch modes plus safer size checks.
-  description_ja: Instagram・ブログ・OG向けに、全体表示・切り抜き・引き伸ばし方式とサイズチェック付きで画像を調整できます。
+  description: 인스타·블로그·OG 규격에 맞춰 사진을 리사이즈하고 WebP·PNG·JPEG 저장, 품질, 여백색까지 조정해요.
+  description_en: Resize photos for Instagram, blogs, and OG cards with WebP, PNG, JPEG, quality, padding color, and safer size checks.
+  description_ja: Instagram・ブログ・OG向けに、WebP・PNG・JPEG保存、品質、余白色、サイズチェック付きで画像を調整できます。
   url: /tools/image-resizer/
   url_en: /en/tools/image-resizer/
   url_ja: /ja/tools/image-resizer/
   thumbnail: /assets/thumbs/image-resizer.svg
+  tool_type: utility
+  topic_cluster: image
 
 - id: youtube-image-kit
   title: 유튜브 이미지 세트 메이커

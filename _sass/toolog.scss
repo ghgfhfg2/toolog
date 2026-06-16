@@ -736,6 +736,29 @@ textarea:focus-visible {
   display: grid;
   gap: .35rem;
 }
+.ir-output-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(160px, .7fr) minmax(120px, .45fr);
+  align-items: end;
+}
+.ir-output-grid > div {
+  display: grid;
+  gap: .35rem;
+}
+.ir-output-grid label {
+  color: var(--muted);
+  font-size: .82rem;
+}
+.ir-ui input[type="range"] {
+  padding-inline: 0;
+  accent-color: #3b82f6;
+}
+.ir-ui input[type="color"] {
+  min-height: 43px;
+  padding: .25rem;
+}
+.ir-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.ir-ui #ir-result[data-state="error"] { color: #fca5a5; }
+.ir-ui #ir-result[data-state="success"] { color: #86efac; }
 .pc-controls {
   grid-template-columns: minmax(0, 1fr) minmax(140px, .45fr);
 }
