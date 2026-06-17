@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Meeting Action Item Extractor | Pull owners, due dates, and decisions from notes
-description: Paste meeting notes to extract owners, due hints, decisions, and open questions into a follow-up checklist.
+title: Meeting Action Item Extractor | Pull owners, due dates, and decisions
+description: Paste meeting notes or chat logs to extract owners, due hints, decisions, and open questions into a browser-side follow-up checklist.
 lang: en
 permalink: /en/tools/meeting-action-item-extractor/
 canonical_url: /en/tools/meeting-action-item-extractor/
@@ -32,7 +32,7 @@ faq:
 ## Why use the Meeting Action Item Extractor?
 After a meeting, the most common gap is simple: who will do what, and by when? Rough notes often mix decisions, questions, and follow-up work, so action items can be missed.
 
-This tool turns pasted notes into a **follow-up checklist with owner hints, due-date hints, decisions, and open questions**. It is not a full AI minutes system; it is a lightweight utility for quick cleanup right after a meeting.
+This tool turns pasted notes or meeting chat logs into a **follow-up checklist with owner hints, due-date hints, decisions, and open questions**. It is not a full AI minutes system; it is a lightweight utility for quick cleanup right after a meeting.
 
 ## How to use it
 1. Paste rough meeting notes, chat logs, or bullet-style minutes.
@@ -52,9 +52,9 @@ TODO, decision, question, and due-date words are grouped into a checklist so you
 Items marked as no owner or no due date show where extra clarification is needed.
 
 ## Related tools
-- Need to rank several follow-up tasks? [Priority Decision Matrix Planner]({ '/en/tools/priority-decision-matrix-planner/' | relative_url })
-- Need to work backward from a deadline? [Deadline Backward Planner]({ '/en/tools/deadline-backward-planner/' | relative_url })
-- Need to send a scheduling follow-up? [Schedule Coordination Message Generator]({ '/en/tools/schedule-coordination-message-generator/' | relative_url })
+- Need to rank several follow-up tasks? [Priority Decision Matrix Planner]({{ '/en/tools/priority-decision-matrix-planner/' | relative_url }})
+- Need to work backward from a deadline? [Deadline Backward Planner]({{ '/en/tools/deadline-backward-planner/' | relative_url }})
+- Need to send a scheduling follow-up? [Schedule Coordination Message Generator]({{ '/en/tools/schedule-coordination-message-generator/' | relative_url }})
 
 ## FAQ
 ### Does it support every meeting note format?

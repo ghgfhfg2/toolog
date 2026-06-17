@@ -4123,15 +4123,15 @@ layout: default
           <p class="tool-result" id="rsp-feedback">{% if page.lang == 'en' %}Start with the first item and choose a category.{% elsif page.lang == 'ja' %}最初の品目から分別カテゴリを選んでください。{% else %}첫 품목을 보고 배출 분류를 골라보세요.{% endif %}</p>
         </div>
       {% when 'meeting-action-item-extractor' %}
-        <div class="tool-ui">
+        <div class="tool-ui maie-ui">
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="maie-input">{% if page.lang == 'en' %}Meeting notes{% elsif page.lang == 'ja' %}会議メモ{% else %}회의 메모{% endif %}</label>
-              <textarea id="maie-input" rows="10" maxlength="20000" placeholder="{% if page.lang == 'en' %}Paste bullets, chat notes, or rough minutes here.{% elsif page.lang == 'ja' %}箇条書き、チャットメモ、ラフな議事録を貼り付けてください。{% else %}회의 중 적은 메모, 채팅 로그, 간단한 회의록을 붙여넣으세요.{% endif %}"></textarea>
+              <textarea id="maie-input" rows="10" maxlength="20000" aria-describedby="maie-summary maie-help" placeholder="{% if page.lang == 'en' %}Paste bullets, chat notes, or rough minutes here.{% elsif page.lang == 'ja' %}箇条書き、チャットメモ、ラフな議事録を貼り付けてください。{% else %}회의 중 적은 메모, 채팅 로그, 간단한 회의록을 붙여넣으세요.{% endif %}"></textarea>
             </div>
             <div>
               <label for="maie-names">{% if page.lang == 'en' %}Known owners (optional, one per line){% elsif page.lang == 'ja' %}担当者候補（任意・1行に1名）{% else %}담당자 후보 (선택, 한 줄에 한 명){% endif %}</label>
-              <textarea id="maie-names" rows="10" maxlength="3000" placeholder="{% if page.lang == 'en' %}Mina&#10;Alex&#10;Design team{% elsif page.lang == 'ja' %}ミナ&#10;ケン&#10;デザインチーム{% else %}민지&#10;현우&#10;디자인팀{% endif %}"></textarea>
+              <textarea id="maie-names" rows="10" maxlength="3000" aria-describedby="maie-help" placeholder="{% if page.lang == 'en' %}Mina&#10;Alex&#10;Design team{% elsif page.lang == 'ja' %}ミナ&#10;ケン&#10;デザインチーム{% else %}민지&#10;현우&#10;디자인팀{% endif %}"></textarea>
             </div>
           </div>
 
@@ -4143,7 +4143,8 @@ layout: default
           <div class="tool-row-grid pct-actions">
             <button id="maie-run" type="button">{% if page.lang == 'en' %}Extract action items{% elsif page.lang == 'ja' %}アクション項目を抽出{% else %}액션아이템 정리{% endif %}</button>
             <button id="maie-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 넣기{% endif %}</button>
-            <button id="maie-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="maie-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="maie-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
           <div class="tool-stats">
@@ -4153,8 +4154,12 @@ layout: default
             <div><strong id="maie-owners">0</strong><span>{% if page.lang == 'en' %}Owner hints{% elsif page.lang == 'ja' %}担当ヒント{% else %}담당 힌트{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="maie-summary">{% if page.lang == 'en' %}Paste notes, then extract a checklist for follow-up.{% elsif page.lang == 'ja' %}メモを貼り付けると、フォローアップ用チェックリストに整理します。{% else %}회의 메모를 붙여넣으면 후속 작업 체크리스트로 정리합니다.{% endif %}</p>
-          <textarea id="maie-output" rows="12" readonly placeholder="{% if page.lang == 'en' %}Extracted checklist will appear here.{% elsif page.lang == 'ja' %}抽出結果がここに表示されます。{% else %}정리된 액션아이템이 여기에 표시됩니다.{% endif %}"></textarea>
+          <p class="tool-result" id="maie-help">{% if page.lang == 'en' %}Best with one note per line. Owner names, @mentions, TODO, by Friday, decision, and question words improve extraction. Notes stay in your browser.{% elsif page.lang == 'ja' %}1行に1件ずつ書くと精度が上がります。担当者名、@メンション、TODO、金曜まで、決定、質問などの語が抽出に役立ちます。メモはブラウザ内で処理されます。{% else %}한 줄에 한 항목씩 쓰면 더 잘 잡힙니다. 담당자 이름, @멘션, TODO, 금요일까지, 결정, 질문 같은 표현이 있으면 추출 품질이 좋아집니다. 메모는 브라우저 안에서만 처리됩니다.{% endif %}</p>
+          <p class="tool-result" id="maie-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Paste notes, then extract a checklist for follow-up.{% elsif page.lang == 'ja' %}メモを貼り付けると、フォローアップ用チェックリストに整理します。{% else %}회의 메모를 붙여넣으면 후속 작업 체크리스트로 정리합니다.{% endif %}</p>
+          <div class="tool-row">
+            <label for="maie-output">{% if page.lang == 'en' %}Extracted checklist{% elsif page.lang == 'ja' %}抽出チェックリスト{% else %}추출된 체크리스트{% endif %}</label>
+            <textarea id="maie-output" rows="12" readonly aria-describedby="maie-summary" placeholder="{% if page.lang == 'en' %}Extracted checklist will appear here.{% elsif page.lang == 'ja' %}抽出結果がここに表示されます。{% else %}정리된 액션아이템이 여기에 표시됩니다.{% endif %}"></textarea>
+          </div>
         </div>
       {% when 'emergency-bag-checklist-planner' %}
         <div class="tool-ui">

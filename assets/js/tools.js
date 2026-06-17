@@ -15759,6 +15759,7 @@
     const runBtn = document.getElementById('maie-run');
     const sampleBtn = document.getElementById('maie-sample');
     const copyBtn = document.getElementById('maie-copy');
+    const clearBtn = document.getElementById('maie-clear');
     const output = document.getElementById('maie-output');
     const summary = document.getElementById('maie-summary');
     const actionsOut = document.getElementById('maie-actions');
@@ -15769,28 +15770,49 @@
 
     const i18n = {
       ko: {
-        untitled: '미지정', noDue: '기한 미정', noOwner: '담당 미정', actionTitle: '## 액션아이템', decisionTitle: '## 결정사항', questionTitle: '## 미해결 질문', none: '- 추출된 항목이 없습니다. `해야 함`, `담당`, `까지`, `결정`처럼 더 구체적인 표현을 넣어보세요.', summary: (a,d,q) => `할 일 ${a}개, 결정사항 ${d}개, 미해결 질문 ${q}개를 정리했습니다.`, copyDone: '복사 완료', sample: `5/13 서비스 개선 회의\n- 민지: 온보딩 화면 문구를 금요일까지 수정\n- 현우는 고객센터 FAQ 초안을 다음 주 월요일까지 작성하기\n- 결정: 베타 공지는 이번 주에는 보내지 않음\n- TODO 결제 실패 로그를 다시 확인\n- 질문: 무료 체험 종료 알림은 며칠 전에 보내야 하나?\n- 디자인팀 @수정 시안 내일까지 공유` },
+        untitled: '미지정', noDue: '기한 미정', noOwner: '담당 미정', actionTitle: '## 액션아이템', decisionTitle: '## 결정사항', questionTitle: '## 미해결 질문', none: '- 추출된 항목이 없습니다. `해야 함`, `담당`, `까지`, `결정`처럼 더 구체적인 표현을 넣어보세요.', empty: '회의 메모를 먼저 붙여넣어 주세요.', cleared: '입력과 결과를 초기화했습니다.', summary: (a,d,q) => `할 일 ${a}개, 결정사항 ${d}개, 미해결 질문 ${q}개를 정리했습니다.`, copyDone: '복사 완료', copyFail: '자동 복사를 사용할 수 없습니다.', sample: `5/13 서비스 개선 회의\n- 민지: 온보딩 화면 문구를 금요일까지 수정\n- 현우는 고객센터 FAQ 초안을 다음 주 월요일까지 작성하기\n- 결정: 베타 공지는 이번 주에는 보내지 않음\n- TODO 결제 실패 로그를 다시 확인\n- 질문: 무료 체험 종료 알림은 며칠 전에 보내야 하나?\n- 디자인팀 @수정 시안 내일까지 공유` },
       en: {
-        untitled: 'Unspecified', noDue: 'No due date', noOwner: 'No owner', actionTitle: '## Action items', decisionTitle: '## Decisions', questionTitle: '## Open questions', none: '- No clear items found. Try adding words like todo, owner, by Friday, decided, or question.', summary: (a,d,q) => `Extracted ${a} action item(s), ${d} decision(s), and ${q} open question(s).`, copyDone: 'Copied', sample: `May 13 product meeting\n- Mina: revise onboarding copy by Friday\n- Alex to draft support FAQ by next Monday\n- Decision: do not send the beta announcement this week\n- TODO review payment failure logs again\n- Question: how many days before trial end should we notify users?\n- Design team @Jamie share revised mockups tomorrow` },
+        untitled: 'Unspecified', noDue: 'No due date', noOwner: 'No owner', actionTitle: '## Action items', decisionTitle: '## Decisions', questionTitle: '## Open questions', none: '- No clear items found. Try adding words like todo, owner, by Friday, decided, or question.', empty: 'Paste meeting notes before extracting.', cleared: 'Cleared the notes and result.', summary: (a,d,q) => `Extracted ${a} action item(s), ${d} decision(s), and ${q} open question(s).`, copyDone: 'Copied', copyFail: 'Automatic copy is unavailable.', sample: `May 13 product meeting\n- Mina: revise onboarding copy by Friday\n- Alex to draft support FAQ by next Monday\n- Decision: do not send the beta announcement this week\n- TODO review payment failure logs again\n- Question: how many days before trial end should we notify users?\n- Design team @Jamie share revised mockups tomorrow` },
       ja: {
-        untitled: '未指定', noDue: '期限未定', noOwner: '担当未定', actionTitle: '## アクション項目', decisionTitle: '## 決定事項', questionTitle: '## 未解決の質問', none: '- 明確な項目が見つかりませんでした。TODO、担当、まで、決定、質問などの表現を入れてみてください。', summary: (a,d,q) => `アクション${a}件、決定事項${d}件、未解決質問${q}件を整理しました。`, copyDone: 'コピー完了', sample: `5/13 サービス改善会議\n- ミナ: オンボーディング文言を金曜まで修正\n- ケンはFAQ草案を来週月曜まで作成\n- 決定: ベータ告知は今週送らない\n- TODO 決済失敗ログを再確認\n- 質問: 無料トライアル終了通知は何日前に送る？\n- デザインチーム @ユイ 明日までに修正版を共有` }
+        untitled: '未指定', noDue: '期限未定', noOwner: '担当未定', actionTitle: '## アクション項目', decisionTitle: '## 決定事項', questionTitle: '## 未解決の質問', none: '- 明確な項目が見つかりませんでした。TODO、担当、まで、決定、質問などの表現を入れてみてください。', empty: '会議メモを貼り付けてから抽出してください。', cleared: '入力と結果をクリアしました。', summary: (a,d,q) => `アクション${a}件、決定事項${d}件、未解決質問${q}件を整理しました。`, copyDone: 'コピー完了', copyFail: '自動コピーを利用できません。', sample: `5/13 サービス改善会議\n- ミナ: オンボーディング文言を金曜まで修正\n- ケンはFAQ草案を来週月曜まで作成\n- 決定: ベータ告知は今週送らない\n- TODO 決済失敗ログを再確認\n- 質問: 無料トライアル終了通知は何日前に送る？\n- デザインチーム @ユイ 明日までに修正版を共有` }
     }[pageLang] || null;
 
-    const normalizeLine = (line) => line.replace(/^\s*[-*•\d.)\]]+\s*/, '').trim();
+    const setSummary = (message, state = '') => {
+      summary.textContent = message;
+      summary.dataset.state = state;
+    };
+    const setCounts = (a = 0, d = 0, due = 0, owner = 0) => {
+      actionsOut.textContent = formatNum(a);
+      decisionsOut.textContent = formatNum(d);
+      datesOut.textContent = formatNum(due);
+      ownersOut.textContent = formatNum(owner);
+    };
+    const setCopyEnabled = (enabled) => {
+      if (copyBtn) copyBtn.disabled = !enabled;
+    };
+    const normalizeLine = (line) => line.replace(/^\s*(?:[-*•]|\d+[.)\]]|[a-z][.)\]])\s*/i, '').replace(/\s+/g, ' ').trim();
+    const pushUnique = (arr, item, keyFn = (v) => v) => {
+      const key = keyFn(item).toLowerCase();
+      if (!arr.some(v => keyFn(v).toLowerCase() === key)) arr.push(item);
+    };
     const ownerFromLine = (line, known) => {
       const at = line.match(/@([\p{L}\p{N}_-]+)/u);
       if (at) return at[1];
       const colon = line.match(/^([\p{L}\p{N}_\s]{2,18})\s*[:：]/u);
       if (colon) return colon[1].trim();
+      const koreanSubject = line.match(/^([\p{L}\p{N}_\s]{2,18})(?:은|는|이|가)\s+/u);
+      if (koreanSubject) return koreanSubject[1].trim();
+      const englishTo = line.match(/^([A-Z][\p{L}\p{N}_-]{1,18})\s+to\s+/u);
+      if (englishTo) return englishTo[1].trim();
       const hit = known.find(name => name && line.toLowerCase().includes(name.toLowerCase()));
       return hit || i18n.noOwner;
     };
     const dueFromLine = (line) => {
       const patterns = [
         /(\d{1,2}[./-]\d{1,2})(?:\s*까지|\s*by)?/,
-        /(오늘|내일|모레|이번\s*주|다음\s*주|금요일|월요일|화요일|수요일|목요일|토요일|일요일)\s*까지?/,
-        /(today|tomorrow|this\s+week|next\s+week|by\s+[A-Za-z]+|Friday|Monday|Tuesday|Wednesday|Thursday|Saturday|Sunday)/i,
-        /(今日|明日|今週|来週|月曜|火曜|水曜|木曜|金曜|土曜|日曜)まで?/
+        /(?:오늘|내일|모레|이번\s*주|다음\s*주|월요일|화요일|수요일|목요일|금요일|토요일|일요일)(?:\s*까지)?/,
+        /\b(?:by\s+)?(?:today|tomorrow|this\s+week|next\s+week|next\s+Monday|next\s+Tuesday|next\s+Wednesday|next\s+Thursday|next\s+Friday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b/i,
+        /(?:今日|明日|今週|来週|月曜|火曜|水曜|木曜|金曜|土曜|日曜)(?:まで)?/
       ];
       for (const p of patterns) { const m = line.match(p); if (m) return m[0].trim(); }
       return i18n.noDue;
@@ -15802,12 +15824,23 @@
     const extract = () => {
       const known = (namesEl?.value || '').split(/\n+/).map(v => v.trim()).filter(Boolean);
       const lines = (input.value || '').split(/\n+/).map(normalizeLine).filter(Boolean);
+      if (!lines.length) {
+        input.setAttribute('aria-invalid', 'true');
+        output.value = '';
+        setCounts();
+        setCopyEnabled(false);
+        setSummary(i18n.empty, 'error');
+        return;
+      }
+      input.setAttribute('aria-invalid', 'false');
       const actions = [], decisions = [], questions = [];
       lines.forEach(line => {
-        if (isDecision(line)) decisions.push(line);
-        if (isQuestion(line)) questions.push(line);
-        if (isAction(line) && !isDecision(line)) {
-          actions.push({ text: line, owner: ownerFromLine(line, known), due: dueFromLine(line) });
+        const decision = isDecision(line);
+        const question = isQuestion(line);
+        if (decision) pushUnique(decisions, line);
+        if (question) pushUnique(questions, line);
+        if (isAction(line) && !decision && !question) {
+          pushUnique(actions, { text: line, owner: ownerFromLine(line, known), due: dueFromLine(line) }, item => item.text);
         }
       });
       const actionLines = actions.map((it, idx) => `- [ ] ${it.text}\n  - ${pageLang === 'en' ? 'Owner' : pageLang === 'ja' ? '担当' : '담당'}: ${it.owner}\n  - ${pageLang === 'en' ? 'Due' : pageLang === 'ja' ? '期限' : '기한'}: ${it.due}`);
@@ -15816,27 +15849,41 @@
       chunks.push(actionLines.length ? actionLines.join('\n') : i18n.none);
       if (includeDecisions?.checked) { chunks.push('', i18n.decisionTitle, decisions.length ? decisions.map(x => `- ${x}`).join('\n') : '- ' + i18n.untitled); }
       if (includeQuestions?.checked) { chunks.push('', i18n.questionTitle, questions.length ? questions.map(x => `- ${x}`).join('\n') : '- ' + i18n.untitled); }
-      output.value = chunks.join('\n');
+      output.value = chunks.join('\n').trim();
       const ownerCount = actions.filter(x => x.owner !== i18n.noOwner).length;
       const dueCount = actions.filter(x => x.due !== i18n.noDue).length;
-      actionsOut.textContent = formatNum(actions.length);
-      decisionsOut.textContent = formatNum(decisions.length);
-      datesOut.textContent = formatNum(dueCount);
-      ownersOut.textContent = formatNum(ownerCount);
-      summary.textContent = i18n.summary(actions.length, decisions.length, questions.length);
+      setCounts(actions.length, decisions.length, dueCount, ownerCount);
+      setCopyEnabled(true);
+      setSummary(i18n.summary(actions.length, decisions.length, questions.length), actions.length ? 'success' : 'warning');
     };
 
     sampleBtn?.addEventListener('click', () => { input.value = i18n.sample; namesEl.value = pageLang === 'en' ? 'Mina\nAlex\nJamie\nDesign team' : pageLang === 'ja' ? 'ミナ\nケン\nユイ\nデザインチーム' : '민지\n현우\n수정\n디자인팀'; extract(); });
+    clearBtn?.addEventListener('click', () => {
+      input.value = '';
+      if (namesEl) namesEl.value = '';
+      output.value = '';
+      input.setAttribute('aria-invalid', 'false');
+      setCounts();
+      setCopyEnabled(false);
+      setSummary(i18n.cleared);
+      input.focus();
+    });
     runBtn.addEventListener('click', extract);
     [input, namesEl, includeDecisions, includeQuestions].forEach(el => { el?.addEventListener('input', extract); el?.addEventListener('change', extract); });
     copyBtn?.addEventListener('click', async () => {
       if (!output.value.trim()) return;
-      if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(output.value.trim());
-      else { output.focus(); output.select(); document.execCommand('copy'); }
-      const old = copyBtn.textContent;
-      copyBtn.textContent = i18n.copyDone;
-      setTimeout(() => { copyBtn.textContent = old; }, 900);
+      try {
+        if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(output.value.trim());
+        else { output.focus(); output.select(); document.execCommand('copy'); }
+        const old = copyBtn.textContent;
+        copyBtn.textContent = i18n.copyDone;
+        setSummary(i18n.copyDone, 'success');
+        setTimeout(() => { copyBtn.textContent = old; }, 900);
+      } catch (_) {
+        setSummary(i18n.copyFail, 'error');
+      }
     });
+    setCopyEnabled(false);
   }
 
   if (slug === 'emergency-bag-checklist-planner') {
