@@ -299,8 +299,8 @@
   badge_en: New
   badge_ja: 新着
   description: 회의 메모와 채팅 로그를 붙여넣으면 담당자, 기한, 결정사항, 미해결 질문을 골라 액션아이템 체크리스트로 정리해요.
-  description_en: Paste meeting notes or chat logs to extract owners, due hints, decisions, and open questions into an action-item checklist.
-  description_ja: 会議メモやチャットログを貼り付けると、担当者・期限・決定事項・未解決の質問をアクション項目として整理します。
+  description_en: Paste meeting notes or chat logs to extract owner hints, due-date hints, decisions, and open questions into a browser-side follow-up checklist.
+  description_ja: 会議メモやチャットログを貼り付けると、担当者候補・期限ヒント・決定事項・未解決の質問をブラウザ内でフォローアップ用チェックリストに整理します。
   url: /tools/meeting-action-item-extractor/
   url_en: /en/tools/meeting-action-item-extractor/
   url_ja: /ja/tools/meeting-action-item-extractor/

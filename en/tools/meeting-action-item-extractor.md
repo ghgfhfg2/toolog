@@ -18,7 +18,7 @@ image:
 tool_key: meeting-action-item-extractor
 tool_type: utility
 topic_cluster: work
-keywords: [meeting action items, meeting notes, minutes checklist, task extractor, follow-up checklist]
+keywords: [meeting action items, meeting notes checklist, meeting minutes action item extractor, task extractor, follow-up checklist]
 related_tools: [priority-decision-matrix-planner, deadline-backward-planner, schedule-coordination-message-generator]
 faq:
   - q: Does this understand notes like an AI minutes tool?
@@ -27,18 +27,20 @@ faq:
     a: No. The text is processed in your current browser only and is not stored or uploaded.
   - q: What note style works best?
     a: Lines that include owner names, TODO, decision, question, by Friday, or due-date words are easier to extract.
+  - q: What happens if no clear item is found?
+    a: The result shows an empty-state message and suggests adding clearer owner, due-date, decision, or question wording.
 ---
 
 ## Why use the Meeting Action Item Extractor?
 After a meeting, the most common gap is simple: who will do what, and by when? Rough notes often mix decisions, questions, and follow-up work, so action items can be missed.
 
-This tool turns pasted notes or meeting chat logs into a **follow-up checklist with owner hints, due-date hints, decisions, and open questions**. It is not a full AI minutes system; it is a lightweight utility for quick cleanup right after a meeting.
+This tool turns pasted notes or meeting chat logs into a **browser-side follow-up checklist with owner hints, due-date hints, decisions, and open questions**. It is not a full AI minutes system; it is a lightweight action item extractor for quick cleanup right after a meeting.
 
 ## How to use it
 1. Paste rough meeting notes, chat logs, or bullet-style minutes.
-2. Add known owner names if you want better owner detection.
-3. Choose whether to include decisions and open questions.
-4. Click Extract action items and review the checklist.
+2. Add known owner names, one per line, if you want better owner detection.
+3. Choose whether to include decisions and open questions in the output.
+4. Click Extract action items and review the checklist, including no-owner or no-due-date labels.
 5. Copy the result into Slack, Notion, email, or your team messenger.
 
 ## Especially useful when
@@ -50,6 +52,9 @@ TODO, decision, question, and due-date words are grouped into a checklist so you
 
 ### 3) Finding missing owners or deadlines
 Items marked as no owner or no due date show where extra clarification is needed.
+
+### 4) Turning rough minutes into a copy-ready checklist
+If you search for a meeting notes checklist or meeting minutes action item extractor, this page is meant for the small step between raw notes and a shareable follow-up list.
 
 ## Related tools
 - Need to rank several follow-up tasks? [Priority Decision Matrix Planner]({{ '/en/tools/priority-decision-matrix-planner/' | relative_url }})
@@ -65,6 +70,9 @@ It checks clear patterns such as `Mina:`, `@Alex`, and names from the optional o
 
 ### Can I share the result as-is?
 Review owners, dates, and decisions before sharing. Remove sensitive information if the notes will leave your team.
+
+### Why does it show no owner or no due date?
+The extractor keeps ambiguous lines in the checklist but labels missing details so you can confirm them before sending the follow-up.
 
 ## Summary
 Meeting Action Item Extractor is a **utility-style tool that turns rough meeting notes into a follow-up checklist**.
