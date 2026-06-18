@@ -442,9 +442,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 글·채팅·문서에 섞인 URL을 한 번에 추출하고, 중복 제거·추적 파라미터 삭제·도메인별 정리를 빠르게 해요.
-  description_en: Extract URLs from text, remove duplicates, strip tracking parameters, and organize links by domain.
-  description_ja: テキスト内のURLをまとめて抽出し、重複削除・追跡パラメータ削除・ドメイン別整理まで素早く行います。
+  description: 글·채팅·문서에 섞인 http, https, www 링크를 브라우저에서 추출하고 중복 제거·추적 파라미터 삭제·도메인별 정리를 빠르게 해요.
+  description_en: Extract http, https, and www links from text in your browser, remove duplicates, strip tracking parameters, and organize links by domain.
+  description_ja: テキスト内の http、https、www リンクをブラウザ内で抽出し、重複削除・追跡パラメータ削除・ドメイン別整理まで素早く行います。
   url: /tools/link-list-cleaner/
   url_en: /en/tools/link-list-cleaner/
   url_ja: /ja/tools/link-list-cleaner/

@@ -2138,39 +2138,45 @@ layout: default
           <textarea id="knr-output" rows="8" readonly placeholder="변환 결과가 여기에 표시됩니다."></textarea>
         </div>
       {% when 'link-list-cleaner' %}
-        <div class="tool-ui">
+        <div class="tool-ui llc-ui">
           <div class="tool-row">
-            <label for="llc-input">링크가 섞인 텍스트</label>
-            <textarea id="llc-input" rows="10" maxlength="30000" placeholder="예: 참고 기사 https://example.com/a?utm_source=chat
+            <label for="llc-input">{% if page.lang == 'en' %}Text containing links{% elsif page.lang == 'ja' %}リンクが混ざったテキスト{% else %}링크가 섞인 텍스트{% endif %}</label>
+            <textarea id="llc-input" rows="10" maxlength="50000" aria-describedby="llc-summary llc-help" placeholder="{% if page.lang == 'en' %}Example: article https://example.com/a?utm_source=chat
+Docs www.docs.example.org/report
+Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}例: 記事 https://example.com/a?utm_source=chat
+資料 www.docs.example.org/report
+同じリンク https://example.com/a?utm_medium=dm{% else %}예: 참고 기사 https://example.com/a?utm_source=chat
 문서 링크 https://docs.example.org/report
-같은 링크 다시 공유 https://example.com/a?utm_medium=dm"></textarea>
+같은 링크 다시 공유 https://example.com/a?utm_medium=dm{% endif %}"></textarea>
           </div>
 
-          <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="llc-dedupe" type="checkbox" checked /> 중복 제거</label>
-            <label class="tool-check"><input id="llc-strip" type="checkbox" checked /> 추적 파라미터 삭제</label>
+          <div class="tool-row-grid llc-options" aria-label="{% if page.lang == 'en' %}Link cleanup options{% elsif page.lang == 'ja' %}リンク整理オプション{% else %}링크 정리 옵션{% endif %}">
+            <label class="tool-check"><input id="llc-dedupe" type="checkbox" checked /> {% if page.lang == 'en' %}Remove duplicates{% elsif page.lang == 'ja' %}重複削除{% else %}중복 제거{% endif %}</label>
+            <label class="tool-check"><input id="llc-strip" type="checkbox" checked /> {% if page.lang == 'en' %}Strip tracking parameters{% elsif page.lang == 'ja' %}追跡パラメータ削除{% else %}추적 파라미터 삭제{% endif %}</label>
+            <label class="tool-check"><input id="llc-sort-domain" type="checkbox" checked /> {% if page.lang == 'en' %}Sort by domain{% elsif page.lang == 'ja' %}ドメイン別ソート{% else %}도메인별 정렬{% endif %}</label>
+            <label class="tool-check"><input id="llc-lower-host" type="checkbox" checked /> {% if page.lang == 'en' %}Lowercase domains{% elsif page.lang == 'ja' %}ドメイン小文字化{% else %}도메인 소문자 정리{% endif %}</label>
           </div>
 
-          <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="llc-sort-domain" type="checkbox" checked /> 도메인별 정렬</label>
-            <label class="tool-check"><input id="llc-lower-host" type="checkbox" checked /> 도메인 소문자 정리</label>
+          <div class="tool-row-grid llc-actions">
+            <button id="llc-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
+            <button id="llc-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="llc-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-row-grid pct-actions">
-            <button id="llc-sample" type="button">예시 넣기</button>
-            <button id="llc-copy" type="button">결과 복사</button>
+          <div class="tool-stats llc-stats" aria-label="{% if page.lang == 'en' %}Link cleanup summary{% elsif page.lang == 'ja' %}リンク整理結果{% else %}링크 정리 결과{% endif %}">
+            <div><strong id="llc-found">0</strong><span>{% if page.lang == 'en' %}Links found{% elsif page.lang == 'ja' %}抽出URL数{% else %}추출 링크 수{% endif %}</span></div>
+            <div><strong id="llc-unique">0</strong><span>{% if page.lang == 'en' %}Cleaned links{% elsif page.lang == 'ja' %}整理後URL数{% else %}정리 후 링크 수{% endif %}</span></div>
+            <div><strong id="llc-domains">0</strong><span>{% if page.lang == 'en' %}Domains{% elsif page.lang == 'ja' %}ドメイン数{% else %}도메인 수{% endif %}</span></div>
+            <div><strong id="llc-tracking">0</strong><span>{% if page.lang == 'en' %}Tracking keys removed{% elsif page.lang == 'ja' %}削除した追跡キー{% else %}삭제된 추적 파라미터{% endif %}</span></div>
           </div>
 
-          <div class="tool-stats">
-            <div><strong id="llc-found">0</strong><span>추출 링크 수</span></div>
-            <div><strong id="llc-unique">0</strong><span>정리 후 링크 수</span></div>
-            <div><strong id="llc-domains">0</strong><span>도메인 수</span></div>
-            <div><strong id="llc-tracking">0</strong><span>삭제된 추적 파라미터</span></div>
+          <p class="tool-result" id="llc-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Paste text to extract URLs, remove duplicates, strip tracking parameters, and sort by domain.{% elsif page.lang == 'ja' %}テキストを貼り付けるとURLだけを抽出し、重複・追跡パラメータ・ドメイン順を整理します。{% else %}텍스트를 넣으면 URL만 추출해 중복, 추적 파라미터, 도메인 순서를 정리합니다.{% endif %}</p>
+          <p class="tool-result" id="llc-help">{% if page.lang == 'en' %}Supports http://, https://, and www. links. Everything runs in your browser, up to 50,000 characters.{% elsif page.lang == 'ja' %}http://、https://、www. 形式に対応します。処理はブラウザ内のみで、最大50,000文字です。{% else %}http://, https://, www. 형태의 링크를 지원합니다. 입력은 브라우저 안에서만 처리되며 최대 50,000자까지 가능합니다.{% endif %}</p>
+          <div class="tool-row">
+            <label for="llc-output">{% if page.lang == 'en' %}Cleaned link list{% elsif page.lang == 'ja' %}整理されたリンク一覧{% else %}정리된 링크 목록{% endif %}</label>
+            <textarea id="llc-output" rows="12" readonly aria-describedby="llc-summary" placeholder="{% if page.lang == 'en' %}Cleaned links will appear here.{% elsif page.lang == 'ja' %}整理されたリンク一覧がここに表示されます。{% else %}정리된 링크 목록이 여기에 표시됩니다.{% endif %}"></textarea>
           </div>
-
-          <p class="tool-result" id="llc-summary">텍스트를 넣으면 URL만 추출해 중복, 추적 파라미터, 도메인 순서를 정리합니다.</p>
-          <textarea id="llc-output" rows="12" readonly placeholder="정리된 링크 목록이 여기에 표시됩니다."></textarea>
-          <div id="llc-domain-list" class="bw-list"></div>
+          <div id="llc-domain-list" class="bw-list" aria-label="{% if page.lang == 'en' %}Domain summary{% elsif page.lang == 'ja' %}ドメイン要約{% else %}도메인 요약{% endif %}"></div>
         </div>
 
       {% when 'date-format-normalizer' %}

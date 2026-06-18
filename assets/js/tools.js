@@ -14333,6 +14333,7 @@
     const lowerHost = document.getElementById('llc-lower-host');
     const sampleBtn = document.getElementById('llc-sample');
     const copyBtn = document.getElementById('llc-copy');
+    const clearBtn = document.getElementById('llc-clear');
     const output = document.getElementById('llc-output');
     const foundOut = document.getElementById('llc-found');
     const uniqueOut = document.getElementById('llc-unique');
@@ -14343,33 +14344,118 @@
 
     if (!input || !output || !foundOut || !uniqueOut || !domainsOut || !trackingOut || !summary || !domainList) return;
 
+    const llcText = {
+      ko: {
+        initial: '텍스트를 넣으면 URL만 추출해 중복, 추적 파라미터, 도메인 순서를 정리합니다.',
+        emptyDomain: '도메인 요약이 여기에 표시됩니다.',
+        noLinks: '텍스트 안에서 http://, https:// 또는 www. 링크를 찾지 못했어요.',
+        cleaned: (found, kept, removed, skipped) => {
+          const extra = skipped ? ` 유효하지 않은 후보 ${formatNum(skipped)}개는 제외했습니다.` : '';
+          return `링크 ${formatNum(found)}개를 읽어 ${formatNum(kept)}개로 정리했고, 추적 파라미터 ${formatNum(removed)}개를 제거했어요.${extra}`;
+        },
+        domainLinks: (count) => `${formatNum(count)}개 링크`,
+        copied: '정리된 링크 목록을 복사했습니다.',
+        copyEmpty: '복사할 정리 결과가 없습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다. 결과를 직접 선택해 복사해 주세요.',
+        cleared: '입력과 결과를 초기화했습니다.',
+        sample: [
+          '기사 참고 https://Example.com/news?id=52&utm_source=telegram&utm_medium=chat',
+          '문서 링크 www.docs.example.org/report?fbclid=test123',
+          '같은 링크 다시 공유 https://example.com/news?id=52&utm_campaign=spring',
+          '영상 링크 https://video.example.net/watch?v=abc123&gclid=demo'
+        ]
+      },
+      en: {
+        initial: 'Paste text to extract URLs, remove duplicates, strip tracking parameters, and sort by domain.',
+        emptyDomain: 'Domain summary will appear here.',
+        noLinks: 'No http://, https://, or www. links were found in the text.',
+        cleaned: (found, kept, removed, skipped) => {
+          const extra = skipped ? ` ${formatNum(skipped)} invalid candidate(s) were skipped.` : '';
+          return `Read ${formatNum(found)} link(s), cleaned them down to ${formatNum(kept)}, and removed ${formatNum(removed)} tracking parameter(s).${extra}`;
+        },
+        domainLinks: (count) => `${formatNum(count)} link(s)`,
+        copied: 'Copied the cleaned link list.',
+        copyEmpty: 'There is no cleaned result to copy.',
+        copyFail: 'Automatic copy is unavailable. Select the result manually to copy it.',
+        cleared: 'Cleared the input and result.',
+        sample: [
+          'Article https://Example.com/news?id=52&utm_source=telegram&utm_medium=chat',
+          'Docs www.docs.example.org/report?fbclid=test123',
+          'Same link again https://example.com/news?id=52&utm_campaign=spring',
+          'Video https://video.example.net/watch?v=abc123&gclid=demo'
+        ]
+      },
+      ja: {
+        initial: 'テキストを貼り付けるとURLだけを抽出し、重複・追跡パラメータ・ドメイン順を整理します。',
+        emptyDomain: 'ドメイン要約がここに表示されます。',
+        noLinks: 'テキスト内に http://、https://、www. のリンクが見つかりませんでした。',
+        cleaned: (found, kept, removed, skipped) => {
+          const extra = skipped ? ` 無効な候補${formatNum(skipped)}件は除外しました。` : '';
+          return `${formatNum(found)}件のリンクを読み取り、${formatNum(kept)}件に整理し、追跡パラメータ${formatNum(removed)}件を削除しました。${extra}`;
+        },
+        domainLinks: (count) => `${formatNum(count)}件のリンク`,
+        copied: '整理されたリンク一覧をコピーしました。',
+        copyEmpty: 'コピーできる整理結果がありません。',
+        copyFail: '自動コピーを利用できません。結果を手動で選択してコピーしてください。',
+        cleared: '入力と結果をクリアしました。',
+        sample: [
+          '記事 https://Example.com/news?id=52&utm_source=telegram&utm_medium=chat',
+          '資料 www.docs.example.org/report?fbclid=test123',
+          '同じリンク https://example.com/news?id=52&utm_campaign=spring',
+          '動画 https://video.example.net/watch?v=abc123&gclid=demo'
+        ]
+      }
+    }[pageLang];
+
     const TRACKING_KEYS = new Set([
       'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
       'utm_id', 'utm_name', 'fbclid', 'gclid', 'igshid', 'mc_cid', 'mc_eid',
       'si', 'feature', 'ref_src'
     ]);
 
+    const setSummary = (message, state = '') => {
+      summary.textContent = message;
+      summary.dataset.state = state;
+    };
+
+    const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[char]));
+
     const copyText = async (text) => {
       try {
         await navigator.clipboard.writeText(text);
+        return true;
       } catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          const ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+          return ok;
+        } catch (err) {
+          return false;
+        }
       }
     };
 
-    const cleanToken = (token) => token.replace(/[)>\],.!?]+$/g, '');
+    const cleanToken = (token) => token
+      .replace(/^[([<{]+/g, '')
+      .replace(/[)\]}>.,!?;:]+$/g, '');
 
     const normalizeUrl = (raw) => {
       const cleaned = cleanToken(raw.trim());
       try {
-        const url = new URL(cleaned);
+        const url = new URL(/^www\./i.test(cleaned) ? `https://${cleaned}` : cleaned);
+        if (!['http:', 'https:'].includes(url.protocol)) return null;
         let removed = 0;
         if (lowerHost.checked) url.hostname = url.hostname.toLowerCase();
         if (strip.checked) {
@@ -14382,6 +14468,7 @@
           });
         }
         if (!url.search) url.search = '';
+        url.hash = url.hash || '';
         return { href: url.toString(), host: url.hostname || '-', removed };
       } catch (_) {
         return null;
@@ -14393,26 +14480,31 @@
       items.forEach((item) => counts.set(item.host, (counts.get(item.host) || 0) + 1));
       const entries = Array.from(counts.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
       if (!entries.length) {
-        domainList.innerHTML = '<p class="tool-result">도메인 요약이 여기에 표시됩니다.</p>';
+        domainList.innerHTML = `<p class="tool-result">${escapeHtml(llcText.emptyDomain)}</p>`;
         return;
       }
       domainList.innerHTML = entries.map(([host, count]) => `
         <div class="tool-card">
-          <strong>${host}</strong>
-          <p class="tool-result">${count}개 링크</p>
+          <strong>${escapeHtml(host)}</strong>
+          <p class="tool-result">${escapeHtml(llcText.domainLinks(count))}</p>
         </div>
       `).join('');
     };
 
     const render = () => {
-      const matches = (input.value.match(/https?:\/\/[^\s"'<>]+/g) || []);
+      const rawText = input.value || '';
+      const matches = (rawText.match(/(?:https?:\/\/|www\.)[^\s"'<>]+/gi) || []);
       foundOut.textContent = matches.length.toLocaleString(numberLocale);
 
       const normalized = [];
       let removedTotal = 0;
+      let skipped = 0;
       matches.forEach((match) => {
         const parsed = normalizeUrl(match);
-        if (!parsed) return;
+        if (!parsed) {
+          skipped += 1;
+          return;
+        }
         removedTotal += parsed.removed;
         normalized.push(parsed);
       });
@@ -14436,31 +14528,46 @@
       domainsOut.textContent = uniqueDomains.size.toLocaleString(numberLocale);
       trackingOut.textContent = removedTotal.toLocaleString(numberLocale);
       output.value = items.map((item) => item.href).join('\n');
+      copyBtn.disabled = !output.value.trim();
       renderDomainCards(items);
 
       if (!matches.length) {
-        summary.textContent = '텍스트 안에서 http:// 또는 https:// 링크를 찾지 못했어요.';
+        setSummary(rawText.trim() ? llcText.noLinks : llcText.initial, rawText.trim() ? 'warning' : '');
       } else {
-        summary.textContent = `링크 ${matches.length}개를 읽어 ${items.length}개로 정리했고, 추적 파라미터 ${removedTotal}개를 제거했어요.`;
+        setSummary(llcText.cleaned(matches.length, items.length, removedTotal, skipped), skipped ? 'warning' : 'success');
       }
     };
 
     sampleBtn?.addEventListener('click', () => {
-      input.value = [
-        '기사 참고 https://Example.com/news?id=52&utm_source=telegram&utm_medium=chat',
-        '문서 링크 https://docs.example.org/report?fbclid=test123',
-        '같은 링크 다시 공유 https://example.com/news?id=52&utm_campaign=spring',
-        '영상 링크 https://video.example.net/watch?v=abc123&gclid=demo'
-      ].join('\n');
+      input.value = llcText.sample.join('\n');
       render();
+      input.focus();
     });
 
     copyBtn?.addEventListener('click', async () => {
-      if (!output.value.trim()) return;
-      await copyText(output.value.trim());
+      if (!output.value.trim()) {
+        setSummary(llcText.copyEmpty, 'error');
+        input.focus();
+        return;
+      }
+      const copied = await copyText(output.value.trim());
+      if (!copied) {
+        setSummary(llcText.copyFail, 'error');
+        output.focus();
+        output.select();
+        return;
+      }
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
+      copyBtn.textContent = llcText.copied;
+      setSummary(llcText.copied, 'success');
       setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      input.value = '';
+      render();
+      setSummary(llcText.cleared);
+      input.focus();
     });
 
     [input, dedupe, strip, sortDomain, lowerHost].forEach((el) => {

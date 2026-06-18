@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Link List Cleaner | Extract and tidy URLs from mixed text
-description: Extract URLs from text, remove duplicates, strip tracking parameters, and organize links by domain.
+title: Link List Cleaner | Extract URLs and www links from mixed text
+description: Extract http, https, and www links from text in your browser, remove duplicates, strip tracking parameters, and organize links by domain.
 lang: en
 permalink: /en/tools/link-list-cleaner/
 canonical_url: /en/tools/link-list-cleaner/
@@ -22,11 +22,13 @@ keywords: [link extractor, URL cleaner, strip UTM parameters, dedupe links, orga
 related_tools: [privacy-exposure-checker, text-line-break-cleaner, filename-sanitizer]
 faq:
   - q: What links does it extract?
-    a: It focuses on standard http:// and https:// URLs and trims common trailing punctuation.
+    a: It extracts http:// and https:// URLs plus links that start with www. Common trailing punctuation is trimmed automatically.
   - q: Which tracking parameters can it remove?
     a: It removes common keys such as utm_source, utm_medium, utm_campaign, utm_term, utm_content, fbclid, and gclid.
   - q: Can I keep the original order?
     a: Yes. Turn off domain sorting to keep the input order as much as possible while still cleaning and deduplicating links.
+  - q: Is my pasted text sent to a server?
+    a: No. The pasted text and cleaned result are processed only in your browser.
 ---
 
 ## Why use Link List Cleaner?
@@ -37,9 +39,10 @@ Common situations include:
 - reference links scattered across multiple paragraphs
 - the same URL repeated several times in a messenger thread
 - share links cluttered with tracking parameters such as `utm_source` or `fbclid`
+- links written as `www.example.com` without a protocol
 - needing to group links by domain before pasting them into a document or note
 
-This tool extracts only the URLs from mixed text, reduces duplicates, removes common tracking parameters, and turns them into a cleaner list that is easier to share.
+This tool extracts only the URLs from mixed text, reduces duplicates, removes common tracking parameters, and turns them into a cleaner list that is easier to share. The text stays in your browser.
 
 ## How to use it
 1. Paste the text that contains links.
@@ -64,7 +67,7 @@ You can strip common tags like `utm_*`, `fbclid`, and `gclid` to make URLs look 
 
 ## FAQ
 ### Can it handle multiple links on one line?
-Yes. It scans links in order even when several URLs appear in the same line.
+Yes. It scans links in order even when several URLs appear in the same line. Links that start with `www.` are normalized to `https://` for easier sharing.
 
 ### Will removing tracking parameters break the original link?
 Usually not for normal sharing links. Still, some services may depend on certain parameters, so it is safest to test important links once after cleaning.
@@ -73,4 +76,4 @@ Usually not for normal sharing links. Still, some services may depend on certain
 It makes sources easier to scan and helps you see how many links came from the same site. That is especially useful for research and reference organization.
 
 ## Summary
-Link List Cleaner is a **utility-type tool** that extracts URLs from mixed text and handles deduplication, tracking-parameter cleanup, and domain-based organization in one place.
+Link List Cleaner is a **utility-type tool** that extracts URLs and www links from mixed text, then handles deduplication, tracking-parameter cleanup, and domain-based organization in one place.
