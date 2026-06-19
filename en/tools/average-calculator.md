@@ -39,8 +39,34 @@ Paste or type scores, expenses, survey values, or measurements and get core stat
 
 If labels or stray text are mixed in, the calculator skips those entries and shows how many were ignored, so you can clean the list without losing the valid numbers.
 
+## Key features
+- Automatic number parsing with comma, space, tab, and line-break separators
+- Mean, median, sum, minimum, maximum, range, and count in one result panel
+- Decimal and negative number support for grades, balances, measurements, and survey responses
+- Ignored-entry count when text, blanks, or non-finite values are mixed into the list
+- Copyable result summary for reports, class records, expense checks, and quick data reviews
+
+## How to use
+1. Paste or type your number list.
+2. Check the live count, sum, mean, median, minimum, maximum, and range.
+3. If the ignored-entry count is not zero, review the original list for labels or extra text.
+4. Use **Copy result** when you need to share the summary.
+
 ## Related tools
-- [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
-- [Average Speed Calculator]({{ '/en/tools/average-speed-calculator/' | relative_url }})
-- [Unit Converter]({{ '/en/tools/unit-converter/' | relative_url }})
-- [Text Counter]({{ '/en/tools/text-counter/' | relative_url }})
+- Compare ratios or changes: [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
+- Average pace or travel records: [Average Speed Calculator]({{ '/en/tools/average-speed-calculator/' | relative_url }})
+- Normalize values first: [Unit Converter]({{ '/en/tools/unit-converter/' | relative_url }})
+- Count text length before pasting labels: [Text Counter]({{ '/en/tools/text-counter/' | relative_url }})
+
+## FAQ
+### How should I input numbers?
+Use commas, spaces, tabs, or line breaks. For example, both `12, 18, 30` and one number per line work.
+
+### Are decimals and negative values supported?
+Yes. Values such as `-2.5` and `3.14` are included in the average, median, sum, and range calculations.
+
+### How is median calculated?
+The calculator sorts the values first. If there is an even number of values, it averages the two middle values.
+
+### What happens if text is mixed with numbers?
+Text and blank entries are excluded from the calculation, and the ignored-entry count is shown in the result. As long as valid numbers remain, mean, median, and range are still calculated.
