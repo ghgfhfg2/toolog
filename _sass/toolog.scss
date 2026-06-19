@@ -719,6 +719,16 @@ textarea:focus-visible {
   accent-color: #3b82f6;
 }
 .tool-result { margin: 0; color: var(--muted); }
+.avg-ui textarea {
+  min-height: 190px;
+  font-size: 16px;
+}
+.avg-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.avg-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.avg-ui textarea[aria-invalid="true"] { border-color: #ef4444; }
+.avg-ui #avg-help[data-state="error"] { color: #fca5a5; }
+.avg-ui #avg-help[data-state="warning"] { color: #fbbf24; }
+.avg-ui #avg-help[data-state="success"] { color: #86efac; }
 .frac-main-grid { grid-template-columns: minmax(0, 1fr) minmax(120px, .35fr) minmax(0, 1fr); }
 .frac-field { display: grid; gap: .4rem; min-width: 0; }
 .frac-pair { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: .5rem; align-items: center; }
@@ -1036,6 +1046,8 @@ textarea:focus-visible {
   .tc-stats { grid-template-columns: 1fr 1fr; }
   .llc-options,.llc-actions { grid-template-columns: 1fr; }
   .llc-stats { grid-template-columns: 1fr 1fr; }
+  .avg-actions { grid-template-columns: 1fr; }
+  .avg-stats { grid-template-columns: 1fr 1fr; }
   .tool-stats { grid-template-columns: 1fr 1fr; }
   .tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .related-grid { grid-template-columns: 1fr; }

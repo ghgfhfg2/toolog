@@ -11014,49 +11014,86 @@
     const medianEl = document.getElementById('avg-median');
     const minEl = document.getElementById('avg-min');
     const maxEl = document.getElementById('avg-max');
+    const rangeEl = document.getElementById('avg-range');
+    const ignoredEl = document.getElementById('avg-ignored');
     const help = document.getElementById('avg-help');
+    const detail = document.getElementById('avg-detail');
+    const sampleBtn = document.getElementById('avg-sample');
     const copyBtn = document.getElementById('avg-copy');
     const resetBtn = document.getElementById('avg-reset');
-    if (!input || !countEl || !sumEl || !meanEl || !medianEl || !minEl || !maxEl || !help) return;
+    if (!input || !countEl || !sumEl || !meanEl || !medianEl || !minEl || !maxEl || !rangeEl || !ignoredEl || !help) return;
 
     const text = {
       ko: {
         idle: '숫자를 입력하면 평균·중앙값·합계·범위를 계산합니다.',
-        invalid: '유효한 숫자를 한 개 이상 입력하세요. (쉼표·공백·줄바꿈 구분 지원)',
+        invalid: '계산할 수 있는 숫자가 없습니다. 문자, 빈 항목, 무한대 값은 제외됩니다.',
+        tooMany: '숫자는 한 번에 최대 5,000개까지 계산할 수 있습니다.',
+        tooLarge: '정확한 계산을 위해 각 숫자는 -1,000조부터 1,000조까지 입력해 주세요.',
+        mixed: (valid, invalid) => `${valid}개 숫자를 계산했습니다. 숫자가 아닌 항목 ${invalid}개는 제외했습니다.`,
         summary: (count, mean) => `${count}개 숫자의 평균은 ${mean}입니다.`,
-        copy: (count, sum, mean, median, min, max) => `평균 계산 결과 | 개수 ${count} | 합계 ${sum} | 평균 ${mean} | 중앙값 ${median} | 최솟값 ${min} | 최댓값 ${max}`,
+        detail: (min, max, range) => `최솟값 ${min}, 최댓값 ${max}, 범위 ${range}`,
+        sample: '82, 91, 77, 88.5, 95, 73, 88.5, 100',
+        copyEmpty: '복사할 계산 결과가 없습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        copy: (count, sum, mean, median, min, max, range, ignored) => `평균 계산 결과 | 개수 ${count} | 합계 ${sum} | 평균 ${mean} | 중앙값 ${median} | 최솟값 ${min} | 최댓값 ${max} | 범위 ${range} | 제외 항목 ${ignored}`,
         copied: '복사됨',
         copyDefault: '결과 복사'
       },
       en: {
         idle: 'Enter numbers to calculate count, sum, average, median, and range.',
-        invalid: 'Enter at least one valid number. (comma/space/newline separated)',
+        invalid: 'No calculable numbers found. Text, blanks, and infinite values are ignored.',
+        tooMany: 'You can calculate up to 5,000 numbers at a time.',
+        tooLarge: 'For reliable results, each number must be between -1 quadrillion and 1 quadrillion.',
+        mixed: (valid, invalid) => `Calculated ${valid} numbers and ignored ${invalid} non-number entries.`,
         summary: (count, mean) => `Average of ${count} numbers is ${mean}.`,
-        copy: (count, sum, mean, median, min, max) => `Average result | Count ${count} | Sum ${sum} | Average ${mean} | Median ${median} | Min ${min} | Max ${max}`,
+        detail: (min, max, range) => `Minimum ${min}, maximum ${max}, range ${range}`,
+        sample: '82, 91, 77, 88.5, 95, 73, 88.5, 100',
+        copyEmpty: 'There is no calculation result to copy.',
+        copyFail: 'Automatic copy is unavailable.',
+        copy: (count, sum, mean, median, min, max, range, ignored) => `Average result | Count ${count} | Sum ${sum} | Average ${mean} | Median ${median} | Min ${min} | Max ${max} | Range ${range} | Ignored ${ignored}`,
         copied: 'Copied',
         copyDefault: 'Copy result'
       },
       ja: {
         idle: '数値を入力すると、個数・合計・平均・中央値・範囲を計算します。',
-        invalid: '有効な数値を1つ以上入力してください。（カンマ・空白・改行区切り対応）',
+        invalid: '計算できる数値がありません。文字、空欄、無限大の値は除外されます。',
+        tooMany: '一度に計算できる数値は最大5,000個です。',
+        tooLarge: '正確に計算するため、各数値は -1,000兆 から 1,000兆 の範囲で入力してください。',
+        mixed: (valid, invalid) => `${valid}個の数値を計算し、数値ではない項目${invalid}個を除外しました。`,
         summary: (count, mean) => `${count}個の数値の平均は ${mean} です。`,
-        copy: (count, sum, mean, median, min, max) => `平均計算結果 | 個数 ${count} | 合計 ${sum} | 平均 ${mean} | 中央値 ${median} | 最小値 ${min} | 最大値 ${max}`,
+        detail: (min, max, range) => `最小値 ${min}、最大値 ${max}、範囲 ${range}`,
+        sample: '82, 91, 77, 88.5, 95, 73, 88.5, 100',
+        copyEmpty: 'コピーできる計算結果がありません。',
+        copyFail: '自動コピーを利用できません。',
+        copy: (count, sum, mean, median, min, max, range, ignored) => `平均計算結果 | 個数 ${count} | 合計 ${sum} | 平均 ${mean} | 中央値 ${median} | 最小値 ${min} | 最大値 ${max} | 範囲 ${range} | 除外項目 ${ignored}`,
         copied: 'コピー完了',
         copyDefault: '結果をコピー'
       }
     }[pageLang] || {
       idle: '숫자를 입력하면 평균·중앙값·합계·범위를 계산합니다.',
-      invalid: '유효한 숫자를 한 개 이상 입력하세요.',
+      invalid: '계산할 수 있는 숫자가 없습니다.',
+      tooMany: '숫자는 한 번에 최대 5,000개까지 계산할 수 있습니다.',
+      tooLarge: '정확한 계산을 위해 각 숫자는 -1,000조부터 1,000조까지 입력해 주세요.',
+      mixed: (valid, invalid) => `${valid}개 숫자를 계산했습니다. 숫자가 아닌 항목 ${invalid}개는 제외했습니다.`,
       summary: (count, mean) => `${count}개 숫자의 평균은 ${mean}입니다.`,
-      copy: (count, sum, mean, median, min, max) => `평균 계산 결과 | 개수 ${count} | 합계 ${sum} | 평균 ${mean} | 중앙값 ${median} | 최솟값 ${min} | 최댓값 ${max}`,
+      detail: (min, max, range) => `최솟값 ${min}, 최댓값 ${max}, 범위 ${range}`,
+      sample: '82, 91, 77, 88.5, 95, 73, 88.5, 100',
+      copyEmpty: '복사할 계산 결과가 없습니다.',
+      copyFail: '자동 복사를 사용할 수 없습니다.',
+      copy: (count, sum, mean, median, min, max, range, ignored) => `평균 계산 결과 | 개수 ${count} | 합계 ${sum} | 평균 ${mean} | 중앙값 ${median} | 최솟값 ${min} | 최댓값 ${max} | 범위 ${range} | 제외 항목 ${ignored}`,
       copied: '복사됨',
       copyDefault: '결과 복사'
     };
 
-    const fmt = (n) => Number(n).toLocaleString(numberLocale, { maximumFractionDigits: 6 });
+    const MAX_ITEMS = 5000;
+    const MAX_ABS = 1000000000000000;
+    const fmt = (n) => Number(n).toLocaleString(numberLocale, { maximumFractionDigits: 8 });
 
     const copyText = async (value) => {
-      try { await navigator.clipboard.writeText(value); }
+      try {
+        if (!navigator.clipboard) throw new Error('clipboard unavailable');
+        await navigator.clipboard.writeText(value);
+      }
       catch (_) {
         const ta = document.createElement('textarea');
         ta.value = value; ta.style.position = 'fixed'; ta.style.opacity = '0';
@@ -11064,29 +11101,53 @@
       }
     };
 
-    const setIdle = (msg) => {
-      countEl.textContent = '-';
-      sumEl.textContent = '-';
-      meanEl.textContent = '-';
-      medianEl.textContent = '-';
-      minEl.textContent = '-';
-      maxEl.textContent = '-';
+    const setStatus = (msg, state = '') => {
       help.textContent = msg;
+      help.dataset.state = state;
+    };
+
+    const setIdle = (msg, state = '') => {
+      [countEl, sumEl, meanEl, medianEl, minEl, maxEl, rangeEl, ignoredEl].forEach((el) => { el.textContent = '-'; });
+      setStatus(msg, state);
+      if (detail) detail.textContent = text.idle;
+      input.setAttribute('aria-invalid', state === 'error' ? 'true' : 'false');
+      if (copyBtn) copyBtn.disabled = true;
     };
 
     const parseNumbers = (raw) => {
-      return (raw || '')
+      const tokens = (raw || '')
+        .replace(/[;|]/g, ' ')
         .split(/[\s,]+/)
         .map((v) => v.trim())
-        .filter(Boolean)
-        .map((v) => Number(v))
-        .filter((v) => Number.isFinite(v));
+        .filter(Boolean);
+      const nums = [];
+      let invalid = 0;
+      tokens.forEach((token) => {
+        const normalized = token.replace(/_/g, '').replace(/,/g, '');
+        if (!/^[-+]?(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?$/i.test(normalized)) {
+          invalid += 1;
+          return;
+        }
+        const value = Number(normalized);
+        if (Number.isFinite(value)) nums.push(value);
+        else invalid += 1;
+      });
+      return { nums, invalid, tokenCount: tokens.length };
     };
 
     const render = () => {
-      const nums = parseNumbers(input.value);
+      const parsed = parseNumbers(input.value);
+      const nums = parsed.nums;
+      if (nums.length > MAX_ITEMS) {
+        setIdle(text.tooMany, 'error');
+        return;
+      }
+      if (nums.some((n) => Math.abs(n) > MAX_ABS)) {
+        setIdle(text.tooLarge, 'error');
+        return;
+      }
       if (!nums.length) {
-        setIdle(input.value.trim() ? text.invalid : text.idle);
+        setIdle(input.value.trim() ? text.invalid : text.idle, input.value.trim() ? 'error' : '');
         return;
       }
       const sorted = [...nums].sort((a, b) => a - b);
@@ -11097,27 +11158,48 @@
       const median = count % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
       const min = sorted[0];
       const max = sorted[sorted.length - 1];
+      const range = max - min;
 
-      countEl.textContent = String(count);
+      input.setAttribute('aria-invalid', 'false');
+      countEl.textContent = count.toLocaleString(numberLocale);
       sumEl.textContent = fmt(sum);
       meanEl.textContent = fmt(mean);
       medianEl.textContent = fmt(median);
       minEl.textContent = fmt(min);
       maxEl.textContent = fmt(max);
-      help.textContent = text.summary(count.toLocaleString(numberLocale), fmt(mean));
+      rangeEl.textContent = fmt(range);
+      ignoredEl.textContent = parsed.invalid ? parsed.invalid.toLocaleString(numberLocale) : '0';
+      if (copyBtn) copyBtn.disabled = false;
+      setStatus(parsed.invalid ? text.mixed(count.toLocaleString(numberLocale), parsed.invalid.toLocaleString(numberLocale)) : text.summary(count.toLocaleString(numberLocale), fmt(mean)), parsed.invalid ? 'warning' : 'success');
+      if (detail) detail.textContent = text.detail(fmt(min), fmt(max), fmt(range));
     };
 
     input.addEventListener('input', render);
+    sampleBtn?.addEventListener('click', () => {
+      input.value = text.sample;
+      render();
+      input.focus();
+    });
     copyBtn?.addEventListener('click', async () => {
-      if (countEl.textContent === '-') return;
-      await copyText(text.copy(countEl.textContent, sumEl.textContent, meanEl.textContent, medianEl.textContent, minEl.textContent, maxEl.textContent));
-      const old = copyBtn.textContent;
-      copyBtn.textContent = text.copied;
-      setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+      if (countEl.textContent === '-') {
+        setStatus(text.copyEmpty, 'error');
+        input.focus();
+        return;
+      }
+      try {
+        await copyText(text.copy(countEl.textContent, sumEl.textContent, meanEl.textContent, medianEl.textContent, minEl.textContent, maxEl.textContent, rangeEl.textContent, ignoredEl.textContent));
+        const old = copyBtn.textContent;
+        copyBtn.textContent = text.copied;
+        setStatus(text.copied, 'success');
+        setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+      } catch (_) {
+        setStatus(text.copyFail, 'error');
+      }
     });
     resetBtn?.addEventListener('click', () => {
       input.value = '';
       setIdle(text.idle);
+      input.focus();
     });
 
     setIdle(text.idle);

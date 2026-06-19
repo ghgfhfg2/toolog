@@ -3570,21 +3570,28 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="as-help">{% if page.lang == 'en' %}Enter distance and time to calculate speed and pace.{% elsif page.lang == 'ja' %}距離と時間を入力すると速度とペースを計算します。{% else %}거리와 시간을 입력하면 속도와 페이스를 계산합니다.{% endif %}</p>
         </div>
       {% when 'average-calculator' %}
-        <div class="tool-ui">
-          <textarea id="avg-input" rows="6" placeholder="{% if page.lang == 'en' %}Enter numbers separated by commas, spaces, or line breaks{% elsif page.lang == 'ja' %}数値をカンマ・空白・改行で区切って入力{% else %}숫자를 쉼표·공백·줄바꿈으로 입력하세요{% endif %}"></textarea>
-          <div class="tool-row-grid pct-actions">
-            <button id="avg-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+        <div class="tool-ui avg-ui">
+          <div class="tool-row">
+            <label for="avg-input">{% if page.lang == 'en' %}Number list{% elsif page.lang == 'ja' %}数値リスト{% else %}계산할 숫자 목록{% endif %}</label>
+            <textarea id="avg-input" rows="7" maxlength="100000" inputmode="decimal" aria-describedby="avg-help avg-detail" placeholder="{% if page.lang == 'en' %}Example: 82, 91, 77, 88.5, 95{% elsif page.lang == 'ja' %}例: 82, 91, 77, 88.5, 95{% else %}예: 82, 91, 77, 88.5, 95{% endif %}"></textarea>
+          </div>
+          <div class="tool-row-grid avg-actions">
+            <button id="avg-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
+            <button id="avg-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
             <button id="avg-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
-          <div class="tool-stats">
+          <div class="tool-stats avg-stats" aria-label="{% if page.lang == 'en' %}Average calculation result{% elsif page.lang == 'ja' %}平均計算結果{% else %}평균 계산 결과{% endif %}">
             <div><strong id="avg-count">-</strong><span>{% if page.lang == 'en' %}Count{% elsif page.lang == 'ja' %}個数{% else %}개수{% endif %}</span></div>
             <div><strong id="avg-sum">-</strong><span>{% if page.lang == 'en' %}Sum{% elsif page.lang == 'ja' %}合計{% else %}합계{% endif %}</span></div>
             <div><strong id="avg-mean">-</strong><span>{% if page.lang == 'en' %}Average{% elsif page.lang == 'ja' %}平均{% else %}평균{% endif %}</span></div>
             <div><strong id="avg-median">-</strong><span>{% if page.lang == 'en' %}Median{% elsif page.lang == 'ja' %}中央値{% else %}중앙값{% endif %}</span></div>
-            <div><strong id="avg-min">-</strong><span>{% if page.lang == 'en' %}Minimum{% elsif page.lang == 'ja' %}最小값{% else %}최솟값{% endif %}</span></div>
+            <div><strong id="avg-min">-</strong><span>{% if page.lang == 'en' %}Minimum{% elsif page.lang == 'ja' %}最小値{% else %}최솟값{% endif %}</span></div>
             <div><strong id="avg-max">-</strong><span>{% if page.lang == 'en' %}Maximum{% elsif page.lang == 'ja' %}最大値{% else %}최댓값{% endif %}</span></div>
+            <div><strong id="avg-range">-</strong><span>{% if page.lang == 'en' %}Range{% elsif page.lang == 'ja' %}範囲{% else %}범위{% endif %}</span></div>
+            <div><strong id="avg-ignored">-</strong><span>{% if page.lang == 'en' %}Ignored entries{% elsif page.lang == 'ja' %}除外項目{% else %}제외 항목{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="avg-help">{% if page.lang == 'en' %}Enter numbers to calculate average, median, sum, and range instantly.{% elsif page.lang == 'ja' %}数値を入力すると平均・中央値・合計・範囲を即時計算します。{% else %}숫자를 입력하면 평균·중앙값·합계·범위를 즉시 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="avg-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter numbers to calculate average, median, sum, and range instantly.{% elsif page.lang == 'ja' %}数値を入力すると平均・中央値・合計・範囲を即時計算します。{% else %}숫자를 입력하면 평균·중앙값·합계·범위를 즉시 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="avg-detail">{% if page.lang == 'en' %}Separators can be commas, spaces, tabs, or line breaks. Up to 5,000 finite numbers are calculated in your browser.{% elsif page.lang == 'ja' %}区切りはカンマ、空白、タブ、改行に対応します。最大5,000個の有限な数値をブラウザ内で計算します。{% else %}쉼표, 공백, 탭, 줄바꿈을 구분자로 사용할 수 있습니다. 최대 5,000개의 유한한 숫자를 브라우저에서 계산합니다.{% endif %}</p>
         </div>
       {% when 'time-difference-calculator' %}
         <div class="tool-ui">
