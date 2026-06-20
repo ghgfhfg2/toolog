@@ -11616,32 +11616,61 @@
     const help = document.getElementById('gpa-help');
     const copyBtn = document.getElementById('gpa-copy');
     const resetBtn = document.getElementById('gpa-reset');
+    const clearBtn = document.getElementById('gpa-clear');
     if (!scale || !outResult || !outCredits || !outPoints || !outPass || !help) return;
 
     const text = {
       ko: {
         idle: '과목별 학점과 등급을 입력하면 가중 평균 GPA를 바로 계산합니다.',
+        incomplete: '학점이나 등급이 빠진 행이 있습니다. 계산에서 제외했으니 입력을 확인해 주세요.',
+        invalidCredit: '학점은 0 초과 30 이하 숫자로 입력해 주세요.',
+        passOnly: (pass) => `P/제외 학점 ${pass}만 입력되어 GPA 계산 대상 학점이 없습니다.`,
         summary: (gpa, credits, pass) => `평가 반영 ${credits}학점 기준 GPA는 ${gpa}입니다. P 처리 학점은 ${pass}학점으로 따로 집계했습니다.`,
         copy: (gpa, credits, points, pass) => `학점 계산 결과 | GPA ${gpa} | 반영 학점 ${credits} | 총 평점 ${points} | P/제외 학점 ${pass}`,
-        copied: '복사됨', copyDefault: '결과 복사', creditUnit: '학점'
+        copied: '복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력값을 초기화했습니다.',
+        copyDefault: '결과 복사',
+        creditUnit: '학점'
       },
       en: {
         idle: 'Enter course credits and grades to calculate weighted GPA instantly.',
+        incomplete: 'Some rows are missing credits or grades. They were skipped, so check the inputs.',
+        invalidCredit: 'Enter credits as a number greater than 0 and no more than 30.',
+        passOnly: (pass) => `Only ${pass} pass/ignored credits are entered, so there are no graded credits to calculate GPA.`,
         summary: (gpa, credits, pass) => `Weighted GPA is ${gpa} across ${credits} graded credits. Pass/ignored credits total ${pass}.`,
         copy: (gpa, credits, points, pass) => `GPA result | GPA ${gpa} | Graded credits ${credits} | Grade points ${points} | Pass/ignored credits ${pass}`,
-        copied: 'Copied', copyDefault: 'Copy result', creditUnit: ' credits'
+        copied: 'Copied the result.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared all inputs.',
+        copyDefault: 'Copy result',
+        creditUnit: ' credits'
       },
       ja: {
         idle: '科目ごとの単位数と成績を入力すると、加重平均GPAをすぐ計算できます。',
+        incomplete: '単位数または成績が未入力の行があります。その行は計算から除外しました。',
+        invalidCredit: '単位数は0より大きく30以下の数値で入力してください。',
+        passOnly: (pass) => `P/除外単位 ${pass} のみ入力されているため、GPA計算対象の単位がありません。`,
         summary: (gpa, credits, pass) => `評価反映 ${credits} を基準にした GPA は ${gpa} です。P扱いの単位は ${pass} として別集計しました。`,
         copy: (gpa, credits, points, pass) => `GPA計算結果 | GPA ${gpa} | 評価反映単位 ${credits} | 総評点 ${points} | P/除外単位 ${pass}`,
-        copied: 'コピー完了', copyDefault: '結果をコピー', creditUnit: '単位'
+        copied: '結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力をクリアしました。',
+        copyDefault: '結果をコピー',
+        creditUnit: '単位'
       }
     }[pageLang] || {
       idle: '과목별 학점과 등급을 입력하면 가중 평균 GPA를 바로 계산합니다.',
+      incomplete: '학점이나 등급이 빠진 행이 있습니다. 계산에서 제외했으니 입력을 확인해 주세요.',
+      invalidCredit: '학점은 0 초과 30 이하 숫자로 입력해 주세요.',
+      passOnly: (pass) => `P/제외 학점 ${pass}만 입력되어 GPA 계산 대상 학점이 없습니다.`,
       summary: (gpa, credits, pass) => `평가 반영 ${credits}학점 기준 GPA는 ${gpa}입니다. P 처리 학점은 ${pass}학점으로 따로 집계했습니다.`,
       copy: (gpa, credits, points, pass) => `학점 계산 결과 | GPA ${gpa} | 반영 학점 ${credits} | 총 평점 ${points} | P/제외 학점 ${pass}`,
-      copied: '복사됨', copyDefault: '결과 복사', creditUnit: '학점'
+      copied: '복사했습니다.',
+      copyFail: '자동 복사를 사용할 수 없습니다.',
+      cleared: '입력값을 초기화했습니다.',
+      copyDefault: '결과 복사',
+      creditUnit: '학점'
     };
 
     const gradeMaps = {
@@ -11651,6 +11680,7 @@
     };
 
     const rows = Array.from({ length: 6 }, (_, idx) => ({
+      course: document.getElementById(`gpa-course-${idx + 1}`),
       credit: document.getElementById(`gpa-credit-${idx + 1}`),
       grade: document.getElementById(`gpa-grade-${idx + 1}`)
     }));
@@ -11666,17 +11696,47 @@
 
     const fmt = (n, digits = 2) => Number(n || 0).toLocaleString(numberLocale, { maximumFractionDigits: digits, minimumFractionDigits: digits });
     const fmtCredit = (n) => `${Number(n || 0).toLocaleString(numberLocale, { maximumFractionDigits: 1 })}${text.creditUnit}`;
+    let current = null;
+
+    const setHelp = (message, state = '') => {
+      help.textContent = message;
+      help.dataset.state = state;
+    };
+
+    const resetOutputs = () => {
+      outResult.textContent = '-';
+      outCredits.textContent = '-';
+      outPoints.textContent = '-';
+      outPass.textContent = '-';
+      copyBtn.disabled = true;
+      current = null;
+    };
 
     const render = () => {
       const map = gradeMaps[scale.value || '4.5'];
       let credits = 0;
       let points = 0;
       let passCredits = 0;
+      let hasInvalid = false;
+      let hasIncomplete = false;
 
       rows.forEach(({ credit, grade }) => {
-        const c = Math.max(0, Number(credit?.value || 0));
+        const rawCredit = credit?.value.trim() || '';
         const g = grade?.value || '';
-        if (!(c > 0) || !g) return;
+        credit?.setAttribute('aria-invalid', 'false');
+        grade?.setAttribute('aria-invalid', 'false');
+        if (!rawCredit && !g) return;
+        const c = Number(rawCredit);
+        if (!Number.isFinite(c) || c <= 0 || c > 30) {
+          hasInvalid = true;
+          credit?.setAttribute('aria-invalid', 'true');
+          return;
+        }
+        if (!g) {
+          hasIncomplete = true;
+          grade?.setAttribute('aria-invalid', 'true');
+          return;
+        }
         if (g === 'P') {
           passCredits += c;
           return;
@@ -11685,12 +11745,15 @@
         points += c * (map[g] ?? 0);
       });
 
+      if (hasInvalid) {
+        resetOutputs();
+        setHelp(text.invalidCredit, 'error');
+        return;
+      }
+
       if (!(credits > 0) && !(passCredits > 0)) {
-        outResult.textContent = '-';
-        outCredits.textContent = '-';
-        outPoints.textContent = '-';
-        outPass.textContent = '-';
-        help.textContent = text.idle;
+        resetOutputs();
+        setHelp(text.idle);
         return;
       }
 
@@ -11699,10 +11762,24 @@
       outCredits.textContent = fmtCredit(credits);
       outPoints.textContent = fmt(points, 2);
       outPass.textContent = fmtCredit(passCredits);
-      help.textContent = text.summary(credits > 0 ? fmt(gpa, 2) : '-', fmtCredit(credits), fmtCredit(passCredits));
+      copyBtn.disabled = credits <= 0;
+      current = credits > 0 ? {
+        gpa: fmt(gpa, 2),
+        credits: fmtCredit(credits),
+        points: fmt(points, 2),
+        pass: fmtCredit(passCredits)
+      } : null;
+      if (hasIncomplete) {
+        setHelp(text.incomplete, 'warning');
+      } else if (credits <= 0) {
+        setHelp(text.passOnly(fmtCredit(passCredits)), 'warning');
+      } else {
+        setHelp(text.summary(current.gpa, current.credits, current.pass), 'success');
+      }
     };
 
-    [scale, ...rows.flatMap((row) => [row.credit, row.grade])].forEach((el) => el?.addEventListener('input', render));
+    [scale, ...rows.flatMap((row) => [row.course, row.credit, row.grade])].forEach((el) => el?.addEventListener('input', render));
+    rows.forEach((row) => row.grade?.addEventListener('change', render));
     resetBtn?.addEventListener('click', () => {
       scale.value = '4.5';
       const sample = [
@@ -11714,17 +11791,33 @@
         { credit: '', grade: '' }
       ];
       rows.forEach((row, idx) => {
+        row.course.value = pageLang === 'en' ? `Course ${idx + 1}` : (pageLang === 'ja' ? `科目 ${idx + 1}` : `과목 ${idx + 1}`);
         row.credit.value = sample[idx].credit;
         row.grade.value = sample[idx].grade;
       });
       render();
     });
+    clearBtn?.addEventListener('click', () => {
+      rows.forEach((row) => {
+        row.course.value = '';
+        row.credit.value = '';
+        row.grade.value = '';
+        row.credit?.setAttribute('aria-invalid', 'false');
+        row.grade?.setAttribute('aria-invalid', 'false');
+      });
+      scale.value = '4.5';
+      resetOutputs();
+      setHelp(text.cleared);
+      rows[0]?.credit?.focus();
+    });
     copyBtn?.addEventListener('click', async () => {
-      if (outResult.textContent === '-' && outPass.textContent === '-') return;
-      await copyText(text.copy(outResult.textContent, outCredits.textContent, outPoints.textContent, outPass.textContent));
-      const old = copyBtn.textContent;
-      copyBtn.textContent = text.copied;
-      setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+      if (!current) return;
+      try {
+        await copyText(text.copy(current.gpa, current.credits, current.points, current.pass));
+        setHelp(text.copied, 'success');
+      } catch (_) {
+        setHelp(text.copyFail, 'error');
+      }
     });
     render();
   }

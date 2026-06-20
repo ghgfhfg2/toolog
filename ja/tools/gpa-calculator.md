@@ -2,7 +2,7 @@
 layout: tool
 lang: ja
 title: GPA計算機 | 4.5・4.3・4.0基準の加重平均GPAをすばやく計算
-description: 科目ごとの単位数と成績を入力すると、4.5・4.3・4.0基準の加重平均GPAをすばやく計算できます。
+description: 科目ごとの単位数と成績から、4.5・4.3・4.0基準の加重平均GPA、評価対象単位、総評点、P/除外単位をすばやく計算できます。
 permalink: /ja/tools/gpa-calculator/
 canonical_url: /ja/tools/gpa-calculator/
 category: calculator
@@ -13,7 +13,7 @@ image:
   alt: GPA計算機プレビュー
 tool_key: gpa-calculator
 keywords: [GPA計算機, 成績計算, 単位計算, 加重平均GPA, 大学成績]
-related_tools: [average-calculator, percent-calculator, d-day-calculator]
+related_tools: [required-gpa-calculator, average-calculator, percent-calculator]
 faq:
   - q: P科目もGPAに含まれますか？
     a: 一般的にP/Pass科目はGPAから除外され、別枠の単位として扱われます。このツールでもP単位は別集計します。
@@ -21,6 +21,8 @@ faq:
     a: 学校ごとにA+やB+などに割り当てる点数が異なるため、最終的なGPAも変わることがあります。自分の学校の基準に合うスケールを選んでください。
   - q: Fはどのように処理されますか？
     a: 多くの制度では、Fは単位不認定でもGPA計算上は0点として扱われます。このツールもその一般的な方式に沿っています。
+  - q: 単位数や成績を入力し忘れた行はどうなりますか？
+    a: 単位数と成績がそろった行だけをGPAに反映し、不完全な行や範囲外の単位数は画面で警告します。
 alternate_urls:
   ko: /tools/gpa-calculator/
   en: /en/tools/gpa-calculator/
@@ -32,19 +34,24 @@ alternate_urls:
 奨学金基準や成績維持条件を超えているかを早く確認したくなります。
 
 このツールでは、科目ごとの単位数と成績を入力するだけで
-**加重平均GPA**をすぐに計算できます。
+**加重平均GPA、評価対象単位、総評点、P/除外単位**をすぐに計算できます。
+4.5、4.3、4.0の基準を同じ画面で切り替えられるため、学校の制度に合わせたGPA確認に使えます。
 
 ## 主な機能
 - 科目ごとの単位数 × 成績点による加重平均計算
 - 4.5 / 4.3 / 4.0 スケールに対応
 - P科目はGPA対象外単位として別集計
 - GPA、総評点、反映単位、除外単位をまとめて確認
+- 単位数だけ入力して成績がない行、範囲外の単位数を警告
+- サンプル入力、クリア、結果コピーに対応
 
 ## 使い方
 1. 学校の基準に合うGPAスケールを選びます。
 2. 各科目の単位数を入力します。
 3. 各科目の成績を選択します。
-4. GPA、総評点、反映単位を確認します。
+4. P/F科目は `P` を選び、GPA計算から除外します。
+5. GPA、総評点、評価対象単位、P/除外単位を確認します。
+6. 必要に応じて結果をコピーし、成績計画やメモに貼り付けます。
 
 ## 計算方法
 GPAは通常、次のように計算します。
@@ -57,9 +64,9 @@ GPAは通常、次のように計算します。
 単純平均ではなく **加重平均** で反映されます。
 
 ## 関連ツール
+- [目標GPA逆算計算機]({{ '/ja/tools/required-gpa-calculator/' | relative_url }})
 - [平均計算機]({{ '/ja/tools/average-calculator/' | relative_url }})
 - [パーセント計算機]({{ '/ja/tools/percent-calculator/' | relative_url }})
-- [D-Day計算機]({{ '/ja/tools/d-day-calculator/' | relative_url }})
 
 ## FAQ
 ### なぜP科目はGPAから除外されるのですか？
@@ -70,3 +77,9 @@ GPAは通常、次のように計算します。
 
 ### 再履修科目はどう入力すればよいですか？
 通常は、実際の成績証明書で認定される成績だけを入力するほうが正確です。再履修の扱いは学校ごとに異なる場合があります。
+
+### 入力できる単位数の範囲は？
+各科目の単位数は0より大きく30以下として扱います。範囲外の値や成績が抜けた行は警告表示されるため、計算前に確認できます。
+
+### 目標GPAまで残りどのくらい必要かも分かりますか？
+この計算機は科目別の学期GPA確認用です。累積GPAの目標に必要な残り単位の平均GPAを見たい場合は、[目標GPA逆算計算機]({{ '/ja/tools/required-gpa-calculator/' | relative_url }})を使ってください。

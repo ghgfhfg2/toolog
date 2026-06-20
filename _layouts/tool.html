@@ -3492,28 +3492,31 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="rg-help">{% if page.lang == 'en' %}Enter your current GPA, credits, target GPA, and remaining credits to calculate the GPA you need.{% elsif page.lang == 'ja' %}現在GPA・取得済み単位・目標GPA・残り単位を入力すると、今後必要なGPAを計算します。{% else %}현재 GPA·이수학점·목표 GPA·남은 학점을 입력하면 앞으로 필요한 GPA를 계산합니다.{% endif %}</p>
         </div>
       {% when 'gpa-calculator' %}
-        <div class="tool-ui">
+        <div class="tool-ui gpa-ui">
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="gpa-scale">{% if page.lang == 'en' %}GPA scale{% elsif page.lang == 'ja' %}GPAスケール{% else %}학점 스케일{% endif %}</label>
-              <select id="gpa-scale">
-                <option value="4.5">4.5</option>
-                <option value="4.3">4.3</option>
-                <option value="4.0">4.0</option>
+              <select id="gpa-scale" aria-describedby="gpa-help">
+                <option value="4.5">4.5 {% if page.lang == 'en' %}scale{% elsif page.lang == 'ja' %}基準{% else %}기준{% endif %}</option>
+                <option value="4.3">4.3 {% if page.lang == 'en' %}scale{% elsif page.lang == 'ja' %}基準{% else %}기준{% endif %}</option>
+                <option value="4.0">4.0 {% if page.lang == 'en' %}scale{% elsif page.lang == 'ja' %}基準{% else %}기준{% endif %}</option>
               </select>
             </div>
           </div>
-          <div class="tool-row-grid pct-grid">
-            <div><strong>{% if page.lang == 'en' %}Course{% elsif page.lang == 'ja' %}과목{% else %}과목{% endif %}</strong></div>
-            <div><strong>{% if page.lang == 'en' %}Credits{% elsif page.lang == 'ja' %}학점{% else %}학점{% endif %}</strong></div>
-            <div><strong>{% if page.lang == 'en' %}Grade{% elsif page.lang == 'ja' %}등급{% else %}등급{% endif %}</strong></div>
+          <div class="tool-row-grid pct-grid gpa-head" aria-hidden="true">
+            <div><strong>{% if page.lang == 'en' %}Course{% elsif page.lang == 'ja' %}科目{% else %}과목{% endif %}</strong></div>
+            <div><strong>{% if page.lang == 'en' %}Credits{% elsif page.lang == 'ja' %}単位{% else %}학점{% endif %}</strong></div>
+            <div><strong>{% if page.lang == 'en' %}Grade{% elsif page.lang == 'ja' %}成績{% else %}등급{% endif %}</strong></div>
           </div>
           {% for i in (1..6) %}
-          <div class="tool-row-grid pct-grid">
-            <input id="gpa-course-{{ i }}" type="text" placeholder="{% if page.lang == 'en' %}Course {{ i }}{% elsif page.lang == 'ja' %}科目 {{ i }}{% else %}과목 {{ i }}{% endif %}" />
-            <input id="gpa-credit-{{ i }}" type="number" min="0" max="30" step="0.5" inputmode="decimal" placeholder="3" />
-            <select id="gpa-grade-{{ i }}">
-              <option value="">-</option>
+          <div class="tool-row-grid pct-grid gpa-row">
+            <label class="sr-only" for="gpa-course-{{ i }}">{% if page.lang == 'en' %}Course {{ i }} name{% elsif page.lang == 'ja' %}科目 {{ i }} 名{% else %}과목 {{ i }} 이름{% endif %}</label>
+            <input id="gpa-course-{{ i }}" type="text" maxlength="80" autocomplete="off" placeholder="{% if page.lang == 'en' %}Course {{ i }}{% elsif page.lang == 'ja' %}科目 {{ i }}{% else %}과목 {{ i }}{% endif %}" />
+            <label class="sr-only" for="gpa-credit-{{ i }}">{% if page.lang == 'en' %}Course {{ i }} credits{% elsif page.lang == 'ja' %}科目 {{ i }} 単位{% else %}과목 {{ i }} 학점{% endif %}</label>
+            <input id="gpa-credit-{{ i }}" type="number" min="0" max="30" step="0.5" inputmode="decimal" placeholder="3" aria-describedby="gpa-help" />
+            <label class="sr-only" for="gpa-grade-{{ i }}">{% if page.lang == 'en' %}Course {{ i }} grade{% elsif page.lang == 'ja' %}科目 {{ i }} 成績{% else %}과목 {{ i }} 등급{% endif %}</label>
+            <select id="gpa-grade-{{ i }}" aria-describedby="gpa-help">
+              <option value="">{% if page.lang == 'en' %}Grade{% elsif page.lang == 'ja' %}成績{% else %}등급{% endif %}</option>
               <option value="A+">A+</option>
               <option value="A0">A0</option>
               <option value="B+">B+</option>
@@ -3528,16 +3531,17 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           </div>
           {% endfor %}
           <div class="tool-row-grid pct-actions">
-            <button id="gpa-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
             <button id="gpa-reset" type="button">{% if page.lang == 'en' %}Fill sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시값 채우기{% endif %}</button>
+            <button id="gpa-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="gpa-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
-          <div class="tool-stats">
+          <div class="tool-stats gpa-stats" aria-label="{% if page.lang == 'en' %}GPA calculation result{% elsif page.lang == 'ja' %}GPA計算結果{% else %}학점 계산 결과{% endif %}">
             <div><strong id="gpa-result">-</strong><span>GPA</span></div>
-            <div><strong id="gpa-credits">-</strong><span>{% if page.lang == 'en' %}Total graded credits{% elsif page.lang == 'ja' %}평가 반영 학점{% else %}평가 반영 학점{% endif %}</span></div>
-            <div><strong id="gpa-points">-</strong><span>{% if page.lang == 'en' %}Grade points sum{% elsif page.lang == 'ja' %}총 평점{% else %}총 평점{% endif %}</span></div>
-            <div><strong id="gpa-pass">-</strong><span>{% if page.lang == 'en' %}Pass/ignored credits{% elsif page.lang == 'ja' %}P/제외 학점{% else %}P/제외 학점{% endif %}</span></div>
+            <div><strong id="gpa-credits">-</strong><span>{% if page.lang == 'en' %}Graded credits{% elsif page.lang == 'ja' %}評価対象単位{% else %}평가 반영 학점{% endif %}</span></div>
+            <div><strong id="gpa-points">-</strong><span>{% if page.lang == 'en' %}Grade points{% elsif page.lang == 'ja' %}総評点{% else %}총 평점{% endif %}</span></div>
+            <div><strong id="gpa-pass">-</strong><span>{% if page.lang == 'en' %}Pass/ignored{% elsif page.lang == 'ja' %}P/除外単位{% else %}P/제외 학점{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="gpa-help">{% if page.lang == 'en' %}Enter course credits and grades to calculate weighted GPA instantly.{% elsif page.lang == 'ja' %}학점과 등급을 입력하면 가중 평균 GPA를 바로 계산합니다.{% else %}과목별 학점과 등급을 입력하면 가중 평균 GPA를 바로 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="gpa-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter course credits and grades to calculate weighted GPA instantly.{% elsif page.lang == 'ja' %}科目ごとの単位数と成績を入力すると、加重平均GPAをすぐ計算できます。{% else %}과목별 학점과 등급을 입력하면 가중 평균 GPA를 바로 계산합니다.{% endif %}</p>
         </div>
       {% when 'average-speed-calculator' %}
         <div class="tool-ui">
