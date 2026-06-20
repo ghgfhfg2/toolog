@@ -2027,7 +2027,7 @@
   badge_ja: 新着
   description: 과목별 학점과 등급을 넣으면 4.5·4.3·4.0 기준 가중 평균 GPA, 반영 학점, P/제외 학점을 빠르게 계산해요.
   description_en: Calculate weighted GPA, graded credits, grade points, and pass/ignored credits from course credits and grades on 4.5, 4.3, or 4.0 scales.
-  description_ja: 科目ごとの単位数と成績から、4.5・4.3・4.0基準の加重平均GPA、評価対象単位、P/除外単位をすばやく計算します。
+  description_ja: 科目ごとの単位数と成績から、4.5・4.3・4.0基準の加重平均GPA、評価対象単位、総評点、P/除外単位をすばやく計算します。
   url: /tools/gpa-calculator/
   url_en: /en/tools/gpa-calculator/
   url_ja: /ja/tools/gpa-calculator/
