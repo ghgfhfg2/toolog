@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Grocery Budget Checker | Sort priorities and find quick grocery savings
-description: Enter a grocery list, estimated prices, and a budget to split must-buy and optional items, check whether you are over budget, and find candidates to cut.
+title: Grocery Budget Checker | Grocery savings list and cut candidates
+description: Enter a grocery list, estimated prices, and a budget to split must-buy and optional items, check the over-budget amount, flag missing prices, and find candidates to cut.
 lang: en
 permalink: /en/tools/grocery-budget-checker/
 canonical_url: /en/tools/grocery-budget-checker/
@@ -24,7 +24,9 @@ faq:
   - q: Is this an exact household accounting calculator?
     a: No. It is a quick checker for reviewing estimated grocery prices and priorities before shopping. The actual checkout total can change depending on store prices, discounts, and coupons.
   - q: What format should I use for items?
-    a: Add one item per line with the item name and estimated price. Words like “milk 3200 must” or “snacks 2500 optional” help the tool classify priorities more clearly.
+    a: Add one item per line with the item name and a whole-number estimated price. Words like “milk 3,200 must” or “snacks 2500 optional” help the tool classify priorities more clearly.
+  - q: What happens if a price format is unclear?
+    a: Only whole-number prices with optional comma separators are included in totals. Ambiguous values such as decimals stay in the result but are excluded from totals with a warning.
   - q: Is my grocery list saved?
     a: No. Everything is processed only in your current browser and is not sent to or stored on a server.
 ---
@@ -32,7 +34,7 @@ faq:
 ## Why use the Grocery Budget Checker?
 When you shop at a supermarket or online grocery store, small extra items can quickly push the total beyond your budget. It gets even harder when ingredients, snacks, household supplies, and sale items are mixed together, because “must buy now” and “can wait until next time” items are not always obvious.
 
-This tool takes your grocery list and estimated prices, then quickly shows **must-buy total, optional-item total, over-budget amount, and candidates to cut**. It is not a detailed accounting tool; it is a practical checker for trimming the list right before shopping.
+This tool takes your grocery list and estimated prices, then quickly shows **must-buy total, optional-item total, over-budget amount, items that still need prices, and candidates to cut**. It is not a detailed accounting tool; it is a practical checker for trimming the list right before shopping.
 
 ## How to use it
 1. Enter your grocery budget for this trip.
@@ -40,6 +42,8 @@ This tool takes your grocery list and estimated prices, then quickly shows **mus
 3. When possible, include an estimated price and priority words such as must, optional, later, or hold.
 4. Press `Check budget` and review whether the list exceeds your budget and which items are easiest to cut.
 5. Copy the cleaned-up list into your notes app or grocery app.
+
+Whole-number prices such as `3200`, `3,200`, or `3200 KRW` work best. Items without prices are kept in the “needs price check” section so you can fill them in later.
 
 ## Especially useful when
 ### 1) Before checking out an online cart
@@ -65,6 +69,9 @@ If a line contains words like `must`, `needed`, or `required`, it is treated as 
 
 ### Can it reflect discounts or coupons?
 The simplest way is to enter the expected price after discounts. This tool does not automatically calculate coupon conditions.
+
+### Can I paste a long grocery list?
+The tool checks up to 200 item lines at a time. For very large shopping trips, split the list into groups such as ingredients, household supplies, and snacks so the result stays readable.
 
 ## Summary
 The Grocery Budget Checker is a **checker-style tool that reviews estimated grocery spending and item priorities to reveal candidates to cut**.
