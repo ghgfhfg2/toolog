@@ -801,6 +801,22 @@ textarea:focus-visible {
   padding-inline: 0;
   accent-color: #3b82f6;
 }
+.pc-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.pc-ui #pc-result[data-state="error"],
+.pc-ui .pc-warning[data-state="error"] { color: #fca5a5; }
+.pc-ui #pc-result[data-state="warning"],
+.pc-ui .pc-warning[data-state="warning"] { color: #fbbf24; }
+.pc-ui #pc-result[data-state="success"] { color: #86efac; }
+.pc-note,
+.pc-warning {
+  font-size: .88rem;
+}
+.pc-warning {
+  border: 1px solid rgba(251, 191, 36, .45);
+  border-radius: 10px;
+  padding: .65rem .75rem;
+  background: rgba(251, 191, 36, .08);
+}
 .ir-stats strong,
 .pc-stats strong,
 .iu-stats strong {

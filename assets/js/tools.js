@@ -1107,51 +1107,67 @@
     const outputStat = document.getElementById('pc-output');
     const savingsStat = document.getElementById('pc-savings');
     const dimensionsStat = document.getElementById('pc-dimensions');
+    const formatStat = document.getElementById('pc-format-stat');
+    const warning = document.getElementById('pc-warning');
     let img = null;
     let originSize = 0;
+    let originType = '';
     let objectUrl = '';
     let downloadUrl = '';
+    let isRunning = false;
 
     const pcText = {
       ko: {
         ready: '이미지를 선택했습니다. 포맷과 품질을 고른 뒤 압축 실행을 누르세요.',
         empty: '먼저 압축할 이미지 파일을 선택해 주세요.',
         unsupported: 'PNG, JPEG, WebP 이미지 파일만 선택할 수 있습니다.',
+        unsupportedBrowser: '이 브라우저는 이미지 압축 기능을 지원하지 않습니다. 최신 Chrome, Edge, Safari에서 다시 시도해 주세요.',
         tooLarge: '이미지가 너무 커서 브라우저 압축이 불안정할 수 있습니다. 먼저 이미지 리사이저로 크기를 줄여 주세요.',
         fail: '이 브라우저에서 해당 포맷으로 압축하지 못했습니다. 다른 출력 포맷을 선택해 보세요.',
         running: '압축 중입니다...',
         done: (o, c, r) => `원본 ${o}에서 결과 ${c}로 변환했습니다. ${r >= 0 ? `약 ${r}% 절감됐습니다.` : `결과가 약 ${Math.abs(r)}% 커졌습니다.`}`,
-        pngNotice: 'PNG는 무손실 출력이라 품질 슬라이더 영향이 작고, 사진은 WebP/JPEG가 더 작을 수 있습니다.'
+        pngNotice: 'PNG는 무손실 출력이라 품질 슬라이더 영향이 작고, 사진은 WebP/JPEG가 더 작을 수 있습니다.',
+        jpegAlpha: '투명 배경 이미지를 JPEG로 저장하면 투명 영역은 흰색 배경으로 합성됩니다.',
+        larger: '결과 용량이 원본보다 커졌습니다. 이미 최적화된 이미지일 수 있으니 WebP/JPEG 품질을 낮추거나 원본을 그대로 쓰는 편이 나을 수 있습니다.'
       },
       en: {
         ready: 'Image loaded. Choose a format and quality, then press Compress.',
         empty: 'Choose an image file before compressing.',
         unsupported: 'Only PNG, JPEG, and WebP images are supported.',
+        unsupportedBrowser: 'This browser does not support in-browser image compression. Try a current Chrome, Edge, or Safari build.',
         tooLarge: 'This image is too large for reliable in-browser compression. Resize it first.',
         fail: 'This browser could not export that format. Try a different output format.',
         running: 'Compressing...',
         done: (o, c, r) => `Converted ${o} to ${c}. ${r >= 0 ? `About ${r}% smaller.` : `The output is about ${Math.abs(r)}% larger.`}`,
-        pngNotice: 'PNG is lossless, so the quality slider has little effect and photos may be smaller as WebP/JPEG.'
+        pngNotice: 'PNG is lossless, so the quality slider has little effect and photos may be smaller as WebP/JPEG.',
+        jpegAlpha: 'Transparent pixels are flattened onto a white background when saving as JPEG.',
+        larger: 'The output is larger than the original. The image may already be optimized, so try lower WebP/JPEG quality or keep the original.'
       },
       ja: {
         ready: '画像を読み込みました。形式と品質を選んで圧縮を実行してください。',
         empty: '先に圧縮する画像ファイルを選択してください。',
         unsupported: 'PNG、JPEG、WebP画像のみ対応しています。',
+        unsupportedBrowser: 'このブラウザは画像圧縮機能に対応していません。最新のChrome、Edge、Safariでお試しください。',
         tooLarge: '画像が大きすぎるため、ブラウザ内圧縮が不安定になる可能性があります。先にリサイズしてください。',
         fail: 'このブラウザではその形式で出力できませんでした。別の出力形式を試してください。',
         running: '圧縮中です...',
         done: (o, c, r) => `${o}から${c}へ変換しました。${r >= 0 ? `約${r}%削減しました。` : `結果が約${Math.abs(r)}%大きくなりました。`}`,
-        pngNotice: 'PNGは可逆出力のため品質スライダーの影響が小さく、写真はWebP/JPEGのほうが軽くなる場合があります。'
+        pngNotice: 'PNGは可逆出力のため品質スライダーの影響が小さく、写真はWebP/JPEGのほうが軽くなる場合があります。',
+        jpegAlpha: '透過画像をJPEGで保存すると、透過部分は白背景に合成されます。',
+        larger: '結果容量が元画像より大きくなりました。すでに最適化済みの可能性があるため、WebP/JPEG品質を下げるか元画像の利用を検討してください。'
       }
     }[pageLang] || {
       ready: '이미지를 선택했습니다. 포맷과 품질을 고른 뒤 압축 실행을 누르세요.',
       empty: '먼저 압축할 이미지 파일을 선택해 주세요.',
       unsupported: 'PNG, JPEG, WebP 이미지 파일만 선택할 수 있습니다.',
+      unsupportedBrowser: '이 브라우저는 이미지 압축 기능을 지원하지 않습니다. 최신 Chrome, Edge, Safari에서 다시 시도해 주세요.',
       tooLarge: '이미지가 너무 커서 브라우저 압축이 불안정할 수 있습니다. 먼저 이미지 리사이저로 크기를 줄여 주세요.',
       fail: '이 브라우저에서 해당 포맷으로 압축하지 못했습니다. 다른 출력 포맷을 선택해 보세요.',
       running: '압축 중입니다...',
       done: (o, c, r) => `원본 ${o}에서 결과 ${c}로 변환했습니다. ${r >= 0 ? `약 ${r}% 절감됐습니다.` : `결과가 약 ${Math.abs(r)}% 커졌습니다.`}`,
-      pngNotice: 'PNG는 무손실 출력이라 품질 슬라이더 영향이 작고, 사진은 WebP/JPEG가 더 작을 수 있습니다.'
+      pngNotice: 'PNG는 무손실 출력이라 품질 슬라이더 영향이 작고, 사진은 WebP/JPEG가 더 작을 수 있습니다.',
+      jpegAlpha: '투명 배경 이미지를 JPEG로 저장하면 투명 영역은 흰색 배경으로 합성됩니다.',
+      larger: '결과 용량이 원본보다 커졌습니다. 이미 최적화된 이미지일 수 있으니 WebP/JPEG 품질을 낮추거나 원본을 그대로 쓰는 편이 나을 수 있습니다.'
     };
 
     const supportedTypes = ['image/png', 'image/jpeg', 'image/webp'];
@@ -1184,11 +1200,32 @@
       }
     };
 
-    const setStats = (original = '-', output = '-', savings = '-', dimensions = '-') => {
+    const mimeLabel = (mime) => {
+      if (mime === 'image/jpeg') return 'JPEG';
+      if (mime === 'image/png') return 'PNG';
+      if (mime === 'image/webp') return 'WebP';
+      return '-';
+    };
+
+    const setMessage = (message, state = '') => {
+      if (!result) return;
+      result.textContent = message;
+      result.dataset.state = state;
+    };
+
+    const setWarning = (message = '', state = 'warning') => {
+      if (!warning) return;
+      warning.textContent = message;
+      warning.hidden = !message;
+      warning.dataset.state = message ? state : '';
+    };
+
+    const setStats = (original = '-', output = '-', savings = '-', dimensions = '-', outputFormat = '-') => {
       if (originalStat) originalStat.textContent = original;
       if (outputStat) outputStat.textContent = output;
       if (savingsStat) savingsStat.textContent = savings;
       if (dimensionsStat) dimensionsStat.textContent = dimensions;
+      if (formatStat) formatStat.textContent = outputFormat;
     };
 
     const updateQualityLabel = () => {
@@ -1202,32 +1239,49 @@
       canvas.height = 0;
     };
 
+    if (!canvas?.getContext || !HTMLCanvasElement.prototype.toBlob) {
+      setMessage(pcText.unsupportedBrowser, 'error');
+      run.disabled = true;
+      file.disabled = true;
+      format.disabled = true;
+      q.disabled = true;
+      setDownloadReady(false);
+      return;
+    }
+
     file?.addEventListener('change', () => {
       setDownloadReady(false);
+      setWarning('');
       clearCanvas();
       img = null;
+      originType = '';
       const f = file.files?.[0];
       if (!f) {
         originSize = 0;
         setStats();
-        if (result) result.textContent = pcText.empty;
+        file.setAttribute('aria-invalid', 'false');
+        setMessage(pcText.empty);
         return;
       }
       if (!supportedTypes.includes(f.type)) {
         file.value = '';
         originSize = 0;
         setStats();
-        if (result) result.textContent = pcText.unsupported;
+        file.setAttribute('aria-invalid', 'true');
+        setMessage(pcText.unsupported, 'error');
         return;
       }
       if (f.size > maxBytes) {
         file.value = '';
         originSize = 0;
         setStats();
-        if (result) result.textContent = pcText.tooLarge;
+        file.setAttribute('aria-invalid', 'true');
+        setMessage(pcText.tooLarge, 'error');
         return;
       }
       originSize = f.size || 0;
+      originType = f.type;
+      file.setAttribute('aria-invalid', 'false');
       if (objectUrl) URL.revokeObjectURL(objectUrl);
       objectUrl = URL.createObjectURL(f);
       const i = new Image();
@@ -1238,46 +1292,82 @@
           originSize = 0;
           file.value = '';
           setStats();
-          if (result) result.textContent = pcText.tooLarge;
+          file.setAttribute('aria-invalid', 'true');
+          setMessage(pcText.tooLarge, 'error');
           return;
         }
         img = i;
-        setStats(formatBytes(originSize), '-', '-', `${formatNum(i.width)} x ${formatNum(i.height)}`);
-        if (result) result.textContent = pcText.ready;
+        setStats(formatBytes(originSize), '-', '-', `${formatNum(i.width)} x ${formatNum(i.height)}`, mimeLabel(format?.value));
+        setMessage(pcText.ready, 'success');
+        if ((format?.value || '') === 'image/jpeg' && originType === 'image/png') {
+          setWarning(pcText.jpegAlpha);
+        }
       };
       i.onerror = () => {
         URL.revokeObjectURL(objectUrl);
         objectUrl = '';
         originSize = 0;
         setStats();
-        if (result) result.textContent = pcText.unsupported;
+        file.setAttribute('aria-invalid', 'true');
+        setMessage(pcText.unsupported, 'error');
       };
       i.src = objectUrl;
     });
 
     q?.addEventListener('input', updateQualityLabel);
     format?.addEventListener('change', () => {
-      if (result && format.value === 'image/png') result.textContent = pcText.pngNotice;
+      setDownloadReady(false);
+      setStats(
+        originalStat?.textContent || '-',
+        '-',
+        '-',
+        dimensionsStat?.textContent || '-',
+        mimeLabel(format.value)
+      );
+      if (format.value === 'image/png') {
+        setMessage(pcText.pngNotice, 'warning');
+        setWarning('');
+      } else if (format.value === 'image/jpeg' && originType === 'image/png') {
+        setWarning(pcText.jpegAlpha);
+        if (img) setMessage(pcText.ready, 'success');
+      } else {
+        setWarning('');
+        if (img) setMessage(pcText.ready, 'success');
+      }
     });
     updateQualityLabel();
     setDownloadReady(false);
 
     run?.addEventListener('click', async () => {
+      if (isRunning) return;
       setDownloadReady(false);
+      setWarning('');
       if (!img) {
-        if (result) result.textContent = pcText.empty;
+        setMessage(pcText.empty, 'error');
+        file?.focus();
         return;
       }
       const mime = format?.value || 'image/webp';
       const quality = Number(q.value || 0.8);
-      if (result) result.textContent = pcText.running;
+      isRunning = true;
+      run.disabled = true;
+      setMessage(pcText.running);
       canvas.width = img.width; canvas.height = img.height;
-      canvas.getContext('2d').drawImage(img, 0, 0);
+      const ctx = canvas.getContext('2d');
+      if (mime === 'image/jpeg') {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      ctx.drawImage(img, 0, 0);
 
       const blob = await new Promise((resolve) => canvas.toBlob(resolve, mime, mime === 'image/png' ? undefined : quality));
+      isRunning = false;
+      run.disabled = false;
       if (!blob) {
-        if (result) result.textContent = pcText.fail;
-        setStats(formatBytes(originSize), '-', '-', `${formatNum(img.width)} x ${formatNum(img.height)}`);
+        setMessage(pcText.fail, 'error');
+        setStats(formatBytes(originSize), '-', '-', `${formatNum(img.width)} x ${formatNum(img.height)}`, mimeLabel(mime));
         return;
       }
       const url = URL.createObjectURL(blob);
@@ -1286,10 +1376,10 @@
 
       const compressedBytes = blob.size || 0;
       const ratio = originSize ? Number(((1 - compressedBytes / originSize) * 100).toFixed(1)) : 0;
-      setStats(formatBytes(originSize), formatBytes(compressedBytes), `${ratio}%`, `${formatNum(img.width)} x ${formatNum(img.height)}`);
-      if (result) {
-        result.textContent = pcText.done(formatBytes(originSize), formatBytes(compressedBytes), ratio);
-      }
+      setStats(formatBytes(originSize), formatBytes(compressedBytes), `${ratio}%`, `${formatNum(img.width)} x ${formatNum(img.height)}`, mimeLabel(mime));
+      setMessage(pcText.done(formatBytes(originSize), formatBytes(compressedBytes), ratio), ratio >= 0 ? 'success' : 'warning');
+      if (ratio < 0) setWarning(pcText.larger, 'warning');
+      else if (mime === 'image/jpeg' && originType === 'image/png') setWarning(pcText.jpegAlpha, 'warning');
     });
   }
 
