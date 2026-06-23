@@ -619,33 +619,41 @@ layout: default
         </div>
       {% when 'privacy-exposure-checker' %}
         <div class="tool-ui">
-          <textarea id="pec-input" rows="10" maxlength="20000" placeholder="메시지, 문서 초안, 공지문 등을 붙여넣어 개인정보 노출 가능성을 점검하세요."></textarea>
-
-          <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="pec-mask-phone" type="checkbox" checked /> 전화번호/연락처 마스킹</label>
-            <label class="tool-check"><input id="pec-mask-id" type="checkbox" checked /> 주민등록/사업자/카드번호 유사 패턴 마스킹</label>
+          <div class="tool-row">
+            <label for="pec-input">{% if page.lang == 'en' %}Draft text to check{% elsif page.lang == 'ja' %}確認する下書きテキスト{% else %}점검할 문서/메시지{% endif %}</label>
+            <textarea id="pec-input" rows="10" maxlength="20000" aria-describedby="pec-summary pec-help" placeholder="{% if page.lang == 'en' %}Paste a message, notice, report draft, or support note before sharing.{% elsif page.lang == 'ja' %}共有前のメッセージ、お知らせ、レポート下書き、サポートメモを貼り付けてください。{% else %}메시지, 문서 초안, 공지문, 상담 메모 등을 붙여넣어 개인정보 노출 가능성을 점검하세요.{% endif %}"></textarea>
           </div>
 
-          <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="pec-mask-email" type="checkbox" checked /> 이메일 마스킹</label>
-            <label class="tool-check"><input id="pec-mask-account" type="checkbox" checked /> 계좌/긴 숫자열 마스킹</label>
+          <div class="tool-row-grid pct-grid" aria-label="{% if page.lang == 'en' %}Masking options{% elsif page.lang == 'ja' %}マスキング設定{% else %}마스킹 옵션{% endif %}">
+            <label class="tool-check"><input id="pec-mask-phone" type="checkbox" checked /> {% if page.lang == 'en' %}Mask phone/contact numbers{% elsif page.lang == 'ja' %}電話番号・連絡先をマスキング{% else %}전화번호/연락처 마스킹{% endif %}</label>
+            <label class="tool-check"><input id="pec-mask-id" type="checkbox" checked /> {% if page.lang == 'en' %}Mask ID, business, and card-like numbers{% elsif page.lang == 'ja' %}個人番号・事業者番号・カード番号風をマスキング{% else %}주민등록/사업자/카드번호 유사 패턴 마스킹{% endif %}</label>
+          </div>
+
+          <div class="tool-row-grid pct-grid" aria-label="{% if page.lang == 'en' %}Additional masking options{% elsif page.lang == 'ja' %}追加マスキング設定{% else %}추가 마스킹 옵션{% endif %}">
+            <label class="tool-check"><input id="pec-mask-email" type="checkbox" checked /> {% if page.lang == 'en' %}Mask email addresses{% elsif page.lang == 'ja' %}メールアドレスをマスキング{% else %}이메일 마스킹{% endif %}</label>
+            <label class="tool-check"><input id="pec-mask-account" type="checkbox" checked /> {% if page.lang == 'en' %}Mask account-style or long number strings{% elsif page.lang == 'ja' %}口座番号風・長い数字列をマスキング{% else %}계좌/긴 숫자열 마스킹{% endif %}</label>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="pec-copy" type="button">마스킹 결과 복사</button>
-            <button id="pec-sample" type="button">예시 넣기</button>
+            <button id="pec-copy" type="button" disabled>{% if page.lang == 'en' %}Copy masked result{% elsif page.lang == 'ja' %}マスキング結果をコピー{% else %}마스킹 결과 복사{% endif %}</button>
+            <button id="pec-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 넣기{% endif %}</button>
+            <button id="pec-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
-            <div><strong id="pec-total">0</strong><span>전체 감지</span></div>
-            <div><strong id="pec-contact">0</strong><span>연락처/이메일</span></div>
-            <div><strong id="pec-idnum">0</strong><span>식별번호 유사</span></div>
-            <div><strong id="pec-link">0</strong><span>링크/아이디 유도</span></div>
+          <div class="tool-stats" aria-label="{% if page.lang == 'en' %}Privacy exposure scan summary{% elsif page.lang == 'ja' %}個人情報露出チェック結果{% else %}개인정보 노출 점검 결과{% endif %}">
+            <div><strong id="pec-total">0</strong><span>{% if page.lang == 'en' %}Total findings{% elsif page.lang == 'ja' %}検出合計{% else %}전체 감지{% endif %}</span></div>
+            <div><strong id="pec-contact">0</strong><span>{% if page.lang == 'en' %}Contact/email{% elsif page.lang == 'ja' %}連絡先/メール{% else %}연락처/이메일{% endif %}</span></div>
+            <div><strong id="pec-idnum">0</strong><span>{% if page.lang == 'en' %}ID-like{% elsif page.lang == 'ja' %}番号系{% else %}식별번호 유사{% endif %}</span></div>
+            <div><strong id="pec-link">0</strong><span>{% if page.lang == 'en' %}Link/ID prompts{% elsif page.lang == 'ja' %}リンク/ID誘導{% else %}링크/아이디 유도{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="pec-summary">텍스트를 입력하면 전화번호, 이메일, 주민등록번호 유사 패턴, 계좌/카드번호형 숫자열, 링크 유도 표현을 점검합니다.</p>
-          <div id="pec-list" class="bw-list"></div>
-          <textarea id="pec-output" rows="10" readonly placeholder="마스킹 결과가 여기에 표시됩니다."></textarea>
+          <p class="tool-result" id="pec-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Paste text to scan for phone numbers, emails, ID-like numbers, card/account-style strings, and link or messenger prompts.{% elsif page.lang == 'ja' %}テキストを貼り付けると、電話番号、メール、番号系パターン、カード/口座番号風文字列、リンクやメッセンジャー誘導を点検します。{% else %}텍스트를 입력하면 전화번호, 이메일, 주민등록번호 유사 패턴, 계좌/카드번호형 숫자열, 링크 유도 표현을 점검합니다.{% endif %}</p>
+          <p class="tool-result" id="pec-help">{% if page.lang == 'en' %}Pattern checks are useful for a first pass, but names, addresses, internal codes, and context-sensitive details still need human review. Input stays in your browser and is limited to 20,000 characters.{% elsif page.lang == 'ja' %}パターン検出は一次確認に便利ですが、名前、住所、社内コード、文脈依存の情報は人の目で確認してください。入力はブラウザ内だけで処理され、最大20,000文字です。{% else %}패턴 점검은 1차 확인에 유용하지만 이름, 주소, 사내 코드, 문맥상 민감한 정보는 사람이 한 번 더 확인해야 합니다. 입력 내용은 브라우저 안에서만 처리되며 최대 20,000자까지 지원합니다.{% endif %}</p>
+          <div id="pec-list" class="bw-list" aria-live="polite"></div>
+          <div class="tool-row">
+            <label for="pec-output">{% if page.lang == 'en' %}Masked result{% elsif page.lang == 'ja' %}マスキング結果{% else %}마스킹 결과{% endif %}</label>
+            <textarea id="pec-output" rows="10" readonly placeholder="{% if page.lang == 'en' %}The masked result will appear here.{% elsif page.lang == 'ja' %}マスキング結果がここに表示されます。{% else %}마스킹 결과가 여기에 표시됩니다.{% endif %}"></textarea>
+          </div>
         </div>
       {% when 'message-tone-checker' %}
         <div class="tool-ui">

@@ -8514,6 +8514,7 @@
     const maskAccount = document.getElementById('pec-mask-account');
     const copyBtn = document.getElementById('pec-copy');
     const sampleBtn = document.getElementById('pec-sample');
+    const clearBtn = document.getElementById('pec-clear');
     const totalEl = document.getElementById('pec-total');
     const contactEl = document.getElementById('pec-contact');
     const idnumEl = document.getElementById('pec-idnum');
@@ -8521,7 +8522,7 @@
     const summaryEl = document.getElementById('pec-summary');
     const listEl = document.getElementById('pec-list');
     const outputEl = document.getElementById('pec-output');
-    if (!input || !maskPhone || !maskId || !maskEmail || !maskAccount || !copyBtn || !sampleBtn || !totalEl || !contactEl || !idnumEl || !linkEl || !summaryEl || !listEl || !outputEl) return;
+    if (!input || !maskPhone || !maskId || !maskEmail || !maskAccount || !copyBtn || !sampleBtn || !clearBtn || !totalEl || !contactEl || !idnumEl || !linkEl || !summaryEl || !listEl || !outputEl) return;
 
     const copyText = async (text) => {
       try { await navigator.clipboard.writeText(text); }
@@ -8538,20 +8539,91 @@
     };
 
     const t = {
-      sample: '안녕하세요. 담당자 김도윤입니다.\n연락은 010-1234-5678 또는 doyoon.kim@example.com 으로 주세요.\n주민등록번호는 900101-1234567 형식으로 적지 마세요.\n법인카드는 4111 1111 1111 1111 처럼 전체 번호를 공유하지 않는 것이 좋습니다.\n입금 계좌는 123-45-678901, 문의 링크는 https://example.com/form 입니다.\n카카오톡 ID: sample_team',
-      idle: '텍스트를 입력하면 전화번호, 이메일, 주민등록번호 유사 패턴, 계좌/카드번호형 숫자열, 링크 유도 표현을 점검합니다.',
-      clean: '눈에 띄는 개인정보/민감정보 패턴은 감지되지 않았습니다. 그래도 이름, 주소, 고유번호처럼 문맥상 민감한 정보는 한 번 더 확인하세요.',
-      caution: (n) => `${n}개의 노출 가능 패턴이 감지됐어요. 외부 발송 전에는 마스킹 결과를 기준으로 꼭 한 번 더 검토하세요.`,
-      copied: '마스킹 결과를 복사했어요.',
-      emptyCopy: '복사할 마스킹 결과가 아직 없어요.',
-      catContact: '연락처/이메일',
-      catId: '식별번호/긴 숫자열',
-      catLink: '링크/아이디 유도',
-      riskHigh: '높음',
-      riskMedium: '중간',
-      riskLow: '낮음',
-      noList: '감지 항목이 없으면 여기에 결과가 정리됩니다.'
-    };
+      ko: {
+        sample: '안녕하세요. 담당자 김도윤입니다.\n연락은 010-1234-5678 또는 doyoon.kim@example.com 으로 주세요.\n주민등록번호는 900101-1234567 형식으로 적지 마세요.\n법인카드는 4111 1111 1111 1111 처럼 전체 번호를 공유하지 않는 것이 좋습니다.\n입금 계좌는 123-45-678901, 문의 링크는 https://example.com/form 입니다.\n카카오톡 ID: sample_team',
+        idle: '텍스트를 입력하면 전화번호, 이메일, 주민등록번호 유사 패턴, 계좌/카드번호형 숫자열, 링크 유도 표현을 점검합니다.',
+        clean: '눈에 띄는 개인정보/민감정보 패턴은 감지되지 않았습니다. 그래도 이름, 주소, 고유번호처럼 문맥상 민감한 정보는 한 번 더 확인하세요.',
+        caution: (n) => `${formatNum(n)}개의 노출 가능 패턴이 감지됐어요. 외부 발송 전에는 마스킹 결과를 기준으로 꼭 한 번 더 검토하세요.`,
+        copied: '마스킹 결과를 복사했어요.',
+        emptyCopy: '복사할 마스킹 결과가 아직 없어요.',
+        cleared: '입력과 마스킹 결과를 초기화했어요.',
+        catContact: '연락처/이메일',
+        catId: '식별번호/긴 숫자열',
+        catLink: '링크/아이디 유도',
+        risk: '위험도',
+        maskedExample: '마스킹 예시',
+        riskHigh: '높음',
+        riskMedium: '중간',
+        riskLow: '낮음',
+        noList: '텍스트를 입력하면 감지 항목이 여기에 정리됩니다.',
+        labels: {
+          phone: '전화번호',
+          email: '이메일',
+          rrn: '주민등록번호 유사',
+          biz: '사업자등록번호 유사',
+          card: '카드번호 유사',
+          account: '계좌/긴 숫자열 유사',
+          url: 'URL 링크',
+          messenger: '메신저/아이디 유도'
+        }
+      },
+      en: {
+        sample: 'Hello, this is Jamie from Operations.\nPlease contact me at +82 10-1234-5678 or jamie.ops@example.com.\nDo not include ID-like numbers such as 900101-1234567 in shared notes.\nAvoid sharing full card numbers like 4111 1111 1111 1111.\nThe deposit account is 123-45-678901 and the form link is https://example.com/form.\nTelegram @sample_team',
+        idle: 'Paste text to scan for phone numbers, emails, ID-like numbers, card/account-style strings, and link or messenger prompts.',
+        clean: 'No obvious privacy or sensitive-data pattern was detected. Still review names, addresses, internal codes, and context-sensitive details manually.',
+        caution: (n) => `${formatNum(n)} possible exposure pattern${n === 1 ? '' : 's'} detected. Review the masked result before sending externally.`,
+        copied: 'Copied the masked result.',
+        emptyCopy: 'There is no masked result to copy yet.',
+        cleared: 'Cleared the input and masked result.',
+        catContact: 'Contact/email',
+        catId: 'ID-like/long number',
+        catLink: 'Link/ID prompt',
+        risk: 'Risk',
+        maskedExample: 'Masked example',
+        riskHigh: 'High',
+        riskMedium: 'Medium',
+        riskLow: 'Low',
+        noList: 'Detected items will appear here after you enter text.',
+        labels: {
+          phone: 'Phone number',
+          email: 'Email address',
+          rrn: 'ID-like number',
+          biz: 'Business ID-like number',
+          card: 'Card-like number',
+          account: 'Account-style number',
+          url: 'URL link',
+          messenger: 'Messenger or ID prompt'
+        }
+      },
+      ja: {
+        sample: 'こんにちは。担当の佐藤です。\n連絡先は 090-1234-5678 または sato.ops@example.com です。\n共有メモには 900101-1234567 のような個人番号風の文字列を入れないでください。\nカード番号 4111 1111 1111 1111 のような全桁共有は避けましょう。\n振込口座は 123-45-678901、問い合わせリンクは https://example.com/form です。\nTelegram @sample_team',
+        idle: 'テキストを貼り付けると、電話番号、メール、番号系パターン、カード/口座番号風文字列、リンクやメッセンジャー誘導を点検します。',
+        clean: '目立つ個人情報・機微情報パターンは検出されませんでした。ただし名前、住所、社内コード、文脈依存の情報はもう一度確認してください。',
+        caution: (n) => `${formatNum(n)}件の露出可能性があるパターンを検出しました。外部送信前にマスキング結果を必ず確認してください。`,
+        copied: 'マスキング結果をコピーしました。',
+        emptyCopy: 'コピーできるマスキング結果がまだありません。',
+        cleared: '入力とマスキング結果をクリアしました。',
+        catContact: '連絡先/メール',
+        catId: '番号系/長い数字列',
+        catLink: 'リンク/ID誘導',
+        risk: 'リスク',
+        maskedExample: 'マスキング例',
+        riskHigh: '高',
+        riskMedium: '中',
+        riskLow: '低',
+        noList: 'テキストを入力すると検出項目がここに表示されます。',
+        labels: {
+          phone: '電話番号',
+          email: 'メールアドレス',
+          rrn: '個人番号風',
+          biz: '事業者番号風',
+          card: 'カード番号風',
+          account: '口座番号風/長い数字列',
+          url: 'URLリンク',
+          messenger: 'メッセンジャー/ID誘導'
+        }
+      }
+    }[pageLang] || {};
 
     const rules = [
       { key: 'phone', cat: 'contact', label: '전화번호', risk: 'medium', re: /(?:\+?82[-\s]?)?0?1[0-9][-.\s]?[0-9]{3,4}[-.\s]?[0-9]{4}/g },
@@ -8599,6 +8671,7 @@
     const findMatches = (text) => {
       const items = [];
       rules.forEach((rule) => {
+        rule.re.lastIndex = 0;
         const matches = [...text.matchAll(rule.re)];
         matches.forEach((match) => {
           const raw = match[0];
@@ -8613,7 +8686,13 @@
           });
         });
       });
-      return items.sort((a, b) => a.index - b.index);
+      const priority = { rrn: 1, biz: 1, card: 2, account: 3, phone: 4, email: 4, url: 5, messenger: 5 };
+      const sorted = items.sort((a, b) => a.index - b.index || (priority[a.key] || 9) - (priority[b.key] || 9) || (b.end - b.index) - (a.end - a.index));
+      const filtered = [];
+      sorted.forEach((item) => {
+        if (!filtered.some((prev) => item.index < prev.end && item.end > prev.index)) filtered.push(item);
+      });
+      return filtered;
     };
 
     const applyMask = (text, items) => {
@@ -8644,6 +8723,7 @@
       linkEl.textContent = formatNum(counts.link);
       summaryEl.textContent = text.trim() ? (items.length ? t.caution(items.length) : t.clean) : t.idle;
       outputEl.value = text.trim() ? applyMask(text, items) : '';
+      copyBtn.disabled = !outputEl.value.trim();
 
       if (!text.trim()) {
         listEl.innerHTML = `<div class="tool-card"><p>${t.noList}</p></div>`;
@@ -8660,10 +8740,10 @@
         const categoryLabel = item.cat === 'contact' ? t.catContact : (item.cat === 'id' ? t.catId : t.catLink);
         return `
           <div class="tool-card">
-            <strong>${escapeHtml(item.label)}</strong>
-            <p>${escapeHtml(categoryLabel)} · 위험도 ${escapeHtml(riskLabel)}</p>
+            <strong>${escapeHtml(t.labels[item.key] || item.label)}</strong>
+            <p>${escapeHtml(categoryLabel)} · ${escapeHtml(t.risk)} ${escapeHtml(riskLabel)}</p>
             <p><code>${escapeHtml(item.value)}</code></p>
-            <p>마스킹 예시: <code>${escapeHtml(item.masked)}</code></p>
+            <p>${escapeHtml(t.maskedExample)}: <code>${escapeHtml(item.masked)}</code></p>
           </div>
         `;
       }).join('');
@@ -8671,7 +8751,13 @@
 
     input.addEventListener('input', render);
     [maskPhone, maskId, maskEmail, maskAccount].forEach((el) => el.addEventListener('change', render));
-    sampleBtn.addEventListener('click', () => { input.value = t.sample; render(); });
+    sampleBtn.addEventListener('click', () => { input.value = t.sample; render(); input.focus(); });
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      render();
+      summaryEl.textContent = t.cleared;
+      input.focus();
+    });
     copyBtn.addEventListener('click', async () => {
       if (!outputEl.value.trim()) {
         summaryEl.textContent = t.emptyCopy;
