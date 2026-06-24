@@ -105,9 +105,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 반품 사유, 남은 기한, 포장 상태, 회수 방법을 넣으면 사진 촬영, 구성품 확인, 포장, 접수 전 체크리스트를 정리해요.
-  description_en: Build a return-prep checklist for photos, components, packaging, and pickup based on reason, deadline, and package state.
-  description_ja: 返品理由、残り期限、梱包状態、回収方法から、写真・付属品・梱包・申請前チェックを整理します。
+  description: 반품 상품과 구성품, 반품 사유, 남은 기한, 포장 상태, 회수 방법을 넣으면 사진 촬영, 구성품 확인, 포장, 접수 전 체크리스트를 정리해요.
+  description_en: Build a return-prep checklist for photos, components, packaging, and pickup based on items, reason, deadline, and package state.
+  description_ja: 返品する商品・付属品、返品理由、残り期限、梱包状態、回収方法から、写真・付属品・梱包・申請前チェックを整理します。
   url: /tools/online-return-package-checker/
   url_en: /en/tools/online-return-package-checker/
   url_ja: /ja/tools/online-return-package-checker/

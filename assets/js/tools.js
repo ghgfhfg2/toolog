@@ -15383,6 +15383,7 @@
     const runBtn = document.getElementById('orpc-run');
     const sampleBtn = document.getElementById('orpc-sample');
     const copyBtn = document.getElementById('orpc-copy');
+    const clearBtn = document.getElementById('orpc-clear');
     const countOut = document.getElementById('orpc-count');
     const urgencyOut = document.getElementById('orpc-urgency');
     const photosOut = document.getElementById('orpc-photos');
@@ -15394,6 +15395,10 @@
     const i18n = {
       ko: {
         title: '온라인 쇼핑 반품 준비 체크리스트', copied: '복사됨', copyDefault: '결과 복사', sample: '재킷\n택/라벨\n사은품 파우치', urgency: ['여유', '주의', '긴급'],
+        empty: '상품이나 구성품을 1개 이상 입력해 주세요.',
+        invalidDays: '남은 일수는 0~30 사이의 정수로 입력해 주세요.',
+        cleared: '입력값을 초기화했습니다.',
+        omitted: (n) => `긴 목록은 앞 30개만 반영했습니다. ${n}개 항목은 생략했습니다.`,
         summary: (u,d) => `반품 기한까지 ${d}일 남았습니다. 긴급도는 ${u}입니다.`,
         basics: ['쇼핑몰 반품 가능 기간과 배송비 조건 확인', '주문번호·상품명·옵션을 반품 접수 화면과 대조', '구성품을 모두 모아 누락 여부 확인'],
         photos: ['상품 전체 상태 사진 촬영', '택·라벨·구성품 사진 촬영', '포장 전 최종 구성 사진 남기기'],
@@ -15406,6 +15411,10 @@
       },
       en: {
         title: 'Online return preparation checklist', copied: 'Copied', copyDefault: 'Copy result', sample: 'Jacket\nTag/label\nGift pouch', urgency: ['Low', 'Watch', 'Urgent'],
+        empty: 'Enter at least one item or component.',
+        invalidDays: 'Days left must be a whole number from 0 to 30.',
+        cleared: 'Cleared the inputs.',
+        omitted: (n) => `Only the first 30 non-empty lines are included. ${n} item(s) were omitted.`,
         summary: (u,d) => `${d} day(s) left before the return deadline. Urgency: ${u}.`,
         basics: ['Check the store return window and shipping-fee rules', 'Match order number, item name, and option with the return form', 'Gather every component and check for missing parts'],
         photos: ['Take a full product-condition photo', 'Photograph tags, labels, and components', 'Take one final photo before sealing the package'],
@@ -15418,6 +15427,10 @@
       },
       ja: {
         title: 'オンライン返品準備チェックリスト', copied: 'コピー完了', copyDefault: '結果をコピー', sample: 'ジャケット\nタグ・ラベル\nノベルティポーチ', urgency: ['余裕', '注意', '緊急'],
+        empty: '商品または付属品を1つ以上入力してください。',
+        invalidDays: '残り日数は0〜30の整数で入力してください。',
+        cleared: '入力をクリアしました。',
+        omitted: (n) => `空でない行は先頭30件だけ反映しました。${n}件を省略しました。`,
         summary: (u,d) => `返品期限まで${d}日です。緊急度は${u}です。`,
         basics: ['ショップの返品期間と送料条件を確認', '注文番号・商品名・オプションを返品申請画面と照合', '付属品をすべて集め、欠品がないか確認'],
         photos: ['商品の全体状態を撮影', 'タグ・ラベル・付属品を撮影', '梱包前に最終構成を撮影'],
@@ -15430,13 +15443,42 @@
       }
     };
     const t = i18n[pageLang] || i18n.ko;
-    const lines = (v) => (v || '').split(/\n+/).map((s) => s.trim()).filter(Boolean);
+    const lines = (v) => (v || '').split(/\n+/).map((s) => s.trim().replace(/\s+/g, ' ')).filter(Boolean);
     const copyText = async (val) => { try { await navigator.clipboard.writeText(val); } catch (_) { const ta=document.createElement('textarea'); ta.value=val; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } };
 
+    const resetStats = () => {
+      countOut.textContent = '0';
+      urgencyOut.textContent = '-';
+      photosOut.textContent = '0';
+      stepsOut.textContent = '0';
+      output.value = '';
+      copyBtn.disabled = true;
+    };
+
     const render = () => {
-      const items = lines(itemsEl.value);
+      const allItems = lines(itemsEl.value);
+      const items = allItems.slice(0, 30);
       const reason = reasonEl.value;
-      const days = Math.max(0, Number(daysEl.value || 0));
+      const daysRaw = String(daysEl.value || '').trim();
+      const days = Number(daysRaw);
+      if (!allItems.length) {
+        itemsEl.setAttribute('aria-invalid', 'true');
+        daysEl.setAttribute('aria-invalid', 'false');
+        resetStats();
+        help.textContent = t.empty;
+        help.dataset.state = 'error';
+        return;
+      }
+      itemsEl.setAttribute('aria-invalid', 'false');
+      if (!daysRaw || !Number.isInteger(days) || days < 0 || days > 30) {
+        daysEl.setAttribute('aria-invalid', 'true');
+        resetStats();
+        countOut.textContent = formatNum(items.length);
+        help.textContent = t.invalidDays;
+        help.dataset.state = 'error';
+        return;
+      }
+      daysEl.setAttribute('aria-invalid', 'false');
       const urgencyIndex = days <= 1 ? 2 : days <= 3 ? 1 : 0;
       const photoList = photoEl.checked ? [...t.photos] : [];
       if (photoEl.checked && reason === 'defect') photoList.push(...t.defect);
@@ -15453,13 +15495,17 @@
       stepsOut.textContent = formatNum(checks.length + photoList.length + items.length);
       const parts = [`# ${t.title}`, '', t.summary(t.urgency[urgencyIndex], days), '', 'Checklist:', ...checks.map((x) => `- [ ] ${x}`)];
       if (photoList.length) parts.push('', 'Photos:', ...photoList.map((x) => `- [ ] ${x}`));
-      if (items.length) parts.push('', `${t.components}:`, ...items.slice(0, 12).map((x) => `- [ ] ${x}`));
+      if (items.length) parts.push('', `${t.components}:`, ...items.map((x) => `- [ ] ${x}`));
+      if (allItems.length > items.length) parts.push('', `Note: ${t.omitted(allItems.length - items.length)}`);
       output.value = parts.join('\n');
-      help.textContent = t.summary(t.urgency[urgencyIndex], days);
+      copyBtn.disabled = false;
+      help.textContent = allItems.length > items.length ? `${t.summary(t.urgency[urgencyIndex], days)} ${t.omitted(allItems.length - items.length)}` : t.summary(t.urgency[urgencyIndex], days);
+      help.dataset.state = 'success';
     };
-    sampleBtn?.addEventListener('click', () => { itemsEl.value = t.sample; reasonEl.value='defect'; daysEl.value='2'; packageEl.value='partial'; pickupEl.value='pickup'; photoEl.checked=true; render(); });
+    sampleBtn?.addEventListener('click', () => { itemsEl.value = t.sample; reasonEl.value='defect'; daysEl.value='2'; packageEl.value='partial'; pickupEl.value='pickup'; photoEl.checked=true; render(); itemsEl.focus(); });
     runBtn?.addEventListener('click', render);
-    copyBtn?.addEventListener('click', async () => { if (!output.value.trim()) return; await copyText(output.value.trim()); const old=copyBtn.textContent; copyBtn.textContent=t.copied; setTimeout(()=>{ copyBtn.textContent=old||t.copyDefault; },900); });
+    clearBtn?.addEventListener('click', () => { itemsEl.value = ''; daysEl.value = '3'; reasonEl.value = 'change'; packageEl.value = 'partial'; pickupEl.value = 'pickup'; photoEl.checked = true; resetStats(); help.textContent = t.cleared; help.dataset.state = ''; itemsEl.setAttribute('aria-invalid', 'false'); daysEl.setAttribute('aria-invalid', 'false'); itemsEl.focus(); });
+    copyBtn?.addEventListener('click', async () => { if (!output.value.trim()) { render(); } if (!output.value.trim()) return; await copyText(output.value.trim()); const old=copyBtn.textContent; copyBtn.textContent=t.copied; setTimeout(()=>{ copyBtn.textContent=old||t.copyDefault; },900); });
     [itemsEl, reasonEl, daysEl, packageEl, pickupEl, photoEl].forEach((el) => { el?.addEventListener('input', render); el?.addEventListener('change', render); });
     render();
   }
