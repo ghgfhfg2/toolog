@@ -248,6 +248,49 @@ a:hover { color: #fff; text-decoration: none; }
   color: white;
 }
 
+.search-clusters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .75rem;
+  margin: 0 20px 1rem;
+}
+.search-cluster {
+  background: rgba(20, 27, 40, .7);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: .85rem;
+}
+.search-cluster h2 {
+  margin: 0 0 .34rem;
+  font-size: .95rem;
+  letter-spacing: 0;
+}
+.search-cluster p {
+  min-height: 2.7rem;
+  margin: 0 0 .72rem;
+  color: var(--muted);
+  font-size: .78rem;
+  line-height: 1.5;
+}
+.search-cluster__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .42rem;
+}
+.search-cluster__links a {
+  border: 1px solid var(--line);
+  background: #111827;
+  color: #e2e8f0;
+  border-radius: 999px;
+  padding: .28rem .58rem;
+  font-size: .73rem;
+  font-weight: 700;
+}
+.search-cluster__links a:hover {
+  border-color: #60a5fa;
+  color: #fff;
+}
+
 /* 핵심: 4~5열 카드형 메인 레이아웃 */
 .tool-grid {
   display: grid;
@@ -941,6 +984,7 @@ a:hover { color: #fff; text-decoration: none; }
 
 @media (max-width: 1280px) { .tool-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (max-width: 980px) { .tool-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 980px) { .search-clusters { grid-template-columns: 1fr 1fr; } }
 
 @media (max-width: 780px) {
   .tool-row-grid,.tz-grid,.frac-main-grid { grid-template-columns: 1fr; }
@@ -962,6 +1006,8 @@ a:hover { color: #fff; text-decoration: none; }
   .font-change-controls button { width: 100%; }
   .tool-stats { grid-template-columns: 1fr 1fr; }
   .tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .search-clusters { grid-template-columns: 1fr; margin-left: 14px; margin-right: 14px; }
+  .search-cluster p { min-height: 0; }
   .related-grid { grid-template-columns: 1fr; }
   .ytk-grid,
   .ytk-actions { grid-template-columns: 1fr; }

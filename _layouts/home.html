@@ -4,8 +4,8 @@ layout: default
 <section class="discover">
   <header class="discover__head">
     <div>
-      <h1>Toolog | 실용 웹툴 모음</h1>
-      <p>이미지·텍스트·계산 웹툴을 카드로 빠르게 찾고 바로 실행하세요.</p>
+      <h1>Toolog | 이미지 용량 줄이기·글자수·계산기 웹툴</h1>
+      <p>PNG 압축, 이미지 크기 조절, 글자수 계산, 할인·대출·복리 계산처럼 자주 찾는 작업을 바로 실행하세요.</p>
       <p style="margin-top:8px;font-size:14px;">
         언어 선택:
         <a href="{{ '/' | relative_url }}">한국어</a> ·
@@ -17,7 +17,7 @@ layout: default
   </header>
 
   <section class="discover__controls">
-    <input id="toolSearch" type="search" placeholder="툴 검색 (예: PNG 압축기, 글자수 계산기)" autocomplete="off" />
+    <input id="toolSearch" type="search" placeholder="툴 검색 (예: 이미지 용량 줄이기, 글자수 계산기, 할인 계산기)" autocomplete="off" />
     <div class="chip-row" id="chipBar">
       <button type="button" class="chip is-active" data-filter="all">전체</button>
       {% assign ko_labels = site.data.tools | map: 'category_label' | uniq | sort %}
@@ -26,6 +26,39 @@ layout: default
       <button type="button" class="chip" data-filter="{{ label }}">{{ label }}</button>
       {% endif %}
       {% endfor %}
+    </div>
+  </section>
+
+  <section class="search-clusters" aria-label="자주 찾는 웹툴 묶음">
+    <div class="search-cluster">
+      <h2>이미지 용량·크기 줄이기</h2>
+      <p>블로그, 쇼핑몰, SNS 업로드 전에 이미지 파일을 가볍게 정리할 때 쓰는 도구입니다.</p>
+      <div class="search-cluster__links">
+        <a href="{{ '/tools/png-compressor/' | relative_url }}">PNG 압축기</a>
+        <a href="{{ '/tools/image-resizer/' | relative_url }}">이미지 리사이저</a>
+        <a href="{{ '/tools/image-upscaler/' | relative_url }}">이미지 화질 보정</a>
+        <a href="{{ '/tools/youtube-image-kit/' | relative_url }}">유튜브 이미지 세트</a>
+      </div>
+    </div>
+    <div class="search-cluster">
+      <h2>글자수·블로그 글 점검</h2>
+      <p>제목, 본문, 업로드 문구를 발행 전에 빠르게 검사하고 다듬는 텍스트 도구입니다.</p>
+      <div class="search-cluster__links">
+        <a href="{{ '/tools/text-counter/' | relative_url }}">글자수 계산기</a>
+        <a href="{{ '/tools/blog-banned-word-checker/' | relative_url }}">블로그 금칙어 검사기</a>
+        <a href="{{ '/tools/case-converter/' | relative_url }}">대소문자 변환기</a>
+        <a href="{{ '/tools/font-change/' | relative_url }}">폰트 변환기</a>
+      </div>
+    </div>
+    <div class="search-cluster">
+      <h2>생활·금융 계산기</h2>
+      <p>할인율, 대출 이자, 복리, 예금 이자, 급여처럼 검색 수요가 큰 계산을 모았습니다.</p>
+      <div class="search-cluster__links">
+        <a href="{{ '/tools/discount-calculator/' | relative_url }}">할인 계산기</a>
+        <a href="{{ '/tools/loan-calculator/' | relative_url }}">대출 이자 계산기</a>
+        <a href="{{ '/tools/compound-interest-calculator/' | relative_url }}">복리 계산기</a>
+        <a href="{{ '/tools/savings-interest-calculator/' | relative_url }}">예금 이자 계산기</a>
+      </div>
     </div>
   </section>
 
