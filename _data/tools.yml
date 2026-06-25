@@ -57,9 +57,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 공유 전 텍스트에서 국내외 전화번호, 이메일, 카드번호, 계좌번호 후보를 브라우저 안에서 마스킹하고 탐지 내역까지 확인해요.
-  description_en: Paste text and mask domestic or international phone numbers, emails, card numbers, and account-like numbers in your browser before sharing.
-  description_ja: 共有前のテキストから国内外の電話番号、メール、カード番号、口座番号候補をブラウザ内でマスキングし、検出内容を確認できます。
+  description: 공유 전 텍스트에서 국내외 전화번호, 이메일, 카드번호, 계좌번호, 주민등록번호 후보를 브라우저 안에서 마스킹하고 탐지 내역까지 확인해요.
+  description_en: Paste text and mask domestic or international phone numbers, emails, card numbers, account-like numbers, and ID-number candidates in your browser before sharing.
+  description_ja: 共有前のテキストから国内外の電話番号、メール、カード番号、口座番号候補、ID番号候補をブラウザ内でマスキングし、検出内容を確認できます。
   url: /tools/privacy-masker/
   url_en: /en/tools/privacy-masker/
   url_ja: /ja/tools/privacy-masker/

@@ -373,7 +373,7 @@ layout: default
         <div class="tool-ui">
           <textarea id="tlbc-input" rows="10" maxlength="30000" placeholder="복사한 텍스트를 붙여넣으세요."></textarea>
 
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid pct-grid pm-categories">
             <label class="tool-check"><input id="tlbc-trim" type="checkbox" checked /> 줄 앞뒤 공백 제거</label>
             <label class="tool-check"><input id="tlbc-spaces" type="checkbox" checked /> 중복 공백 정리</label>
           </div>
@@ -395,7 +395,7 @@ layout: default
             </div>
           </div>
 
-          <div class="tool-row-grid pct-actions">
+          <div class="tool-row-grid pct-actions pm-actions">
             <button id="tlbc-run" type="button">텍스트 정리</button>
             <button id="tlbc-sample" type="button">예시 넣기</button>
             <button id="tlbc-copy" type="button">결과 복사</button>
@@ -1092,30 +1092,42 @@ layout: default
         </div>
 
       {% when 'privacy-masker' %}
-        <div class="tool-ui">
+        <div class="tool-ui pm-ui">
           <label for="pm-input">{% if page.lang == 'en' %}Text to mask{% elsif page.lang == 'ja' %}マスキングするテキスト{% else %}마스킹할 텍스트{% endif %}</label>
-          <textarea id="pm-input" rows="8" maxlength="12000" aria-describedby="pm-help" placeholder="{% if page.lang == 'en' %}Paste a support message, log, or note here.{% elsif page.lang == 'ja' %}問い合わせ文、ログ、メモなどを貼り付けます。{% else %}문의 내용, 로그, 메모 등을 붙여넣으세요.{% endif %}"></textarea>
+          <textarea id="pm-input" rows="8" maxlength="12000" aria-describedby="pm-help pm-detections-title" placeholder="{% if page.lang == 'en' %}Paste a support message, log, or note here.{% elsif page.lang == 'ja' %}問い合わせ文、ログ、メモなどを貼り付けます。{% else %}문의 내용, 로그, 메모 등을 붙여넣으세요.{% endif %}"></textarea>
+          <div class="tool-row-grid pm-options">
+            <div>
+              <label for="pm-style">{% if page.lang == 'en' %}Masking style{% elsif page.lang == 'ja' %}マスキング方式{% else %}마스킹 방식{% endif %}</label>
+              <select id="pm-style" aria-describedby="pm-help">
+                <option value="shape">{% if page.lang == 'en' %}Keep shape with *{% elsif page.lang == 'ja' %}形式を残して * で隠す{% else %}형식 유지하고 *로 가리기{% endif %}</option>
+                <option value="label">{% if page.lang == 'en' %}Replace with category label{% elsif page.lang == 'ja' %}カテゴリ名に置換{% else %}분류 라벨로 바꾸기{% endif %}</option>
+              </select>
+            </div>
+          </div>
           <div class="tool-row-grid pct-grid">
             <label class="tool-check"><input id="pm-phone" type="checkbox" checked /> {% if page.lang == 'en' %}Phone numbers{% elsif page.lang == 'ja' %}電話番号{% else %}전화번호{% endif %}</label>
             <label class="tool-check"><input id="pm-email" type="checkbox" checked /> {% if page.lang == 'en' %}Email addresses{% elsif page.lang == 'ja' %}メールアドレス{% else %}이메일{% endif %}</label>
             <label class="tool-check"><input id="pm-card" type="checkbox" checked /> {% if page.lang == 'en' %}Card numbers{% elsif page.lang == 'ja' %}カード番号{% else %}카드번호{% endif %}</label>
             <label class="tool-check"><input id="pm-account" type="checkbox" checked /> {% if page.lang == 'en' %}Account-like numbers{% elsif page.lang == 'ja' %}口座番号候補{% else %}계좌번호 후보{% endif %}</label>
+            <label class="tool-check"><input id="pm-id" type="checkbox" checked /> {% if page.lang == 'en' %}ID number candidates{% elsif page.lang == 'ja' %}ID番号候補{% else %}주민등록번호 후보{% endif %}</label>
           </div>
           <div class="tool-row-grid pct-actions">
             <button id="pm-run" type="button">{% if page.lang == 'en' %}Mask text{% elsif page.lang == 'ja' %}マスキング実行{% else %}마스킹 실행{% endif %}</button>
             <button id="pm-sample" type="button">{% if page.lang == 'en' %}Fill sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 입력{% endif %}</button>
-            <button id="pm-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="pm-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
             <button id="pm-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}지우기{% endif %}</button>
           </div>
-          <div class="tool-stats">
+          <div class="tool-stats pm-stats" aria-label="{% if page.lang == 'en' %}Masked candidate counts{% elsif page.lang == 'ja' %}マスキング候補数{% else %}마스킹 후보 수{% endif %}">
             <div><strong id="pm-phone-count">0</strong><span>{% if page.lang == 'en' %}Phones{% elsif page.lang == 'ja' %}電話{% else %}전화{% endif %}</span></div>
             <div><strong id="pm-email-count">0</strong><span>{% if page.lang == 'en' %}Emails{% elsif page.lang == 'ja' %}メール{% else %}이메일{% endif %}</span></div>
             <div><strong id="pm-card-count">0</strong><span>{% if page.lang == 'en' %}Cards{% elsif page.lang == 'ja' %}カード{% else %}카드{% endif %}</span></div>
             <div><strong id="pm-account-count">0</strong><span>{% if page.lang == 'en' %}Account candidates{% elsif page.lang == 'ja' %}口座候補{% else %}계좌 후보{% endif %}</span></div>
+            <div><strong id="pm-id-count">0</strong><span>{% if page.lang == 'en' %}IDs{% elsif page.lang == 'ja' %}ID候補{% else %}신분번호{% endif %}</span></div>
           </div>
           <label for="pm-output">{% if page.lang == 'en' %}Masked result{% elsif page.lang == 'ja' %}マスキング結果{% else %}마스킹 결과{% endif %}</label>
-          <textarea id="pm-output" rows="8" readonly aria-label="{% if page.lang == 'en' %}Masked text result{% elsif page.lang == 'ja' %}マスキング済みテキスト結果{% else %}마스킹된 텍스트 결과{% endif %}"></textarea>
+          <textarea id="pm-output" rows="8" readonly aria-describedby="pm-help pm-detections-title" aria-label="{% if page.lang == 'en' %}Masked text result{% elsif page.lang == 'ja' %}マスキング済みテキスト結果{% else %}마스킹된 텍스트 결과{% endif %}"></textarea>
           <p class="tool-result" id="pm-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Masking runs only in this browser. Review names, addresses, and context-specific IDs manually before sharing.{% elsif page.lang == 'ja' %}処理はこのブラウザ内だけで行われます。氏名・住所・文脈依存IDは共有前に目視確認してください。{% else %}마스킹은 이 브라우저 안에서만 처리됩니다. 이름·주소·문맥형 번호는 공유 전 직접 확인하세요.{% endif %}</p>
+          <p class="pm-detections-title" id="pm-detections-title">{% if page.lang == 'en' %}Detected candidates{% elsif page.lang == 'ja' %}検出候補{% else %}탐지된 후보{% endif %}</p>
           <div id="pm-detections" class="bw-list" aria-live="polite"></div>
         </div>
       {% when 'recycling-sorting-checker' %}
