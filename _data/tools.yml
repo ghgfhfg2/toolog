@@ -1556,13 +1556,15 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 이미지 1장으로 썸네일·쇼츠·배너·아이콘·워터마크를 WebP·PNG·JPEG 포맷으로 한 번에 만들어요.
-  description_en: Generate YouTube thumbnail, Shorts cover, banner, icon, and watermark from one image as WebP, PNG, or JPEG.
-  description_ja: 画像1枚からYouTubeサムネ・ショート・バナー・アイコン・透かしをWebP・PNG・JPEGで一括生成します。
+  description: 이미지 1장으로 썸네일·쇼츠·배너·아이콘·워터마크를 WebP·PNG·JPEG 포맷으로 만들고 원본 크기와 총 용량을 확인해요.
+  description_en: Generate YouTube thumbnail, Shorts cover, banner, icon, and watermark from one image as WebP, PNG, or JPEG, with source size and total output size checks.
+  description_ja: 画像1枚からYouTubeサムネ・ショート・バナー・アイコン・透かしをWebP・PNG・JPEGで生成し、元画像サイズと合計容量も確認できます。
   url: /tools/youtube-image-kit/
   url_en: /en/tools/youtube-image-kit/
   url_ja: /ja/tools/youtube-image-kit/
   thumbnail: /assets/thumbs/youtube-image-kit.svg
+  tool_type: utility
+  topic_cluster: image
 
 - id: image-upscaler
   title: 이미지 업스케일러

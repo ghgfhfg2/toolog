@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: YouTube Image Kit Maker | Generate Thumbnail, Shorts Cover, Banner Sizes
-description: "Upload one image to generate YouTube thumbnail 1280×720, Shorts cover, channel banner, icon, and watermark files as WebP, PNG, or JPEG."
+description: "Upload one image to generate YouTube thumbnail 1280×720, Shorts cover, channel banner, icon, and watermark files as WebP, PNG, or JPEG with source size and total output size checks."
 lang: en
 permalink: /en/tools/youtube-image-kit/
 canonical_url: /en/tools/youtube-image-kit/
@@ -27,6 +27,8 @@ faq:
     a: WebP is usually best for smaller upload-ready files. PNG is better when you want to preserve sharp logo or text edges, and JPEG can work well for photo-heavy thumbnails.
   - q: Where is image processing done?
     a: In your browser. No server upload is required for generation.
+  - q: Can I use a small source image?
+    a: Yes, but images below 1280×720 may look soft when enlarged for thumbnails or banners. Upscale first or use a larger source when possible.
 ---
 
 ## Why this tool matters
@@ -49,11 +51,15 @@ Use WebP when file size matters, PNG for logos, captions, and crisp edges, and J
 3. Click `Generate YouTube set` to create the output cards.
 4. Download individually or with one-click download all.
 
+After generation, the summary shows the source dimensions, output count, selected format, and total file size.
+Large files and low-resolution sources are flagged before you spend time downloading results, which helps on mobile browsers.
+
 ## Practical tips
 - For face-focused visuals, **cover** often looks better in thumbnails.
 - For logos/text, **contain** helps avoid cropping.
 - If the source is smaller than 1280×720, try [Image Upscaler]({{ '/en/tools/image-upscaler/' | relative_url }}) first.
 - After generation, optimize files with [PNG Compressor]({{ '/en/tools/png-compressor/' | relative_url }}).
+- Channel banners are generated at 2560×1440, but visible safe areas vary by device. Keep important text and logos near the center.
 
 ## Summary
 The YouTube Image Kit Maker automates the size work behind channel graphics, reduces upload preparation time, and keeps every generated image aligned from the same source.

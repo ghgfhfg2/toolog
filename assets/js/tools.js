@@ -1393,11 +1393,14 @@
     const run = document.getElementById('ytk-run');
     const wrap = document.getElementById('ytk-list');
     const result = document.getElementById('ytk-result');
+    const warning = document.getElementById('ytk-warning');
     const allBtn = document.getElementById('ytk-download-all');
+    const clearBtn = document.getElementById('ytk-clear');
     const originalOut = document.getElementById('ytk-original');
     const countOut = document.getElementById('ytk-count');
     const formatOut = document.getElementById('ytk-format-label');
     const totalOut = document.getElementById('ytk-total-size');
+    if (!file || !fit || !bg || !format || !quality || !run || !wrap || !result) return;
 
     const ytkText = {
       ko: {
@@ -1411,11 +1414,17 @@
         idle: '이미지를 선택하면 유튜브 업로드 이미지 세트를 브라우저에서 생성합니다.',
         empty: '먼저 기준 이미지를 선택해 주세요.',
         badType: 'PNG, JPEG, WebP, GIF 이미지만 사용할 수 있습니다.',
+        tooBigFile: '파일 용량이 큽니다. 모바일에서는 생성이 느리거나 실패할 수 있습니다.',
+        smallSource: '원본이 썸네일 권장 크기(1280x720)보다 작아 일부 결과가 흐릴 수 있습니다.',
         tooLarge: '이미지 해상도가 너무 큽니다. 8000만 픽셀 이하 이미지로 줄인 뒤 다시 시도해 주세요.',
         loading: '이미지를 불러오는 중입니다...',
         failed: '이미지를 읽지 못했습니다. 다른 파일로 다시 시도해 주세요.',
         ready: (w, h) => `원본: ${w}x${h}px · 생성 준비 완료`,
         generating: '출력 이미지를 생성하는 중입니다...',
+        generateFailed: '출력 이미지를 생성하지 못했습니다. 더 작은 이미지나 다른 포맷으로 다시 시도해 주세요.',
+        emptyAfterGenerate: '생성된 출력이 없습니다. 포맷을 바꾸거나 더 작은 이미지로 다시 시도해 주세요.',
+        cleared: '입력과 생성 결과를 초기화했습니다.',
+        downloadAll: (count) => `${count}개 파일 다운로드를 시작했습니다. 브라우저가 여러 다운로드 허용을 물어볼 수 있습니다.`,
         download: (label) => `${label} 다운로드`,
         previewAlt: (label) => `${label} 미리보기`,
         done: (count, size, formatLabel) => `${count}개 ${formatLabel} 출력 이미지를 생성했습니다. 총 ${size}.`,
@@ -1432,11 +1441,17 @@
         idle: 'Choose an image to generate a YouTube upload image set in your browser.',
         empty: 'Choose a source image first.',
         badType: 'Use a PNG, JPEG, WebP, or GIF image.',
+        tooBigFile: 'This file is large. Generation may be slow or fail on mobile browsers.',
+        smallSource: 'The source is below the recommended thumbnail size (1280x720), so some outputs may look soft.',
         tooLarge: 'The image resolution is too large. Resize it below 80 million pixels and try again.',
         loading: 'Loading image...',
         failed: 'Could not read the image. Try another file.',
         ready: (w, h) => `Original: ${w}x${h}px · Ready to generate`,
         generating: 'Generating output images...',
+        generateFailed: 'Could not generate the outputs. Try a smaller image or another format.',
+        emptyAfterGenerate: 'No outputs were generated. Try another format or a smaller source image.',
+        cleared: 'Cleared the input and generated outputs.',
+        downloadAll: (count) => `Started downloading ${count} files. Your browser may ask to allow multiple downloads.`,
         download: (label) => `Download ${label}`,
         previewAlt: (label) => `${label} preview`,
         done: (count, size, formatLabel) => `Generated ${count} ${formatLabel} output images. Total ${size}.`,
@@ -1453,11 +1468,17 @@
         idle: '画像を選ぶと、YouTube投稿用画像セットをブラウザ内で生成できます。',
         empty: '先に元画像を選択してください。',
         badType: 'PNG、JPEG、WebP、GIF画像を使用してください。',
+        tooBigFile: 'ファイル容量が大きいため、モバイルでは生成が遅くなるか失敗する場合があります。',
+        smallSource: '元画像が推奨サムネイルサイズ（1280x720）未満のため、一部の出力がぼやける場合があります。',
         tooLarge: '画像解像度が大きすぎます。8000万ピクセル以下に縮小してから再試行してください。',
         loading: '画像を読み込んでいます...',
         failed: '画像を読み込めませんでした。別のファイルで再試行してください。',
         ready: (w, h) => `元画像: ${w}x${h}px · 生成準備完了`,
         generating: '出力画像を生成しています...',
+        generateFailed: '出力画像を生成できませんでした。小さめの画像または別形式で再試行してください。',
+        emptyAfterGenerate: '生成された出力がありません。形式を変えるか、小さめの画像で再試行してください。',
+        cleared: '入力と生成結果をクリアしました。',
+        downloadAll: (count) => `${count}個のファイルのダウンロードを開始しました。ブラウザが複数ダウンロードの許可を求める場合があります。`,
         download: (label) => `${label} をダウンロード`,
         previewAlt: (label) => `${label} プレビュー`,
         done: (count, size, formatLabel) => `${count}個の${formatLabel}出力画像を生成しました。合計 ${size}。`,
@@ -1474,11 +1495,17 @@
       idle: '이미지를 선택하면 유튜브 업로드 이미지 세트를 브라우저에서 생성합니다.',
       empty: '먼저 기준 이미지를 선택해 주세요.',
       badType: 'PNG, JPEG, WebP, GIF 이미지만 사용할 수 있습니다.',
+      tooBigFile: '파일 용량이 큽니다. 모바일에서는 생성이 느리거나 실패할 수 있습니다.',
+      smallSource: '원본이 썸네일 권장 크기(1280x720)보다 작아 일부 결과가 흐릴 수 있습니다.',
       tooLarge: '이미지 해상도가 너무 큽니다. 8000만 픽셀 이하 이미지로 줄인 뒤 다시 시도해 주세요.',
       loading: '이미지를 불러오는 중입니다...',
       failed: '이미지를 읽지 못했습니다. 다른 파일로 다시 시도해 주세요.',
       ready: (w, h) => `원본: ${w}x${h}px · 생성 준비 완료`,
       generating: '출력 이미지를 생성하는 중입니다...',
+      generateFailed: '출력 이미지를 생성하지 못했습니다. 더 작은 이미지나 다른 포맷으로 다시 시도해 주세요.',
+      emptyAfterGenerate: '생성된 출력이 없습니다. 포맷을 바꾸거나 더 작은 이미지로 다시 시도해 주세요.',
+      cleared: '입력과 생성 결과를 초기화했습니다.',
+      downloadAll: (count) => `${count}개 파일 다운로드를 시작했습니다. 브라우저가 여러 다운로드 허용을 물어볼 수 있습니다.`,
       download: (label) => `${label} 다운로드`,
       previewAlt: (label) => `${label} 미리보기`,
       done: (count, size, formatLabel) => `${count}개 ${formatLabel} 출력 이미지를 생성했습니다. 총 ${size}.`,
@@ -1496,12 +1523,25 @@
     let img = null;
     let renders = [];
     let objectUrls = [];
+    const maxFileBytes = 30 * 1024 * 1024;
 
     const formatBytes = (bytes) => {
       if (!Number.isFinite(bytes) || bytes <= 0) return '-';
       if (bytes < 1024) return `${Math.round(bytes)} B`;
       if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
       return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+    };
+
+    const setStatus = (message, state = '') => {
+      result.textContent = message;
+      result.dataset.state = state;
+    };
+
+    const setWarning = (message = '', state = '') => {
+      if (!warning) return;
+      warning.textContent = message;
+      warning.dataset.state = state;
+      warning.hidden = !message;
     };
 
     const resetOutputs = () => {
@@ -1517,10 +1557,10 @@
     const getFormatLabel = () => ytkText.formatLabel?.[format?.value || 'image/webp'] || 'WebP';
 
     const updateControls = () => {
-      const mime = format?.value || 'image/webp';
+      const mime = format.value || 'image/webp';
       if (formatOut) formatOut.textContent = getFormatLabel();
-      if (qualityLabel) qualityLabel.textContent = `${Math.round(Number(quality?.value || 0.86) * 100)}%`;
-      if (quality) quality.disabled = mime === 'image/png';
+      if (qualityLabel) qualityLabel.textContent = `${Math.round(Number(quality.value || 0.86) * 100)}%`;
+      quality.disabled = mime === 'image/png';
     };
 
     const drawFrame = (ctx, image, w, h, mode, bgColor) => {
@@ -1545,33 +1585,41 @@
       resetOutputs();
       img = null;
       if (originalOut) originalOut.textContent = '-';
+      file.setAttribute('aria-invalid', 'false');
+      setWarning('');
       if (!f) {
-        if (result) result.textContent = ytkText.idle;
+        setStatus(ytkText.idle);
         return;
       }
-      if (!/^image\/(png|jpe?g|webp|gif)$/i.test(f.type || '')) {
-        if (result) result.textContent = ytkText.badType;
+      const isSupported = /^image\/(png|jpe?g|webp|gif)$/i.test(f.type || '') || /\.(png|jpe?g|webp|gif)$/i.test(f.name || '');
+      if (!isSupported) {
+        file.setAttribute('aria-invalid', 'true');
+        setStatus(ytkText.badType, 'error');
         file.value = '';
         return;
       }
-      if (result) result.textContent = ytkText.loading;
+      if (f.size > maxFileBytes) setWarning(ytkText.tooBigFile, 'warning');
+      setStatus(ytkText.loading);
       const u = URL.createObjectURL(f);
       const i = new Image();
       i.onload = () => {
         if (i.width * i.height > 80000000) {
           URL.revokeObjectURL(u);
-          if (result) result.textContent = ytkText.tooLarge;
+          file.setAttribute('aria-invalid', 'true');
+          setStatus(ytkText.tooLarge, 'error');
           file.value = '';
           return;
         }
         img = i;
         URL.revokeObjectURL(u);
         if (originalOut) originalOut.textContent = `${i.width}x${i.height}`;
-        if (result) result.textContent = ytkText.ready(i.width, i.height);
+        if (i.width < 1280 || i.height < 720) setWarning(ytkText.smallSource, 'warning');
+        setStatus(ytkText.ready(i.width, i.height), 'success');
       };
       i.onerror = () => {
         URL.revokeObjectURL(u);
-        if (result) result.textContent = ytkText.failed;
+        file.setAttribute('aria-invalid', 'true');
+        setStatus(ytkText.failed, 'error');
       };
       i.src = u;
     });
@@ -1583,80 +1631,112 @@
     updateControls();
 
     run?.addEventListener('click', async () => {
-      if (!img || !wrap) {
-        if (result) result.textContent = ytkText.empty;
+      if (!img) {
+        setStatus(ytkText.empty, 'error');
+        file.focus();
         return;
       }
       resetOutputs();
-      if (result) result.textContent = ytkText.generating;
-      const mime = format?.value || 'image/webp';
-      const q = Math.max(0.5, Math.min(1, Number(quality?.value || 0.86)));
+      setStatus(ytkText.generating);
+      run.disabled = true;
+      const mime = format.value || 'image/webp';
+      const q = Math.max(0.5, Math.min(1, Number(quality.value || 0.86)));
       const ext = mime === 'image/png' ? 'png' : (mime === 'image/jpeg' ? 'jpg' : 'webp');
       let totalBytes = 0;
-      for (const t of targets) {
-        const label = ytkText.labels[t.key] || t.key;
+      try {
+        for (const t of targets) {
+          const label = ytkText.labels[t.key] || t.key;
 
-        const card = document.createElement('div');
-        card.className = 'ytk-card';
+          const card = document.createElement('div');
+          card.className = 'ytk-card';
 
-        const canvas = document.createElement('canvas');
-        canvas.width = t.w;
-        canvas.height = t.h;
-        const ctx = canvas.getContext('2d');
-        drawFrame(ctx, img, t.w, t.h, fit.value || 'cover', bg?.value || '#0f172a');
-        const blob = await canvasToBlob(canvas, mime, q);
-        if (!blob) continue;
-        totalBytes += blob.size;
-        const url = URL.createObjectURL(blob);
-        objectUrls.push(url);
+          const canvas = document.createElement('canvas');
+          canvas.width = t.w;
+          canvas.height = t.h;
+          const ctx = canvas.getContext('2d', { alpha: mime !== 'image/jpeg' });
+          if (!ctx) throw new Error('canvas-context');
+          drawFrame(ctx, img, t.w, t.h, fit.value || 'cover', bg.value || '#0f172a');
+          const blob = await canvasToBlob(canvas, mime, q);
+          if (!blob) continue;
+          totalBytes += blob.size;
+          const url = URL.createObjectURL(blob);
+          objectUrls.push(url);
 
-        const previewCanvas = document.createElement('canvas');
-        const previewScale = Math.min(1, 520 / Math.max(t.w, t.h));
-        previewCanvas.width = Math.max(1, Math.round(t.w * previewScale));
-        previewCanvas.height = Math.max(1, Math.round(t.h * previewScale));
-        const pctx = previewCanvas.getContext('2d');
-        drawFrame(pctx, img, previewCanvas.width, previewCanvas.height, fit.value || 'cover', bg?.value || '#0f172a');
-        const previewUrl = previewCanvas.toDataURL('image/png');
+          const previewCanvas = document.createElement('canvas');
+          const previewScale = Math.min(1, 520 / Math.max(t.w, t.h));
+          previewCanvas.width = Math.max(1, Math.round(t.w * previewScale));
+          previewCanvas.height = Math.max(1, Math.round(t.h * previewScale));
+          const pctx = previewCanvas.getContext('2d');
+          if (!pctx) throw new Error('preview-context');
+          drawFrame(pctx, img, previewCanvas.width, previewCanvas.height, fit.value || 'cover', bg.value || '#0f172a');
+          const previewUrl = previewCanvas.toDataURL('image/png');
 
-        const link = document.createElement('a');
-        link.className = 'open-link';
-        link.textContent = ytkText.download(label);
-        link.download = `${t.key}-${t.w}x${t.h}.${ext}`;
-        link.href = url;
+          const link = document.createElement('a');
+          link.className = 'open-link';
+          link.textContent = ytkText.download(label);
+          link.download = `${t.key}-${t.w}x${t.h}.${ext}`;
+          link.href = url;
 
-        const title = document.createElement('strong');
-        title.textContent = `${label} (${t.w}x${t.h})`;
+          const title = document.createElement('strong');
+          title.textContent = `${label} (${t.w}x${t.h})`;
 
-        const preview = document.createElement('div');
-        preview.className = 'ytk-preview';
-        const previewImg = document.createElement('img');
-        previewImg.className = 'ytk-preview-img';
-        previewImg.src = previewUrl;
-        previewImg.alt = ytkText.previewAlt(label);
-        preview.appendChild(previewImg);
+          const meta = document.createElement('span');
+          meta.className = 'ytk-card-meta';
+          meta.textContent = `${getFormatLabel()} · ${formatBytes(blob.size)}`;
 
-        card.appendChild(title);
-        card.appendChild(preview);
-        card.appendChild(link);
-        wrap.appendChild(card);
+          const preview = document.createElement('div');
+          preview.className = 'ytk-preview';
+          const previewImg = document.createElement('img');
+          previewImg.className = 'ytk-preview-img';
+          previewImg.src = previewUrl;
+          previewImg.alt = ytkText.previewAlt(label);
+          preview.appendChild(previewImg);
 
-        renders.push(link);
+          card.appendChild(title);
+          card.appendChild(meta);
+          card.appendChild(preview);
+          card.appendChild(link);
+          wrap.appendChild(card);
+
+          renders.push(link);
+        }
+      } catch (_) {
+        resetOutputs();
+        setStatus(ytkText.generateFailed, 'error');
+        run.disabled = false;
+        return;
       }
       if (countOut) countOut.textContent = formatNum(renders.length);
       if (totalOut) totalOut.textContent = formatBytes(totalBytes);
       if (allBtn) allBtn.disabled = renders.length === 0;
-      if (result) result.textContent = ytkText.done(renders.length, formatBytes(totalBytes), getFormatLabel());
+      run.disabled = false;
+      setStatus(
+        renders.length ? ytkText.done(renders.length, formatBytes(totalBytes), getFormatLabel()) : ytkText.emptyAfterGenerate,
+        renders.length ? 'success' : 'error'
+      );
     });
 
     allBtn?.addEventListener('click', async () => {
       if (!renders.length) {
-        if (result) result.textContent = ytkText.empty;
+        setStatus(ytkText.empty, 'error');
         return;
       }
+      setStatus(ytkText.downloadAll(renders.length), 'success');
       for (const a of renders) {
         a.click();
         await new Promise((r) => setTimeout(r, 180));
       }
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      file.value = '';
+      file.setAttribute('aria-invalid', 'false');
+      img = null;
+      resetOutputs();
+      setWarning('');
+      if (originalOut) originalOut.textContent = '-';
+      setStatus(ytkText.cleared);
+      file.focus();
     });
   }
 

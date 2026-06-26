@@ -778,11 +778,24 @@ a:hover { color: #fff; text-decoration: none; }
   padding: .2rem;
 }
 .ytk-actions {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 .ytk-actions button[disabled] {
   opacity: .48;
   cursor: not-allowed;
+}
+.ytk-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.ytk-ui #ytk-result[data-state="error"] { color: #fca5a5; }
+.ytk-ui #ytk-result[data-state="success"] { color: #86efac; }
+.ytk-warning {
+  border: 1px solid rgba(251, 191, 36, .45);
+  border-radius: 10px;
+  padding: .65rem .75rem;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, .08);
+}
+.ytk-warning[hidden] {
+  display: none;
 }
 .ytk-stats strong {
   font-size: .95rem;
@@ -798,14 +811,25 @@ a:hover { color: #fff; text-decoration: none; }
 }
 .ytk-card strong {
   display: block;
-  margin-bottom: .4rem;
+  margin-bottom: .2rem;
   font-size: .82rem;
   line-height: 1.35;
   word-break: keep-all;
 }
+.ytk-card-meta {
+  display: block;
+  margin-bottom: .45rem;
+  color: var(--muted);
+  font-size: .75rem;
+  line-height: 1.35;
+}
 #ytk-run,
 #ytk-download-all {
   cursor: pointer;
+}
+#ytk-run[disabled] {
+  opacity: .58;
+  cursor: wait;
 }
 
 .ytk-preview {
@@ -1036,6 +1060,7 @@ a:hover { color: #fff; text-decoration: none; }
   .related-grid { grid-template-columns: 1fr; }
   .ytk-grid,
   .ytk-actions { grid-template-columns: 1fr; }
+  .ytk-card { padding: .6rem; }
   .ytk-preview {
     height: 180px;
     max-height: 180px;
