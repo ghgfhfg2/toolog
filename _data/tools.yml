@@ -1535,9 +1535,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 이미지 크기 조절과 사진 리사이즈를 인스타·블로그·OG 규격에 맞추고 WebP·PNG·JPEG로 저장해요.
-  description_en: Resize photos for Instagram, blogs, and OG cards with WebP, PNG, JPEG, quality, padding color, and safer size checks.
-  description_ja: Instagram・ブログ・OG向けに、WebP・PNG・JPEG保存、品質、余白色、サイズチェック付きで画像を調整できます。
+  description: 이미지 크기 조절과 사진 리사이즈를 인스타·블로그·OG 규격에 맞추고 크롭·여백·WebP·PNG·JPEG 저장까지 처리해요.
+  description_en: Resize photos for Instagram, blogs, and OG cards with crop or padding, WebP, PNG, JPEG, quality control, and safer size checks.
+  description_ja: Instagram・ブログ・OG向けに、切り抜き・余白・WebP・PNG・JPEG保存・品質調整・サイズチェック付きで画像を調整できます。
   url: /tools/image-resizer/
   url_en: /en/tools/image-resizer/
   url_ja: /ja/tools/image-resizer/

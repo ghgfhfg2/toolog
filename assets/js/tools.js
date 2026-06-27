@@ -805,17 +805,19 @@
     const maxEdge = 4096;
     const maxPixels = 12000000;
     const maxSourcePixels = 50000000;
+    const supportedTypes = ['image/png', 'image/jpeg', 'image/webp'];
 
     const resizeText = {
       ko: {
         empty: '이미지를 먼저 선택해 주세요.',
         invalidFile: '이미지 파일을 불러오지 못했습니다. JPG, PNG, WebP 파일로 다시 시도해 주세요.',
+        unsupportedBrowser: '이 브라우저는 이미지 리사이즈 저장을 지원하지 않습니다. 최신 Chrome, Edge, Safari에서 다시 시도해 주세요.',
         invalidSize: '너비와 높이는 1~4096px 사이 숫자로 입력해 주세요.',
         tooLarge: '출력 픽셀 수가 너무 큽니다. 가로×세로가 1,200만 픽셀 이하가 되도록 줄여 주세요.',
         sourceTooLarge: '원본 이미지가 너무 큽니다. 5,000만 픽셀 이하 이미지로 다시 시도해 주세요.',
         exportFail: '브라우저에서 결과 파일을 만들지 못했습니다. 크기를 줄이거나 다른 출력 포맷을 선택해 주세요.',
-        original: (w, h, b) => `원본: ${w}×${h}px / ${b} bytes`,
-        result: (ow, oh, w, h, b) => `원본: ${ow}×${oh}px → 결과: ${w}×${h}px / ${b} bytes`,
+        original: (w, h, b) => `원본: ${w}×${h}px / ${b}`,
+        result: (ow, oh, w, h, b) => `원본: ${ow}×${oh}px → 결과: ${w}×${h}px / ${b}`,
         ready: (w, h) => `${w}×${h}px 이미지가 준비되었습니다. 목표 크기를 확인한 뒤 리사이즈하세요.`,
         done: (w, h, b) => `${w}×${h}px 이미지로 리사이즈했습니다. 다운로드 버튼을 사용할 수 있습니다.`,
         quality: (n) => `품질 ${n}%`,
@@ -824,12 +826,13 @@
       en: {
         empty: 'Choose an image first.',
         invalidFile: 'Could not load this image. Try a JPG, PNG, or WebP file.',
+        unsupportedBrowser: 'This browser cannot export resized images. Try the latest Chrome, Edge, or Safari.',
         invalidSize: 'Enter width and height as numbers from 1 to 4096 px.',
         tooLarge: 'The output is too large. Keep width × height at 12 million pixels or less.',
         sourceTooLarge: 'The source image is too large. Try an image at or below 50 million pixels.',
         exportFail: 'The browser could not create the output file. Try a smaller size or another output format.',
-        original: (w, h, b) => `Original: ${w}×${h}px / ${b} bytes`,
-        result: (ow, oh, w, h, b) => `Original: ${ow}×${oh}px → Result: ${w}×${h}px / ${b} bytes`,
+        original: (w, h, b) => `Original: ${w}×${h}px / ${b}`,
+        result: (ow, oh, w, h, b) => `Original: ${ow}×${oh}px → Result: ${w}×${h}px / ${b}`,
         ready: (w, h) => `${w}×${h}px image loaded. Check the target size, then resize.`,
         done: (w, h, b) => `Resized to ${w}×${h}px. The download button is ready.`,
         quality: (n) => `Quality ${n}%`,
@@ -838,12 +841,13 @@
       ja: {
         empty: '先に画像を選択してください。',
         invalidFile: '画像を読み込めませんでした。JPG、PNG、WebPファイルで再試行してください。',
+        unsupportedBrowser: 'このブラウザではリサイズ画像を書き出せません。最新のChrome、Edge、Safariで再試行してください。',
         invalidSize: '幅と高さは1〜4096pxの数字で入力してください。',
         tooLarge: '出力サイズが大きすぎます。幅×高さを1,200万ピクセル以下にしてください。',
         sourceTooLarge: '元画像が大きすぎます。5,000万ピクセル以下の画像で再試行してください。',
         exportFail: 'ブラウザで出力ファイルを作成できませんでした。サイズを下げるか別の形式を選んでください。',
-        original: (w, h, b) => `元画像: ${w}×${h}px / ${b} bytes`,
-        result: (ow, oh, w, h, b) => `元画像: ${ow}×${oh}px → 出力: ${w}×${h}px / ${b} bytes`,
+        original: (w, h, b) => `元画像: ${w}×${h}px / ${b}`,
+        result: (ow, oh, w, h, b) => `元画像: ${ow}×${oh}px → 出力: ${w}×${h}px / ${b}`,
         ready: (w, h) => `${w}×${h}pxの画像を読み込みました。目標サイズを確認してリサイズしてください。`,
         done: (w, h, b) => `${w}×${h}pxにリサイズしました。ダウンロードできます。`,
         quality: (n) => `品質 ${n}%`,
@@ -852,12 +856,13 @@
     }[pageLang] || {
       empty: '이미지를 먼저 선택해 주세요.',
       invalidFile: '이미지 파일을 불러오지 못했습니다. JPG, PNG, WebP 파일로 다시 시도해 주세요.',
+      unsupportedBrowser: '이 브라우저는 이미지 리사이즈 저장을 지원하지 않습니다. 최신 Chrome, Edge, Safari에서 다시 시도해 주세요.',
       invalidSize: '너비와 높이는 1~4096px 사이 숫자로 입력해 주세요.',
       tooLarge: '출력 픽셀 수가 너무 큽니다. 가로×세로가 1,200만 픽셀 이하가 되도록 줄여 주세요.',
       sourceTooLarge: '원본 이미지가 너무 큽니다. 5,000만 픽셀 이하 이미지로 다시 시도해 주세요.',
       exportFail: '브라우저에서 결과 파일을 만들지 못했습니다. 크기를 줄이거나 다른 출력 포맷을 선택해 주세요.',
-      original: (w, h, b) => `원본: ${w}×${h}px / ${b} bytes`,
-      result: (ow, oh, w, h, b) => `원본: ${ow}×${oh}px → 결과: ${w}×${h}px / ${b} bytes`,
+      original: (w, h, b) => `원본: ${w}×${h}px / ${b}`,
+      result: (ow, oh, w, h, b) => `원본: ${ow}×${oh}px → 결과: ${w}×${h}px / ${b}`,
       ready: (w, h) => `${w}×${h}px 이미지가 준비되었습니다. 목표 크기를 확인한 뒤 리사이즈하세요.`,
       done: (w, h, b) => `${w}×${h}px 이미지로 리사이즈했습니다. 다운로드 버튼을 사용할 수 있습니다.`,
       quality: (n) => `품질 ${n}%`,
@@ -895,6 +900,16 @@
     const setInvalid = (invalid) => {
       [w, h].forEach(el => el?.setAttribute('aria-invalid', invalid ? 'true' : 'false'));
     };
+    const setFileInvalid = (invalid) => {
+      f.setAttribute('aria-invalid', invalid ? 'true' : 'false');
+    };
+    const formatBytes = (bytes) => {
+      const n = Number(bytes || 0);
+      if (!Number.isFinite(n) || n <= 0) return '0 B';
+      if (n < 1024) return `${formatNum(n)} B`;
+      if (n < 1024 * 1024) return `${formatNum(n / 1024)} KB`;
+      return `${(n / 1024 / 1024).toFixed(n >= 10 * 1024 * 1024 ? 1 : 2)} MB`;
+    };
 
     const getMime = () => format?.value || mime;
     const getQuality = () => {
@@ -917,12 +932,12 @@
 
     const updateResult = (width, height, outBytes = 0) => {
       const fitMode = resizeText.fitLabels[fit?.value || 'contain'] || '-';
-      setStats(`${formatNum(width)}×${formatNum(height)}`, outBytes ? `${formatNum(outBytes)} bytes` : '-', fitMode);
+      setStats(`${formatNum(width)}×${formatNum(height)}`, outBytes ? formatBytes(outBytes) : '-', fitMode);
       if (!result) return;
       if (!outBytes) {
-        result.textContent = resizeText.original(img?.width || 0, img?.height || 0, formatNum(originBytes));
+        result.textContent = resizeText.original(img?.width || 0, img?.height || 0, formatBytes(originBytes));
       } else {
-        result.textContent = resizeText.result(img?.width || 0, img?.height || 0, width, height, formatNum(outBytes));
+        result.textContent = resizeText.result(img?.width || 0, img?.height || 0, width, height, formatBytes(outBytes));
       }
     };
 
@@ -968,10 +983,19 @@
     setDownloadReady(false);
     setStats();
     updateQualityLabel();
+    if (!canvas.getContext || !HTMLCanvasElement.prototype.toBlob) {
+      run.disabled = true;
+      setFileInvalid(false);
+      setInvalid(false);
+      setMessage(resizeText.unsupportedBrowser, 'error');
+      return;
+    }
 
     f.addEventListener('change', () => {
       const file = f.files?.[0];
       setDownloadReady(false);
+      setFileInvalid(false);
+      setInvalid(false);
       canvas.removeAttribute('width');
       canvas.removeAttribute('height');
       if (!file) {
@@ -980,9 +1004,10 @@
         setMessage(resizeText.empty);
         return;
       }
-      if (!['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(file.type)) {
+      if (!supportedTypes.includes(file.type)) {
         img = null;
         setStats();
+        setFileInvalid(true);
         setMessage(resizeText.invalidFile, 'error');
         return;
       }
@@ -994,12 +1019,14 @@
         if (i.width * i.height > maxSourcePixels) {
           img = null;
           setStats();
+          setFileInvalid(true);
           setMessage(resizeText.sourceTooLarge, 'error');
           URL.revokeObjectURL(objectUrl);
           objectUrl = '';
           return;
         }
         img = i;
+        setFileInvalid(false);
         ratio = i.width / i.height;
         if (w) w.value = i.width;
         if (h) h.value = i.height;
@@ -1011,6 +1038,7 @@
       i.onerror = () => {
         img = null;
         setStats();
+        setFileInvalid(true);
         setMessage(resizeText.invalidFile, 'error');
         URL.revokeObjectURL(objectUrl);
         objectUrl = '';
@@ -1028,6 +1056,7 @@
     });
 
     w?.addEventListener('input', () => {
+      if (preset) preset.value = 'custom';
       if (!img || !lock?.checked) return;
       const width = Number(w.value || img.width);
       if (!Number.isFinite(width) || width < 1) {
@@ -1039,6 +1068,7 @@
     });
 
     h?.addEventListener('input', () => {
+      if (preset) preset.value = 'custom';
       if (!img || !lock?.checked) return;
       const height = Number(h.value || img.height);
       if (!Number.isFinite(height) || height < 1) {
@@ -1050,7 +1080,17 @@
     });
 
     [w, h, fit, bg, format].forEach(el => el?.addEventListener('change', syncTargetStats));
-    qualityInput?.addEventListener('input', updateQualityLabel);
+    [w, h].forEach(el => el?.addEventListener('input', () => {
+      setDownloadReady(false);
+      const size = getTargetSize();
+      setInvalid(size === false || !size);
+      syncTargetStats();
+    }));
+    [fit, bg, format].forEach(el => el?.addEventListener('change', () => setDownloadReady(false)));
+    qualityInput?.addEventListener('input', () => {
+      setDownloadReady(false);
+      updateQualityLabel();
+    });
 
     run.addEventListener('click', () => {
       setDownloadReady(false);

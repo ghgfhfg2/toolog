@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Image Resizer | Resize, Crop, and Convert to WebP
-description: Resize images to exact pixels in your browser with WebP/PNG/JPEG output, quality control, padding color, Instagram, blog, and OG presets.
+description: Resize images to exact pixels in your browser with WebP/PNG/JPEG output, quality control, crop or padding modes, Instagram, blog, and OG presets.
 lang: en
 permalink: /en/tools/image-resizer/
 canonical_url: /en/tools/image-resizer/
@@ -29,12 +29,17 @@ faq:
     a: 1200×630 is a widely used Open Graph size.
   - q: Should I save as PNG, WebP, or JPEG?
     a: Use PNG for transparency, WebP for smaller web images, and JPEG for broad photo compatibility.
+  - q: Is my image uploaded to a server?
+    a: No. The selected image is processed with canvas inside your browser and is not sent to a server.
+  - q: Why are very large images limited?
+    a: Source and output pixel limits help prevent mobile browsers and lower-powered devices from freezing.
 ---
 
 ## When you need an image resizer
 Images often get cropped or look blurry when uploaded with the wrong dimensions.
-This tool helps you resize quickly to channel-specific sizes before publishing.
+This tool helps you resize photos, change image dimensions, and convert to WebP quickly before publishing.
 Processing happens in your browser, so it is useful for thumbnails, social share images, and blog cover images without an upload step.
+You can enter exact width and height, pick a preset, and choose whether to keep the whole image or crop into the target frame.
 
 ## Key features
 - Presets: Instagram square (1080×1080), OG (1200×630), blog thumbnail, and more
@@ -45,10 +50,12 @@ Processing happens in your browser, so it is useful for thumbnails, social share
 - Padding color for fit mode and transparent pixels in JPEG output
 - Error guidance for empty files, non-image files, invalid dimensions, and oversized output
 - Shows original, target, output size, and fit mode
+- Mobile-safe limits to reduce browser freezes with very large images
 
 ## How to use
 ### 1) Upload an image
-Upload the image you want to resize. The original dimensions are filled in automatically.
+Upload the JPG, PNG, or WebP image you want to resize. The original dimensions are filled in automatically.
+Non-image files and oversized images show a clear message in the result area.
 
 ### 2) Pick a preset or enter a custom size
 Choose a preset for your use case or type the exact pixel width and height. Very large values are limited to protect browser memory.
@@ -59,6 +66,7 @@ Use fit mode when the whole image must remain visible, crop mode when the target
 ### 4) Choose output format and quality
 Use PNG for logos and transparent images, or WebP/JPEG for photos and lighter blog uploads.
 JPEG cannot preserve transparent pixels, so check the padding color before exporting.
+Choose WebP first when smaller file size matters, or JPEG when broad compatibility matters more.
 
 ### 5) Resize and download
 Check the canvas preview and output details, then download the resized image.
@@ -68,6 +76,8 @@ Check the canvas preview and output details, then download the resized image.
 - For social share cards, start with 1200×630 for broad compatibility.
 - Use fit mode when product photos or screenshots must not be cropped.
 - Transparent PNG areas become the selected padding color when you export to JPEG.
+- On mobile, resize very large camera photos to around 1200px first to reduce export failures.
+- If an upload form requires a square image, try fit mode before crop mode to avoid cutting off important edges.
 - After resizing, use [PNG Compressor]({{ '/en/tools/png-compressor/' | relative_url }}) to reduce file size further.
 - For YouTube thumbnails, banners, and icons, try the [YouTube Image Kit Maker]({{ '/en/tools/youtube-image-kit/' | relative_url }}).
 
