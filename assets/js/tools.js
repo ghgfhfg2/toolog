@@ -9907,12 +9907,19 @@
     const showAllBtn = document.getElementById('fc-show-all');
     const clearFavBtn = document.getElementById('fc-clear-fav');
     const clearInputBtn = document.getElementById('fc-clear-input');
+    const sampleBtn = document.getElementById('fc-sample');
+    const copyVisibleBtn = document.getElementById('fc-copy-visible');
+    const charCount = document.getElementById('fc-char-count');
+    const styleCount = document.getElementById('fc-style-count');
+    const convertedCount = document.getElementById('fc-converted-count');
+    const unchangedCount = document.getElementById('fc-unchanged-count');
     if (!input || !list) return;
 
     const favStoreKey = 'toolog-font-favorites-v1';
     let favorites = new Set();
     let onlyFav = false;
     let showAll = false;
+    let visibleResults = [];
 
     try {
       const saved = JSON.parse(localStorage.getItem(favStoreKey) || '[]');
@@ -10178,10 +10185,15 @@
         empty: '입력 전에는 예시 문구로 스타일을 미리 볼 수 있습니다.',
         noMatch: '검색 조건에 맞는 스타일이 없습니다.',
         noFav: '즐겨찾기된 폰트가 없습니다.',
+        noVisible: '복사할 표시 스타일이 없습니다.',
         copied: (label) => `${label} 스타일을 복사했습니다.`,
+        copiedVisible: (n) => `${formatNum(n)}개 표시 스타일을 한 번에 복사했습니다.`,
         copyFail: '자동 복사에 실패했습니다. 브라우저의 클립보드 권한을 확인해 주세요.',
         cleared: '입력과 스타일 검색을 초기화했습니다.',
         favCleared: '즐겨찾기를 초기화했습니다.',
+        favAdded: (label) => `${label} 스타일을 즐겨찾기에 추가했습니다.`,
+        favRemoved: (label) => `${label} 스타일을 즐겨찾기에서 제거했습니다.`,
+        sample: 'daily mood 2026',
         copyLabel: (label) => `${label} 스타일 결과 복사`
       },
       en: {
@@ -10189,10 +10201,15 @@
         empty: 'Previewing styles with sample text until you enter your own.',
         noMatch: 'No styles match your search.',
         noFav: 'No favorite styles yet.',
+        noVisible: 'There are no visible styles to copy.',
         copied: (label) => `Copied the ${label} style.`,
+        copiedVisible: (n) => `Copied ${formatNum(n)} visible styles.`,
         copyFail: 'Copy failed. Check your browser clipboard permission.',
         cleared: 'Cleared the text and style search.',
         favCleared: 'Reset favorites.',
+        favAdded: (label) => `Added ${label} to favorites.`,
+        favRemoved: (label) => `Removed ${label} from favorites.`,
+        sample: 'daily mood 2026',
         copyLabel: (label) => `Copy ${label} style result`
       },
       ja: {
@@ -10200,10 +10217,15 @@
         empty: '入力前はサンプル文でスタイルをプレビューできます。',
         noMatch: '検索条件に一致するスタイルがありません。',
         noFav: 'お気に入り登録されたスタイルがありません。',
+        noVisible: 'コピーできる表示スタイルがありません。',
         copied: (label) => `${label}スタイルをコピーしました。`,
+        copiedVisible: (n) => `${formatNum(n)}件の表示スタイルをコピーしました。`,
         copyFail: 'コピーに失敗しました。ブラウザのクリップボード権限を確認してください。',
         cleared: '入力とスタイル検索をクリアしました。',
         favCleared: 'お気に入りをリセットしました。',
+        favAdded: (label) => `${label}をお気に入りに追加しました。`,
+        favRemoved: (label) => `${label}をお気に入りから削除しました。`,
+        sample: 'daily mood 2026',
         copyLabel: (label) => `${label}スタイルの結果をコピー`
       }
     }[pageLang] || {};
@@ -10265,9 +10287,12 @@
       const value = (input.value || '').slice(0, 500);
       const query = (filter?.value || '').trim().toLocaleLowerCase(pageLang === 'ja' ? 'ja-JP' : (pageLang === 'en' ? 'en-US' : 'ko-KR'));
       list.innerHTML = '';
+      visibleResults = [];
       let targets = showAll ? fontMap : fontMap.filter((f) => safeKeys.has(f.key));
       if (onlyFav) targets = targets.filter((f) => favorites.has(f.key));
       if (query) targets = targets.filter((f) => `${f.key} ${f.label} ${getStyleLabel(f)}`.toLocaleLowerCase().includes(query));
+      if (charCount) charCount.textContent = formatNum([...value].length);
+      if (styleCount) styleCount.textContent = formatNum(targets.length);
 
       if (!targets.length) {
         const message = query ? fcText.noMatch : fcText.noFav;
@@ -10275,13 +10300,21 @@
         empty.className = 'empty-state';
         empty.textContent = message;
         list.appendChild(empty);
+        if (convertedCount) convertedCount.textContent = '0';
+        if (unchangedCount) unchangedCount.textContent = '0';
         setStatus(message, 'error');
         return;
       }
 
+      let changed = 0;
+      let unchanged = 0;
       targets.forEach((font) => {
         const sampleText = pageLang === 'en' ? 'Hello Font' : (pageLang === 'ja' ? 'フォントサンプル' : '폰트 샘플');
-        const out = font.convert(value || sampleText);
+        const sourceText = value || sampleText;
+        const out = font.convert(sourceText);
+        if (out === sourceText) unchanged += 1;
+        else changed += 1;
+        visibleResults.push({ label: getStyleLabel(font), text: out });
 
         const item = document.createElement('div');
         item.className = 'font-preview-item';
@@ -10310,10 +10343,18 @@
 
         favBtn.addEventListener('click', (e) => {
           e.stopPropagation();
-          if (favorites.has(font.key)) favorites.delete(font.key);
-          else favorites.add(font.key);
+          const label = getStyleLabel(font);
+          let message;
+          if (favorites.has(font.key)) {
+            favorites.delete(font.key);
+            message = fcText.favRemoved(label);
+          } else {
+            favorites.add(font.key);
+            message = fcText.favAdded(label);
+          }
           saveFav();
           render();
+          setStatus(message, 'success');
         });
 
         const copyResult = async () => {
@@ -10343,6 +10384,8 @@
         item.appendChild(body);
         list.appendChild(item);
       });
+      if (convertedCount) convertedCount.textContent = formatNum(changed);
+      if (unchangedCount) unchangedCount.textContent = formatNum(unchanged);
       setStatus(value ? fcText.visible(targets.length) : fcText.empty);
     };
 
@@ -10370,6 +10413,29 @@
       saveFav();
       render();
       setStatus(fcText.favCleared);
+    });
+
+    sampleBtn?.addEventListener('click', () => {
+      input.value = fcText.sample;
+      render();
+      input.focus();
+    });
+
+    copyVisibleBtn?.addEventListener('click', async () => {
+      if (!visibleResults.length) {
+        setStatus(fcText.noVisible, 'error');
+        return;
+      }
+      const text = visibleResults.map((item) => `${item.label}: ${item.text}`).join('\n');
+      const copied = await copyText(text);
+      if (!copied) {
+        setStatus(fcText.copyFail, 'error');
+        showToast(fcText.copyFail);
+        return;
+      }
+      const message = fcText.copiedVisible(visibleResults.length);
+      setStatus(message, 'success');
+      showToast(message);
     });
 
     clearInputBtn?.addEventListener('click', () => {

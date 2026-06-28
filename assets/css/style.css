@@ -856,12 +856,13 @@ a:hover { color: #fff; text-decoration: none; }
 }
 
 .font-change-controls {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: .45rem;
-  flex-wrap: wrap;
 }
 .font-change-controls button {
-  width: auto;
+  width: 100%;
+  min-height: 42px;
 }
 .fc-filter-grid {
   align-items: end;
@@ -937,7 +938,7 @@ a:hover { color: #fff; text-decoration: none; }
   font-size: 1rem;
   line-height: 1.45;
   word-break: break-word;
-  letter-spacing: .01em;
+  letter-spacing: 0;
   min-width: 0;
   font-family: "Noto Sans", "Noto Sans Symbols 2", "Noto Sans Math", "Segoe UI Symbol", "Apple Symbols", "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
 }
@@ -1054,7 +1055,12 @@ a:hover { color: #fff; text-decoration: none; }
   .gbc-grid,
   .gbc-actions { grid-template-columns: 1fr; }
   .fc-filter-grid { grid-template-columns: 1fr; }
-  .font-change-controls button { width: 100%; }
+  .font-change-controls { grid-template-columns: 1fr; }
+  .font-change-ui #fc-input {
+    position: static;
+    min-height: 96px;
+    box-shadow: none;
+  }
   .tool-stats { grid-template-columns: 1fr 1fr; }
   .pm-categories,
   .pm-actions { grid-template-columns: 1fr; }

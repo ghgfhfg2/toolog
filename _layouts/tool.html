@@ -2305,9 +2305,17 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <button id="fc-clear-input" type="button">{% if page.lang == 'en' %}Clear text and search{% elsif page.lang == 'ja' %}入力と検索をクリア{% else %}입력·검색 초기화{% endif %}</button>
           </div>
           <div class="font-change-controls">
+            <button id="fc-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 입력{% endif %}</button>
             <button id="fc-show-fav" type="button">{% if page.lang == 'en' %}★ Favorites only: OFF{% elsif page.lang == 'ja' %}★ お気に入りのみ: OFF{% else %}★ 즐겨찾기만 보기: OFF{% endif %}</button>
             <button id="fc-show-all" type="button">{% if page.lang == 'en' %}Show extended styles: OFF{% elsif page.lang == 'ja' %}拡張スタイル表示: OFF{% else %}확장 폰트 보기: OFF{% endif %}</button>
+            <button id="fc-copy-visible" type="button">{% if page.lang == 'en' %}Copy visible styles{% elsif page.lang == 'ja' %}表示スタイルをコピー{% else %}표시된 스타일 복사{% endif %}</button>
             <button id="fc-clear-fav" type="button">{% if page.lang == 'en' %}Reset favorites{% elsif page.lang == 'ja' %}お気に入りをリセット{% else %}즐겨찾기 초기화{% endif %}</button>
+          </div>
+          <div class="tool-stats fc-stats" aria-label="{% if page.lang == 'en' %}Font conversion summary{% elsif page.lang == 'ja' %}フォント変換の概要{% else %}폰트 변환 요약{% endif %}">
+            <div><strong id="fc-char-count">0</strong><span>{% if page.lang == 'en' %}Characters{% elsif page.lang == 'ja' %}文字数{% else %}글자 수{% endif %}</span></div>
+            <div><strong id="fc-style-count">0</strong><span>{% if page.lang == 'en' %}Visible styles{% elsif page.lang == 'ja' %}表示スタイル{% else %}표시 스타일{% endif %}</span></div>
+            <div><strong id="fc-converted-count">0</strong><span>{% if page.lang == 'en' %}Styles changing text{% elsif page.lang == 'ja' %}変化あり{% else %}변환됨{% endif %}</span></div>
+            <div><strong id="fc-unchanged-count">0</strong><span>{% if page.lang == 'en' %}Mostly unchanged{% elsif page.lang == 'ja' %}ほぼ未変換{% else %}거의 그대로{% endif %}</span></div>
           </div>
           <p class="tool-result" id="fc-status" role="status" aria-live="polite"></p>
           <p class="tool-result" id="fc-help">{% if page.lang == 'en' %}Unicode styles mainly change Latin letters and numbers. Korean and some symbols may stay unchanged, and support varies by platform.{% elsif page.lang == 'ja' %}Unicodeスタイルは主に英字と数字を変換します。日本語や一部記号は変わらない場合があり、表示対応はサービスごとに異なります。{% else %}유니코드 스타일은 주로 영문과 숫자를 바꿉니다. 한글과 일부 기호는 그대로일 수 있고 플랫폼마다 표시 지원이 다릅니다.{% endif %}</p>
