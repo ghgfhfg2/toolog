@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: JSON Merge | Combine Arrays and Objects, Remove Duplicates
-description: Safely merge multiple JSON files in your browser. Concatenate arrays, merge object keys or shared arrays, remove duplicates, and review key conflicts.
+title: JSON Merge | Combine Array and Object Files, Remove Duplicates
+description: Safely merge multiple JSON files in your browser. Concatenate arrays, merge object keys or shared arrays, remove duplicates, review conflicts, copy results, and download merged.json.
 lang: en
 permalink: /en/tools/json-merge/
 canonical_url: /en/tools/json-merge/
@@ -12,14 +12,16 @@ tool_key: json-merge
 keywords: [json merge, combine json files, merge arrays, merge json objects]
 related_tools: [text-counter, case-converter]
 faq:
+  - q: Are JSON files uploaded to a server before merging?
+    a: No. File selection, parsing, merging, preview, and download generation all happen inside your current browser.
   - q: What happens when I upload multiple JSON arrays?
     a: In Auto mode, if every root is an array, they are concatenated in upload order.
   - q: How are JSON objects merged?
     a: In object-merge mode, keys are merged and duplicate keys are overwritten by later files.
   - q: What if file structures are mixed?
     a: Auto mode wraps roots into an array when structures differ, so source shape is preserved.
-  - q: Are uploaded JSON files sent to a server?
-    a: No. File reading, merging, and output generation all happen locally in your current browser.
+  - q: Can I merge large JSON files?
+    a: Each run accepts up to 50 files with a 20 MB combined limit to protect browser memory. If the result is large, the preview is shortened but the downloaded file keeps the full output.
 alternate_urls:
   ko: /tools/json-merge/
   en: /en/tools/json-merge/
@@ -31,13 +33,17 @@ Use it when split JSON files with similar schema need to be combined quickly.
 
 Examples: paged API exports, chunked logs, and batch output files.
 
+It is useful when you saved API responses page by page or need to turn several batch outputs into one `merged.json` without uploading private data elsewhere.
+
 ## Key features
 - Multi-file JSON upload
 - Auto mode detects array/object structure
 - Manual modes: array concat, object key merge, wrap roots into array
-- Preview + `merged.json` download
+- Shared-array concatenation for objects such as `{ "items": [...] }`
+- Preview + copy result + `merged.json` download
 - Optional array deduplication + object key conflict count
 - Clear errors for invalid JSON, incompatible manual modes, and excessive file size
+- Sample data to test the merge behavior before choosing files
 
 ## How to use
 1. Upload multiple JSON files.
@@ -48,6 +54,7 @@ Examples: paged API exports, chunked logs, and batch output files.
 ## Notes
 - In object-merge mode, duplicate keys are overwritten by later files.
 - Manual object-merge mode requires every file root to be a JSON object. Incompatible structures are rejected with an error.
+- Array deduplication compares objects with sorted keys, so `{ "a": 1, "b": 2 }` and `{ "b": 2, "a": 1 }` count as the same item.
 - To protect browser memory, each run accepts up to 50 files with a combined size of 20 MB.
 - Uploaded files and merged results stay in your current browser and are never sent to a server.
 

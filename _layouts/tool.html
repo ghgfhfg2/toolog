@@ -2256,10 +2256,11 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <div id="dfn-warning-list" class="bw-list" aria-live="polite"></div>
         </div>
       {% when 'json-merge' %}
-        <div class="tool-ui">
+        <div class="tool-ui jm-ui">
           <label for="jm-files">{% if page.lang == 'en' %}JSON files to merge{% elsif page.lang == 'ja' %}結合するJSONファイル{% else %}합칠 JSON 파일{% endif %}</label>
           <input id="jm-files" type="file" accept="application/json,.json" multiple aria-describedby="jm-files-summary jm-help" />
           <p id="jm-files-summary" class="tool-result">{% if page.lang == 'en' %}Select up to 50 JSON files (20 MB total). Files are processed only in this browser.{% elsif page.lang == 'ja' %}JSONファイルを最大50個（合計20 MB）選択できます。処理はブラウザ内だけで行われます。{% else %}JSON 파일을 최대 50개(합계 20MB)까지 선택할 수 있습니다. 파일은 브라우저 안에서만 처리됩니다.{% endif %}</p>
+          <div id="jm-file-list" class="jm-file-list" aria-live="polite"></div>
 
           <div class="tool-row">
             <label for="jm-mode">{% if page.lang == 'en' %}Merge mode{% elsif page.lang == 'ja' %}マージ方式{% else %}병합 방식{% endif %}</label>
@@ -2276,7 +2277,9 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
 
           <div class="tool-row-grid pct-actions">
             <button id="jm-run" type="button" disabled>{% if page.lang == 'en' %}Merge JSON{% elsif page.lang == 'ja' %}JSONをマージ{% else %}JSON 합치기{% endif %}</button>
+            <button id="jm-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}サンプルを入力{% else %}예시 불러오기{% endif %}</button>
             <button id="jm-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="jm-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
           <div class="tool-stats">

@@ -704,6 +704,26 @@ textarea:focus-visible {
 .pm-ui #pm-help[data-state="error"] { color: #fca5a5; }
 .pm-ui #pm-help[data-state="warning"] { color: #fbbf24; }
 .pm-ui #pm-help[data-state="success"] { color: #86efac; }
+.jm-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.jm-ui #jm-help[data-state="error"],
+.jm-ui #jm-files-summary[data-state="error"] { color: #fca5a5; }
+.jm-ui #jm-help[data-state="warning"] { color: #fbbf24; }
+.jm-ui #jm-help[data-state="success"] { color: #86efac; }
+.jm-file-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+.jm-file-list span {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #111827;
+  color: var(--muted);
+  padding: .25rem .55rem;
+  font-size: .78rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
 .pm-detections-title {
   margin: .15rem 0 -.15rem;
   color: var(--muted);

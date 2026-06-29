@@ -1670,7 +1670,7 @@
   title_en: JSON Merge for Arrays and Objects
   title_ja: 配列・オブジェクトJSON結合
   category: data
-  category_label: 데이터/계산
+  category_label: 데이터/JSON 유틸리티
   category_label_en: Data/Utilities
   category_label_ja: データ/ユーティリティ
   badge: New
@@ -1683,6 +1683,8 @@
   url_en: /en/tools/json-merge/
   url_ja: /ja/tools/json-merge/
   thumbnail: /assets/thumbs/json-merge.svg
+  tool_type: utility
+  topic_cluster: data
 
 - id: vat-calculator
   title: 부가세 계산기
