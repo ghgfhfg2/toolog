@@ -2284,14 +2284,16 @@
     const excludeSimilar = document.getElementById('pw-exclude-similar');
     const runBtn = document.getElementById('pw-run');
     const copyAllBtn = document.getElementById('pw-copy-all');
+    const clearBtn = document.getElementById('pw-clear');
     const output = document.getElementById('pw-output');
     const strength = document.getElementById('pw-strength');
     const poolOut = document.getElementById('pw-pool');
     const combosOut = document.getElementById('pw-combos');
     const bitsOut = document.getElementById('pw-bits');
+    const status = document.getElementById('pw-status');
     const help = document.getElementById('pw-help');
 
-    if (!lenInput || !countInput || !upper || !lower || !number || !symbol || !runBtn || !copyAllBtn || !output || !strength || !poolOut || !combosOut || !bitsOut || !help) return;
+    if (!lenInput || !countInput || !upper || !lower || !number || !symbol || !runBtn || !copyAllBtn || !clearBtn || !output || !strength || !poolOut || !combosOut || !bitsOut || !status || !help) return;
 
     const pwI18n = {
       ko: {
@@ -2300,12 +2302,20 @@
         scoreStrong: '강함',
         scoreVeryStrong: '매우 강함',
         poolUnit: '자',
+        ready: '옵션을 고르면 브라우저에서 안전한 랜덤 비밀번호를 생성합니다.',
         chooseType: '최소 1개 문자 유형을 선택해 주세요.',
+        invalidLength: '길이는 4 이상 128 이하의 정수로 입력해 주세요.',
+        invalidCount: '생성 개수는 1 이상 20 이하의 정수로 입력해 주세요.',
+        cryptoUnavailable: '이 브라우저에서는 보안 난수 생성 API를 사용할 수 없습니다.',
         tooShort: (length, n) => `현재 길이(${length})로는 선택한 문자 유형 ${n}개를 모두 포함할 수 없습니다.`,
+        preview: (pool, bits) => `문자풀 ${pool}자, 예상 엔트로피 ${bits} bit입니다.`,
         generatedAll: (length, count) => `길이 ${length}, ${count}개 생성 완료. 각 비밀번호는 선택한 모든 문자 유형을 최소 1개 이상 포함합니다.`,
         generatedPartial: (size, count) => `중복 없는 비밀번호 ${size}개를 생성했습니다. (요청 ${count}개, 문자풀/길이 조합 제한)`,
         copied: '복사됨',
-        copyDefault: '전체 복사'
+        copyDefault: '전체 복사',
+        copyEmpty: '복사할 비밀번호가 없습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '생성 결과를 지웠습니다.'
       },
       en: {
         scoreLow: 'Low',
@@ -2313,12 +2323,20 @@
         scoreStrong: 'Strong',
         scoreVeryStrong: 'Very strong',
         poolUnit: 'chars',
+        ready: 'Choose options and generate secure random passwords in your browser.',
         chooseType: 'Select at least one character type.',
+        invalidLength: 'Enter a whole-number length from 4 to 128.',
+        invalidCount: 'Enter a whole-number count from 1 to 20.',
+        cryptoUnavailable: 'This browser does not provide a secure random generator API.',
         tooShort: (length, n) => `Current length (${length}) cannot include all ${n} selected character types.`,
+        preview: (pool, bits) => `Pool size is ${pool} characters with about ${bits} bits of entropy.`,
         generatedAll: (length, count) => `Generated ${count} password(s) at length ${length}. Each password includes every selected character type at least once.`,
         generatedPartial: (size, count) => `Generated ${size} unique password(s). (Requested: ${count}; limited by pool/length combination)`,
         copied: 'Copied',
-        copyDefault: 'Copy all'
+        copyDefault: 'Copy all',
+        copyEmpty: 'There are no generated passwords to copy.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared the generated passwords.'
       },
       ja: {
         scoreLow: '低い',
@@ -2326,12 +2344,20 @@
         scoreStrong: '強い',
         scoreVeryStrong: '非常に強い',
         poolUnit: '文字',
+        ready: 'オプションを選ぶと、ブラウザ内で安全なランダムパスワードを生成できます。',
         chooseType: '文字種を1つ以上選択してください。',
+        invalidLength: '長さは4〜128の整数で入力してください。',
+        invalidCount: '生成数は1〜20の整数で入力してください。',
+        cryptoUnavailable: 'このブラウザでは安全な乱数生成APIを利用できません。',
         tooShort: (length, n) => `現在の長さ（${length}）では、選択した${n}種類すべてを含められません。`,
+        preview: (pool, bits) => `文字プールは${pool}文字、推定エントロピーは${bits} bitです。`,
         generatedAll: (length, count) => `長さ${length}で${count}件生成しました。各パスワードは選択した文字種をすべて最低1文字含みます。`,
         generatedPartial: (size, count) => `重複なしパスワードを${size}件生成しました。（要求${count}件、文字プール/長さの組み合わせ制限）`,
         copied: 'コピー完了',
-        copyDefault: 'すべてコピー'
+        copyDefault: 'すべてコピー',
+        copyEmpty: 'コピーできるパスワードがありません。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '生成結果をクリアしました。'
       }
     };
     const pwText = pwI18n[pageLang] || pwI18n.ko;
@@ -2344,16 +2370,26 @@
     };
     const SIMILAR = new Set(['O', '0', 'o', 'I', 'l', '1', 'B', '8', 'S', '5', 'Z', '2']);
 
+    const canUseCrypto = Boolean(window.crypto && window.crypto.getRandomValues);
+    const setStatus = (message, state = '') => {
+      status.textContent = message;
+      status.dataset.state = state;
+    };
+
     const pick = (str) => {
+      if (!canUseCrypto || !str.length) return '';
       const arr = new Uint32Array(1);
-      crypto.getRandomValues(arr);
+      const max = Math.floor(0x100000000 / str.length) * str.length;
+      do {
+        crypto.getRandomValues(arr);
+      } while (arr[0] >= max);
       return str[arr[0] % str.length];
     };
 
     const shuffle = (arr) => {
       for (let i = arr.length - 1; i > 0; i--) {
         const rand = new Uint32Array(1);
-        crypto.getRandomValues(rand);
+        window.crypto.getRandomValues(rand);
         const j = rand[0] % (i + 1);
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
@@ -2408,24 +2444,59 @@
       bitsOut.textContent = `${bits.toLocaleString(numberLocale, { maximumFractionDigits: 1 })} bit`;
     };
 
+    const parseBoundedInt = (input, min, max) => {
+      const raw = input.value.trim();
+      const value = Number(raw);
+      if (!raw || !Number.isInteger(value) || value < min || value > max) {
+        input.setAttribute('aria-invalid', 'true');
+        return null;
+      }
+      input.setAttribute('aria-invalid', 'false');
+      return value;
+    };
+
+    const clearResult = () => {
+      output.value = '';
+      copyAllBtn.disabled = true;
+    };
+
     const generate = () => {
-      const length = Math.max(4, Math.min(128, Math.floor(Number(lenInput.value || 16))));
-      const count = Math.max(1, Math.min(20, Math.floor(Number(countInput.value || 5))));
-      lenInput.value = length;
-      countInput.value = count;
+      const length = parseBoundedInt(lenInput, 4, 128);
+      const count = parseBoundedInt(countInput, 1, 20);
+      if (length === null) {
+        clearResult();
+        renderStats(0, 0);
+        setStatus(pwText.invalidLength, 'error');
+        lenInput.focus();
+        return;
+      }
+      if (count === null) {
+        clearResult();
+        renderStats(0, 0);
+        setStatus(pwText.invalidCount, 'error');
+        countInput.focus();
+        return;
+      }
+
+      if (!canUseCrypto) {
+        clearResult();
+        renderStats(0, 0);
+        setStatus(pwText.cryptoUnavailable, 'error');
+        return;
+      }
 
       const { normalized, pool } = buildSet();
       if (!normalized.length || !pool.length) {
-        output.value = '';
+        clearResult();
         renderStats(0, length);
-        help.textContent = pwText.chooseType;
+        setStatus(pwText.chooseType, 'error');
         return;
       }
 
       if (length < normalized.length) {
-        output.value = '';
+        clearResult();
         renderStats(pool.length, length);
-        help.textContent = pwText.tooShort(length, normalized.length);
+        setStatus(pwText.tooShort(length, normalized.length), 'error');
         return;
       }
 
@@ -2448,10 +2519,11 @@
       }
 
       output.value = list.join('\n');
+      copyAllBtn.disabled = !list.length;
       if (list.length === count) {
-        help.textContent = pwText.generatedAll(length, count);
+        setStatus(pwText.generatedAll(length, count), 'success');
       } else {
-        help.textContent = pwText.generatedPartial(list.length, count);
+        setStatus(pwText.generatedPartial(list.length, count), 'warning');
       }
     };
 
@@ -2470,19 +2542,55 @@
       }
     };
 
-    runBtn.addEventListener('click', generate);
-    [lenInput, countInput, upper, lower, number, symbol, excludeSimilar].forEach((el) => el.addEventListener('input', () => {
+    const previewStats = () => {
+      const length = parseBoundedInt(lenInput, 4, 128);
+      const count = parseBoundedInt(countInput, 1, 20);
       const { pool } = buildSet();
-      const length = Math.max(4, Math.min(128, Math.floor(Number(lenInput.value || 16))));
+      clearResult();
+      if (length === null) {
+        renderStats(0, 0);
+        setStatus(pwText.invalidLength, 'error');
+        return;
+      }
+      if (count === null) {
+        renderStats(0, 0);
+        setStatus(pwText.invalidCount, 'error');
+        return;
+      }
+      if (!pool.length) {
+        renderStats(0, length);
+        setStatus(pwText.chooseType, 'error');
+        return;
+      }
+      const bits = length * Math.log2(pool.length);
       renderStats(pool.length, length);
-    }));
+      setStatus(pwText.preview(pool.length.toLocaleString(numberLocale), bits.toLocaleString(numberLocale, { maximumFractionDigits: 1 })));
+    };
+
+    runBtn.addEventListener('click', generate);
+    [lenInput, countInput].forEach((el) => el.addEventListener('input', previewStats));
+    [upper, lower, number, symbol, excludeSimilar].forEach((el) => el.addEventListener('change', previewStats));
 
     copyAllBtn.addEventListener('click', async () => {
-      if (!output.value.trim()) return;
-      await copyText(output.value.trim());
-      const old = copyAllBtn.textContent;
-      copyAllBtn.textContent = pwText.copied;
-      setTimeout(() => { copyAllBtn.textContent = old || pwText.copyDefault; }, 900);
+      if (!output.value.trim()) {
+        setStatus(pwText.copyEmpty, 'error');
+        return;
+      }
+      try {
+        await copyText(output.value.trim());
+        const old = copyAllBtn.textContent;
+        copyAllBtn.textContent = pwText.copied;
+        setStatus(pwText.copied, 'success');
+        setTimeout(() => { copyAllBtn.textContent = old || pwText.copyDefault; }, 900);
+      } catch (_) {
+        setStatus(pwText.copyFail, 'error');
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      clearResult();
+      setStatus(pwText.cleared);
+      output.focus();
     });
 
     generate();

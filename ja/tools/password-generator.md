@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: パスワード生成ツール | 強力なランダムパスワードを一括作成
-description: 長さ・文字種・紛らわしい文字の除外を指定して、安全なランダムパスワードを即時生成。エントロピー（bit）と強度目安も確認できます。
+description: 4〜128文字のランダムパスワードをブラウザ内で生成。英大文字・小文字・数字・記号、紛らわしい文字の除外、エントロピー、強度目安、一括コピーに対応します。
 lang: ja
 permalink: /ja/tools/password-generator/
 canonical_url: /ja/tools/password-generator/
@@ -12,8 +12,8 @@ image:
   path: /assets/thumbs/password-generator.svg
   alt: パスワード生成ツールの結果プレビュー
 tool_key: password-generator
-keywords: [パスワード生成, ランダムパスワード, 強力なパスワード, セキュアパスワード, エントロピー]
-related_tools: [text-counter, case-converter]
+keywords: [パスワード生成, ランダムパスワード, 強力なパスワード, セキュアパスワード, エントロピー, 一括パスワード生成]
+related_tools: [password-strength-checker, privacy-exposure-checker, filename-sanitizer]
 alternate_urls:
   ko: /tools/password-generator/
   en: /en/tools/password-generator/
@@ -25,6 +25,8 @@ faq:
     a: はい。英大文字・英小文字・数字・記号で選択した種別は、各パスワードに最低1文字ずつ含まれます。
   - q: 推奨の文字数は？
     a: 通常アカウントは12文字以上、金融系や管理者アカウントは16文字以上が推奨です。
+  - q: 紛らわしい文字を除外すると弱くなりますか？
+    a: 文字プールが少し減るためエントロピーは下がります。ただし手入力する共有・一時パスワードでは入力ミスを減らせます。除外する場合は長さを少し増やすのがおすすめです。
 ---
 
 ## なぜパスワード生成が必要？
@@ -37,6 +39,7 @@ faq:
 - 紛らわしい文字の除外（`O/0`, `l/I/1`, `B/8`, `S/5`, `Z/2` など）
 - 強度目安・文字プール・組み合わせ数・エントロピーを表示
 - 一括生成時の重複最小化と一括コピー
+- 長さ・生成数・文字種選択のエラーをすぐに表示
 
 ## 使い方
 1. パスワードの長さと生成数を入力
@@ -48,7 +51,13 @@ faq:
 - サービスごとに **別のパスワード** を使う
 - 可能なら **パスワードマネージャー** を利用
 - **2段階認証（2FA）** を有効化する
+- 手入力が必要な場合は紛らわしい文字を除外し、その分長めに設定すると実用的です。
 
 ## 関連ツール
-- 文字数チェック: [文字数カウンター]({{ '/ja/tools/text-counter/' | relative_url }})
-- 文字ケース整理: [大文字小文字変換ツール]({{ '/ja/tools/case-converter/' | relative_url }})
+- 候補の強度確認: [パスワード強度チェッカー]({{ '/ja/tools/password-strength-checker/' | relative_url }})
+- メモ内の個人情報チェック: [個人情報露出チェッカー]({{ '/ja/tools/privacy-exposure-checker/' | relative_url }})
+- ファイル名の機微情報整理: [ファイル名整理ツール]({{ '/ja/tools/filename-sanitizer/' | relative_url }})
+
+## FAQ
+### 一括生成で重複することはありますか？
+可能な範囲では重複しない候補を優先します。ただし文字プールが小さい、または長さが短い場合は組み合わせ数が限られることがあります。
