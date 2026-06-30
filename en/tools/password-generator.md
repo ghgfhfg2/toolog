@@ -59,5 +59,18 @@ This tool helps you create **strong, hard-to-predict random passwords** quickly 
 - Clean sensitive names from filenames: [Filename Sanitizer]({{ '/en/tools/filename-sanitizer/' | relative_url }})
 
 ## FAQ
+### Are generated passwords secure?
+They are generated with the browser's cryptographic random API (`crypto.getRandomValues`).
+
+### Can I generate passwords without symbols?
+Yes, but removing symbols reduces the character pool and can lower the difficulty of guessing.
+
+### Is the strength estimate absolute?
+No. It is a reference score based on length and character pool size. Real account security also depends heavily on password reuse and whether 2FA is enabled.
+
 ### Can bulk generation create duplicates?
 The generator prioritizes unique results where possible. If the character pool is very small or the length is short, the available combination space can still be limited.
+
+## Summary
+The password generator is a practical baseline tool for account security.
+Adjust **length, character sets, and readability options** to quickly create passwords that are safer and still usable.
