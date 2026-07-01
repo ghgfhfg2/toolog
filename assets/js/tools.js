@@ -14061,6 +14061,7 @@
     const runBtn = document.getElementById('mtc-run');
     const sampleBtn = document.getElementById('mtc-sample');
     const copyBtn = document.getElementById('mtc-copy');
+    const clearBtn = document.getElementById('mtc-clear');
     const statusEl = document.getElementById('mtc-status');
     const directEl = document.getElementById('mtc-direct');
     const softEl = document.getElementById('mtc-soft');
@@ -14070,20 +14071,198 @@
     const summaryEl = document.getElementById('mtc-summary');
     const listEl = document.getElementById('mtc-list');
     const outputEl = document.getElementById('mtc-output');
-    if (!contextEl || !inputEl || !runBtn || !sampleBtn || !copyBtn || !statusEl || !directEl || !softEl || !requestEl || !deadlineEl || !lengthEl || !summaryEl || !listEl || !outputEl) return;
+    if (!contextEl || !inputEl || !runBtn || !sampleBtn || !copyBtn || !clearBtn || !statusEl || !directEl || !softEl || !requestEl || !deadlineEl || !lengthEl || !summaryEl || !listEl || !outputEl) return;
 
-    const samples = {
-      work: '안녕하세요. 초안 검토 부탁드립니다. 오늘 오후 4시 전까지 가능 여부만 회신 주시면 일정 정리에 도움이 됩니다. 어려우시면 가능한 시간도 함께 알려주세요.',
-      external: '안녕하세요. 전달드린 제안서 관련해 검토 부탁드립니다. 가능하시다면 내일 오전까지 확인 의견을 회신 주시면 후속 일정 안내에 큰 도움이 됩니다.',
-      quick: '왜 아직 공유 안 됐나요? 빨리 보내주세요. 오늘 안에 꼭 필요합니다.'
+    const mtcText = {
+      ko: {
+        samples: {
+          work: '안녕하세요. 초안 검토 부탁드립니다. 오늘 오후 4시 전까지 가능 여부만 회신 주시면 일정 정리에 도움이 됩니다. 어려우시면 가능한 시간도 함께 알려주세요.',
+          external: '안녕하세요. 전달드린 제안서 관련해 검토 부탁드립니다. 가능하시다면 내일 오전까지 확인 의견을 회신 주시면 후속 일정 안내에 큰 도움이 됩니다.',
+          quick: '왜 아직 공유 안 됐나요? 빨리 보내주세요. 오늘 안에 꼭 필요합니다.'
+        },
+        empty: '메시지를 넣으면 직설성, 정중함, 요청/마감 언급, 길이 부담을 함께 점검합니다.',
+        emptyList: '아직 점검한 메시지가 없습니다.',
+        emptyCopy: '복사할 점검 결과가 없습니다.',
+        copied: '복사됨',
+        copyDefault: '결과 복사',
+        cleared: '입력을 초기화했습니다.',
+        balanced: '균형적',
+        directStrong: '직설 강함',
+        softHeavy: '완곡 과다',
+        vagueRequest: '요청 모호',
+        missingDeadline: '마감 누락',
+        long: '조금 김',
+        unclear: '판단 보류',
+        noInput: '-',
+        requestOk: '명확',
+        requestNeed: '보완 필요',
+        deadlineOk: '있음',
+        deadlineNeed: '없음',
+        summaryBalanced: '전반적으로 무난한 톤입니다.',
+        summaryDirect: '상대가 압박으로 느낄 수 있는 표현이 보여 완충 표현을 조금 섞는 편이 좋습니다.',
+        summarySoft: '정중하지만 사과·완충 표현이 많아 핵심 요청이 흐려질 수 있습니다.',
+        summaryRequest: '메시지 목적은 보이지만 상대가 무엇을 해야 하는지 조금 더 분명하게 적는 편이 좋습니다.',
+        summaryDeadline: '요청은 있지만 언제까지 필요한지 드러나지 않아 처리 우선순위가 밀릴 수 있습니다.',
+        summaryShort: '짧은 문장은 관계와 맥락 영향이 커서 자동 신호만으로 판단하기 어렵습니다.',
+        sentenceInfo: (summary, sentences, avg) => `${summary} (문장 ${sentences}개 · 평균 ${avg}자)`,
+        detected: (items) => `감지된 표현: ${items}`,
+        noteDirect: '압박으로 읽히는 표현이 있는지 다시 보고, 이유나 완충 문장을 한 줄 덧붙여보세요.',
+        noteSoft: '`죄송하지만`, `혹시`, `괜찮으시다면` 같은 표현이 겹치면 핵심 요청을 한 문장으로 분리해보세요.',
+        noteRequest: '`확인 부탁드립니다`, `회신 부탁드립니다`, `공유 부탁드립니다`처럼 행동 요청을 한 번은 명시해보세요.',
+        noteDeadline: '오늘/내일/오후 4시 전처럼 시점을 넣으면 상대가 처리 우선순위를 잡기 쉬워집니다.',
+        noteLong: '설명이 길다면 핵심 요청 문장을 앞에 두고 배경 설명은 뒤로 정리해보세요.',
+        noteShort: '짧은 메시지는 목적어와 기한이 빠지기 쉽습니다. 무엇을 언제까지 원하는지 한 번 더 확인해보세요.',
+        noteOk: '요청과 시점이 비교적 분명합니다. 보내기 전 호칭·첨부 여부만 마지막으로 확인해보세요.',
+        heading: '[메시지 톤 점검 결과]',
+        context: '상황 기준',
+        tone: '톤 요약',
+        direct: '직설 표현',
+        soft: '완충/사과 표현',
+        request: '요청 명확성',
+        deadline: '마감 언급',
+        length: '글자 수',
+        memo: '개선 메모'
+      },
+      en: {
+        samples: {
+          work: 'Hi, could you review the draft by 4 PM today? Even a quick yes or no would help me finalize the schedule. If that timing is difficult, please let me know when works.',
+          external: 'Hello, could you review the proposal I shared and send any comments by tomorrow morning? Your feedback will help us confirm the next schedule.',
+          quick: 'Why has this not been shared yet? Please send it ASAP. I need it today.'
+        },
+        empty: 'Paste a message to check directness, politeness, request clarity, deadline cues, and length burden together.',
+        emptyList: 'No message has been checked yet.',
+        emptyCopy: 'There is no check result to copy.',
+        copied: 'Copied',
+        copyDefault: 'Copy result',
+        cleared: 'Cleared the input.',
+        balanced: 'Balanced',
+        directStrong: 'Too direct',
+        softHeavy: 'Over-softened',
+        vagueRequest: 'Vague request',
+        missingDeadline: 'No timing cue',
+        long: 'A bit long',
+        unclear: 'Needs context',
+        noInput: '-',
+        requestOk: 'Clear',
+        requestNeed: 'Needs work',
+        deadlineOk: 'Present',
+        deadlineNeed: 'Missing',
+        summaryBalanced: 'The overall tone looks workable.',
+        summaryDirect: 'Some phrasing may feel pushy, so adding context or a softer request would help.',
+        summarySoft: 'The message is polite, but too much softening can hide the main ask.',
+        summaryRequest: 'The purpose is visible, but the exact action could be clearer.',
+        summaryDeadline: 'There is a request, but the needed timing is not clear enough for prioritization.',
+        summaryShort: 'Very short messages depend heavily on relationship and context, so treat this as a signal check.',
+        sentenceInfo: (summary, sentences, avg) => `${summary} (${sentences} sentence(s), ${avg} chars avg.)`,
+        detected: (items) => `Detected signals: ${items}`,
+        noteDirect: 'Review phrases that may read as pressure, and add a short reason or softer request.',
+        noteSoft: 'If apologies or hedges repeat, separate the main ask into one direct sentence.',
+        noteRequest: 'State the action once, such as "please review", "please reply", or "please share".',
+        noteDeadline: 'Add a clear timing cue such as today, tomorrow, or before 4 PM.',
+        noteLong: 'Put the main ask first and move background details after it.',
+        noteShort: 'Short messages often miss the object or deadline. Check what you need and by when.',
+        noteOk: 'The request and timing look reasonably clear. Check the recipient name and attachments before sending.',
+        heading: '[Message Tone Check]',
+        context: 'Context',
+        tone: 'Tone summary',
+        direct: 'Direct signals',
+        soft: 'Softening words',
+        request: 'Request clarity',
+        deadline: 'Timing cue',
+        length: 'Characters',
+        memo: 'Revision notes'
+      },
+      ja: {
+        samples: {
+          work: 'お疲れさまです。下書きの確認をお願いします。本日16時までに可否だけでも返信いただけると、予定調整に助かります。難しければ可能な時間も教えてください。',
+          external: 'お世話になっております。共有した提案書について、明日午前中までに確認コメントをいただけますでしょうか。後続日程の調整に役立ちます。',
+          quick: 'まだ共有されていないのはなぜですか。ASAPで送ってください。今日中に必要です。'
+        },
+        empty: 'メッセージを入力すると、強さ、丁寧さ、依頼/期限の明確さ、文量負担をまとめて点検します。',
+        emptyList: 'まだ点検したメッセージがありません。',
+        emptyCopy: 'コピーできる点検結果がありません。',
+        copied: 'コピー済み',
+        copyDefault: '結果をコピー',
+        cleared: '入力をクリアしました。',
+        balanced: 'バランス良好',
+        directStrong: '強め',
+        softHeavy: '婉曲多め',
+        vagueRequest: '依頼が曖昧',
+        missingDeadline: '期限なし',
+        long: '少し長い',
+        unclear: '文脈判断',
+        noInput: '-',
+        requestOk: '明確',
+        requestNeed: '要補足',
+        deadlineOk: 'あり',
+        deadlineNeed: 'なし',
+        summaryBalanced: '全体として無理のないトーンです。',
+        summaryDirect: '相手が急かされていると感じる表現があるため、理由や緩衝表現を少し足すとよさそうです。',
+        summarySoft: '丁寧ですが、謝罪や緩衝表現が多いと依頼の要点がぼやけることがあります。',
+        summaryRequest: '目的は見えますが、相手が何をすればよいかをもう少し明確にするとよさそうです。',
+        summaryDeadline: '依頼はありますが、いつまで必要かが見えにくく優先順位をつけにくい可能性があります。',
+        summaryShort: '短い文面は関係性や文脈の影響が大きいため、信号チェックとして見てください。',
+        sentenceInfo: (summary, sentences, avg) => `${summary} (文 ${sentences} 件・平均 ${avg} 文字)`,
+        detected: (items) => `検出した表現: ${items}`,
+        noteDirect: '圧力として読まれそうな表現を見直し、理由や柔らかい依頼文を一文足してみてください。',
+        noteSoft: '謝罪や緩衝表現が重なる場合は、中心の依頼を一文で分けると伝わりやすくなります。',
+        noteRequest: '「確認をお願いします」「返信をお願いします」「共有してください」のように行動を一度明示しましょう。',
+        noteDeadline: '今日、明日、16時までなど、処理の目安になる時間を入れると親切です。',
+        noteLong: '説明が長い場合は、中心の依頼を先に置き、背景説明を後ろに回しましょう。',
+        noteShort: '短文では対象や期限が抜けやすいです。何をいつまでに求めるのか確認してください。',
+        noteOk: '依頼と時点は比較的明確です。送信前に宛名や添付の有無だけ確認してください。',
+        heading: '[メッセージトーン点検結果]',
+        context: '利用場面',
+        tone: 'トーン要約',
+        direct: '強い表現',
+        soft: '緩衝/謝罪表現',
+        request: '依頼の明確さ',
+        deadline: '期限言及',
+        length: '文字数',
+        memo: '改善メモ'
+      }
+    }[pageLang] || {};
+
+    const directPatterns = [
+      { label: '빨리', re: /빨리|당장|즉시|왜 아직|왜 안|무조건|지금 바로|꼭 보내/gi },
+      { label: 'ASAP', re: /\bASAP\b|right now|immediately|why (?:is|has|was|did)|must\b|urgent/gi },
+      { label: '強い依頼', re: /至急|早急|すぐに|なぜまだ|必ず|今すぐ|ASAP/gi }
+    ];
+    const softPatterns = [
+      { label: '완충 표현', re: /죄송|송구|부탁|감사|괜찮으실까요|가능하실까요|혹시|번거로우시겠지만/gi },
+      { label: 'softening words', re: /sorry|apologize|please|thank you|would you|could you|if possible|when you have a chance/gi },
+      { label: '緩衝表現', re: /すみません|申し訳|恐れ入ります|お願いします|ありがとう|可能でしたら|よろしければ|お手数/gi }
+    ];
+    const requestPatterns = [
+      /부탁|확인|회신|알려|공유|검토|전달|정리|보내/gi,
+      /please|could you|would you|review|reply|respond|share|send|confirm|let me know|check/gi,
+      /お願い|確認|返信|共有|検討|送って|教えて|ご確認|ご返信/gi
+    ];
+    const deadlinePatterns = [
+      /오늘|내일|모레|이번 주|다음 주|까지|전까지|오전|오후|\d{1,2}시|\d{1,2}:\d{2}|\d+일/gi,
+      /\btoday\b|\btomorrow\b|this week|next week|by\b|before\b|until\b|AM\b|PM\b|\d{1,2}:\d{2}/gi,
+      /今日|明日|今週|来週|まで|午前|午後|\d{1,2}時|\d{1,2}:\d{2}/gi
+    ];
+
+    const getMatches = (text, patternGroups) => {
+      const found = [];
+      patternGroups.forEach(({ re }) => {
+        re.lastIndex = 0;
+        for (const match of text.matchAll(re)) {
+          if (match[0]) found.push(match[0]);
+        }
+      });
+      return found;
     };
-
-    const directPatterns = [/빨리/g, /당장/g, /즉시/g, /왜 아직/g, /왜 안/g, /무조건/g, /지금 바로/g, /꼭 보내/g, /ASAP/gi];
-    const softPatterns = [/죄송/g, /송구/g, /부탁/g, /감사/g, /괜찮으실까요/g, /가능하실까요/g, /혹시/g, /번거로우시겠지만/g];
-    const requestPatterns = [/부탁/g, /확인/g, /회신/g, /알려/g, /공유/g, /검토/g, /전달/g, /정리/g, /보내/g];
-    const deadlinePatterns = [/오늘/g, /내일/g, /모레/g, /이번 주/g, /다음 주/g, /까지/g, /전까지/g, /오전/g, /오후/g, /\d{1,2}시/g, /\d{1,2}:\d{2}/g, /\d+일/g];
-
-    const countMatches = (text, patterns) => patterns.reduce((sum, pattern) => sum + ((text.match(pattern) || []).length), 0);
+    const countMatches = (text, patterns) => patterns.reduce((sum, pattern) => {
+      pattern.lastIndex = 0;
+      return sum + Array.from(text.matchAll(pattern)).length;
+    }, 0);
+    const hasAnyMatch = (text, patterns) => patterns.some((pattern) => {
+      pattern.lastIndex = 0;
+      return pattern.test(text);
+    });
+    const uniqueShort = (items) => [...new Set(items.map((item) => item.trim()).filter(Boolean))].slice(0, 6);
     const copyText = async (text) => {
       try { await navigator.clipboard.writeText(text); }
       catch (_) {
@@ -14093,103 +14272,161 @@
       }
     };
 
+    const resetList = (message) => {
+      listEl.innerHTML = '';
+      const p = document.createElement('p');
+      p.className = 'tool-result';
+      p.textContent = message;
+      listEl.appendChild(p);
+    };
+
+    const renderNotes = (notes) => {
+      listEl.innerHTML = '';
+      notes.forEach((note) => {
+        const card = document.createElement('div');
+        card.className = 'tool-card';
+        const p = document.createElement('p');
+        p.className = 'tool-result';
+        p.textContent = note;
+        card.appendChild(p);
+        listEl.appendChild(card);
+      });
+    };
+
     const render = () => {
       const text = (inputEl.value || '').trim();
       const context = contextEl.value || 'work';
-      const sentenceParts = text.split(/[.!?\n]+/).map((part) => part.trim()).filter(Boolean);
+      const sentenceParts = text.split(/[.!?。！？\n]+/u).map((part) => part.trim()).filter(Boolean);
       const sentenceCount = sentenceParts.length || 1;
-      const avgSentence = text ? text.length / sentenceCount : 0;
-      const directCount = countMatches(text, directPatterns);
-      const softCount = countMatches(text, softPatterns);
+      const charCount = [...text].length;
+      const avgSentence = text ? charCount / sentenceCount : 0;
+      const directMatches = uniqueShort(getMatches(text, directPatterns));
+      const softMatches = uniqueShort(getMatches(text, softPatterns));
+      const directCount = directMatches.length;
+      const softCount = softMatches.length;
       const requestCount = countMatches(text, requestPatterns);
-      const hasDeadline = deadlinePatterns.some((pattern) => pattern.test(text));
+      const hasDeadline = hasAnyMatch(text, deadlinePatterns);
       const hasRequest = requestCount > 0;
 
       if (!text) {
-        statusEl.textContent = '-';
+        statusEl.textContent = mtcText.noInput;
         directEl.textContent = '0';
         softEl.textContent = '0';
-        requestEl.textContent = '-';
-        deadlineEl.textContent = '-';
+        requestEl.textContent = mtcText.noInput;
+        deadlineEl.textContent = mtcText.noInput;
         lengthEl.textContent = '0';
-        summaryEl.textContent = '메시지를 넣으면 직설성, 정중함, 요청/마감 언급, 길이 부담을 함께 점검합니다.';
-        listEl.innerHTML = '<p class="tool-result">아직 점검한 메시지가 없습니다.</p>';
+        summaryEl.textContent = mtcText.empty;
+        summaryEl.dataset.state = '';
+        resetList(mtcText.emptyList);
         outputEl.value = '';
+        copyBtn.disabled = true;
+        inputEl.setAttribute('aria-invalid', 'false');
         return;
       }
 
-      let status = '균형적';
-      let summary = '전반적으로 무난한 톤입니다.';
+      inputEl.setAttribute('aria-invalid', 'false');
+      copyBtn.disabled = false;
+      let status = mtcText.balanced;
+      let summary = mtcText.summaryBalanced;
+      let state = 'success';
       const notes = [];
 
       if (directCount >= (context === 'quick' ? 3 : 2)) {
-        status = '직설 강함';
-        summary = '상대가 압박으로 느낄 수 있는 표현이 보여 완충 표현을 조금 섞는 편이 좋습니다.';
-        notes.push('`빨리`, `왜 아직`, `당장`처럼 압박으로 읽히는 표현이 있는지 다시 보세요.');
+        status = mtcText.directStrong;
+        summary = mtcText.summaryDirect;
+        state = 'warning';
+        notes.push(mtcText.noteDirect);
       }
 
-      if (softCount >= 4 && status === '균형적') {
-        status = '완곡 과다';
-        summary = '정중하지만 사과·완충 표현이 많아 핵심 요청이 흐려질 수 있습니다.';
-        notes.push('`죄송하지만`, `혹시`, `괜찮으시다면` 같은 표현이 겹치면 핵심 요청을 한 문장으로 분리해보세요.');
+      if (softCount >= 4 && status === mtcText.balanced) {
+        status = mtcText.softHeavy;
+        summary = mtcText.summarySoft;
+        state = 'warning';
+        notes.push(mtcText.noteSoft);
       }
 
       if (!hasRequest) {
-        status = '요청 모호';
-        summary = '메시지 목적은 보이지만 상대가 무엇을 해야 하는지 조금 더 분명하게 적는 편이 좋습니다.';
-        notes.push('`확인 부탁드립니다`, `회신 부탁드립니다`, `공유 부탁드립니다`처럼 행동 요청을 한 번은 명시해보세요.');
+        status = mtcText.vagueRequest;
+        summary = mtcText.summaryRequest;
+        state = 'warning';
+        notes.push(mtcText.noteRequest);
       }
 
       if (hasRequest && !hasDeadline) {
-        if (status === '균형적') status = '마감 누락';
-        summary = '요청은 있지만 언제까지 필요한지 드러나지 않아 처리 우선순위가 밀릴 수 있습니다.';
-        notes.push('오늘/내일/오후 4시 전처럼 시점을 넣으면 상대가 처리 우선순위를 잡기 쉬워집니다.');
+        if (status === mtcText.balanced) status = mtcText.missingDeadline;
+        summary = mtcText.summaryDeadline;
+        state = 'warning';
+        notes.push(mtcText.noteDeadline);
       }
 
-      if (text.length >= (context === 'external' ? 260 : 220) || avgSentence >= 55) {
-        if (status === '균형적') status = '조금 김';
-        notes.push('설명이 길다면 핵심 요청 문장을 앞에 두고 배경 설명은 뒤로 정리해보세요.');
+      if (charCount <= 12 && !hasRequest) {
+        if (status === mtcText.balanced) status = mtcText.unclear;
+        summary = mtcText.summaryShort;
+        state = 'warning';
+        notes.push(mtcText.noteShort);
       }
 
+      if (charCount >= (context === 'external' ? 260 : 220) || avgSentence >= 55) {
+        if (status === mtcText.balanced) status = mtcText.long;
+        state = state === 'success' ? 'warning' : state;
+        notes.push(mtcText.noteLong);
+      }
+
+      const detected = [...directMatches, ...softMatches];
+      if (detected.length) notes.unshift(mtcText.detected(detected.join(', ')));
       if (!notes.length) {
-        notes.push('요청과 시점이 비교적 분명합니다. 보내기 전 호칭·첨부 여부만 마지막으로 확인해보세요.');
+        notes.push(mtcText.noteOk);
       }
 
       statusEl.textContent = status;
       directEl.textContent = String(directCount);
       softEl.textContent = String(softCount);
-      requestEl.textContent = hasRequest ? '명확' : '보완 필요';
-      deadlineEl.textContent = hasDeadline ? '있음' : '없음';
-      lengthEl.textContent = String(text.length);
-      summaryEl.textContent = `${summary} (문장 ${sentenceCount}개 · 평균 ${Math.round(avgSentence)}자)`;
+      requestEl.textContent = hasRequest ? mtcText.requestOk : mtcText.requestNeed;
+      deadlineEl.textContent = hasDeadline ? mtcText.deadlineOk : mtcText.deadlineNeed;
+      lengthEl.textContent = formatNum(charCount);
+      summaryEl.textContent = mtcText.sentenceInfo(summary, sentenceCount, Math.round(avgSentence));
+      summaryEl.dataset.state = state;
 
-      listEl.innerHTML = notes.map((note) => `<div class="tool-card"><p class="tool-result">${note}</p></div>`).join('');
+      renderNotes(notes);
       outputEl.value = [
-        '[메시지 톤 점검 결과]',
-        `- 상황 기준: ${contextEl.options[contextEl.selectedIndex].text}`,
-        `- 톤 요약: ${status}`,
-        `- 직설 표현: ${directCount}개`,
-        `- 완충/사과 표현: ${softCount}개`,
-        `- 요청 명확성: ${hasRequest ? '명확' : '보완 필요'}`,
-        `- 마감 언급: ${hasDeadline ? '있음' : '없음'}`,
-        `- 글자 수: ${text.length}자`,
+        mtcText.heading,
+        `- ${mtcText.context}: ${contextEl.options[contextEl.selectedIndex].text}`,
+        `- ${mtcText.tone}: ${status}`,
+        `- ${mtcText.direct}: ${directCount}`,
+        `- ${mtcText.soft}: ${softCount}`,
+        `- ${mtcText.request}: ${hasRequest ? mtcText.requestOk : mtcText.requestNeed}`,
+        `- ${mtcText.deadline}: ${hasDeadline ? mtcText.deadlineOk : mtcText.deadlineNeed}`,
+        `- ${mtcText.length}: ${formatNum(charCount)}`,
         '',
-        '개선 메모',
+        mtcText.memo,
         ...notes.map((note) => `- ${note}`)
       ].join('\n');
     };
 
     runBtn.addEventListener('click', render);
     sampleBtn.addEventListener('click', () => {
-      inputEl.value = samples[contextEl.value || 'work'];
+      inputEl.value = mtcText.samples[contextEl.value || 'work'];
       render();
+      inputEl.focus();
+    });
+    clearBtn.addEventListener('click', () => {
+      inputEl.value = '';
+      render();
+      summaryEl.textContent = mtcText.cleared;
+      inputEl.focus();
     });
     copyBtn.addEventListener('click', async () => {
       if (!outputEl.value.trim()) render();
+      if (!outputEl.value.trim()) {
+        summaryEl.textContent = mtcText.emptyCopy;
+        summaryEl.dataset.state = 'error';
+        inputEl.focus();
+        return;
+      }
       await copyText(outputEl.value.trim());
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = mtcText.copied;
+      setTimeout(() => { copyBtn.textContent = old || mtcText.copyDefault; }, 900);
     });
     [contextEl, inputEl].forEach((el) => {
       el.addEventListener('input', render);

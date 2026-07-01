@@ -761,6 +761,8 @@
   url_en: /en/tools/message-tone-checker/
   url_ja: /ja/tools/message-tone-checker/
   thumbnail: /assets/thumbs/message-tone-checker.svg
+  thumbnail_en: /assets/thumbs/en/message-tone-checker.svg
+  thumbnail_ja: /assets/thumbs/ja/message-tone-checker.svg
   published_at: 2026-04-23
   tool_type: checker
   topic_cluster: communication

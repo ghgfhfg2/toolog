@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Message Tone Checker | Check if your draft sounds too blunt, urgent, or vague before sending
-description: Paste a work message, email draft, or request note to review direct phrasing, repeated apologies, request clarity, deadline mentions, and message length in one pass.
+title: Message Tone Checker | Review work email and chat wording before sending
+description: Paste a work email, Slack or chat draft, or request note to review blunt phrasing, repeated apologies, request clarity, deadline cues, and sentence length in one pass.
 lang: en
 permalink: /en/tools/message-tone-checker/
 canonical_url: /en/tools/message-tone-checker/
@@ -23,6 +23,8 @@ faq:
     a: No. It runs locally in the browser and does not send or save your draft to a server.
   - q: Is it only for internal work chat?
     a: No. It is tuned for work communication, but it also helps with email drafts, client replies, and other messages where politeness and clarity both matter.
+  - q: What kind of message works best?
+    a: It is most useful for requests, follow-ups, schedule checks, and review messages where the recipient needs to take action. Pasting the full draft gives better signals than a single short phrase.
 ---
 
 ## Why use a Message Tone Checker?
@@ -37,6 +39,15 @@ This tool helps you quickly review both tone and actionability before you send.
 3. Run the check.
 4. Review the tone summary, detected signals, and suggestion notes.
 5. Edit the draft and send it with more confidence.
+
+## What it checks
+This tool is a quick signal checker, not an automatic rewrite engine. It is tuned for work email tone checks, Slack message reviews, and request wording where the recipient should understand the next action quickly.
+
+- direct signals such as ASAP, right now, must, or urgent
+- softening words such as sorry, please, if possible, or when you have a chance
+- request clarity, including review, reply, share, send, confirm, and let me know
+- deadline or timing cues such as today, tomorrow, by, before, AM, or PM
+- length burden from long messages or long average sentences
 
 ## Useful when
 - you want to review a Slack, chat, or email draft before sending

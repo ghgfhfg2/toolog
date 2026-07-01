@@ -658,40 +658,43 @@ layout: default
           </div>
         </div>
       {% when 'message-tone-checker' %}
-        <div class="tool-ui">
+        <div class="tool-ui mtc-ui">
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="mtc-context">상황 기준</label>
-              <select id="mtc-context">
-                <option value="work" selected>업무 협업</option>
-                <option value="external">외부 커뮤니케이션</option>
-                <option value="quick">빠른 내부 메신저</option>
+              <label for="mtc-context">{% if page.lang == 'en' %}Message context{% elsif page.lang == 'ja' %}利用場面{% else %}상황 기준{% endif %}</label>
+              <select id="mtc-context" aria-describedby="mtc-summary mtc-help">
+                <option value="work" selected>{% if page.lang == 'en' %}Work collaboration{% elsif page.lang == 'ja' %}業務協業{% else %}업무 협업{% endif %}</option>
+                <option value="external">{% if page.lang == 'en' %}External communication{% elsif page.lang == 'ja' %}外部コミュニケーション{% else %}외부 커뮤니케이션{% endif %}</option>
+                <option value="quick">{% if page.lang == 'en' %}Quick internal chat{% elsif page.lang == 'ja' %}素早い社内チャット{% else %}빠른 내부 메신저{% endif %}</option>
               </select>
             </div>
             <div>
-              <label for="mtc-input">메시지 초안</label>
-              <textarea id="mtc-input" rows="8" maxlength="5000" placeholder="예: 자료 확인 부탁드립니다. 오늘 오후 4시 전까지 가능 여부만 회신 주시면 일정 정리에 도움이 됩니다."></textarea>
+              <label for="mtc-input">{% if page.lang == 'en' %}Message draft{% elsif page.lang == 'ja' %}メッセージ下書き{% else %}메시지 초안{% endif %}</label>
+              <textarea id="mtc-input" rows="8" maxlength="5000" aria-describedby="mtc-summary mtc-help" placeholder="{% if page.lang == 'en' %}Example: Could you review the draft by 4 PM today? A quick reply would help me finalize the schedule.{% elsif page.lang == 'ja' %}例: 本日16時までに下書きを確認いただけますか。可否だけでも返信いただけると予定調整に助かります。{% else %}예: 자료 확인 부탁드립니다. 오늘 오후 4시 전까지 가능 여부만 회신 주시면 일정 정리에 도움이 됩니다.{% endif %}"></textarea>
             </div>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="mtc-run" type="button">점검하기</button>
-            <button id="mtc-sample" type="button">예시 넣기</button>
-            <button id="mtc-copy" type="button">결과 복사</button>
+            <button id="mtc-run" type="button">{% if page.lang == 'en' %}Check tone{% elsif page.lang == 'ja' %}点検する{% else %}점검하기{% endif %}</button>
+            <button id="mtc-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 넣기{% endif %}</button>
+            <button id="mtc-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="mtc-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
-            <div><strong id="mtc-status">-</strong><span>톤 요약</span></div>
-            <div><strong id="mtc-direct">0</strong><span>직설 표현</span></div>
-            <div><strong id="mtc-soft">0</strong><span>완충/사과 표현</span></div>
-            <div><strong id="mtc-request">-</strong><span>요청 명확성</span></div>
-            <div><strong id="mtc-deadline">-</strong><span>마감 언급</span></div>
-            <div><strong id="mtc-length">0</strong><span>글자 수</span></div>
+          <div class="tool-stats mtc-stats" aria-label="{% if page.lang == 'en' %}Message tone check summary{% elsif page.lang == 'ja' %}メッセージトーン点検結果{% else %}메시지 톤 점검 결과{% endif %}">
+            <div><strong id="mtc-status">-</strong><span>{% if page.lang == 'en' %}Tone summary{% elsif page.lang == 'ja' %}トーン要約{% else %}톤 요약{% endif %}</span></div>
+            <div><strong id="mtc-direct">0</strong><span>{% if page.lang == 'en' %}Direct signals{% elsif page.lang == 'ja' %}強い表現{% else %}직설 표현{% endif %}</span></div>
+            <div><strong id="mtc-soft">0</strong><span>{% if page.lang == 'en' %}Softening words{% elsif page.lang == 'ja' %}緩衝/謝罪表現{% else %}완충/사과 표현{% endif %}</span></div>
+            <div><strong id="mtc-request">-</strong><span>{% if page.lang == 'en' %}Request clarity{% elsif page.lang == 'ja' %}依頼の明確さ{% else %}요청 명확성{% endif %}</span></div>
+            <div><strong id="mtc-deadline">-</strong><span>{% if page.lang == 'en' %}Timing cue{% elsif page.lang == 'ja' %}期限言及{% else %}마감 언급{% endif %}</span></div>
+            <div><strong id="mtc-length">0</strong><span>{% if page.lang == 'en' %}Characters{% elsif page.lang == 'ja' %}文字数{% else %}글자 수{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="mtc-summary">메시지를 넣으면 직설성, 정중함, 요청/마감 언급, 길이 부담을 함께 점검합니다.</p>
-          <div id="mtc-list" class="bw-list"></div>
-          <textarea id="mtc-output" rows="12" readonly placeholder="점검 결과 메모가 여기에 표시됩니다."></textarea>
+          <p class="tool-result" id="mtc-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Paste a message to check directness, politeness, request clarity, deadline cues, and length burden together.{% elsif page.lang == 'ja' %}メッセージを入力すると、強さ、丁寧さ、依頼/期限の明確さ、文量負担をまとめて点検します。{% else %}메시지를 넣으면 직설성, 정중함, 요청/마감 언급, 길이 부담을 함께 점검합니다.{% endif %}</p>
+          <p class="tool-result" id="mtc-help">{% if page.lang == 'en' %}Input stays in your browser. Very short, mixed-language, or relationship-specific messages may need manual judgment after the signal check.{% elsif page.lang == 'ja' %}入力内容はブラウザ内だけで処理されます。短文、混在言語、関係性に左右される文面は点検後に人の判断で調整してください。{% else %}입력 내용은 브라우저 안에서만 처리됩니다. 짧은 문장, 혼합 언어, 관계성에 따라 달라지는 표현은 점검 신호를 본 뒤 직접 판단해 주세요.{% endif %}</p>
+          <div id="mtc-list" class="bw-list" aria-live="polite"></div>
+          <label for="mtc-output">{% if page.lang == 'en' %}Check memo{% elsif page.lang == 'ja' %}点検メモ{% else %}점검 결과 메모{% endif %}</label>
+          <textarea id="mtc-output" rows="12" readonly placeholder="{% if page.lang == 'en' %}The check memo will appear here.{% elsif page.lang == 'ja' %}点検結果メモがここに表示されます。{% else %}점검 결과 메모가 여기에 표시됩니다.{% endif %}"></textarea>
         </div>
       {% when 'password-strength-checker' %}
         <div class="tool-ui">
