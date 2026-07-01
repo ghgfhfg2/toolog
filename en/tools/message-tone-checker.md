@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Message Tone Checker | Review work email and chat wording before sending
-description: Paste a work email, Slack or chat draft, or request note to review blunt phrasing, repeated apologies, request clarity, deadline cues, and sentence length in one pass.
+description: Paste a work email, Slack or chat draft, or request note to review blunt phrasing, repeated apologies, request clarity, deadline cues, and long-message burden in one pass.
 lang: en
 permalink: /en/tools/message-tone-checker/
 canonical_url: /en/tools/message-tone-checker/
@@ -31,14 +31,48 @@ faq:
 The hardest part of sending a message is often not the content itself, but the tone.
 A message written in a rush can sound sharper than intended, while an overly careful draft can hide the real request.
 
-This tool helps you quickly review both tone and actionability before you send.
+This is especially easy to miss when:
+- you wrote a Slack, Teams, chat, or email draft and cannot tell if it sounds too stiff
+- phrases like `sorry` or `if possible` repeat until the message feels heavy
+- the request is present but the needed timing is missing
+- a long explanation may make the recipient miss the main action
+- you need to send quickly but want one final tone check
+
+The checker reviews **directness, repeated softening, request clarity, deadline cues, and length burden** together so you can adjust both the impression and the actionability of the message.
 
 ## How it works
 1. Paste the message you want to check.
 2. Choose a context: work collaboration, external communication, or quick internal chat.
 3. Run the check.
-4. Review the tone summary, detected signals, and suggestion notes.
-5. Edit the draft and send it with more confidence.
+4. Review the detected signals:
+   - direct or pushy wording
+   - apology and softening words
+   - whether the requested action is clear
+   - whether a deadline or timing cue is present
+   - total length and average sentence length
+5. Edit the draft using the summary and suggestion notes.
+
+It does not force one "correct" rewrite. It works more like a quick pre-send review of how the message may land and whether the recipient can act on it.
+
+## Especially useful for
+### 1. Urgent chat requests
+Words such as `ASAP`, `right now`, `urgent`, or `why has this not` can feel like pressure when they appear without context.
+A quick check helps you soften the wording before sending.
+
+### 2. Email or client response drafts
+Too much apology can weaken the main ask, while overly firm wording can feel cold.
+This is where balancing politeness and clarity matters.
+
+### 3. Team follow-up requests
+`Please review this` may be clear enough as an action, but without a deadline the task can slip.
+The checker helps confirm that the request and timing appear together.
+
+## How to use it
+1. Paste the full message draft.
+2. Select the communication context.
+3. Click `Check tone`.
+4. Review the tone summary and detected items.
+5. Use `Copy result` if you want to keep the check memo.
 
 ## What it checks
 This tool is a quick signal checker, not an automatic rewrite engine. It is tuned for work email tone checks, Slack message reviews, and request wording where the recipient should understand the next action quickly.
@@ -49,15 +83,36 @@ This tool is a quick signal checker, not an automatic rewrite engine. It is tune
 - deadline or timing cues such as today, tomorrow, by, before, AM, or PM
 - length burden from long messages or long average sentences
 
-## Useful when
-- you want to review a Slack, chat, or email draft before sending
-- you worry the wording sounds too blunt or too vague
-- you want to confirm that the request and deadline are stated clearly
+## Examples
+### Example 1. Blunt internal request
+- `Why has this not been shared yet? Send it ASAP.`
+
+The checker will flag direct signals and suggest adding context or a softer request.
+
+### Example 2. Overly cautious email
+- `Sorry, but if possible, when you have a chance, could you maybe review this...`
+
+It can show that repeated softening makes the main request harder to see.
+
+### Example 3. Request without timing
+- `Please review the materials.`
+
+The request is detected, but the memo can remind you to add when the review is needed.
 
 ## Related tools
 - For scheduling messages: [Schedule Coordination Message Generator]({{ '/en/tools/schedule-coordination-message-generator/' | relative_url }})
 - For sentence length and readability checks: [Readability Checker]({{ '/en/tools/readability-checker/' | relative_url }})
 - For turning notes into follow-up tasks: [Meeting Action Item Organizer]({{ '/en/tools/meeting-action-item-organizer/' | relative_url }})
 
+## FAQ
+### Are the check results always right?
+No. Tone depends on the recipient, relationship, company culture, and urgency. Use this as a quick signal checker, not a final judgment.
+
+### Is being more polite always better?
+Not always. Too much softening can make the request vague. That is why the tool checks request clarity and timing cues along with politeness.
+
+### Can I paste a long message?
+Yes. Long drafts work, but the tool may warn you if the overall message or average sentence length makes the main point harder to scan.
+
 ## Summary
-The Message Tone Checker is a **checker-type tool that reviews directness, softening language, request clarity, deadline mentions, and length in work communication drafts**.
+The Message Tone Checker is a **checker-type tool that reviews directness, softening language, request clarity, deadline mentions, and length burden in work message and email drafts**.
