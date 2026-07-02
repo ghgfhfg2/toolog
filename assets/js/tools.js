@@ -15322,6 +15322,7 @@
     const strip = document.getElementById('llc-strip');
     const sortDomain = document.getElementById('llc-sort-domain');
     const lowerHost = document.getElementById('llc-lower-host');
+    const format = document.getElementById('llc-format');
     const sampleBtn = document.getElementById('llc-sample');
     const copyBtn = document.getElementById('llc-copy');
     const clearBtn = document.getElementById('llc-clear');
@@ -15340,9 +15341,9 @@
         initial: '텍스트를 넣으면 URL만 추출해 중복, 추적 파라미터, 도메인 순서를 정리합니다.',
         emptyDomain: '도메인 요약이 여기에 표시됩니다.',
         noLinks: '텍스트 안에서 http://, https:// 또는 www. 링크를 찾지 못했어요.',
-        cleaned: (found, kept, removed, skipped) => {
+        cleaned: (found, kept, removed, duplicates, skipped) => {
           const extra = skipped ? ` 유효하지 않은 후보 ${formatNum(skipped)}개는 제외했습니다.` : '';
-          return `링크 ${formatNum(found)}개를 읽어 ${formatNum(kept)}개로 정리했고, 추적 파라미터 ${formatNum(removed)}개를 제거했어요.${extra}`;
+          return `링크 ${formatNum(found)}개를 읽어 ${formatNum(kept)}개로 정리했고, 추적 파라미터 ${formatNum(removed)}개와 중복 ${formatNum(duplicates)}개를 줄였어요.${extra}`;
         },
         domainLinks: (count) => `${formatNum(count)}개 링크`,
         copied: '정리된 링크 목록을 복사했습니다.',
@@ -15351,18 +15352,18 @@
         cleared: '입력과 결과를 초기화했습니다.',
         sample: [
           '기사 참고 https://Example.com/news?id=52&utm_source=telegram&utm_medium=chat',
-          '문서 링크 www.docs.example.org/report?fbclid=test123',
+          '문서 링크 [보고서](www.docs.example.org/report?fbclid=test123)',
           '같은 링크 다시 공유 https://example.com/news?id=52&utm_campaign=spring',
-          '영상 링크 https://video.example.net/watch?v=abc123&gclid=demo'
+          '영상 링크 https://video.example.net/watch?v=abc123&gclid=demo).'
         ]
       },
       en: {
         initial: 'Paste text to extract URLs, remove duplicates, strip tracking parameters, and sort by domain.',
         emptyDomain: 'Domain summary will appear here.',
         noLinks: 'No http://, https://, or www. links were found in the text.',
-        cleaned: (found, kept, removed, skipped) => {
+        cleaned: (found, kept, removed, duplicates, skipped) => {
           const extra = skipped ? ` ${formatNum(skipped)} invalid candidate(s) were skipped.` : '';
-          return `Read ${formatNum(found)} link(s), cleaned them down to ${formatNum(kept)}, and removed ${formatNum(removed)} tracking parameter(s).${extra}`;
+          return `Read ${formatNum(found)} link(s), cleaned them down to ${formatNum(kept)}, and reduced ${formatNum(removed)} tracking parameter(s) plus ${formatNum(duplicates)} duplicate(s).${extra}`;
         },
         domainLinks: (count) => `${formatNum(count)} link(s)`,
         copied: 'Copied the cleaned link list.',
@@ -15371,18 +15372,18 @@
         cleared: 'Cleared the input and result.',
         sample: [
           'Article https://Example.com/news?id=52&utm_source=telegram&utm_medium=chat',
-          'Docs www.docs.example.org/report?fbclid=test123',
+          'Docs [report](www.docs.example.org/report?fbclid=test123)',
           'Same link again https://example.com/news?id=52&utm_campaign=spring',
-          'Video https://video.example.net/watch?v=abc123&gclid=demo'
+          'Video https://video.example.net/watch?v=abc123&gclid=demo).'
         ]
       },
       ja: {
         initial: 'テキストを貼り付けるとURLだけを抽出し、重複・追跡パラメータ・ドメイン順を整理します。',
         emptyDomain: 'ドメイン要約がここに表示されます。',
         noLinks: 'テキスト内に http://、https://、www. のリンクが見つかりませんでした。',
-        cleaned: (found, kept, removed, skipped) => {
+        cleaned: (found, kept, removed, duplicates, skipped) => {
           const extra = skipped ? ` 無効な候補${formatNum(skipped)}件は除外しました。` : '';
-          return `${formatNum(found)}件のリンクを読み取り、${formatNum(kept)}件に整理し、追跡パラメータ${formatNum(removed)}件を削除しました。${extra}`;
+          return `${formatNum(found)}件のリンクを読み取り、${formatNum(kept)}件に整理し、追跡パラメータ${formatNum(removed)}件と重複${formatNum(duplicates)}件を減らしました。${extra}`;
         },
         domainLinks: (count) => `${formatNum(count)}件のリンク`,
         copied: '整理されたリンク一覧をコピーしました。',
@@ -15391,9 +15392,9 @@
         cleared: '入力と結果をクリアしました。',
         sample: [
           '記事 https://Example.com/news?id=52&utm_source=telegram&utm_medium=chat',
-          '資料 www.docs.example.org/report?fbclid=test123',
+          '資料 [レポート](www.docs.example.org/report?fbclid=test123)',
           '同じリンク https://example.com/news?id=52&utm_campaign=spring',
-          '動画 https://video.example.net/watch?v=abc123&gclid=demo'
+          '動画 https://video.example.net/watch?v=abc123&gclid=demo).'
         ]
       }
     }[pageLang];
@@ -15401,7 +15402,9 @@
     const TRACKING_KEYS = new Set([
       'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
       'utm_id', 'utm_name', 'fbclid', 'gclid', 'igshid', 'mc_cid', 'mc_eid',
-      'si', 'feature', 'ref_src'
+      'si', 'feature', 'ref_src', 'utm_creative', 'utm_reader', 'utm_place',
+      '_hsenc', '_hsmi', 'mkt_tok', 'vero_id', 'yclid', 'msclkid', 'twclid',
+      'dclid', 'gbraid', 'wbraid'
     ]);
 
     const setSummary = (message, state = '') => {
@@ -15438,9 +15441,26 @@
       }
     };
 
-    const cleanToken = (token) => token
-      .replace(/^[([<{]+/g, '')
-      .replace(/[)\]}>.,!?;:]+$/g, '');
+    const trimTrailingPunctuation = (token) => {
+      let value = token;
+      while (/[.,!?;:]+$/.test(value)) value = value.slice(0, -1);
+      const pairs = [['(', ')'], ['[', ']'], ['{', '}'], ['<', '>']];
+      let changed = true;
+      while (changed) {
+        changed = false;
+        pairs.forEach(([open, close]) => {
+          const opens = (value.match(new RegExp(`\\${open}`, 'g')) || []).length;
+          const closes = (value.match(new RegExp(`\\${close}`, 'g')) || []).length;
+          if (value.endsWith(close) && closes > opens) {
+            value = value.slice(0, -1);
+            changed = true;
+          }
+        });
+      }
+      return value;
+    };
+
+    const cleanToken = (token) => trimTrailingPunctuation(token.trim().replace(/^[([<{]+/g, ''));
 
     const normalizeUrl = (raw) => {
       const cleaned = cleanToken(raw.trim());
@@ -15458,6 +15478,7 @@
             }
           });
         }
+        if (!url.pathname) url.pathname = '/';
         if (!url.search) url.search = '';
         url.hash = url.hash || '';
         return { href: url.toString(), host: url.hostname || '-', removed };
@@ -15482,6 +15503,14 @@
       `).join('');
     };
 
+    const formatOutput = (items) => {
+      const mode = format?.value || 'plain';
+      const hrefs = items.map((item) => item.href);
+      if (mode === 'markdown') return hrefs.map((href) => `- <${href}>`).join('\n');
+      if (mode === 'html') return hrefs.map((href) => `<a href="${escapeHtml(href)}">${escapeHtml(href)}</a>`).join('\n');
+      return hrefs.join('\n');
+    };
+
     const render = () => {
       const rawText = input.value || '';
       const matches = (rawText.match(/(?:https?:\/\/|www\.)[^\s"'<>]+/gi) || []);
@@ -15501,10 +15530,14 @@
       });
 
       let items = normalized;
+      let duplicates = 0;
       if (dedupe.checked) {
         const seen = new Set();
         items = items.filter((item) => {
-          if (seen.has(item.href)) return false;
+          if (seen.has(item.href)) {
+            duplicates += 1;
+            return false;
+          }
           seen.add(item.href);
           return true;
         });
@@ -15517,15 +15550,15 @@
       const uniqueDomains = new Set(items.map((item) => item.host));
       uniqueOut.textContent = items.length.toLocaleString(numberLocale);
       domainsOut.textContent = uniqueDomains.size.toLocaleString(numberLocale);
-      trackingOut.textContent = removedTotal.toLocaleString(numberLocale);
-      output.value = items.map((item) => item.href).join('\n');
+      trackingOut.textContent = `${formatNum(removedTotal)} / ${formatNum(duplicates)}`;
+      output.value = formatOutput(items);
       copyBtn.disabled = !output.value.trim();
       renderDomainCards(items);
 
       if (!matches.length) {
         setSummary(rawText.trim() ? llcText.noLinks : llcText.initial, rawText.trim() ? 'warning' : '');
       } else {
-        setSummary(llcText.cleaned(matches.length, items.length, removedTotal, skipped), skipped ? 'warning' : 'success');
+        setSummary(llcText.cleaned(matches.length, items.length, removedTotal, duplicates, skipped), skipped ? 'warning' : 'success');
       }
     };
 
@@ -15561,7 +15594,7 @@
       input.focus();
     });
 
-    [input, dedupe, strip, sortDomain, lowerHost].forEach((el) => {
+    [input, dedupe, strip, sortDomain, lowerHost, format].forEach((el) => {
       el?.addEventListener('input', render);
       el?.addEventListener('change', render);
     });
