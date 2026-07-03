@@ -1581,9 +1581,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 저해상도 PNG·JPEG·WebP 이미지를 2x·3x·4x로 확대하고 선명도·노이즈 보정을 적용해 브라우저에서 저장해요.
-  description_en: Upscale PNG, JPEG, or WebP images by 2x, 3x, or 4x with sharpening and noise reduction in your browser.
-  description_ja: PNG・JPEG・WebP画像を2x・3x・4xに拡大し、シャープ補正とノイズ低減をブラウザ内で適用します。
+  description: 저해상도 PNG·JPEG·WebP 이미지를 1x 보정 또는 2x·3x·4x로 확대하고 WebP/PNG/JPEG 저장, 품질 조절, 안전 제한까지 확인해요.
+  description_en: Upscale or enhance PNG, JPEG, and WebP images with 1x to 4x options, sharpening, denoise, WebP/PNG/JPEG output, and safer browser limits.
+  description_ja: PNG・JPEG・WebP画像を1x補正または2x〜4xに拡大し、WebP/PNG/JPEG保存、品質調整、安全制限まで確認できます。
   url: /tools/image-upscaler/
   url_en: /en/tools/image-upscaler/
   url_ja: /ja/tools/image-upscaler/

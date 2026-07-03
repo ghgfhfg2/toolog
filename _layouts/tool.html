@@ -348,6 +348,20 @@ layout: default
             <label class="tool-check"><input id="iu-sharp" type="checkbox" checked /> {% if page.lang == 'en' %}Sharpen (light){% elsif page.lang == 'ja' %}シャープ補正（軽め）{% else %}선명도 보정(가벼운 샤픈){% endif %}</label>
             <label class="tool-check"><input id="iu-denoise" type="checkbox" /> {% if page.lang == 'en' %}Noise reduction (smooth){% elsif page.lang == 'ja' %}ノイズ低減（なめらか）{% else %}노이즈 감소(부드럽게){% endif %}</label>
           </div>
+          <div class="tool-row-grid iu-output-grid">
+            <div>
+              <label for="iu-format">{% if page.lang == 'en' %}Output format{% elsif page.lang == 'ja' %}出力形式{% else %}출력 포맷{% endif %}</label>
+              <select id="iu-format" aria-describedby="iu-result iu-help">
+                <option value="image/png">PNG {% if page.lang == 'en' %}(transparent-safe){% elsif page.lang == 'ja' %}（透過向け）{% else %}(투명 배경 보존){% endif %}</option>
+                <option value="image/webp" selected>WebP {% if page.lang == 'en' %}(smaller){% elsif page.lang == 'ja' %}（軽量）{% else %}(용량 절감){% endif %}</option>
+                <option value="image/jpeg">JPEG {% if page.lang == 'en' %}(photo){% elsif page.lang == 'ja' %}（写真向け）{% else %}(사진용){% endif %}</option>
+              </select>
+            </div>
+            <div>
+              <label for="iu-quality">{% if page.lang == 'en' %}Quality{% elsif page.lang == 'ja' %}品質{% else %}품질{% endif %} <span id="iu-quality-label">86%</span></label>
+              <input id="iu-quality" type="range" min="0.5" max="1" step="0.05" value="0.86" aria-describedby="iu-help" />
+            </div>
+          </div>
           <p class="tool-result" id="iu-result" role="status" aria-live="polite">{% if page.lang == 'en' %}Choose an image, then run enhancement. (1x applies enhancement only.){% elsif page.lang == 'ja' %}画像を選んで補正を実行してください。（1xは拡大せず補正のみ）{% else %}이미지를 선택한 뒤 보정을 실행하세요. (1x는 확대 없이 보정만 적용){% endif %}</p>
           <div class="tool-stats iu-stats" aria-label="{% if page.lang == 'en' %}Upscale summary{% elsif page.lang == 'ja' %}アップスケール概要{% else %}업스케일 요약{% endif %}">
             <div><strong id="iu-original">-</strong><span>{% if page.lang == 'en' %}Original{% elsif page.lang == 'ja' %}元画像{% else %}원본{% endif %}</span></div>
@@ -355,9 +369,9 @@ layout: default
             <div><strong id="iu-size">-</strong><span>{% if page.lang == 'en' %}Output size{% elsif page.lang == 'ja' %}出力容量{% else %}결과 용량{% endif %}</span></div>
             <div><strong id="iu-mode">-</strong><span>{% if page.lang == 'en' %}Enhancement{% elsif page.lang == 'ja' %}補正{% else %}보정 방식{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="iu-help">{% if page.lang == 'en' %}PNG, JPEG, and WebP are supported. Output is limited to 12 megapixels to prevent browser crashes.{% elsif page.lang == 'ja' %}PNG・JPEG・WebPに対応しています。ブラウザ停止を防ぐため、出力は最大1,200万画素です。{% else %}PNG, JPEG, WebP를 지원하며 브라우저 멈춤 방지를 위해 결과는 최대 1,200만 화소로 제한합니다.{% endif %}</p>
+          <p class="tool-result" id="iu-help">{% if page.lang == 'en' %}PNG, JPEG, and WebP are supported. Output is limited to 12 megapixels and files over 25 MB are blocked to prevent browser crashes. JPEG cannot keep transparency.{% elsif page.lang == 'ja' %}PNG・JPEG・WebPに対応しています。ブラウザ停止を防ぐため、出力は最大1,200万画素、ファイルは25MBまでです。JPEGは透過を保持できません。{% else %}PNG, JPEG, WebP를 지원하며 브라우저 멈춤 방지를 위해 결과는 최대 1,200만 화소, 파일은 25MB까지 처리합니다. JPEG는 투명 배경을 유지할 수 없습니다.{% endif %}</p>
           <canvas id="iu-canvas" aria-label="{% if page.lang == 'en' %}Enhanced image preview{% elsif page.lang == 'ja' %}補正後画像プレビュー{% else %}보정 이미지 미리보기{% endif %}" hidden></canvas>
-          <a id="iu-download" class="open-link" download="upscaled-image.png" aria-disabled="true">{% if page.lang == 'en' %}Download enhanced PNG{% elsif page.lang == 'ja' %}補正済みPNGをダウンロード{% else %}보정된 PNG 다운로드{% endif %}</a>
+          <a id="iu-download" class="open-link" download="upscaled-image.webp" aria-disabled="true">{% if page.lang == 'en' %}Download enhanced image{% elsif page.lang == 'ja' %}補正済み画像をダウンロード{% else %}보정 이미지 다운로드{% endif %}</a>
         </div>
       {% when 'blog-banned-word-checker' %}
         <div class="tool-ui">

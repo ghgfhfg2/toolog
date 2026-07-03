@@ -2030,6 +2030,9 @@
     const run = document.getElementById('iu-run');
     const sharp = document.getElementById('iu-sharp');
     const denoise = document.getElementById('iu-denoise');
+    const formatSel = document.getElementById('iu-format');
+    const quality = document.getElementById('iu-quality');
+    const qualityLabel = document.getElementById('iu-quality-label');
     const canvas = document.getElementById('iu-canvas');
     const link = document.getElementById('iu-download');
     const result = document.getElementById('iu-result');
@@ -2043,44 +2046,53 @@
       ko: {
         ready: '이미지를 확인했습니다. 배율과 보정 옵션을 고른 뒤 실행하세요.',
         empty: 'PNG, JPEG, WebP 이미지를 먼저 선택해 주세요.',
+        unsupported: '지원하는 이미지 형식은 PNG, JPEG, WebP입니다.',
+        fileTooLarge: '파일 용량이 25MB를 넘습니다. 먼저 이미지 리사이저로 크기를 줄인 뒤 다시 시도해 주세요.',
         invalid: '이미지를 읽을 수 없습니다. 손상되지 않은 PNG, JPEG, WebP 파일인지 확인해 주세요.',
         tooLarge: (w, h) => `선택한 배율의 결과(${w}×${h})가 1,200만 화소를 넘습니다. 더 낮은 배율을 선택해 주세요.`,
         processing: '이미지를 보정하고 있습니다. 큰 이미지는 잠시 걸릴 수 있습니다.',
         failed: '이미지 처리에 실패했습니다. 더 작은 이미지나 낮은 배율로 다시 시도해 주세요.',
-        done: (w, h) => `${w}×${h}px 보정이 끝났습니다. 미리보기를 확인하고 PNG를 다운로드하세요.`,
+        done: (w, h, format) => `${w}×${h}px 보정이 끝났습니다. 미리보기를 확인하고 ${format} 파일을 다운로드하세요.`,
         mode1x: '1x 보정',
         modeUpscale: (scale) => `${scale}x 업스케일`,
         denoiseOn: '노이즈 감소',
         sharpOn: '선명도 보정',
-        noFilter: '추가 보정 없음'
+        noFilter: '추가 보정 없음',
+        formatNames: { 'image/png': 'PNG', 'image/webp': 'WebP', 'image/jpeg': 'JPEG' }
       },
       en: {
         ready: 'Image loaded. Choose a scale and enhancement options, then run.',
         empty: 'Choose a PNG, JPEG, or WebP image first.',
+        unsupported: 'Supported image formats are PNG, JPEG, and WebP.',
+        fileTooLarge: 'The file is larger than 25 MB. Resize it first, then try again.',
         invalid: 'This image could not be read. Check that it is a valid PNG, JPEG, or WebP file.',
         tooLarge: (w, h) => `The selected output (${w}×${h}) exceeds 12 megapixels. Choose a lower scale.`,
         processing: 'Enhancing the image. Large images may take a moment.',
         failed: 'Image processing failed. Try a smaller image or lower scale.',
-        done: (w, h) => `${w}×${h}px enhancement complete. Review the preview and download the PNG.`,
+        done: (w, h, format) => `${w}×${h}px enhancement complete. Review the preview and download the ${format} file.`,
         mode1x: '1x enhance',
         modeUpscale: (scale) => `${scale}x upscale`,
         denoiseOn: 'Denoise',
         sharpOn: 'Sharpen',
-        noFilter: 'No extra filter'
+        noFilter: 'No extra filter',
+        formatNames: { 'image/png': 'PNG', 'image/webp': 'WebP', 'image/jpeg': 'JPEG' }
       },
       ja: {
         ready: '画像を読み込みました。倍率と補正オプションを選んで実行してください。',
         empty: 'PNG、JPEG、WebP画像を選択してください。',
+        unsupported: '対応形式はPNG、JPEG、WebPです。',
+        fileTooLarge: 'ファイルが25MBを超えています。先にリサイズしてから再試行してください。',
         invalid: '画像を読み込めません。破損していないPNG、JPEG、WebPファイルか確認してください。',
         tooLarge: (w, h) => `選択した出力（${w}×${h}）は1,200万画素を超えます。低い倍率を選択してください。`,
         processing: '画像を補正しています。大きな画像は少し時間がかかります。',
         failed: '画像処理に失敗しました。小さい画像または低い倍率で再試行してください。',
-        done: (w, h) => `${w}×${h}pxの補正が完了しました。プレビューを確認してPNGを保存できます。`,
+        done: (w, h, format) => `${w}×${h}pxの補正が完了しました。プレビューを確認して${format}ファイルを保存できます。`,
         mode1x: '1x 補正',
         modeUpscale: (scale) => `${scale}x アップスケール`,
         denoiseOn: 'ノイズ低減',
         sharpOn: 'シャープ補正',
-        noFilter: '追加補正なし'
+        noFilter: '追加補正なし',
+        formatNames: { 'image/png': 'PNG', 'image/webp': 'WebP', 'image/jpeg': 'JPEG' }
       }
     };
     const iuText = iuI18n[pageLang] || iuI18n.ko;
@@ -2089,15 +2101,32 @@
     let originBytes = 0;
     let outputUrl = '';
     const maxPixels = 12000000;
+    const maxFileBytes = 25 * 1024 * 1024;
+    const supportedTypes = new Set(['image/png', 'image/jpeg', 'image/webp']);
+    const extensionFor = (type) => type === 'image/jpeg' ? 'jpg' : (type === 'image/png' ? 'png' : 'webp');
     const formatBytes = (bytes) => bytes < 1024 * 1024
       ? `${(bytes / 1024).toLocaleString(numberLocale, { maximumFractionDigits: 1 })} KB`
       : `${(bytes / 1024 / 1024).toLocaleString(numberLocale, { maximumFractionDigits: 1 })} MB`;
+    const setStatus = (message, state = '') => {
+      result.textContent = message;
+      result.dataset.state = state;
+    };
     const setDownload = (url = '') => {
       if (outputUrl) URL.revokeObjectURL(outputUrl);
       outputUrl = url;
       link.removeAttribute('href');
       link.setAttribute('aria-disabled', url ? 'false' : 'true');
       if (url) link.href = url;
+    };
+    const resetStats = () => {
+      if (originalOut) originalOut.textContent = '-';
+      if (targetOut) targetOut.textContent = '-';
+      if (sizeOut) sizeOut.textContent = '-';
+      if (modeOut) modeOut.textContent = '-';
+    };
+    const updateQualityLabel = () => {
+      if (!qualityLabel || !quality) return;
+      qualityLabel.textContent = `${Math.round(Number(quality.value || 0.86) * 100)}%`;
     };
     const modeText = () => {
       const scale = Number(scaleSel.value || 1);
@@ -2112,8 +2141,8 @@
       if (targetOut) targetOut.textContent = `${formatNum(w)}×${formatNum(h)}px`;
       if (modeOut) modeOut.textContent = modeText();
       run.disabled = w * h > maxPixels;
-      if (w * h > maxPixels) result.textContent = iuText.tooLarge(formatNum(w), formatNum(h));
-      else if (!outputUrl) result.textContent = iuText.ready;
+      if (w * h > maxPixels) setStatus(iuText.tooLarge(formatNum(w), formatNum(h)), 'error');
+      else if (!outputUrl) setStatus(iuText.ready);
     };
 
     file?.addEventListener('change', () => {
@@ -2122,11 +2151,22 @@
       run.disabled = true;
       canvas.hidden = true;
       setDownload();
-      if (sizeOut) sizeOut.textContent = '-';
+      resetStats();
       if (!f) {
-        result.textContent = iuText.empty;
+        setStatus(iuText.empty);
         return;
       }
+      if (!supportedTypes.has(f.type)) {
+        file.setAttribute('aria-invalid', 'true');
+        setStatus(iuText.unsupported, 'error');
+        return;
+      }
+      if (f.size > maxFileBytes) {
+        file.setAttribute('aria-invalid', 'true');
+        setStatus(iuText.fileTooLarge, 'error');
+        return;
+      }
+      file.setAttribute('aria-invalid', 'false');
       originBytes = f.size || 0;
       const u = URL.createObjectURL(f);
       const i = new Image();
@@ -2138,7 +2178,8 @@
       };
       i.onerror = () => {
         URL.revokeObjectURL(u);
-        result.textContent = iuText.invalid;
+        file.setAttribute('aria-invalid', 'true');
+        setStatus(iuText.invalid, 'error');
       };
       i.src = u;
     });
@@ -2199,7 +2240,14 @@
       ctx.putImageData(out, 0, 0);
     };
 
-    [scaleSel, sharp, denoise].forEach((el) => el?.addEventListener('change', () => {
+    updateQualityLabel();
+    quality?.addEventListener('input', () => {
+      updateQualityLabel();
+      setDownload();
+      if (sizeOut) sizeOut.textContent = '-';
+      if (img && !outputUrl) setStatus(iuText.ready);
+    });
+    [scaleSel, sharp, denoise, formatSel].forEach((el) => el?.addEventListener('change', () => {
       setDownload();
       canvas.hidden = true;
       if (sizeOut) sizeOut.textContent = '-';
@@ -2208,18 +2256,18 @@
 
     run?.addEventListener('click', () => {
       if (!img) {
-        result.textContent = iuText.empty;
+        setStatus(iuText.empty, 'error');
         return;
       }
       const scale = Number(scaleSel?.value || 2);
       const w = Math.max(1, Math.round(img.width * scale));
       const h = Math.max(1, Math.round(img.height * scale));
       if (w * h > maxPixels) {
-        result.textContent = iuText.tooLarge(formatNum(w), formatNum(h));
+        setStatus(iuText.tooLarge(formatNum(w), formatNum(h)), 'error');
         return;
       }
       run.disabled = true;
-      result.textContent = iuText.processing;
+      setStatus(iuText.processing);
       setDownload();
       canvas.width = w;
       canvas.height = h;
@@ -2255,22 +2303,31 @@
         ch = nh;
       }
 
-      ctx.drawImage(stepCanvas, 0, 0, cw, ch, 0, 0, w, h);
-      if (denoise?.checked) applyDenoise(ctx, w, h);
-      if (sharp?.checked) applySharpen(ctx, w, h);
-
-      canvas.toBlob((blob) => {
-        run.disabled = false;
-        if (!blob) {
-          result.textContent = iuText.failed;
-          return;
+      window.setTimeout(() => {
+        try {
+          ctx.drawImage(stepCanvas, 0, 0, cw, ch, 0, 0, w, h);
+          if (denoise?.checked) applyDenoise(ctx, w, h);
+          if (sharp?.checked) applySharpen(ctx, w, h);
+          const mime = formatSel?.value || 'image/webp';
+          const outputQuality = Number(quality?.value || 0.86);
+          link.download = `upscaled-image.${extensionFor(mime)}`;
+          canvas.toBlob((blob) => {
+            run.disabled = false;
+            if (!blob) {
+              setStatus(iuText.failed, 'error');
+              return;
+            }
+            setDownload(URL.createObjectURL(blob));
+            canvas.hidden = false;
+            if (sizeOut) sizeOut.textContent = formatBytes(blob.size);
+            if (modeOut) modeOut.textContent = modeText();
+            setStatus(iuText.done(formatNum(w), formatNum(h), iuText.formatNames[mime] || 'image'), 'success');
+          }, mime, outputQuality);
+        } catch (_) {
+          run.disabled = false;
+          setStatus(iuText.failed, 'error');
         }
-        setDownload(URL.createObjectURL(blob));
-        canvas.hidden = false;
-        if (sizeOut) sizeOut.textContent = formatBytes(blob.size);
-        if (modeOut) modeOut.textContent = modeText();
-        result.textContent = iuText.done(formatNum(w), formatNum(h));
-      }, 'image/png');
+      }, 20);
     });
   }
 
