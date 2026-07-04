@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Banned Word Checker | Real-time Spam and Overclaim Pattern Scan
-description: Scan text for spammy promotions, overclaim wording, risky contact/link patterns, and hashtag stuffing before publishing.
+description: Scan blog drafts for spammy promotions, overclaim wording, risky contact/link patterns, hashtag stuffing, and repeated keywords before publishing.
 lang: en
 permalink: /en/tools/blog-banned-word-checker/
 canonical_url: /en/tools/blog-banned-word-checker/
@@ -12,8 +12,10 @@ image:
   path: /assets/thumbs/blog-banned-word-checker.svg
   alt: Banned word checker preview
 tool_key: blog-banned-word-checker
-keywords: [banned word checker, spam filter, overclaim checker, blog quality check]
-related_tools: [text-counter, case-converter]
+tool_type: checker
+topic_cluster: text
+keywords: [banned word checker, blog spam checker, overclaim checker, blog quality check, hashtag stuffing checker]
+related_tools: [text-counter, readability-checker, privacy-exposure-checker]
 alternate_urls:
   ko: /tools/blog-banned-word-checker/
   en: /en/tools/blog-banned-word-checker/
@@ -29,6 +31,13 @@ Search ranking can be harmed by repetitive spam wording, forced marketing tone, 
 - Contact IDs, phone numbers, and suspicious links
 - Excessive hashtag or repeated phrase patterns
 
+## FAQ
+### Is the text uploaded to a server?
+No. The scan runs in your browser and does not store or send your draft.
+
+### Does a clean result guarantee search ranking?
+No. It only checks common risk signals. Search quality still depends on useful context, evidence, originality, and readability.
+
 ## How to use
 1. Paste your draft text.
 2. Review highlighted risky terms and patterns.
@@ -36,4 +45,5 @@ Search ranking can be harmed by repetitive spam wording, forced marketing tone, 
 
 ## Related tools
 - Length and byte check: [Text Counter]({{ '/en/tools/text-counter/' | relative_url }})
-- Cleanup text style: [Case Converter]({{ '/en/tools/case-converter/' | relative_url }})
+- Readability review: [Readability Checker]({{ '/en/tools/readability-checker/' | relative_url }})
+- Personal data scan: [Privacy Exposure Checker]({{ '/en/tools/privacy-exposure-checker/' | relative_url }})

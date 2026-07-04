@@ -374,16 +374,26 @@ layout: default
           <a id="iu-download" class="open-link" download="upscaled-image.webp" aria-disabled="true">{% if page.lang == 'en' %}Download enhanced image{% elsif page.lang == 'ja' %}補正済み画像をダウンロード{% else %}보정 이미지 다운로드{% endif %}</a>
         </div>
       {% when 'blog-banned-word-checker' %}
-        <div class="tool-ui">
-          <textarea id="bw-input" maxlength="5000" placeholder="{% if page.lang == 'en' %}Paste text to check{% elsif page.lang == 'ja' %}チェックする文章を貼り付け{% else %}검사할 글을 붙여넣으세요{% endif %}"></textarea>
-          <p class="tool-result" id="bw-summary">{% if page.lang == 'en' %}Enter text to instantly scan risky/banned patterns.{% elsif page.lang == 'ja' %}テキストを入力すると、禁止語/注意パターンをすぐに点検します。{% else %}텍스트를 입력하면 금칙어/주의 패턴을 즉시 검사합니다.{% endif %}</p>
-          <div class="tool-stats">
+        <div class="tool-ui bw-ui">
+          <div class="tool-row">
+            <label for="bw-input">{% if page.lang == 'en' %}Draft text to check{% elsif page.lang == 'ja' %}チェックする下書き{% else %}검사할 블로그 글{% endif %}</label>
+            <textarea id="bw-input" rows="11" maxlength="20000" aria-describedby="bw-summary bw-help" placeholder="{% if page.lang == 'en' %}Paste a blog post, product copy, or message before publishing.{% elsif page.lang == 'ja' %}公開前のブログ本文、商品紹介文、案内文を貼り付けてください。{% else %}발행 전 블로그 본문, 제품 소개문, 안내 문구를 붙여넣으세요.{% endif %}"></textarea>
+          </div>
+          <div class="tool-row-grid bw-actions">
+            <button id="bw-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
+            <button id="bw-copy" type="button" disabled>{% if page.lang == 'en' %}Copy checklist{% elsif page.lang == 'ja' %}チェック結果をコピー{% else %}점검 결과 복사{% endif %}</button>
+            <button id="bw-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
+          </div>
+          <p class="tool-result" id="bw-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter text to instantly scan risky/banned patterns.{% elsif page.lang == 'ja' %}テキストを入力すると、禁止語/注意パターンをすぐに点検します。{% else %}텍스트를 입력하면 금칙어/주의 패턴을 즉시 검사합니다.{% endif %}</p>
+          <div class="tool-stats bw-stats" aria-label="{% if page.lang == 'en' %}Banned word scan summary{% elsif page.lang == 'ja' %}禁止語チェック結果{% else %}금칙어 검사 요약{% endif %}">
             <div><strong id="bw-total">0</strong><span>{% if page.lang == 'en' %}Detections{% elsif page.lang == 'ja' %}検出数{% else %}검출 수{% endif %}</span></div>
             <div><strong id="bw-spam">0</strong><span>{% if page.lang == 'en' %}Spam / promo{% elsif page.lang == 'ja' %}スパム/宣伝{% else %}스팸/홍보{% endif %}</span></div>
             <div><strong id="bw-claim">0</strong><span>{% if page.lang == 'en' %}Overclaim / ad tone{% elsif page.lang == 'ja' %}誇大/広告表現{% else %}과장/광고성{% endif %}</span></div>
             <div><strong id="bw-link">0</strong><span>{% if page.lang == 'en' %}Links / contacts{% elsif page.lang == 'ja' %}リンク/連絡先{% else %}링크/연락처{% endif %}</span></div>
+            <div><strong id="bw-chars">0</strong><span>{% if page.lang == 'en' %}Characters{% elsif page.lang == 'ja' %}文字数{% else %}글자 수{% endif %}</span></div>
           </div>
-          <div id="bw-list" class="bw-list"></div>
+          <p class="tool-result" id="bw-help">{% if page.lang == 'en' %}Checks up to 20,000 characters in your browser. This is a writing-risk checklist, not a guarantee about search ranking.{% elsif page.lang == 'ja' %}最大20,000文字をブラウザ内で点検します。検索順位を保証するものではなく、公開前のリスク確認用です。{% else %}최대 20,000자까지 브라우저 안에서 점검합니다. 검색 순위를 보장하는 도구가 아니라 발행 전 리스크 체크리스트입니다.{% endif %}</p>
+          <div id="bw-list" class="bw-list" aria-live="polite"></div>
         </div>
       {% when 'text-line-break-cleaner' %}
         <div class="tool-ui">

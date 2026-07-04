@@ -8226,6 +8226,10 @@
     const spamEl = document.getElementById('bw-spam');
     const claimEl = document.getElementById('bw-claim');
     const linkEl = document.getElementById('bw-link');
+    const charsEl = document.getElementById('bw-chars');
+    const sampleBtn = document.getElementById('bw-sample');
+    const copyBtn = document.getElementById('bw-copy');
+    const clearBtn = document.getElementById('bw-clear');
     if (!input || !list) return;
 
     const bwI18n = {
@@ -8243,10 +8247,15 @@
         hashtagDetail: '해시태그 수가 많습니다. 본문 맥락과 직접 관련된 태그만 최소화하세요.',
         emptyState: '현재 기준으로 감지된 금칙/주의 패턴이 없습니다.',
         idle: '텍스트를 입력하면 금칙/주의 패턴을 실시간 점검합니다.',
+        tooLong: '최대 20,000자까지만 검사합니다. 글을 나누어 점검해 주세요.',
         highRisk: (n) => `위험도 높음: 총 ${n}건 감지. 스팸성/과장 표현을 적극 수정하세요.`,
         caution: (n) => `주의 필요: 총 ${n}건 감지. 반복 키워드·링크·표현을 정리하세요.`,
         mild: (n) => `경미한 주의: ${n}건 감지. 문맥 중심으로 자연스럽게 다듬으세요.`,
-        clean: '감지 항목이 없습니다. 그래도 문맥/정보가치 중심으로 최종 검수하세요.'
+        clean: '감지 항목이 없습니다. 그래도 문맥/정보가치 중심으로 최종 검수하세요.',
+        copied: '점검 결과를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력값을 초기화했습니다.',
+        sample: '이 제품은 100% 효과 보장! 지금 무료체험 신청하면 최저가로 당일지급 혜택을 받을 수 있습니다. 자세한 문의는 카카오톡 ID toolog 또는 https://bit.ly/sample 에서 확인하세요. #추천 #추천 #최저가 #이벤트 #대박 #후기 #후기 #광고'
       },
       en: {
         catSpamPromo: 'Spam/promo keywords',
@@ -8262,10 +8271,15 @@
         hashtagDetail: 'Too many hashtags detected. Keep only tags that are directly relevant to the content.',
         emptyState: 'No banned/risky pattern detected with the current rules.',
         idle: 'Paste text to scan banned/risky patterns in real time.',
+        tooLong: 'Only the first 20,000 characters can be checked. Split longer drafts into sections.',
         highRisk: (n) => `High risk: ${n} hits detected. Rewrite spammy or overclaim wording aggressively.`,
         caution: (n) => `Needs attention: ${n} hits detected. Clean repetitive keywords, links, and tone.`,
         mild: (n) => `Mild caution: ${n} hit(s) detected. Smooth out wording with context-first edits.`,
-        clean: 'No detected issue. Still run a final review for context and information value.'
+        clean: 'No detected issue. Still run a final review for context and information value.',
+        copied: 'Copied the scan checklist.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared the text.',
+        sample: 'This offer is 100% guaranteed with no risk. Get a free trial and guaranteed profit today. Contact telegram @toolog or visit https://bit.ly/sample now. #best #best #sale #promo #review #review #deal #deal'
       },
       ja: {
         catSpamPromo: 'スパム/宣伝キーワード',
@@ -8281,10 +8295,15 @@
         hashtagDetail: 'ハッシュタグが多すぎます。本文と直接関係するタグだけに絞ってください。',
         emptyState: '現在の基準では禁止語/注意パターンは検出されませんでした。',
         idle: 'テキストを入力すると、禁止語/注意パターンをリアルタイムで点検します。',
+        tooLong: '最大20,000文字まで点検できます。長い文章は分けて確認してください。',
         highRisk: (n) => `高リスク: 合計${n}件を検出。スパム的・誇大な表現を積極的に修正してください。`,
         caution: (n) => `要注意: 合計${n}件を検出。反復キーワード・リンク・表現を整理してください。`,
         mild: (n) => `軽度注意: ${n}件を検出。文脈を意識して自然な表現に整えてください。`,
-        clean: '検出項目はありません。最終的に文脈と情報価値の観点で見直してください。'
+        clean: '検出項目はありません。最終的に文脈と情報価値の観点で見直してください。',
+        copied: 'チェック結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力をクリアしました。',
+        sample: 'この商品は絶対におすすめ。無料体験で必ず高収益、ノーリスクです。連絡はテレグラム @toolog または https://bit.ly/sample へ。#おすすめ #おすすめ #最安値 #レビュー #レビュー #広告 #副業 #無料体験'
       }
     };
     const t = bwI18n[pageLang] || bwI18n.ko;
@@ -8293,12 +8312,14 @@
       { cat: t.catSpamPromo, tag: 'spam', re: /(대출|도박|성인물|카지노|바카라|급전|무료체험|최저가|특가|당일지급|고수익|부업문의|재택알바|loan|casino|gambling|adult\s?content|free\s?trial|guaranteed\s?profit|side\s?hustle|副業|無料体験|最安値|即日支給|高収益)/gi },
       { cat: t.catOverclaim, tag: 'claim', re: /(무조건|100%|완치|치료|암\s*예방|직빵|평생보장|절대\s*손해\s*없음|보장수익|guaranteed|cure|always|no\s?risk|risk[-\s]?free|絶対|完治|必ず|ノーリスク)/gi },
       { cat: t.catAbuse, tag: 'spam', re: /(강추\s*강추|최저가\s*최저가|후기\s*후기|추천\s*추천|best\s*best|must\s*buy\s*must\s*buy|おすすめ\s*おすすめ)/gi },
-      { cat: t.catContact, tag: 'link', re: /(01[0-9][-\s]?[0-9]{3,4}[-\s]?[0-9]{4}|카카오톡\s*ID|카톡\s*아이디|오픈채팅|텔레그램\s*@?\w+|kakao\s?talk\s?id|line\s?id|telegram\s*@?\w+|open\s?chat|連絡先|オープンチャット|テレグラム\s*@?\w+)/gi },
+      { cat: t.catContact, tag: 'link', re: /(\b01[0-9][-\s]?[0-9]{3,4}[-\s]?[0-9]{4}\b|카카오톡\s*ID|카톡\s*아이디|오픈채팅|텔레그램\s*@?[\w.-]+|kakao\s?talk\s?id|line\s?id|telegram\s*@?[\w.-]+|open\s?chat|連絡先|オープンチャット|テレグラム\s*@?[\w.-]+)/gi },
       { cat: t.catLinks, tag: 'link', re: /(https?:\/\/[^\s]+|www\.[^\s]+|bit\.ly\/[^\s]+|tinyurl\.com\/[^\s]+)/gi }
     ];
 
     const repetitionCheck = (text) => {
-      const words = (text.match(/[가-힣A-Za-zぁ-んァ-ン一-龥]{2,}/g) || []).map((w) => w.toLowerCase());
+      const words = (text.match(/[가-힣A-Za-zぁ-んァ-ン一-龥]{2,}/g) || [])
+        .map((w) => w.toLowerCase())
+        .filter((w) => !/^(그리고|하지만|그리고요|the|and|for|with|this|that|です|ます|する)$/.test(w));
       const count = {};
       words.forEach((w) => { count[w] = (count[w] || 0) + 1; });
       const top = Object.entries(count).sort((a,b) => b[1]-a[1]).slice(0, 5);
@@ -8313,8 +8334,12 @@
 
     const render = () => {
       const text = input.value || '';
+      const charCount = [...text].length;
       list.innerHTML = '';
       let total = 0, spam = 0, claim = 0, link = 0;
+      const copyLines = [];
+      if (charsEl) charsEl.textContent = formatNum(charCount);
+      input.setAttribute('aria-invalid', charCount > 20000 ? 'true' : 'false');
 
       rules.forEach((rule) => {
         const matches = text.match(rule.re) || [];
@@ -8327,8 +8352,10 @@
         const item = document.createElement('div');
         item.className = 'bw-item';
         const uniq = Array.from(new Set(matches.map((m) => m.trim()))).slice(0, 8).join(', ');
-        item.innerHTML = `<strong>${rule.cat}<span class="bw-tag">${matches.length}${t.countHit}</span></strong><p>${uniq}</p>`;
+        item.innerHTML = `<strong>${rule.cat}<span class="bw-tag">${formatNum(matches.length)}${t.countHit}</span></strong><p></p>`;
+        item.querySelector('p').textContent = uniq;
         list.appendChild(item);
+        copyLines.push(`${rule.cat}: ${uniq}`);
       });
 
       const rep = repetitionCheck(text);
@@ -8336,8 +8363,10 @@
         const item = document.createElement('div');
         item.className = 'bw-item';
         const view = rep.bad.map(([w,n]) => `${w}(${n}${t.countTimes})`).join(', ');
-        item.innerHTML = `<strong>${t.catRepeat}<span class="bw-tag">${rep.bad.length}${t.countItem}</span></strong><p>${view}</p>`;
+        item.innerHTML = `<strong>${t.catRepeat}<span class="bw-tag">${formatNum(rep.bad.length)}${t.countItem}</span></strong><p></p>`;
+        item.querySelector('p').textContent = view;
         list.appendChild(item);
+        copyLines.push(`${t.catRepeat}: ${view}`);
         total += rep.bad.length;
         spam += rep.bad.length;
       }
@@ -8346,8 +8375,10 @@
       if (hs.over) {
         const item = document.createElement('div');
         item.className = 'bw-item';
-        item.innerHTML = `<strong>${t.catHashtag}<span class="bw-tag">${hs.tags.length}${t.countItem}</span></strong><p>${t.hashtagDetail}</p>`;
+        item.innerHTML = `<strong>${t.catHashtag}<span class="bw-tag">${formatNum(hs.tags.length)}${t.countItem}</span></strong><p></p>`;
+        item.querySelector('p').textContent = t.hashtagDetail;
         list.appendChild(item);
+        copyLines.push(`${t.catHashtag}: ${t.hashtagDetail}`);
         total += hs.tags.length;
         spam += hs.tags.length;
       }
@@ -8356,13 +8387,22 @@
         list.innerHTML = `<div class="empty-state">${t.emptyState}</div>`;
       }
 
-      totalEl.textContent = String(total);
-      spamEl.textContent = String(spam);
-      claimEl.textContent = String(claim);
-      linkEl.textContent = String(link);
+      totalEl.textContent = formatNum(total);
+      spamEl.textContent = formatNum(spam);
+      claimEl.textContent = formatNum(claim);
+      linkEl.textContent = formatNum(link);
+      if (copyBtn) {
+        copyBtn.disabled = !text.trim();
+        copyBtn.dataset.copyText = copyLines.length ? copyLines.join('\n') : t.clean;
+      }
 
       if (summary) {
+        summary.dataset.state = '';
         if (!text.trim()) summary.textContent = t.idle;
+        else if (charCount > 20000) {
+          summary.textContent = t.tooLong;
+          summary.dataset.state = 'error';
+        }
         else if (total >= 15) summary.textContent = t.highRisk(total);
         else if (total >= 6) summary.textContent = t.caution(total);
         else if (total > 0) summary.textContent = t.mild(total);
@@ -8370,10 +8410,47 @@
       }
     };
 
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    };
+
     let timer;
     input.addEventListener('input', () => {
       clearTimeout(timer);
       timer = setTimeout(render, 80);
+    });
+    sampleBtn?.addEventListener('click', () => {
+      input.value = t.sample;
+      render();
+      input.focus();
+    });
+    clearBtn?.addEventListener('click', () => {
+      input.value = '';
+      render();
+      if (summary) summary.textContent = t.cleared;
+      input.focus();
+    });
+    copyBtn?.addEventListener('click', async () => {
+      try {
+        await copyText(copyBtn.dataset.copyText || t.clean);
+        if (summary) summary.textContent = t.copied;
+      } catch (_) {
+        if (summary) {
+          summary.textContent = t.copyFail;
+          summary.dataset.state = 'error';
+        }
+      }
     });
     render();
   }

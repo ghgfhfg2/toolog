@@ -1623,13 +1623,15 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 스팸/과장/어뷰징/외부링크 패턴을 실시간으로 점검해요.
+  description: 블로그 발행 전 스팸·홍보 키워드, 과장 표현, 연락처·단축 URL, 해시태그 남발과 반복 키워드를 실시간으로 점검해요.
   description_en: Scan text in real time for spam, overclaim wording, abuse patterns, and risky external-link signals.
   description_ja: テキスト内のスパム・誇大表現・不正利用パターン・外部リンクリスクをリアルタイムで検出します。
   url: /tools/blog-banned-word-checker/
   url_en: /en/tools/blog-banned-word-checker/
   url_ja: /ja/tools/blog-banned-word-checker/
   thumbnail: /assets/thumbs/blog-banned-word-checker.svg
+  tool_type: checker
+  topic_cluster: text
 
 - id: text-counter
   title: 글자수 계산기
