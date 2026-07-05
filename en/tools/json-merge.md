@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: JSON Merge | Combine Files, Pasted Arrays, and Objects
-description: Merge JSON files or pasted API responses in your browser. Concatenate arrays, merge object keys or shared arrays, remove duplicates, review conflicts, copy results, and download merged.json.
+title: JSON Merge | Combine Files, Pasted JSON, Arrays, and Objects
+description: Merge JSON files or pasted API responses in your browser. Concatenate arrays, merge object keys and shared arrays, remove duplicates, review key conflicts, copy results, and download merged.json.
 lang: en
 permalink: /en/tools/json-merge/
 canonical_url: /en/tools/json-merge/
@@ -17,9 +17,9 @@ faq:
   - q: What happens when I upload multiple JSON arrays?
     a: In Auto mode, if every root is an array, they are concatenated in upload order.
   - q: How are JSON objects merged?
-    a: In object-merge mode, keys are merged and duplicate keys are overwritten by later files.
+    a: In Auto mode, JSON objects are merged by key, and duplicate keys are overwritten by later files.
   - q: What if file structures are mixed?
-    a: Auto mode wraps roots into an array when structures differ, so source shape is preserved.
+    a: Auto mode wraps each root into an array when structures differ, so the source shape is preserved. Switch merge modes manually if you need a specific output shape.
   - q: Can I merge large JSON files?
     a: Each run accepts up to 50 files with a 20 MB combined limit to protect browser memory. If the result is large, the preview is shortened but the downloaded file keeps the full output.
   - q: Can I paste JSON instead of choosing files?
@@ -35,7 +35,7 @@ Use it when split JSON files with similar schema need to be combined quickly.
 
 Examples: paged API exports, chunked logs, and batch output files.
 
-It is useful when you saved API responses page by page or need to turn several batch outputs into one `merged.json` without uploading private data elsewhere. For smaller snippets, paste JSON directly instead of saving temporary files.
+It is useful when you saved API responses page by page or need to turn several batch outputs into one `merged.json` without uploading private data elsewhere. For smaller snippets, paste JSON directly instead of saving temporary files, then test the same array merge or object merge behavior.
 
 ## Key features
 - Multi-file JSON upload

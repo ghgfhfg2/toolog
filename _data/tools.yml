@@ -1673,8 +1673,8 @@
 
 - id: json-merge
   title: JSON 합치기
-  title_en: JSON Merge for Arrays and Objects
-  title_ja: 配列・オブジェクトJSON結合
+  title_en: JSON Merge for Files, Arrays, and Objects
+  title_ja: JSONファイル・配列・オブジェクト結合
   category: data
   category_label: 데이터/JSON 유틸리티
   category_label_en: Data/Utilities
@@ -1683,8 +1683,8 @@
   badge_en: New
   badge_ja: 新着
   description: JSON 파일이나 붙여넣은 API 응답을 브라우저에서 병합하고 중복 항목과 키 충돌을 확인해 다운로드해요.
-  description_en: Merge JSON files or pasted API responses in your browser, remove duplicate items, review key conflicts, and download the result.
-  description_ja: JSONファイルや貼り付けたAPIレスポンスをブラウザ内で結合し、重複項目やキー競合を確認して結果を保存できます。
+  description_en: Merge JSON files or pasted API responses in your browser, combine arrays and objects, remove duplicates, review key conflicts, and download the result.
+  description_ja: JSONファイルや貼り付けたAPIレスポンスをブラウザ内で結合し、配列・オブジェクト統合、重複削除、キー競合確認、結果保存まで行えます。
   url: /tools/json-merge/
   url_en: /en/tools/json-merge/
   url_ja: /ja/tools/json-merge/
