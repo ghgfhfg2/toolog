@@ -1682,9 +1682,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 여러 JSON 배열·객체 파일을 브라우저에서 병합하고 중복 항목과 키 충돌을 확인해 다운로드해요.
-  description_en: Merge JSON arrays and objects in your browser, remove duplicate items, review key conflicts, and download the result.
-  description_ja: JSON配列・オブジェクトをブラウザ内で結合し、重複項目やキー競合を確認して結果をダウンロードできます。
+  description: JSON 파일이나 붙여넣은 API 응답을 브라우저에서 병합하고 중복 항목과 키 충돌을 확인해 다운로드해요.
+  description_en: Merge JSON files or pasted API responses in your browser, remove duplicate items, review key conflicts, and download the result.
+  description_ja: JSONファイルや貼り付けたAPIレスポンスをブラウザ内で結合し、重複項目やキー競合を確認して結果を保存できます。
   url: /tools/json-merge/
   url_en: /en/tools/json-merge/
   url_ja: /ja/tools/json-merge/

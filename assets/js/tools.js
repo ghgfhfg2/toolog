@@ -9848,6 +9848,7 @@
 
   if (slug === 'json-merge') {
     const filesInput = document.getElementById('jm-files');
+    const manualInput = document.getElementById('jm-manual');
     const modeSel = document.getElementById('jm-mode');
     const runBtn = document.getElementById('jm-run');
     const dedupeChk = document.getElementById('jm-dedupe');
@@ -9864,17 +9865,20 @@
     const sampleBtn = document.getElementById('jm-sample');
     const clearBtn = document.getElementById('jm-clear');
 
-    if (!filesInput || !modeSel || !runBtn || !copyBtn || !output || !download || !help || !fileCount || !itemCount || !conflictCount || !sizeOut || !filesSummary || !fileList || !sampleBtn || !clearBtn) return;
+    if (!filesInput || !manualInput || !modeSel || !runBtn || !copyBtn || !output || !download || !help || !fileCount || !itemCount || !conflictCount || !sizeOut || !filesSummary || !fileList || !sampleBtn || !clearBtn) return;
 
     const jmI18n = {
       ko: {
         idle: 'JSON 파일을 선택하거나 예시를 불러와 병합 결과를 확인하세요.',
         readFail: (name) => `파일 읽기 실패: ${name}`,
         parseFail: (name) => `JSON 파싱 실패: ${name}. 쉼표, 따옴표, 중괄호가 맞는지 확인하세요.`,
-        needFiles: '먼저 JSON 파일을 1개 이상 선택하세요.',
+        needInput: '먼저 JSON 파일을 선택하거나 JSON 텍스트를 붙여넣으세요.',
+        manualReady: (count, size) => `붙여넣은 JSON ${count}개 감지 · ${size}MB · 파일과 함께 병합할 수 있습니다.`,
         tooManyFiles: (count) => `파일이 ${count}개 선택되었습니다. 한 번에 최대 50개까지 합칠 수 있습니다.`,
         tooLarge: (size) => `선택한 파일의 합계가 ${size}MB입니다. 브라우저 보호를 위해 20MB 이하로 줄여 주세요.`,
+        manualTooLarge: (size) => `붙여넣은 JSON이 ${size}MB입니다. 브라우저 보호를 위해 파일 포함 20MB 이하로 줄여 주세요.`,
         filesReady: (count, size) => `${count}개 파일 선택됨 · 합계 ${size}MB · 파일은 브라우저 안에서만 처리됩니다.`,
+        mixedReady: (files, blocks, size) => `파일 ${files}개 + 붙여넣은 JSON ${blocks}개 준비됨 · 합계 ${size}MB`,
         filePill: (name, size) => `${name} · ${size}KB`,
         invalidObjectMode: '객체 키 병합은 모든 파일의 루트가 JSON 객체일 때만 사용할 수 있습니다.',
         invalidObjectArrayMode: '공통 배열 이어붙이기는 모든 파일이 같은 이름의 배열 키를 가진 JSON 객체여야 합니다.',
@@ -9901,10 +9905,13 @@
         idle: 'Choose JSON files or load the sample to preview a merge.',
         readFail: (name) => `Failed to read file: ${name}`,
         parseFail: (name) => `JSON parse failed: ${name}. Check commas, quotes, and braces.`,
-        needFiles: 'Select at least one JSON file first.',
+        needInput: 'Select JSON files or paste JSON text first.',
+        manualReady: (count, size) => `${count} pasted JSON block(s) detected · ${size} MB · You can merge them with uploaded files.`,
         tooManyFiles: (count) => `${count} files selected. You can merge up to 50 files at once.`,
         tooLarge: (size) => `Selected files total ${size} MB. Reduce the total to 20 MB or less to protect browser memory.`,
+        manualTooLarge: (size) => `Pasted JSON totals ${size} MB. Keep files plus pasted text under 20 MB to protect browser memory.`,
         filesReady: (count, size) => `${count} file(s) selected · ${size} MB total · Files stay in this browser.`,
+        mixedReady: (files, blocks, size) => `${files} file(s) + ${blocks} pasted JSON block(s) ready · ${size} MB total`,
         filePill: (name, size) => `${name} · ${size} KB`,
         invalidObjectMode: 'Object key merge requires every file root to be a JSON object.',
         invalidObjectArrayMode: 'Common-array merge requires JSON objects that share an array key with the same name.',
@@ -9931,10 +9938,13 @@
         idle: 'JSONファイルを選択するか、サンプルでマージ結果を確認してください。',
         readFail: (name) => `ファイルの読み込みに失敗しました: ${name}`,
         parseFail: (name) => `JSONの解析に失敗しました: ${name}。カンマ、引用符、中括弧を確認してください。`,
-        needFiles: '先にJSONファイルを1つ以上選択してください。',
+        needInput: '先にJSONファイルを選択するか、JSONテキストを貼り付けてください。',
+        manualReady: (count, size) => `貼り付けJSON ${count}件を検出 · 合計${size}MB · ファイルと一緒に結合できます。`,
         tooManyFiles: (count) => `${count}個のファイルが選択されています。一度に結合できるのは最大50個です。`,
         tooLarge: (size) => `選択ファイルの合計は${size}MBです。ブラウザ保護のため20MB以下に減らしてください。`,
+        manualTooLarge: (size) => `貼り付けJSONは${size}MBです。ファイルを含め20MB以下に減らしてください。`,
         filesReady: (count, size) => `${count}個選択 · 合計${size}MB · ファイルはブラウザ内だけで処理されます。`,
+        mixedReady: (files, blocks, size) => `ファイル${files}個 + 貼り付けJSON ${blocks}件 · 合計${size}MB`,
         filePill: (name, size) => `${name} · ${size}KB`,
         invalidObjectMode: 'オブジェクトキー結合は、すべてのファイルのルートがJSONオブジェクトの場合のみ使用できます。',
         invalidObjectArrayMode: '共通配列の連結には、同じ名前の配列キーを持つJSONオブジェクトが必要です。',
@@ -9968,6 +9978,7 @@
     const fmt = (n) => Number(n || 0).toLocaleString(numberLocale);
     const formatMb = (bytes) => (bytes / (1024 * 1024)).toLocaleString(numberLocale, { maximumFractionDigits: 2 });
     const formatKb = (bytes) => (bytes / 1024).toLocaleString(numberLocale, { maximumFractionDigits: 1 });
+    const byteLength = (value) => new TextEncoder().encode(value || '').length;
 
     const setHelp = (message, state = '') => {
       help.textContent = message;
@@ -10010,6 +10021,11 @@
       reader.onerror = () => reject(new Error(jmText.readFail(file.name)));
       reader.readAsText(file, 'utf-8');
     });
+
+    const splitManualBlocks = () => (manualInput.value || '')
+      .split(/\n\s*---\s*\n/g)
+      .map((block) => block.trim())
+      .filter(Boolean);
 
     const detectMode = (roots) => {
       if (roots.every((v) => Array.isArray(v))) return 'array-concat';
@@ -10063,27 +10079,37 @@
       return out;
     };
 
-    const validateFiles = (files) => {
-      if (!files.length) return jmText.needFiles;
+    const validateInputs = (files, manualBlocks) => {
+      if (!files.length && !manualBlocks.length) return jmText.needInput;
       if (files.length > MAX_FILES) return jmText.tooManyFiles(files.length);
-      const totalBytes = files.reduce((sum, file) => sum + file.size, 0);
+      const manualBytes = byteLength(manualBlocks.join('\n---\n'));
+      const totalBytes = files.reduce((sum, file) => sum + file.size, 0) + manualBytes;
       if (totalBytes > MAX_TOTAL_BYTES) return jmText.tooLarge(formatMb(totalBytes));
       return '';
     };
 
-    filesInput.addEventListener('change', () => {
+    const updateInputState = () => {
       const files = Array.from(filesInput.files || []);
-      const totalBytes = files.reduce((sum, file) => sum + file.size, 0);
-      const error = validateFiles(files);
+      const manualBlocks = splitManualBlocks();
+      const totalBytes = files.reduce((sum, file) => sum + file.size, 0) + byteLength(manualBlocks.join('\n---\n'));
+      const error = validateInputs(files, manualBlocks);
       clearResult();
-      fileCount.textContent = fmt(files.length);
+      fileCount.textContent = fmt(files.length + manualBlocks.length);
       runBtn.disabled = !!error;
-      filesInput.setAttribute('aria-invalid', error ? 'true' : 'false');
+      filesInput.setAttribute('aria-invalid', error && files.length ? 'true' : 'false');
+      manualInput.setAttribute('aria-invalid', error && manualBlocks.length ? 'true' : 'false');
       renderFileList(files);
-      filesSummary.textContent = error || jmText.filesReady(files.length, formatMb(totalBytes));
+      let readyText = error;
+      if (!readyText && files.length && manualBlocks.length) readyText = jmText.mixedReady(files.length, manualBlocks.length, formatMb(totalBytes));
+      else if (!readyText && files.length) readyText = jmText.filesReady(files.length, formatMb(totalBytes));
+      else if (!readyText) readyText = jmText.manualReady(manualBlocks.length, formatMb(totalBytes));
+      filesSummary.textContent = readyText;
       filesSummary.dataset.state = error ? 'error' : '';
-      setHelp(error || jmText.filesReady(files.length, formatMb(totalBytes)), error ? 'error' : '');
-    });
+      setHelp(readyText, error ? 'error' : '');
+    };
+
+    filesInput.addEventListener('change', updateInputState);
+    manualInput.addEventListener('input', updateInputState);
 
     [modeSel, dedupeChk].forEach((control) => control?.addEventListener('change', () => {
       if (!output.value) return;
@@ -10093,25 +10119,30 @@
 
     runBtn.addEventListener('click', async () => {
       const files = Array.from(filesInput.files || []);
-      const fileError = validateFiles(files);
-      if (fileError) {
-        help.textContent = fileError;
-        setHelp(fileError, 'error');
+      const manualBlocks = splitManualBlocks();
+      const inputError = validateInputs(files, manualBlocks);
+      if (inputError) {
+        help.textContent = inputError;
+        setHelp(inputError, 'error');
         return;
       }
 
       clearResult();
       runBtn.disabled = true;
       filesInput.setAttribute('aria-invalid', 'false');
-      setHelp(jmText.working(files.length));
+      manualInput.setAttribute('aria-invalid', 'false');
+      setHelp(jmText.working(files.length + manualBlocks.length));
       try {
-        const texts = await Promise.all(files.map(readText));
-        const parsed = texts.map((txt, idx) => {
-          if (!txt.trim()) throw new Error(jmText.emptyFile(files[idx].name));
+        const fileSources = await Promise.all(files.map(async (file) => ({ name: file.name, text: await readText(file) })));
+        const manualSources = manualBlocks.map((text, idx) => ({ name: `pasted-json-${idx + 1}`, text }));
+        const sources = [...fileSources, ...manualSources];
+        const parsed = sources.map((source) => {
+          const txt = source.text || '';
+          if (!txt.trim()) throw new Error(jmText.emptyFile(source.name));
           try {
             return JSON.parse(txt);
           } catch (_) {
-            throw new Error(jmText.parseFail(files[idx].name));
+            throw new Error(jmText.parseFail(source.name));
           }
         });
 
@@ -10171,7 +10202,7 @@
         conflictCount.textContent = fmt(conflicts);
         const outputBytes = new TextEncoder().encode(pretty).length;
         sizeOut.textContent = fmt(outputBytes);
-        const doneMessage = jmText.mergeDone(files.length, jmText.modeLabelMap[mode] || mode, formatKb(outputBytes));
+        const doneMessage = jmText.mergeDone(sources.length, jmText.modeLabelMap[mode] || mode, formatKb(outputBytes));
         setHelp(pretty.length > MAX_PREVIEW_CHARS ? `${doneMessage} ${jmText.outputTooLarge}` : doneMessage, 'success');
       } catch (err) {
         output.value = '';
@@ -10186,44 +10217,27 @@
 
     sampleBtn.addEventListener('click', () => {
       clearResult();
-      const sample = {
-        source: 'toolog-sample',
-        items: [
-          { id: 1, title: 'alpha', status: 'open' },
-          { id: 2, title: 'beta', status: 'done' },
-          { id: 3, title: 'gamma', status: 'open' }
-        ],
-        updatedAt: '2026-06-29'
-      };
-      const pretty = JSON.stringify(sample, null, 2);
-      currentResult = pretty;
-      output.value = pretty;
-      const blob = new Blob([pretty], { type: 'application/json;charset=utf-8' });
-      downloadUrl = URL.createObjectURL(blob);
-      download.href = downloadUrl;
-      download.download = `merged-sample-${new Date().toISOString().slice(0, 10)}.json`;
-      download.setAttribute('aria-disabled', 'false');
-      itemCount.textContent = fmt(sample.items.length);
-      conflictCount.textContent = '1';
-      sizeOut.textContent = fmt(new TextEncoder().encode(pretty).length);
-      fileCount.textContent = '2';
-      copyBtn.disabled = false;
       modeSel.value = 'object-array-concat';
       dedupeChk.checked = true;
       filesInput.value = '';
+      manualInput.value = [
+        JSON.stringify({ source: 'page-1', items: [{ id: 1, title: 'alpha' }, { id: 2, title: 'beta' }], updatedAt: '2026-07-01' }, null, 2),
+        JSON.stringify({ source: 'page-2', items: [{ id: 2, title: 'beta' }, { id: 3, title: 'gamma' }], updatedAt: '2026-07-02' }, null, 2)
+      ].join('\n---\n');
       filesInput.setAttribute('aria-invalid', 'false');
-      fileList.replaceChildren();
-      filesSummary.textContent = jmText.sampleLoaded;
-      filesSummary.dataset.state = '';
-      setHelp(jmText.sampleLoaded, 'success');
+      manualInput.setAttribute('aria-invalid', 'false');
+      updateInputState();
+      runBtn.click();
     });
 
     clearBtn.addEventListener('click', () => {
       clearResult();
       filesInput.value = '';
+      manualInput.value = '';
       fileCount.textContent = '0';
       runBtn.disabled = true;
       filesInput.setAttribute('aria-invalid', 'false');
+      manualInput.setAttribute('aria-invalid', 'false');
       fileList.replaceChildren();
       filesSummary.textContent = jmText.idle;
       filesSummary.dataset.state = '';

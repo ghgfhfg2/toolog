@@ -704,15 +704,23 @@ textarea:focus-visible {
 .pm-ui #pm-help[data-state="error"] { color: #fca5a5; }
 .pm-ui #pm-help[data-state="warning"] { color: #fbbf24; }
 .pm-ui #pm-help[data-state="success"] { color: #86efac; }
-.jm-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.jm-ui input[aria-invalid="true"],
+.jm-ui textarea[aria-invalid="true"] { border-color: #ef4444; }
 .jm-ui #jm-help[data-state="error"],
 .jm-ui #jm-files-summary[data-state="error"] { color: #fca5a5; }
 .jm-ui #jm-help[data-state="warning"] { color: #fbbf24; }
 .jm-ui #jm-help[data-state="success"] { color: #86efac; }
+.jm-ui #jm-manual {
+  min-height: 11rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: .9rem;
+  line-height: 1.55;
+}
 .jm-file-list {
   display: flex;
   flex-wrap: wrap;
   gap: .4rem;
+  margin-bottom: .9rem;
 }
 .jm-file-list span {
   border: 1px solid var(--line);
