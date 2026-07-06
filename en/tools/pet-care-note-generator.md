@@ -13,7 +13,7 @@ tool_type: generator
 topic_cluster: pet
 keywords: [pet care note, pet sitter note, dog care, cat care, pet handoff]
 permalink: /en/tools/pet-care-note-generator/
-canonical_url: /tools/pet-care-note-generator/
+canonical_url: /en/tools/pet-care-note-generator/
 alternate_urls:
   ko: /tools/pet-care-note-generator/
   en: /en/tools/pet-care-note-generator/

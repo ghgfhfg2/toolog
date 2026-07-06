@@ -20,7 +20,8 @@ faq:
   - q: Which divisor should I choose?
     a: The divisor depends on the carrier or forwarder policy. 6000, 5000, and 4000 are all used in practice.
   - q: How is chargeable weight decided?
-    a: In many cases, the larger value between actual weight and volumetric weight is used as the billable weight.---
+    a: In many cases, the larger value between actual weight and volumetric weight is used as the billable weight.
+---
 
 ## Why use a volumetric weight calculator?
 A parcel may feel light in hand, but shipping charges can still increase if the box is large.  

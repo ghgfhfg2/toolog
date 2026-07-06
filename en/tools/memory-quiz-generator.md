@@ -22,7 +22,8 @@ faq:
   - q: "Is it only for vocabulary study?"
     a: "No. It also works for interview prep, history facts, product knowledge, and any prompt-answer style notes."
   - q: "Does it auto-grade typed answers?"
-    a: "This version is designed for fast self-testing. You reveal the answer and mark each card as correct or incorrect yourself."---
+    a: "This version is designed for fast self-testing. You reveal the answer and mark each card as correct or incorrect yourself."
+---
 
 ## Why use it?
 Reading notes again and again is not the same as recalling them.

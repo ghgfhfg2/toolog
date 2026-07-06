@@ -22,7 +22,8 @@ faq:
   - q: Does it give different results for solo meals and team lunches?
     a: Yes. It weighs quick and convenient options more highly for solo meals, while group-friendly choices move up for team lunches.
   - q: Can I use it for dinner or late-night meals too?
-    a: Yes. Change the meal situation to dinner or late-night and options that suit that time move higher.---
+    a: Yes. Change the meal situation to dinner or late-night and options that suit that time move higher.
+---
 
 ## Why this lunch menu picker is useful
 Choosing what to eat sounds simple, but it gets strangely harder when you are already hungry.

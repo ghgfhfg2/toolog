@@ -22,7 +22,8 @@ faq:
   - q: Is remote work always cheaper?
     a: Not necessarily. Meal subsidies, commuting support, hybrid schedules, and extra home utility costs can change the result.
   - q: Do I have to enter an hourly value for time?
-    a: No. If you leave it blank, the tool compares direct expenses only. If you add it, commute time is converted into an estimated monthly time cost.---
+    a: No. If you leave it blank, the tool compares direct expenses only. If you add it, commute time is converted into an estimated monthly time cost.
+---
 
 ## Why compare remote work and commuting costs?
 Work-style decisions often feel emotional, but a lot of the difference comes from repeated daily friction:

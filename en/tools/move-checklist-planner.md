@@ -20,7 +20,8 @@ faq:
   - q: Is it only for home moves?
     a: No. It can also help with office or studio moves because it highlights setup, address, and equipment tasks too.
   - q: Can I copy the result into notes or chat?
-    a: Yes. The output is designed to be pasted into notes, family chat, or a simple shared checklist.---
+    a: Yes. The output is designed to be pasted into notes, family chat, or a simple shared checklist.
+---
 
 ## Why this move checklist planner helps
 Moving becomes stressful when every task stays in your head.

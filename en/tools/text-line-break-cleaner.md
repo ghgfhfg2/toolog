@@ -22,7 +22,8 @@ faq:
   - q: When should I use paragraph line merging?
     a: It is most useful for text copied from PDFs, chat apps, or documents where lines break in the middle of sentences. For poetry, code, or scripts, it is safer to leave that option off.
   - q: Can it normalize bullet lists too?
-    a: Yes. Mixed bullet symbols like hyphens, asterisks, and dots can be converted into one consistent list style.---
+    a: Yes. Mixed bullet symbols like hyphens, asterisks, and dots can be converted into one consistent list style.
+---
 
 ## Why use a text line break cleaner?
 Copied text often breaks in annoying ways before the content itself becomes the problem.

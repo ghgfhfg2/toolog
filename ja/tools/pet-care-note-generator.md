@@ -13,7 +13,7 @@ tool_type: generator
 topic_cluster: pet
 keywords: [ペットお世話メモ, ペットシッターメモ, 犬のお世話, 猫のお世話, ペットを預ける]
 permalink: /ja/tools/pet-care-note-generator/
-canonical_url: /tools/pet-care-note-generator/
+canonical_url: /ja/tools/pet-care-note-generator/
 alternate_urls:
   ko: /tools/pet-care-note-generator/
   en: /en/tools/pet-care-note-generator/

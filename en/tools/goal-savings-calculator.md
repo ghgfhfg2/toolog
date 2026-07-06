@@ -20,7 +20,8 @@ faq:
   - q: Is this accurate if I save different amounts every month?
     a: It is a simple planning tool that assumes the same monthly contribution each month. If your savings amount changes, the actual timeline can change too.
   - q: What if my current savings already meet the target?
-    a: The tool treats the goal as already achieved and shows 0 months required.---
+    a: The tool treats the goal as already achieved and shows 0 months required.
+---
 
 ## What this calculator helps you answer
 The most practical savings question is simple: **if I save this much every month, when will I reach my target?**

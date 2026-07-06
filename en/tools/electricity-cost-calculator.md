@@ -19,7 +19,8 @@ faq:
   - q: What is the difference between W and kW?
     a: 1kW equals 1000W. For example, a 1500W heater used for 2 hours consumes 3kWh.
   - q: Can I compare multiple appliances with this tool?
-    a: Yes. Change the wattage and usage time for each appliance to compare which one costs more to run.---
+    a: Yes. Change the wattage and usage time for each appliance to compare which one costs more to run.
+---
 
 ## Why use an electricity cost calculator?
 For appliances like air conditioners, heaters, dehumidifiers, gaming PCs, or home servers, it is often hard to guess the real running cost.

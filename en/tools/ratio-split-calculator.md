@@ -20,7 +20,8 @@ faq:
   - q: Can rounding make the total inaccurate?
     a: The tool applies the selected rounding unit and then adjusts the last item so the final total still matches exactly.
   - q: Can I enter percentages instead of ratios?
-    a: Yes. Values like 50, 30, 20 work exactly the same because only the relative size matters.---
+    a: Yes. Values like 50, 30, 20 work exactly the same because only the relative size matters.
+---
 
 ## What this tool does
 When you need to split a budget, profit share, or shared cost by a predefined ratio, the annoying part is converting the ratio into actual money.

@@ -20,7 +20,8 @@ faq:
   - q: Do I need to enter fuel price?
     a: No. Fuel economy can be calculated with distance and fuel used only. If you add price per liter, the tool also calculates total fuel cost and cost per km.
   - q: Can I use this for EV efficiency?
-    a: This tool is designed for liquid fuel and liters. It is not meant for EV efficiency in kWh.---
+    a: This tool is designed for liquid fuel and liters. It is not meant for EV efficiency in kWh.
+---
 
 ## When this fuel economy calculator is useful
 After a trip or a refill, you may want to know **your real fuel economy** and **how much that drive actually cost**.

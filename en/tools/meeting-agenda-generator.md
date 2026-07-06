@@ -20,7 +20,8 @@ faq:
   - q: How is time allocated across agenda items?
     a: The tool reserves basic opening and closing time first, then distributes the remaining time across the topics you entered.
   - q: Is it only for team meetings?
-    a: No. It also works well for project updates, client calls, retrospectives, 1:1s, and interviews.---
+    a: No. It also works well for project updates, client calls, retrospectives, 1:1s, and interviews.
+---
 
 ## Why use a meeting agenda generator?
 Meetings usually run long when the structure is vague.
