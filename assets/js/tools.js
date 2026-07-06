@@ -16136,6 +16136,7 @@
     const runBtn = document.getElementById('rsc-run');
     const sampleBtn = document.getElementById('rsc-sample');
     const copyBtn = document.getElementById('rsc-copy');
+    const clearBtn = document.getElementById('rsc-clear');
     const countOut = document.getElementById('rsc-count');
     const rinseOut = document.getElementById('rsc-rinse');
     const reviewOut = document.getElementById('rsc-review');
@@ -16146,11 +16147,22 @@
 
     const i18n = {
       ko: {
-        title: '재활용 분리배출 체크리스트', copied: '복사됨', copyDefault: '결과 복사', sample: '페트병\n배달 플라스틱 용기\n종이컵', items: '품목', checklist: '체크리스트', review: '재확인', local: '거주지·건물별 배출 요일과 수거 가능 품목을 최종 확인',
+        title: '재활용 분리배출 체크리스트', copied: '복사됨', copyDefault: '결과 복사', sample: '페트병\n배달 플라스틱 용기\n종이컵\n건전지', items: '품목', checklist: '체크리스트', review: '재확인', local: '거주지·건물별 배출 요일과 수거 가능 품목을 최종 확인',
         empty: '품목을 한 줄에 하나 이상 입력하면 체크리스트를 만들 수 있습니다.',
+        cleared: '입력과 결과를 초기화했습니다.',
+        noCopy: '먼저 품목을 입력해 체크리스트를 만들어 주세요.',
+        duplicate: (count) => `중복 품목 ${count}개를 한 번만 표시했습니다.`,
         tooMany: (shown, total) => `품목이 ${total}개라 결과에는 먼저 ${shown}개만 표시했습니다. 나머지는 같은 기준으로 나누어 확인하세요.`,
         localNote: (note) => `지역/건물 메모: ${note}`,
         summary: (decision) => `현재 조건의 권장 방향은 “${decision}”입니다. 지자체·건물 규칙은 마지막에 다시 확인하세요.`,
+        itemHintsTitle: '품목명에서 감지한 재확인',
+        itemHints: [
+          { re: /(건전지|배터리|보조배터리|전자담배)/i, text: '배터리류는 일반 재활용품과 섞지 말고 전용 수거함을 확인' },
+          { re: /(깨진|파손|유리조각|칼|날카)/i, text: '깨지거나 날카로운 품목은 안전 포장 후 지역 배출 안내 확인' },
+          { re: /(영수증|코팅|감열지|택배전표)/i, text: '영수증·코팅지·전표는 종이류 재활용에서 제외될 수 있어 별도 확인' },
+          { re: /(스프레이|부탄|가스캔|라이터)/i, text: '가스·압력 용기는 완전히 비우고 지자체 위험물 안내 확인' },
+          { re: /(음식|피자|치킨|기름|양념)/i, text: '음식물·기름 오염은 세척 가능 여부를 먼저 판단' }
+        ],
         decision: { recycle: '분리 후 재활용 배출', rinse: '비우고 헹군 뒤 재활용 검토', trash: '일반쓰레기 또는 전용 배출 검토', review: '지역 규칙 확인 후 배출' },
         material: { plastic: ['내용물을 완전히 비우기', '페트병은 가능하면 투명 페트 전용함 여부 확인'], paper: ['젖은 종이와 음식물 묻은 종이는 분리', '종이팩은 펼쳐 말린 뒤 전용 수거함 여부 확인'], can: ['캔 내부를 비우고 가볍게 헹구기', '날카로운 뚜껑이나 금속 조각은 안전하게 처리'], glass: ['유리병은 내용물을 비우고 병 수거함 확인', '깨진 유리는 재활용함 대신 안전 포장 후 지역 안내 확인'], mixed: ['몸체 재질과 부속품 재질을 각각 확인', '혼합 재질은 무리하게 재활용함에 넣지 말고 안내를 확인'] },
         contam: { clean: ['깨끗한 상태를 유지해 같은 재질끼리 모으기'], rinse: ['남은 내용물을 버리고 물로 한 번 헹구기'], heavy: ['음식물·기름기가 많이 남으면 재활용 품질이 떨어짐', '세척이 어렵다면 일반쓰레기 전환을 검토'], chemical: ['약품·페인트·세제 잔여물은 일반 재활용함에 넣지 않기', '유해 폐기물 또는 전용 수거 안내 확인'] },
@@ -16159,11 +16171,22 @@
         special: { none: [], sharp: ['깨지거나 날카로운 부분은 두꺼운 종이·신문지로 감싸고 겉면에 표시', '안전 위험이 있으면 일반 재활용함 대신 지역 폐기물 안내 확인'], battery: ['배터리는 일반 재활용품과 섞지 말고 폐건전지·전자제품 전용 수거함 확인', '부풀거나 손상된 배터리는 만지지 말고 전용 회수 안내 확인'], large: ['대형폐기물 신고, 스티커, 예약 수거가 필요한지 먼저 확인', '분해 가능한 재질도 임의 배출하지 말고 건물·지자체 규칙 확인'] }
       },
       en: {
-        title: 'Recycling sorting checklist', copied: 'Copied', copyDefault: 'Copy result', sample: 'PET bottle\nTakeout plastic container\nPaper cup', items: 'Items', checklist: 'Checklist', review: 'Review', local: 'Confirm collection days and accepted items for your city, building, or provider',
+        title: 'Recycling sorting checklist', copied: 'Copied', copyDefault: 'Copy result', sample: 'PET bottle\nTakeout plastic container\nPaper cup\nAA battery', items: 'Items', checklist: 'Checklist', review: 'Review', local: 'Confirm collection days and accepted items for your city, building, or provider',
         empty: 'Enter at least one item, one per line, to generate a checklist.',
+        cleared: 'Cleared the inputs and result.',
+        noCopy: 'Enter items and generate a checklist first.',
+        duplicate: (count) => `Removed ${count} duplicate item(s) from the displayed list.`,
         tooMany: (shown, total) => `You entered ${total} items, so the result shows the first ${shown}. Apply the same checks to the rest.`,
         localNote: (note) => `Local/building note: ${note}`,
         summary: (decision) => `Recommended direction: “${decision}”. Confirm local and building rules before disposal.`,
+        itemHintsTitle: 'Item-name review flags',
+        itemHints: [
+          { re: /(battery|power bank|e-cig|vape)/i, text: 'Keep batteries out of regular recycling and check a dedicated collection point' },
+          { re: /(broken|shard|glass shard|knife|sharp)/i, text: 'Wrap broken or sharp items safely and check local disposal guidance' },
+          { re: /(receipt|thermal paper|coated|shipping label)/i, text: 'Receipts, coated paper, and shipping labels may be excluded from paper recycling' },
+          { re: /(spray|aerosol|butane|gas can|lighter)/i, text: 'Pressure or gas containers should be emptied and checked against hazardous-item guidance' },
+          { re: /(food|pizza|chicken|oil|sauce)/i, text: 'Food or oil contamination should be checked for practical rinsing first' }
+        ],
         decision: { recycle: 'Recycle after separation', rinse: 'Empty and rinse, then review recycling', trash: 'Consider trash or special disposal', review: 'Check local rules before disposal' },
         material: { plastic: ['Empty all contents', 'For PET bottles, check whether a clear-PET-only bin is required'], paper: ['Separate wet or food-stained paper', 'For cartons, flatten and dry, then check a dedicated carton bin'], can: ['Empty and lightly rinse cans', 'Handle sharp lids or metal pieces safely'], glass: ['Empty glass bottles and check the bottle bin', 'For broken glass, wrap safely and follow local guidance'], mixed: ['Check the main body and attached parts separately', 'Do not force mixed materials into recycling; review guidance'] },
         contam: { clean: ['Keep clean items grouped with the same material'], rinse: ['Empty residue and rinse once with water'], heavy: ['Heavy food or oil residue lowers recycling quality', 'If cleaning is impractical, consider trash disposal'], chemical: ['Do not put chemical, paint, or detergent residue in regular recycling', 'Check hazardous or special collection guidance'] },
@@ -16172,11 +16195,22 @@
         special: { none: [], sharp: ['Wrap broken or sharp parts in thick paper and mark the outside clearly', 'For safety risks, check local disposal guidance instead of regular recycling bins'], battery: ['Do not mix batteries with regular recyclables; use battery or electronics collection points', 'For swollen or damaged batteries, avoid handling and check special collection guidance'], large: ['Check whether a bulky-waste request, sticker, or pickup reservation is required', 'Even if materials can be separated, follow city or building rules before disposal'] }
       },
       ja: {
-        title: 'リサイクル分別チェックリスト', copied: 'コピー完了', copyDefault: '結果をコピー', sample: 'PETボトル\nテイクアウト容器\n紙コップ', items: '品目', checklist: 'チェックリスト', review: '再確認', local: '自治体・建物ごとの回収日と対象品目を最終確認',
+        title: 'リサイクル分別チェックリスト', copied: 'コピー完了', copyDefault: '結果をコピー', sample: 'PETボトル\nテイクアウト容器\n紙コップ\n乾電池', items: '品目', checklist: 'チェックリスト', review: '再確認', local: '自治体・建物ごとの回収日と対象品目を最終確認',
         empty: '品目を1行に1つ以上入力するとチェックリストを作成できます。',
+        cleared: '入力と結果をクリアしました。',
+        noCopy: '先に品目を入力してチェックリストを作成してください。',
+        duplicate: (count) => `重複した品目${count}件は1回だけ表示しました。`,
         tooMany: (shown, total) => `${total}件入力されたため、結果には先頭${shown}件を表示しました。残りも同じ基準で確認してください。`,
         localNote: (note) => `地域・建物メモ: ${note}`,
         summary: (decision) => `現在条件のおすすめは「${decision}」です。出す前に地域・建物ルールを確認してください。`,
+        itemHintsTitle: '品目名から検出した再確認',
+        itemHints: [
+          { re: /(電池|バッテリー|モバイルバッテリー|電子タバコ)/i, text: '電池類は通常資源と混ぜず専用回収を確認' },
+          { re: /(割れ|破損|ガラス片|包丁|鋭利)/i, text: '割れ物や鋭利な品目は安全に包み、地域の案内を確認' },
+          { re: /(レシート|感熱紙|コーティング|配送ラベル)/i, text: 'レシート・コーティング紙・配送ラベルは紙資源から除外される場合があります' },
+          { re: /(スプレー|エアゾール|ガス缶|ライター)/i, text: 'ガス・圧力容器は中身を抜き、危険物案内を確認' },
+          { re: /(食品|ピザ|チキン|油|ソース)/i, text: '食品・油汚れは洗えるかを先に確認' }
+        ],
         decision: { recycle: '分離して資源回収へ', rinse: '空にしてすすいだ後リサイクル確認', trash: '一般ごみまたは専用回収を検討', review: '地域ルール確認後に排出' },
         material: { plastic: ['中身を完全に空にする', 'PETボトルは透明PET専用回収の有無を確認'], paper: ['濡れた紙や食品汚れの紙を分ける', '紙パックは開いて乾かし専用回収を確認'], can: ['缶の中を空にして軽くすすぐ', '鋭いフタや金属片は安全に処理'], glass: ['びんは中身を空にしてびん回収を確認', '割れたガラスは資源箱ではなく安全に包んで地域案内を確認'], mixed: ['本体素材と付属部品を別々に確認', '複合素材は無理に資源箱へ入れず案内を確認'] },
         contam: { clean: ['きれいな状態を保ち同じ素材でまとめる'], rinse: ['残りを捨てて水で一度すすぐ'], heavy: ['食品・油汚れが多いとリサイクル品質が下がります', '洗浄が難しければ一般ごみを検討'], chemical: ['薬品・塗料・洗剤の残りは通常資源に入れない', '有害ごみや専用回収案内を確認'] },
@@ -16186,11 +16220,26 @@
       }
     };
     const t = i18n[pageLang] || i18n.ko;
-    const lines = (v) => (v || '').split(/\n+/).map((s) => s.trim()).filter(Boolean);
+    const lines = (v) => (v || '').split(/\n+/).map((s) => s.trim().replace(/\s+/g, ' ')).filter(Boolean);
     const copyText = async (val) => { try { await navigator.clipboard.writeText(val); } catch (_) { const ta=document.createElement('textarea'); ta.value=val; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } };
+    const setHelp = (message, state = '') => {
+      help.textContent = message;
+      help.dataset.state = state;
+    };
+    const setCopyEnabled = (enabled) => {
+      if (copyBtn) copyBtn.disabled = !enabled;
+    };
 
     const render = () => {
-      const items = lines(itemsEl.value);
+      const rawItems = lines(itemsEl.value);
+      const seen = new Set();
+      const items = rawItems.filter((item) => {
+        const key = item.toLocaleLowerCase();
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+      const duplicateCount = rawItems.length - items.length;
       const material = materialEl.value;
       const contam = contamEl.value;
       const parts = partsEl.value;
@@ -16203,31 +16252,44 @@
       if (material === 'mixed' || parts === 'stuck') decisionKey = decisionKey === 'trash' ? 'trash' : 'review';
       if (special !== 'none') decisionKey = 'trash';
       const checks = [...t.material[material], ...t.contam[contam], ...t.parts[parts], ...t.place[place], ...t.special[special]];
+      const itemText = items.join('\n');
+      const detectedHints = (t.itemHints || []).filter((hint) => hint.re.test(itemText)).map((hint) => hint.text);
+      detectedHints.forEach((hint) => {
+        if (!checks.includes(hint)) checks.push(hint);
+      });
+      if (detectedHints.length && decisionKey !== 'trash') decisionKey = 'review';
       if (localNote) checks.push(t.localNote(localNote));
       if (localEl.checked) checks.push(t.local);
       const rinseCount = (contam === 'rinse' ? 1 : 0) + checks.filter((x) => /헹|씻|rinse|すす/.test(x)).length;
       const reviewCount = (decisionKey === 'review' ? 1 : 0) + (decisionKey === 'trash' ? 2 : 0) + checks.filter((x) => /확인|검토|check|review|確認|検討/.test(x)).length;
-      countOut.textContent = formatNum(items.length);
+      countOut.textContent = formatNum(rawItems.length);
       rinseOut.textContent = formatNum(rinseCount);
       reviewOut.textContent = formatNum(reviewCount);
       stepsOut.textContent = formatNum(checks.length + items.length);
       if (!items.length) {
         output.value = '';
-        help.textContent = t.empty;
+        itemsEl.setAttribute('aria-invalid', 'false');
+        setCopyEnabled(false);
+        setHelp(t.empty);
         return;
       }
+      itemsEl.setAttribute('aria-invalid', 'false');
       const decision = t.decision[decisionKey];
       const result = [`# ${t.title}`, '', t.summary(decision), '', `${t.checklist}:`, ...checks.map((x) => `- [ ] ${x}`)];
+      if (detectedHints.length) result.push('', `${t.itemHintsTitle}:`, ...detectedHints.map((x) => `- ${x}`));
       const shownItems = items.slice(0, 20);
       result.push('', `${t.items}:`, ...shownItems.map((x) => `- [ ] ${x}`));
       if (items.length > shownItems.length) result.push('', t.tooMany(shownItems.length, items.length));
+      if (duplicateCount) result.push('', t.duplicate(duplicateCount));
       if (decisionKey === 'trash' || decisionKey === 'review') result.push('', `${t.review}: ${decision}`);
       output.value = result.join('\n');
-      help.textContent = t.summary(decision);
+      setCopyEnabled(true);
+      setHelp(t.summary(decision), decisionKey === 'trash' || decisionKey === 'review' ? 'warning' : 'success');
     };
-    sampleBtn?.addEventListener('click', () => { itemsEl.value = t.sample; materialEl.value='plastic'; contamEl.value='rinse'; partsEl.value='possible'; placeEl.value='apartment'; if (specialEl) specialEl.value='none'; if (localNoteEl) localNoteEl.value=''; localEl.checked=true; render(); });
+    sampleBtn?.addEventListener('click', () => { itemsEl.value = t.sample; materialEl.value='plastic'; contamEl.value='rinse'; partsEl.value='possible'; placeEl.value='apartment'; if (specialEl) specialEl.value='none'; if (localNoteEl) localNoteEl.value=''; localEl.checked=true; render(); itemsEl.focus(); });
     runBtn?.addEventListener('click', render);
-    copyBtn?.addEventListener('click', async () => { if (!output.value.trim()) return; await copyText(output.value.trim()); const old=copyBtn.textContent; copyBtn.textContent=t.copied; setTimeout(()=>{ copyBtn.textContent=old||t.copyDefault; },900); });
+    copyBtn?.addEventListener('click', async () => { if (!output.value.trim()) { itemsEl.setAttribute('aria-invalid', 'true'); setHelp(t.noCopy, 'error'); itemsEl.focus(); return; } await copyText(output.value.trim()); const old=copyBtn.textContent; copyBtn.textContent=t.copied; setTimeout(()=>{ copyBtn.textContent=old||t.copyDefault; },900); });
+    clearBtn?.addEventListener('click', () => { itemsEl.value=''; if (localNoteEl) localNoteEl.value=''; materialEl.value='plastic'; contamEl.value='rinse'; partsEl.value='possible'; placeEl.value='apartment'; if (specialEl) specialEl.value='none'; localEl.checked=true; output.value=''; [countOut, rinseOut, reviewOut, stepsOut].forEach((el) => { el.textContent='0'; }); itemsEl.setAttribute('aria-invalid', 'false'); setCopyEnabled(false); setHelp(t.cleared); itemsEl.focus(); });
     [itemsEl, materialEl, contamEl, partsEl, placeEl, specialEl, localNoteEl, localEl].forEach((el) => { el?.addEventListener('input', render); el?.addEventListener('change', render); });
     render();
   }

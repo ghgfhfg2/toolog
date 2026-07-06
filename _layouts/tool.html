@@ -1160,13 +1160,14 @@ layout: default
           <div id="pm-detections" class="bw-list" aria-live="polite"></div>
         </div>
       {% when 'recycling-sorting-checker' %}
-        <div class="tool-ui">
+        <div class="tool-ui rsc-ui">
           <label for="rsc-items">{% if page.lang == 'en' %}Items to sort (one per line){% elsif page.lang == 'ja' %}分別する物（1行に1つ）{% else %}분리배출할 품목 (한 줄에 하나){% endif %}</label>
-          <textarea id="rsc-items" rows="7" maxlength="6000" aria-describedby="rsc-help" placeholder="{% if page.lang == 'en' %}PET bottle&#10;Delivery container&#10;Paper cup{% elsif page.lang == 'ja' %}PETボトル&#10;テイクアウト容器&#10;紙コップ{% else %}페트병&#10;배달 용기&#10;종이컵{% endif %}"></textarea>
+          <textarea id="rsc-items" rows="7" maxlength="6000" aria-describedby="rsc-help rsc-limits" placeholder="{% if page.lang == 'en' %}PET bottle&#10;Delivery container&#10;Paper cup{% elsif page.lang == 'ja' %}PETボトル&#10;テイクアウト容器&#10;紙コップ{% else %}페트병&#10;배달 용기&#10;종이컵{% endif %}"></textarea>
+          <p class="tool-result rsc-note" id="rsc-limits">{% if page.lang == 'en' %}Up to 6,000 characters. For mixed materials, run separate checks when conditions differ.{% elsif page.lang == 'ja' %}最大6,000文字。素材や汚れが違う物は分けて確認すると正確です。{% else %}최대 6,000자까지 입력할 수 있습니다. 재질이나 오염 상태가 다른 품목은 나눠 확인하면 더 정확합니다.{% endif %}</p>
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="rsc-material">{% if page.lang == 'en' %}Main material{% elsif page.lang == 'ja' %}主な素材{% else %}주된 재질{% endif %}</label>
-              <select id="rsc-material">
+              <select id="rsc-material" aria-describedby="rsc-help">
                 <option value="plastic">{% if page.lang == 'en' %}Plastic / PET{% elsif page.lang == 'ja' %}プラスチック・PET{% else %}플라스틱·페트{% endif %}</option>
                 <option value="paper">{% if page.lang == 'en' %}Paper / carton{% elsif page.lang == 'ja' %}紙・紙パック{% else %}종이·종이팩{% endif %}</option>
                 <option value="can">{% if page.lang == 'en' %}Can / metal{% elsif page.lang == 'ja' %}缶・金属{% else %}캔·금속{% endif %}</option>
@@ -1176,7 +1177,7 @@ layout: default
             </div>
             <div>
               <label for="rsc-contam">{% if page.lang == 'en' %}Contamination{% elsif page.lang == 'ja' %}汚れ具合{% else %}오염 상태{% endif %}</label>
-              <select id="rsc-contam">
+              <select id="rsc-contam" aria-describedby="rsc-help">
                 <option value="clean">{% if page.lang == 'en' %}Clean / empty{% elsif page.lang == 'ja' %}きれい・空{% else %}깨끗함·내용물 없음{% endif %}</option>
                 <option value="rinse" selected>{% if page.lang == 'en' %}Needs rinsing{% elsif page.lang == 'ja' %}すすぎ必要{% else %}헹굼 필요{% endif %}</option>
                 <option value="heavy">{% if page.lang == 'en' %}Heavy food/oil residue{% elsif page.lang == 'ja' %}食品・油汚れ多め{% else %}음식물·기름 오염 심함{% endif %}</option>
@@ -1187,17 +1188,17 @@ layout: default
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="rsc-parts">{% if page.lang == 'en' %}Labels/caps/parts{% elsif page.lang == 'ja' %}ラベル・フタ・部品{% else %}라벨·뚜껑·부속품{% endif %}</label>
-              <select id="rsc-parts"><option value="separated">{% if page.lang == 'en' %}Already separated{% elsif page.lang == 'ja' %}分離済み{% else %}이미 분리함{% endif %}</option><option value="possible" selected>{% if page.lang == 'en' %}Can separate{% elsif page.lang == 'ja' %}分離できる{% else %}분리 가능{% endif %}</option><option value="stuck">{% if page.lang == 'en' %}Stuck or mixed{% elsif page.lang == 'ja' %}外れない・複合{% else %}붙어 있음·혼합{% endif %}</option></select>
+              <select id="rsc-parts" aria-describedby="rsc-help"><option value="separated">{% if page.lang == 'en' %}Already separated{% elsif page.lang == 'ja' %}分離済み{% else %}이미 분리함{% endif %}</option><option value="possible" selected>{% if page.lang == 'en' %}Can separate{% elsif page.lang == 'ja' %}分離できる{% else %}분리 가능{% endif %}</option><option value="stuck">{% if page.lang == 'en' %}Stuck or mixed{% elsif page.lang == 'ja' %}外れない・複合{% else %}붙어 있음·혼합{% endif %}</option></select>
             </div>
             <div>
               <label for="rsc-place">{% if page.lang == 'en' %}Disposal setting{% elsif page.lang == 'ja' %}排出場所{% else %}배출 장소{% endif %}</label>
-              <select id="rsc-place"><option value="apartment">{% if page.lang == 'en' %}Apartment / shared bins{% elsif page.lang == 'ja' %}集合住宅・分別箱{% else %}공동주택 분리함{% endif %}</option><option value="house">{% if page.lang == 'en' %}House / curbside{% elsif page.lang == 'ja' %}戸建て・集積所{% else %}단독주택·수거장{% endif %}</option><option value="office">{% if page.lang == 'en' %}Office / school{% elsif page.lang == 'ja' %}オフィス・学校{% else %}사무실·학교{% endif %}</option></select>
+              <select id="rsc-place" aria-describedby="rsc-help"><option value="apartment">{% if page.lang == 'en' %}Apartment / shared bins{% elsif page.lang == 'ja' %}集合住宅・分別箱{% else %}공동주택 분리함{% endif %}</option><option value="house">{% if page.lang == 'en' %}House / curbside{% elsif page.lang == 'ja' %}戸建て・集積所{% else %}단독주택·수거장{% endif %}</option><option value="office">{% if page.lang == 'en' %}Office / school{% elsif page.lang == 'ja' %}オフィス・学校{% else %}사무실·학교{% endif %}</option></select>
             </div>
           </div>
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="rsc-special">{% if page.lang == 'en' %}Special condition{% elsif page.lang == 'ja' %}特別な状態{% else %}특수 상태{% endif %}</label>
-              <select id="rsc-special">
+              <select id="rsc-special" aria-describedby="rsc-help">
                 <option value="none" selected>{% if page.lang == 'en' %}None / ordinary item{% elsif page.lang == 'ja' %}なし・通常品{% else %}없음·일반 품목{% endif %}</option>
                 <option value="sharp">{% if page.lang == 'en' %}Broken or sharp{% elsif page.lang == 'ja' %}割れ物・鋭利{% else %}깨짐·날카로움{% endif %}</option>
                 <option value="battery">{% if page.lang == 'en' %}Battery or electronics{% elsif page.lang == 'ja' %}電池・電子機器{% else %}배터리·전자제품{% endif %}</option>
@@ -1206,15 +1207,15 @@ layout: default
             </div>
             <div>
               <label for="rsc-local-note">{% if page.lang == 'en' %}Local note (optional){% elsif page.lang == 'ja' %}地域メモ（任意）{% else %}지역/건물 메모 (선택){% endif %}</label>
-              <input id="rsc-local-note" type="text" maxlength="80" placeholder="{% if page.lang == 'en' %}e.g., clear PET bin on Tue{% elsif page.lang == 'ja' %}例: 火曜は透明PET回収{% else %}예: 화요일 투명 페트 별도함{% endif %}" />
+              <input id="rsc-local-note" type="text" maxlength="80" aria-describedby="rsc-help" placeholder="{% if page.lang == 'en' %}e.g., clear PET bin on Tue{% elsif page.lang == 'ja' %}例: 火曜は透明PET回収{% else %}예: 화요일 투명 페트 별도함{% endif %}" />
             </div>
           </div>
           <label class="tool-check"><input id="rsc-local" type="checkbox" checked /> {% if page.lang == 'en' %}Include a reminder to confirm local rules{% elsif page.lang == 'ja' %}地域ルール確認のリマインダーを含める{% else %}지역별 배출 규칙 확인 알림 포함{% endif %}</label>
-          <div class="tool-row-grid pct-actions"><button id="rsc-run" type="button">{% if page.lang == 'en' %}Check sorting{% elsif page.lang == 'ja' %}分別チェック{% else %}분리배출 체크{% endif %}</button><button id="rsc-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button><button id="rsc-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button></div>
+          <div class="tool-row-grid pct-actions rsc-actions"><button id="rsc-run" type="button">{% if page.lang == 'en' %}Check sorting{% elsif page.lang == 'ja' %}分別チェック{% else %}분리배출 체크{% endif %}</button><button id="rsc-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button><button id="rsc-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button><button id="rsc-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button></div>
           <div class="tool-stats" aria-live="polite"><div><strong id="rsc-count">0</strong><span>{% if page.lang == 'en' %}Items{% elsif page.lang == 'ja' %}品目{% else %}품목{% endif %}</span></div><div><strong id="rsc-rinse">0</strong><span>{% if page.lang == 'en' %}Rinse checks{% elsif page.lang == 'ja' %}すすぎ確認{% else %}세척 확인{% endif %}</span></div><div><strong id="rsc-review">0</strong><span>{% if page.lang == 'en' %}Review flags{% elsif page.lang == 'ja' %}再確認{% else %}재확인{% endif %}</span></div><div><strong id="rsc-steps">0</strong><span>{% if page.lang == 'en' %}Steps{% elsif page.lang == 'ja' %}手順{% else %}체크 수{% endif %}</span></div></div>
           <p class="tool-result" id="rsc-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Add at least one item, then choose the material and condition to make a disposal checklist.{% elsif page.lang == 'ja' %}品目を1つ以上入力し、素材と状態を選ぶと分別チェックリストを作れます。{% else %}품목을 1개 이상 입력하고 재질과 상태를 고르면 배출 전 체크리스트를 만듭니다.{% endif %}</p>
           <label for="rsc-output">{% if page.lang == 'en' %}Generated checklist{% elsif page.lang == 'ja' %}生成されたチェックリスト{% else %}생성된 체크리스트{% endif %}</label>
-          <textarea id="rsc-output" rows="16" readonly aria-label="{% if page.lang == 'en' %}Generated recycling sorting checklist{% elsif page.lang == 'ja' %}生成されたリサイクル分別チェックリスト{% else %}생성된 재활용 분리배출 체크리스트{% endif %}" placeholder="{% if page.lang == 'en' %}Your recycling sorting checklist will appear here.{% elsif page.lang == 'ja' %}分別チェックリストがここに表示されます。{% else %}분리배출 체크리스트가 여기에 표시됩니다.{% endif %}"></textarea>
+          <textarea id="rsc-output" rows="16" readonly aria-describedby="rsc-help rsc-limits" aria-label="{% if page.lang == 'en' %}Generated recycling sorting checklist{% elsif page.lang == 'ja' %}生成されたリサイクル分別チェックリスト{% else %}생성된 재활용 분리배출 체크리스트{% endif %}" placeholder="{% if page.lang == 'en' %}Your recycling sorting checklist will appear here.{% elsif page.lang == 'ja' %}分別チェックリストがここに表示されます。{% else %}분리배출 체크리스트가 여기에 표시됩니다.{% endif %}"></textarea>
         </div>
       {% when 'online-return-package-checker' %}
         <div class="tool-ui orpc-ui">

@@ -1,8 +1,8 @@
 ---
 layout: tool
 lang: en
-title: Recycling Sorting Checker | Plastic, paper, can, and glass disposal checklist
-description: Check items, materials, contamination, labels, caps, and special conditions to organize recycling, rinsing, separation, and trash-disposal steps.
+title: Recycling Sorting Checker | Plastic, paper, cans, glass, and battery disposal checklist
+description: Check items, materials, contamination, labels, caps, and special conditions to organize recycling, rinsing, separation, trash-disposal steps, and item-specific review flags.
 category: lifestyle
 category_label: Lifestyle/Recycling Sorting
 thumbnail: /assets/thumbs/en/recycling-sorting-checker.svg
@@ -18,8 +18,8 @@ alternate_urls:
   ko: /tools/recycling-sorting-checker/
   en: /en/tools/recycling-sorting-checker/
   ja: /ja/tools/recycling-sorting-checker/
-keywords: [recycling sorting, recycling checklist, plastic recycling, carton sorting, trash or recycle, recyclable or not]
-related_tools: [online-return-package-checker, list-format-converter, privacy-exposure-checker]
+keywords: [recycling sorting, recycling checklist, plastic recycling, carton sorting, battery recycling, trash or recycle, recyclable or not]
+related_tools: [online-return-package-checker, recycling-sorting-practice, list-format-converter, privacy-exposure-checker]
 faq:
   - q: Does this know my local recycling rules exactly?
     a: No. Local rules can differ by city, building, and collection provider. Use this as a general pre-check and confirm local instructions before disposal.
@@ -34,7 +34,7 @@ faq:
 ## Why use the Recycling Sorting Checker?
 Recycling looks simple when labels say plastic, paper, or can, but real disposal gets confusing because of residue, labels, caps, coating, and mixed materials. Incorrectly mixed items can be rejected during sorting or contaminate otherwise clean recyclables.
 
-This checker-type tool uses your item list, material, contamination level, label/cap separation state, and special conditions such as broken items, batteries, or bulky waste to organize **emptying, rinsing, separating, recycling-bin, or trash-conversion checks**. It does not replace local rules, but it gives you a quick home checklist before disposal.
+This checker-type tool uses your item list, material, contamination level, label/cap separation state, and special conditions such as broken items, batteries, or bulky waste to organize **emptying, rinsing, separating, recycling-bin, or trash-conversion checks**. When item names include review signals such as batteries, receipts, aerosol cans, broken glass, or food-stained packaging, it adds extra warnings to the result. It does not replace local rules, but it gives you a quick home checklist before disposal.
 
 ## How to use it
 1. Enter items to throw away, one per line.
@@ -57,8 +57,12 @@ Receipts, coated paper, or food-stained paper are flagged for extra review befor
 ### 4) Safety or special-collection items are mixed in
 Broken glass, sharp metal, batteries, electronics, and bulky waste are flagged so you can check special disposal guidance before using regular recycling bins.
 
+### 5) Item names include common review signals
+Words such as battery, power bank, receipt, thermal paper, aerosol can, lighter, or pizza box add an extra review note. Duplicate item lines are collapsed in the displayed result so long pasted lists stay readable.
+
 ## Related tools
 - To check packaging before a return: [Online Return Package Checker]({{ '/en/tools/online-return-package-checker/' | relative_url }})
+- To practice common sorting examples: [Recycling Sorting Practice]({{ '/en/tools/recycling-sorting-practice/' | relative_url }})
 - To organize an item list as a table: [List Format Converter]({{ '/en/tools/list-format-converter/' | relative_url }})
 - To review privacy exposure before sharing notes: [Privacy Exposure Checker]({{ '/en/tools/privacy-exposure-checker/' | relative_url }})
 

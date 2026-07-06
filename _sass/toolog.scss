@@ -852,6 +852,16 @@ textarea:focus-visible {
   accent-color: #3b82f6;
 }
 .tool-result { margin: 0; color: var(--muted); }
+.rsc-ui textarea {
+  min-height: 180px;
+  font-size: 16px;
+}
+.rsc-ui textarea[aria-invalid="true"] { border-color: #ef4444; }
+.rsc-ui #rsc-help[data-state="error"] { color: #fca5a5; }
+.rsc-ui #rsc-help[data-state="warning"] { color: #fbbf24; }
+.rsc-ui #rsc-help[data-state="success"] { color: #86efac; }
+.rsc-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.rsc-note { font-size: .82rem; }
 .avg-ui textarea {
   min-height: 190px;
   font-size: 16px;

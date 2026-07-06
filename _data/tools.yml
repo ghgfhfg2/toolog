@@ -9,9 +9,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 버릴 물건, 재질, 오염 상태, 라벨·뚜껑·특수 상태를 넣으면 재활용 가능성, 세척·분리·일반쓰레기 전환 체크리스트를 정리해요.
-  description_en: Check items, materials, contamination, labels, caps, and special conditions to organize recycling, rinsing, separation, and trash-disposal steps.
-  description_ja: 捨てる物、素材、汚れ、ラベル・フタ・特別な状態から、リサイクル可否や洗浄・分別・一般ごみ切替のチェックを整理します。
+  description: 버릴 물건, 재질, 오염 상태, 라벨·뚜껑·특수 상태를 넣으면 재활용 가능성, 세척·분리·일반쓰레기 전환 체크리스트와 품목별 주의 신호를 정리해요.
+  description_en: Check items, materials, contamination, labels, caps, and special conditions to organize recycling, rinsing, separation, trash-disposal steps, and item-specific review flags.
+  description_ja: 捨てる物、素材、汚れ、ラベル・フタ・特別な状態から、リサイクル可否、洗浄・分別・一般ごみ切替、品目別の注意点を整理します。
   url: /tools/recycling-sorting-checker/
   url_en: /en/tools/recycling-sorting-checker/
   url_ja: /ja/tools/recycling-sorting-checker/
