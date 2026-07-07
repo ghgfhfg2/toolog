@@ -2193,7 +2193,7 @@ layout: default
             <div><strong id="knr-style-out">-</strong><span>{% if page.lang == 'en' %}Output style{% elsif page.lang == 'ja' %}出力スタイル{% else %}출력 스타일{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="knr-help" role="status" aria-live="polite">한글 입력을 로마자 표기 초안으로 빠르게 바꿉니다. 공식 서류 제출 전에는 기존 등록 영문명과 기관 기준을 꼭 다시 확인하세요.</p>
+          <p class="tool-result" id="knr-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Convert Hangul input into quick Romanized drafts. For official documents, always verify your registered English spelling first.{% elsif page.lang == 'ja' %}ハングル入力をローマ字表記の下書きに変換します。公式書類では既存の登録表記を必ず確認してください。{% else %}한글 입력을 로마자 표기 초안으로 빠르게 바꿉니다. 공식 서류 제출 전에는 기존 등록 영문명과 기관 기준을 꼭 다시 확인하세요.{% endif %}</p>
           <p class="tool-result" id="knr-limit">{% if page.lang == 'en' %}Input stays in your browser. Up to 12,000 characters are supported, and non-Hangul text is preserved in the result.{% elsif page.lang == 'ja' %}入力内容はブラウザ内だけで処理されます。最大12,000文字まで対応し、ハングル以外の文字は結果に残ります。{% else %}입력 내용은 브라우저 안에서만 처리됩니다. 최대 12,000자까지 지원하며 비한글 문자는 결과에 그대로 남습니다.{% endif %}</p>
           <div class="tool-row">
             <label for="knr-output">{% if page.lang == 'en' %}Romanized result{% elsif page.lang == 'ja' %}ローマ字化結果{% else %}로마자 변환 결과{% endif %}</label>
