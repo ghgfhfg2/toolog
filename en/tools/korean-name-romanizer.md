@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Korean Name Romanizer | Convert Hangul names and short Korean text into Romanized spelling
-description: Convert Korean names, place names, brand names, and short Hangul text into quick Romanized spelling with case and separator options.
+title: Korean Name Romanizer | Draft passport names, place names, and brand spelling
+description: Convert Korean names, place names, brand names, and short Hangul text into Romanized spelling drafts, then adjust spaces, hyphens, and letter case before copying.
 lang: en
 permalink: /en/tools/korean-name-romanizer/
 canonical_url: /en/tools/korean-name-romanizer/
@@ -27,6 +27,8 @@ faq:
     a: Yes. It works on Hangul syllables, so it is useful for names, place names, store names, and short Korean text.
   - q: Can I change spaces or hyphens?
     a: Yes. You can keep spaces, join words, or switch spaces to hyphens depending on the output style you want.
+  - q: What happens to English, numbers, or symbols?
+    a: Only Hangul syllables are Romanized. Existing English text, numbers, and basic symbols are preserved, which helps with mixed brand names, address fragments, or labels.
 ---
 
 ## Why use a Korean name romanizer?
@@ -35,6 +37,7 @@ Names, place names, and short Korean phrases often raise small but annoying ques
 
 This tool helps you make a fast first draft.
 Paste Hangul, choose your preferred output style, and copy a Romanized result right away.
+It is especially useful for passport-name drafts, airline booking names, overseas account forms, map labels, and quick brand-name spelling checks.
 
 ## Useful for
 ### 1) Drafting English name spelling
@@ -45,6 +48,19 @@ Useful when you want a quick Romanized version of a Korean business name or even
 
 ### 3) Checking place names or short phrases
 You can also use it for simple location names, short labels, or short Korean text snippets.
+
+## What the result includes
+- Hangul syllables are split and converted into a practical Romanized spelling.
+- You can keep spaces, join words, or replace spaces with hyphens.
+- You can choose title case, lowercase, uppercase, or syllable-style capitalization.
+- Non-Hangul characters stay in the output so mixed names and labels remain readable.
+
+## FAQ
+### Can one Korean name have multiple valid English spellings?
+Yes. Personal preference, family spelling, and already registered records can matter more than an automatic conversion. Treat this result as a draft and verify official spellings before submitting documents.
+
+### Does it handle every pronunciation change?
+No. It is a browser-based quick converter, not a full linguistic review system. It is best for names, labels, and short text where you need a clean first draft.
 
 ## Related tools
 - To clean pasted text first: [Text Line Break Cleaner]({{ '/en/tools/text-line-break-cleaner/' | relative_url }})

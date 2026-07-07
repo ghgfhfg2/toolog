@@ -2150,47 +2150,55 @@ layout: default
           <textarea id="hklc-output" rows="10" readonly placeholder="복원 결과가 여기에 표시됩니다."></textarea>
         </div>
       {% when 'korean-name-romanizer' %}
-        <div class="tool-ui">
-          <textarea id="knr-input" rows="8" maxlength="12000" placeholder="한글 이름, 상호명, 지명, 짧은 문장을 입력하세요."></textarea>
+        <div class="tool-ui knr-ui">
+          <div class="tool-row">
+            <label for="knr-input">{% if page.lang == 'en' %}Hangul text to romanize{% elsif page.lang == 'ja' %}ローマ字化するハングル{% else %}로마자로 바꿀 한글{% endif %}</label>
+            <textarea id="knr-input" rows="8" maxlength="12000" aria-describedby="knr-help knr-limit" placeholder="{% if page.lang == 'en' %}Enter a Korean name, place name, store name, or short Hangul phrase.{% elsif page.lang == 'ja' %}ハングルの名前、地名、店舗名、短いフレーズを入力してください。{% else %}한글 이름, 상호명, 지명, 짧은 문장을 입력하세요.{% endif %}"></textarea>
+          </div>
 
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid pct-grid knr-grid">
             <div>
-              <label for="knr-case">영문 스타일</label>
+              <label for="knr-case">{% if page.lang == 'en' %}Letter case{% elsif page.lang == 'ja' %}英字スタイル{% else %}영문 스타일{% endif %}</label>
               <select id="knr-case">
-                <option value="title">단어별 첫 글자 대문자</option>
-                <option value="lower">모두 소문자</option>
-                <option value="upper">모두 대문자</option>
+                <option value="title">{% if page.lang == 'en' %}Capitalize each word{% elsif page.lang == 'ja' %}単語ごとに先頭大文字{% else %}단어별 첫 글자 대문자{% endif %}</option>
+                <option value="lower">{% if page.lang == 'en' %}All lowercase{% elsif page.lang == 'ja' %}すべて小文字{% else %}모두 소문자{% endif %}</option>
+                <option value="upper">{% if page.lang == 'en' %}All uppercase{% elsif page.lang == 'ja' %}すべて大文字{% else %}모두 대문자{% endif %}</option>
               </select>
             </div>
             <div>
-              <label for="knr-separator">단어 연결 방식</label>
+              <label for="knr-separator">{% if page.lang == 'en' %}Word separator{% elsif page.lang == 'ja' %}単語のつなぎ方{% else %}단어 연결 방식{% endif %}</label>
               <select id="knr-separator">
-                <option value="space">공백 유지</option>
-                <option value="hyphen">하이픈 연결</option>
-                <option value="none">붙여쓰기</option>
+                <option value="space">{% if page.lang == 'en' %}Keep spaces{% elsif page.lang == 'ja' %}空白を維持{% else %}공백 유지{% endif %}</option>
+                <option value="hyphen">{% if page.lang == 'en' %}Replace spaces with hyphens{% elsif page.lang == 'ja' %}ハイフンで連結{% else %}하이픈 연결{% endif %}</option>
+                <option value="none">{% if page.lang == 'en' %}Join words{% elsif page.lang == 'ja' %}つなげる{% else %}붙여쓰기{% endif %}</option>
               </select>
             </div>
           </div>
 
-          <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="knr-cap-syllable" type="checkbox" /> 음절마다 첫 글자 대문자</label>
-            <label class="tool-check"><input id="knr-trim" type="checkbox" checked /> 불필요한 공백 정리</label>
+          <div class="tool-row-grid pct-grid knr-options">
+            <label class="tool-check"><input id="knr-cap-syllable" type="checkbox" /> {% if page.lang == 'en' %}Capitalize each Hangul syllable{% elsif page.lang == 'ja' %}ハングル音節ごとに先頭大文字{% else %}음절마다 첫 글자 대문자{% endif %}</label>
+            <label class="tool-check"><input id="knr-trim" type="checkbox" checked /> {% if page.lang == 'en' %}Clean extra spaces{% elsif page.lang == 'ja' %}余分な空白を整理{% else %}불필요한 공백 정리{% endif %}</label>
           </div>
 
-          <div class="tool-row-grid pct-actions">
-            <button id="knr-sample" type="button">예시 넣기</button>
-            <button id="knr-copy" type="button">결과 복사</button>
+          <div class="tool-row-grid pct-actions knr-actions">
+            <button id="knr-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
+            <button id="knr-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="knr-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
-            <div><strong id="knr-hangul-count">0</strong><span>한글 음절 수</span></div>
-            <div><strong id="knr-word-count">0</strong><span>단어 수</span></div>
-            <div><strong id="knr-char-count">0</strong><span>결과 글자 수</span></div>
-            <div><strong id="knr-style-out">-</strong><span>출력 스타일</span></div>
+          <div class="tool-stats knr-stats" aria-label="{% if page.lang == 'en' %}Romanization summary{% elsif page.lang == 'ja' %}ローマ字変換の概要{% else %}로마자 변환 요약{% endif %}">
+            <div><strong id="knr-hangul-count">0</strong><span>{% if page.lang == 'en' %}Hangul syllables{% elsif page.lang == 'ja' %}ハングル音節数{% else %}한글 음절 수{% endif %}</span></div>
+            <div><strong id="knr-word-count">0</strong><span>{% if page.lang == 'en' %}Words{% elsif page.lang == 'ja' %}単語数{% else %}단어 수{% endif %}</span></div>
+            <div><strong id="knr-char-count">0</strong><span>{% if page.lang == 'en' %}Result characters{% elsif page.lang == 'ja' %}結果文字数{% else %}결과 글자 수{% endif %}</span></div>
+            <div><strong id="knr-style-out">-</strong><span>{% if page.lang == 'en' %}Output style{% elsif page.lang == 'ja' %}出力スタイル{% else %}출력 스타일{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="knr-help">한글 입력을 로마자 표기 초안으로 빠르게 바꿉니다. 공식 서류 제출 전에는 기존 등록 영문명과 기관 기준을 꼭 다시 확인하세요.</p>
-          <textarea id="knr-output" rows="8" readonly placeholder="변환 결과가 여기에 표시됩니다."></textarea>
+          <p class="tool-result" id="knr-help" role="status" aria-live="polite">한글 입력을 로마자 표기 초안으로 빠르게 바꿉니다. 공식 서류 제출 전에는 기존 등록 영문명과 기관 기준을 꼭 다시 확인하세요.</p>
+          <p class="tool-result" id="knr-limit">{% if page.lang == 'en' %}Input stays in your browser. Up to 12,000 characters are supported, and non-Hangul text is preserved in the result.{% elsif page.lang == 'ja' %}入力内容はブラウザ内だけで処理されます。最大12,000文字まで対応し、ハングル以外の文字は結果に残ります。{% else %}입력 내용은 브라우저 안에서만 처리됩니다. 최대 12,000자까지 지원하며 비한글 문자는 결과에 그대로 남습니다.{% endif %}</p>
+          <div class="tool-row">
+            <label for="knr-output">{% if page.lang == 'en' %}Romanized result{% elsif page.lang == 'ja' %}ローマ字化結果{% else %}로마자 변환 결과{% endif %}</label>
+            <textarea id="knr-output" rows="8" readonly placeholder="{% if page.lang == 'en' %}The Romanized result appears here.{% elsif page.lang == 'ja' %}ローマ字化結果がここに表示されます。{% else %}변환 결과가 여기에 표시됩니다.{% endif %}"></textarea>
+          </div>
         </div>
       {% when 'link-list-cleaner' %}
         <div class="tool-ui llc-ui">
