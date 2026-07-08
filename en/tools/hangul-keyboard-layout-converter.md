@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Hangul Keyboard Layout Converter | Recover Korean typed in English layout and English typed in Korean layout
-description: Paste mistyped text to recover Korean typed on an English keyboard layout or English typed on a Korean layout right in your browser.
+description: Paste mistyped text to recover Korean typed on an English keyboard layout or English typed on a Korean layout with auto detect, manual direction, and browser-only conversion.
 lang: en
 permalink: /en/tools/hangul-keyboard-layout-converter/
 canonical_url: /en/tools/hangul-keyboard-layout-converter/
@@ -23,6 +23,8 @@ faq:
     a: Yes. It supports English-to-Korean recovery and Korean-to-English recovery, with an auto-detect mode for quick use.
   - q: Is auto detect always correct?
     a: Not always. Very short or mixed strings may work better when you choose the direction manually.
+  - q: What happens to numbers and symbols?
+    a: Only convertible Korean or English keys are changed. Numbers, spaces, and common symbols are preserved where possible.
 ---
 
 ## Why use this tool?
@@ -34,11 +36,18 @@ This tool quickly recovers common Korean/English keyboard-layout mistakes withou
 2. Choose auto detect or a manual direction.
 3. Review the recovered result.
 4. Copy and paste it where you actually need it.
+5. Clear the field when you want to test another phrase.
 
 ## Useful when
 - you typed Korean while the keyboard was in English mode
 - you typed English while the keyboard was in Korean mode
 - you want to fix chat messages, search queries, titles, or notes quickly
+- you need a quick local-only check before pasting text into another app
+
+## Notes for accurate recovery
+Auto detect compares English-key characters with Hangul or jamo characters and chooses the likely direction. If the input is very short, contains mostly numbers, or mixes both directions in one line, switch the direction manually and compare the result.
+
+Numbers, spaces, and ordinary symbols are left alone where possible, so the tool works well for search terms, filenames, chat messages, and short titles.
 
 ## Related tools
 - For Romanizing Korean names: [Korean Name Romanizer]({{ '/en/tools/korean-name-romanizer/' | relative_url }})

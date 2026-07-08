@@ -9483,6 +9483,7 @@
     const sampleBtn = document.getElementById('hklc-sample');
     const swapBtn = document.getElementById('hklc-swap');
     const copyBtn = document.getElementById('hklc-copy');
+    const clearBtn = document.getElementById('hklc-clear');
     const charsOut = document.getElementById('hklc-chars');
     const hangulOut = document.getElementById('hklc-hangul');
     const englishOut = document.getElementById('hklc-english');
@@ -9490,7 +9491,7 @@
     const help = document.getElementById('hklc-help');
     const output = document.getElementById('hklc-output');
 
-    if (!input || !mode || !preview || !sampleBtn || !swapBtn || !copyBtn || !charsOut || !hangulOut || !englishOut || !modeOut || !help || !output) return;
+    if (!input || !mode || !preview || !sampleBtn || !swapBtn || !copyBtn || !clearBtn || !charsOut || !hangulOut || !englishOut || !modeOut || !help || !output) return;
 
     const textMap = {
       ko: {
@@ -9500,8 +9501,13 @@
         koToEn: '한글 → 영어 복원',
         helpIdle: '잘못 입력된 텍스트를 넣으면 한/영 키 배열 기준으로 복원합니다.',
         helpResult: (direction) => `${direction} 기준으로 복원 결과를 만들었습니다. 짧은 혼합 문자열은 방향을 직접 바꾸면 더 정확할 수 있습니다.`,
-        copied: '복사됨',
-        copyDefault: '결과 복사'
+        helpNoConvertible: '변환할 수 있는 한글/영문 키가 거의 없습니다. 일반 기호나 숫자는 그대로 유지됩니다.',
+        copied: '결과를 복사했습니다.',
+        copyEmpty: '복사할 복원 결과가 없습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다. 결과를 직접 선택해 복사해 주세요.',
+        cleared: '입력과 결과를 초기화했습니다.',
+        copyDefault: '결과 복사',
+        sample: 'dkssudgktpdy\nㅗ디ㅣㅐ\nrkatkgkqslek'
       },
       en: {
         idle: 'Waiting',
@@ -9510,23 +9516,35 @@
         koToEn: 'Korean → English',
         helpIdle: 'Paste mistyped text to recover it using the Korean/English keyboard layout mapping.',
         helpResult: (direction) => `Recovered with ${direction}. For short mixed strings, manual direction selection may be more accurate.`,
-        copied: 'Copied',
-        copyDefault: 'Copy result'
+        helpNoConvertible: 'There are almost no convertible Korean or English keys. Numbers and symbols are preserved.',
+        copied: 'Copied the recovered result.',
+        copyEmpty: 'There is no recovered result to copy yet.',
+        copyFail: 'Automatic copy is unavailable. Select and copy the result manually.',
+        cleared: 'Cleared the input and result.',
+        copyDefault: 'Copy result',
+        sample: 'dkssudgktpdy\nㅗ디ㅣㅐ\nrkatkgkqslek'
       },
       ja: {
         idle: '入力待ち',
         auto: '自動判定',
         enToKo: '英語 → ハングル復元',
         koToEn: 'ハングル → 英語復元',
-        helpIdle: '誤入力テキストを貼り付けると、韓/英キーボード配列 기준で復元します。',
-        helpResult: (direction) => `${direction} 기준으로復元しました。短い混在文字列は方向を 직접 선택すると 더 정확할 수 있습니다。`,
-        copied: 'コピー完了',
-        copyDefault: '結果をコピー'
+        helpIdle: '誤入力テキストを貼り付けると、韓/英キーボード配列に基づいて復元します。',
+        helpResult: (direction) => `${direction}を基準に復元しました。短い混在文字列は方向を手動で選ぶとより正確な場合があります。`,
+        helpNoConvertible: '変換できるハングルまたは英字キーがほとんどありません。数字や記号はそのまま維持されます。',
+        copied: '復元結果をコピーしました。',
+        copyEmpty: 'コピーできる復元結果がまだありません。',
+        copyFail: '自動コピーを利用できません。結果を手動で選択してコピーしてください。',
+        cleared: '入力と結果をクリアしました。',
+        copyDefault: '結果をコピー',
+        sample: 'dkssudgktpdy\nㅗ디ㅣㅐ\nrkatkgkqslek'
       }
     }[pageLang] || {
       idle: '입력 대기', auto: '자동 판별', enToKo: '영어 → 한글 복원', koToEn: '한글 → 영어 복원',
       helpIdle: '잘못 입력된 텍스트를 넣으면 한/영 키 배열 기준으로 복원합니다.',
-      helpResult: (direction) => `${direction} 기준으로 복원 결과를 만들었습니다.`, copied: '복사됨', copyDefault: '결과 복사'
+      helpResult: (direction) => `${direction} 기준으로 복원 결과를 만들었습니다.`, helpNoConvertible: '변환할 수 있는 문자가 거의 없습니다.',
+      copied: '결과를 복사했습니다.', copyEmpty: '복사할 복원 결과가 없습니다.', copyFail: '자동 복사를 사용할 수 없습니다.',
+      cleared: '입력과 결과를 초기화했습니다.', copyDefault: '결과 복사', sample: 'dkssudgktpdy\nㅗ디ㅣㅐ\nrkatkgkqslek'
     };
 
     const ENG_TO_JAMO = {
@@ -9660,18 +9678,29 @@
       return JAMO_TO_ENG[char] || char;
     }).join('');
 
+    const setHelp = (message, state = '') => {
+      help.textContent = message;
+      help.dataset.state = state;
+    };
+
     const copyText = async (text) => {
       try {
         await navigator.clipboard.writeText(text);
+        return true;
       } catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          const copied = document.execCommand('copy');
+          document.body.removeChild(ta);
+          return copied;
+        } catch (err) {
+          return false;
+        }
       }
     };
 
@@ -9688,28 +9717,46 @@
       englishOut.textContent = formatNum(englishCount);
       modeOut.textContent = value ? directionLabel : '-';
       preview.value = value ? directionLabel : textMap.idle;
-      help.textContent = value ? textMap.helpResult(directionLabel) : textMap.helpIdle;
+      input.setAttribute('aria-invalid', 'false');
+      copyBtn.disabled = !converted;
+      if (!value) {
+        setHelp(textMap.helpIdle);
+      } else if (englishCount === 0 && hangulCount === 0) {
+        setHelp(textMap.helpNoConvertible, 'warning');
+      } else {
+        setHelp(textMap.helpResult(directionLabel), 'success');
+      }
       output.value = converted;
     };
 
     input.addEventListener('input', render);
     mode.addEventListener('change', render);
     sampleBtn.addEventListener('click', () => {
-      input.value = 'dkssudgktpdy\nㅗ디ㅣㅐ\nrkatkgkqslek';
+      input.value = textMap.sample;
       mode.value = 'auto';
       render();
+      input.focus();
     });
     swapBtn.addEventListener('click', () => {
       if (mode.value === 'auto') mode.value = chooseDirection(input.value || '', 'auto') === 'en-to-ko' ? 'ko-to-en' : 'en-to-ko';
       else mode.value = mode.value === 'en-to-ko' ? 'ko-to-en' : 'en-to-ko';
       render();
     });
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      mode.value = 'auto';
+      render();
+      setHelp(textMap.cleared);
+      input.focus();
+    });
     copyBtn.addEventListener('click', async () => {
-      if (!output.value) return;
-      await copyText(output.value);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = textMap.copied;
-      setTimeout(() => { copyBtn.textContent = old || textMap.copyDefault; }, 900);
+      if (!output.value) {
+        setHelp(textMap.copyEmpty, 'error');
+        input.focus();
+        return;
+      }
+      const copied = await copyText(output.value);
+      setHelp(copied ? textMap.copied : textMap.copyFail, copied ? 'success' : 'error');
     });
     render();
   }

@@ -793,6 +793,9 @@ textarea:focus-visible {
 .maie-ui .tool-result[data-state="error"] { border-color: #ef4444; }
 .maie-ui .tool-result[data-state="warning"] { border-color: #f59e0b; }
 .maie-ui .tool-result[data-state="success"] { border-color: #16a34a; }
+.hklc-ui .tool-result[data-state="error"] { border-color: #ef4444; }
+.hklc-ui .tool-result[data-state="warning"] { border-color: #f59e0b; }
+.hklc-ui .tool-result[data-state="success"] { border-color: #16a34a; }
 .vat-ui #vat-status[data-state="error"] { color: #fca5a5; }
 .vat-ui #vat-status[data-state="success"] { color: #86efac; }
 .llc-options { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; }

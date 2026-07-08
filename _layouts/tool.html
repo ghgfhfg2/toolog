@@ -2115,39 +2115,47 @@ layout: default
           <p class="tool-result" id="lmp-help">상황과 기분을 고르면 바로 먹을 메뉴 후보를 3개 추천합니다.</p>
         </div>
       {% when 'hangul-keyboard-layout-converter' %}
-        <div class="tool-ui">
-          <textarea id="hklc-input" rows="10" maxlength="20000" placeholder="예: dkssudgktpdy / ㅗ디ㅣㅐ / rkatkgkqslek"></textarea>
+        <div class="tool-ui hklc-ui">
+          <div class="tool-row">
+            <label for="hklc-input">{% if page.lang == 'en' %}Mistyped text{% elsif page.lang == 'ja' %}誤入力したテキスト{% else %}잘못 입력된 텍스트{% endif %}</label>
+            <textarea id="hklc-input" rows="10" maxlength="20000" aria-describedby="hklc-help hklc-limit" placeholder="{% if page.lang == 'en' %}e.g. dkssudgktpdy / ㅗ디ㅣㅐ / rkatkgkqslek{% elsif page.lang == 'ja' %}例: dkssudgktpdy / ㅗ디ㅣㅐ / rkatkgkqslek{% else %}예: dkssudgktpdy / ㅗ디ㅣㅐ / rkatkgkqslek{% endif %}"></textarea>
+          </div>
 
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid hklc-grid">
             <div>
-              <label for="hklc-mode">변환 방향</label>
-              <select id="hklc-mode">
-                <option value="auto">자동 판별</option>
-                <option value="en-to-ko">영어 → 한글 복원</option>
-                <option value="ko-to-en">한글 → 영어 복원</option>
+              <label for="hklc-mode">{% if page.lang == 'en' %}Recovery direction{% elsif page.lang == 'ja' %}復元方向{% else %}변환 방향{% endif %}</label>
+              <select id="hklc-mode" aria-describedby="hklc-help">
+                <option value="auto">{% if page.lang == 'en' %}Auto detect{% elsif page.lang == 'ja' %}自動判定{% else %}자동 판별{% endif %}</option>
+                <option value="en-to-ko">{% if page.lang == 'en' %}English keys → Korean{% elsif page.lang == 'ja' %}英語キー → ハングル{% else %}영어 → 한글 복원{% endif %}</option>
+                <option value="ko-to-en">{% if page.lang == 'en' %}Korean keys → English{% elsif page.lang == 'ja' %}韓国語キー → 英語{% else %}한글 → 영어 복원{% endif %}</option>
               </select>
             </div>
             <div>
-              <label for="hklc-preview">판별 결과</label>
-              <input id="hklc-preview" type="text" readonly value="입력 대기" />
+              <label for="hklc-preview">{% if page.lang == 'en' %}Detected result{% elsif page.lang == 'ja' %}判定結果{% else %}판별 결과{% endif %}</label>
+              <input id="hklc-preview" type="text" readonly value="{% if page.lang == 'en' %}Waiting{% elsif page.lang == 'ja' %}入力待ち{% else %}입력 대기{% endif %}" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-actions">
-            <button id="hklc-sample" type="button">예시 넣기</button>
-            <button id="hklc-swap" type="button">방향 바꾸기</button>
-            <button id="hklc-copy" type="button">결과 복사</button>
+          <div class="tool-row-grid hklc-actions">
+            <button id="hklc-sample" type="button">{% if page.lang == 'en' %}Load examples{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
+            <button id="hklc-swap" type="button">{% if page.lang == 'en' %}Swap direction{% elsif page.lang == 'ja' %}方向を切替{% else %}방향 바꾸기{% endif %}</button>
+            <button id="hklc-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="hklc-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
-            <div><strong id="hklc-chars">0</strong><span>입력 글자 수</span></div>
-            <div><strong id="hklc-hangul">0</strong><span>한글/자모 수</span></div>
-            <div><strong id="hklc-english">0</strong><span>영문 키 수</span></div>
-            <div><strong id="hklc-mode-out">-</strong><span>적용 방향</span></div>
+          <div class="tool-stats hklc-stats" aria-label="{% if page.lang == 'en' %}Keyboard recovery summary{% elsif page.lang == 'ja' %}キー入力復元の概要{% else %}한영 키 입력 복원 요약{% endif %}">
+            <div><strong id="hklc-chars">0</strong><span>{% if page.lang == 'en' %}Input characters{% elsif page.lang == 'ja' %}入力文字数{% else %}입력 글자 수{% endif %}</span></div>
+            <div><strong id="hklc-hangul">0</strong><span>{% if page.lang == 'en' %}Hangul/jamo{% elsif page.lang == 'ja' %}ハングル/字母{% else %}한글/자모 수{% endif %}</span></div>
+            <div><strong id="hklc-english">0</strong><span>{% if page.lang == 'en' %}English keys{% elsif page.lang == 'ja' %}英字キー{% else %}영문 키 수{% endif %}</span></div>
+            <div><strong id="hklc-mode-out">-</strong><span>{% if page.lang == 'en' %}Applied direction{% elsif page.lang == 'ja' %}適用方向{% else %}적용 방향{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="hklc-help">잘못 입력된 텍스트를 넣으면 한/영 키 배열 기준으로 복원합니다.</p>
-          <textarea id="hklc-output" rows="10" readonly placeholder="복원 결과가 여기에 표시됩니다."></textarea>
+          <p class="tool-result" id="hklc-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Paste mistyped text to recover it using Korean/English keyboard layout mapping.{% elsif page.lang == 'ja' %}誤入力テキストを貼り付けると、韓/英キーボード配列に基づいて復元します。{% else %}잘못 입력된 텍스트를 넣으면 한/영 키 배열 기준으로 복원합니다.{% endif %}</p>
+          <p class="tool-result" id="hklc-limit">{% if page.lang == 'en' %}Up to 20,000 characters. Spaces and symbols are preserved where possible, and conversion runs only in your browser.{% elsif page.lang == 'ja' %}最大20,000文字。空白や記号は可能な限り維持し、変換はブラウザ内だけで行われます。{% else %}최대 20,000자까지 입력할 수 있습니다. 공백과 기호는 가능한 한 유지하며 변환은 브라우저 안에서만 처리됩니다.{% endif %}</p>
+          <div class="tool-row">
+            <label for="hklc-output">{% if page.lang == 'en' %}Recovered result{% elsif page.lang == 'ja' %}復元結果{% else %}복원 결과{% endif %}</label>
+            <textarea id="hklc-output" rows="10" readonly placeholder="{% if page.lang == 'en' %}Recovered text appears here.{% elsif page.lang == 'ja' %}復元結果がここに表示されます。{% else %}복원 결과가 여기에 표시됩니다.{% endif %}"></textarea>
+          </div>
         </div>
       {% when 'korean-name-romanizer' %}
         <div class="tool-ui knr-ui">
