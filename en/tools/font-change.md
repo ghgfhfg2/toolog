@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Font Style Converter | Copy Unicode Text for Instagram & Social Media
-description: Convert letters and numbers into Unicode font styles, search and favorite styles, then copy one style or all visible candidates for Instagram bios, social profiles, and captions.
+description: Convert letters and numbers into Unicode font styles, search and favorite styles, then copy one style or all visible candidates for Instagram bios, nicknames, social profiles, and captions.
 lang: en
 permalink: /en/tools/font-change/
 canonical_url: /en/tools/font-change/
@@ -23,6 +23,10 @@ faq:
     a: The tool automatically tries a fallback copy method so copy still works in most browsers.
   - q: Will it change Korean, Japanese, or other non-Latin text?
     a: Unicode math and decorative characters mainly replace Latin letters and numbers, so Korean, Japanese, and many other characters usually remain unchanged.
+  - q: How long can the input be?
+    a: The input is limited to 500 characters to keep mobile preview and copy interactions responsive. It is best for bios, nicknames, titles, and short captions.
+  - q: Can I search by plain style names?
+    a: Yes. Search terms such as bold, underline, circled, monospace, superscript, or full-width narrow the preview list immediately.
 alternate_urls:
   ko: /tools/font-change/
   en: /en/tools/font-change/
@@ -39,6 +43,7 @@ When styling an Instagram bio, social profile, channel name, or short caption, m
 - Copy one style with a click or keyboard, or copy all visible style candidates
 - Count characters, visible styles, and styles that actually changed the text
 - Save favorite styles for faster reuse
+- 500-character input guard for smoother mobile preview
 - Mobile-friendly interaction
 
 ## How to use
@@ -53,6 +58,9 @@ When styling an Instagram bio, social profile, channel name, or short caption, m
 - Testing nickname or channel-name variants
 - Creating highlighted event/promotional text quickly
 - Comparing which Unicode styles remain readable on your target platform
+
+## Input and compatibility notes
+This tool is designed for short social text, not long documents. If a platform shows blank boxes or broken symbols, switch to a simpler style such as bold, sans, monospace, underline, or full-width.
 
 ## Related tools
 - Check platform limits: [Text Counter]({{ '/en/tools/text-counter/' | relative_url }})

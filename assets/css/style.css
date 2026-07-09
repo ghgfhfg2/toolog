@@ -1042,18 +1042,28 @@ a:hover { color: #fff; text-decoration: none; }
 
 .font-change-controls {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: .45rem;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 .font-change-controls button {
-  width: 100%;
   min-height: 42px;
+  width: 100%;
 }
 .fc-filter-grid {
-  align-items: end;
+  grid-template-columns: minmax(0, 1fr) minmax(160px, auto);
 }
 .fc-filter-grid button {
-  min-height: 42px;
+  align-self: end;
+}
+.fc-limit {
+  margin-top: -.15rem;
+}
+.font-change-ui #fc-status[data-state="success"] { color: #86efac; }
+.font-change-ui #fc-status[data-state="warning"] { color: #fbbf24; }
+.font-change-ui #fc-status[data-state="error"] { color: #fca5a5; }
+.font-change-ui button[aria-pressed="true"] {
+  border-color: #60a5fa;
+  background: #172554;
 }
 
 .font-preview-list {
@@ -1074,6 +1084,12 @@ a:hover { color: #fff; text-decoration: none; }
 .font-preview-item:hover {
   border-color: #3b82f6;
   background: #13203a;
+}
+.font-preview-body:focus-visible,
+.font-fav-btn:focus-visible,
+.font-change-controls button:focus-visible {
+  outline: 2px solid #93c5fd;
+  outline-offset: 2px;
 }
 .font-preview-item.copied {
   border-color: #22c55e;

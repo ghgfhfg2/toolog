@@ -10569,6 +10569,57 @@
     ];
 
     const labelI18n = {
+      ko: {
+        normal: '기본',
+        bold: '굵게(세리프)',
+        italic: '기울임(세리프)',
+        'bold-italic': '굵은 기울임(세리프)',
+        sans: '산세리프',
+        'sans-bold': '산세리프 굵게',
+        'sans-italic': '산세리프 기울임',
+        'sans-bold-italic': '산세리프 굵은 기울임',
+        script: '스크립트',
+        'script-bold': '스크립트 굵게',
+        fraktur: '프락투어',
+        'fraktur-bold': '프락투어 굵게',
+        'double-struck': '이중선',
+        monospace: '고정폭',
+        'small-caps': '스몰캡',
+        'small-caps-strict': '스몰캡(엄격)',
+        'bottom-mix': '아래첨자 혼합',
+        'mini-bottom-align': '미니 아래 정렬',
+        'tiny-subscript-final': '작은 아래첨자',
+        circled: '동그라미',
+        'circled-negative': '반전 동그라미',
+        squared: '네모',
+        'squared-negative': '반전 네모',
+        parenthesized: '괄호 문자',
+        'full-width': '전각',
+        'upside-down': '거꾸로',
+        'strike-through': '취소선',
+        underline: '밑줄',
+        slash: '사선',
+        crossed: '가로선',
+        overline: '윗줄',
+        'underline-overline': '밑줄+윗줄',
+        'long-strike': '긴 취소선',
+        'double-slash': '사선 3중',
+        'regional-indicator': '지역 표시 문자',
+        superscript: '위첨자',
+        subscript: '아래첨자',
+        'cloud-top': '위쪽 점 장식',
+        'double-top': '위쪽 이중 장식',
+        'dot-below': '아래쪽 점 장식',
+        'zigzag-combo': '복합 지그재그',
+        joiner: '연결 장식',
+        'spark-combo': '스파크 장식',
+        'khmer-mark': '크메르 장식',
+        'thai-comb-1a5a': '결합 장식',
+        'wing-only': '날개 장식',
+        'alt-alpha': '대체 알파',
+        'alt-cyrillic': '대체 키릴',
+        'alt-box': '대체 박스'
+      },
       ja: {
         normal: '標準',
         bold: '太字（セリフ）',
@@ -10623,6 +10674,7 @@
     };
 
     const getStyleLabel = (font) => {
+      if (pageLang === 'ko') return labelI18n.ko?.[font.key] || font.label;
       if (pageLang === 'ja') return labelI18n.ja?.[font.key] || font.label;
       return font.label;
     };
@@ -10641,6 +10693,7 @@
         noMatch: '검색 조건에 맞는 스타일이 없습니다.',
         noFav: '즐겨찾기된 폰트가 없습니다.',
         noVisible: '복사할 표시 스타일이 없습니다.',
+        truncated: '입력은 최대 500자까지 지원합니다. 초과한 내용은 잘라냈습니다.',
         copied: (label) => `${label} 스타일을 복사했습니다.`,
         copiedVisible: (n) => `${formatNum(n)}개 표시 스타일을 한 번에 복사했습니다.`,
         copyFail: '자동 복사에 실패했습니다. 브라우저의 클립보드 권한을 확인해 주세요.',
@@ -10657,6 +10710,7 @@
         noMatch: 'No styles match your search.',
         noFav: 'No favorite styles yet.',
         noVisible: 'There are no visible styles to copy.',
+        truncated: 'Input is limited to 500 characters. Extra text was trimmed.',
         copied: (label) => `Copied the ${label} style.`,
         copiedVisible: (n) => `Copied ${formatNum(n)} visible styles.`,
         copyFail: 'Copy failed. Check your browser clipboard permission.',
@@ -10673,6 +10727,7 @@
         noMatch: '検索条件に一致するスタイルがありません。',
         noFav: 'お気に入り登録されたスタイルがありません。',
         noVisible: 'コピーできる表示スタイルがありません。',
+        truncated: '入力は最大500文字です。超過分を削除しました。',
         copied: (label) => `${label}スタイルをコピーしました。`,
         copiedVisible: (n) => `${formatNum(n)}件の表示スタイルをコピーしました。`,
         copyFail: 'コピーに失敗しました。ブラウザのクリップボード権限を確認してください。',
@@ -10731,15 +10786,24 @@
         : (pageLang === 'ja')
           ? `★ お気に入りのみ: ${onlyFav ? 'ON' : 'OFF'}`
           : `★ 즐겨찾기만 보기: ${onlyFav ? 'ON' : 'OFF'}`;
+      if (showFavBtn) showFavBtn.setAttribute('aria-pressed', onlyFav ? 'true' : 'false');
       if (showAllBtn) showAllBtn.textContent = (pageLang === 'en')
         ? `Show extended styles: ${showAll ? 'ON' : 'OFF'}`
         : (pageLang === 'ja')
           ? `拡張スタイル表示: ${showAll ? 'ON' : 'OFF'}`
           : `확장 폰트 보기: ${showAll ? 'ON' : 'OFF'}`;
+      if (showAllBtn) showAllBtn.setAttribute('aria-pressed', showAll ? 'true' : 'false');
     };
 
     const render = () => {
-      const value = (input.value || '').slice(0, 500);
+      const rawValue = input.value || '';
+      const rawChars = Array.from(rawValue);
+      let wasTrimmed = false;
+      if (rawChars.length > 500) {
+        input.value = rawChars.slice(0, 500).join('');
+        wasTrimmed = true;
+      }
+      const value = input.value || '';
       const query = (filter?.value || '').trim().toLocaleLowerCase(pageLang === 'ja' ? 'ja-JP' : (pageLang === 'en' ? 'en-US' : 'ko-KR'));
       list.innerHTML = '';
       visibleResults = [];
@@ -10753,10 +10817,12 @@
         const message = query ? fcText.noMatch : fcText.noFav;
         const empty = document.createElement('div');
         empty.className = 'empty-state';
+        empty.setAttribute('role', 'listitem');
         empty.textContent = message;
         list.appendChild(empty);
         if (convertedCount) convertedCount.textContent = '0';
         if (unchangedCount) unchangedCount.textContent = '0';
+        if (copyVisibleBtn) copyVisibleBtn.disabled = true;
         setStatus(message, 'error');
         return;
       }
@@ -10773,6 +10839,7 @@
 
         const item = document.createElement('div');
         item.className = 'font-preview-item';
+        item.setAttribute('role', 'listitem');
 
         const favBtn = document.createElement('button');
         favBtn.type = 'button';
@@ -10841,7 +10908,8 @@
       });
       if (convertedCount) convertedCount.textContent = formatNum(changed);
       if (unchangedCount) unchangedCount.textContent = formatNum(unchanged);
-      setStatus(value ? fcText.visible(targets.length) : fcText.empty);
+      if (copyVisibleBtn) copyVisibleBtn.disabled = !visibleResults.length;
+      setStatus(wasTrimmed ? fcText.truncated : (value ? fcText.visible(targets.length) : fcText.empty), wasTrimmed ? 'warning' : '');
     };
 
     let timer;

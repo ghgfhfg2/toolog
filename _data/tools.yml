@@ -1604,9 +1604,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 입력하면 다양한 유니코드 폰트로 실시간 변환하고 개별·일괄 복사로 SNS 문구 후보를 비교해요.
-  description_en: Convert plain text into multiple Unicode font styles in real time, then copy one style or all visible candidates.
-  description_ja: 入力テキストを複数のUnicodeフォントへ変換し、個別コピーや表示候補の一括コピーができます。
+  description: 입력하면 다양한 유니코드 폰트로 실시간 변환하고 한국어 스타일명 검색, 즐겨찾기, 개별·일괄 복사로 SNS 문구 후보를 비교해요.
+  description_en: Convert plain text into multiple Unicode font styles in real time, search and favorite styles, then copy one style or all visible candidates.
+  description_ja: 入力テキストを複数のUnicodeフォントへ変換し、検索・お気に入り・個別コピー・表示候補の一括コピーができます。
   url: /tools/font-change/
   url_en: /en/tools/font-change/
   url_ja: /ja/tools/font-change/

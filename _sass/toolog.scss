@@ -1059,12 +1059,29 @@ textarea:focus-visible {
 }
 
 .font-change-controls {
-  display: flex;
+  display: grid;
   gap: .45rem;
-  flex-wrap: wrap;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 .font-change-controls button {
-  width: auto;
+  min-height: 42px;
+  width: 100%;
+}
+.fc-filter-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(160px, auto);
+}
+.fc-filter-grid button {
+  align-self: end;
+}
+.fc-limit {
+  margin-top: -.15rem;
+}
+.font-change-ui #fc-status[data-state="success"] { color: #86efac; }
+.font-change-ui #fc-status[data-state="warning"] { color: #fbbf24; }
+.font-change-ui #fc-status[data-state="error"] { color: #fca5a5; }
+.font-change-ui button[aria-pressed="true"] {
+  border-color: #60a5fa;
+  background: #172554;
 }
 
 .font-preview-list {
@@ -1085,6 +1102,12 @@ textarea:focus-visible {
 .font-preview-item:hover {
   border-color: #3b82f6;
   background: #13203a;
+}
+.font-preview-body:focus-visible,
+.font-fav-btn:focus-visible,
+.font-change-controls button:focus-visible {
+  outline: 2px solid #93c5fd;
+  outline-offset: 2px;
 }
 .font-preview-item.copied {
   border-color: #22c55e;
@@ -1233,6 +1256,11 @@ textarea:focus-visible {
   .avg-actions { grid-template-columns: 1fr; }
   .avg-stats { grid-template-columns: 1fr 1fr; }
   .tool-stats { grid-template-columns: 1fr 1fr; }
+  .fc-filter-grid,
+  .font-change-controls { grid-template-columns: 1fr; }
+  .font-change-ui #fc-input {
+    min-height: 150px;
+  }
   .pm-categories,
   .pm-actions { grid-template-columns: 1fr; }
   .pm-stats { grid-template-columns: 1fr 1fr; }
