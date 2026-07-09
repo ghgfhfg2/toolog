@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Font Style Converter | Copy Unicode Text for Instagram & Social Media
-description: Convert letters and numbers into Unicode font styles, search and favorite styles, then copy one style or all visible candidates for Instagram bios, nicknames, social profiles, and captions.
+description: Convert letters and numbers into Unicode font styles in real time, search style names, save favorites, and copy one style or all visible candidates for Instagram bios, nicknames, social profiles, and captions.
 lang: en
 permalink: /en/tools/font-change/
 canonical_url: /en/tools/font-change/
@@ -18,14 +18,14 @@ faq:
   - q: Does it convert text in real time?
     a: Yes. As you type, every style preview updates immediately.
   - q: How do I copy a style?
-    a: Click any style block to copy that exact converted text, or copy every visible candidate at once for comparison.
+    a: Click any style block to copy that exact result. To compare several options, use Copy visible styles to copy every currently shown candidate.
   - q: What if clipboard permission fails?
     a: The tool automatically tries a fallback copy method so copy still works in most browsers.
   - q: Will it change Korean, Japanese, or other non-Latin text?
     a: Unicode math and decorative characters mainly replace Latin letters and numbers, so Korean, Japanese, and many other characters usually remain unchanged.
   - q: How long can the input be?
     a: The input is limited to 500 characters to keep mobile preview and copy interactions responsive. It is best for bios, nicknames, titles, and short captions.
-  - q: Can I search by plain style names?
+  - q: Can I search by style name?
     a: Yes. Search terms such as bold, underline, circled, monospace, superscript, or full-width narrow the preview list immediately.
 alternate_urls:
   ko: /tools/font-change/
@@ -34,33 +34,33 @@ alternate_urls:
 ---
 
 ## Why use a font style converter?
-When styling an Instagram bio, social profile, channel name, or short caption, moving between separate font sites slows the process down. This tool keeps the workflow on one screen with **live conversion, style search, favorites, and copy feedback**.
+When styling an Instagram bio, channel name, social profile, or short caption, jumping between separate font sites slows the process down. This tool keeps the practical workflow on one screen: **type, preview every style, compare favorites, and copy with one click**.
 
 ## Key features
 - Live conversion while typing
-- Search for a style by name
+- Search by plain style names such as bold, circled, underline, monospace, and superscript
 - Multiple Unicode style previews
 - Copy one style with a click or keyboard, or copy all visible style candidates
 - Count characters, visible styles, and styles that actually changed the text
-- Save favorite styles for faster reuse
+- Save favorite styles for faster repeat use
 - 500-character input guard for smoother mobile preview
 - Mobile-friendly interaction
 
 ## How to use
 1. Enter your text.
-2. Search by style name or show only your favorites.
-3. Click the style you want to copy, or copy all visible styles to compare candidates elsewhere.
+2. Search by style name, expand the style list, or show only your favorites.
+3. Click the style you want to copy, or copy all visible styles when you want to compare candidates elsewhere.
 
 > Unicode font styles do not install or change an actual font file. They replace Latin letters and numbers with similar-looking Unicode characters. Korean, Japanese, and other characters may stay unchanged, and some platforms may not support every styled character.
 
 ## Practical use cases
-- Styling Instagram bios and social profile text
+- Styling Instagram bios, social profiles, and short profile intros
 - Testing nickname or channel-name variants
 - Creating highlighted event/promotional text quickly
-- Comparing which Unicode styles remain readable on your target platform
+- Comparing which Unicode styles stay readable on your target platform before posting
 
 ## Input and compatibility notes
-This tool is designed for short social text, not long documents. If a platform shows blank boxes or broken symbols, switch to a simpler style such as bold, sans, monospace, underline, or full-width.
+This tool is designed for short social text, not long documents. Input is capped at 500 characters for smoother mobile preview and copy behavior. If a platform shows blank boxes or broken symbols, switch to a simpler style such as bold, sans, monospace, underline, or full-width.
 
 ## Related tools
 - Check platform limits: [Text Counter]({{ '/en/tools/text-counter/' | relative_url }})
@@ -68,4 +68,4 @@ This tool is designed for short social text, not long documents. If a platform s
 - Clean candidate lists: [List Format Converter]({{ '/en/tools/list-format-converter/' | relative_url }})
 
 ## Summary
-This Unicode font style converter keeps the full social-text workflow on one screen: type, search, compare, favorite, and copy.
+This Unicode font style converter keeps the SNS text workflow on one screen: type, preview, search, compare, favorite, and copy.
