@@ -4524,85 +4524,90 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
         </div>
 
       {% when 'movie-seat-choice-simulator' %}
-        <div class="tool-ui">
-          <p class="tool-result">좌석 후보 4개까지 화면 거리, 중앙 위치, 통로 접근성, 관람 선호도를 비교해 추천 순서를 정리합니다.</p>
+        <div class="tool-ui mscs-ui">
+          <p class="tool-result" id="mscs-intro">
+            {% if page.lang == 'en' %}Compare up to four movie seat candidates by screen distance, center position, aisle access, and viewing preference before booking.
+            {% elsif page.lang == 'ja' %}予約前に、最大4つの映画館座席候補をスクリーン距離・中央位置・通路アクセス・鑑賞の好みで比較します。
+            {% else %}좌석 후보 4개까지 화면 거리, 중앙 위치, 통로 접근성, 관람 선호도를 비교해 추천 순서를 정리합니다.{% endif %}
+          </p>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="mscs-preference">가장 중시하는 기준</label>
-              <select id="mscs-preference">
-                <option value="balanced" selected>전체 균형</option>
-                <option value="immersion">화면 몰입감</option>
-                <option value="comfort">목 편안함</option>
-                <option value="exit">출입 편의</option>
+              <label for="mscs-preference">{% if page.lang == 'en' %}Top priority{% elsif page.lang == 'ja' %}最重視する基準{% else %}가장 중시하는 기준{% endif %}</label>
+              <select id="mscs-preference" aria-describedby="mscs-summary mscs-intro">
+                <option value="balanced" selected>{% if page.lang == 'en' %}Balanced{% elsif page.lang == 'ja' %}全体バランス{% else %}전체 균형{% endif %}</option>
+                <option value="immersion">{% if page.lang == 'en' %}Screen immersion{% elsif page.lang == 'ja' %}スクリーン没入感{% else %}화면 몰입감{% endif %}</option>
+                <option value="comfort">{% if page.lang == 'en' %}Neck comfort{% elsif page.lang == 'ja' %}首の楽さ{% else %}목 편안함{% endif %}</option>
+                <option value="exit">{% if page.lang == 'en' %}Easy exit{% elsif page.lang == 'ja' %}出入りのしやすさ{% else %}출입 편의{% endif %}</option>
               </select>
             </div>
             <div>
-              <label for="mscs-group">관람 인원</label>
-              <select id="mscs-group">
-                <option value="solo">혼자</option>
-                <option value="pair" selected>2명</option>
-                <option value="group">3명 이상</option>
+              <label for="mscs-group">{% if page.lang == 'en' %}Viewers{% elsif page.lang == 'ja' %}鑑賞人数{% else %}관람 인원{% endif %}</label>
+              <select id="mscs-group" aria-describedby="mscs-summary mscs-intro">
+                <option value="solo">{% if page.lang == 'en' %}Solo{% elsif page.lang == 'ja' %}1人{% else %}혼자{% endif %}</option>
+                <option value="pair" selected>{% if page.lang == 'en' %}2 people{% elsif page.lang == 'ja' %}2人{% else %}2명{% endif %}</option>
+                <option value="group">{% if page.lang == 'en' %}3+ people{% elsif page.lang == 'ja' %}3人以上{% else %}3명 이상{% endif %}</option>
               </select>
             </div>
           </div>
 
           {% for i in (1..4) %}
-          <div class="tool-card">
+          <div class="tool-card mscs-card">
             <div class="tool-row-grid pct-grid">
               <div>
-                <label for="mscs-name-{{ i }}">좌석 후보 {{ i }}</label>
-                <input id="mscs-name-{{ i }}" type="text" maxlength="60" placeholder="예: G열 8번, H열 중앙, J열 통로" />
+                <label for="mscs-name-{{ i }}">{% if page.lang == 'en' %}Seat candidate {{ i }}{% elsif page.lang == 'ja' %}座席候補 {{ i }}{% else %}좌석 후보 {{ i }}{% endif %}</label>
+                <input id="mscs-name-{{ i }}" type="text" maxlength="60" aria-describedby="mscs-summary" placeholder="{% if page.lang == 'en' %}e.g. G8, center row H, aisle row J{% elsif page.lang == 'ja' %}例: G列8番、H列中央、J列通路側{% else %}예: G열 8번, H열 중앙, J열 통로{% endif %}" />
               </div>
               <div>
-                <label for="mscs-distance-{{ i }}">화면과의 거리</label>
-                <select id="mscs-distance-{{ i }}">
-                  <option value="front">앞쪽</option>
-                  <option value="mid" selected>중간</option>
-                  <option value="back">뒤쪽</option>
-                  <option value="far">맨 뒤쪽</option>
+                <label for="mscs-distance-{{ i }}">{% if page.lang == 'en' %}Screen distance{% elsif page.lang == 'ja' %}スクリーンとの距離{% else %}화면과의 거리{% endif %}</label>
+                <select id="mscs-distance-{{ i }}" aria-describedby="mscs-summary">
+                  <option value="front">{% if page.lang == 'en' %}Front{% elsif page.lang == 'ja' %}前方{% else %}앞쪽{% endif %}</option>
+                  <option value="mid" selected>{% if page.lang == 'en' %}Middle{% elsif page.lang == 'ja' %}中ほど{% else %}중간{% endif %}</option>
+                  <option value="back">{% if page.lang == 'en' %}Back{% elsif page.lang == 'ja' %}後方{% else %}뒤쪽{% endif %}</option>
+                  <option value="far">{% if page.lang == 'en' %}Very back{% elsif page.lang == 'ja' %}最後方{% else %}맨 뒤쪽{% endif %}</option>
                 </select>
               </div>
             </div>
             <div class="tool-row-grid pct-grid">
               <div>
-                <label for="mscs-center-{{ i }}">중앙 위치</label>
-                <select id="mscs-center-{{ i }}">
-                  <option value="center" selected>거의 중앙</option>
-                  <option value="near">중앙에서 조금 벗어남</option>
-                  <option value="side">사이드</option>
+                <label for="mscs-center-{{ i }}">{% if page.lang == 'en' %}Center position{% elsif page.lang == 'ja' %}中央位置{% else %}중앙 위치{% endif %}</label>
+                <select id="mscs-center-{{ i }}" aria-describedby="mscs-summary">
+                  <option value="center" selected>{% if page.lang == 'en' %}Almost centered{% elsif page.lang == 'ja' %}ほぼ中央{% else %}거의 중앙{% endif %}</option>
+                  <option value="near">{% if page.lang == 'en' %}Slightly off-center{% elsif page.lang == 'ja' %}中央から少し外れる{% else %}중앙에서 조금 벗어남{% endif %}</option>
+                  <option value="side">{% if page.lang == 'en' %}Side{% elsif page.lang == 'ja' %}端寄り{% else %}사이드{% endif %}</option>
                 </select>
               </div>
               <div>
-                <label for="mscs-aisle-{{ i }}">통로 접근성</label>
-                <select id="mscs-aisle-{{ i }}">
-                  <option value="aisle">통로 바로 옆</option>
-                  <option value="near" selected>통로와 가까움</option>
-                  <option value="middle">줄 가운데</option>
+                <label for="mscs-aisle-{{ i }}">{% if page.lang == 'en' %}Aisle access{% elsif page.lang == 'ja' %}通路アクセス{% else %}통로 접근성{% endif %}</label>
+                <select id="mscs-aisle-{{ i }}" aria-describedby="mscs-summary">
+                  <option value="aisle">{% if page.lang == 'en' %}Right by aisle{% elsif page.lang == 'ja' %}通路すぐ横{% else %}통로 바로 옆{% endif %}</option>
+                  <option value="near" selected>{% if page.lang == 'en' %}Near aisle{% elsif page.lang == 'ja' %}通路に近い{% else %}통로와 가까움{% endif %}</option>
+                  <option value="middle">{% if page.lang == 'en' %}Middle of row{% elsif page.lang == 'ja' %}列の中央側{% else %}줄 가운데{% endif %}</option>
                 </select>
               </div>
             </div>
             <div class="tool-row">
-              <label for="mscs-note-{{ i }}">메모(선택)</label>
-              <input id="mscs-note-{{ i }}" type="text" maxlength="80" placeholder="예: 예매 가능 좌석, 커플석, 스피커 가까움" />
+              <label for="mscs-note-{{ i }}">{% if page.lang == 'en' %}Note (optional){% elsif page.lang == 'ja' %}メモ（任意）{% else %}메모(선택){% endif %}</label>
+              <input id="mscs-note-{{ i }}" type="text" maxlength="80" aria-describedby="mscs-summary" placeholder="{% if page.lang == 'en' %}e.g. available now, couple seat, close to speaker{% elsif page.lang == 'ja' %}例: 予約可能、ペアシート、スピーカーに近い{% else %}예: 예매 가능 좌석, 커플석, 스피커 가까움{% endif %}" />
             </div>
           </div>
           {% endfor %}
 
           <div class="tool-row-grid pct-actions">
-            <button id="mscs-sample" type="button">예시 넣기</button>
-            <button id="mscs-copy" type="button">결과 복사</button>
+            <button id="mscs-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
+            <button id="mscs-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="mscs-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
-            <div><strong id="mscs-count">0</strong><span>비교 좌석</span></div>
-            <div><strong id="mscs-top">-</strong><span>추천 1순위</span></div>
-            <div><strong id="mscs-immersion">0</strong><span>몰입형 후보</span></div>
-            <div><strong id="mscs-comfort">0</strong><span>편안한 후보</span></div>
+          <div class="tool-stats" aria-label="{% if page.lang == 'en' %}Seat comparison summary{% elsif page.lang == 'ja' %}座席比較サマリー{% else %}좌석 비교 요약{% endif %}">
+            <div><strong id="mscs-count">0</strong><span>{% if page.lang == 'en' %}Seats{% elsif page.lang == 'ja' %}比較座席{% else %}비교 좌석{% endif %}</span></div>
+            <div><strong id="mscs-top">-</strong><span>{% if page.lang == 'en' %}Top pick{% elsif page.lang == 'ja' %}おすすめ1位{% else %}추천 1순위{% endif %}</span></div>
+            <div><strong id="mscs-immersion">0</strong><span>{% if page.lang == 'en' %}Immersive{% elsif page.lang == 'ja' %}没入型{% else %}몰입형 후보{% endif %}</span></div>
+            <div><strong id="mscs-comfort">0</strong><span>{% if page.lang == 'en' %}Comfortable{% elsif page.lang == 'ja' %}楽な候補{% else %}편안한 후보{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="mscs-summary">좌석 후보를 입력하면 추천 순서와 이유가 여기에 표시됩니다.</p>
-          <textarea id="mscs-output" rows="14" readonly placeholder="좌석 비교 결과가 여기에 표시됩니다."></textarea>
+          <p class="tool-result" id="mscs-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter at least one seat candidate to see the recommended order and reasons.{% elsif page.lang == 'ja' %}座席候補を1つ以上入力すると、おすすめ順と理由を表示します。{% else %}좌석 후보를 입력하면 추천 순서와 이유가 여기에 표시됩니다.{% endif %}</p>
+          <textarea id="mscs-output" rows="14" readonly aria-describedby="mscs-summary mscs-intro" aria-label="{% if page.lang == 'en' %}Movie seat comparison result{% elsif page.lang == 'ja' %}映画館座席比較結果{% else %}영화관 좌석 비교 결과{% endif %}" placeholder="{% if page.lang == 'en' %}Seat comparison results will appear here.{% elsif page.lang == 'ja' %}座席比較結果がここに表示されます。{% else %}좌석 비교 결과가 여기에 표시됩니다.{% endif %}"></textarea>
         </div>
 
       {% when 'ingredient-expiry-priority-checker' %}

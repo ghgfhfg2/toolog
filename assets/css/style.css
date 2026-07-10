@@ -516,6 +516,23 @@ a:hover { color: #fff; text-decoration: none; }
 .knr-ui #knr-help[data-state="warning"] { color: #fbbf24; }
 .knr-ui #knr-help[data-state="success"] { color: #86efac; }
 .knr-ui textarea[aria-invalid="true"] { border-color: #ef4444; }
+.mscs-ui .mscs-card {
+  display: grid;
+  gap: .55rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: .75rem;
+  background: #172033;
+}
+.mscs-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.mscs-ui #mscs-summary[data-state="error"] { color: #fca5a5; }
+.mscs-ui #mscs-summary[data-state="warning"] { color: #fbbf24; }
+.mscs-ui #mscs-summary[data-state="success"] { color: #86efac; }
+.mscs-ui #mscs-copy:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+.mscs-ui .pct-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .pm-options { grid-template-columns: minmax(0, 1fr); }
 .pm-options > div { display: grid; gap: .35rem; }
 .pm-categories { grid-template-columns: repeat(5, minmax(0, 1fr)); }

@@ -346,9 +346,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 영화관 좌석 후보의 화면 거리, 중앙 위치, 통로 접근성, 동행 인원, 선호도를 넣으면 어떤 자리가 더 편한지 빠르게 비교해요.
-  description_en: Compare movie theater seat candidates by distance, center position, aisle access, group size, and viewing preference.
-  description_ja: 映画館の座席候補を、スクリーン距離・中央位置・通路・同行人数・好みで比較します。
+  description: 영화 예매 전 좌석 후보의 화면 거리, 중앙 위치, 통로 접근성, 동행 인원, 관람 선호도를 비교해 추천 순서와 선택 이유를 정리해요.
+  description_en: Compare movie seat candidates before booking by screen distance, center position, aisle access, group size, and viewing preference.
+  description_ja: 映画の予約前に、座席候補をスクリーン距離・中央位置・通路アクセス・同行人数・好みで比較します。
   url: /tools/movie-seat-choice-simulator/
   url_en: /en/tools/movie-seat-choice-simulator/
   url_ja: /ja/tools/movie-seat-choice-simulator/

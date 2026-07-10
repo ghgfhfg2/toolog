@@ -15172,6 +15172,7 @@
     });
     const sampleBtn = document.getElementById('mscs-sample');
     const copyBtn = document.getElementById('mscs-copy');
+    const clearBtn = document.getElementById('mscs-clear');
     const countEl = document.getElementById('mscs-count');
     const topEl = document.getElementById('mscs-top');
     const immersionEl = document.getElementById('mscs-immersion');
@@ -15180,6 +15181,134 @@
     const outputEl = document.getElementById('mscs-output');
 
     if (!preferenceEl || !rows[0].name || !summaryEl || !outputEl) return;
+
+    const mscsText = {
+      ko: {
+        empty: '좌석 후보를 1개 이상 입력하면 추천 순서와 이유를 정리합니다.',
+        duplicated: '같은 좌석명이 있어요. 구분할 수 있게 열/번호나 메모를 조금 더 적어주세요.',
+        recommended: (name, count) => `${name}을(를) 1순위로 추천합니다. 총 ${count}개 좌석 후보를 비교했어요.`,
+        noCopy: '복사할 좌석 비교 결과가 없습니다.',
+        copied: '복사됨',
+        cleared: '좌석 후보를 초기화했습니다.',
+        resultTitle: '[영화관 좌석 선택 시뮬레이션 결과]',
+        criteria: '기준',
+        viewers: '인원',
+        condition: '조건',
+        reason: '이유',
+        note: '메모',
+        labels: {
+          distance: { front: '앞쪽', mid: '중간', back: '뒤쪽', far: '맨 뒤쪽' },
+          center: { center: '거의 중앙', near: '중앙에서 조금 벗어남', side: '사이드' },
+          aisle: { aisle: '통로 바로 옆', near: '통로와 가까움', middle: '줄 가운데' },
+          kinds: { immersion: '몰입형', comfort: '편안한 관람형', exit: '출입 편의형', balanced: '무난한 후보' }
+        },
+        reasons: {
+          centered: '화면 중심에 가까움',
+          side: '사이드라 시야 균형은 약함',
+          mid: '목 편안함과 몰입감 균형이 좋음',
+          back: '목 부담이 적고 전체 화면을 보기 쉬움',
+          far: '화면은 멀지만 전체 시야가 편함',
+          frontImmersion: '앞쪽 몰입감이 강함',
+          frontComfort: '앞쪽이라 목 피로를 확인해야 함',
+          aisle: '출입이 편함',
+          middleImmersion: '줄 가운데라 시야 방해가 적음',
+          groupMiddle: '여러 명이면 이동이 불편할 수 있음',
+          balanced: '전체 조건이 무난함'
+        },
+        samples: [
+          ['G열 8번', 'mid', 'center', 'middle', '남은 중앙 좌석'],
+          ['H열 3번 통로', 'mid', 'near', 'aisle', '출입 편함'],
+          ['D열 중앙', 'front', 'center', 'middle', '몰입감 좋음'],
+          ['J열 사이드', 'back', 'side', 'near', '목은 편할 듯']
+        ],
+        copyDefault: '결과 복사'
+      },
+      en: {
+        empty: 'Enter at least one seat candidate to see the recommended order and reasons.',
+        duplicated: 'Some seat names are duplicated. Add a row, number, or note so each option is easy to tell apart.',
+        recommended: (name, count) => `${name} is the top recommendation after comparing ${count} seat candidate${count === 1 ? '' : 's'}.`,
+        noCopy: 'There is no seat comparison result to copy yet.',
+        copied: 'Copied',
+        cleared: 'Cleared the seat candidates.',
+        resultTitle: '[Movie Seat Choice Simulation Result]',
+        criteria: 'Criteria',
+        viewers: 'Viewers',
+        condition: 'Conditions',
+        reason: 'Reason',
+        note: 'Note',
+        labels: {
+          distance: { front: 'Front', mid: 'Middle', back: 'Back', far: 'Very back' },
+          center: { center: 'Almost centered', near: 'Slightly off-center', side: 'Side' },
+          aisle: { aisle: 'Right by aisle', near: 'Near aisle', middle: 'Middle of row' },
+          kinds: { immersion: 'Immersive', comfort: 'Comfort viewing', exit: 'Easy-exit', balanced: 'Balanced option' }
+        },
+        reasons: {
+          centered: 'close to the screen center',
+          side: 'side position weakens visual balance',
+          mid: 'good balance of neck comfort and immersion',
+          back: 'less neck strain and easy full-screen view',
+          far: 'farther from the screen but comfortable for full view',
+          frontImmersion: 'strong front-row immersion',
+          frontComfort: 'front position may strain the neck',
+          aisle: 'easy to enter and leave',
+          middleImmersion: 'middle of the row can reduce side distractions',
+          groupMiddle: 'middle-row access can be inconvenient for a group',
+          balanced: 'overall conditions are balanced'
+        },
+        samples: [
+          ['G8', 'mid', 'center', 'middle', 'remaining center seat'],
+          ['H3 aisle', 'mid', 'near', 'aisle', 'easy exit'],
+          ['D center', 'front', 'center', 'middle', 'strong immersion'],
+          ['J side', 'back', 'side', 'near', 'probably easier on the neck']
+        ],
+        copyDefault: 'Copy result'
+      },
+      ja: {
+        empty: '座席候補を1つ以上入力すると、おすすめ順と理由を整理します。',
+        duplicated: '同じ座席名があります。列・番号・メモを足して区別しやすくしてください。',
+        recommended: (name, count) => `${name}を1位としておすすめします。合計${count}件の座席候補を比較しました。`,
+        noCopy: 'コピーできる座席比較結果がまだありません。',
+        copied: 'コピー済み',
+        cleared: '座席候補をクリアしました。',
+        resultTitle: '[映画館座席選びシミュレーション結果]',
+        criteria: '基準',
+        viewers: '人数',
+        condition: '条件',
+        reason: '理由',
+        note: 'メモ',
+        labels: {
+          distance: { front: '前方', mid: '中ほど', back: '後方', far: '最後方' },
+          center: { center: 'ほぼ中央', near: '中央から少し外れる', side: '端寄り' },
+          aisle: { aisle: '通路すぐ横', near: '通路に近い', middle: '列の中央側' },
+          kinds: { immersion: '没入型', comfort: '楽に鑑賞型', exit: '出入りしやすい型', balanced: '無難な候補' }
+        },
+        reasons: {
+          centered: 'スクリーン中央に近い',
+          side: '端寄りで視界のバランスは弱め',
+          mid: '首の楽さと没入感のバランスがよい',
+          back: '首への負担が少なく全体を見やすい',
+          far: '画面は遠いが全体視野は楽',
+          frontImmersion: '前方ならではの没入感が強い',
+          frontComfort: '前方なので首の疲れを確認したい',
+          aisle: '出入りしやすい',
+          middleImmersion: '列の中央側で横の視界の乱れが少ない',
+          groupMiddle: '複数人では移動しにくい場合がある',
+          balanced: '全体条件が無難'
+        },
+        samples: [
+          ['G列8番', 'mid', 'center', 'middle', '残っている中央席'],
+          ['H列3番 通路側', 'mid', 'near', 'aisle', '出入りしやすい'],
+          ['D列中央', 'front', 'center', 'middle', '没入感が強い'],
+          ['J列端寄り', 'back', 'side', 'near', '首は楽そう']
+        ],
+        copyDefault: '結果をコピー'
+      }
+    }[pageLang] || {};
+
+    const setSummary = (message, state = '') => {
+      summaryEl.textContent = message;
+      summaryEl.dataset.state = state;
+    };
 
     const copyText = async (text) => {
       try { await navigator.clipboard.writeText(text); }
@@ -15195,15 +15324,11 @@
       }
     };
 
-    const distanceLabel = { front: '앞쪽', mid: '중간', back: '뒤쪽', far: '맨 뒤쪽' };
-    const centerLabel = { center: '거의 중앙', near: '중앙에서 조금 벗어남', side: '사이드' };
-    const aisleLabel = { aisle: '통로 바로 옆', near: '통로와 가까움', middle: '줄 가운데' };
-
     const classify = (item) => {
-      if (item.center === 'center' && (item.distance === 'front' || item.distance === 'mid')) return '몰입형';
-      if ((item.distance === 'mid' || item.distance === 'back') && item.center !== 'side') return '편안한 관람형';
-      if (item.aisle === 'aisle') return '출입 편의형';
-      return '무난한 후보';
+      if (item.center === 'center' && (item.distance === 'front' || item.distance === 'mid')) return 'immersion';
+      if ((item.distance === 'mid' || item.distance === 'back') && item.center !== 'side') return 'comfort';
+      if (item.aisle === 'aisle') return 'exit';
+      return 'balanced';
     };
 
     const scoreItem = (item, preference, group) => {
@@ -15229,21 +15354,26 @@
 
     const reasonFor = (item, preference, group) => {
       const reasons = [];
-      if (item.center === 'center') reasons.push('화면 중심에 가까움');
-      if (item.center === 'side') reasons.push('사이드라 시야 균형은 약함');
-      if (item.distance === 'mid') reasons.push('목 편안함과 몰입감 균형이 좋음');
-      if (item.distance === 'front') reasons.push(preference === 'immersion' ? '앞쪽 몰입감이 강함' : '앞쪽이라 목 피로를 확인해야 함');
-      if (item.aisle === 'aisle') reasons.push('출입이 편함');
-      if (group === 'group' && item.aisle === 'middle') reasons.push('여러 명이면 이동이 불편할 수 있음');
-      if (!reasons.length) reasons.push('전체 조건이 무난함');
+      const rt = mscsText.reasons;
+      if (item.center === 'center') reasons.push(rt.centered);
+      if (item.center === 'side') reasons.push(rt.side);
+      if (item.distance === 'mid') reasons.push(rt.mid);
+      if (item.distance === 'back') reasons.push(rt.back);
+      if (item.distance === 'far') reasons.push(rt.far);
+      if (item.distance === 'front') reasons.push(preference === 'immersion' ? rt.frontImmersion : rt.frontComfort);
+      if (item.aisle === 'aisle') reasons.push(rt.aisle);
+      if (preference === 'immersion' && item.aisle === 'middle') reasons.push(rt.middleImmersion);
+      if (group === 'group' && item.aisle === 'middle') reasons.push(rt.groupMiddle);
+      if (!reasons.length) reasons.push(rt.balanced);
       return reasons.join(', ');
     };
 
     const build = () => {
       const preference = preferenceEl.value || 'balanced';
       const group = groupEl.value || 'pair';
+      rows.forEach((row) => row.name.setAttribute('aria-invalid', 'false'));
       const items = rows.map((row, idx) => {
-        const name = (row.name.value || '').trim();
+        const name = (row.name.value || '').replace(/\s+/g, ' ').trim();
         if (!name) return null;
         const item = { idx, name, distance: row.distance.value, center: row.center.value, aisle: row.aisle.value, note: (row.note.value || '').trim() };
         item.score = scoreItem(item, preference, group);
@@ -15251,36 +15381,43 @@
         item.reason = reasonFor(item, preference, group);
         return item;
       }).filter(Boolean).sort((a, b) => b.score - a.score || a.idx - b.idx);
+      const duplicatedNames = items.reduce((acc, item) => {
+        const key = item.name.toLocaleLowerCase();
+        acc.set(key, (acc.get(key) || 0) + 1);
+        return acc;
+      }, new Map());
+      rows.forEach((row) => {
+        const key = (row.name.value || '').replace(/\s+/g, ' ').trim().toLocaleLowerCase();
+        row.name.setAttribute('aria-invalid', key && duplicatedNames.get(key) > 1 ? 'true' : 'false');
+      });
 
       countEl.textContent = String(items.length);
       topEl.textContent = items[0]?.name || '-';
-      immersionEl.textContent = String(items.filter((item) => item.kind === '몰입형').length);
-      comfortEl.textContent = String(items.filter((item) => item.kind === '편안한 관람형').length);
+      immersionEl.textContent = String(items.filter((item) => item.kind === 'immersion').length);
+      comfortEl.textContent = String(items.filter((item) => item.kind === 'comfort').length);
+      copyBtn.disabled = !items.length;
 
       if (!items.length) {
-        summaryEl.textContent = '좌석 후보를 1개 이상 입력하면 추천 순서와 이유를 정리합니다.';
+        setSummary(mscsText.empty);
         outputEl.value = '';
         return;
       }
 
-      summaryEl.textContent = `${items[0].name}을(를) 1순위로 추천합니다. 총 ${items.length}개 좌석 후보를 비교했어요.`;
+      const hasDuplicate = Array.from(duplicatedNames.values()).some((count) => count > 1);
+      setSummary(hasDuplicate ? mscsText.duplicated : mscsText.recommended(items[0].name, items.length), hasDuplicate ? 'warning' : 'success');
+      const labels = mscsText.labels;
       outputEl.value = [
-        '[영화관 좌석 선택 시뮬레이션 결과]',
-        `기준: ${preferenceEl.options[preferenceEl.selectedIndex].text} / 인원: ${groupEl.options[groupEl.selectedIndex].text}`,
-        ...items.map((item, index) => `${index + 1}. ${item.name} | ${item.kind} | 점수 ${Math.round(item.score)}
-- 조건: ${distanceLabel[item.distance]} / ${centerLabel[item.center]} / ${aisleLabel[item.aisle]}
-- 이유: ${item.reason}${item.note ? `
-- 메모: ${item.note}` : ''}`)
+        mscsText.resultTitle,
+        `${mscsText.criteria}: ${preferenceEl.options[preferenceEl.selectedIndex].text} / ${mscsText.viewers}: ${groupEl.options[groupEl.selectedIndex].text}`,
+        ...items.map((item, index) => `${index + 1}. ${item.name} | ${labels.kinds[item.kind]} | ${Math.round(item.score)}
+- ${mscsText.condition}: ${labels.distance[item.distance]} / ${labels.center[item.center]} / ${labels.aisle[item.aisle]}
+- ${mscsText.reason}: ${item.reason}${item.note ? `
+- ${mscsText.note}: ${item.note}` : ''}`)
       ].join('\n\n');
     };
 
     sampleBtn?.addEventListener('click', () => {
-      const samples = [
-        ['G열 8번', 'mid', 'center', 'middle', '남은 중앙 좌석'],
-        ['H열 3번 통로', 'mid', 'near', 'aisle', '출입 편함'],
-        ['D열 중앙', 'front', 'center', 'middle', '몰입감 좋음'],
-        ['J열 사이드', 'back', 'side', 'near', '목은 편할 듯']
-      ];
+      const samples = mscsText.samples;
       rows.forEach((row, idx) => {
         const sample = samples[idx];
         row.name.value = sample[0];
@@ -15296,11 +15433,31 @@
 
     copyBtn?.addEventListener('click', async () => {
       if (!outputEl.value.trim()) build();
-      if (!outputEl.value.trim()) return;
+      if (!outputEl.value.trim()) {
+        setSummary(mscsText.noCopy, 'error');
+        rows[0].name.focus();
+        return;
+      }
       await copyText(outputEl.value.trim());
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = mscsText.copied;
+      setTimeout(() => { copyBtn.textContent = old || mscsText.copyDefault; }, 900);
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      rows.forEach((row) => {
+        row.name.value = '';
+        row.distance.value = 'mid';
+        row.center.value = 'center';
+        row.aisle.value = 'near';
+        row.note.value = '';
+        row.name.setAttribute('aria-invalid', 'false');
+      });
+      preferenceEl.value = 'balanced';
+      groupEl.value = 'pair';
+      build();
+      setSummary(mscsText.cleared);
+      rows[0].name.focus();
     });
 
     [preferenceEl, groupEl, ...rows.flatMap((row) => Object.values(row))].forEach((el) => {

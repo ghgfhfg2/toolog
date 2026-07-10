@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Movie Theater Seat Choice Simulator | Compare center, aisle, and front/back seats
-description: Compare movie theater seat candidates by screen distance, center position, aisle access, group size, and viewing preference.
+description: Compare movie seat candidates before booking by screen distance, center position, aisle access, group size, and viewing preference to get a ranked recommendation with reasons.
 lang: en
 permalink: /en/tools/movie-seat-choice-simulator/
 canonical_url: /en/tools/movie-seat-choice-simulator/
@@ -27,12 +27,15 @@ faq:
     a: Yes. Adjust your immersion preference and front/back distance criteria to use it as a reference for larger theaters too.
   - q: Is the highest-scoring seat always the right answer?
     a: No. Treat it as a comparison based on personal preferences such as neck comfort, companion seating, and easy exit.
+  - q: How many seat candidates can I compare?
+    a: You can compare up to four seats. One or two candidates are enough to get a quick recommendation and explanation.
 ---
 
 ## Why use the Movie Theater Seat Choice Simulator?
 When several seats are still available on a movie booking page, it is not always easy to decide **whether the center, an aisle seat, or a more immersive front seat** is the better choice. For popular movies, a good seat can disappear while you are still comparing options.
 
 This tool lets you enter up to four seat candidates and compare screen distance, center position, aisle access, group size, and viewing preference to produce a **practical seat order for the booking moment**.
+It is useful for quick choices such as “Should I take the center of row G or the aisle seat in row H?” before the seats disappear.
 
 ## How to use it
 1. Enter the seat candidates you are considering, such as G8, center of row H, or an aisle seat in row J.
@@ -66,6 +69,8 @@ No. It is a lightweight simulator based on common viewing experience, not a prec
 ### Can I compare couple seats or accessible seats?
 You can write those details in the seat name as a note, but actual availability and booking rules should always follow the theater's guidance.
 
+### Can I enter the same seat name twice?
+You can, but the tool will warn you because duplicate names make the result harder to read. Add a row, seat number, or short note to tell candidates apart.
+
 ## Summary
-Movie Theater Seat Choice Simulator is a **simulator-style tool for comparing candidate seats by distance, centeredness, aisle access, and companion conditions before booking**.
-Recent releases leaned toward generator, checker, picker, and utility formats, so this tool adds an entertainment-focused simulation format and broadens the lineup without becoming another calculator-like tool.
+Movie Theater Seat Choice Simulator is a **web tool for comparing candidate seats by distance, centeredness, aisle access, and companion conditions before booking**. It does not automatically analyze a theater seat map, but it helps you quickly decide which remaining seat best matches your viewing preference.
