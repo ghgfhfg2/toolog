@@ -16287,7 +16287,7 @@
         detectionLimit:'Only the first 30 detections are listed for performance. Masking was applied throughout the text.',
         selectedAll:'Selected every masking category.',
         selectedNone:'Cleared every masking category.',
-        labels:{ phone:'Phone', email:'Email', card:'Card number', account:'Account candidate', id:'ID number candidate' },
+        labels:{ phone:'Phone', email:'Email', card:'Card number', account:'Account candidate', id:'Korean ID-style candidate' },
         tokens:{ phone:'[PHONE]', email:'[EMAIL]', card:'[CARD]', account:'[ACCOUNT]', id:'[ID]' },
         sample:'Customer Suya Kim can be reached at 010-1234-5678, +1 415-555-1212, or sooya@example.com. Payment card 1234-5678-9012-3456, refund account 123456-78-901234, and ID-like number 900101-1234567 were included.'
       },
@@ -16298,7 +16298,7 @@
         detectionLimit:'検出リストは動作を軽くするため先頭30件だけ表示します。本文全体にはマスキングが適用されています。',
         selectedAll:'すべてのマスキング対象を選択しました。',
         selectedNone:'マスキング対象をすべて解除しました。',
-        labels:{ phone:'電話番号', email:'メール', card:'カード番号', account:'口座番号候補', id:'ID番号候補' },
+        labels:{ phone:'電話番号', email:'メール', card:'カード番号', account:'口座番号候補', id:'韓国ID形式候補' },
         tokens:{ phone:'[電話番号]', email:'[メール]', card:'[カード]', account:'[口座]', id:'[ID]' },
         sample:'スヤ様の連絡先は010-1234-5678、海外拠点は+1 415-555-1212、メールはsooya@example.comです。決済カード1234-5678-9012-3456、返金口座123456-78-901234、ID番号候補900101-1234567が含まれています。'
       }

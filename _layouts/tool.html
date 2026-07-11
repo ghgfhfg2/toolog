@@ -1138,7 +1138,7 @@ layout: default
             <label class="tool-check"><input id="pm-email" type="checkbox" checked /> {% if page.lang == 'en' %}Email addresses{% elsif page.lang == 'ja' %}メールアドレス{% else %}이메일{% endif %}</label>
             <label class="tool-check"><input id="pm-card" type="checkbox" checked /> {% if page.lang == 'en' %}Card numbers{% elsif page.lang == 'ja' %}カード番号{% else %}카드번호{% endif %}</label>
             <label class="tool-check"><input id="pm-account" type="checkbox" checked /> {% if page.lang == 'en' %}Account-like numbers{% elsif page.lang == 'ja' %}口座番号候補{% else %}계좌번호 후보{% endif %}</label>
-            <label class="tool-check"><input id="pm-id" type="checkbox" checked /> {% if page.lang == 'en' %}ID number candidates{% elsif page.lang == 'ja' %}ID番号候補{% else %}주민등록번호 후보{% endif %}</label>
+            <label class="tool-check"><input id="pm-id" type="checkbox" checked /> {% if page.lang == 'en' %}Korean ID-style candidates{% elsif page.lang == 'ja' %}韓国ID形式候補{% else %}주민등록번호 후보{% endif %}</label>
           </div>
           <div class="tool-row-grid pm-actions">
             <button id="pm-run" type="button">{% if page.lang == 'en' %}Mask text{% elsif page.lang == 'ja' %}マスキング実行{% else %}마스킹 실행{% endif %}</button>
@@ -1153,7 +1153,7 @@ layout: default
             <div><strong id="pm-email-count">0</strong><span>{% if page.lang == 'en' %}Emails{% elsif page.lang == 'ja' %}メール{% else %}이메일{% endif %}</span></div>
             <div><strong id="pm-card-count">0</strong><span>{% if page.lang == 'en' %}Cards{% elsif page.lang == 'ja' %}カード{% else %}카드{% endif %}</span></div>
             <div><strong id="pm-account-count">0</strong><span>{% if page.lang == 'en' %}Account candidates{% elsif page.lang == 'ja' %}口座候補{% else %}계좌 후보{% endif %}</span></div>
-            <div><strong id="pm-id-count">0</strong><span>{% if page.lang == 'en' %}IDs{% elsif page.lang == 'ja' %}ID候補{% else %}신분번호{% endif %}</span></div>
+            <div><strong id="pm-id-count">0</strong><span>{% if page.lang == 'en' %}Korean IDs{% elsif page.lang == 'ja' %}韓国ID形式{% else %}신분번호{% endif %}</span></div>
           </div>
           <label for="pm-output">{% if page.lang == 'en' %}Masked result{% elsif page.lang == 'ja' %}マスキング結果{% else %}마스킹 결과{% endif %}</label>
           <textarea id="pm-output" rows="8" readonly aria-describedby="pm-help pm-detections-title" aria-label="{% if page.lang == 'en' %}Masked text result{% elsif page.lang == 'ja' %}マスキング済みテキスト結果{% else %}마스킹된 텍스트 결과{% endif %}"></textarea>
