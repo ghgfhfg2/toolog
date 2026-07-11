@@ -1133,16 +1133,18 @@ layout: default
               </select>
             </div>
           </div>
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid pm-categories" role="group" aria-label="{% if page.lang == 'en' %}Masking categories{% elsif page.lang == 'ja' %}マスキング対象カテゴリ{% else %}마스킹 대상 항목{% endif %}">
             <label class="tool-check"><input id="pm-phone" type="checkbox" checked /> {% if page.lang == 'en' %}Phone numbers{% elsif page.lang == 'ja' %}電話番号{% else %}전화번호{% endif %}</label>
             <label class="tool-check"><input id="pm-email" type="checkbox" checked /> {% if page.lang == 'en' %}Email addresses{% elsif page.lang == 'ja' %}メールアドレス{% else %}이메일{% endif %}</label>
             <label class="tool-check"><input id="pm-card" type="checkbox" checked /> {% if page.lang == 'en' %}Card numbers{% elsif page.lang == 'ja' %}カード番号{% else %}카드번호{% endif %}</label>
             <label class="tool-check"><input id="pm-account" type="checkbox" checked /> {% if page.lang == 'en' %}Account-like numbers{% elsif page.lang == 'ja' %}口座番号候補{% else %}계좌번호 후보{% endif %}</label>
             <label class="tool-check"><input id="pm-id" type="checkbox" checked /> {% if page.lang == 'en' %}ID number candidates{% elsif page.lang == 'ja' %}ID番号候補{% else %}주민등록번호 후보{% endif %}</label>
           </div>
-          <div class="tool-row-grid pct-actions">
+          <div class="tool-row-grid pm-actions">
             <button id="pm-run" type="button">{% if page.lang == 'en' %}Mask text{% elsif page.lang == 'ja' %}マスキング実行{% else %}마스킹 실행{% endif %}</button>
             <button id="pm-sample" type="button">{% if page.lang == 'en' %}Fill sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 입력{% endif %}</button>
+            <button id="pm-select-all" type="button">{% if page.lang == 'en' %}Select all{% elsif page.lang == 'ja' %}すべて選択{% else %}전체 선택{% endif %}</button>
+            <button id="pm-select-none" type="button">{% if page.lang == 'en' %}Clear categories{% elsif page.lang == 'ja' %}対象を解除{% else %}항목 해제{% endif %}</button>
             <button id="pm-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
             <button id="pm-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}지우기{% endif %}</button>
           </div>

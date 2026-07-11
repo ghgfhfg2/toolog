@@ -2,7 +2,7 @@
 layout: tool
 lang: en
 title: Privacy Masker | Hide phone, email, card, account, and Korean ID-style numbers
-description: Paste text and mask domestic or international phone numbers, emails, card numbers, account-like numbers, and Korean resident-registration-style ID candidates in your browser before sharing.
+description: Paste text and mask phone numbers, emails, card numbers, account-like numbers, and Korean resident-registration-style ID candidates in your browser while reviewing detections and missed-risk limits.
 category: productivity
 category_label: Work/Privacy Masking
 thumbnail: /assets/thumbs/en/privacy-masker.svg
@@ -29,6 +29,8 @@ faq:
     a: It can catch some separated international candidates such as +1 415-555-1212, but phone formats vary by country, so review important text manually.
   - q: Can it mask Korean resident-registration-style ID numbers?
     a: Yes. It can flag 13-digit candidates shaped like 900101-1234567 and hide the trailing digits. It is pattern-based, not a validity check, so review the result manually.
+  - q: Can I paste a long support log or message?
+    a: You can enter up to 12,000 characters. The detection list shows the first 30 candidates for performance, while masking is applied throughout the text.
   - q: Can the masked result be restored?
     a: Not from the masked output alone. Keep the original safely if you need it, and share only the masked text.
 ---
@@ -36,14 +38,14 @@ faq:
 ## Why use Privacy Masker?
 Support messages, bug reports, copied logs, and internal notes often contain phone numbers, emails, card numbers, or account-like numbers that should not be shared as-is. When you are in a hurry, it is easy to remove one item and miss another.
 
-This utility-type tool lets you paste text and mask common privacy-sensitive patterns directly in your browser, including Korean resident-registration-style ID candidates. You choose which categories to mask, review the detected candidates, and copy a safer sharing version after checking the result. You can keep the original shape with `*` characters or replace each match with a category label such as `[PHONE]`.
+This utility-type tool lets you paste text and mask common privacy-sensitive patterns directly in your browser, including Korean resident-registration-style ID candidates. You choose which categories to mask, review the detected candidates, and copy a safer sharing version after checking the result. You can keep the original shape with `*` characters or replace each match with a category label such as `[PHONE]`, and category controls can be selected or cleared together for repeat checks.
 
 ## How to use it
 1. Paste the text you want to share or clean up.
 2. Choose whether to keep the shape or replace matches with category labels.
 3. Select phone numbers, emails, card numbers, account-like numbers, and/or Korean ID-style candidates.
 4. Press `Mask text` to see the cleaned result and detection counts.
-5. Review the detection list to see what was changed.
+5. Review the detection list to see what was changed. When there are many candidates, the list shows the first 30.
 6. Review the output, then copy only the sharing-safe version.
 7. Manually check names, addresses, order IDs, or context-specific details.
 
@@ -72,6 +74,9 @@ Resident-registration-style 13-digit candidates are masked as a first-pass guard
 ### How are values masked?
 Phone numbers keep the rough shape while hiding the middle digits. Emails hide part of the local name and domain. Card and account-like numbers hide the middle digits. Korean resident-registration-style candidates keep the first seven digits and hide the rest. Card masking prioritizes separated 4-digit groups or long numbers that pass a basic checksum to reduce numeric false positives.
 
+### If a value is not in the detection list, was it left unmasked?
+If there are more than 30 candidates, the visible detection list is capped but masking still runs across the whole text. Names, addresses, order IDs, internal customer numbers, and other context-specific data still need manual review.
+
 ### Is this a compliance review tool?
 No. It is a first-pass helper before sharing text. For legal or security-sensitive documents, follow your organization’s official review process.
 
@@ -79,4 +84,4 @@ No. It is a first-pass helper before sharing text. For legal or security-sensiti
 No. Input and output stay only on the current page session and disappear when refreshed.
 
 ## Summary
-Privacy Masker is a **utility tool for hiding contact, email, Korean ID-style, and numeric sensitive-data candidates and reviewing what was detected before sharing text**. It adds a privacy/document-cleanup use case after recent learning, checker, and planner tools.
+Privacy Masker is a **utility tool for hiding contact, email, Korean ID-style, and numeric sensitive-data candidates and reviewing what was detected before sharing text**. It works best as a first-pass check for support messages, logs, meeting notes, and sample documents, followed by manual review for context-specific private data.

@@ -705,7 +705,7 @@ textarea:focus-visible {
 .pm-options { grid-template-columns: minmax(0, 1fr); }
 .pm-options > div { display: grid; gap: .35rem; }
 .pm-categories { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-.pm-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.pm-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .pm-ui .tool-check {
   min-height: 44px;
   border: 1px solid var(--line);
@@ -750,6 +750,10 @@ textarea:focus-visible {
   color: var(--muted);
   font-size: .82rem;
   font-weight: 700;
+}
+.pm-empty-detection,
+.pm-detection-limit {
+  color: var(--muted);
 }
 .pm-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .tz-grid { grid-template-columns: 1fr 1fr 1fr; }

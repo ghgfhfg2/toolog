@@ -16257,6 +16257,8 @@
     const output = $('pm-output');
     const runBtn = $('pm-run');
     const sampleBtn = $('pm-sample');
+    const selectAllBtn = $('pm-select-all');
+    const selectNoneBtn = $('pm-select-none');
     const copyBtn = $('pm-copy');
     const clearBtn = $('pm-clear');
     const style = $('pm-style');
@@ -16270,6 +16272,10 @@
       ko: {
         copied:'복사됨', copyDefault:'결과 복사', none:'마스킹할 텍스트를 입력하세요.', noneSelected:'마스킹할 항목을 하나 이상 선택하세요.', noMatch:'선택한 항목에서 마스킹 후보를 찾지 못했습니다. 원문을 그대로 표시했습니다.',
         done:(n)=>`${n}개 후보를 마스킹했습니다. 이름·주소·주문번호처럼 문맥 확인이 필요한 정보는 직접 확인하세요.`,
+        emptyDetections:'아직 탐지된 후보가 없습니다.',
+        detectionLimit:'탐지 목록은 성능을 위해 앞 30개까지만 표시합니다. 전체 마스킹은 본문에 적용되었습니다.',
+        selectedAll:'모든 마스킹 항목을 선택했습니다.',
+        selectedNone:'마스킹 항목을 모두 해제했습니다.',
         labels:{ phone:'전화번호', email:'이메일', card:'카드번호', account:'계좌번호 후보', id:'주민등록번호 후보' },
         tokens:{ phone:'[전화번호]', email:'[이메일]', card:'[카드번호]', account:'[계좌번호]', id:'[신분번호]' },
         sample:'김수야 고객님 연락처는 010-1234-5678, 이메일은 sooya@example.com 입니다. 미국 지점 번호는 +1 415-555-1212입니다. 결제 카드 1234-5678-9012-3456, 환불 계좌 국민 123456-78-901234, 신분번호 후보 900101-1234567 로 접수되었습니다.'
@@ -16277,6 +16283,10 @@
       en: {
         copied:'Copied', copyDefault:'Copy result', none:'Enter text to mask.', noneSelected:'Select at least one masking category.', noMatch:'No selected privacy candidates were found. The original text is shown unchanged.',
         done:(n)=>`Masked ${n} candidate(s). Review context-specific details such as names, addresses, and order IDs manually.`,
+        emptyDetections:'No detected candidates yet.',
+        detectionLimit:'Only the first 30 detections are listed for performance. Masking was applied throughout the text.',
+        selectedAll:'Selected every masking category.',
+        selectedNone:'Cleared every masking category.',
         labels:{ phone:'Phone', email:'Email', card:'Card number', account:'Account candidate', id:'ID number candidate' },
         tokens:{ phone:'[PHONE]', email:'[EMAIL]', card:'[CARD]', account:'[ACCOUNT]', id:'[ID]' },
         sample:'Customer Suya Kim can be reached at 010-1234-5678, +1 415-555-1212, or sooya@example.com. Payment card 1234-5678-9012-3456, refund account 123456-78-901234, and ID-like number 900101-1234567 were included.'
@@ -16284,6 +16294,10 @@
       ja: {
         copied:'コピー完了', copyDefault:'結果をコピー', none:'マスキングするテキストを入力してください。', noneSelected:'マスキング対象を1つ以上選択してください。', noMatch:'選択した項目では候補が見つかりませんでした。原文をそのまま表示しています。',
         done:(n)=>`${n}件の候補をマスキングしました。氏名・住所・注文番号など文脈依存の情報は目視確認してください。`,
+        emptyDetections:'検出候補はまだありません。',
+        detectionLimit:'検出リストは動作を軽くするため先頭30件だけ表示します。本文全体にはマスキングが適用されています。',
+        selectedAll:'すべてのマスキング対象を選択しました。',
+        selectedNone:'マスキング対象をすべて解除しました。',
         labels:{ phone:'電話番号', email:'メール', card:'カード番号', account:'口座番号候補', id:'ID番号候補' },
         tokens:{ phone:'[電話番号]', email:'[メール]', card:'[カード]', account:'[口座]', id:'[ID]' },
         sample:'スヤ様の連絡先は010-1234-5678、海外拠点は+1 415-555-1212、メールはsooya@example.comです。決済カード1234-5678-9012-3456、返金口座123456-78-901234、ID番号候補900101-1234567が含まれています。'
@@ -16301,15 +16315,26 @@
     const resetCounts = () => Object.values(counts).forEach(el => { if (el) el.textContent = '0'; });
     const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (ch) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[ch]));
     const detectionRows = [];
+    let detectionOverflow = false;
     const addDetection = (key, before, after) => {
-      if (before === after || detectionRows.length >= 30) return;
+      if (before === after) return;
+      if (detectionRows.length >= 30) {
+        detectionOverflow = true;
+        return;
+      }
       detectionRows.push({ key, before, after });
     };
     const renderDetections = () => {
       if (!detectionsEl) return;
-      detectionsEl.innerHTML = detectionRows.map((row) => (
+      if (!detectionRows.length) {
+        detectionsEl.innerHTML = `<div class="bw-item pm-empty-detection"><p>${escapeHtml(i18n.emptyDetections)}</p></div>`;
+        return;
+      }
+      const rows = detectionRows.map((row) => (
         `<div class="bw-item"><strong>${escapeHtml(i18n.labels[row.key] || row.key)}</strong><span class="bw-tag">${escapeHtml(row.after)}</span><p>${escapeHtml(row.before)}</p></div>`
-      )).join('');
+      ));
+      if (detectionOverflow) rows.push(`<div class="bw-item pm-detection-limit"><p>${escapeHtml(i18n.detectionLimit)}</p></div>`);
+      detectionsEl.innerHTML = rows.join('');
     };
     const shouldUseLabel = () => (style?.value || 'shape') === 'label';
     const labelFor = (key) => i18n.tokens?.[key] || `[${String(key).toUpperCase()}]`;
@@ -16357,6 +16382,7 @@
     const render = () => {
       resetCounts();
       detectionRows.length = 0;
+      detectionOverflow = false;
       if (detectionsEl) detectionsEl.innerHTML = '';
       let text = input.value || '';
       if (!text.trim()) {
@@ -16430,6 +16456,16 @@
     const copyText = async (val) => { try { await navigator.clipboard.writeText(val); } catch (_) { const ta=document.createElement('textarea'); ta.value=val; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } };
     runBtn?.addEventListener('click', render);
     sampleBtn?.addEventListener('click', () => { input.value = i18n.sample; render(); });
+    selectAllBtn?.addEventListener('click', () => {
+      Object.values(checks).forEach((el) => { if (el) el.checked = true; });
+      render();
+      setHelp(i18n.selectedAll);
+    });
+    selectNoneBtn?.addEventListener('click', () => {
+      Object.values(checks).forEach((el) => { if (el) el.checked = false; });
+      render();
+      setHelp(i18n.selectedNone, 'warning');
+    });
     copyBtn?.addEventListener('click', async () => { if (!output.value.trim()) render(); if (!output.value.trim()) return; await copyText(output.value); const old = copyBtn.textContent; copyBtn.textContent = i18n.copied; setTimeout(() => { copyBtn.textContent = old || i18n.copyDefault; }, 900); });
     clearBtn?.addEventListener('click', () => { input.value = ''; output.value = ''; input.setAttribute('aria-invalid', 'false'); resetCounts(); setCopyEnabled(false); if (detectionsEl) detectionsEl.innerHTML = ''; setHelp(i18n.none); input.focus(); });
     input.addEventListener('input', render);
