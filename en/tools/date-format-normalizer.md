@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Date Format Normalizer | Standardize dates in docs, notes, and announcements
-description: Use Date Format Normalizer to convert mixed yyyy-mm-dd, yyyy년 m월 d일, May 4th, 2026, 20260504, and 05/10/2026 date styles into one format, with invalid dates and ambiguous month/day dates flagged for review.
+title: Date Format Normalizer | Standardize dates in documents and announcements
+description: Use Date Format Normalizer to convert mixed yyyy-mm-dd, Korean date text, May 4th, 2026, 20260504, and 05/10/2026 date styles into one format, with invalid dates and ambiguous month/day dates flagged for review.
 lang: en
 permalink: /en/tools/date-format-normalizer/
 canonical_url: /en/tools/date-format-normalizer/
@@ -22,7 +22,7 @@ keywords: [date format normalizer, date style converter, normalize yyyy-mm-dd, d
 related_tools: [filename-sanitizer, text-line-break-cleaner, hangul-keyboard-layout-converter]
 faq:
   - q: What formats can it read?
-    a: It focuses on common formats such as yyyy-mm-dd, yyyy.mm.dd, yyyy년 m월 d일, yyyymmdd, May 4, 2026, May 4th, 2026, 4 May 2026, and 05/10/2026.
+    a: It focuses on common formats such as yyyy-mm-dd, yyyy.mm.dd, Korean yyyy년 m월 d일 dates, yyyymmdd, May 4, 2026, May 4th, 2026, 4 May 2026, and 05/10/2026.
   - q: How does it handle 05/10/2026?
     a: Slash-based dates can be ambiguous, so the tool follows the selected slash parsing option and flags ambiguous cases.
   - q: Can I paste full sentences instead of date-only lines?
@@ -43,7 +43,7 @@ Date Format Normalizer reads these common date expressions and converts them int
 
 ## How to use it
 1. Paste date-only lines or text that contains dates.
-2. Choose an output format: `2026-05-04`, `2026. 5. 4.`, `2026/05/04`, or a localized weekday format.
+2. Choose an output format: `2026-05-04`, `2026. 5. 4.`, `2026/05/04`, or a weekday format such as `2026. 5. 4. (Mon)`.
 3. Set the slash-date interpretation rule if your text includes dates such as `05/10/2026`.
 4. Copy the normalized result into announcements, docs, Notion pages, spreadsheets, or shared notes.
 
@@ -62,7 +62,7 @@ When multiple people have edited the same document, this helps standardize date 
 You can convert one-date-per-line lists or turn on inline extraction to normalize dates inside sentences.
 
 ### 3. Mixing English month names with Korean or ISO-style dates
-English month dates such as `May 4, 2026` can be converted into a Korean-style weekday format or a clean ISO date.
+English month dates such as `May 4, 2026` can be converted into a weekday format or a clean ISO date.
 
 ## FAQ
 ### Why are some slash dates marked for review?

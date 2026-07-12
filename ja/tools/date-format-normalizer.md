@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: 日付フォーマット変換ツール | 文書・メモ・お知らせの日付表記を統一
-description: 日付フォーマット変換ツールで、yyyy-mm-dd、yyyy년 m월 d일、May 4th, 2026、20260504、05/10/2026 など混在した日付を1つの形式に統一し、不正な日付と迷いやすい月/日表記も確認できます。
+description: 日付フォーマット変換ツールで、yyyy-mm-dd、韓国語の日付、May 4th, 2026、20260504、05/10/2026 など混在した日付を1つの形式に統一し、不正な日付と迷いやすい月/日表記も確認できます。
 lang: ja
 permalink: /ja/tools/date-format-normalizer/
 canonical_url: /ja/tools/date-format-normalizer/
@@ -22,7 +22,7 @@ keywords: [日付表記変換, 日付フォーマット統一, yyyy-mm-dd 変換
 related_tools: [filename-sanitizer, text-line-break-cleaner, hangul-keyboard-layout-converter]
 faq:
   - q: どんな形式を読み取れますか?
-    a: yyyy-mm-dd, yyyy.mm.dd, yyyy년 m월 d일, yyyymmdd, May 4, 2026, May 4th, 2026, 4 May 2026, 05/10/2026 など代表的な形式を優先して読み取ります。
+    a: yyyy-mm-dd, yyyy.mm.dd, 韓国語の yyyy년 m월 d일 形式, yyyymmdd, May 4, 2026, May 4th, 2026, 4 May 2026, 05/10/2026 など代表的な形式を優先して読み取ります。
   - q: 05/10/2026 のような表記はどうなりますか?
     a: 月/日か日/月か迷いやすいため、スラッシュ日付の解釈オプションに従って変換し、注意件数にも反映します。
   - q: 日付だけでなく文章全体を貼ってもいいですか?
