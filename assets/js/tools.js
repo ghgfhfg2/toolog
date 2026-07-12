@@ -3028,8 +3028,11 @@
         none: '인식 가능한 날짜를 찾지 못했어요. yyyy-mm-dd, yyyy년 m월 d일, May 4, 2026 같은 형식을 써보세요.',
         copied: '복사됨',
         copyEmpty: '복사할 결과가 아직 없습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다. 결과를 직접 선택해 복사해 주세요.',
         warningsTitle: '확인할 날짜',
+        invalidTitle: '변환되지 않은 입력',
         invalidDropped: (count) => `${formatNum(count)}개 줄은 해석되지 않아 결과에서 제외했어요.`,
+        invalidKept: (count) => `${formatNum(count)}개 입력은 날짜로 해석되지 않아 원문을 유지했어요.`,
         yearRange: '연도는 1000~9999 범위만 변환합니다.',
         formatNames: { iso: 'YYYY-MM-DD', dot: 'YYYY. M. D.', slash: 'YYYY/MM/DD', korean: 'YYYY년 M월 D일 (요일)' },
         sample: [
@@ -3046,8 +3049,11 @@
         none: 'No recognizable dates found. Try formats like yyyy-mm-dd, May 4, 2026, or 20260504.',
         copied: 'Copied',
         copyEmpty: 'There is no result to copy yet.',
+        copyFail: 'Automatic copy is unavailable. Select the result and copy it manually.',
         warningsTitle: 'Dates to review',
+        invalidTitle: 'Unconverted input',
         invalidDropped: (count) => `${formatNum(count)} unparsed line(s) were omitted from the result.`,
+        invalidKept: (count) => `${formatNum(count)} input item(s) could not be parsed and were kept as-is.`,
         yearRange: 'Only years from 1000 to 9999 are converted.',
         formatNames: { iso: 'YYYY-MM-DD', dot: 'YYYY. M. D.', slash: 'YYYY/MM/DD', korean: 'YYYY년 M월 D일 (weekday)' },
         sample: [
@@ -3064,8 +3070,11 @@
         none: '認識できる日付が見つかりません。yyyy-mm-dd、May 4, 2026、20260504 などを試してください。',
         copied: 'コピー済み',
         copyEmpty: 'コピーできる結果がまだありません。',
+        copyFail: '自動コピーを利用できません。結果を選択して手動でコピーしてください。',
         warningsTitle: '確認が必要な日付',
+        invalidTitle: '変換されなかった入力',
         invalidDropped: (count) => `${formatNum(count)}行は解釈できなかったため結果から除外しました。`,
+        invalidKept: (count) => `${formatNum(count)}件は日付として解釈できず、原文のまま残しました。`,
         yearRange: '年は1000〜9999の範囲のみ変換します。',
         formatNames: { iso: 'YYYY-MM-DD', dot: 'YYYY. M. D.', slash: 'YYYY/MM/DD', korean: 'YYYY年 M月 D日 (曜日)' },
         sample: [
@@ -3082,6 +3091,15 @@
       january: 1, jan: 1, february: 2, feb: 2, march: 3, mar: 3, april: 4, apr: 4,
       may: 5, june: 6, jun: 6, july: 7, jul: 7, august: 8, aug: 8,
       september: 9, sept: 9, sep: 9, october: 10, oct: 10, november: 11, nov: 11, december: 12, dec: 12
+    };
+
+    const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (ch) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[ch]));
+
+    const setSummary = (message, state = '') => {
+      summary.textContent = message;
+      summary.dataset.state = state;
     };
 
     const copyText = async (text) => {
@@ -3132,7 +3150,7 @@
     };
 
     const parseCandidate = (text) => {
-      const raw = (text || '').trim();
+      const raw = (text || '').trim().replace(/^[([{<]+|[)\]}>.,;:!?]+$/g, '');
       if (!raw) return { date: null, ambiguous: false, token: raw };
 
       let match = raw.match(/^(\d{4})[.\/-](\d{1,2})[.\/-](\d{1,2})\.?$/);
@@ -3144,10 +3162,10 @@
       match = raw.match(/^(\d{4})(\d{2})(\d{2})$/);
       if (match) return { date: makeDate(match[1], match[2], match[3]), ambiguous: false, token: raw };
 
-      match = raw.match(/^([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})$/);
+      match = raw.match(/^([A-Za-z]+)\.?\s+(\d{1,2})(?:st|nd|rd|th)?,?\s*(\d{4})$/i);
       if (match) return { date: makeDate(match[3], monthMap[match[1].toLowerCase()], match[2]), ambiguous: false, token: raw };
 
-      match = raw.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/);
+      match = raw.match(/^(\d{1,2})(?:st|nd|rd|th)?\s+([A-Za-z]+)\.?\s+(\d{4})$/i);
       if (match) return { date: makeDate(match[3], monthMap[match[2].toLowerCase()], match[1]), ambiguous: false, token: raw };
 
       match = raw.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/);
@@ -3166,12 +3184,12 @@
 
     const replaceInlineDates = (line) => {
       const patterns = [
-        /(\d{4}[.\/-]\d{1,2}[.\/-]\d{1,2}\.?)/g,
+        /\b(\d{4}[.\/-]\d{1,2}[.\/-]\d{1,2}\.?)\b/g,
         /(\d{4}년\s*\d{1,2}월\s*\d{1,2}일)/g,
-        /(\d{8})(?!\d)/g,
-        /([A-Za-z]+\s+\d{1,2},\s*\d{4})/g,
-        /(\d{1,2}\s+[A-Za-z]+\s+\d{4})/g,
-        /(\d{1,2}[\/.-]\d{1,2}[\/.-]\d{4})/g
+        /\b(\d{8})(?!\d)\b/g,
+        /\b([A-Za-z]+\.?\s+\d{1,2}(?:st|nd|rd|th)?,?\s*\d{4})\b/gi,
+        /\b(\d{1,2}(?:st|nd|rd|th)?\s+[A-Za-z]+\.?\s+\d{4})\b/gi,
+        /\b(\d{1,2}[\/.-]\d{1,2}[\/.-]\d{4})\b/g
       ];
 
       let converted = 0;
@@ -3195,15 +3213,21 @@
       return { text: out, converted, ambiguous, warnings };
     };
 
-    const renderWarnings = (items, dropped) => {
+    const renderWarnings = (items, invalidItems, dropped, keptInvalid) => {
       if (!warningList) return;
       const warnings = [...new Set(items)].slice(0, 8);
+      const invalids = [...new Set(invalidItems)].slice(0, 8);
       const parts = [];
       if (warnings.length) {
-        parts.push(`<p><strong>${dfnText.warningsTitle || 'Dates to review'}</strong>: ${warnings.map((item) => `<code>${item}</code>`).join(' ')}</p>`);
+        parts.push(`<p><strong>${escapeHtml(dfnText.warningsTitle || 'Dates to review')}</strong>: ${warnings.map((item) => `<code>${escapeHtml(item)}</code>`).join(' ')}</p>`);
+      }
+      if (invalids.length) {
+        parts.push(`<p><strong>${escapeHtml(dfnText.invalidTitle || 'Unconverted input')}</strong>: ${invalids.map((item) => `<code>${escapeHtml(item)}</code>`).join(' ')}</p>`);
       }
       if (dropped > 0) {
-        parts.push(`<p>${dfnText.invalidDropped ? dfnText.invalidDropped(dropped) : `${dropped} unparsed line(s) omitted.`}</p>`);
+        parts.push(`<p>${escapeHtml(dfnText.invalidDropped ? dfnText.invalidDropped(dropped) : `${dropped} unparsed line(s) omitted.`)}</p>`);
+      } else if (keptInvalid > 0) {
+        parts.push(`<p>${escapeHtml(dfnText.invalidKept ? dfnText.invalidKept(keptInvalid) : `${keptInvalid} unparsed item(s) kept as-is.`)}</p>`);
       }
       warningList.innerHTML = parts.join('');
     };
@@ -3215,8 +3239,10 @@
         convertedOut.textContent = '0';
         ambiguousOut.textContent = '0';
         formatOut.textContent = (dfnText.formatNames && dfnText.formatNames[format.value]) || format.options[format.selectedIndex]?.text || '-';
-        summary.textContent = dfnText.empty || 'Paste mixed date text to normalize it into one format.';
-        renderWarnings([], 0);
+        copyBtn.disabled = true;
+        input.setAttribute('aria-invalid', 'false');
+        setSummary(dfnText.empty || 'Paste mixed date text to normalize it into one format.');
+        renderWarnings([], [], 0, 0);
         return;
       }
 
@@ -3224,7 +3250,9 @@
       let converted = 0;
       let ambiguous = 0;
       let dropped = 0;
+      let keptInvalid = 0;
       const warnings = [];
+      const invalidItems = [];
 
       const result = rows.map((line) => {
         const trimmed = line.trim();
@@ -3249,18 +3277,24 @@
         }
 
         if (!keepInvalid.checked) dropped += 1;
-        return keepInvalid.checked ? line : '';
+        else keptInvalid += 1;
+        invalidItems.push(trimmed.slice(0, 80));
+        return keepInvalid.checked ? line : null;
       });
 
-      output.value = result.filter((line, index) => line !== '' || rows[index].trim() !== '').join('\n');
+      output.value = result.filter((line) => line !== null).join('\n');
       linesOut.textContent = formatNum(rows.filter((line) => line.trim()).length);
       convertedOut.textContent = formatNum(converted);
       ambiguousOut.textContent = formatNum(ambiguous);
       formatOut.textContent = (dfnText.formatNames && dfnText.formatNames[format.value]) || format.options[format.selectedIndex]?.text || '-';
-      summary.textContent = converted
-        ? dfnText.converted(converted, ambiguous)
-        : dfnText.none;
-      renderWarnings(warnings, dropped);
+      copyBtn.disabled = !output.value.trim();
+      input.setAttribute('aria-invalid', converted ? 'false' : 'true');
+      if (converted) {
+        setSummary(dfnText.converted(converted, ambiguous), ambiguous || keptInvalid || dropped ? 'warning' : 'success');
+      } else {
+        setSummary(dfnText.none, 'error');
+      }
+      renderWarnings(warnings, invalidItems, dropped, keptInvalid);
     };
 
     sampleBtn?.addEventListener('click', () => {
@@ -3270,13 +3304,17 @@
 
     copyBtn?.addEventListener('click', async () => {
       if (!output.value.trim()) {
-        summary.textContent = dfnText.copyEmpty;
+        setSummary(dfnText.copyEmpty, 'error');
         return;
       }
-      await copyText(output.value.trim());
-      const old = copyBtn.textContent;
-      copyBtn.textContent = dfnText.copied || 'Copied';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      try {
+        await copyText(output.value.trim());
+        const old = copyBtn.textContent;
+        copyBtn.textContent = dfnText.copied || 'Copied';
+        setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      } catch (_) {
+        setSummary(dfnText.copyFail || 'Automatic copy is unavailable.', 'error');
+      }
     });
 
     clearBtn?.addEventListener('click', () => {

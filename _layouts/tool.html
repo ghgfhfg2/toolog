@@ -2294,7 +2294,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
 
           <div class="tool-row-grid pct-actions">
             <button id="dfn-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
-            <button id="dfn-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="dfn-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
             <button id="dfn-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
@@ -2307,7 +2307,10 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
 
           <p class="tool-result" id="dfn-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Paste mixed date text to normalize it into one format.{% elsif page.lang == 'ja' %}混在した日付テキストを貼り付けると、1つの形式に整えます。{% else %}날짜가 섞인 텍스트를 넣으면 통일된 형식으로 정리합니다.{% endif %}</p>
           <p class="tool-result" id="dfn-help">{% if page.lang == 'en' %}Ambiguous slash dates such as 05/10/2026 are counted separately so you can review them before sharing.{% elsif page.lang == 'ja' %}05/10/2026 のように迷いやすい日付は別途カウントし、共有前に確認できます。{% else %}05/10/2026처럼 월/일 해석이 헷갈리는 날짜는 별도로 표시해 공유 전에 확인할 수 있습니다.{% endif %}</p>
-          <textarea id="dfn-output" rows="12" readonly placeholder="{% if page.lang == 'en' %}Normalized dates appear here.{% elsif page.lang == 'ja' %}整理結果がここに表示されます。{% else %}정리 결과가 여기에 표시됩니다.{% endif %}"></textarea>
+          <div class="tool-row dfn-output-row">
+            <label for="dfn-output">{% if page.lang == 'en' %}Normalized result{% elsif page.lang == 'ja' %}整理結果{% else %}정리 결과{% endif %}</label>
+            <textarea id="dfn-output" rows="12" readonly placeholder="{% if page.lang == 'en' %}Normalized dates appear here.{% elsif page.lang == 'ja' %}整理結果がここに表示されます。{% else %}정리 결과가 여기에 표시됩니다.{% endif %}"></textarea>
+          </div>
           <div id="dfn-warning-list" class="bw-list" aria-live="polite"></div>
         </div>
       {% when 'json-merge' %}

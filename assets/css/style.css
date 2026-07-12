@@ -703,6 +703,18 @@ a:hover { color: #fff; text-decoration: none; }
 .llc-ui #llc-summary[data-state="error"] { color: #fca5a5; }
 .llc-ui #llc-summary[data-state="warning"] { color: #fbbf24; }
 .llc-ui #llc-summary[data-state="success"] { color: #86efac; }
+.dfn-ui textarea[aria-invalid="true"] { border-color: #ef4444; }
+.dfn-ui #dfn-summary[data-state="error"] { color: #fca5a5; }
+.dfn-ui #dfn-summary[data-state="warning"] { color: #fbbf24; }
+.dfn-ui #dfn-summary[data-state="success"] { color: #86efac; }
+.dfn-output-row {
+  display: grid;
+  gap: .35rem;
+}
+.dfn-ui #dfn-output {
+  min-height: 180px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
 .bw-ui textarea {
   min-height: 220px;
   font-size: 16px;
