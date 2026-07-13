@@ -250,9 +250,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 장보기 목록, 예상 가격, 예산을 넣으면 필수·선택 품목을 나누고 예산 초과 금액, 가격 미입력 품목, 줄일 후보를 빠르게 점검해요.
-  description_en: Enter a grocery list, estimated prices, and a budget to split must-buy and optional items, check the over-budget amount, flag missing prices, and find candidates to cut.
-  description_ja: 買い物リスト、予想価格、予算を入力すると、必須・任意品目、予算超過額、価格未入力品目、削減候補をすばやく確認できます。
+  description: 장보기 목록, 예상 가격, 예산을 넣으면 필수·선택 품목, 예산 사용률, 가격 미입력 품목, 줄일 후보를 브라우저에서 빠르게 점검해요.
+  description_en: Enter a grocery list, estimated prices, and a budget to split must-buy and optional items, see budget usage, flag missing prices, and find candidates to cut.
+  description_ja: 買い物リスト、予想価格、予算を入力すると、必須・任意品目、予算使用率、価格未入力品目、削減候補をブラウザ内ですばやく確認できます。
   url: /tools/grocery-budget-checker/
   url_en: /en/tools/grocery-budget-checker/
   url_ja: /ja/tools/grocery-budget-checker/

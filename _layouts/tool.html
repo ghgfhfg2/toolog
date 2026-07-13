@@ -4199,7 +4199,10 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <div><strong id="gbc-essential">0</strong><span>{% if page.lang == 'en' %}Must-buy{% elsif page.lang == 'ja' %}必須{% else %}필수 품목{% endif %}</span></div>
             <div><strong id="gbc-optional">0</strong><span>{% if page.lang == 'en' %}Optional{% elsif page.lang == 'ja' %}任意{% else %}선택/보류{% endif %}</span></div>
             <div><strong id="gbc-gap">0</strong><span>{% if page.lang == 'en' %}Over / left{% elsif page.lang == 'ja' %}超過/残り{% else %}초과/남은 금액{% endif %}</span></div>
+            <div><strong id="gbc-item-count">0</strong><span>{% if page.lang == 'en' %}Item lines{% elsif page.lang == 'ja' %}品目行{% else %}품목 줄{% endif %}</span></div>
+            <div><strong id="gbc-missing-count">0</strong><span>{% if page.lang == 'en' %}Need prices{% elsif page.lang == 'ja' %}価格未入力{% else %}가격 확인{% endif %}</span></div>
           </div>
+          <div class="gbc-meter" role="progressbar" aria-label="{% if page.lang == 'en' %}Budget usage{% elsif page.lang == 'ja' %}予算使用率{% else %}예산 사용률{% endif %}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="gbc-meter-bar"></span></div>
           <p class="tool-result" id="gbc-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter a grocery list to check it against your budget.{% elsif page.lang == 'ja' %}買い物リストを入力すると予算に合うか確認できます。{% else %}장보기 목록을 넣으면 예산 초과 여부와 줄일 후보를 보여줍니다.{% endif %}</p>
           <p class="tool-result" id="gbc-help">{% if page.lang == 'en' %}Use one item per line. The last whole number on each line is treated as the estimated price; lines without a price stay in the output but are excluded from totals.{% elsif page.lang == 'ja' %}1行に1品目ずつ入力します。各行の最後の整数を予想価格として扱い、価格がない行は結果に残しつつ合計から除外します。{% else %}한 줄에 하나씩 입력하세요. 각 줄의 마지막 정수를 예상 가격으로 보고, 가격이 없는 줄은 결과에 남기되 합계에서는 제외합니다.{% endif %}</p>
           <div class="tool-row">

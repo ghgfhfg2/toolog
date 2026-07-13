@@ -813,6 +813,28 @@ a:hover { color: #fff; text-decoration: none; }
 .gbc-grid { grid-template-columns: minmax(0, 1fr) minmax(180px, .55fr); }
 .gbc-grid > div { display: grid; gap: .35rem; min-width: 0; }
 .gbc-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.gbc-stats { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.gbc-stats strong {
+  overflow-wrap: anywhere;
+  line-height: 1.3;
+}
+.gbc-meter {
+  height: 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #10192c;
+  overflow: hidden;
+}
+.gbc-meter span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: #22c55e;
+  transition: width .18s ease, background-color .18s ease;
+}
+.gbc-meter span[data-state="exact"] { background: #3b82f6; }
+.gbc-meter span[data-state="over"] { background: #ef4444; }
 .gbc-ui textarea {
   min-height: 180px;
   font-size: 16px;
@@ -1291,6 +1313,7 @@ a:hover { color: #fff; text-decoration: none; }
   .avg-stats { grid-template-columns: 1fr 1fr; }
   .gbc-grid,
   .gbc-actions { grid-template-columns: 1fr; }
+  .gbc-stats { grid-template-columns: 1fr 1fr; }
   .mtc-ui .pct-grid,
   .mtc-ui .pct-actions { grid-template-columns: 1fr; }
   .tool-stats.mtc-stats { grid-template-columns: 1fr 1fr; }

@@ -17361,6 +17361,10 @@
     const essentialEl = document.getElementById('gbc-essential');
     const optionalEl = document.getElementById('gbc-optional');
     const gapEl = document.getElementById('gbc-gap');
+    const itemCountEl = document.getElementById('gbc-item-count');
+    const missingCountEl = document.getElementById('gbc-missing-count');
+    const meter = document.querySelector('.gbc-meter');
+    const meterBar = document.getElementById('gbc-meter-bar');
     const summary = document.getElementById('gbc-summary');
     const output = document.getElementById('gbc-output');
     if (!budgetEl || !input) return;
@@ -17376,6 +17380,7 @@
         tooMany: '품목은 최대 200줄까지 점검할 수 있어요. 목록을 나눠서 확인해 주세요.',
         invalidPrice: (count) => `가격 형식이 애매한 줄 ${formatNum(count)}개는 합계에서 제외했어요. 정수 가격으로 고쳐주세요.`,
         noPricedItems: '가격이 있는 품목이 없습니다. 예상 가격을 함께 입력하면 예산을 점검할 수 있어요.',
+        usage: (pct) => `예산 사용률 ${formatNum(pct)}%`,
         noPrice: '가격 없음', must: '필수', optional: '선택/보류', normal: '일반', cut: '줄일 후보', keep: '구매 유지 후보', unpriced: '가격 확인 필요', copied: '결과를 복사했어요.', copyEmpty: '복사할 점검 결과가 없습니다.', copyFail: '자동 복사를 사용할 수 없습니다.', cleared: '입력값을 초기화했습니다.'
       },
       en: {
@@ -17388,6 +17393,7 @@
         tooMany: 'Check up to 200 item lines at a time. Split longer lists into smaller batches.',
         invalidPrice: (count) => `${formatNum(count)} lines have unclear prices and were excluded from totals. Use whole-number prices.`,
         noPricedItems: 'No priced items were found. Add estimated prices to check the budget.',
+        usage: (pct) => `Budget usage ${formatNum(pct)}%`,
         noPrice: 'no price', must: 'must-buy', optional: 'optional/later', normal: 'regular', cut: 'cut candidates', keep: 'keep candidates', unpriced: 'needs price check', copied: 'Result copied.', copyEmpty: 'There is no budget check result to copy yet.', copyFail: 'Automatic copy is unavailable.', cleared: 'Cleared the inputs.'
       },
       ja: {
@@ -17400,6 +17406,7 @@
         tooMany: '品目は最大200行まで確認できます。長いリストは分けてください。',
         invalidPrice: (count) => `価格が曖昧な行${formatNum(count)}件は合計から除外しました。整数価格に直してください。`,
         noPricedItems: '価格のある品目がありません。予想価格を入れると予算を確認できます。',
+        usage: (pct) => `予算使用率 ${formatNum(pct)}%`,
         noPrice: '価格なし', must: '必須', optional: '任意/あとで', normal: '通常', cut: '削減候補', keep: '購入候補', unpriced: '価格確認が必要', copied: '結果をコピーしました。', copyEmpty: 'コピーできる確認結果がまだありません。', copyFail: '自動コピーを利用できません。', cleared: '入力をクリアしました。'
       }
     }[pageLang] || null;
@@ -17419,6 +17426,13 @@
       essentialEl.textContent = money(0);
       optionalEl.textContent = money(0);
       gapEl.textContent = money(0);
+      itemCountEl.textContent = '0';
+      missingCountEl.textContent = '0';
+      if (meter && meterBar) {
+        meter.setAttribute('aria-valuenow', '0');
+        meterBar.style.width = '0%';
+        meterBar.dataset.state = 'empty';
+      }
       output.value = '';
       currentOutput = '';
       copyBtn.disabled = true;
@@ -17459,9 +17473,9 @@
       budgetEl.setAttribute('aria-invalid', 'false');
       const { items, omitted } = parse();
       if (!items.length) {
-        input.setAttribute('aria-invalid', 'true');
+        input.setAttribute('aria-invalid', 'false');
         resetStats();
-        setStatus(t.empty, 'error');
+        setStatus(t.empty);
         return;
       }
       input.setAttribute('aria-invalid', 'false');
@@ -17470,14 +17484,25 @@
         if (it.type === 'must') a.must += it.price;
         if (it.type === 'optional') a.optional += it.price;
         if (it.hasPrice) a.priced += 1;
+        if (!it.hasPrice) a.missing += 1;
         if (it.invalidPrice) a.invalid += 1;
         return a;
-      }, { total: 0, must: 0, optional: 0, priced: 0, invalid: 0 });
+      }, { total: 0, must: 0, optional: 0, priced: 0, missing: 0, invalid: 0 });
       const gap = budget - totals.total;
       totalEl.textContent = money(totals.total);
       essentialEl.textContent = money(totals.must);
       optionalEl.textContent = money(totals.optional);
       gapEl.textContent = gap >= 0 ? `+${money(gap)}` : `-${money(Math.abs(gap))}`;
+      itemCountEl.textContent = formatNum(items.length);
+      missingCountEl.textContent = formatNum(totals.missing);
+      const usagePct = budget > 0 ? Math.round((totals.total / budget) * 100) : (totals.total > 0 ? 100 : 0);
+      const meterPct = Math.min(100, Math.max(0, usagePct));
+      if (meter && meterBar) {
+        meter.setAttribute('aria-valuenow', String(meterPct));
+        meter.setAttribute('aria-valuetext', t.usage(usagePct));
+        meterBar.style.width = `${meterPct}%`;
+        meterBar.dataset.state = usagePct > 100 ? 'over' : (usagePct === 100 ? 'exact' : 'within');
+      }
       if (omitted > 0) setStatus(t.tooMany, 'warning');
       else if (totals.invalid > 0) setStatus(t.invalidPrice(totals.invalid), 'warning');
       else if (!totals.priced) setStatus(t.noPricedItems, 'warning');
@@ -17497,6 +17522,7 @@
       const line = (it) => `- [${label(it)}] ${it.name} · ${it.price ? money(it.price) : t.noPrice}`;
       currentOutput = [
         `${summary.textContent}`,
+        `${t.usage(usagePct)}`,
         ``,
         `${t.keep}`,
         ...(keep.length ? keep.map(line) : ['-']),
