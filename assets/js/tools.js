@@ -11938,72 +11938,75 @@
     const minEl = document.getElementById('avg-min');
     const maxEl = document.getElementById('avg-max');
     const rangeEl = document.getElementById('avg-range');
+    const q1El = document.getElementById('avg-q1');
+    const q3El = document.getElementById('avg-q3');
+    const stdDevEl = document.getElementById('avg-stddev');
     const ignoredEl = document.getElementById('avg-ignored');
     const help = document.getElementById('avg-help');
     const detail = document.getElementById('avg-detail');
     const sampleBtn = document.getElementById('avg-sample');
     const copyBtn = document.getElementById('avg-copy');
     const resetBtn = document.getElementById('avg-reset');
-    if (!input || !countEl || !sumEl || !meanEl || !medianEl || !minEl || !maxEl || !rangeEl || !ignoredEl || !help) return;
+    if (!input || !countEl || !sumEl || !meanEl || !medianEl || !minEl || !maxEl || !rangeEl || !q1El || !q3El || !stdDevEl || !ignoredEl || !help) return;
 
     const text = {
       ko: {
-        idle: '숫자를 입력하면 평균·중앙값·합계·범위를 계산합니다.',
+        idle: '숫자를 입력하면 평균·중앙값·사분위수·표준편차·합계·범위를 계산합니다.',
         invalid: '계산할 수 있는 숫자가 없습니다. 문자, 빈 항목, 무한대 값은 제외됩니다.',
         tooMany: '숫자는 한 번에 최대 5,000개까지 계산할 수 있습니다.',
         tooLarge: '정확한 계산을 위해 각 숫자는 -1,000조부터 1,000조까지 입력해 주세요.',
         mixed: (valid, invalid) => `${valid}개 숫자를 계산했습니다. 숫자가 아닌 항목 ${invalid}개는 제외했습니다.`,
         summary: (count, mean) => `${count}개 숫자의 평균은 ${mean}입니다.`,
-        detail: (min, max, range) => `최솟값 ${min}, 최댓값 ${max}, 범위 ${range}`,
-        sample: '82, 91, 77, 88.5, 95, 73, 88.5, 100',
+        detail: (min, max, range, q1, q3, stdDev) => `최솟값 ${min}, 최댓값 ${max}, 범위 ${range}, 1사분위수 ${q1}, 3사분위수 ${q3}, 표준편차 ${stdDev}`,
+        sample: '82, 91, 77, 88.5, 95, 73, 88.5, 100, ₩1,200',
         copyEmpty: '복사할 계산 결과가 없습니다.',
         copyFail: '자동 복사를 사용할 수 없습니다.',
-        copy: (count, sum, mean, median, min, max, range, ignored) => `평균 계산 결과 | 개수 ${count} | 합계 ${sum} | 평균 ${mean} | 중앙값 ${median} | 최솟값 ${min} | 최댓값 ${max} | 범위 ${range} | 제외 항목 ${ignored}`,
+        copy: (count, sum, mean, median, min, max, range, q1, q3, stdDev, ignored) => `평균 계산 결과 | 개수 ${count} | 합계 ${sum} | 평균 ${mean} | 중앙값 ${median} | 최솟값 ${min} | 최댓값 ${max} | 범위 ${range} | 1사분위수 ${q1} | 3사분위수 ${q3} | 표준편차 ${stdDev} | 제외 항목 ${ignored}`,
         copied: '복사됨',
         copyDefault: '결과 복사'
       },
       en: {
-        idle: 'Enter numbers to calculate count, sum, average, median, and range.',
+        idle: 'Enter numbers to calculate count, sum, average, median, quartiles, standard deviation, and range.',
         invalid: 'No calculable numbers found. Text, blanks, and infinite values are ignored.',
         tooMany: 'You can calculate up to 5,000 numbers at a time.',
         tooLarge: 'For reliable results, each number must be between -1 quadrillion and 1 quadrillion.',
         mixed: (valid, invalid) => `Calculated ${valid} numbers and ignored ${invalid} non-number entries.`,
         summary: (count, mean) => `Average of ${count} numbers is ${mean}.`,
-        detail: (min, max, range) => `Minimum ${min}, maximum ${max}, range ${range}`,
-        sample: '82, 91, 77, 88.5, 95, 73, 88.5, 100',
+        detail: (min, max, range, q1, q3, stdDev) => `Minimum ${min}, maximum ${max}, range ${range}, Q1 ${q1}, Q3 ${q3}, standard deviation ${stdDev}`,
+        sample: '82, 91, 77, 88.5, 95, 73, 88.5, 100, $1,200',
         copyEmpty: 'There is no calculation result to copy.',
         copyFail: 'Automatic copy is unavailable.',
-        copy: (count, sum, mean, median, min, max, range, ignored) => `Average result | Count ${count} | Sum ${sum} | Average ${mean} | Median ${median} | Min ${min} | Max ${max} | Range ${range} | Ignored ${ignored}`,
+        copy: (count, sum, mean, median, min, max, range, q1, q3, stdDev, ignored) => `Average result | Count ${count} | Sum ${sum} | Average ${mean} | Median ${median} | Min ${min} | Max ${max} | Range ${range} | Q1 ${q1} | Q3 ${q3} | Standard deviation ${stdDev} | Ignored ${ignored}`,
         copied: 'Copied',
         copyDefault: 'Copy result'
       },
       ja: {
-        idle: '数値を入力すると、個数・合計・平均・中央値・範囲を計算します。',
+        idle: '数値を入力すると、個数・合計・平均・中央値・四分位・標準偏差・範囲を計算します。',
         invalid: '計算できる数値がありません。文字、空欄、無限大の値は除外されます。',
         tooMany: '一度に計算できる数値は最大5,000個です。',
         tooLarge: '正確に計算するため、各数値は -1,000兆 から 1,000兆 の範囲で入力してください。',
         mixed: (valid, invalid) => `${valid}個の数値を計算し、数値ではない項目${invalid}個を除外しました。`,
         summary: (count, mean) => `${count}個の数値の平均は ${mean} です。`,
-        detail: (min, max, range) => `最小値 ${min}、最大値 ${max}、範囲 ${range}`,
-        sample: '82, 91, 77, 88.5, 95, 73, 88.5, 100',
+        detail: (min, max, range, q1, q3, stdDev) => `最小値 ${min}、最大値 ${max}、範囲 ${range}、第1四分位 ${q1}、第3四分位 ${q3}、標準偏差 ${stdDev}`,
+        sample: '82, 91, 77, 88.5, 95, 73, 88.5, 100, ¥1,200',
         copyEmpty: 'コピーできる計算結果がありません。',
         copyFail: '自動コピーを利用できません。',
-        copy: (count, sum, mean, median, min, max, range, ignored) => `平均計算結果 | 個数 ${count} | 合計 ${sum} | 平均 ${mean} | 中央値 ${median} | 最小値 ${min} | 最大値 ${max} | 範囲 ${range} | 除外項目 ${ignored}`,
+        copy: (count, sum, mean, median, min, max, range, q1, q3, stdDev, ignored) => `平均計算結果 | 個数 ${count} | 合計 ${sum} | 平均 ${mean} | 中央値 ${median} | 最小値 ${min} | 最大値 ${max} | 範囲 ${range} | 第1四分位 ${q1} | 第3四分位 ${q3} | 標準偏差 ${stdDev} | 除外項目 ${ignored}`,
         copied: 'コピー完了',
         copyDefault: '結果をコピー'
       }
     }[pageLang] || {
-      idle: '숫자를 입력하면 평균·중앙값·합계·범위를 계산합니다.',
+      idle: '숫자를 입력하면 평균·중앙값·사분위수·표준편차·합계·범위를 계산합니다.',
       invalid: '계산할 수 있는 숫자가 없습니다.',
       tooMany: '숫자는 한 번에 최대 5,000개까지 계산할 수 있습니다.',
       tooLarge: '정확한 계산을 위해 각 숫자는 -1,000조부터 1,000조까지 입력해 주세요.',
       mixed: (valid, invalid) => `${valid}개 숫자를 계산했습니다. 숫자가 아닌 항목 ${invalid}개는 제외했습니다.`,
       summary: (count, mean) => `${count}개 숫자의 평균은 ${mean}입니다.`,
-      detail: (min, max, range) => `최솟값 ${min}, 최댓값 ${max}, 범위 ${range}`,
-      sample: '82, 91, 77, 88.5, 95, 73, 88.5, 100',
+      detail: (min, max, range, q1, q3, stdDev) => `최솟값 ${min}, 최댓값 ${max}, 범위 ${range}, 1사분위수 ${q1}, 3사분위수 ${q3}, 표준편차 ${stdDev}`,
+      sample: '82, 91, 77, 88.5, 95, 73, 88.5, 100, ₩1,200',
       copyEmpty: '복사할 계산 결과가 없습니다.',
       copyFail: '자동 복사를 사용할 수 없습니다.',
-      copy: (count, sum, mean, median, min, max, range, ignored) => `평균 계산 결과 | 개수 ${count} | 합계 ${sum} | 평균 ${mean} | 중앙값 ${median} | 최솟값 ${min} | 최댓값 ${max} | 범위 ${range} | 제외 항목 ${ignored}`,
+      copy: (count, sum, mean, median, min, max, range, q1, q3, stdDev, ignored) => `평균 계산 결과 | 개수 ${count} | 합계 ${sum} | 평균 ${mean} | 중앙값 ${median} | 최솟값 ${min} | 최댓값 ${max} | 범위 ${range} | 1사분위수 ${q1} | 3사분위수 ${q3} | 표준편차 ${stdDev} | 제외 항목 ${ignored}`,
       copied: '복사됨',
       copyDefault: '결과 복사'
     };
@@ -12030,7 +12033,7 @@
     };
 
     const setIdle = (msg, state = '') => {
-      [countEl, sumEl, meanEl, medianEl, minEl, maxEl, rangeEl, ignoredEl].forEach((el) => { el.textContent = '-'; });
+      [countEl, sumEl, meanEl, medianEl, minEl, maxEl, rangeEl, q1El, q3El, stdDevEl, ignoredEl].forEach((el) => { el.textContent = '-'; });
       setStatus(msg, state);
       if (detail) detail.textContent = text.idle;
       input.setAttribute('aria-invalid', state === 'error' ? 'true' : 'false');
@@ -12038,24 +12041,28 @@
     };
 
     const parseNumbers = (raw) => {
-      const tokens = (raw || '')
-        .replace(/[;|]/g, ' ')
-        .split(/[\s,]+/)
-        .map((v) => v.trim())
-        .filter(Boolean);
+      const source = raw || '';
+      const numberPattern = /[-+]?(?:(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?|\.\d+)(?:e[-+]?\d+)?/gi;
       const nums = [];
-      let invalid = 0;
-      tokens.forEach((token) => {
+      const matches = [...source.matchAll(numberPattern)];
+      matches.forEach((match) => {
+        const token = match[0];
         const normalized = token.replace(/_/g, '').replace(/,/g, '');
-        if (!/^[-+]?(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?$/i.test(normalized)) {
-          invalid += 1;
-          return;
-        }
         const value = Number(normalized);
         if (Number.isFinite(value)) nums.push(value);
-        else invalid += 1;
       });
-      return { nums, invalid, tokenCount: tokens.length };
+      const leftovers = source.replace(numberPattern, ' ');
+      const invalid = leftovers
+        .split(/[\s,;|/()[\]{}<>]+/)
+        .map((v) => v.trim())
+        .filter((v) => v && /[0-9A-Za-z가-힣ぁ-んァ-ヶ一-龥]/.test(v)).length;
+      return { nums, invalid, tokenCount: matches.length + invalid };
+    };
+
+    const medianOf = (values) => {
+      if (!values.length) return 0;
+      const mid = Math.floor(values.length / 2);
+      return values.length % 2 ? values[mid] : (values[mid - 1] + values[mid]) / 2;
     };
 
     const render = () => {
@@ -12077,11 +12084,15 @@
       const count = nums.length;
       const sum = nums.reduce((acc, cur) => acc + cur, 0);
       const mean = sum / count;
-      const mid = Math.floor(count / 2);
-      const median = count % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+      const median = medianOf(sorted);
       const min = sorted[0];
       const max = sorted[sorted.length - 1];
       const range = max - min;
+      const lowerHalf = count === 1 ? sorted : sorted.slice(0, Math.floor(count / 2));
+      const upperHalf = count === 1 ? sorted : sorted.slice(Math.ceil(count / 2));
+      const q1 = medianOf(lowerHalf);
+      const q3 = medianOf(upperHalf);
+      const stdDev = Math.sqrt(nums.reduce((acc, cur) => acc + ((cur - mean) ** 2), 0) / count);
 
       input.setAttribute('aria-invalid', 'false');
       countEl.textContent = count.toLocaleString(numberLocale);
@@ -12091,10 +12102,13 @@
       minEl.textContent = fmt(min);
       maxEl.textContent = fmt(max);
       rangeEl.textContent = fmt(range);
+      q1El.textContent = fmt(q1);
+      q3El.textContent = fmt(q3);
+      stdDevEl.textContent = fmt(stdDev);
       ignoredEl.textContent = parsed.invalid ? parsed.invalid.toLocaleString(numberLocale) : '0';
       if (copyBtn) copyBtn.disabled = false;
       setStatus(parsed.invalid ? text.mixed(count.toLocaleString(numberLocale), parsed.invalid.toLocaleString(numberLocale)) : text.summary(count.toLocaleString(numberLocale), fmt(mean)), parsed.invalid ? 'warning' : 'success');
-      if (detail) detail.textContent = text.detail(fmt(min), fmt(max), fmt(range));
+      if (detail) detail.textContent = text.detail(fmt(min), fmt(max), fmt(range), fmt(q1), fmt(q3), fmt(stdDev));
     };
 
     input.addEventListener('input', render);
@@ -12110,7 +12124,7 @@
         return;
       }
       try {
-        await copyText(text.copy(countEl.textContent, sumEl.textContent, meanEl.textContent, medianEl.textContent, minEl.textContent, maxEl.textContent, rangeEl.textContent, ignoredEl.textContent));
+        await copyText(text.copy(countEl.textContent, sumEl.textContent, meanEl.textContent, medianEl.textContent, minEl.textContent, maxEl.textContent, rangeEl.textContent, q1El.textContent, q3El.textContent, stdDevEl.textContent, ignoredEl.textContent));
         const old = copyBtn.textContent;
         copyBtn.textContent = text.copied;
         setStatus(text.copied, 'success');

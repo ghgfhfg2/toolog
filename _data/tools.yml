@@ -1232,9 +1232,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 숫자 목록의 평균·중앙값·합계·최솟값·최댓값·범위를 계산하고, 숫자가 아닌 항목은 제외해 표시해요.
-  description_en: Calculate average, median, sum, minimum, maximum, and range from a number list, with non-number entries counted as ignored.
-  description_ja: 数値リストの平均・中央値・合計・最小値・最大値・範囲を計算し、数値ではない項目は除外数として表示します。
+  description: 숫자 목록의 평균·중앙값·합계·범위·사분위수·표준편차를 계산하고, 천 단위 쉼표와 통화기호가 섞여도 숫자만 추려 표시해요.
+  description_en: Calculate average, median, sum, range, quartiles, and standard deviation from a number list, while handling thousands separators, currency symbols, and ignored text.
+  description_ja: 数値リストの平均・中央値・合計・範囲・四分位・標準偏差を計算し、桁区切りや通貨記号、除外文字も確認できます。
   url: /tools/average-calculator/
   url_en: /en/tools/average-calculator/
   url_ja: /ja/tools/average-calculator/
