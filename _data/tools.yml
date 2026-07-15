@@ -658,9 +658,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 제목이나 파일명 목록을 붙여넣으면 공백, 특수문자, 반복 구분자, 번호 형식을 정리해 복사하기 쉬운 파일명 목록으로 바꿔줘요.
-  description_en: Paste titles or file names to normalize spaces, special characters, separators, and numbering into cleaner copy-ready file names.
-  description_ja: タイトルやファイル名一覧を貼り付けると、空白・記号・区切り文字・連番を整えて使いやすいファイル名へまとめます。
+  description: 제목이나 파일명 목록을 붙여넣으면 공백, 특수문자, 반복 구분자, 확장자, 날짜·순번, 중복 후보를 정리해 복사하기 쉬운 안전한 파일명으로 바꿔줘요.
+  description_en: Paste titles or file names to normalize spaces, special characters, extensions, date prefixes, numbering, and duplicate candidates into safer copy-ready file names.
+  description_ja: タイトルやファイル名一覧を貼り付けると、空白・記号・拡張子・日付・連番・重複候補を整理して使いやすいファイル名へまとめます。
   url: /tools/filename-sanitizer/
   url_en: /en/tools/filename-sanitizer/
   url_ja: /ja/tools/filename-sanitizer/

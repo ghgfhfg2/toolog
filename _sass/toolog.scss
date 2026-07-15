@@ -1024,6 +1024,26 @@ textarea:focus-visible {
   line-height: 1.35;
   word-break: keep-all;
 }
+.fs-ui #fs-input,
+.fs-ui #fs-output {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .95rem;
+  line-height: 1.55;
+}
+.fs-ui #fs-output {
+  min-height: 220px;
+}
+.fs-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.fs-ui #fs-summary[data-state="error"] { color: #fca5a5; }
+.fs-ui #fs-summary[data-state="warning"] { color: #fbbf24; }
+.fs-ui #fs-summary[data-state="success"] { color: #86efac; }
+.fs-ui button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+.fs-stats strong {
+  overflow-wrap: anywhere;
+}
 .iu-controls {
   grid-template-columns: minmax(0, 1fr) minmax(180px, .55fr);
 }

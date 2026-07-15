@@ -438,63 +438,72 @@ layout: default
           <textarea id="tlbc-output" rows="12" readonly placeholder="정리 결과가 여기에 표시됩니다."></textarea>
         </div>
       {% when 'filename-sanitizer' %}
-        <div class="tool-ui">
-          <textarea id="fs-input" rows="10" maxlength="20000" placeholder="제목이나 파일명을 한 줄에 하나씩 붙여넣으세요."></textarea>
+        <div class="tool-ui fs-ui">
+          <div class="tool-row">
+            <label for="fs-input">{% if page.lang == 'en' %}Titles or file names{% elsif page.lang == 'ja' %}タイトル・ファイル名{% else %}제목 또는 파일명 목록{% endif %}</label>
+            <textarea id="fs-input" rows="10" maxlength="20000" aria-describedby="fs-summary fs-limits" placeholder="{% if page.lang == 'en' %}Paste one title or file name per line.{% elsif page.lang == 'ja' %}1行に1つずつタイトルやファイル名を貼り付けます。{% else %}제목이나 파일명을 한 줄에 하나씩 붙여넣으세요.{% endif %}"></textarea>
+          </div>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="fs-separator">구분자 스타일</label>
-              <select id="fs-separator">
-                <option value="-">하이픈 (-)</option>
-                <option value="_">언더스코어 (_)</option>
-                <option value="">붙여쓰기</option>
+              <label for="fs-separator">{% if page.lang == 'en' %}Separator style{% elsif page.lang == 'ja' %}区切り文字{% else %}구분자 스타일{% endif %}</label>
+              <select id="fs-separator" aria-describedby="fs-summary">
+                <option value="-">{% if page.lang == 'en' %}Hyphen (-){% elsif page.lang == 'ja' %}ハイフン (-){% else %}하이픈 (-){% endif %}</option>
+                <option value="_">{% if page.lang == 'en' %}Underscore (_){% elsif page.lang == 'ja' %}アンダースコア (_){% else %}언더스코어 (_){% endif %}</option>
+                <option value="">{% if page.lang == 'en' %}No separator{% elsif page.lang == 'ja' %}区切りなし{% else %}붙여쓰기{% endif %}</option>
               </select>
             </div>
             <div>
-              <label for="fs-case">영문 처리</label>
-              <select id="fs-case">
-                <option value="keep">원문 유지</option>
-                <option value="lower">영문 소문자</option>
-                <option value="upper">영문 대문자</option>
+              <label for="fs-case">{% if page.lang == 'en' %}Letter case{% elsif page.lang == 'ja' %}英字の処理{% else %}영문 처리{% endif %}</label>
+              <select id="fs-case" aria-describedby="fs-summary">
+                <option value="keep">{% if page.lang == 'en' %}Keep original{% elsif page.lang == 'ja' %}元のまま{% else %}원문 유지{% endif %}</option>
+                <option value="lower">{% if page.lang == 'en' %}Lowercase English{% elsif page.lang == 'ja' %}英字を小文字{% else %}영문 소문자{% endif %}</option>
+                <option value="upper">{% if page.lang == 'en' %}Uppercase English{% elsif page.lang == 'ja' %}英字を大文字{% else %}영문 대문자{% endif %}</option>
               </select>
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="fs-date-enabled" type="checkbox" /> 날짜 접두어 붙이기</label>
+            <label class="tool-check"><input id="fs-date-enabled" type="checkbox" /> {% if page.lang == 'en' %}Add date prefix{% elsif page.lang == 'ja' %}日付プレフィックスを付ける{% else %}날짜 접두어 붙이기{% endif %}</label>
             <div>
-              <label for="fs-date">날짜</label>
-              <input id="fs-date" type="date" />
+              <label for="fs-date">{% if page.lang == 'en' %}Date{% elsif page.lang == 'ja' %}日付{% else %}날짜{% endif %}</label>
+              <input id="fs-date" type="date" aria-describedby="fs-summary" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="fs-number-enabled" type="checkbox" checked /> 순번 붙이기</label>
+            <label class="tool-check"><input id="fs-number-enabled" type="checkbox" checked /> {% if page.lang == 'en' %}Add sequence number{% elsif page.lang == 'ja' %}連番を付ける{% else %}순번 붙이기{% endif %}</label>
             <div>
-              <label for="fs-number-start">시작 번호</label>
-              <input id="fs-number-start" type="number" min="1" max="9999" step="1" value="1" inputmode="numeric" />
+              <label for="fs-number-start">{% if page.lang == 'en' %}Starting number{% elsif page.lang == 'ja' %}開始番号{% else %}시작 번호{% endif %}</label>
+              <input id="fs-number-start" type="number" min="1" max="9999" step="1" value="1" inputmode="numeric" aria-describedby="fs-limits" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="fs-remove-emoji" type="checkbox" checked /> 이모지/장식기호 정리</label>
-            <label class="tool-check"><input id="fs-keep-extension" type="checkbox" checked /> 확장자 유지</label>
+            <label class="tool-check"><input id="fs-remove-emoji" type="checkbox" checked /> {% if page.lang == 'en' %}Remove emoji/decorative symbols{% elsif page.lang == 'ja' %}絵文字・装飾記号を整理{% else %}이모지/장식기호 정리{% endif %}</label>
+            <label class="tool-check"><input id="fs-keep-extension" type="checkbox" checked /> {% if page.lang == 'en' %}Keep extensions{% elsif page.lang == 'ja' %}拡張子を保持{% else %}확장자 유지{% endif %}</label>
+            <label class="tool-check"><input id="fs-dedupe" type="checkbox" checked /> {% if page.lang == 'en' %}Make duplicate names unique{% elsif page.lang == 'ja' %}重複名を自動調整{% else %}중복 파일명 자동 보정{% endif %}</label>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="fs-sample" type="button">예시 넣기</button>
-            <button id="fs-copy" type="button">결과 복사</button>
+            <button id="fs-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
+            <button id="fs-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="fs-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
-            <div><strong id="fs-input-count">0</strong><span>입력 항목 수</span></div>
-            <div><strong id="fs-output-count">0</strong><span>출력 항목 수</span></div>
-            <div><strong id="fs-changed-count">0</strong><span>변경된 항목</span></div>
-            <div><strong id="fs-duplicate-count">0</strong><span>중복 파일명</span></div>
+          <div class="tool-stats fs-stats" aria-label="{% if page.lang == 'en' %}Filename cleanup summary{% elsif page.lang == 'ja' %}ファイル名整理の概要{% else %}파일명 정리 요약{% endif %}">
+            <div><strong id="fs-input-count">0</strong><span>{% if page.lang == 'en' %}Input items{% elsif page.lang == 'ja' %}入力項目{% else %}입력 항목 수{% endif %}</span></div>
+            <div><strong id="fs-output-count">0</strong><span>{% if page.lang == 'en' %}Output items{% elsif page.lang == 'ja' %}出力項目{% else %}출력 항목 수{% endif %}</span></div>
+            <div><strong id="fs-changed-count">0</strong><span>{% if page.lang == 'en' %}Changed{% elsif page.lang == 'ja' %}変更済み{% else %}변경된 항목{% endif %}</span></div>
+            <div><strong id="fs-duplicate-count">0</strong><span>{% if page.lang == 'en' %}Duplicate candidates{% elsif page.lang == 'ja' %}重複候補{% else %}중복 파일명{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="fs-summary">파일명 목록을 붙여넣으면 공백, 특수문자, 순번 규칙을 한 번에 정리합니다.</p>
-          <textarea id="fs-output" rows="12" readonly placeholder="정리된 파일명 목록이 여기에 표시됩니다."></textarea>
+          <p class="tool-result" id="fs-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Paste file names to normalize spaces, symbols, numbering, and duplicate candidates.{% elsif page.lang == 'ja' %}ファイル名を貼り付けると、空白・記号・連番・重複候補をまとめて整理します。{% else %}파일명 목록을 붙여넣으면 공백, 특수문자, 순번 규칙을 한 번에 정리합니다.{% endif %}</p>
+          <p class="tool-result" id="fs-limits">{% if page.lang == 'en' %}Up to 200 non-empty lines are processed. Starting number must be a whole number from 1 to 9999.{% elsif page.lang == 'ja' %}空でない行を最大200件まで処理します。開始番号は1〜9999の整数で入力してください。{% else %}빈 줄을 제외한 최대 200개 항목을 처리합니다. 시작 번호는 1~9999 사이의 정수로 입력하세요.{% endif %}</p>
+          <div class="tool-row">
+            <label for="fs-output">{% if page.lang == 'en' %}Cleaned file names{% elsif page.lang == 'ja' %}整理後のファイル名{% else %}정리된 파일명 목록{% endif %}</label>
+            <textarea id="fs-output" rows="12" readonly placeholder="{% if page.lang == 'en' %}Cleaned file names will appear here.{% elsif page.lang == 'ja' %}整理されたファイル名がここに表示されます。{% else %}정리된 파일명 목록이 여기에 표시됩니다.{% endif %}"></textarea>
+          </div>
         </div>
       {% when 'gift-idea-picker' %}
         <div class="tool-ui">
