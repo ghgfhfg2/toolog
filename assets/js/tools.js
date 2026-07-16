@@ -14520,9 +14520,10 @@
     const deadlineEl = document.getElementById('mtc-deadline');
     const lengthEl = document.getElementById('mtc-length');
     const summaryEl = document.getElementById('mtc-summary');
+    const countEl = document.getElementById('mtc-count');
     const listEl = document.getElementById('mtc-list');
     const outputEl = document.getElementById('mtc-output');
-    if (!contextEl || !inputEl || !runBtn || !sampleBtn || !copyBtn || !clearBtn || !statusEl || !directEl || !softEl || !requestEl || !deadlineEl || !lengthEl || !summaryEl || !listEl || !outputEl) return;
+    if (!contextEl || !inputEl || !runBtn || !sampleBtn || !copyBtn || !clearBtn || !statusEl || !directEl || !softEl || !requestEl || !deadlineEl || !lengthEl || !summaryEl || !countEl || !listEl || !outputEl) return;
 
     const mtcText = {
       ko: {
@@ -14563,7 +14564,9 @@
         noteDeadline: '오늘/내일/오후 4시 전처럼 시점을 넣으면 상대가 처리 우선순위를 잡기 쉬워집니다.',
         noteLong: '설명이 길다면 핵심 요청 문장을 앞에 두고 배경 설명은 뒤로 정리해보세요.',
         noteShort: '짧은 메시지는 목적어와 기한이 빠지기 쉽습니다. 무엇을 언제까지 원하는지 한 번 더 확인해보세요.',
+        noteNearLimit: '입력 길이가 5,000자 제한에 가까워졌습니다. 핵심 요청과 배경 설명을 분리하면 복사·공유가 쉬워집니다.',
         noteOk: '요청과 시점이 비교적 분명합니다. 보내기 전 호칭·첨부 여부만 마지막으로 확인해보세요.',
+        count: (n) => `${formatNum(n)} / 5,000자`,
         heading: '[메시지 톤 점검 결과]',
         context: '상황 기준',
         tone: '톤 요약',
@@ -14612,7 +14615,9 @@
         noteDeadline: 'Add a clear timing cue such as today, tomorrow, or before 4 PM.',
         noteLong: 'Put the main ask first and move background details after it.',
         noteShort: 'Short messages often miss the object or deadline. Check what you need and by when.',
+        noteNearLimit: 'The draft is close to the 5,000-character limit. Splitting the main ask and background can make it easier to copy and review.',
         noteOk: 'The request and timing look reasonably clear. Check the recipient name and attachments before sending.',
+        count: (n) => `${formatNum(n)} / 5,000 characters`,
         heading: '[Message Tone Check]',
         context: 'Context',
         tone: 'Tone summary',
@@ -14661,7 +14666,9 @@
         noteDeadline: '今日、明日、16時までなど、処理の目安になる時間を入れると親切です。',
         noteLong: '説明が長い場合は、中心の依頼を先に置き、背景説明を後ろに回しましょう。',
         noteShort: '短文では対象や期限が抜けやすいです。何をいつまでに求めるのか確認してください。',
+        noteNearLimit: '入力が5,000文字の上限に近づいています。中心の依頼と背景説明を分けると確認しやすくなります。',
         noteOk: '依頼と時点は比較的明確です。送信前に宛名や添付の有無だけ確認してください。',
+        count: (n) => `${formatNum(n)} / 5,000 文字`,
         heading: '[メッセージトーン点検結果]',
         context: '利用場面',
         tone: 'トーン要約',
@@ -14745,19 +14752,25 @@
     };
 
     const render = () => {
-      const text = (inputEl.value || '').trim();
+      const rawText = inputEl.value || '';
+      const text = rawText.trim();
       const context = contextEl.value || 'work';
       const sentenceParts = text.split(/[.!?。！？\n]+/u).map((part) => part.trim()).filter(Boolean);
       const sentenceCount = sentenceParts.length || 1;
       const charCount = [...text].length;
+      const rawCharCount = [...rawText].length;
       const avgSentence = text ? charCount / sentenceCount : 0;
       const directMatches = uniqueShort(getMatches(text, directPatterns));
       const softMatches = uniqueShort(getMatches(text, softPatterns));
-      const directCount = directMatches.length;
-      const softCount = softMatches.length;
+      const directCount = getMatches(text, directPatterns).length;
+      const softCount = getMatches(text, softPatterns).length;
       const requestCount = countMatches(text, requestPatterns);
       const hasDeadline = hasAnyMatch(text, deadlinePatterns);
       const hasRequest = requestCount > 0;
+      const directThreshold = context === 'quick' ? 3 : (context === 'external' ? 1 : 2);
+      const softThreshold = context === 'quick' ? 3 : (context === 'external' ? 5 : 4);
+      countEl.textContent = mtcText.count(rawCharCount);
+      countEl.dataset.state = rawCharCount >= 5000 ? 'error' : (rawCharCount >= 4500 ? 'warning' : '');
 
       if (!text) {
         statusEl.textContent = mtcText.noInput;
@@ -14782,14 +14795,14 @@
       let state = 'success';
       const notes = [];
 
-      if (directCount >= (context === 'quick' ? 3 : 2)) {
+      if (directCount >= directThreshold) {
         status = mtcText.directStrong;
         summary = mtcText.summaryDirect;
         state = 'warning';
         notes.push(mtcText.noteDirect);
       }
 
-      if (softCount >= 4 && status === mtcText.balanced) {
+      if (softCount >= softThreshold && status === mtcText.balanced) {
         status = mtcText.softHeavy;
         summary = mtcText.summarySoft;
         state = 'warning';
@@ -14821,6 +14834,11 @@
         if (status === mtcText.balanced) status = mtcText.long;
         state = state === 'success' ? 'warning' : state;
         notes.push(mtcText.noteLong);
+      }
+
+      if (rawCharCount >= 4500) {
+        state = state === 'success' ? 'warning' : state;
+        notes.push(mtcText.noteNearLimit);
       }
 
       const detected = [...directMatches, ...softMatches];

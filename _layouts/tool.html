@@ -692,7 +692,7 @@ layout: default
         </div>
       {% when 'message-tone-checker' %}
         <div class="tool-ui mtc-ui">
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid mtc-context-grid">
             <div>
               <label for="mtc-context">{% if page.lang == 'en' %}Message context{% elsif page.lang == 'ja' %}利用場面{% else %}상황 기준{% endif %}</label>
               <select id="mtc-context" aria-describedby="mtc-summary mtc-help">
@@ -701,10 +701,11 @@ layout: default
                 <option value="quick">{% if page.lang == 'en' %}Quick internal chat{% elsif page.lang == 'ja' %}素早い社内チャット{% else %}빠른 내부 메신저{% endif %}</option>
               </select>
             </div>
-            <div>
-              <label for="mtc-input">{% if page.lang == 'en' %}Message draft{% elsif page.lang == 'ja' %}メッセージ下書き{% else %}메시지 초안{% endif %}</label>
-              <textarea id="mtc-input" rows="8" maxlength="5000" aria-describedby="mtc-summary mtc-help" placeholder="{% if page.lang == 'en' %}Example: Could you review the draft by 4 PM today? A quick reply would help me finalize the schedule.{% elsif page.lang == 'ja' %}例: 本日16時までに下書きを確認いただけますか。可否だけでも返信いただけると予定調整に助かります。{% else %}예: 자료 확인 부탁드립니다. 오늘 오후 4시 전까지 가능 여부만 회신 주시면 일정 정리에 도움이 됩니다.{% endif %}"></textarea>
-            </div>
+          </div>
+          <div class="tool-row">
+            <label for="mtc-input">{% if page.lang == 'en' %}Message draft{% elsif page.lang == 'ja' %}メッセージ下書き{% else %}메시지 초안{% endif %}</label>
+            <textarea id="mtc-input" rows="8" maxlength="5000" aria-describedby="mtc-summary mtc-count mtc-help" placeholder="{% if page.lang == 'en' %}Example: Could you review the draft by 4 PM today? A quick reply would help me finalize the schedule.{% elsif page.lang == 'ja' %}例: 本日16時までに下書きを確認いただけますか。可否だけでも返信いただけると予定調整に助かります。{% else %}예: 자료 확인 부탁드립니다. 오늘 오후 4시 전까지 가능 여부만 회신 주시면 일정 정리에 도움이 됩니다.{% endif %}"></textarea>
+            <p class="tool-result mtc-count" id="mtc-count">{% if page.lang == 'en' %}0 / 5,000 characters{% elsif page.lang == 'ja' %}0 / 5,000 文字{% else %}0 / 5,000자{% endif %}</p>
           </div>
 
           <div class="tool-row-grid pct-actions">
@@ -724,7 +725,7 @@ layout: default
           </div>
 
           <p class="tool-result" id="mtc-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Paste a message to check directness, politeness, request clarity, deadline cues, and length burden together.{% elsif page.lang == 'ja' %}メッセージを入力すると、強さ、丁寧さ、依頼/期限の明確さ、文量負担をまとめて点検します。{% else %}메시지를 넣으면 직설성, 정중함, 요청/마감 언급, 길이 부담을 함께 점검합니다.{% endif %}</p>
-          <p class="tool-result" id="mtc-help">{% if page.lang == 'en' %}Input stays in your browser. Very short, mixed-language, or relationship-specific messages may need manual judgment after the signal check.{% elsif page.lang == 'ja' %}入力内容はブラウザ内だけで処理されます。短文、混在言語、関係性に左右される文面は点検後に人の判断で調整してください。{% else %}입력 내용은 브라우저 안에서만 처리됩니다. 짧은 문장, 혼합 언어, 관계성에 따라 달라지는 표현은 점검 신호를 본 뒤 직접 판단해 주세요.{% endif %}</p>
+          <p class="tool-result" id="mtc-help">{% if page.lang == 'en' %}Input stays in your browser and is limited to 5,000 characters. Very short, mixed-language, or relationship-specific messages may need manual judgment after the signal check.{% elsif page.lang == 'ja' %}入力内容はブラウザ内だけで処理され、最大5,000文字まで点検できます。短文、混在言語、関係性に左右される文面は点検後に人の判断で調整してください。{% else %}입력 내용은 브라우저 안에서만 처리되며 최대 5,000자까지 점검합니다. 짧은 문장, 혼합 언어, 관계성에 따라 달라지는 표현은 점검 신호를 본 뒤 직접 판단해 주세요.{% endif %}</p>
           <div id="mtc-list" class="bw-list" aria-live="polite"></div>
           <label for="mtc-output">{% if page.lang == 'en' %}Check memo{% elsif page.lang == 'ja' %}点検メモ{% else %}점검 결과 메모{% endif %}</label>
           <textarea id="mtc-output" rows="12" readonly placeholder="{% if page.lang == 'en' %}The check memo will appear here.{% elsif page.lang == 'ja' %}点検結果メモがここに表示されます。{% else %}점검 결과 메모가 여기에 표시됩니다.{% endif %}"></textarea>

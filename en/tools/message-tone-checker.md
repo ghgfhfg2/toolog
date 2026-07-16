@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Message Tone Checker | Review work email and chat wording before sending
-description: Paste a work email, Slack or chat draft, or request note to review blunt phrasing, repeated apologies, request clarity, deadline cues, and long-message burden in one pass.
+description: Paste a work email, Slack or chat draft, or request note to review blunt phrasing, repeated apologies, request clarity, deadline cues, character count, and long-message burden before sending.
 lang: en
 permalink: /en/tools/message-tone-checker/
 canonical_url: /en/tools/message-tone-checker/
@@ -25,6 +25,8 @@ faq:
     a: No. It is tuned for work communication, but it also helps with email drafts, client replies, and other messages where politeness and clarity both matter.
   - q: What kind of message works best?
     a: It is most useful for requests, follow-ups, schedule checks, and review messages where the recipient needs to take action. Pasting the full draft gives better signals than a single short phrase.
+  - q: Can it check long drafts?
+    a: It checks up to 5,000 characters in your browser. For long drafts, use the character count and notes to separate the main ask from background details.
 ---
 
 ## Why use a Message Tone Checker?
@@ -50,6 +52,7 @@ The checker reviews **directness, repeated softening, request clarity, deadline 
    - whether the requested action is clear
    - whether a deadline or timing cue is present
    - total length and average sentence length
+   - whether the draft is close to the 5,000-character limit
 5. Edit the draft using the summary and suggestion notes.
 
 It does not force one "correct" rewrite. It works more like a quick pre-send review of how the message may land and whether the recipient can act on it.
@@ -82,6 +85,7 @@ This tool is a quick signal checker, not an automatic rewrite engine. It is tune
 - request clarity, including review, reply, share, send, confirm, and let me know
 - deadline or timing cues such as today, tomorrow, by, before, AM, or PM
 - length burden from long messages or long average sentences
+- input length near the 5,000-character browser-side limit
 
 ## Examples
 ### Example 1. Blunt internal request
@@ -112,7 +116,7 @@ No. Tone depends on the recipient, relationship, company culture, and urgency. U
 Not always. Too much softening can make the request vague. That is why the tool checks request clarity and timing cues along with politeness.
 
 ### Can I paste a long message?
-Yes. Long drafts work, but the tool may warn you if the overall message or average sentence length makes the main point harder to scan.
+Yes. You can paste up to 5,000 characters. Long drafts work, but the tool may warn you if the overall message or average sentence length makes the main point harder to scan.
 
 ## Summary
 The Message Tone Checker is a **checker-type tool that reviews directness, softening language, request clarity, deadline mentions, and length burden in work message and email drafts**.
