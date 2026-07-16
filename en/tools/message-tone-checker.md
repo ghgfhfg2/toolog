@@ -40,7 +40,7 @@ This is especially easy to miss when:
 - a long explanation may make the recipient miss the main action
 - you need to send quickly but want one final tone check
 
-The checker reviews **directness, repeated softening, request clarity, deadline cues, and length burden** together so you can adjust both the impression and the actionability of the message.
+The checker reviews **directness, repeated softening, request clarity, deadline cues, character count, and length burden** together before you send, so you can adjust both the impression and the actionability of the message.
 
 ## How it works
 1. Paste the message you want to check.
@@ -119,4 +119,5 @@ Not always. Too much softening can make the request vague. That is why the tool 
 Yes. You can paste up to 5,000 characters. Long drafts work, but the tool may warn you if the overall message or average sentence length makes the main point harder to scan.
 
 ## Summary
-The Message Tone Checker is a **checker-type tool that reviews directness, softening language, request clarity, deadline mentions, and length burden in work message and email drafts**.
+The Message Tone Checker is a **checker-type tool that reviews directness, softening language, request clarity, deadline mentions, character count, and length burden in work message and email drafts**.
+Paste a draft before sending to quickly check whether the recipient can understand the next action and timing.
