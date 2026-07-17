@@ -844,6 +844,18 @@ a:hover { color: #fff; text-decoration: none; }
 .gbc-ui #gbc-summary[data-state="error"] { color: #fca5a5; }
 .gbc-ui #gbc-summary[data-state="warning"] { color: #fbbf24; }
 .gbc-ui #gbc-summary[data-state="success"] { color: #86efac; }
+.lmp-ui textarea {
+  min-height: 220px;
+  font-size: 15px;
+  line-height: 1.55;
+}
+.lmp-ui .tool-result[data-state="success"] { color: #86efac; }
+.lmp-ui .tool-result[data-state="warning"] { color: #fbbf24; }
+.lmp-ui .tool-result[data-state="error"] { color: #fca5a5; }
+.lmp-stats strong {
+  overflow-wrap: anywhere;
+  line-height: 1.18;
+}
 .mtc-ui textarea {
   min-height: 190px;
   font-size: 16px;

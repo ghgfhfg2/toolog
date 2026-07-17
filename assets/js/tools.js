@@ -7989,34 +7989,91 @@
     const helpEl = document.getElementById('lmp-help');
     if (!timeEl || !companyEl || !budgetEl || !moodEl || !hotEl || !riceEl || !runBtn || !copyBtn || !countEl || !topTagEl || !budgetTagEl || !formatEl || !outputEl || !helpEl) return;
 
-    const labelMap = { comfort: '든든', fresh: '가벼움', spicy: '자극적', fast: '빨리 먹기', social: '같이 먹기' };
+    const lmpText = {
+      ko: {
+        title: '[오늘 뭐 먹지? 메뉴 추천 결과]',
+        labels: { time: '식사 상황', company: '함께 먹는 사람', budget: '예산', mood: '원하는 분위기' },
+        tags: { comfort: '든든', fresh: '가벼움', spicy: '자극적', fast: '빨리 먹기', social: '같이 먹기', hot: '뜨끈함', rice: '밥류' },
+        format: '복사형 추천 리스트',
+        relaxed: '조건이 좁아 분위기와 예산을 조금 완화해 추천했어요.',
+        ready: (names) => `${names} 순으로 추천했어요.`,
+        copied: '복사됨',
+        copyFail: '복사를 사용할 수 없습니다. 결과를 직접 선택해 복사해 주세요.',
+        tips: [
+          '고르기 팁',
+          '- 빨리 정해야 하면 1번부터, 여럿이 먹는 자리면 같이 먹기 성향 메뉴를 먼저 보세요.',
+          '- 너무 무거운 메뉴가 싫으면 가벼움, 든든하게 먹고 싶으면 든든 성향 메뉴가 잘 맞습니다.'
+        ]
+      },
+      en: {
+        title: '[Menu suggestions for now]',
+        labels: { time: 'Meal situation', company: 'Who is eating', budget: 'Budget', mood: 'Mood' },
+        tags: { comfort: 'hearty', fresh: 'light', spicy: 'bold', fast: 'quick', social: 'group-friendly', hot: 'hot dish', rice: 'rice-based' },
+        format: 'copy-ready suggestion list',
+        relaxed: 'The filters were narrow, so mood and budget were relaxed slightly.',
+        ready: (names) => `Suggested in this order: ${names}.`,
+        copied: 'Copied',
+        copyFail: 'Copy is unavailable. Select and copy the result manually.',
+        tips: [
+          'Picking tips',
+          '- If you need to decide fast, start with #1. For a group meal, look for group-friendly tags first.',
+          '- Choose light tags when you want something easier, or hearty tags when you need a filling meal.'
+        ]
+      },
+      ja: {
+        title: '[今食べるメニュー提案]',
+        labels: { time: '食事シーン', company: '一緒に食べる人', budget: '予算', mood: '気分' },
+        tags: { comfort: 'しっかり', fresh: '軽め', spicy: '刺激的', fast: '手早い', social: '会話向き', hot: '温かい', rice: 'ご飯もの' },
+        format: 'コピー用の提案リスト',
+        relaxed: '条件が狭かったため、気分と予算を少し緩めて提案しました。',
+        ready: (names) => `${names} の順に提案しました。`,
+        copied: 'コピー済み',
+        copyFail: 'コピーを利用できません。結果を選択して手動でコピーしてください。',
+        tips: [
+          '選び方のヒント',
+          '- 早く決めたいときは1番から、複数人なら会話向きタグを先に見てください。',
+          '- 軽く済ませたいなら軽め、満足感がほしいならしっかり系が合いやすいです。'
+        ]
+      }
+    }[pageLang] || {};
+    const labelMap = lmpText.tags || {};
     const menus = [
-      { name: '김치찌개', time: ['lunch', 'dinner'], company: ['solo', 'pair', 'team'], budget: ['light', 'mid'], moods: ['comfort', 'spicy', 'fast'], hot: true, rice: true },
-      { name: '제육볶음', time: ['lunch', 'dinner'], company: ['solo', 'pair', 'team'], budget: ['light', 'mid'], moods: ['comfort', 'spicy'], hot: true, rice: true },
-      { name: '비빔밥', time: ['lunch', 'dinner'], company: ['solo', 'pair'], budget: ['light', 'mid'], moods: ['fresh', 'fast'], hot: false, rice: true },
-      { name: '샐러드 포케', time: ['lunch', 'dinner'], company: ['solo', 'pair'], budget: ['mid', 'high'], moods: ['fresh', 'fast'], hot: false, rice: false },
-      { name: '쌀국수', time: ['lunch', 'dinner'], company: ['solo', 'pair', 'team'], budget: ['mid'], moods: ['fresh', 'comfort'], hot: true, rice: false },
-      { name: '마라탕', time: ['lunch', 'dinner', 'late'], company: ['pair', 'team'], budget: ['mid', 'high'], moods: ['spicy', 'social'], hot: true, rice: false },
-      { name: '초밥', time: ['lunch', 'dinner'], company: ['pair', 'team'], budget: ['mid', 'high'], moods: ['fresh', 'social'], hot: false, rice: true },
-      { name: '돈까스', time: ['lunch', 'dinner'], company: ['solo', 'pair'], budget: ['light', 'mid'], moods: ['comfort', 'fast'], hot: true, rice: true },
-      { name: '파스타', time: ['lunch', 'dinner'], company: ['pair', 'team'], budget: ['mid', 'high'], moods: ['social', 'fresh'], hot: true, rice: false },
-      { name: '햄버거', time: ['lunch', 'dinner', 'late'], company: ['solo', 'pair'], budget: ['light', 'mid'], moods: ['fast'], hot: true, rice: false },
-      { name: '국밥', time: ['lunch', 'dinner', 'late'], company: ['solo', 'pair'], budget: ['light', 'mid'], moods: ['comfort', 'fast'], hot: true, rice: true },
-      { name: '칼국수', time: ['lunch', 'dinner'], company: ['solo', 'pair', 'team'], budget: ['light', 'mid'], moods: ['comfort'], hot: true, rice: false },
-      { name: '분식 세트', time: ['lunch', 'late'], company: ['solo', 'pair'], budget: ['light'], moods: ['fast', 'spicy'], hot: true, rice: false },
-      { name: '삼겹살', time: ['dinner'], company: ['pair', 'team'], budget: ['high'], moods: ['social', 'comfort'], hot: true, rice: true },
-      { name: '냉면', time: ['lunch', 'dinner'], company: ['solo', 'pair'], budget: ['light', 'mid'], moods: ['fresh'], hot: false, rice: false },
-      { name: '샤브샤브', time: ['dinner'], company: ['pair', 'team'], budget: ['high'], moods: ['social', 'fresh'], hot: true, rice: false },
-      { name: '도시락 / 덮밥', time: ['lunch', 'dinner'], company: ['solo', 'pair'], budget: ['light'], moods: ['fast', 'comfort'], hot: true, rice: true },
-      { name: '타코 / 브리또', time: ['lunch', 'dinner'], company: ['pair', 'team'], budget: ['mid'], moods: ['fresh', 'social'], hot: false, rice: false }
+      { name: { ko: '김치찌개', en: 'Kimchi stew', ja: 'キムチチゲ' }, time: ['lunch', 'dinner'], company: ['solo', 'pair', 'team'], budget: ['light', 'mid'], moods: ['comfort', 'spicy', 'fast'], hot: true, rice: true },
+      { name: { ko: '제육볶음', en: 'Spicy pork stir-fry', ja: '豚肉の辛炒め' }, time: ['lunch', 'dinner'], company: ['solo', 'pair', 'team'], budget: ['light', 'mid'], moods: ['comfort', 'spicy'], hot: true, rice: true },
+      { name: { ko: '비빔밥', en: 'Bibimbap', ja: 'ビビンバ' }, time: ['lunch', 'dinner'], company: ['solo', 'pair'], budget: ['light', 'mid'], moods: ['fresh', 'fast'], hot: false, rice: true },
+      { name: { ko: '샐러드 포케', en: 'Salad poke bowl', ja: 'サラダポケ' }, time: ['lunch', 'dinner'], company: ['solo', 'pair'], budget: ['mid', 'high'], moods: ['fresh', 'fast'], hot: false, rice: false },
+      { name: { ko: '쌀국수', en: 'Pho or rice noodles', ja: 'フォー・米麺' }, time: ['lunch', 'dinner'], company: ['solo', 'pair', 'team'], budget: ['mid'], moods: ['fresh', 'comfort'], hot: true, rice: false },
+      { name: { ko: '마라탕', en: 'Malatang', ja: 'マーラータン' }, time: ['lunch', 'dinner', 'late'], company: ['pair', 'team'], budget: ['mid', 'high'], moods: ['spicy', 'social'], hot: true, rice: false },
+      { name: { ko: '초밥', en: 'Sushi', ja: '寿司' }, time: ['lunch', 'dinner'], company: ['pair', 'team'], budget: ['mid', 'high'], moods: ['fresh', 'social'], hot: false, rice: true },
+      { name: { ko: '돈까스', en: 'Pork cutlet', ja: 'とんかつ' }, time: ['lunch', 'dinner'], company: ['solo', 'pair'], budget: ['light', 'mid'], moods: ['comfort', 'fast'], hot: true, rice: true },
+      { name: { ko: '파스타', en: 'Pasta', ja: 'パスタ' }, time: ['lunch', 'dinner'], company: ['pair', 'team'], budget: ['mid', 'high'], moods: ['social', 'fresh'], hot: true, rice: false },
+      { name: { ko: '햄버거', en: 'Burger', ja: 'ハンバーガー' }, time: ['lunch', 'dinner', 'late'], company: ['solo', 'pair'], budget: ['light', 'mid'], moods: ['fast'], hot: true, rice: false },
+      { name: { ko: '국밥', en: 'Soup rice', ja: 'クッパ' }, time: ['lunch', 'dinner', 'late'], company: ['solo', 'pair'], budget: ['light', 'mid'], moods: ['comfort', 'fast'], hot: true, rice: true },
+      { name: { ko: '칼국수', en: 'Kalguksu noodles', ja: 'カルグクス' }, time: ['lunch', 'dinner'], company: ['solo', 'pair', 'team'], budget: ['light', 'mid'], moods: ['comfort'], hot: true, rice: false },
+      { name: { ko: '분식 세트', en: 'Korean snack set', ja: '軽食セット' }, time: ['lunch', 'late'], company: ['solo', 'pair'], budget: ['light'], moods: ['fast', 'spicy'], hot: true, rice: false },
+      { name: { ko: '삼겹살', en: 'Korean BBQ pork belly', ja: 'サムギョプサル' }, time: ['dinner'], company: ['pair', 'team'], budget: ['high'], moods: ['social', 'comfort'], hot: true, rice: true },
+      { name: { ko: '냉면', en: 'Cold noodles', ja: '冷麺' }, time: ['lunch', 'dinner'], company: ['solo', 'pair'], budget: ['light', 'mid'], moods: ['fresh'], hot: false, rice: false },
+      { name: { ko: '샤브샤브', en: 'Shabu-shabu', ja: 'しゃぶしゃぶ' }, time: ['dinner'], company: ['pair', 'team'], budget: ['high'], moods: ['social', 'fresh'], hot: true, rice: false },
+      { name: { ko: '도시락 / 덮밥', en: 'Lunch box or rice bowl', ja: '弁当・丼' }, time: ['lunch', 'dinner'], company: ['solo', 'pair'], budget: ['light'], moods: ['fast', 'comfort'], hot: true, rice: true },
+      { name: { ko: '타코 / 브리또', en: 'Tacos or burrito', ja: 'タコス・ブリトー' }, time: ['lunch', 'dinner'], company: ['pair', 'team'], budget: ['mid'], moods: ['fresh', 'social'], hot: false, rice: false }
     ];
 
     const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
       catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select();
+          const ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+          return ok;
+        } catch (err) {
+          return false;
+        }
       }
     };
 
@@ -8041,43 +8098,48 @@
         wantRice: !!riceEl.checked
       };
 
+      let relaxed = false;
       let ranked = menus.map((menu) => ({ ...menu, score: scoreMenu(menu, state) }))
         .filter((menu) => menu.score >= 4)
-        .sort((a, b) => b.score - a.score || a.name.localeCompare(b.name, 'ko'));
+        .sort((a, b) => b.score - a.score || (a.name.ko || '').localeCompare(b.name.ko || '', 'ko'));
 
       if (!state.wantHot) ranked = ranked.filter((menu) => !menu.hot || menu.score >= 7);
       if (!state.wantRice) ranked = ranked.filter((menu) => !menu.rice || menu.score >= 7);
       if (!ranked.length) {
+        relaxed = true;
         ranked = menus.map((menu) => ({ ...menu, score: scoreMenu(menu, { ...state, mood: 'any', budget: 'any' }) }))
-          .sort((a, b) => b.score - a.score || a.name.localeCompare(b.name, 'ko'));
+          .sort((a, b) => b.score - a.score || (a.name.ko || '').localeCompare(b.name.ko || '', 'ko'));
       }
 
       const picks = ranked.slice(0, 3);
       const lines = [];
-      lines.push('[오늘 뭐 먹지? 메뉴 추천 결과]');
-      lines.push(`- 식사 상황: ${timeEl.options[timeEl.selectedIndex].text}`);
-      lines.push(`- 함께 먹는 사람: ${companyEl.options[companyEl.selectedIndex].text}`);
-      lines.push(`- 예산: ${budgetEl.options[budgetEl.selectedIndex].text}`);
-      lines.push(`- 원하는 분위기: ${moodEl.options[moodEl.selectedIndex].text}`);
+      lines.push(lmpText.title);
+      lines.push(`- ${lmpText.labels.time}: ${timeEl.options[timeEl.selectedIndex].text}`);
+      lines.push(`- ${lmpText.labels.company}: ${companyEl.options[companyEl.selectedIndex].text}`);
+      lines.push(`- ${lmpText.labels.budget}: ${budgetEl.options[budgetEl.selectedIndex].text}`);
+      lines.push(`- ${lmpText.labels.mood}: ${moodEl.options[moodEl.selectedIndex].text}`);
+      if (relaxed) lines.push(`- ${lmpText.relaxed}`);
       lines.push('');
       picks.forEach((pick, index) => {
         const tags = [];
-        if (pick.hot) tags.push('뜨끈함');
-        if (pick.rice) tags.push('밥류');
+        if (pick.hot) tags.push(labelMap.hot);
+        if (pick.rice) tags.push(labelMap.rice);
         tags.push(...pick.moods.slice(0, 2).map((m) => labelMap[m] || m));
-        lines.push(`${index + 1}. ${pick.name} — ${tags.join(' · ')}`);
+        lines.push(`${index + 1}. ${pick.name[pageLang] || pick.name.ko} - ${tags.join(' · ')}`);
       });
       lines.push('');
-      lines.push('고르기 팁');
-      lines.push('- 빨리 정해야 하면 1번부터, 여럿이 먹는 자리면 social 성향 메뉴를 먼저 보세요.');
-      lines.push('- 너무 무거운 메뉴가 싫으면 fresh, 든든하게 먹고 싶으면 comfort 성향 메뉴가 잘 맞습니다.');
+      lines.push(...lmpText.tips);
 
       outputEl.value = lines.join('\n');
       countEl.textContent = String(ranked.length);
       topTagEl.textContent = moodEl.options[moodEl.selectedIndex].text;
       budgetTagEl.textContent = budgetEl.options[budgetEl.selectedIndex].text;
-      formatEl.textContent = '복사형 추천 리스트';
-      helpEl.textContent = picks.length ? `${picks.map((pick) => pick.name).join(', ')} 순으로 추천했어요.` : '조건을 조금 완화해서 다시 추천해보세요.';
+      formatEl.textContent = lmpText.format;
+      copyBtn.disabled = !picks.length;
+      helpEl.dataset.state = relaxed ? 'warning' : 'success';
+      helpEl.textContent = picks.length
+        ? `${relaxed ? lmpText.relaxed + ' ' : ''}${lmpText.ready(picks.map((pick) => pick.name[pageLang] || pick.name.ko).join(', '))}`
+        : lmpText.relaxed;
     };
 
     [timeEl, companyEl, budgetEl, moodEl, hotEl, riceEl].forEach((el) => {
@@ -8087,10 +8149,15 @@
     runBtn.addEventListener('click', generate);
     copyBtn.addEventListener('click', async () => {
       if (!outputEl.value.trim()) generate();
-      await copyText(outputEl.value.trim());
+      const copied = await copyText(outputEl.value.trim());
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      if (copied) {
+        copyBtn.textContent = lmpText.copied;
+        setTimeout(() => { copyBtn.textContent = old || lmpText.copied; }, 900);
+      } else {
+        helpEl.dataset.state = 'error';
+        helpEl.textContent = lmpText.copyFail;
+      }
     });
 
     generate();

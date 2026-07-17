@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Lunch Menu Picker | Quickly choose what to eat today
-description: Pick the meal time, budget, group size, and mood to get three menu suggestions that fit the moment right away.
+description: Pick meal time, budget, group size, and mood to get three fitting menu ideas plus a copy-ready suggestion summary.
 lang: en
 permalink: /en/tools/lunch-menu-picker/
 canonical_url: /en/tools/lunch-menu-picker/
@@ -23,6 +23,8 @@ faq:
     a: Yes. It weighs quick and convenient options more highly for solo meals, while group-friendly choices move up for team lunches.
   - q: Can I use it for dinner or late-night meals too?
     a: Yes. Change the meal situation to dinner or late-night and options that suit that time move higher.
+  - q: What happens if my filters are too narrow?
+    a: If the candidate pool becomes too small, the tool slightly relaxes mood and budget and clearly notes that in the result.
 ---
 
 ## Why this lunch menu picker is useful
@@ -35,7 +37,7 @@ It is especially easy to waste time in situations like these:
 - when you already know the kind of food you want, like soup or a rice dish
 
 This tool is built to cut down that hesitation.
-Choose the meal situation, who you are eating with, your budget, and the kind of food you feel like, and it immediately shows three easy-to-share candidates.
+Choose the meal situation, who you are eating with, your budget, and the kind of food you feel like, and it immediately shows three easy-to-share candidates in a copy-ready format.
 
 ## How it recommends menus
 The logic is not a huge AI model. It is a lightweight scoring approach based on the factors that matter in real meal decisions.
@@ -47,6 +49,7 @@ The logic is not a huge AI model. It is a lightweight scoring approach based on 
 5. **Preference options**: include hot dishes, include rice-based dishes
 
 It scores menu types against those conditions and shows the top candidates.
+If the filters leave too few realistic options, it slightly relaxes mood and budget and tells you that in the result.
 So rather than giving you a totally random pick, it works more like a **decision helper that makes the current situation easier to choose for**.
 
 ## Especially useful in these situations
@@ -110,6 +113,9 @@ The current version focuses on fast everyday decisions. More detailed dietary fi
 
 ### Can we use it like a quick team vote?
 Yes. You can copy the three results straight into chat and pick from them.
+
+### Will the result appear in English on the English page?
+Yes. Buttons, status messages, menu names, tags, and the copy-ready result are localized for the English page.
 
 ## Summary
 The Lunch Menu Picker is a **picker-type tool that quickly narrows today’s meal decision down to realistic options that fit your situation**.
