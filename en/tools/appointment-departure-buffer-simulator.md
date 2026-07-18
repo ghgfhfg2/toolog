@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Appointment Departure Buffer Simulator | Calculate prep start and leave-home time
-description: Simulate when to start getting ready, when to leave home, and what arrival target to use based on appointment time, travel time, prep time, weather, transfers, unfamiliar places, and packing needs.
+title: Appointment Departure Buffer Simulator | Avoid being late by calculating prep and leave-home time
+description: Use the Appointment Departure Buffer Simulator to calculate when to start getting ready, when to leave home, and what arrival target to use from appointment time, travel time, prep time, transfers, rain, unfamiliar routes, and packing needs.
 lang: en
 permalink: /en/tools/appointment-departure-buffer-simulator/
 canonical_url: /en/tools/appointment-departure-buffer-simulator/
@@ -14,7 +14,7 @@ image:
 tool_key: appointment-departure-buffer-simulator
 tool_type: simulator
 topic_cluster: travel
-keywords: [appointment departure time, when should I leave, getting ready time planner, travel buffer simulator, leave home on time]
+keywords: [appointment departure time calculator, when should I leave, getting ready time planner, travel buffer simulator, avoid being late, leave home on time]
 related_tools: [deadline-backward-planner, time-difference-calculator, schedule-coordination-message-generator]
 faq:
   - q: Is this based on live traffic data?
@@ -37,7 +37,7 @@ Common examples:
 - an unfamiliar building or exit takes extra minutes to figure out
 - you remember something important right before leaving and your prep time stretches out
 
-This tool helps you calculate **when to start getting ready, when to leave home, and how much safety buffer your plan really has**.
+This tool helps you calculate **when to start getting ready, when to leave home, and what arrival target to aim for** in one place.
 It is built around common last-minute questions like "when should I leave," "when should I start getting ready," and "how much buffer do I need to avoid being late."
 It is closer to a practical **simulator-type tool** than a simple time calculator.
 
@@ -70,7 +70,7 @@ For interviews, hospital visits, meetings, or reservations, planning the prep st
 4. Choose the buffer style and risk factors.
 5. Copy the recommended leave time into your calendar or notes.
 
-If a value is missing, outside the supported range, or already in the past, the result area stays empty and the tool shows what needs to be fixed first.
+If a required value is missing, travel time or prep time is outside the supported range, or the appointment time is already in the past, the result area stays empty and the tool shows what needs to be fixed first. This keeps a past or invalid time from being mistaken for a usable departure plan.
 
 ## Example scenarios
 ### Example 1) Casual coffee meetup
@@ -112,5 +112,8 @@ That is often useful for important appointments. If it is only a casual plan, ch
 ### How should I choose the buffer style?
 Tight works for casual meetups, standard fits most everyday plans, and relaxed is a safer choice for appointments where being late would hurt.
 
+### Why is my result blank or showing a warning?
+The simulator only calculates future appointment times. Travel time must be 1-600 minutes, and prep time must be 0-240 minutes.
+
 ## Summary
-The Appointment Departure Buffer Simulator is a **simulator-type tool that turns appointment time, prep time, and travel uncertainty into a realistic plan for when to get ready and when to leave**.
+The Appointment Departure Buffer Simulator is a **simulator-type tool that turns appointment time, prep time, and travel uncertainty into a realistic plan for when to get ready, when to leave, and when to aim to arrive**.
