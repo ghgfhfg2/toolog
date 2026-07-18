@@ -4051,6 +4051,7 @@
     const packing = document.getElementById('adbs-packing');
     const copyBtn = document.getElementById('adbs-copy');
     const sampleBtn = document.getElementById('adbs-sample');
+    const resetBtn = document.getElementById('adbs-reset');
     const startOut = document.getElementById('adbs-start');
     const leaveOut = document.getElementById('adbs-leave');
     const arriveOut = document.getElementById('adbs-arrive');
@@ -4061,7 +4062,79 @@
 
     if (!appointment || !travel || !ready || !style || !startOut || !leaveOut || !arriveOut || !bufferOut || !totalOut || !riskOut || !help) return;
 
-    const fmtTime = (date) => new Intl.DateTimeFormat('ko-KR', {
+    const adbsText = {
+      ko: {
+        initial: '약속 시각과 이동/준비시간을 입력하면 준비 시작과 출발 시각을 현실적으로 시뮬레이션합니다.',
+        empty: '약속 시각, 이동시간, 준비시간을 입력하면 결과가 계산됩니다.',
+        invalidTravel: '이동시간은 1분 이상 600분 이하로 입력해 주세요.',
+        invalidReady: '준비시간은 0분 이상 240분 이하로 입력해 주세요.',
+        past: '이미 지난 약속 시각입니다. 이후 시각으로 바꾸면 출발 계획을 계산할 수 있어요.',
+        risk: { low: '낮음', medium: '보통', high: '높음' },
+        min: '분',
+        early: (m) => `${m}분 전`,
+        help: (readyMin, travelMin, bufferMin, leadMin) => `준비 ${readyMin}분 + 이동 ${travelMin}분 + 추가 버퍼 ${bufferMin}분 + 조기 도착 ${leadMin}분 기준으로 계산했어요.`,
+        copied: '복사됨',
+        copyButton: '결과 복사',
+        copyEmpty: '복사할 출발 계획이 아직 없습니다.',
+        reset: '기본값으로 초기화했습니다.',
+        copyLines: {
+          start: '준비 시작',
+          leave: '출발 시각',
+          arrive: '권장 도착',
+          buffer: '추가 버퍼',
+          total: '총 소요',
+          risk: '리스크'
+        }
+      },
+      en: {
+        initial: 'Enter the appointment time, travel time, and prep time to simulate a realistic departure plan.',
+        empty: 'Enter the appointment time, travel time, and prep time to calculate the result.',
+        invalidTravel: 'Enter travel time from 1 to 600 minutes.',
+        invalidReady: 'Enter prep time from 0 to 240 minutes.',
+        past: 'This appointment time is already in the past. Choose a future time to calculate a departure plan.',
+        risk: { low: 'Low', medium: 'Medium', high: 'High' },
+        min: 'min',
+        early: (m) => `${m} min early`,
+        help: (readyMin, travelMin, bufferMin, leadMin) => `Calculated from ${readyMin} min prep + ${travelMin} min travel + ${bufferMin} min extra buffer + ${leadMin} min early arrival.`,
+        copied: 'Copied',
+        copyButton: 'Copy result',
+        copyEmpty: 'There is no departure plan to copy yet.',
+        reset: 'Reset to the default plan.',
+        copyLines: {
+          start: 'Start prep',
+          leave: 'Leave home',
+          arrive: 'Arrival target',
+          buffer: 'Extra buffer',
+          total: 'Total estimate',
+          risk: 'Risk'
+        }
+      },
+      ja: {
+        initial: '約束時刻、移動時間、支度時間を入力すると現実的な出発計画をシミュレーションします。',
+        empty: '約束時刻、移動時間、支度時間を入力すると結果を計算します。',
+        invalidTravel: '移動時間は1〜600分で入力してください。',
+        invalidReady: '支度時間は0〜240分で入力してください。',
+        past: 'すでに過ぎた約束時刻です。未来の時刻にすると出発計画を計算できます。',
+        risk: { low: '低い', medium: '普通', high: '高い' },
+        min: '分',
+        early: (m) => `${m}分前`,
+        help: (readyMin, travelMin, bufferMin, leadMin) => `支度${readyMin}分 + 移動${travelMin}分 + 追加バッファ${bufferMin}分 + 早め到着${leadMin}分で計算しました。`,
+        copied: 'コピー済み',
+        copyButton: '結果をコピー',
+        copyEmpty: 'コピーできる出発計画がまだありません。',
+        reset: '初期値に戻しました。',
+        copyLines: {
+          start: '支度開始',
+          leave: '出発時刻',
+          arrive: '到着目標',
+          buffer: '追加バッファ',
+          total: '合計見込み',
+          risk: 'リスク'
+        }
+      }
+    }[pageLang] || {};
+
+    const fmtTime = (date) => new Intl.DateTimeFormat(numberLocale, {
       month: 'numeric',
       day: 'numeric',
       weekday: 'short',
@@ -4073,6 +4146,21 @@
       if (!value) return null;
       const date = new Date(value);
       return Number.isNaN(date.getTime()) ? null : date;
+    };
+
+    const setHelp = (message, state = '') => {
+      help.textContent = message;
+      help.dataset.state = state;
+    };
+
+    const clearInvalid = () => {
+      [appointment, travel, ready].forEach((el) => el.setAttribute('aria-invalid', 'false'));
+    };
+
+    const resetOutputs = () => {
+      [startOut, leaveOut, arriveOut, bufferOut, totalOut, riskOut].forEach((el) => {
+        el.textContent = '-';
+      });
     };
 
     const copyText = async (text) => {
@@ -4095,15 +4183,30 @@
       const travelMin = Number(travel.value || 0);
       const readyMin = Number(ready.value || 0);
       const styleBase = ({ tight: 5, normal: 12, relaxed: 20 })[style.value] ?? 12;
+      clearInvalid();
 
-      if (!when || !(travelMin > 0) || readyMin < 0) {
-        startOut.textContent = '-';
-        leaveOut.textContent = '-';
-        arriveOut.textContent = '-';
-        bufferOut.textContent = '-';
-        totalOut.textContent = '-';
-        riskOut.textContent = '-';
-        help.textContent = '약속 시각, 이동시간, 준비시간을 입력하면 결과가 계산됩니다.';
+      if (!when || !travel.value || !ready.value) {
+        resetOutputs();
+        setHelp(adbsText.empty);
+        if (!when) appointment.setAttribute('aria-invalid', 'true');
+        return;
+      }
+      if (!Number.isFinite(travelMin) || !Number.isInteger(travelMin) || travelMin < 1 || travelMin > 600) {
+        resetOutputs();
+        travel.setAttribute('aria-invalid', 'true');
+        setHelp(adbsText.invalidTravel, 'error');
+        return;
+      }
+      if (!Number.isFinite(readyMin) || !Number.isInteger(readyMin) || readyMin < 0 || readyMin > 240) {
+        resetOutputs();
+        ready.setAttribute('aria-invalid', 'true');
+        setHelp(adbsText.invalidReady, 'error');
+        return;
+      }
+      if (when.getTime() < Date.now() - 60000) {
+        resetOutputs();
+        appointment.setAttribute('aria-invalid', 'true');
+        setHelp(adbsText.past, 'warning');
         return;
       }
 
@@ -4120,15 +4223,15 @@
       const totalMinutes = readyMin + travelMin + variableBuffer + arrivalLead;
 
       const riskScore = [style.value === 'tight' ? 2 : 0, transfer.checked ? 2 : 0, weather.checked ? 2 : 0, newplace.checked ? 2 : 0, packing.checked ? 1 : 0].reduce((a, b) => a + b, 0);
-      const riskLabel = riskScore >= 6 ? '높음' : (riskScore >= 3 ? '보통' : '낮음');
+      const riskLabel = riskScore >= 6 ? adbsText.risk.high : (riskScore >= 3 ? adbsText.risk.medium : adbsText.risk.low);
 
       startOut.textContent = fmtTime(startTime);
       leaveOut.textContent = fmtTime(leaveTime);
-      arriveOut.textContent = `${fmtTime(arriveGoal)} (${arrivalLead}분 전)`;
-      bufferOut.textContent = `${variableBuffer}분`;
-      totalOut.textContent = `${totalMinutes}분`;
+      arriveOut.textContent = `${fmtTime(arriveGoal)} (${adbsText.early(arrivalLead)})`;
+      bufferOut.textContent = `${variableBuffer}${adbsText.min}`;
+      totalOut.textContent = `${totalMinutes}${adbsText.min}`;
       riskOut.textContent = riskLabel;
-      help.textContent = `준비 ${readyMin}분 + 이동 ${travelMin}분 + 추가 버퍼 ${variableBuffer}분 + 조기 도착 ${arrivalLead}분 기준으로 계산했어요.`;
+      setHelp(adbsText.help(readyMin, travelMin, variableBuffer, arrivalLead), 'success');
     };
 
     sampleBtn?.addEventListener('click', () => {
@@ -4146,20 +4249,36 @@
       render();
     });
 
+    resetBtn?.addEventListener('click', () => {
+      const base = new Date();
+      base.setHours(base.getHours() + 3, 0, 0, 0);
+      appointment.value = new Date(base.getTime() - base.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+      travel.value = 35;
+      ready.value = 25;
+      style.value = 'normal';
+      [transfer, weather, newplace, packing].forEach((el) => { el.checked = false; });
+      render();
+      setHelp(adbsText.reset);
+    });
+
     copyBtn?.addEventListener('click', async () => {
-      if (startOut.textContent === '-') return;
+      if (startOut.textContent === '-') {
+        setHelp(adbsText.copyEmpty, 'error');
+        appointment.focus();
+        return;
+      }
       const text = [
-        `준비 시작: ${startOut.textContent}`,
-        `출발 시각: ${leaveOut.textContent}`,
-        `권장 도착: ${arriveOut.textContent}`,
-        `추가 버퍼: ${bufferOut.textContent}`,
-        `총 소요: ${totalOut.textContent}`,
-        `리스크: ${riskOut.textContent}`
+        `${adbsText.copyLines.start}: ${startOut.textContent}`,
+        `${adbsText.copyLines.leave}: ${leaveOut.textContent}`,
+        `${adbsText.copyLines.arrive}: ${arriveOut.textContent}`,
+        `${adbsText.copyLines.buffer}: ${bufferOut.textContent}`,
+        `${adbsText.copyLines.total}: ${totalOut.textContent}`,
+        `${adbsText.copyLines.risk}: ${riskOut.textContent}`
       ].join(' | ');
       await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = adbsText.copied;
+      setTimeout(() => { copyBtn.textContent = old || adbsText.copyButton; }, 900);
     });
 
     if (!appointment.value) {

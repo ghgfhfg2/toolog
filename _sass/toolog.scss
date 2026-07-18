@@ -938,6 +938,19 @@ textarea:focus-visible {
 .gbc-ui #gbc-summary[data-state="error"] { color: #fca5a5; }
 .gbc-ui #gbc-summary[data-state="warning"] { color: #fbbf24; }
 .gbc-ui #gbc-summary[data-state="success"] { color: #86efac; }
+.adbs-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.adbs-ui #adbs-help[data-state="error"] { color: #fca5a5; }
+.adbs-ui #adbs-help[data-state="warning"] { color: #fbbf24; }
+.adbs-ui #adbs-help[data-state="success"] { color: #86efac; }
+.adbs-checks .tool-check {
+  min-height: 44px;
+  align-items: center;
+}
+.tool-stats.adbs-stats strong {
+  font-size: clamp(.88rem, 1.4vw, 1.02rem);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
 .lmp-ui textarea {
   min-height: 220px;
   font-size: 15px;

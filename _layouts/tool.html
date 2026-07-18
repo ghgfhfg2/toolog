@@ -3963,58 +3963,60 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
         </div>
 
       {% when 'appointment-departure-buffer-simulator' %}
-        <div class="tool-ui">
+        <div class="tool-ui adbs-ui">
+          <p class="tool-result" id="adbs-intro">{% if page.lang == 'en' %}Enter your appointment time, map travel estimate, prep time, and delay factors to get a realistic prep start and leave-home time.{% elsif page.lang == 'ja' %}約束時刻、地図アプリの移動見込み、支度時間、遅れ要因を入れると、現実的な支度開始時刻と出発時刻を確認できます。{% else %}약속 시각, 지도 앱 이동시간, 준비시간, 지연 변수를 넣으면 현실적인 준비 시작과 출발 시각을 확인할 수 있습니다.{% endif %}</p>
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="adbs-appointment">약속 날짜와 시간</label>
-              <input id="adbs-appointment" type="datetime-local" />
+              <label for="adbs-appointment">{% if page.lang == 'en' %}Appointment date and time{% elsif page.lang == 'ja' %}約束の日付と時刻{% else %}약속 날짜와 시간{% endif %}</label>
+              <input id="adbs-appointment" type="datetime-local" aria-describedby="adbs-help adbs-intro" />
             </div>
             <div>
-              <label for="adbs-travel">기본 이동시간(분)</label>
-              <input id="adbs-travel" type="number" min="1" max="600" step="1" value="35" inputmode="numeric" />
+              <label for="adbs-travel">{% if page.lang == 'en' %}Base travel time (min){% elsif page.lang == 'ja' %}基本移動時間(分){% else %}기본 이동시간(분){% endif %}</label>
+              <input id="adbs-travel" type="number" min="1" max="600" step="1" value="35" inputmode="numeric" aria-describedby="adbs-help" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="adbs-ready">집에서 준비시간(분)</label>
-              <input id="adbs-ready" type="number" min="0" max="240" step="5" value="25" inputmode="numeric" />
+              <label for="adbs-ready">{% if page.lang == 'en' %}Prep time at home (min){% elsif page.lang == 'ja' %}家での支度時間(分){% else %}집에서 준비시간(분){% endif %}</label>
+              <input id="adbs-ready" type="number" min="0" max="240" step="5" value="25" inputmode="numeric" aria-describedby="adbs-help" />
             </div>
             <div>
-              <label for="adbs-style">버퍼 스타일</label>
+              <label for="adbs-style">{% if page.lang == 'en' %}Buffer style{% elsif page.lang == 'ja' %}バッファスタイル{% else %}버퍼 스타일{% endif %}</label>
               <select id="adbs-style">
-                <option value="tight">타이트</option>
-                <option value="normal" selected>보통</option>
-                <option value="relaxed">여유 있게</option>
+                <option value="tight">{% if page.lang == 'en' %}Tight{% elsif page.lang == 'ja' %}タイト{% else %}타이트{% endif %}</option>
+                <option value="normal" selected>{% if page.lang == 'en' %}Standard{% elsif page.lang == 'ja' %}標準{% else %}보통{% endif %}</option>
+                <option value="relaxed">{% if page.lang == 'en' %}Relaxed{% elsif page.lang == 'ja' %}余裕あり{% else %}여유 있게{% endif %}</option>
               </select>
             </div>
           </div>
 
-          <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="adbs-transfer" type="checkbox" /> 환승/갈아타기 많음</label>
-            <label class="tool-check"><input id="adbs-weather" type="checkbox" /> 비·눈·악천후 가능성</label>
+          <div class="tool-row-grid pct-grid adbs-checks" aria-label="{% if page.lang == 'en' %}Extra delay factors{% elsif page.lang == 'ja' %}追加の遅れ要因{% else %}추가 지연 변수{% endif %}">
+            <label class="tool-check"><input id="adbs-transfer" type="checkbox" /> {% if page.lang == 'en' %}Many transfers{% elsif page.lang == 'ja' %}乗り換えが多い{% else %}환승/갈아타기 많음{% endif %}</label>
+            <label class="tool-check"><input id="adbs-weather" type="checkbox" /> {% if page.lang == 'en' %}Rain, snow, or bad weather{% elsif page.lang == 'ja' %}雨・雪・悪天候の可能性{% else %}비·눈·악천후 가능성{% endif %}</label>
           </div>
 
-          <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="adbs-newplace" type="checkbox" /> 초행길 / 건물 찾기 어려움</label>
-            <label class="tool-check"><input id="adbs-packing" type="checkbox" /> 챙길 물건 많음</label>
+          <div class="tool-row-grid pct-grid adbs-checks">
+            <label class="tool-check"><input id="adbs-newplace" type="checkbox" /> {% if page.lang == 'en' %}Unfamiliar route or building{% elsif page.lang == 'ja' %}初めての道・建物が分かりにくい{% else %}초행길 / 건물 찾기 어려움{% endif %}</label>
+            <label class="tool-check"><input id="adbs-packing" type="checkbox" /> {% if page.lang == 'en' %}Lots to pack or carry{% elsif page.lang == 'ja' %}持ち物が多い{% else %}챙길 물건 많음{% endif %}</label>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="adbs-copy" type="button">결과 복사</button>
-            <button id="adbs-sample" type="button">예시 넣기</button>
+            <button id="adbs-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="adbs-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
+            <button id="adbs-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
-            <div><strong id="adbs-start">-</strong><span>준비 시작</span></div>
-            <div><strong id="adbs-leave">-</strong><span>집에서 출발</span></div>
-            <div><strong id="adbs-arrive">-</strong><span>권장 도착 목표</span></div>
-            <div><strong id="adbs-buffer">-</strong><span>추가 버퍼</span></div>
-            <div><strong id="adbs-total">-</strong><span>총 소요 예상</span></div>
-            <div><strong id="adbs-risk">-</strong><span>지각 리스크</span></div>
+          <div class="tool-stats adbs-stats" aria-label="{% if page.lang == 'en' %}Departure plan summary{% elsif page.lang == 'ja' %}出発計画サマリー{% else %}출발 계획 요약{% endif %}">
+            <div><strong id="adbs-start">-</strong><span>{% if page.lang == 'en' %}Start prep{% elsif page.lang == 'ja' %}支度開始{% else %}준비 시작{% endif %}</span></div>
+            <div><strong id="adbs-leave">-</strong><span>{% if page.lang == 'en' %}Leave home{% elsif page.lang == 'ja' %}家を出る{% else %}집에서 출발{% endif %}</span></div>
+            <div><strong id="adbs-arrive">-</strong><span>{% if page.lang == 'en' %}Arrival target{% elsif page.lang == 'ja' %}到着目標{% else %}권장 도착 목표{% endif %}</span></div>
+            <div><strong id="adbs-buffer">-</strong><span>{% if page.lang == 'en' %}Extra buffer{% elsif page.lang == 'ja' %}追加バッファ{% else %}추가 버퍼{% endif %}</span></div>
+            <div><strong id="adbs-total">-</strong><span>{% if page.lang == 'en' %}Total estimate{% elsif page.lang == 'ja' %}合計見込み{% else %}총 소요 예상{% endif %}</span></div>
+            <div><strong id="adbs-risk">-</strong><span>{% if page.lang == 'en' %}Late risk{% elsif page.lang == 'ja' %}遅刻リスク{% else %}지각 리스크{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="adbs-help">약속 시각과 이동/준비시간을 입력하면 준비 시작과 출발 시각을 현실적으로 시뮬레이션합니다.</p>
+          <p class="tool-result" id="adbs-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter the appointment time, travel time, and prep time to simulate a realistic departure plan.{% elsif page.lang == 'ja' %}約束時刻、移動時間、支度時間を入力すると現実的な出発計画をシミュレーションします。{% else %}약속 시각과 이동/준비시간을 입력하면 준비 시작과 출발 시각을 현실적으로 시뮬레이션합니다.{% endif %}</p>
         </div>
 
       {% when 'priority-decision-matrix-planner' %}

@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Appointment Departure Buffer Simulator | Plan when to start getting ready and when to leave
-description: Simulate when to start getting ready and when to leave home based on appointment time, travel time, prep time, weather, and route difficulty.
+title: Appointment Departure Buffer Simulator | Calculate prep start and leave-home time
+description: Simulate when to start getting ready, when to leave home, and what arrival target to use based on appointment time, travel time, prep time, weather, transfers, unfamiliar places, and packing needs.
 lang: en
 permalink: /en/tools/appointment-departure-buffer-simulator/
 canonical_url: /en/tools/appointment-departure-buffer-simulator/
@@ -23,6 +23,8 @@ faq:
     a: Yes. It is especially helpful when being late matters, such as interviews, hospital visits, or work meetings.
   - q: What if I do not want to arrive too early?
     a: Choose the tight buffer style and leave extra risk factors unchecked for a leaner recommendation.
+  - q: Does it calculate past appointment times or very long trips?
+    a: Past appointment times are flagged instead of calculated. Travel time is limited to 1-600 minutes and prep time to 0-240 minutes.
 ---
 
 ## Why do you need an appointment departure buffer simulator?
@@ -36,6 +38,7 @@ Common examples:
 - you remember something important right before leaving and your prep time stretches out
 
 This tool helps you calculate **when to start getting ready, when to leave home, and how much safety buffer your plan really has**.
+It is built around common last-minute questions like "when should I leave," "when should I start getting ready," and "how much buffer do I need to avoid being late."
 It is closer to a practical **simulator-type tool** than a simple time calculator.
 
 ## How does it work?
@@ -66,6 +69,8 @@ For interviews, hospital visits, meetings, or reservations, planning the prep st
 3. Add realistic prep time, including washing up, getting dressed, and packing what you need.
 4. Choose the buffer style and risk factors.
 5. Copy the recommended leave time into your calendar or notes.
+
+If a value is missing, outside the supported range, or already in the past, the result area stays empty and the tool shows what needs to be fixed first.
 
 ## Example scenarios
 ### Example 1) Casual coffee meetup
