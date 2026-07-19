@@ -2640,35 +2640,36 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="bfat-help">{% if page.lang == 'en' %}Enter your measurements to estimate body fat using the U.S. Navy formula.{% elsif page.lang == 'ja' %}U.S. Navy方式で体脂肪率を推定します。数値を入力してください。{% else %}U.S. Navy 공식을 기반으로 체지방률을 추정합니다. 수치를 입력하세요.{% endif %}</p>
         </div>
       {% when 'loan-calculator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui loan-ui">
+          <div class="tool-row-grid loan-grid">
             <div>
               <label for="loan-amount">{% if page.lang == 'en' %}Loan amount{% elsif page.lang == 'ja' %}借入額{% else %}대출금액(원){% endif %}</label>
-              <input id="loan-amount" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 100000000{% elsif page.lang == 'ja' %}例: 100000000{% else %}예: 100000000{% endif %}" inputmode="numeric" />
+              <input id="loan-amount" type="number" min="1" max="1000000000000000" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 100000000{% elsif page.lang == 'ja' %}例: 100000000{% else %}예: 100000000{% endif %}" inputmode="numeric" aria-describedby="loan-help" />
             </div>
             <div>
               <label for="loan-rate">{% if page.lang == 'en' %}Annual interest rate (%) {% elsif page.lang == 'ja' %}年利(%) {% else %}연이율(%) {% endif %}</label>
-              <input id="loan-rate" type="number" min="0" step="0.01" placeholder="{% if page.lang == 'en' %}e.g. 4.2{% elsif page.lang == 'ja' %}例: 4.2{% else %}예: 4.2{% endif %}" inputmode="decimal" />
+              <input id="loan-rate" type="number" min="0" max="100" step="0.01" placeholder="{% if page.lang == 'en' %}e.g. 4.2{% elsif page.lang == 'ja' %}例: 4.2{% else %}예: 4.2{% endif %}" inputmode="decimal" aria-describedby="loan-help" />
             </div>
           </div>
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid loan-grid">
             <div>
               <label for="loan-years">{% if page.lang == 'en' %}Repayment term (years){% elsif page.lang == 'ja' %}返済期間(年){% else %}상환기간(년){% endif %}</label>
-              <input id="loan-years" type="number" min="1" step="1" placeholder="{% if page.lang == 'en' %}e.g. 30{% elsif page.lang == 'ja' %}例: 30{% else %}예: 30{% endif %}" inputmode="numeric" />
+              <input id="loan-years" type="number" min="1" max="50" step="1" placeholder="{% if page.lang == 'en' %}e.g. 30{% elsif page.lang == 'ja' %}例: 30{% else %}예: 30{% endif %}" inputmode="numeric" aria-describedby="loan-help" />
             </div>
             <div>
               <label for="loan-type">{% if page.lang == 'en' %}Repayment type{% elsif page.lang == 'ja' %}返済方式{% else %}상환방식{% endif %}</label>
-              <select id="loan-type">
+              <select id="loan-type" aria-describedby="loan-help">
                 <option value="equal-payment">{% if page.lang == 'en' %}Amortized (equal payment){% elsif page.lang == 'ja' %}元利均等返済{% else %}원리금균등상환{% endif %}</option>
                 <option value="equal-principal">{% if page.lang == 'en' %}Equal principal{% elsif page.lang == 'ja' %}元金均等返済{% else %}원금균등상환{% endif %}</option>
               </select>
             </div>
           </div>
-          <div class="tool-row-grid pct-actions">
-            <button id="loan-copy" type="button">{% if page.lang == 'en' %}Copy results{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
-            <button id="loan-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          <div class="tool-row-grid loan-actions">
+            <button id="loan-sample" type="button">{% if page.lang == 'en' %}Load 100M example{% elsif page.lang == 'ja' %}1億の例を入力{% else %}1억 원 예시{% endif %}</button>
+            <button id="loan-copy" type="button" disabled>{% if page.lang == 'en' %}Copy results{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="loan-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
-          <div class="tool-stats">
+          <div class="tool-stats loan-stats" aria-label="{% if page.lang == 'en' %}Loan repayment result{% elsif page.lang == 'ja' %}ローン返済試算結果{% else %}대출 상환 계산 결과{% endif %}">
             <div><strong id="loan-monthly">-</strong><span>{% if page.lang == 'en' %}Monthly payment (first){% elsif page.lang == 'ja' %}毎月返済額(初回){% else %}월 납입액(첫 달){% endif %}</span></div>
             <div><strong id="loan-total-interest">-</strong><span>{% if page.lang == 'en' %}Total interest{% elsif page.lang == 'ja' %}総利息{% else %}총 이자{% endif %}</span></div>
             <div><strong id="loan-total-payment">-</strong><span>{% if page.lang == 'en' %}Total repayment{% elsif page.lang == 'ja' %}総返済額{% else %}총 상환액{% endif %}</span></div>
@@ -2679,7 +2680,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <p class="tool-result" id="loan-compare-payment">{% if page.lang == 'en' %}Amortized: - / Equal principal: first - → last -{% elsif page.lang == 'ja' %}元利均等: - / 元金均等: 初回 - → 最終 -{% else %}원리금균등: - / 원금균등: 첫 달 - → 마지막 -{% endif %}</p>
             <p class="tool-result" id="loan-compare-interest">{% if page.lang == 'en' %}Interest difference: -{% elsif page.lang == 'ja' %}総利息差: -{% else %}총 이자 차이: -{% endif %}</p>
           </div>
-          <p class="tool-result" id="loan-help">{% if page.lang == 'en' %}Enter amount, rate, and term to calculate monthly payment and total interest.{% elsif page.lang == 'ja' %}借入額・年利・期間を入力すると毎月返済額と総利息を計算します。{% else %}금액·이율·기간을 입력하면 월 납입액과 총 이자를 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="loan-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter amount, rate, and term to calculate monthly payment and total interest. Amount is capped at 1 quadrillion KRW and term at 50 years.{% elsif page.lang == 'ja' %}借入額・年利・期間を入力すると毎月返済額と総利息を計算します。借入額は1,000兆ウォン、期間は50年までです。{% else %}금액·이율·기간을 입력하면 월 납입액과 총 이자를 계산합니다. 금액은 1,000조 원, 기간은 50년까지 지원합니다.{% endif %}</p>
         </div>
       {% when 'compound-interest-calculator' %}
         <div class="tool-ui">

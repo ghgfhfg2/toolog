@@ -805,6 +805,16 @@ textarea:focus-visible {
 .vat-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .vat-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .vat-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.loan-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.loan-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.loan-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.loan-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.loan-ui button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+.loan-ui #loan-help[data-state="error"] { color: #fca5a5; }
+.loan-ui #loan-help[data-state="success"] { color: #86efac; }
 .maie-ui textarea[aria-invalid="true"] { border-color: #ef4444; }
 .maie-ui .tool-result[data-state="error"] { border-color: #ef4444; }
 .maie-ui .tool-result[data-state="warning"] { border-color: #f59e0b; }
@@ -1353,6 +1363,9 @@ textarea:focus-visible {
   .gbc-grid,
   .gbc-actions { grid-template-columns: 1fr; }
   .gbc-stats { grid-template-columns: 1fr 1fr; }
+  .loan-grid,
+  .loan-actions { grid-template-columns: 1fr; }
+  .loan-stats { grid-template-columns: 1fr 1fr; }
   .tool-stats { grid-template-columns: 1fr 1fr; }
   .fc-filter-grid,
   .font-change-controls { grid-template-columns: 1fr; }

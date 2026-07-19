@@ -4301,8 +4301,9 @@
     const rate = document.getElementById('loan-rate');
     const years = document.getElementById('loan-years');
     const type = document.getElementById('loan-type');
+    const sampleBtn = document.getElementById('loan-sample');
     const copyBtn = document.getElementById('loan-copy');
-    const resetBtn = document.getElementById('loan-reset');
+    const clearBtn = document.getElementById('loan-clear');
     const monthly = document.getElementById('loan-monthly');
     const totalInterest = document.getElementById('loan-total-interest');
     const totalPayment = document.getElementById('loan-total-payment');
@@ -4322,13 +4323,18 @@
         compareInterestSame: '총 이자 차이: 거의 없음',
         compareInterestEqualPrincipalLess: (v) => `총 이자 차이: 원금균등이 ${v} 더 적음`,
         compareInterestEqualPaymentLess: (v) => `총 이자 차이: 원리금균등이 ${v} 더 적음`,
-        invalidHelp: '대출금액·연이율·상환기간을 올바르게 입력하세요.',
+        idleHelp: '대출금액·연이율·상환기간을 입력하면 월 납입액과 총 이자를 계산합니다.',
+        invalidAmount: '대출금액은 1원 이상 1,000조 원 이하로 입력해 주세요.',
+        invalidRate: '연이율은 0% 이상 100% 이하로 입력해 주세요.',
+        invalidYears: '상환기간은 1년 이상 50년 이하의 정수로 입력해 주세요.',
         estimateHelp: (label) => `${label} 기준 추정값입니다. 실제 대출은 수수료·우대금리·중도상환 여부에 따라 달라질 수 있습니다.`,
         copyTitle: (label) => `대출 계산 결과 (${label})`,
         copyMonthly: (v) => `월 납입액(첫 달): ${v}`,
         copyInterest: (v) => `총 이자: ${v}`,
         copyTotal: (v) => `총 상환액: ${v}`,
         copied: '복사됨',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력을 초기화했습니다.',
         copyDefault: '결과 복사'
       },
       en: {
@@ -4339,13 +4345,18 @@
         compareInterestSame: 'Interest difference: almost none',
         compareInterestEqualPrincipalLess: (v) => `Interest difference: equal principal is lower by ${v}`,
         compareInterestEqualPaymentLess: (v) => `Interest difference: amortized is lower by ${v}`,
-        invalidHelp: 'Enter a valid loan amount, annual rate, and term.',
+        idleHelp: 'Enter amount, annual rate, and term to calculate monthly payment and total interest.',
+        invalidAmount: 'Enter a loan amount from 1 to 1 quadrillion KRW.',
+        invalidRate: 'Enter an annual rate from 0% to 100%.',
+        invalidYears: 'Enter a whole-year term from 1 to 50 years.',
         estimateHelp: (label) => `Estimated result based on ${label}. Actual loans vary by fees, preferential rates, and prepayment conditions.`,
         copyTitle: (label) => `Loan calculation (${label})`,
         copyMonthly: (v) => `Monthly payment (first): ${v}`,
         copyInterest: (v) => `Total interest: ${v}`,
         copyTotal: (v) => `Total repayment: ${v}`,
         copied: 'Copied',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared the inputs.',
         copyDefault: 'Copy results'
       },
       ja: {
@@ -4356,13 +4367,18 @@
         compareInterestSame: '総利息差: ほぼなし',
         compareInterestEqualPrincipalLess: (v) => `総利息差: 元金均等のほうが${v}少ない`,
         compareInterestEqualPaymentLess: (v) => `総利息差: 元利均等のほうが${v}少ない`,
-        invalidHelp: '借入額・年利・返済期間を正しく入力してください。',
+        idleHelp: '借入額・年利・返済期間を入力すると毎月返済額と総利息を計算します。',
+        invalidAmount: '借入額は1以上1,000兆ウォン以下で入力してください。',
+        invalidRate: '年利は0%以上100%以下で入力してください。',
+        invalidYears: '返済期間は1〜50年の整数で入力してください。',
         estimateHelp: (label) => `${label}基準の試算です。実際のローンは手数料・優遇金利・繰上返済条件で変わる場合があります。`,
         copyTitle: (label) => `ローン計算結果 (${label})`,
         copyMonthly: (v) => `毎月返済額(初回): ${v}`,
         copyInterest: (v) => `総利息: ${v}`,
         copyTotal: (v) => `総返済額: ${v}`,
         copied: 'コピー完了',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力をクリアしました。',
         copyDefault: '結果をコピー'
       }
     };
@@ -4371,6 +4387,22 @@
       const rounded = Math.round(v);
       if (pageLang === 'en') return `${rounded.toLocaleString(numberLocale)}${loanText.currency}`;
       return `${rounded.toLocaleString(numberLocale)}${loanText.currency}`;
+    };
+    const copyText = async (text) => {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand('copy');
+      ta.remove();
+      if (!ok) throw new Error('copy failed');
     };
 
     const calcPlan = ({ principal, n, r, mode }) => {
@@ -4408,27 +4440,57 @@
       };
     };
 
-    const setInvalid = () => {
+    const setHelp = (message, state = '') => {
+      help.textContent = message;
+      help.dataset.state = state;
+    };
+
+    const resetResult = (message = loanText.idleHelp, state = '') => {
       monthly.textContent = '-';
       totalInterest.textContent = '-';
       totalPayment.textContent = '-';
       monthCount.textContent = '-';
       comparePayment.textContent = loanText.comparePayment('-', '-', '-');
       compareInterest.textContent = loanText.compareInterestEmpty;
-      help.textContent = loanText.invalidHelp;
+      if (copyBtn) copyBtn.disabled = true;
+      setHelp(message, state);
+    };
+
+    const setInvalid = (field, message) => {
+      [amount, rate, years].forEach((el) => el.setAttribute('aria-invalid', el === field ? 'true' : 'false'));
+      resetResult(message, 'error');
     };
 
     const render = () => {
-      const principal = Number(amount.value || 0);
-      const annualRate = Number(rate.value || 0);
-      const yearTerm = Number(years.value || 0);
-      const n = Math.round(yearTerm * 12);
+      const amountRaw = amount.value.trim();
+      const rateRaw = rate.value.trim();
+      const yearsRaw = years.value.trim();
 
-      if (!(principal > 0) || !(yearTerm > 0) || n <= 0 || annualRate < 0) {
-        setInvalid();
+      if (!amountRaw && !rateRaw && !yearsRaw) {
+        [amount, rate, years].forEach((el) => el.setAttribute('aria-invalid', 'false'));
+        resetResult();
         return;
       }
 
+      const principal = Number(amountRaw);
+      const annualRate = Number(rateRaw);
+      const yearTerm = Number(yearsRaw);
+      const n = Math.round(yearTerm * 12);
+
+      if (!Number.isFinite(principal) || principal < 1 || principal > 1000000000000000) {
+        setInvalid(amount, loanText.invalidAmount);
+        return;
+      }
+      if (!Number.isFinite(annualRate) || annualRate < 0 || annualRate > 100) {
+        setInvalid(rate, loanText.invalidRate);
+        return;
+      }
+      if (!Number.isInteger(yearTerm) || yearTerm < 1 || yearTerm > 50 || n <= 0) {
+        setInvalid(years, loanText.invalidYears);
+        return;
+      }
+
+      [amount, rate, years].forEach((el) => el.setAttribute('aria-invalid', 'false'));
       const r = annualRate / 100 / 12;
       const equalPayment = calcPlan({ principal, n, r, mode: 'equal-payment' });
       const equalPrincipal = calcPlan({ principal, n, r, mode: 'equal-principal' });
@@ -4454,20 +4516,33 @@
         compareInterest.textContent = loanText.compareInterestEqualPaymentLess(fmtKRW(Math.abs(diffInterest)));
       }
 
-      help.textContent = loanText.estimateHelp(type.options[type.selectedIndex].text);
+      if (copyBtn) copyBtn.disabled = false;
+      setHelp(loanText.estimateHelp(type.options[type.selectedIndex].text), 'success');
     };
 
-    [amount, rate, years, type].forEach((el) => el.addEventListener('input', render));
+    [amount, rate, years].forEach((el) => el.addEventListener('input', render));
+    type.addEventListener('change', render);
 
-    resetBtn?.addEventListener('click', () => {
-      amount.value = 100000000;
-      rate.value = 4.2;
-      years.value = 30;
+    sampleBtn?.addEventListener('click', () => {
+      amount.value = '100000000';
+      rate.value = '4.2';
+      years.value = '30';
       type.value = 'equal-payment';
       render();
+      amount.focus();
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      amount.value = '';
+      rate.value = '';
+      years.value = '';
+      type.value = 'equal-payment';
+      resetResult(loanText.cleared);
+      amount.focus();
     });
 
     copyBtn?.addEventListener('click', async () => {
+      if (copyBtn.disabled) return;
       const text = [
         loanText.copyTitle(type.options[type.selectedIndex].text),
         loanText.copyMonthly(monthly.textContent),
@@ -4476,15 +4551,15 @@
         comparePayment.textContent,
         compareInterest.textContent
       ].join(' | ');
-      await copyText(text);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = loanText.copied;
-      setTimeout(() => { copyBtn.textContent = old || loanText.copyDefault; }, 900);
+      try {
+        await copyText(text);
+        const old = copyBtn.textContent;
+        copyBtn.textContent = loanText.copied;
+        setTimeout(() => { copyBtn.textContent = old || loanText.copyDefault; }, 900);
+      } catch (_) {
+        setHelp(loanText.copyFail, 'error');
+      }
     });
-
-    if (!amount.value) amount.value = 100000000;
-    if (!rate.value) rate.value = 4.2;
-    if (!years.value) years.value = 30;
 
     render();
   }

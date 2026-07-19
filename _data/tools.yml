@@ -1442,13 +1442,15 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 대출 이자, 월 납입액, 총 상환액을 원리금/원금균등 방식으로 비교해요.
-  description_en: Compare monthly payment, total interest, and repayment types from loan amount, rate, and term.
-  description_ja: 借入額・金利・期間から、毎月返済額・総利息・返済方式をまとめて比較できます。
+  description: 대출금액·연이율·상환기간으로 월 상환금, 총 이자, 원리금균등/원금균등 차이를 빠르게 비교해요.
+  description_en: Compare monthly payment, total interest, total repayment, and amortized vs equal-principal plans from amount, rate, and term.
+  description_ja: 借入額・年利・期間から、毎月返済額・総利息・総返済額、元利均等/元金均等の差を比較できます。
   url: /tools/loan-calculator/
   url_en: /en/tools/loan-calculator/
   url_ja: /ja/tools/loan-calculator/
   thumbnail: /assets/thumbs/loan-calculator.svg
+  tool_type: calculator
+  topic_cluster: finance
 
 - id: compound-interest-calculator
   title: 복리 계산기
