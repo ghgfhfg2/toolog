@@ -25,29 +25,36 @@ faq:
     a: Actual loans can include fees, day-count rules, preferential rates, prepayments, and product-specific rounding, so this calculator is for quick comparison.
   - q: Can I calculate a 0% interest loan?
     a: Yes. At 0% interest, the monthly payment is the principal divided by the number of months and total interest is zero.
+  - q: Which numbers should I compare between repayment plans?
+    a: Compare the amortized monthly payment, the equal-principal first and last payments, and the total interest difference. Confirm the final month-by-month schedule with your lender.
 ---
 
-## Why use this loan calculator?
-Before taking a loan, most people want to know three things:
-- Monthly payment burden
-- Total interest paid over the full term
-- Difference between amortized and equal-principal plans
+## Check loan payments before you talk to a lender
+Before a loan consultation, the first questions are usually "How much will I pay each month?" and "How much interest will this cost overall?"
 
-This tool gives all three in one view.
+Enter the **loan amount, annual interest rate, and repayment term** to estimate monthly payments instantly, then compare amortized repayment with equal-principal repayment in one view.
 
 ## Key features
-- Supports amortized and equal-principal repayment
-- Shows monthly payment and total interest clearly
-- Compares equal-principal first and last monthly payment
-- Handles blank values, 0% interest, out-of-range values, and copy-ready summaries
+- **Amortized and equal-principal repayment support**
+- **Equal-principal first and final monthly payments**
+- **Total interest and total repayment calculation**
+- **100M KRW example, copy-ready result, and clear blank/range errors**
+- **Instant recalculation on mobile and desktop**
+- **0% interest and edge-case handling**
 
 ## How to use
-1. Enter loan amount, annual rate, and repayment period.
-2. Calculation updates instantly as you type.
-3. Check monthly payment, total repayment, and total interest.
-4. Compare repayment methods and pick the plan that fits your cash flow.
+1. Enter the loan amount, for example `100,000,000` KRW.
+2. Enter the annual interest rate, for example `4.2`.
+3. Enter the repayment term in years and choose a repayment type, for example `30 years` and `amortized repayment`.
 
-The calculator accepts amounts up to 1 quadrillion KRW, rates from 0% to 100%, and whole-year terms from 1 to 50 years.
+As you type, the result cards show monthly payment, total interest, and total repayment. The calculator accepts amounts from 1 KRW to 1 quadrillion KRW, rates from 0% to 100%, and whole-year terms from 1 to 50 years.
+
+## Example
+- Loan amount: 100M KRW
+- Annual interest rate: 4.2%
+- Term: 30 years
+
+With amortized repayment, you can review the estimated monthly payment, total interest, and total repayment at once. Switching to equal-principal repayment shows the higher first payment, lower final payment, and typically lower total interest.
 
 ## FAQ
 ### What is the difference between amortized and equal-principal repayment?
@@ -59,7 +66,13 @@ Actual loans can include fees, day-count rules, preferential rates, prepayments,
 ### Can I calculate a 0% interest loan?
 Yes. At 0% interest, the monthly payment is the principal divided by the number of months and total interest is zero.
 
+### Which numbers should I compare between repayment plans?
+Compare the amortized monthly payment, the equal-principal first and final payments, and the total interest difference together. For the final month-by-month schedule, use the official repayment table from your lender.
+
 ## Related tools
 - Investment growth: [Compound Interest Calculator]({{ '/en/tools/compound-interest-calculator/' | relative_url }})
 - Ratio math: [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
 - Net income planning: [Salary Calculator]({{ '/en/tools/salary-calculator/' | relative_url }})
+
+## Summary
+This loan interest calculator helps you quickly estimate **monthly payment, total interest, and total repayment** before choosing or discussing a loan.
