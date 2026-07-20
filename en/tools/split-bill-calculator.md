@@ -21,6 +21,8 @@ faq:
     a: Choose 1, 10, 100, or 1000 to round the standard share to that unit. The last person absorbs the difference so the total stays exact.
   - q: Why is the last person amount different?
     a: The last person absorbs the rounding difference so the final total remains exact.
+  - q: Can I include card fees, tax, delivery, or tips?
+    a: Yes. Enter the final paid total after any fees or tips that should be shared.
   - q: Can the last person become negative?
     a: It can happen if the rounding unit is too large for the total and group size. The tool now warns you and suggests a smaller unit or rounding down.
 ---
@@ -38,8 +40,18 @@ That makes it easier to send a clean payment request without losing or over-coll
 - Warnings for empty, decimal, negative, oversized, or impossible rounding inputs
 - Copy-ready settlement summary
 
-## Example
-If the total is 50,000 and 3 people are splitting it with 100-unit rounding, two people pay 16,700 and the last person pays 16,600.
+## How to use it
+1. Enter the total amount.
+2. Enter the number of people.
+3. Choose a rounding unit if you want cleaner transfer amounts.
+4. Pick nearest, round up, or round down.
+5. Check the standard share and last-person amount, then copy the result.
+
+## Settlement examples
+If the total is 48,000 and 5 people split it, the exact per-person amount is 9,600.
+With 100-unit rounding, 4 people pay 9,600 and the last person also pays 9,600, so the total matches without adjustment.
+
+If the total is 50,000 and 3 people split it with 100-unit rounding, 2 people pay 16,700 and the last person pays 16,600.
 The final collected amount still equals 50,000.
 
 ## Input guidelines
@@ -54,6 +66,12 @@ The final collected amount still equals 50,000.
 - [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
 
 ## FAQ
+### When should I use the rounding unit?
+Use it when exact small units make transfers awkward and you want cleaner 10, 100, or 1000-unit payment amounts.
+
+### Why is only the last person different?
+The last person corrects the rounding difference so the collected total equals the original bill.
+
 ### Can I use it on mobile?
 Yes. It runs in the browser and keeps the calculation on your device.
 
