@@ -12688,31 +12688,58 @@
     const help = document.getElementById('sb-help');
     const copyBtn = document.getElementById('sb-copy');
     const resetBtn = document.getElementById('sb-reset');
+    const sampleBtn = document.getElementById('sb-sample');
 
     if (!total || !people || !rounding || !mode || !outBase || !outRounded || !outLast || !outDiff || !help) return;
 
     const t = {
       ko: {
         currency: '원', idle: '총액과 인원 수를 입력하면 N빵 결과를 계산합니다.',
-        summary: (share, last, people) => `${people}명 기준 기본 송금액은 ${share}, 마지막 1인은 ${last}로 맞추면 총액이 정확히 맞습니다.`,
-        copy: (a,b,c,d) => `N빵 계산 결과 | 정확한 1인당 ${a} | 반올림 기준 금액 ${b} | 마지막 1인 조정 ${c} | 차액 ${d}`,
-        copied: '복사됨', copyDefault: '결과 복사'
+        needTotal: '총 금액을 1원 이상 입력해 주세요.',
+        invalidTotal: '총 금액은 1원 이상 1조 원 이하의 정수로 입력해 주세요.',
+        invalidPeople: '인원 수는 1명 이상 200명 이하의 정수로 입력해 주세요.',
+        impossible: '현재 반올림 기준에서는 마지막 1인 금액이 음수가 됩니다. 반올림 단위를 낮추거나 내림을 선택해 주세요.',
+        summary: (share, last, people, adjustedCount) => `${people}명 중 ${adjustedCount}명은 ${share}, 마지막 1인은 ${last}로 맞추면 총액이 정확히 맞습니다.`,
+        copy: (a,b,c,d,people) => `N빵 계산 결과 | 인원 ${people}명 | 정확한 1인당 ${a} | 기준 송금액 ${b} | 마지막 1인 ${c} | 차액 ${d}`,
+        copied: '복사됨', copyDefault: '결과 복사', reset: '입력값을 초기화했습니다.'
       },
       en: {
         currency: ' KRW', idle: 'Enter total amount and people to split the bill.',
-        summary: (share, last, people) => `For ${people} people, send ${share} as the standard share and ${last} for the last person to match the exact total.`,
-        copy: (a,b,c,d) => `Split bill result | Exact share ${a} | Rounded share ${b} | Last-person adjustment ${c} | Difference ${d}`,
-        copied: 'Copied', copyDefault: 'Copy result'
+        needTotal: 'Enter a total amount of at least 1.',
+        invalidTotal: 'Enter a whole-number total from 1 to 1 trillion.',
+        invalidPeople: 'Enter a whole-number people count from 1 to 200.',
+        impossible: 'This rounding setting would make the last person negative. Choose a smaller unit or round down.',
+        summary: (share, last, people, adjustedCount) => `For ${people} people, ${adjustedCount} pay ${share} and the last person pays ${last} so the total matches exactly.`,
+        copy: (a,b,c,d,people) => `Split bill result | People ${people} | Exact share ${a} | Standard share ${b} | Last person ${c} | Difference ${d}`,
+        copied: 'Copied', copyDefault: 'Copy result', reset: 'Cleared the inputs.'
       },
       ja: {
         currency: 'ウォン', idle: '合計金額と人数を入れると割り勘結果を計算します。',
-        summary: (share, last, people) => `${people}人なら標準金額は ${share}、最後の1人を ${last} にすると合計がぴったり合います。`,
-        copy: (a,b,c,d) => `割り勘計算結果 | 正確な1人あたり ${a} | 丸め後の標準金額 ${b} | 最後の1人の調整額 ${c} | 差額 ${d}`,
-        copied: 'コピー完了', copyDefault: '結果をコピー'
+        needTotal: '合計金額を1以上で入力してください。',
+        invalidTotal: '合計金額は1以上1兆以下の整数で入力してください。',
+        invalidPeople: '人数は1〜200の整数で入力してください。',
+        impossible: 'この丸め設定では最後の1人がマイナスになります。単位を小さくするか切り捨てを選んでください。',
+        summary: (share, last, people, adjustedCount) => `${people}人中${adjustedCount}人は ${share}、最後の1人は ${last} にすると合計がぴったり合います。`,
+        copy: (a,b,c,d,people) => `割り勘計算結果 | 人数 ${people} | 正確な1人あたり ${a} | 標準金額 ${b} | 最後の1人 ${c} | 差額 ${d}`,
+        copied: 'コピー完了', copyDefault: '結果をコピー', reset: '入力をクリアしました。'
       }
-    }[pageLang] || { currency: '원', idle: '총액과 인원 수를 입력하면 N빵 결과를 계산합니다.', summary: (share,last,people) => `${people}명 기준 기본 송금액은 ${share}, 마지막 1인은 ${last}로 맞추면 총액이 정확히 맞습니다.`, copy: (a,b,c,d) => `N빵 계산 결과 | 정확한 1인당 ${a} | 반올림 기준 금액 ${b} | 마지막 1인 조정 ${c} | 차액 ${d}`, copied: '복사됨', copyDefault: '결과 복사' };
+    }[pageLang] || {};
+    let currentCopy = '';
 
     const fmt = (n) => `${Math.round(n || 0).toLocaleString(numberLocale)}${t.currency}`;
+    const setHelp = (message, state = '') => {
+      help.textContent = message;
+      help.dataset.state = state;
+    };
+    const resetResult = () => {
+      outBase.textContent = '-';
+      outRounded.textContent = '-';
+      outLast.textContent = '-';
+      outDiff.textContent = '-';
+      currentCopy = '';
+      if (copyBtn) copyBtn.disabled = true;
+    };
+    const setInvalid = (el, invalid) => el.setAttribute('aria-invalid', invalid ? 'true' : 'false');
     const copyText = async (text) => {
       try { await navigator.clipboard.writeText(text); }
       catch (_) {
@@ -12727,30 +12754,74 @@
       return Math.round(value / unit) * unit;
     };
     const render = () => {
-      const totalValue = Math.max(0, Number(total.value || 0));
-      const peopleValue = Math.max(1, Math.floor(Number(people.value || 1)));
-      const unit = Math.max(1, Number(rounding.value || 1));
-      people.value = peopleValue;
-      if (!(totalValue > 0)) {
-        outBase.textContent = '-'; outRounded.textContent = '-'; outLast.textContent = '-'; outDiff.textContent = '-'; help.textContent = t.idle; return;
+      const rawTotal = total.value.trim();
+      const rawPeople = people.value.trim();
+      if (!rawTotal) {
+        setInvalid(total, false);
+        setInvalid(people, false);
+        resetResult();
+        setHelp(t.idle);
+        return;
       }
+      const totalValue = Number(rawTotal);
+      const peopleValue = Number(rawPeople || 1);
+      const unit = Math.max(1, Number(rounding.value || 1));
+      if (!Number.isFinite(totalValue) || !Number.isInteger(totalValue) || totalValue < 1 || totalValue > 1000000000000) {
+        setInvalid(total, true);
+        resetResult();
+        setHelp(totalValue === 0 ? t.needTotal : t.invalidTotal, 'error');
+        return;
+      }
+      if (!Number.isFinite(peopleValue) || !Number.isInteger(peopleValue) || peopleValue < 1 || peopleValue > 200) {
+        setInvalid(total, false);
+        setInvalid(people, true);
+        resetResult();
+        setHelp(t.invalidPeople, 'error');
+        return;
+      }
+      setInvalid(total, false);
+      setInvalid(people, false);
       const exact = totalValue / peopleValue;
       const rounded = roundByMode(exact, unit, mode.value || 'nearest');
       const last = totalValue - rounded * (peopleValue - 1);
+      if (last < 0) {
+        resetResult();
+        setHelp(t.impossible, 'error');
+        return;
+      }
       const diff = last - rounded;
       outBase.textContent = fmt(exact);
       outRounded.textContent = fmt(rounded);
       outLast.textContent = fmt(last);
       outDiff.textContent = fmt(diff);
-      help.textContent = t.summary(fmt(rounded), fmt(last), peopleValue.toLocaleString(numberLocale));
+      currentCopy = t.copy(outBase.textContent, outRounded.textContent, outLast.textContent, outDiff.textContent, peopleValue.toLocaleString(numberLocale));
+      if (copyBtn) copyBtn.disabled = false;
+      setHelp(t.summary(fmt(rounded), fmt(last), peopleValue.toLocaleString(numberLocale), Math.max(peopleValue - 1, 0).toLocaleString(numberLocale)), 'success');
     };
     [total, people, rounding, mode].forEach((el) => el?.addEventListener('input', render));
+    [rounding, mode].forEach((el) => el?.addEventListener('change', render));
+    sampleBtn?.addEventListener('click', () => {
+      total.value = 48000;
+      people.value = 5;
+      rounding.value = 100;
+      mode.value = 'nearest';
+      render();
+      total.focus();
+    });
     copyBtn?.addEventListener('click', async () => {
-      if (outBase.textContent === '-') return;
-      await copyText(t.copy(outBase.textContent, outRounded.textContent, outLast.textContent, outDiff.textContent));
+      if (!currentCopy) return;
+      await copyText(currentCopy);
       const old = copyBtn.textContent; copyBtn.textContent = t.copied; setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
     });
-    resetBtn?.addEventListener('click', () => { total.value = 50000; people.value = 3; rounding.value = 100; mode.value = 'nearest'; render(); });
+    resetBtn?.addEventListener('click', () => {
+      total.value = '';
+      people.value = 2;
+      rounding.value = 1;
+      mode.value = 'nearest';
+      render();
+      setHelp(t.reset);
+      total.focus();
+    });
     if (!people.value) people.value = 2;
     render();
   }

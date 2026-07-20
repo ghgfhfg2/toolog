@@ -503,6 +503,18 @@ a:hover { color: #fff; text-decoration: none; }
 .tool-row-grid { display: grid; gap: .5rem; grid-template-columns: 1fr 1fr auto 1fr; align-items: center; }
 .pct-grid { grid-template-columns: 1fr 1fr; }
 .pct-actions { grid-template-columns: 1fr 1fr; }
+.sb-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.sb-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.sb-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.sb-ui #sb-help[data-state="error"] { color: #fca5a5; }
+.sb-ui #sb-help[data-state="success"] { color: #86efac; }
+.sb-ui button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+.sb-stats strong {
+  overflow-wrap: anywhere;
+}
 .knr-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .knr-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .knr-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -1380,6 +1392,9 @@ a:hover { color: #fff; text-decoration: none; }
   .loan-grid,
   .loan-actions { grid-template-columns: 1fr; }
   .loan-stats { grid-template-columns: 1fr 1fr; }
+  .sb-grid,
+  .sb-actions { grid-template-columns: 1fr; }
+  .sb-stats { grid-template-columns: 1fr 1fr; }
   .mtc-context-grid,
   .mtc-ui .pct-actions { grid-template-columns: 1fr; }
   .tool-stats.mtc-stats { grid-template-columns: 1fr 1fr; }
