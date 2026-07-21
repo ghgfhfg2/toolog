@@ -32,20 +32,20 @@ alternate_urls:
 ## When is this useful?
 Parking lots often use different fee rules, so it’s hard to estimate the final cost in advance.
 
-This tool calculates the estimated fee, overtime minutes, charged units, daily max status, and optional discount in the browser.
+This tool calculates the estimated parking fee, overtime minutes, charged units, whether the daily max applies, and the final amount after a coupon or validation discount.
 
 ## Inputs
 - Parking time (minutes)
 - Base time / base fee
 - Additional unit / additional fee
 - Daily max fee (optional)
-- Daily max handling: once for the stay or per 24-hour block
+- Daily max handling: cap once for the whole stay or cap each 24-hour block
 - Discount amount (optional)
 
 ## Calculation logic
 1. If parking time is within base time, base fee is applied.
 2. Overtime is charged by **ceil(overtime ÷ additional unit)**.
-3. If daily max fee is set, the result is capped once or per 24-hour block depending on your selection.
+3. If a daily max fee is set, the result is capped once for the whole stay or separately for each 24-hour block, depending on your selection.
 4. Optional discount is subtracted after cap handling, and the final estimate never goes below zero.
 
 ## Example
@@ -53,8 +53,11 @@ This tool calculates the estimated fee, overtime minutes, charged units, daily m
 - Base: 60 minutes / 2,000 KRW
 - Extra: 500 KRW per 10 minutes
 - Daily max: 15,000 KRW
+- Discount: none
 
 Overtime is 75 minutes, so 8 extra units are charged. The estimate is **6,000 KRW** before any discount.
+
+For long stays, the result can change a lot depending on whether the same daily max is applied only once to the whole stay or reset for every 24-hour block.
 
 ## Related Tools
 - Estimate when you will leave: [Work End Time Calculator]({{ '/en/tools/work-end-time-calculator/' | relative_url }})
@@ -62,6 +65,18 @@ Overtime is 75 minutes, so 8 extra units are charged. The estimate is **6,000 KR
 - Compare hourly cost: [Unit Price Calculator]({{ '/en/tools/unit-price-calculator/' | relative_url }})
 
 ## FAQ
+### What happens if the extra unit does not divide evenly?
+Most parking lots round up the charged unit. For example, even 1 minute over a 10-minute unit is billed as one additional unit, and this calculator uses the same rounding-up rule.
+
+### What if the parking lot has no daily max fee?
+Leave the daily max field blank to calculate without a cap.
+
+### How do I enter free parking time?
+Use the free period as the base time and set the base fee to 0.
+
+### Can I include a coupon or validation discount?
+Yes. Enter the discount amount and it will be subtracted after the daily max handling. The final estimate will not go below zero.
+
 ### Can I calculate overnight parking?
 Yes. Parking time supports up to 10,080 minutes, or 7 days. For multi-day parking, check whether the lot applies the daily cap every 24 hours.
 

@@ -11673,7 +11673,7 @@
         tooLarge: '駐車時間は10,080分（7日）まで、料金は入力範囲内で計算してください。',
         summary: (fee) => `予想駐車料金は ${fee} です。`,
         cappedPerDay: (days) => `24時間上限を${days}区間に適用しました。`,
-        discountApplied: (amount) => `${amount}割引`,
+        discountApplied: (amount) => `${amount}差し引き`,
         copy: (a, b, c, d, e) => `駐車料金計算結果 | 料金 ${a} | 超過時間 ${b} | 課金単位 ${c} | 最大料金 ${d} | 割引 ${e}`,
         copied: 'コピー完了',
         copyDefault: '結果をコピー'
