@@ -1290,9 +1290,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 주차시간과 기본/추가요금, 일 최대요금을 입력해 예상 주차비를 계산해요.
-  description_en: Estimate parking fees from parking time, base/extra pricing, and optional daily cap.
-  description_ja: 駐車時間・基本/追加料金・1日上限を入力して駐車料金を試算します。
+  description: 주차시간, 기본/추가요금, 일 최대요금 적용 방식, 할인 금액을 입력해 예상 주차비를 계산해요.
+  description_en: Estimate parking fees from parking time, base/extra pricing, daily cap handling, and optional discounts.
+  description_ja: 駐車時間・基本/追加料金・1日上限の扱い・割引額を入力して駐車料金を試算します。
   url: /tools/parking-fee-calculator/
   url_en: /en/tools/parking-fee-calculator/
   url_ja: /ja/tools/parking-fee-calculator/

@@ -11612,15 +11612,19 @@
     const unitMinutes = document.getElementById('pf-unit-minutes');
     const unitFee = document.getElementById('pf-unit-fee');
     const maxFee = document.getElementById('pf-max-fee');
+    const capMode = document.getElementById('pf-cap-mode');
+    const discount = document.getElementById('pf-discount');
     const outTotal = document.getElementById('pf-total');
     const outOver = document.getElementById('pf-over-minutes');
     const outUnits = document.getElementById('pf-units');
     const outCap = document.getElementById('pf-cap-applied');
+    const outDiscount = document.getElementById('pf-discount-applied');
     const help = document.getElementById('pf-help');
+    const exampleBtn = document.getElementById('pf-example');
     const copyBtn = document.getElementById('pf-copy');
     const resetBtn = document.getElementById('pf-reset');
 
-    if (!minutes || !baseMinutes || !baseFee || !unitMinutes || !unitFee || !maxFee || !outTotal || !outOver || !outUnits || !outCap || !help) return;
+    if (!minutes || !baseMinutes || !baseFee || !unitMinutes || !unitFee || !maxFee || !capMode || !discount || !outTotal || !outOver || !outUnits || !outCap || !outDiscount || !help || !copyBtn || !resetBtn) return;
 
     const i18n = {
       ko: {
@@ -11629,9 +11633,14 @@
         unit: '회',
         yes: '적용',
         no: '미적용',
+        none: '없음',
         needInput: '주차 시간과 요금 조건을 입력하세요.',
+        invalid: '시간은 0 이상, 추가단위는 1분 이상, 요금은 0원 이상으로 입력해 주세요.',
+        tooLarge: '주차 시간은 10,080분(7일), 요금 입력은 허용 범위 안에서 계산해 주세요.',
         summary: (fee) => `예상 주차요금은 ${fee}입니다.`,
-        copy: (a, b, c, d) => `주차요금 계산 결과 | 요금 ${a} | 초과시간 ${b} | 과금단위 ${c} | 최대요금 ${d}`,
+        cappedPerDay: (days) => `24시간 상한을 ${days}개 구간에 적용했습니다.`,
+        discountApplied: (amount) => `${amount} 차감`,
+        copy: (a, b, c, d, e) => `주차요금 계산 결과 | 요금 ${a} | 초과시간 ${b} | 과금단위 ${c} | 최대요금 ${d} | 할인 ${e}`,
         copied: '복사됨',
         copyDefault: '결과 복사'
       },
@@ -11641,9 +11650,14 @@
         unit: ' units',
         yes: 'Applied',
         no: 'Not applied',
+        none: 'None',
         needInput: 'Enter parking time and pricing policy.',
+        invalid: 'Use non-negative time and fee values, and an additional unit of at least 1 minute.',
+        tooLarge: 'Parking time is limited to 10,080 minutes (7 days), and fee values must stay within range.',
         summary: (fee) => `Estimated parking fee: ${fee}.`,
-        copy: (a, b, c, d) => `Parking fee result | Fee ${a} | Overtime ${b} | Charged units ${c} | Max fee ${d}`,
+        cappedPerDay: (days) => `Applied the 24-hour cap across ${days} block(s).`,
+        discountApplied: (amount) => `${amount} deducted`,
+        copy: (a, b, c, d, e) => `Parking fee result | Fee ${a} | Overtime ${b} | Charged units ${c} | Max fee ${d} | Discount ${e}`,
         copied: 'Copied',
         copyDefault: 'Copy result'
       },
@@ -11653,9 +11667,14 @@
         unit: '回',
         yes: '適用',
         no: '未適用',
+        none: 'なし',
         needInput: '駐車時間と料金条件を入力してください。',
+        invalid: '時間と料金は0以上、追加単位は1分以上で入力してください。',
+        tooLarge: '駐車時間は10,080分（7日）まで、料金は入力範囲内で計算してください。',
         summary: (fee) => `予想駐車料金は ${fee} です。`,
-        copy: (a, b, c, d) => `駐車料金計算結果 | 料金 ${a} | 超過時間 ${b} | 課金単位 ${c} | 最大料金 ${d}`,
+        cappedPerDay: (days) => `24時間上限を${days}区間に適用しました。`,
+        discountApplied: (amount) => `${amount}割引`,
+        copy: (a, b, c, d, e) => `駐車料金計算結果 | 料金 ${a} | 超過時間 ${b} | 課金単位 ${c} | 最大料金 ${d} | 割引 ${e}`,
         copied: 'コピー完了',
         copyDefault: '結果をコピー'
       }
@@ -11668,6 +11687,16 @@
     };
     const fmtMinute = (v) => `${Math.max(0, Math.round(v || 0)).toLocaleString(numberLocale)}${t.minute}`;
     const fmtUnit = (v) => `${Math.max(0, Math.round(v || 0)).toLocaleString(numberLocale)}${t.unit}`;
+    const fields = [minutes, baseMinutes, baseFee, unitMinutes, unitFee, maxFee, discount];
+    const ranges = new Map([
+      [minutes, [0, 10080]],
+      [baseMinutes, [0, 1440]],
+      [baseFee, [0, 1000000]],
+      [unitMinutes, [1, 1440]],
+      [unitFee, [0, 1000000]],
+      [maxFee, [0, 10000000]],
+      [discount, [0, 10000000]]
+    ]);
 
     const copyText = async (text) => {
       try { await navigator.clipboard.writeText(text); }
@@ -11683,62 +11712,123 @@
       outOver.textContent = '-';
       outUnits.textContent = '-';
       outCap.textContent = '-';
+      outDiscount.textContent = '-';
       help.textContent = msg;
+      help.dataset.state = '';
+      copyBtn.disabled = true;
+    };
+
+    const setError = (msg) => {
+      setIdle(msg);
+      help.dataset.state = 'error';
+    };
+
+    const readField = (el, optional = false) => {
+      const raw = el.value.trim();
+      if (optional && !raw) {
+        el.setAttribute('aria-invalid', 'false');
+        return { ok: true, value: 0 };
+      }
+      if (!raw) {
+        el.setAttribute('aria-invalid', 'false');
+        return { ok: false, empty: true, value: 0 };
+      }
+      const value = Number(raw);
+      const [min, max] = ranges.get(el) || [0, Number.MAX_SAFE_INTEGER];
+      const ok = Number.isFinite(value) && Number.isInteger(value) && value >= min && value <= max;
+      el.setAttribute('aria-invalid', ok ? 'false' : 'true');
+      return { ok, value, tooLarge: Number.isFinite(value) && value > max };
     };
 
     const render = () => {
-      const m = Math.max(0, Number(minutes.value || 0));
-      const bm = Math.max(0, Number(baseMinutes.value || 0));
-      const bf = Math.max(0, Number(baseFee.value || 0));
-      const um = Math.max(1, Number(unitMinutes.value || 1));
-      const uf = Math.max(0, Number(unitFee.value || 0));
-      const mfRaw = Number(maxFee.value || 0);
-      const mf = Number.isFinite(mfRaw) && mfRaw > 0 ? mfRaw : 0;
+      const values = {
+        minutes: readField(minutes),
+        baseMinutes: readField(baseMinutes),
+        baseFee: readField(baseFee),
+        unitMinutes: readField(unitMinutes),
+        unitFee: readField(unitFee),
+        maxFee: readField(maxFee, true),
+        discount: readField(discount, true)
+      };
 
-      if (!(m > 0)) {
+      const required = [values.minutes, values.baseMinutes, values.baseFee, values.unitMinutes, values.unitFee];
+      if (required.some((item) => item.empty)) {
         setIdle(t.needInput);
         return;
       }
+      if (Object.values(values).some((item) => !item.ok)) {
+        setError(Object.values(values).some((item) => item.tooLarge) ? t.tooLarge : t.invalid);
+        return;
+      }
+
+      const m = values.minutes.value;
+      const bm = values.baseMinutes.value;
+      const bf = values.baseFee.value;
+      const um = values.unitMinutes.value;
+      const uf = values.unitFee.value;
+      const mf = values.maxFee.value;
+      const dc = values.discount.value;
 
       const over = Math.max(0, m - bm);
       const units = over > 0 ? Math.ceil(over / um) : 0;
-      const rawFee = bf + (units * uf);
-      const finalFee = mf > 0 ? Math.min(rawFee, mf) : rawFee;
-      const capApplied = mf > 0 && rawFee > mf;
+      const rawFee = m === 0 ? 0 : bf + (units * uf);
+      const capBlocks = capMode.value === 'per-day' ? Math.max(1, Math.ceil(m / 1440)) : 1;
+      const capLimit = mf > 0 ? mf * capBlocks : 0;
+      const cappedFee = capLimit > 0 ? Math.min(rawFee, capLimit) : rawFee;
+      const finalFee = Math.max(0, cappedFee - dc);
+      const capApplied = capLimit > 0 && rawFee > capLimit;
+      const discountApplied = dc > 0;
 
       outTotal.textContent = fmtMoney(finalFee);
       outOver.textContent = fmtMinute(over);
       outUnits.textContent = fmtUnit(units);
-      outCap.textContent = capApplied ? t.yes : t.no;
+      outCap.textContent = capApplied ? (capMode.value === 'per-day' ? t.cappedPerDay(capBlocks) : t.yes) : t.no;
+      outDiscount.textContent = discountApplied ? t.discountApplied(fmtMoney(Math.min(dc, cappedFee))) : t.none;
       help.textContent = t.summary(fmtMoney(finalFee));
+      help.dataset.state = 'success';
+      copyBtn.disabled = false;
     };
 
-    [minutes, baseMinutes, baseFee, unitMinutes, unitFee, maxFee].forEach((el) => el?.addEventListener('input', render));
+    fields.forEach((el) => el?.addEventListener('input', render));
+    capMode.addEventListener('change', render);
 
     copyBtn?.addEventListener('click', async () => {
       if (outTotal.textContent === '-') return;
-      await copyText(t.copy(outTotal.textContent, outOver.textContent, outUnits.textContent, outCap.textContent));
+      await copyText(t.copy(outTotal.textContent, outOver.textContent, outUnits.textContent, outCap.textContent, outDiscount.textContent));
       const old = copyBtn.textContent;
       copyBtn.textContent = t.copied;
       setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
     });
 
-    resetBtn?.addEventListener('click', () => {
+    const loadExample = () => {
       minutes.value = 135;
       baseMinutes.value = 60;
       baseFee.value = 2000;
       unitMinutes.value = 10;
       unitFee.value = 500;
       maxFee.value = 15000;
+      capMode.value = 'single';
+      discount.value = '';
       render();
+    };
+
+    exampleBtn?.addEventListener('click', () => {
+      loadExample();
+      minutes.focus();
     });
 
-    if (!minutes.value) minutes.value = 135;
-    if (!baseMinutes.value) baseMinutes.value = 60;
-    if (!baseFee.value) baseFee.value = 2000;
-    if (!unitMinutes.value) unitMinutes.value = 10;
-    if (!unitFee.value) unitFee.value = 500;
-    render();
+    resetBtn?.addEventListener('click', () => {
+      fields.forEach((el) => {
+        el.value = '';
+        el.setAttribute('aria-invalid', 'false');
+      });
+      capMode.value = 'single';
+      setIdle(t.needInput);
+      minutes.focus();
+    });
+
+    copyBtn.disabled = true;
+    setIdle(t.needInput);
   }
 
   if (slug === 'lucky-draw-picker') {
