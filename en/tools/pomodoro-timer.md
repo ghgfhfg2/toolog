@@ -30,23 +30,42 @@ alternate_urls:
 ---
 
 ## Build a sustainable focus rhythm
-The Pomodoro method helps you avoid burnout by alternating focused work and short recovery breaks.
-Use this tool to keep your sessions structured and repeatable.
-It works well as a study timer, work sprint timer, writing timer, or deep-focus browser timer.
+Starting a task is easier when the next break is already planned.
+This Pomodoro timer alternates **focus and recovery phases automatically** so you can keep a steady rhythm without watching the clock.
+It works well as a study timer, work sprint timer, coding sprint timer, writing timer, or deep-focus browser timer.
 
 ## What you can do
 - Set focus / short break / long break minutes
 - Apply 25/5, 50/10, or light sprint presets
 - Trigger long break every N focus sessions
 - Start, pause, skip current phase, reset, and copy your current plan
-- Track current phase, remaining time, focus progress, and input errors
+- Track current phase, remaining time, focus progress, and live input errors
+- See clear empty-state and range-error guidance before starting
 
-## Good starting settings
+## Recommended workflow
+1. Start with 25 minutes of focus, 5 minutes of short break, and 15 minutes of long break
+2. Set the long-break cycle to every 4 focus sessions
+3. Try it for 2 or 3 days, then adjust the minutes to match your own energy pattern
+
+## Good settings for different tasks
 - 25 minutes focus + 5 minutes break: general study, writing, and desk work
 - 50 minutes focus + 10 minutes break: coding, research, and deep work
-- 15 minutes focus + 3 minutes break: low-energy days or quick task starts
+- 15 minutes focus + 3 minutes break: low-energy days or when you want a smaller starting step
 
 ## Related tools
 - [Work End Time Calculator]({{ '/en/tools/work-end-time-calculator/' | relative_url }})
 - [D-Day Calculator]({{ '/en/tools/d-day-calculator/' | relative_url }})
 - [Timezone Converter]({{ '/en/tools/timezone-converter/' | relative_url }})
+
+## FAQ
+### Do Pomodoro sessions have to be 25/5?
+No. 25/5 is a useful default, but 20/5, 40/10, or 50/10 can be better depending on the task and your attention span.
+
+### When should I take the long break?
+A long break usually works best after 3 to 5 focus sessions because it gives fatigue time to reset before the next block.
+
+### Can I use different settings for different work?
+Yes. It is often better to use shorter cycles for admin tasks and longer cycles for coding, writing, research, or memorization.
+
+### Does the timer move to the next phase automatically?
+Yes. When focus time ends, it switches to a short or long break. When the break ends, it returns to focus.
