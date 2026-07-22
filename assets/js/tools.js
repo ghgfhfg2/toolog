@@ -6636,63 +6636,124 @@
     const startBtn = document.getElementById('pomo-start');
     const skipBtn = document.getElementById('pomo-skip');
     const resetBtn = document.getElementById('pomo-reset');
+    const copyBtn = document.getElementById('pomo-copy');
+    const presetBtns = Array.from(document.querySelectorAll('.pt-presets button[data-focus]'));
 
     const outPhase = document.getElementById('pomo-phase');
     const outRemaining = document.getElementById('pomo-remaining');
     const outProgress = document.getElementById('pomo-progress');
     const outStatus = document.getElementById('pomo-status');
     const help = document.getElementById('pomo-help');
+    const error = document.getElementById('pomo-error');
+    const meter = document.querySelector('.pt-meter');
+    const meterBar = document.getElementById('pomo-meter-bar');
 
-    if (!focusEl || !shortEl || !longEl || !cycleEl || !startBtn || !skipBtn || !resetBtn || !outPhase || !outRemaining || !outProgress || !outStatus || !help) return;
+    if (!focusEl || !shortEl || !longEl || !cycleEl || !startBtn || !skipBtn || !resetBtn || !copyBtn || !outPhase || !outRemaining || !outProgress || !outStatus || !help || !error || !meter || !meterBar) return;
 
     const t = {
       ko: {
         phase: { focus: '집중', short: '짧은 휴식', long: '긴 휴식' },
-        ready: '준비됨', running: '진행 중', paused: '일시정지',
+        ready: '준비됨', running: '진행 중', paused: '일시정지', done: '전환됨',
+        start: '시작', pause: '일시정지',
         helpReady: '시작을 누르면 포모도로 타이머가 시작됩니다.',
-        helpPhaseDone: (phase) => `${phase} 시간이 끝났습니다. 다음 구간으로 자동 전환됩니다.`
+        helpRunning: (phase) => `${phase} 구간이 진행 중입니다.`,
+        helpPaused: '타이머를 일시정지했습니다. 다시 시작하면 이어서 진행됩니다.',
+        helpPhaseDone: (prev, next) => `${prev} 시간이 끝나 ${next} 구간으로 전환했습니다.`,
+        helpSkipped: (next) => `${next} 구간으로 건너뛰었습니다.`,
+        helpPreset: '추천 설정을 적용했습니다.',
+        helpCopied: '현재 뽀모도로 설정을 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        invalid: '입력값을 범위 안의 정수로 고쳐 주세요.',
+        summary: (s) => `뽀모도로 설정: 집중 ${s.focus}분 / 짧은 휴식 ${s.short}분 / 긴 휴식 ${s.long}분 / ${s.cycle}회마다 긴 휴식`
       },
       en: {
         phase: { focus: 'Focus', short: 'Short break', long: 'Long break' },
-        ready: 'Ready', running: 'Running', paused: 'Paused',
+        ready: 'Ready', running: 'Running', paused: 'Paused', done: 'Switched',
+        start: 'Start', pause: 'Pause',
         helpReady: 'Press Start to begin the Pomodoro timer.',
-        helpPhaseDone: (phase) => `${phase} completed. Switched to next phase automatically.`
+        helpRunning: (phase) => `${phase} phase is running.`,
+        helpPaused: 'Timer paused. Press Start to continue.',
+        helpPhaseDone: (prev, next) => `${prev} completed. Switched to ${next}.`,
+        helpSkipped: (next) => `Skipped to ${next}.`,
+        helpPreset: 'Applied the preset.',
+        helpCopied: 'Copied the current Pomodoro plan.',
+        copyFail: 'Automatic copy is unavailable.',
+        invalid: 'Fix the settings with whole numbers inside the allowed ranges.',
+        summary: (s) => `Pomodoro plan: focus ${s.focus} min / short break ${s.short} min / long break ${s.long} min / long break every ${s.cycle} focus sessions`
       },
       ja: {
         phase: { focus: '集中', short: '短い休憩', long: '長い休憩' },
-        ready: '準備完了', running: '進行中', paused: '一時停止',
+        ready: '準備完了', running: '進行中', paused: '一時停止', done: '切替済み',
+        start: '開始', pause: '一時停止',
         helpReady: '開始を押すとポモドーロタイマーが始まります。',
-        helpPhaseDone: (phase) => `${phase}が終了し、次のフェーズに自動で切り替わりました。`
+        helpRunning: (phase) => `${phase}フェーズが進行中です。`,
+        helpPaused: 'タイマーを一時停止しました。再開すると続きから進みます。',
+        helpPhaseDone: (prev, next) => `${prev}が終了し、${next}へ切り替わりました。`,
+        helpSkipped: (next) => `${next}へスキップしました。`,
+        helpPreset: 'プリセットを適用しました。',
+        helpCopied: '現在のポモドーロ設定をコピーしました。',
+        copyFail: '自動コピーを利用できません。',
+        invalid: '入力範囲内の整数に修正してください。',
+        summary: (s) => `ポモドーロ設定: 集中${s.focus}分 / 短い休憩${s.short}分 / 長い休憩${s.long}分 / ${s.cycle}回ごとに長い休憩`
       }
     }[pageLang] || {
       phase: { focus: '집중', short: '짧은 휴식', long: '긴 휴식' },
-      ready: '준비됨', running: '진행 중', paused: '일시정지',
+      ready: '준비됨', running: '진행 중', paused: '일시정지', done: '전환됨',
+      start: '시작', pause: '일시정지',
       helpReady: '시작을 누르면 포모도로 타이머가 시작됩니다.',
-      helpPhaseDone: (phase) => `${phase} 시간이 끝났습니다. 다음 구간으로 자동 전환됩니다.`
+      helpRunning: (phase) => `${phase} 구간이 진행 중입니다.`,
+      helpPaused: '타이머를 일시정지했습니다. 다시 시작하면 이어서 진행됩니다.',
+      helpPhaseDone: (prev, next) => `${prev} 시간이 끝나 ${next} 구간으로 전환했습니다.`,
+      helpSkipped: (next) => `${next} 구간으로 건너뛰었습니다.`,
+      helpPreset: '추천 설정을 적용했습니다.',
+      helpCopied: '현재 뽀모도로 설정을 복사했습니다.',
+      copyFail: '자동 복사를 사용할 수 없습니다.',
+      invalid: '입력값을 범위 안의 정수로 고쳐 주세요.',
+      summary: (s) => `뽀모도로 설정: 집중 ${s.focus}분 / 짧은 휴식 ${s.short}분 / 긴 휴식 ${s.long}분 / ${s.cycle}회마다 긴 휴식`
     };
 
     let timer = null;
     let phase = 'focus';
     let focusDone = 0;
     let remainingSec = 25 * 60;
+    let phaseTotalSec = 25 * 60;
+    let targetTime = 0;
     let running = false;
+    let startedOnce = false;
+    let lastTitle = document.title;
 
-    const clampInt = (v, min, max) => {
-      const n = Math.floor(Number(v || min));
-      if (!Number.isFinite(n)) return min;
-      return Math.min(max, Math.max(min, n));
+    const setMessage = (message, state = '') => {
+      help.textContent = message;
+      help.dataset.state = state;
+    };
+
+    const parseSetting = (el, min, max) => {
+      const raw = el.value.trim();
+      const n = Number(raw);
+      const ok = raw !== '' && Number.isInteger(n) && n >= min && n <= max;
+      el.setAttribute('aria-invalid', ok ? 'false' : 'true');
+      return ok ? n : null;
     };
 
     const settings = () => {
-      const focus = clampInt(focusEl.value, 1, 120);
-      const short = clampInt(shortEl.value, 1, 60);
-      const long = clampInt(longEl.value, 1, 90);
-      const cycle = clampInt(cycleEl.value, 2, 12);
-      focusEl.value = focus;
-      shortEl.value = short;
-      longEl.value = long;
-      cycleEl.value = cycle;
-      return { focus, short, long, cycle };
+      const result = {
+        focus: parseSetting(focusEl, 1, 120),
+        short: parseSetting(shortEl, 1, 60),
+        long: parseSetting(longEl, 1, 90),
+        cycle: parseSetting(cycleEl, 2, 12)
+      };
+      const valid = Object.values(result).every((value) => value !== null);
+      error.dataset.state = valid ? '' : 'error';
+      startBtn.disabled = !valid;
+      skipBtn.disabled = !valid;
+      copyBtn.disabled = !valid;
+      return valid ? result : null;
+    };
+
+    const durationForPhase = (phaseKey, s) => {
+      if (phaseKey === 'short') return s.short * 60;
+      if (phaseKey === 'long') return s.long * 60;
+      return s.focus * 60;
     };
 
     const formatSec = (sec) => {
@@ -6702,63 +6763,142 @@
       return `${String(m).padStart(2, '0')}:${String(r).padStart(2, '0')}`;
     };
 
-    const nextPhase = () => {
-      const { focus, short, long, cycle } = settings();
+    const nextPhase = (fromSkip = false) => {
+      const s = settings();
+      if (!s) {
+        running = false;
+        clearTimer();
+        setMessage(t.invalid, 'error');
+        return;
+      }
+      const previous = phase;
       if (phase === 'focus') {
         focusDone += 1;
-        const longTurn = (focusDone > 0 && focusDone % cycle === 0);
+        const longTurn = (focusDone > 0 && focusDone % s.cycle === 0);
         phase = longTurn ? 'long' : 'short';
-        remainingSec = (longTurn ? long : short) * 60;
       } else {
         phase = 'focus';
-        remainingSec = focus * 60;
       }
-      help.textContent = t.helpPhaseDone(t.phase[phase]);
+      phaseTotalSec = durationForPhase(phase, s);
+      remainingSec = phaseTotalSec;
+      if (running) targetTime = Date.now() + (remainingSec * 1000);
+      setMessage(fromSkip ? t.helpSkipped(t.phase[phase]) : t.helpPhaseDone(t.phase[previous], t.phase[phase]), fromSkip ? 'warning' : 'success');
     };
 
     const render = () => {
-      const { cycle } = settings();
+      const s = settings();
+      if (!s) {
+        outStatus.textContent = t.paused;
+        startBtn.textContent = t.start;
+        setMessage(t.invalid, 'error');
+        return;
+      }
+      const progress = phaseTotalSec > 0 ? Math.min(100, Math.max(0, Math.round(((phaseTotalSec - remainingSec) / phaseTotalSec) * 100))) : 0;
       outPhase.textContent = t.phase[phase] || phase;
       outRemaining.textContent = formatSec(remainingSec);
-      outProgress.textContent = `${focusDone % cycle} / ${cycle}`;
-      outStatus.textContent = running ? t.running : (focusDone === 0 && phase === 'focus' && remainingSec === settings().focus * 60 ? t.ready : t.paused);
+      outProgress.textContent = `${focusDone % s.cycle} / ${s.cycle}`;
+      outStatus.textContent = running ? t.running : (!startedOnce && focusDone === 0 && phase === 'focus' && remainingSec === s.focus * 60 ? t.ready : t.paused);
+      startBtn.textContent = running ? t.pause : t.start;
+      meter.setAttribute('aria-valuenow', String(progress));
+      meterBar.style.width = `${progress}%`;
+      document.title = running ? `${formatSec(remainingSec)} ${t.phase[phase]} | Toolog` : lastTitle;
+    };
+
+    const clearTimer = () => {
+      if (timer) clearInterval(timer);
+      timer = null;
     };
 
     const tick = () => {
-      if (!running) return;
-      remainingSec -= 1;
-      if (remainingSec <= 0) nextPhase();
+      if (!running || !targetTime) return;
+      remainingSec = Math.max(0, Math.ceil((targetTime - Date.now()) / 1000));
+      if (remainingSec <= 0) nextPhase(false);
       render();
     };
 
     const resetAll = () => {
-      const { focus } = settings();
-      if (timer) clearInterval(timer);
-      timer = null;
+      const s = settings();
+      if (!s) {
+        running = false;
+        clearTimer();
+        return render();
+      }
+      clearTimer();
       running = false;
       phase = 'focus';
       focusDone = 0;
-      remainingSec = focus * 60;
+      remainingSec = s.focus * 60;
+      phaseTotalSec = remainingSec;
+      targetTime = 0;
+      startedOnce = false;
       outStatus.textContent = t.ready;
-      help.textContent = t.helpReady;
+      setMessage(t.helpReady);
       render();
     };
 
     startBtn.addEventListener('click', () => {
-      if (!timer) timer = setInterval(tick, 1000);
+      const s = settings();
+      if (!s) {
+        running = false;
+        clearTimer();
+        setMessage(t.invalid, 'error');
+        render();
+        return;
+      }
       running = !running;
+      if (running) {
+        startedOnce = true;
+        targetTime = Date.now() + (remainingSec * 1000);
+        if (!timer) timer = setInterval(tick, 250);
+        setMessage(t.helpRunning(t.phase[phase]), 'success');
+      } else {
+        remainingSec = Math.max(0, Math.ceil((targetTime - Date.now()) / 1000));
+        clearTimer();
+        setMessage(t.helpPaused, 'warning');
+      }
       render();
     });
 
     skipBtn.addEventListener('click', () => {
-      nextPhase();
+      nextPhase(true);
       render();
     });
 
     resetBtn.addEventListener('click', resetAll);
     [focusEl, shortEl, longEl, cycleEl].forEach((el) => el.addEventListener('input', () => {
-      if (!running) resetAll();
+      if (running) {
+        settings();
+        return;
+      }
+      resetAll();
     }));
+    presetBtns.forEach((btn) => btn.addEventListener('click', () => {
+      if (running) {
+        setMessage(t.helpPaused, 'warning');
+        return;
+      }
+      focusEl.value = btn.dataset.focus || '25';
+      shortEl.value = btn.dataset.short || '5';
+      longEl.value = btn.dataset.long || '15';
+      cycleEl.value = btn.dataset.cycle || '4';
+      resetAll();
+      setMessage(t.helpPreset, 'success');
+      focusEl.focus();
+    }));
+    copyBtn.addEventListener('click', async () => {
+      const s = settings();
+      if (!s) {
+        setMessage(t.invalid, 'error');
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(t.summary(s));
+        setMessage(t.helpCopied, 'success');
+      } catch (_) {
+        setMessage(t.copyFail, 'error');
+      }
+    });
+    window.addEventListener('beforeunload', () => { document.title = lastTitle; });
 
     resetAll();
   }

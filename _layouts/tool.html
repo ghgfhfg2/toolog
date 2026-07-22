@@ -3300,43 +3300,50 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="si-help">{% if page.lang == 'en' %}Enter deposit, rate, and term to estimate maturity amount.{% elsif page.lang == 'ja' %}預入額・金利・期間を入力すると満期金額を試算します。{% else %}예치금·금리·기간을 입력하면 만기금액을 계산합니다.{% endif %}</p>
         </div>
       {% when 'pomodoro-timer' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui pt-ui">
+          <div class="tool-row-grid pt-presets" aria-label="{% if page.lang == 'en' %}Pomodoro presets{% elsif page.lang == 'ja' %}ポモドーロ設定プリセット{% else %}뽀모도로 추천 설정{% endif %}">
+            <button type="button" data-focus="25" data-short="5" data-long="15" data-cycle="4">25 / 5</button>
+            <button type="button" data-focus="50" data-short="10" data-long="25" data-cycle="3">50 / 10</button>
+            <button type="button" data-focus="15" data-short="3" data-long="12" data-cycle="4">{% if page.lang == 'en' %}Light sprint{% elsif page.lang == 'ja' %}短め集中{% else %}짧은 집중{% endif %}</button>
+          </div>
+
+          <div class="tool-row-grid pt-grid">
             <div>
               <label for="pomo-focus">{% if page.lang == 'en' %}Focus (min){% elsif page.lang == 'ja' %}集中（分）{% else %}집중 시간(분){% endif %}</label>
-              <input id="pomo-focus" type="number" min="1" max="120" step="1" value="25" inputmode="numeric" />
+              <input id="pomo-focus" type="number" min="1" max="120" step="1" value="25" inputmode="numeric" aria-describedby="pomo-help pomo-error" />
             </div>
             <div>
               <label for="pomo-short">{% if page.lang == 'en' %}Short break (min){% elsif page.lang == 'ja' %}短い休憩（分）{% else %}짧은 휴식(분){% endif %}</label>
-              <input id="pomo-short" type="number" min="1" max="60" step="1" value="5" inputmode="numeric" />
+              <input id="pomo-short" type="number" min="1" max="60" step="1" value="5" inputmode="numeric" aria-describedby="pomo-help pomo-error" />
             </div>
-          </div>
-
-          <div class="tool-row-grid pct-grid">
             <div>
               <label for="pomo-long">{% if page.lang == 'en' %}Long break (min){% elsif page.lang == 'ja' %}長い休憩（分）{% else %}긴 휴식(분){% endif %}</label>
-              <input id="pomo-long" type="number" min="1" max="90" step="1" value="15" inputmode="numeric" />
+              <input id="pomo-long" type="number" min="1" max="90" step="1" value="15" inputmode="numeric" aria-describedby="pomo-help pomo-error" />
             </div>
             <div>
               <label for="pomo-cycle">{% if page.lang == 'en' %}Long break every N focus sessions{% elsif page.lang == 'ja' %}何回ごとに長い休憩{% else %}긴 휴식 주기(집중 N회마다){% endif %}</label>
-              <input id="pomo-cycle" type="number" min="2" max="12" step="1" value="4" inputmode="numeric" />
+              <input id="pomo-cycle" type="number" min="2" max="12" step="1" value="4" inputmode="numeric" aria-describedby="pomo-help pomo-error" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-actions">
-            <button id="pomo-start" type="button">{% if page.lang == 'en' %}Start / Pause{% elsif page.lang == 'ja' %}開始 / 一時停止{% else %}시작 / 일시정지{% endif %}</button>
+          <div class="tool-row-grid pt-actions">
+            <button id="pomo-start" type="button" aria-describedby="pomo-help">{% if page.lang == 'en' %}Start{% elsif page.lang == 'ja' %}開始{% else %}시작{% endif %}</button>
             <button id="pomo-skip" type="button">{% if page.lang == 'en' %}Skip phase{% elsif page.lang == 'ja' %}フェーズスキップ{% else %}구간 건너뛰기{% endif %}</button>
             <button id="pomo-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+            <button id="pomo-copy" type="button">{% if page.lang == 'en' %}Copy plan{% elsif page.lang == 'ja' %}設定をコピー{% else %}설정 복사{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
+          <div class="pt-meter" role="progressbar" aria-label="{% if page.lang == 'en' %}Current phase progress{% elsif page.lang == 'ja' %}現在フェーズの進捗{% else %}현재 구간 진행률{% endif %}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="pomo-meter-bar"></span></div>
+
+          <div class="tool-stats pt-stats" aria-label="{% if page.lang == 'en' %}Pomodoro timer status{% elsif page.lang == 'ja' %}ポモドーロタイマー状態{% else %}뽀모도로 타이머 상태{% endif %}">
             <div><strong id="pomo-phase">-</strong><span>{% if page.lang == 'en' %}Current phase{% elsif page.lang == 'ja' %}現在フェーズ{% else %}현재 구간{% endif %}</span></div>
             <div><strong id="pomo-remaining">25:00</strong><span>{% if page.lang == 'en' %}Time remaining{% elsif page.lang == 'ja' %}残り時間{% else %}남은 시간{% endif %}</span></div>
             <div><strong id="pomo-progress">0 / 4</strong><span>{% if page.lang == 'en' %}Focus progress{% elsif page.lang == 'ja' %}集中 진행도{% else %}집중 진행도{% endif %}</span></div>
             <div><strong id="pomo-status">{% if page.lang == 'en' %}Ready{% elsif page.lang == 'ja' %}準備完了{% else %}준비됨{% endif %}</strong><span>{% if page.lang == 'en' %}Status{% elsif page.lang == 'ja' %}状態{% else %}상태{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="pomo-help">{% if page.lang == 'en' %}Set minutes and press Start. Timer continues in this tab while open.{% elsif page.lang == 'ja' %}分を設定して開始を押してください。このタブを開いている間タイマーが動作します。{% else %}분 단위를 설정하고 시작을 누르세요. 탭이 열려 있는 동안 타이머가 동작합니다.{% endif %}</p>
+          <p class="tool-result" id="pomo-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Set minutes and press Start. Timer continues in this tab while open.{% elsif page.lang == 'ja' %}分を設定して開始を押してください。このタブを開いている間タイマーが動作します。{% else %}분 단위를 설정하고 시작을 누르세요. 탭이 열려 있는 동안 타이머가 동작합니다.{% endif %}</p>
+          <p class="tool-result" id="pomo-error" aria-live="polite">{% if page.lang == 'en' %}Allowed ranges: focus 1-120, short break 1-60, long break 1-90, long-break cycle 2-12.{% elsif page.lang == 'ja' %}入力範囲: 集中1〜120分、短い休憩1〜60分、長い休憩1〜90分、周期2〜12回。{% else %}입력 범위: 집중 1~120분, 짧은 휴식 1~60분, 긴 휴식 1~90분, 긴 휴식 주기 2~12회입니다.{% endif %}</p>
         </div>
       {% when 'parking-fee-calculator' %}
         <div class="tool-ui pf-ui">

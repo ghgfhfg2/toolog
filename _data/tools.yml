@@ -1366,13 +1366,15 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 집중·휴식 시간을 자동 전환해 공부와 업무 리듬을 유지하는 포모도로 타이머예요.
-  description_en: Keep your study/work rhythm with automatic focus-break cycles using a customizable Pomodoro timer.
-  description_ja: 集中と休憩を自動で切り替え、学習や作業リズムを整えるカスタム可能なポモドーロタイマーです。
+  description: 25/5, 50/10 프리셋과 직접 설정으로 집중·짧은 휴식·긴 휴식을 자동 전환하는 공부·업무용 뽀모도로 타이머예요.
+  description_en: Start 25/5, 50/10, or custom focus, short-break, and long-break cycles with a browser Pomodoro timer for work and study.
+  description_ja: 25/5、50/10、カスタム設定で集中・短い休憩・長い休憩を自動切替する勉強・仕事向けポモドーロタイマーです。
   url: /tools/pomodoro-timer/
   url_en: /en/tools/pomodoro-timer/
   url_ja: /ja/tools/pomodoro-timer/
   thumbnail: /assets/thumbs/pomodoro-timer.svg
+  tool_type: planner
+  topic_cluster: productivity
 
 - id: body-fat-calculator
   title: 체지방률 계산기
