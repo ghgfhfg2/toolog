@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Emergency Bag Checklist Planner | Prepare for family, pets, and medicine needs
-description: Build a practical emergency bag checklist based on family members, pets, medicine needs, evacuation time, and season.
+title: Emergency Bag Checklist Planner | 24-72 Hour Go-Bag Supply Check
+description: Build a 24-72 hour emergency bag checklist from household size, pets, medicine needs, evacuation duration, season, and items already prepared.
 lang: en
 permalink: /en/tools/emergency-bag-checklist-planner/
 canonical_url: /en/tools/emergency-bag-checklist-planner/
@@ -18,7 +18,7 @@ image:
 tool_key: emergency-bag-checklist-planner
 tool_type: planner
 topic_cluster: safety
-keywords: [emergency bag checklist, disaster kit, go bag, family emergency supplies, pet emergency bag]
+keywords: [emergency bag checklist, disaster kit, go bag, family emergency supplies, pet emergency bag, 72 hour emergency kit]
 related_tools: [deadline-backward-planner, ingredient-expiry-priority-checker, appointment-departure-buffer-simulator]
 faq:
   - q: Does this replace official disaster response guidance?
@@ -32,7 +32,7 @@ faq:
 ## Why use the Emergency Bag Checklist Planner?
 In situations that are uncommon in daily life—power outages, water outages, typhoons, earthquakes, or sudden evacuation—it can be hard to remember **what to pack first**. Basic items such as water, a power bank, and first-aid supplies matter, but the right list also changes depending on family members, pets, regular medicine, and the season.
 
-This tool lets you select your family size and situation, then organizes **essential items, personalized items, and items that need reinforcement** so you can review an emergency bag quickly.
+This tool lets you select your family size and situation, then organizes **24-hour, 48-hour, or 72-hour essentials, personalized items, and the items to reinforce first** so you can review an emergency bag quickly. It is useful when you are building a disaster kit for the first time or checking what is missing from a bag you already have.
 
 ## How to use it
 1. Choose the number of adults, children, or older family members, and whether pets are included.
@@ -57,6 +57,9 @@ The planner calls out seasonal items that are easy to miss, such as hygiene and 
 - Need to leave with enough travel buffer? [Appointment Departure Buffer Simulator]({{ '/en/tools/appointment-departure-buffer-simulator/' | relative_url }})
 
 ## FAQ
+### Should I choose 24, 48, or 72 hours?
+If you are starting from scratch, 48 hours is a practical baseline. Use 72 hours when transportation may be limited, your household is larger, or you want a wider safety buffer, then check whether the final bag is still realistic to carry.
+
 ### How heavy should an emergency bag be?
 It should be light enough to carry for a long time. Instead of putting everything into one bag, you can split supplies into smaller bags for each family member.
 
@@ -67,5 +70,4 @@ Small cash, emergency contacts, and copies of important documents can help. If d
 No. Water, snacks, medicine, batteries, and seasonal items need periodic replacement or checks. Reviewing the bag at least once each quarter is safer.
 
 ## Summary
-Emergency Bag Checklist Planner is a **planner-style tool that organizes disaster-preparedness supplies around family composition and personal conditions**.
-Recent releases were distributed across simulator, generator, checker, picker, and utility formats, so this safety-focused planning tool adds a different use case instead of duplicating the latest flow.
+Emergency Bag Checklist Planner is a **planner-style tool that organizes 24-72 hour disaster-preparedness supplies around family composition and personal conditions**. Use it as a quick personal review before checking official emergency guidance, and prioritize local alerts and municipal instructions during an actual incident.

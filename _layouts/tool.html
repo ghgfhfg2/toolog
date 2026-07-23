@@ -4342,66 +4342,71 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           </div>
         </div>
       {% when 'emergency-bag-checklist-planner' %}
-        <div class="tool-ui">
-          <p class="tool-result">가족 구성과 상황을 선택하면 비상가방 필수·맞춤 준비물을 체크리스트로 정리합니다.</p>
+        <div class="tool-ui ebcp-ui">
+          <p class="tool-result" id="ebcp-help">{% if page.lang == 'en' %}Choose household conditions to build a practical 24-72 hour go-bag checklist. Nothing is uploaded.{% elsif page.lang == 'ja' %}家族条件を選ぶと、24〜72時間向けの非常用持ち出し袋チェックリストを作れます。入力内容は送信されません。{% else %}가족 구성과 상황을 선택하면 24~72시간 비상가방 필수·맞춤 준비물을 체크리스트로 정리합니다. 입력 내용은 전송되지 않습니다.{% endif %}</p>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="ebcp-adults">성인 인원</label>
-              <input id="ebcp-adults" type="number" min="1" max="10" value="1" />
+              <label for="ebcp-adults">{% if page.lang == 'en' %}Adults{% elsif page.lang == 'ja' %}大人の人数{% else %}성인 인원{% endif %}</label>
+              <input id="ebcp-adults" type="number" min="1" max="10" value="1" inputmode="numeric" aria-describedby="ebcp-summary ebcp-help" />
             </div>
             <div>
-              <label for="ebcp-children">아이·고령자 인원</label>
-              <input id="ebcp-children" type="number" min="0" max="10" value="0" />
+              <label for="ebcp-children">{% if page.lang == 'en' %}Children or older adults{% elsif page.lang == 'ja' %}子ども・高齢者の人数{% else %}아이·고령자 인원{% endif %}</label>
+              <input id="ebcp-children" type="number" min="0" max="10" value="0" inputmode="numeric" aria-describedby="ebcp-summary ebcp-help" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="ebcp-hours">예상 대비 시간</label>
+              <label for="ebcp-hours">{% if page.lang == 'en' %}Prepared duration{% elsif page.lang == 'ja' %}想定する避難時間{% else %}예상 대비 시간{% endif %}</label>
               <select id="ebcp-hours">
-                <option value="24">24시간 기본</option>
-                <option value="48" selected>48시간 권장</option>
-                <option value="72">72시간 넉넉히</option>
+                <option value="24">{% if page.lang == 'en' %}24 hours basic{% elsif page.lang == 'ja' %}24時間 基本{% else %}24시간 기본{% endif %}</option>
+                <option value="48" selected>{% if page.lang == 'en' %}48 hours recommended{% elsif page.lang == 'ja' %}48時間 推奨{% else %}48시간 권장{% endif %}</option>
+                <option value="72">{% if page.lang == 'en' %}72 hours extended{% elsif page.lang == 'ja' %}72時間 余裕あり{% else %}72시간 넉넉히{% endif %}</option>
               </select>
             </div>
             <div>
-              <label for="ebcp-season">계절</label>
+              <label for="ebcp-season">{% if page.lang == 'en' %}Season or weather risk{% elsif page.lang == 'ja' %}季節・天候リスク{% else %}계절·날씨 위험{% endif %}</label>
               <select id="ebcp-season">
-                <option value="normal" selected>일반</option>
-                <option value="summer">여름</option>
-                <option value="winter">겨울</option>
-                <option value="rain">장마·태풍</option>
+                <option value="normal" selected>{% if page.lang == 'en' %}Normal{% elsif page.lang == 'ja' %}通常{% else %}일반{% endif %}</option>
+                <option value="summer">{% if page.lang == 'en' %}Summer heat{% elsif page.lang == 'ja' %}夏・暑さ{% else %}여름·폭염{% endif %}</option>
+                <option value="winter">{% if page.lang == 'en' %}Winter cold{% elsif page.lang == 'ja' %}冬・寒さ{% else %}겨울·한파{% endif %}</option>
+                <option value="rain">{% if page.lang == 'en' %}Heavy rain or typhoon{% elsif page.lang == 'ja' %}大雨・台風{% else %}장마·태풍{% endif %}</option>
               </select>
             </div>
           </div>
 
-          <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="ebcp-pet" type="checkbox" /> 반려동물 동반</label>
-            <label class="tool-check"><input id="ebcp-medicine" type="checkbox" /> 정기 복용약 필요</label>
-            <label class="tool-check"><input id="ebcp-glasses" type="checkbox" /> 안경·렌즈 필요</label>
-            <label class="tool-check"><input id="ebcp-baby" type="checkbox" /> 유아용품 필요</label>
+          <div class="tool-row-grid pct-grid ebcp-checks" aria-label="{% if page.lang == 'en' %}Personal emergency conditions{% elsif page.lang == 'ja' %}個別の防災条件{% else %}개인별 비상 조건{% endif %}">
+            <label class="tool-check"><input id="ebcp-pet" type="checkbox" /> {% if page.lang == 'en' %}Include pets{% elsif page.lang == 'ja' %}ペット同行{% else %}반려동물 동반{% endif %}</label>
+            <label class="tool-check"><input id="ebcp-medicine" type="checkbox" /> {% if page.lang == 'en' %}Regular medicine needed{% elsif page.lang == 'ja' %}常備薬が必要{% else %}정기 복용약 필요{% endif %}</label>
+            <label class="tool-check"><input id="ebcp-glasses" type="checkbox" /> {% if page.lang == 'en' %}Glasses or contacts needed{% elsif page.lang == 'ja' %}眼鏡・コンタクトが必要{% else %}안경·렌즈 필요{% endif %}</label>
+            <label class="tool-check"><input id="ebcp-baby" type="checkbox" /> {% if page.lang == 'en' %}Baby supplies needed{% elsif page.lang == 'ja' %}乳幼児用品が必要{% else %}유아용품 필요{% endif %}</label>
           </div>
 
           <div class="tool-row">
-            <label for="ebcp-ready">이미 준비한 물품(쉼표 또는 줄바꿈)</label>
-            <textarea id="ebcp-ready" rows="5" maxlength="1500" placeholder="예: 생수, 보조배터리, 손전등, 상비약"></textarea>
+            <label for="ebcp-ready">{% if page.lang == 'en' %}Items already prepared (comma or line break){% elsif page.lang == 'ja' %}準備済みの物（カンマまたは改行）{% else %}이미 준비한 물품(쉼표 또는 줄바꿈){% endif %}</label>
+            <textarea id="ebcp-ready" rows="5" maxlength="1500" aria-describedby="ebcp-summary ebcp-help" placeholder="{% if page.lang == 'en' %}e.g. water, power bank, flashlight, first-aid kit{% elsif page.lang == 'ja' %}例: 水、モバイルバッテリー、懐中電灯、常備薬{% else %}예: 생수, 보조배터리, 손전등, 상비약{% endif %}"></textarea>
           </div>
 
-          <div class="tool-row-grid pct-actions">
-            <button id="ebcp-sample" type="button">예시 넣기</button>
-            <button id="ebcp-copy" type="button">결과 복사</button>
+          <div class="tool-row-grid pct-actions ebcp-actions">
+            <button id="ebcp-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 넣기{% endif %}</button>
+            <button id="ebcp-copy" type="button" disabled>{% if page.lang == 'en' %}Copy checklist{% elsif page.lang == 'ja' %}チェックリストをコピー{% else %}체크리스트 복사{% endif %}</button>
+            <button id="ebcp-clear" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
-            <div><strong id="ebcp-total">0</strong><span>권장 항목</span></div>
-            <div><strong id="ebcp-ready-count">0</strong><span>준비됨</span></div>
-            <div><strong id="ebcp-missing-count">0</strong><span>보강 필요</span></div>
-            <div><strong id="ebcp-water">0L</strong><span>권장 생수</span></div>
+          <div class="tool-stats ebcp-stats" aria-label="{% if page.lang == 'en' %}Emergency bag summary{% elsif page.lang == 'ja' %}非常用袋の概要{% else %}비상가방 요약{% endif %}">
+            <div><strong id="ebcp-total">0</strong><span>{% if page.lang == 'en' %}Recommended{% elsif page.lang == 'ja' %}推奨項目{% else %}권장 항목{% endif %}</span></div>
+            <div><strong id="ebcp-ready-count">0</strong><span>{% if page.lang == 'en' %}Ready{% elsif page.lang == 'ja' %}準備済み{% else %}준비됨{% endif %}</span></div>
+            <div><strong id="ebcp-missing-count">0</strong><span>{% if page.lang == 'en' %}Missing{% elsif page.lang == 'ja' %}補強必要{% else %}보강 필요{% endif %}</span></div>
+            <div><strong id="ebcp-water">0L</strong><span>{% if page.lang == 'en' %}Water guide{% elsif page.lang == 'ja' %}水の目安{% else %}권장 생수{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="ebcp-summary">조건을 선택하면 비상가방 체크리스트가 여기에 표시됩니다.</p>
-          <textarea id="ebcp-output" rows="16" readonly placeholder="비상가방 체크리스트가 여기에 표시됩니다."></textarea>
+          <p class="tool-result" id="ebcp-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Choose conditions to see the emergency bag checklist.{% elsif page.lang == 'ja' %}条件を選ぶとチェックリストを表示します。{% else %}조건을 선택하면 비상가방 체크리스트가 여기에 표시됩니다.{% endif %}</p>
+          <div id="ebcp-missing-list" class="bw-list" aria-label="{% if page.lang == 'en' %}Missing priority items{% elsif page.lang == 'ja' %}不足している優先項目{% else %}우선 보강 항목{% endif %}"></div>
+          <div class="tool-row">
+            <label for="ebcp-output">{% if page.lang == 'en' %}Checklist output{% elsif page.lang == 'ja' %}チェックリスト出力{% else %}체크리스트 결과{% endif %}</label>
+            <textarea id="ebcp-output" rows="16" readonly aria-describedby="ebcp-summary" placeholder="{% if page.lang == 'en' %}Emergency bag checklist will appear here.{% elsif page.lang == 'ja' %}非常用持ち出し袋チェックリストがここに表示されます。{% else %}비상가방 체크리스트가 여기에 표시됩니다.{% endif %}"></textarea>
+          </div>
         </div>
 
       {% when 'customer-support-message-generator' %}

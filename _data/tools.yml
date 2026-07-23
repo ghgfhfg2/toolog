@@ -322,9 +322,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 가족 구성, 반려동물, 복용약, 대피 시간, 계절을 넣으면 비상가방에 먼저 챙길 물품과 보강해야 할 항목을 체크리스트로 정리해요.
-  description_en: Build an emergency bag checklist based on family members, pets, medicine needs, evacuation time, and season.
-  description_ja: 家族構成、ペット、服薬、避難時間、季節に合わせて非常用持ち出し袋のチェックリストを整理します。
+  description: 가족 구성, 반려동물, 복용약, 대피 시간, 계절, 준비한 물품을 넣으면 24~72시간 비상가방 보강 항목을 체크리스트로 정리해요.
+  description_en: Build a 24-72 hour emergency bag checklist from household size, pets, medicine needs, season, and items already prepared.
+  description_ja: 家族構成、ペット、服薬、避難時間、季節、準備済みの物から24〜72時間向けの非常用袋チェックリストを整理します。
   url: /tools/emergency-bag-checklist-planner/
   url_en: /en/tools/emergency-bag-checklist-planner/
   url_ja: /ja/tools/emergency-bag-checklist-planner/

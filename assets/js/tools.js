@@ -18512,12 +18512,206 @@
     const readyCountEl = $('ebcp-ready-count');
     const missingCountEl = $('ebcp-missing-count');
     const waterEl = $('ebcp-water');
+    const missingList = $('ebcp-missing-list');
     const sampleBtn = $('ebcp-sample');
     const copyBtn = $('ebcp-copy');
+    const clearBtn = $('ebcp-clear');
     if (!adultsEl || !output) return;
 
+    const i18n = {
+      ko: {
+        groups: { essential: '필수', custom: '맞춤', season: '계절' },
+        reasons: {
+          water: '1인당 하루 2L 안팎을 기준으로 준비합니다.',
+          food: '조리 없이 먹을 수 있는 에너지바·통조림·견과류가 좋습니다.',
+          power: '정전이나 이동 중 연락 수단을 유지합니다.',
+          light: '야간 이동과 정전 상황에 필요합니다.',
+          radio: '통신 장애 시 공지 확인에 도움이 됩니다.',
+          firstAid: '소독제, 밴드, 진통제 등 기본 처치용입니다.',
+          hygiene: '먼지, 감염, 화장실 이용 상황에 대비합니다.',
+          cash: '카드 결제가 안 될 때와 연락처 확인에 필요합니다.',
+          waterproof: '서류, 약, 전자기기를 습기에서 보호합니다.',
+          clothes: '비·땀·추위에 젖었을 때 체온 유지에 필요합니다.',
+          children: '나이와 건강 상태에 맞는 식품, 보온용품, 보조기구를 따로 챙깁니다.',
+          pet: '동반 대피 시 평소 먹는 사료와 리드줄, 배변용품이 필요합니다.',
+          medicine: '평소 먹는 약은 대체가 어려우므로 별도 방수 보관합니다.',
+          glasses: '시력 보조 도구가 없으면 이동과 정보 확인이 어려울 수 있습니다.',
+          baby: '유아는 식사와 위생용품을 성인 물품과 별도로 준비해야 합니다.',
+          summer: '더위와 탈수에 대비합니다.',
+          winter: '저체온 예방을 위해 가볍고 따뜻한 물품을 추가합니다.',
+          rain: '젖은 상태로 이동할 때 체온 저하와 물품 손상을 줄입니다.'
+        },
+        names: {
+          water: '생수',
+          food: '비상식량',
+          power: '보조배터리와 충전 케이블',
+          light: '손전등 또는 헤드랜턴',
+          radio: '휴대용 라디오 또는 재난 알림 수단',
+          firstAid: '상비약과 응급처치 키트',
+          hygiene: '마스크와 위생용품',
+          cash: '소액 현금과 비상 연락처',
+          waterproof: '방수 지퍼백',
+          clothes: '여벌 옷과 양말',
+          children: '아이·고령자용 간식과 개인 물품',
+          pet: '반려동물 사료·물그릇·배변봉투',
+          medicine: '정기 복용약 3일분과 처방 정보',
+          glasses: '예비 안경·렌즈와 세척용품',
+          baby: '기저귀·분유·아기 물티슈',
+          summer: '전해질 음료와 냉감 수건',
+          winter: '핫팩·보온포·장갑',
+          rain: '우비·방수 신발 커버'
+        },
+        invalidPeople: '인원수는 성인 1~10명, 아이·고령자 0~10명 범위로 조정해 주세요.',
+        summary: (people, hours, total, missing) => `${people}명 기준 ${hours}시간 대비: ${total}개 권장 항목 중 ${missing}개를 보강하면 좋습니다.`,
+        allReady: '모든 권장 항목이 준비된 것으로 보입니다. 유통기한과 배터리 잔량을 확인하세요.',
+        noneReady: '아직 입력된 준비 물품이 없습니다.',
+        copied: '체크리스트를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다. 결과를 직접 선택해 복사해 주세요.',
+        cleared: '조건을 기본값으로 초기화했습니다.',
+        title: '비상가방 체크리스트',
+        basis: (people, hours, water) => `- 기준: ${people}명 / ${hours}시간 / 권장 생수 약 ${water}L`,
+        missingHeading: '## 먼저 보강할 항목',
+        readyHeading: '## 준비된 항목',
+        tipsHeading: '## 점검 팁',
+        tips: [
+          '생수·간식·약·배터리는 분기마다 교체하거나 상태를 확인하세요.',
+          '가족별 작은 가방으로 나누면 한 사람이 모든 무게를 부담하지 않아도 됩니다.',
+          '실제 대피 판단은 재난 문자와 지자체 안내를 우선하세요.'
+        ],
+        sampleReady: '생수, 보조배터리, 손전등, 마스크, 현금',
+        copyDefault: '체크리스트 복사'
+      },
+      en: {
+        groups: { essential: 'Essential', custom: 'Personalized', season: 'Seasonal' },
+        reasons: {
+          water: 'Plan around roughly 2 liters per person per day.',
+          food: 'Energy bars, canned food, and nuts work well because they need no cooking.',
+          power: 'Keeps phones and small devices usable during outages or travel.',
+          light: 'Needed for night movement and power outages.',
+          radio: 'Helps you receive alerts when mobile networks are unreliable.',
+          firstAid: 'Covers basic care such as disinfectant, bandages, and pain relief.',
+          hygiene: 'Prepares for dust, infection risk, and bathroom situations.',
+          cash: 'Useful when card payments fail and for checking emergency contacts.',
+          waterproof: 'Protects documents, medicine, and electronics from moisture.',
+          clothes: 'Helps preserve body temperature after rain, sweat, or cold exposure.',
+          children: 'Pack age-appropriate food, warmth items, and assistive supplies separately.',
+          pet: 'Pets need familiar food, a leash, bowls, and waste bags during evacuation.',
+          medicine: 'Regular medicine is hard to replace, so keep it waterproofed separately.',
+          glasses: 'Vision aids can be critical for moving safely and reading instructions.',
+          baby: 'Babies need feeding and hygiene supplies separate from adult items.',
+          summer: 'Helps with heat and dehydration risk.',
+          winter: 'Adds lightweight warmth items to reduce hypothermia risk.',
+          rain: 'Reduces body-temperature loss and damage to supplies while moving wet.'
+        },
+        names: {
+          water: 'Drinking water',
+          food: 'Emergency food',
+          power: 'Power bank and charging cables',
+          light: 'Flashlight or headlamp',
+          radio: 'Portable radio or emergency alert method',
+          firstAid: 'First-aid kit and basic medicine',
+          hygiene: 'Masks and hygiene supplies',
+          cash: 'Small cash and emergency contacts',
+          waterproof: 'Waterproof zipper bags',
+          clothes: 'Spare clothes and socks',
+          children: 'Snacks and personal supplies for children or older adults',
+          pet: 'Pet food, bowl, leash, and waste bags',
+          medicine: '3-day regular medicine supply and prescription info',
+          glasses: 'Spare glasses or contacts and cleaning supplies',
+          baby: 'Diapers, formula, and baby wipes',
+          summer: 'Electrolyte drink and cooling towel',
+          winter: 'Hand warmers, thermal blanket, and gloves',
+          rain: 'Raincoat and waterproof shoe covers'
+        },
+        invalidPeople: 'Adjust the people count to adults 1-10 and children or older adults 0-10.',
+        summary: (people, hours, total, missing) => `For ${people} people and ${hours} hours: reinforce ${missing} of ${total} recommended items.`,
+        allReady: 'All recommended items appear to be ready. Check expiry dates and battery levels.',
+        noneReady: 'No prepared items have been entered yet.',
+        copied: 'Copied the checklist.',
+        copyFail: 'Automatic copy is unavailable. Select the result and copy it manually.',
+        cleared: 'Reset the conditions to defaults.',
+        title: 'Emergency Bag Checklist',
+        basis: (people, hours, water) => `- Basis: ${people} people / ${hours} hours / about ${water}L of water`,
+        missingHeading: '## Items to reinforce first',
+        readyHeading: '## Prepared items',
+        tipsHeading: '## Review tips',
+        tips: [
+          'Review or replace water, snacks, medicine, and batteries each quarter.',
+          'Split supplies into smaller bags so one person does not carry all the weight.',
+          'Prioritize local alerts and official instructions when deciding whether to evacuate.'
+        ],
+        sampleReady: 'water, power bank, flashlight, masks, cash',
+        copyDefault: 'Copy checklist'
+      },
+      ja: {
+        groups: { essential: '必須', custom: '個別', season: '季節' },
+        reasons: {
+          water: '1人1日あたり約2Lを目安に準備します。',
+          food: '調理せず食べられるエナジーバー、缶詰、ナッツが便利です。',
+          power: '停電時や移動中に連絡手段を維持します。',
+          light: '夜間移動や停電時に必要です。',
+          radio: '通信障害時に情報を確認しやすくなります。',
+          firstAid: '消毒、絆創膏、鎮痛薬など基本的な処置に使います。',
+          hygiene: '粉じん、感染、トイレ利用に備えます。',
+          cash: 'カード決済が使えない時や緊急連絡先確認に役立ちます。',
+          waterproof: '書類、薬、電子機器を湿気から守ります。',
+          clothes: '雨、汗、寒さで濡れた時の体温維持に必要です。',
+          children: '年齢や健康状態に合う食品、防寒用品、補助具を別に準備します。',
+          pet: '同行避難では普段のフード、リード、食器、排泄用品が必要です。',
+          medicine: '常用薬は代替しにくいため、防水して別に保管します。',
+          glasses: '視力補助具がないと移動や情報確認が難しくなることがあります。',
+          baby: '乳幼児には食事と衛生用品を大人用とは別に準備します。',
+          summer: '暑さと脱水に備えます。',
+          winter: '低体温を防ぐため、軽くて暖かい物を追加します。',
+          rain: '濡れた状態で移動する時の体温低下と物品の損傷を減らします。'
+        },
+        names: {
+          water: '飲料水',
+          food: '非常食',
+          power: 'モバイルバッテリーと充電ケーブル',
+          light: '懐中電灯またはヘッドライト',
+          radio: '携帯ラジオまたは防災情報手段',
+          firstAid: '常備薬と応急処置キット',
+          hygiene: 'マスクと衛生用品',
+          cash: '少額現金と緊急連絡先',
+          waterproof: '防水ジッパーバッグ',
+          clothes: '着替えと靴下',
+          children: '子ども・高齢者用の軽食と個人物品',
+          pet: 'ペットフード、食器、リード、排泄袋',
+          medicine: '常用薬3日分と処方情報',
+          glasses: '予備の眼鏡・コンタクトと洗浄用品',
+          baby: 'おむつ、ミルク、赤ちゃん用おしりふき',
+          summer: '経口補水飲料と冷感タオル',
+          winter: 'カイロ、保温シート、手袋',
+          rain: 'レインコートと防水シューズカバー'
+        },
+        invalidPeople: '人数は大人1〜10人、子ども・高齢者0〜10人の範囲に調整してください。',
+        summary: (people, hours, total, missing) => `${people}人・${hours}時間想定: 推奨${total}項目のうち${missing}項目を補強するとよさそうです。`,
+        allReady: 'すべての推奨項目が準備済みに見えます。期限と電池残量を確認してください。',
+        noneReady: '準備済みの物はまだ入力されていません。',
+        copied: 'チェックリストをコピーしました。',
+        copyFail: '自動コピーを利用できません。結果を選択して手動でコピーしてください。',
+        cleared: '条件を初期値に戻しました。',
+        title: '非常用持ち出し袋チェックリスト',
+        basis: (people, hours, water) => `- 基準: ${people}人 / ${hours}時間 / 水の目安 約${water}L`,
+        missingHeading: '## 先に補強したい項目',
+        readyHeading: '## 準備済みの項目',
+        tipsHeading: '## 点検のヒント',
+        tips: [
+          '水、軽食、薬、電池は四半期ごとに交換または状態確認をしてください。',
+          '家族ごとの小さなバッグに分けると、一人に重さが集中しません。',
+          '実際の避難判断では緊急速報と自治体の案内を優先してください。'
+        ],
+        sampleReady: '水、モバイルバッテリー、懐中電灯、マスク、現金',
+        copyDefault: 'チェックリストをコピー'
+      }
+    }[pageLang] || {};
+
     const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
+      try {
+        if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(text);
+        else throw new Error('clipboard');
+      }
       catch (_) {
         const ta = document.createElement('textarea');
         ta.value = text;
@@ -18530,39 +18724,59 @@
       }
     };
 
-    const item = (name, group, reason, aliases = []) => ({ name, group, reason, aliases: [name, ...aliases].map(v => v.toLowerCase()) });
+    const setSummary = (text, state = '') => {
+      summary.textContent = text;
+      summary.dataset.state = state;
+    };
+
+    const clampInt = (el, min, max, fallback) => {
+      const raw = String(el.value || '').trim();
+      const parsed = Number(raw);
+      const valid = Number.isInteger(parsed) && parsed >= min && parsed <= max;
+      el.setAttribute('aria-invalid', valid || !raw ? 'false' : 'true');
+      if (!raw || !Number.isFinite(parsed)) return fallback;
+      return Math.min(max, Math.max(min, Math.round(parsed)));
+    };
+
+    const normalize = (value) => String(value || '').toLowerCase().normalize('NFKC').replace(/\s+/g, ' ').trim();
+    const item = (key, group, aliases = []) => ({
+      name: i18n.names[key],
+      group: i18n.groups[group],
+      reason: i18n.reasons[key],
+      aliases: [i18n.names[key], ...aliases].map(normalize).filter(Boolean)
+    });
     const baseItems = [
-      item('생수', '필수', '1인당 하루 2L 안팎을 기준으로 준비합니다.', ['물', 'water']),
-      item('비상식량', '필수', '조리 없이 먹을 수 있는 에너지바·통조림·견과류가 좋습니다.', ['간식', '통조림', '에너지바']),
-      item('보조배터리와 충전 케이블', '필수', '정전이나 이동 중 연락 수단을 유지합니다.', ['보조배터리', '충전기', '케이블']),
-      item('손전등 또는 헤드랜턴', '필수', '야간 이동과 정전 상황에 필요합니다.', ['손전등', '랜턴']),
-      item('휴대용 라디오 또는 재난 알림 수단', '필수', '통신 장애 시 공지 확인에 도움이 됩니다.', ['라디오']),
-      item('상비약과 응급처치 키트', '필수', '소독제, 밴드, 진통제 등 기본 처치용입니다.', ['상비약', '구급상자', '밴드']),
-      item('마스크와 위생용품', '필수', '먼지, 감염, 화장실 이용 상황에 대비합니다.', ['마스크', '물티슈', '휴지']),
-      item('소액 현금과 비상 연락처', '필수', '카드 결제가 안 될 때와 연락처 확인에 필요합니다.', ['현금', '연락처']),
-      item('방수 지퍼백', '필수', '서류, 약, 전자기기를 습기에서 보호합니다.', ['지퍼백', '방수팩']),
-      item('여벌 옷과 양말', '필수', '비·땀·추위에 젖었을 때 체온 유지에 필요합니다.', ['옷', '양말'])
+      item('water', 'essential', ['물', 'water', 'drinking water', '水', '飲料水']),
+      item('food', 'essential', ['간식', '통조림', '에너지바', 'food', 'snack', 'canned food', '非常食', '軽食']),
+      item('power', 'essential', ['보조배터리', '충전기', '케이블', 'power bank', 'charger', 'battery', 'モバイルバッテリー', '充電']),
+      item('light', 'essential', ['손전등', '랜턴', 'flashlight', 'headlamp', '懐中電灯', 'ライト']),
+      item('radio', 'essential', ['라디오', 'alert', 'radio', '防災情報', 'ラジオ']),
+      item('firstAid', 'essential', ['상비약', '구급상자', '밴드', 'first aid', 'medicine', '常備薬', '救急']),
+      item('hygiene', 'essential', ['마스크', '물티슈', '휴지', 'mask', 'wipes', 'tissue', 'マスク', '衛生']),
+      item('cash', 'essential', ['현금', '연락처', 'cash', 'contacts', '現金', '連絡先']),
+      item('waterproof', 'essential', ['지퍼백', '방수팩', 'waterproof', 'zip bag', '防水', 'ジッパー']),
+      item('clothes', 'essential', ['옷', '양말', 'clothes', 'socks', '着替え', '靴下'])
     ];
 
     const build = () => {
-      const adults = Math.max(1, Number(adultsEl.value || 1));
-      const children = Math.max(0, Number(childrenEl.value || 0));
+      const adults = clampInt(adultsEl, 1, 10, 1);
+      const children = clampInt(childrenEl, 0, 10, 0);
       const people = adults + children;
       const hours = Number(hoursEl.value || 48);
       const days = Math.max(1, Math.ceil(hours / 24));
       const season = seasonEl.value || 'normal';
       const items = [...baseItems];
 
-      if (children > 0) items.push(item('아이·고령자용 간식과 개인 물품', '맞춤', '나이와 건강 상태에 맞는 식품, 보온용품, 보조기구를 따로 챙깁니다.', ['아이 간식', '고령자 물품']));
-      if (petEl.checked) items.push(item('반려동물 사료·물그릇·배변봉투', '맞춤', '동반 대피 시 평소 먹는 사료와 리드줄, 배변용품이 필요합니다.', ['사료', '배변봉투', '리드줄']));
-      if (medicineEl.checked) items.push(item('정기 복용약 3일분과 처방 정보', '맞춤', '평소 먹는 약은 대체가 어려우므로 별도 방수 보관합니다.', ['복용약', '처방전', '약']));
-      if (glassesEl.checked) items.push(item('예비 안경·렌즈와 세척용품', '맞춤', '시력 보조 도구가 없으면 이동과 정보 확인이 어려울 수 있습니다.', ['안경', '렌즈']));
-      if (babyEl.checked) items.push(item('기저귀·분유·아기 물티슈', '맞춤', '유아는 식사와 위생용품을 성인 물품과 별도로 준비해야 합니다.', ['기저귀', '분유', '아기 물티슈']));
-      if (season === 'summer') items.push(item('전해질 음료와 냉감 수건', '계절', '더위와 탈수에 대비합니다.', ['전해질', '냉감 수건']));
-      if (season === 'winter') items.push(item('핫팩·보온포·장갑', '계절', '저체온 예방을 위해 가볍고 따뜻한 물품을 추가합니다.', ['핫팩', '보온포', '장갑']));
-      if (season === 'rain') items.push(item('우비·방수 신발 커버', '계절', '젖은 상태로 이동할 때 체온 저하와 물품 손상을 줄입니다.', ['우비', '방수']));
+      if (children > 0) items.push(item('children', 'custom', ['아이 간식', '고령자 물품', 'child supplies', 'older adult supplies', '子ども', '高齢者']));
+      if (petEl.checked) items.push(item('pet', 'custom', ['사료', '배변봉투', '리드줄', 'pet food', 'leash', 'waste bags', 'ペットフード', 'リード']));
+      if (medicineEl.checked) items.push(item('medicine', 'custom', ['복용약', '처방전', '약', 'prescription', 'regular medicine', '常用薬', '処方']));
+      if (glassesEl.checked) items.push(item('glasses', 'custom', ['안경', '렌즈', 'glasses', 'contacts', '眼鏡', 'コンタクト']));
+      if (babyEl.checked) items.push(item('baby', 'custom', ['기저귀', '분유', '아기 물티슈', 'diapers', 'formula', 'baby wipes', 'おむつ', 'ミルク']));
+      if (season === 'summer') items.push(item('summer', 'season', ['전해질', '냉감 수건', 'electrolyte', 'cooling towel', '経口補水', '冷感']));
+      if (season === 'winter') items.push(item('winter', 'season', ['핫팩', '보온포', '장갑', 'warmers', 'thermal blanket', 'gloves', 'カイロ', '手袋']));
+      if (season === 'rain') items.push(item('rain', 'season', ['우비', '방수', 'raincoat', 'waterproof', 'レインコート', '防水']));
 
-      const readyRaw = (readyEl.value || '').toLowerCase().split(/[\n,]/).map(v => v.trim()).filter(Boolean);
+      const readyRaw = (readyEl.value || '').split(/[\n,]/).map(normalize).filter(Boolean).slice(0, 100);
       const rows = items.map(it => {
         const ready = readyRaw.some(r => it.aliases.some(a => r.includes(a) || a.includes(r)));
         return { ...it, ready };
@@ -18574,21 +18788,24 @@
       readyCountEl.textContent = formatNum(readyCount);
       missingCountEl.textContent = formatNum(missing.length);
       waterEl.textContent = `${water}L`;
-      summary.textContent = `${people}명 기준 ${hours}시간 대비: ${rows.length}개 권장 항목 중 ${missing.length}개를 보강하면 좋습니다.`;
+      copyBtn.disabled = false;
+      const hasInvalidPeople = adultsEl.getAttribute('aria-invalid') === 'true' || childrenEl.getAttribute('aria-invalid') === 'true';
+      setSummary(hasInvalidPeople ? i18n.invalidPeople : i18n.summary(people, hours, rows.length, missing.length), hasInvalidPeople ? 'error' : 'success');
+      if (missingList) {
+        missingList.innerHTML = missing.slice(0, 6).map(r => `<div><strong>${r.name}</strong><span>${r.group} · ${r.reason}</span></div>`).join('');
+      }
       const lines = [
-        '# 비상가방 체크리스트',
-        `- 기준: ${people}명 / ${hours}시간 / 권장 생수 약 ${water}L`,
+        `# ${i18n.title}`,
+        i18n.basis(people, hours, water),
         '',
-        '## 먼저 보강할 항목',
-        ...(missing.length ? missing.map(r => `- [ ] ${r.name} (${r.group}) — ${r.reason}`) : ['- 모든 권장 항목이 준비된 것으로 보입니다. 유통기한과 배터리 잔량을 확인하세요.']),
+        i18n.missingHeading,
+        ...(missing.length ? missing.map(r => `- [ ] ${r.name} (${r.group}) - ${r.reason}`) : [`- ${i18n.allReady}`]),
         '',
-        '## 준비된 항목',
-        ...(rows.filter(r => r.ready).length ? rows.filter(r => r.ready).map(r => `- [x] ${r.name}`) : ['- 아직 입력된 준비 물품이 없습니다.']),
+        i18n.readyHeading,
+        ...(rows.filter(r => r.ready).length ? rows.filter(r => r.ready).map(r => `- [x] ${r.name}`) : [`- ${i18n.noneReady}`]),
         '',
-        '## 점검 팁',
-        '- 생수·간식·약·배터리는 분기마다 교체하거나 상태를 확인하세요.',
-        '- 가족별 작은 가방으로 나누면 한 사람이 모든 무게를 부담하지 않아도 됩니다.',
-        '- 실제 대피 판단은 재난 문자와 지자체 안내를 우선하세요.'
+        i18n.tipsHeading,
+        ...i18n.tips.map(tip => `- ${tip}`)
       ];
       output.value = lines.join('\n');
     };
@@ -18596,15 +18813,29 @@
     sampleBtn?.addEventListener('click', () => {
       adultsEl.value = '2'; childrenEl.value = '1'; hoursEl.value = '72'; seasonEl.value = 'rain';
       petEl.checked = true; medicineEl.checked = true; glassesEl.checked = false; babyEl.checked = false;
-      readyEl.value = '생수, 보조배터리, 손전등, 마스크, 현금';
+      readyEl.value = i18n.sampleReady;
       build();
+      readyEl.focus();
     });
     copyBtn?.addEventListener('click', async () => {
       if (!output.value.trim()) return;
-      await copyText(output.value.trim());
-      const old = copyBtn.textContent;
-      copyBtn.textContent = '복사 완료';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      try {
+        await copyText(output.value.trim());
+        const old = copyBtn.textContent;
+        copyBtn.textContent = i18n.copied;
+        setSummary(i18n.copied, 'success');
+        setTimeout(() => { copyBtn.textContent = old || i18n.copyDefault; }, 900);
+      } catch (_) {
+        setSummary(i18n.copyFail, 'error');
+      }
+    });
+    clearBtn?.addEventListener('click', () => {
+      adultsEl.value = '1'; childrenEl.value = '0'; hoursEl.value = '48'; seasonEl.value = 'normal';
+      [petEl, medicineEl, glassesEl, babyEl].forEach(el => { el.checked = false; });
+      readyEl.value = '';
+      build();
+      setSummary(i18n.cleared);
+      adultsEl.focus();
     });
     [adultsEl, childrenEl, hoursEl, seasonEl, petEl, medicineEl, glassesEl, babyEl, readyEl].forEach(el => {
       el?.addEventListener('input', build);
