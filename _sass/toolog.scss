@@ -850,6 +850,14 @@ textarea:focus-visible {
 }
 .loan-ui #loan-help[data-state="error"] { color: #fca5a5; }
 .loan-ui #loan-help[data-state="success"] { color: #86efac; }
+.bfat-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.bfat-ui [data-disabled="true"] { opacity: .68; }
+.bfat-ui .tool-result[data-state="error"] { color: #fca5a5; }
+.bfat-ui .tool-result[data-state="success"] { color: #86efac; }
+.bfat-ui button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
 .maie-ui textarea[aria-invalid="true"] { border-color: #ef4444; }
 .maie-ui .tool-result[data-state="error"] { border-color: #ef4444; }
 .maie-ui .tool-result[data-state="warning"] { border-color: #f59e0b; }

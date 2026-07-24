@@ -1387,13 +1387,17 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: US Navy 공식을 기반으로 체지방률·체지방량·제지방량을 빠르게 계산해요.
-  description_en: Estimate body fat percentage, fat mass, and lean mass instantly using the U.S. Navy method.
-  description_ja: U.S. Navy方式で体脂肪率・脂肪量・除脂肪体重をすばやく計算します。
+  description: 키·목·허리·몸무게와 여성 엉덩이 둘레를 넣어 US Navy 공식 기반 체지방률, 체지방량, 제지방량을 범위 검증과 함께 계산해요.
+  description_en: Estimate body fat percentage, fat mass, and lean mass from height, neck, waist, weight, and female hip measurement with safer range checks.
+  description_ja: 身長・首・腹囲・体重、女性はヒップを入力し、範囲チェック付きで体脂肪率・脂肪量・除脂肪体重を推定します。
   url: /tools/body-fat-calculator/
   url_en: /en/tools/body-fat-calculator/
   url_ja: /ja/tools/body-fat-calculator/
   thumbnail: /assets/thumbs/body-fat-calculator.svg
+  thumbnail_en: /assets/thumbs/en/body-fat-calculator.svg
+  thumbnail_ja: /assets/thumbs/ja/body-fat-calculator.svg
+  tool_type: calculator
+  topic_cluster: health
 
 - id: jeonse-vs-wolse-calculator
   title: 전세 vs 월세 계산기

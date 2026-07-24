@@ -3871,6 +3871,7 @@
     const help = document.getElementById('bfat-help');
     const copyBtn = document.getElementById('bfat-copy');
     const resetBtn = document.getElementById('bfat-reset');
+    const sampleBtn = document.getElementById('bfat-sample');
 
     if (!sex || !height || !neck || !waist || !hip || !weight || !outPercent || !outCategory || !outFatMass || !outLeanMass || !help) return;
 
@@ -3878,7 +3879,9 @@
       ko: {
         waiting: '입력 대기',
         idle: '키·목·허리·몸무게를 입력하면 체지방률을 계산합니다. 여성은 엉덩이 둘레도 입력하세요.',
-        invalid: '치수가 올바른지 확인하세요. (허리 > 목, 여성은 허리+엉덩이 > 목)',
+        invalid: '치수가 올바른지 확인하세요. (남성은 허리 > 목, 여성은 허리+엉덩이 > 목)',
+        range: '입력값이 지원 범위를 벗어났습니다. 아래 범위 안내를 확인해 주세요.',
+        copiedEmpty: '복사할 계산 결과가 아직 없습니다.',
         categoriesMale: ['필수지방', '운동선수', '피트니스', '평균', '높음'],
         categoriesFemale: ['필수지방', '운동선수', '피트니스', '평균', '높음'],
         helpSummary: (percent, category) => `US Navy 공식 · ${percent} (${category})`,
@@ -3890,6 +3893,8 @@
         waiting: 'Waiting for input',
         idle: 'Enter height, neck, waist, and weight. For female mode, add hip measurement.',
         invalid: 'Check measurements. (waist > neck, and for female: waist + hip > neck)',
+        range: 'One or more values are outside the supported range. Check the range note below.',
+        copiedEmpty: 'There is no calculation result to copy yet.',
         categoriesMale: ['Essential', 'Athletes', 'Fitness', 'Average', 'High'],
         categoriesFemale: ['Essential', 'Athletes', 'Fitness', 'Average', 'High'],
         helpSummary: (percent, category) => `US Navy formula · ${percent} (${category})`,
@@ -3901,6 +3906,8 @@
         waiting: '入力待ち',
         idle: '身長・首・腹囲・体重を入力してください。女性モードはヒップも入力します。',
         invalid: '測定値を確認してください。（腹囲 > 首、女性は 腹囲+ヒップ > 首）',
+        range: '対応範囲外の値があります。下の範囲案内を確認してください。',
+        copiedEmpty: 'コピーできる計算結果がまだありません。',
         categoriesMale: ['必須脂肪', 'アスリート', 'フィットネス', '平均', '高め'],
         categoriesFemale: ['必須脂肪', 'アスリート', 'フィットネス', '平均', '高め'],
         helpSummary: (percent, category) => `U.S. Navy方式 · ${percent}（${category}）`,
@@ -3909,7 +3916,7 @@
         copyDefault: '結果をコピー'
       }
     }[pageLang] || {
-      waiting: '입력 대기', idle: '값을 입력하세요.', invalid: '입력값 확인',
+      waiting: '입력 대기', idle: '값을 입력하세요.', invalid: '입력값 확인', range: '지원 범위를 확인하세요.', copiedEmpty: '복사할 계산 결과가 없습니다.',
       categoriesMale: ['필수지방','운동선수','피트니스','평균','높음'],
       categoriesFemale: ['필수지방','운동선수','피트니스','평균','높음'],
       helpSummary: (percent, category) => `US Navy 공식 · ${percent} (${category})`,
@@ -3942,12 +3949,18 @@
       return c[4];
     };
 
-    const setIdle = (msg = t.idle) => {
+    const fields = [height, neck, waist, hip, weight];
+    const setFieldInvalid = (el, invalid) => el?.setAttribute('aria-invalid', invalid ? 'true' : 'false');
+    const clearFieldInvalid = () => fields.forEach((el) => setFieldInvalid(el, false));
+
+    const setIdle = (msg = t.idle, state = '') => {
       outPercent.textContent = '-';
       outCategory.textContent = t.waiting;
       outFatMass.textContent = '-';
       outLeanMass.textContent = '-';
       help.textContent = msg;
+      help.dataset.state = state;
+      if (copyBtn) copyBtn.disabled = true;
     };
 
     const within = (value, min, max) => value >= min && value <= max;
@@ -3956,24 +3969,44 @@
       const isFemale = sex.value === 'female';
       hip.disabled = !isFemale;
       hip.setAttribute('aria-disabled', String(!isFemale));
-      if (!isFemale) hip.value = '';
+      hip.closest('div')?.setAttribute('data-disabled', String(!isFemale));
+      if (!isFemale) {
+        hip.value = '';
+        setFieldInvalid(hip, false);
+      }
     };
 
     const render = () => {
       const isFemale = sex.value === 'female';
-      const h = Number(height.value || 0);
-      const n = Number(neck.value || 0);
-      const w = Number(waist.value || 0);
-      const hp = Number(hip.value || 0);
-      const kg = Number(weight.value || 0);
+      const raw = {
+        h: height.value.trim(),
+        n: neck.value.trim(),
+        w: waist.value.trim(),
+        hp: hip.value.trim(),
+        kg: weight.value.trim()
+      };
+      const h = Number(raw.h);
+      const n = Number(raw.n);
+      const w = Number(raw.w);
+      const hp = Number(raw.hp);
+      const kg = Number(raw.kg);
+      clearFieldInvalid();
 
-      if (!(h > 0) || !(n > 0) || !(w > 0) || !(kg > 0) || (isFemale && !(hp > 0))) {
+      if (!raw.h || !raw.n || !raw.w || !raw.kg || (isFemale && !raw.hp)) {
         setIdle();
         return;
       }
 
-      if (!within(h, 120, 230) || !within(n, 20, 70) || !within(w, 40, 180) || !within(kg, 30, 250) || (isFemale && !within(hp, 50, 200))) {
-        setIdle(t.invalid);
+      const invalidFields = [
+        [height, !Number.isFinite(h) || !within(h, 120, 230)],
+        [neck, !Number.isFinite(n) || !within(n, 20, 70)],
+        [waist, !Number.isFinite(w) || !within(w, 40, 180)],
+        [weight, !Number.isFinite(kg) || !within(kg, 30, 250)],
+        [hip, isFemale && (!Number.isFinite(hp) || !within(hp, 50, 200))]
+      ];
+      invalidFields.forEach(([el, invalid]) => setFieldInvalid(el, invalid));
+      if (invalidFields.some(([, invalid]) => invalid)) {
+        setIdle(t.range, 'error');
         return;
       }
 
@@ -3985,16 +4018,16 @@
 
       let denominator;
       if (isFemale) {
-        if ((wi + hpi) <= ni) { setIdle(t.invalid); return; }
+        if ((wi + hpi) <= ni) { setFieldInvalid(neck, true); setFieldInvalid(waist, true); setFieldInvalid(hip, true); setIdle(t.invalid, 'error'); return; }
         denominator = 1.29579 - 0.35004 * Math.log10(wi + hpi - ni) + 0.22100 * Math.log10(hi);
       } else {
-        if (wi <= ni) { setIdle(t.invalid); return; }
+        if (wi <= ni) { setFieldInvalid(neck, true); setFieldInvalid(waist, true); setIdle(t.invalid, 'error'); return; }
         denominator = 1.0324 - 0.19077 * Math.log10(wi - ni) + 0.15456 * Math.log10(hi);
       }
 
-      if (!(denominator > 0)) { setIdle(t.invalid); return; }
+      if (!(denominator > 0)) { setIdle(t.invalid, 'error'); return; }
       const bf = 495 / denominator - 450;
-      if (!Number.isFinite(bf) || bf <= 0 || bf >= 70) { setIdle(t.invalid); return; }
+      if (!Number.isFinite(bf) || bf <= 0 || bf >= 70) { setIdle(t.invalid, 'error'); return; }
 
       const fatMass = kg * (bf / 100);
       const leanMass = kg - fatMass;
@@ -4005,6 +4038,8 @@
       outFatMass.textContent = `${fatMass.toLocaleString(numberLocale, { maximumFractionDigits: 1 })}kg`;
       outLeanMass.textContent = `${leanMass.toLocaleString(numberLocale, { maximumFractionDigits: 1 })}kg`;
       help.textContent = t.helpSummary(outPercent.textContent, category);
+      help.dataset.state = 'success';
+      if (copyBtn) copyBtn.disabled = false;
     };
 
     [sex, height, neck, waist, hip, weight].forEach((el) => el?.addEventListener('input', render));
@@ -4015,27 +4050,40 @@
 
     resetBtn?.addEventListener('click', () => {
       sex.value = 'male';
-      height.value = 170;
-      neck.value = 38;
-      waist.value = 82;
+      height.value = '';
+      neck.value = '';
+      waist.value = '';
       hip.value = '';
-      weight.value = 68;
+      weight.value = '';
+      toggleHipField();
+      clearFieldInvalid();
+      setIdle();
+      height.focus();
+    });
+
+    sampleBtn?.addEventListener('click', () => {
+      sex.value = 'female';
+      height.value = 165;
+      neck.value = 32;
+      waist.value = 95;
+      hip.value = 108;
+      weight.value = 65;
       toggleHipField();
       render();
+      height.focus();
     });
 
     copyBtn?.addEventListener('click', async () => {
-      if (outPercent.textContent === '-') return;
+      if (outPercent.textContent === '-') {
+        setIdle(t.copiedEmpty, 'error');
+        return;
+      }
       await copyText(t.copyText(outPercent.textContent, outCategory.textContent, outFatMass.textContent, outLeanMass.textContent));
       const old = copyBtn.textContent;
       copyBtn.textContent = t.copied;
       setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
     });
 
-    if (!height.value) height.value = 170;
-    if (!neck.value) neck.value = 38;
-    if (!waist.value) waist.value = 82;
-    if (!weight.value) weight.value = 68;
     toggleHipField();
     render();
   }
