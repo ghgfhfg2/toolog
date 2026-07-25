@@ -12786,6 +12786,10 @@
     const outDecimal = document.getElementById('frac-decimal');
     const outPercent = document.getElementById('frac-percent');
     const help = document.getElementById('frac-help');
+    const expression = document.getElementById('frac-expression');
+    const applyExpressionBtn = document.getElementById('frac-apply-expression');
+    const sampleBtn = document.getElementById('frac-sample');
+    const normalizeBtn = document.getElementById('frac-normalize');
     const swapBtn = document.getElementById('frac-swap');
     const copyBtn = document.getElementById('frac-copy');
     const resetBtn = document.getElementById('frac-reset');
@@ -12800,9 +12804,14 @@
         tooLarge: '정확한 계산을 위해 각 값은 -10,000,000부터 10,000,000까지 입력해 주세요.',
         zeroDenominator: '분모는 0이 될 수 없습니다.',
         divZero: '0으로 나누는 연산은 할 수 없습니다.',
+        expressionInvalid: '식은 1/2 + 1/3처럼 “분자/분모 연산 분자/분모” 형식으로 입력해 주세요.',
+        expressionApplied: '빠른 식을 입력칸에 반영했습니다.',
+        signsNormalized: '분모의 음수 부호를 분자로 옮겨 정리했습니다.',
+        sampleLoaded: '예시 분수 계산을 불러왔습니다.',
         mixedNone: '해당 없음',
         copy: (r, m, d, p) => `분수 계산 결과 | 약분 결과 ${r} | 대분수 ${m} | 소수값 ${d} | 백분율 ${p}`,
         copied: '복사됨',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
         copyDefault: '결과 복사'
       },
       en: {
@@ -12812,9 +12821,14 @@
         tooLarge: 'For an exact result, enter each value from -10,000,000 to 10,000,000.',
         zeroDenominator: 'Denominator cannot be 0.',
         divZero: 'Division by zero is not allowed.',
+        expressionInvalid: 'Use an expression like 1/2 + 1/3: numerator/denominator, operator, numerator/denominator.',
+        expressionApplied: 'Applied the quick expression to the fraction fields.',
+        signsNormalized: 'Moved negative denominator signs to the numerators.',
+        sampleLoaded: 'Loaded an example fraction calculation.',
         mixedNone: 'N/A',
         copy: (r, m, d, p) => `Fraction result | Simplified ${r} | Mixed ${m} | Decimal ${d} | Percent ${p}`,
         copied: 'Copied',
+        copyFail: 'Automatic copy is unavailable.',
         copyDefault: 'Copy result'
       },
       ja: {
@@ -12824,9 +12838,14 @@
         tooLarge: '正確に計算するため、各値は -10,000,000 から 10,000,000 の範囲で入力してください。',
         zeroDenominator: '分母に 0 は使えません。',
         divZero: '0 で割ることはできません。',
+        expressionInvalid: '式は 1/2 + 1/3 のように「分子/分母 演算 分子/分母」で入力してください。',
+        expressionApplied: '式を分数入力欄に反映しました。',
+        signsNormalized: '分母の負号を分子側へ整理しました。',
+        sampleLoaded: '例の分数計算を入力しました。',
         mixedNone: '該当なし',
         copy: (r, m, d, p) => `分数計算結果 | 約分結果 ${r} | 帯分数 ${m} | 小数 ${d} | 百分率 ${p}`,
         copied: 'コピー完了',
+        copyFail: '自動コピーを利用できません。',
         copyDefault: '結果をコピー'
       }
     }[pageLang] || {
@@ -12836,9 +12855,14 @@
       tooLarge: '정확한 계산을 위해 각 값은 -10,000,000부터 10,000,000까지 입력해 주세요.',
       zeroDenominator: '분모는 0이 될 수 없습니다.',
       divZero: '0으로 나누는 연산은 할 수 없습니다.',
+      expressionInvalid: '식은 1/2 + 1/3처럼 “분자/분모 연산 분자/분모” 형식으로 입력해 주세요.',
+      expressionApplied: '빠른 식을 입력칸에 반영했습니다.',
+      signsNormalized: '분모의 음수 부호를 분자로 옮겨 정리했습니다.',
+      sampleLoaded: '예시 분수 계산을 불러왔습니다.',
       mixedNone: '해당 없음',
       copy: (r, m, d, p) => `분수 계산 결과 | 약분 결과 ${r} | 대분수 ${m} | 소수값 ${d} | 백분율 ${p}`,
       copied: '복사됨',
+      copyFail: '자동 복사를 사용할 수 없습니다.',
       copyDefault: '결과 복사'
     };
 
@@ -12865,12 +12889,16 @@
     const setInvalid = (invalidInputs = []) => {
       inputs.forEach((input) => input.setAttribute('aria-invalid', invalidInputs.includes(input) ? 'true' : 'false'));
     };
-    const setIdle = (msg, invalidInputs = []) => {
+    const setHelp = (msg, state = '') => {
+      help.textContent = msg;
+      help.dataset.state = state;
+    };
+    const setIdle = (msg, invalidInputs = [], state = '') => {
       outResult.textContent = '-';
       outMixed.textContent = '-';
       outDecimal.textContent = '-';
       outPercent.textContent = '-';
-      help.textContent = msg;
+      setHelp(msg, state);
       setInvalid(invalidInputs);
       if (copyBtn) copyBtn.disabled = true;
     };
@@ -12885,23 +12913,23 @@
       const parsed = inputs.map(readInteger);
       const emptyInputs = inputs.filter((_, index) => parsed[index].error === 'empty');
       if (emptyInputs.length) {
-        setIdle(text.empty, emptyInputs);
+        setIdle(text.empty, emptyInputs, 'warning');
         return;
       }
       const invalidInputs = inputs.filter((_, index) => parsed[index].error === 'invalid');
       if (invalidInputs.length) {
-        setIdle(text.invalid, invalidInputs);
+        setIdle(text.invalid, invalidInputs, 'error');
         return;
       }
       const largeInputs = inputs.filter((_, index) => parsed[index].error === 'tooLarge');
       if (largeInputs.length) {
-        setIdle(text.tooLarge, largeInputs);
+        setIdle(text.tooLarge, largeInputs, 'error');
         return;
       }
       const [an, ad, bn, bd] = parsed.map(({ value }) => value);
       const zeroDenominators = [aDen, bDen].filter((input) => Number(input.value) === 0);
       if (zeroDenominators.length) {
-        setIdle(text.zeroDenominator, zeroDenominators);
+        setIdle(text.zeroDenominator, zeroDenominators, 'error');
         return;
       }
       let rn = 0, rd = 1;
@@ -12913,7 +12941,7 @@
         rn = an * bn; rd = ad * bd;
       } else {
         if (bn === 0) {
-          setIdle(text.divZero, [bNum]);
+          setIdle(text.divZero, [bNum], 'error');
           return;
         }
         rn = an * bd; rd = ad * bn;
@@ -12926,11 +12954,60 @@
       outMixed.textContent = rem === 0 ? `${whole}` : (Math.abs(s.n) < s.d ? text.mixedNone : `${whole} ${rem}/${s.d}`);
       outDecimal.textContent = fmt(dec, 8);
       outPercent.textContent = `${fmt(dec * 100, 4)}%`;
-      help.textContent = `${an}/${ad} ${op.options[op.selectedIndex].text} ${bn}/${bd} = ${outResult.textContent}`;
+      setHelp(`${an}/${ad} ${op.options[op.selectedIndex].text} ${bn}/${bd} = ${outResult.textContent}`, 'success');
       setInvalid();
       if (copyBtn) copyBtn.disabled = false;
     };
+    const operatorValue = (symbol) => {
+      if (symbol === '+') return 'add';
+      if (symbol === '-') return 'sub';
+      if (symbol === '×' || symbol.toLowerCase() === 'x' || symbol === '*') return 'mul';
+      return 'div';
+    };
+    const applyExpression = () => {
+      const raw = expression?.value.trim() || '';
+      const match = raw.match(/^([+-]?\d+)\s*\/\s*([+-]?\d+)\s*([+\-×x*÷/])\s*([+-]?\d+)\s*\/\s*([+-]?\d+)$/u);
+      if (!match) {
+        if (expression) expression.setAttribute('aria-invalid', 'true');
+        setIdle(text.expressionInvalid, [], 'error');
+        expression?.focus();
+        return;
+      }
+      const [, an, ad, symbol, bn, bd] = match;
+      aNum.value = an; aDen.value = ad; bNum.value = bn; bDen.value = bd; op.value = operatorValue(symbol);
+      expression?.setAttribute('aria-invalid', 'false');
+      render();
+      setHelp(text.expressionApplied, 'success');
+      aNum.focus();
+    };
+    const normalizeSigns = () => {
+      [[aNum, aDen], [bNum, bDen]].forEach(([num, den]) => {
+        if (Number(den.value) < 0) {
+          num.value = String(Number(num.value || 0) * -1);
+          den.value = String(Math.abs(Number(den.value)));
+        }
+      });
+      render();
+      setHelp(text.signsNormalized, 'success');
+      aNum.focus();
+    };
     [...inputs, op].forEach((el) => el.addEventListener('input', render));
+    op.addEventListener('change', render);
+    expression?.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') applyExpression();
+    });
+    applyExpressionBtn?.addEventListener('click', applyExpression);
+    sampleBtn?.addEventListener('click', () => {
+      aNum.value = -7; aDen.value = 12; bNum.value = 5; bDen.value = 8; op.value = 'add';
+      if (expression) {
+        expression.value = '-7/12 + 5/8';
+        expression.setAttribute('aria-invalid', 'false');
+      }
+      render();
+      setHelp(text.sampleLoaded, 'success');
+      aNum.focus();
+    });
+    normalizeBtn?.addEventListener('click', normalizeSigns);
     swapBtn?.addEventListener('click', () => {
       [aNum.value, bNum.value] = [bNum.value, aNum.value];
       [aDen.value, bDen.value] = [bDen.value, aDen.value];
@@ -12938,14 +13015,24 @@
       aNum.focus();
     });
     resetBtn?.addEventListener('click', () => {
-      aNum.value = 1; aDen.value = 2; bNum.value = 1; bDen.value = 3; op.value = 'add'; render();
+      aNum.value = 1; aDen.value = 2; bNum.value = 1; bDen.value = 3; op.value = 'add';
+      if (expression) {
+        expression.value = '';
+        expression.setAttribute('aria-invalid', 'false');
+      }
+      render();
     });
     copyBtn?.addEventListener('click', async () => {
       if (outResult.textContent === '-') return;
-      await copyText(text.copy(outResult.textContent, outMixed.textContent, outDecimal.textContent, outPercent.textContent));
-      const old = copyBtn.textContent;
-      copyBtn.textContent = text.copied;
-      setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+      try {
+        await copyText(text.copy(outResult.textContent, outMixed.textContent, outDecimal.textContent, outPercent.textContent));
+        const old = copyBtn.textContent;
+        copyBtn.textContent = text.copied;
+        setHelp(text.copied, 'success');
+        setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+      } catch (_) {
+        setHelp(text.copyFail, 'error');
+      }
     });
     if (!aNum.value) aNum.value = 1;
     if (!aDen.value) aDen.value = 2;

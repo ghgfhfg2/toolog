@@ -2003,9 +2003,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 두 분수의 사칙연산을 정확하게 계산하고 약분, 대분수, 소수, 백분율 결과와 입력 오류를 바로 확인해요.
-  description_en: Calculate two fractions exactly and instantly see simplified, mixed-number, decimal, percent, and input error results.
-  description_ja: 2つの分数を正確に四則演算し、約分結果・帯分数・小数・百分率・入力エラーをすぐ確認できます。
+  description: 1/2 + 1/3 같은 식이나 분자·분모 직접 입력으로 분수 사칙연산, 약분, 대분수, 소수, 백분율, 입력 오류를 바로 확인해요.
+  description_en: Enter an expression like 1/2 + 1/3 or fill fraction fields to calculate operations, simplification, mixed-number, decimal, percent, and input errors.
+  description_ja: 1/2 + 1/3 のような式や分子・分母入力から、四則演算、約分、帯分数、小数、百分率、入力エラーを確認できます。
   url: /tools/fraction-calculator/
   url_en: /en/tools/fraction-calculator/
   url_ja: /ja/tools/fraction-calculator/

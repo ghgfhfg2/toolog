@@ -872,12 +872,17 @@ a:hover { color: #fff; text-decoration: none; }
 .avg-ui #avg-help[data-state="error"] { color: #fca5a5; }
 .avg-ui #avg-help[data-state="warning"] { color: #fbbf24; }
 .avg-ui #avg-help[data-state="success"] { color: #86efac; }
+.frac-expression-grid { grid-template-columns: minmax(0, 1fr) minmax(150px, auto); align-items: end; }
 .frac-main-grid { grid-template-columns: minmax(0, 1fr) minmax(120px, .35fr) minmax(0, 1fr); }
 .frac-field { display: grid; gap: .4rem; min-width: 0; }
 .frac-pair { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: .5rem; align-items: center; }
 .frac-pair span { color: var(--muted); font-weight: 700; }
-.frac-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.frac-actions { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .frac-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.frac-ui #frac-help[data-state="error"] { color: #fca5a5; }
+.frac-ui #frac-help[data-state="warning"] { color: #fbbf24; }
+.frac-ui #frac-help[data-state="success"] { color: #86efac; }
+.frac-ui .tool-stats strong { overflow-wrap: anywhere; }
 .gpa-ui .gpa-row {
   grid-template-columns: minmax(160px, 1.2fr) minmax(96px, .7fr) minmax(108px, .7fr);
 }
@@ -1430,7 +1435,7 @@ a:hover { color: #fff; text-decoration: none; }
   .ir-size-grid,
   .ir-output-grid { grid-template-columns: 1fr; }
   .frac-pair { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
-  .frac-actions { grid-template-columns: 1fr; }
+  .frac-expression-grid,.frac-actions { grid-template-columns: 1fr; }
   .tz-actions { grid-template-columns: 1fr; }
   .tz-presets { grid-template-columns: 1fr 1fr; }
   .cc-grid { grid-template-columns: 1fr 1fr; }

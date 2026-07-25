@@ -1,8 +1,8 @@
 ---
 layout: tool
 lang: en
-title: Fraction Calculator | Simplify, mixed number, decimal, and percent
-description: Calculate fraction addition, subtraction, multiplication, or division exactly, with simplified, mixed-number, decimal, percent, and input error results.
+title: Fraction Calculator | Operations, simplification, mixed number, decimal
+description: Enter a quick expression like 1/2 + 1/3 or fill numerator and denominator fields to add, subtract, multiply, or divide fractions and see simplified, mixed-number, decimal, and percent results.
 permalink: /en/tools/fraction-calculator/
 canonical_url: /en/tools/fraction-calculator/
 category: data
@@ -23,6 +23,8 @@ faq:
     a: Yes. The tool shows the simplified fraction together with decimal and percent results.
   - q: What numbers can I enter?
     a: For exact fraction simplification, each numerator and denominator must be a whole number from -10,000,000 to 10,000,000.
+  - q: Can I paste a fraction expression in one line?
+    a: Yes. Enter an expression like 1/2 + 1/3, then apply it to fill the fraction fields automatically.
 alternate_urls:
   ko: /tools/fraction-calculator/
   en: /en/tools/fraction-calculator/
@@ -35,21 +37,25 @@ calculating fractions is only half the job — you usually also want the **simpl
 
 This tool lets you enter two fractions and instantly see:
 **simplified fraction / mixed number / decimal / percent**.
+You can also paste a one-line expression such as `1/2 + 1/3`, `-7/12 + 5/8`, or `3/4 ÷ 2/5` and apply it to the input fields.
 
 ## Key features
 - Add, subtract, multiply, and divide fractions
+- Quick expression input for `numerator/denominator operator numerator/denominator`
 - Auto-simplify the final result
 - Show mixed-number form when useful
 - Show decimal and percent at the same time
+- Clear warnings for negative denominators, zero denominators, division by zero, and out-of-range inputs
 - Copy the result quickly
 
 ## How to use it
-1. Enter the numerator and denominator of the first fraction.
+1. Apply a quick expression like `1/2 + 1/3`, or enter the numerator and denominator of the first fraction.
 2. Choose an operation.
 3. Enter the numerator and denominator of the second fraction.
 4. Check the simplified result, mixed number, decimal, and percent.
 
 For subtraction and division, where order changes the result, use **Swap fractions** to compare both directions quickly. Enter whole numbers from -10,000,000 to 10,000,000 for each numerator and denominator so the calculator can return an exact result.
+If you enter a negative denominator like `1/-2`, use **Normalize signs** to move the sign to the numerator.
 
 ## Related tools
 - [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
@@ -65,6 +71,9 @@ Yes. Enter a negative numerator to work with negative fractions.
 
 ### Can I enter decimals or very large numbers?
 This calculator simplifies fractions made from whole numbers exactly. Decimal inputs are not supported, and each input is limited to an absolute value of 10,000,000 to prevent precision errors.
+
+### Which operators work in quick expression input?
+Use `+` for addition, `-` for subtraction, `×` or `*` for multiplication, and `÷` or `/` for division.
 
 ### When is percent output useful?
 It helps when you want to interpret a fraction as a rate, share, or ratio in percent form.
