@@ -1253,13 +1253,34 @@ layout: default
               <select id="orpc-pickup" aria-describedby="orpc-help"><option value="pickup" selected>{% if page.lang == 'en' %}Pickup visit{% elsif page.lang == 'ja' %}集荷{% else %}택배 회수 방문{% endif %}</option><option value="dropoff">{% if page.lang == 'en' %}Convenience store/drop-off{% elsif page.lang == 'ja' %}店舗・コンビニ持込{% else %}편의점/지점 접수{% endif %}</option><option value="direct">{% if page.lang == 'en' %}Ship directly{% elsif page.lang == 'ja' %}直接発送{% else %}직접 발송{% endif %}</option></select>
             </div>
           </div>
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="orpc-condition">{% if page.lang == 'en' %}Product condition{% elsif page.lang == 'ja' %}商品状態{% else %}상품 상태{% endif %}</label>
+              <select id="orpc-condition" aria-describedby="orpc-help orpc-limits">
+                <option value="sealed">{% if page.lang == 'en' %}Unopened / tag intact{% elsif page.lang == 'ja' %}未開封・タグあり{% else %}미개봉·택 있음{% endif %}</option>
+                <option value="opened" selected>{% if page.lang == 'en' %}Opened but unused{% elsif page.lang == 'ja' %}開封済み・未使用{% else %}개봉했지만 미사용{% endif %}</option>
+                <option value="tried">{% if page.lang == 'en' %}Tried on / lightly checked{% elsif page.lang == 'ja' %}試着・軽く確認{% else %}시착·가벼운 확인{% endif %}</option>
+                <option value="used">{% if page.lang == 'en' %}Used or signs of use{% elsif page.lang == 'ja' %}使用済み・使用跡あり{% else %}사용했거나 사용 흔적 있음{% endif %}</option>
+              </select>
+            </div>
+            <div>
+              <label for="orpc-note">{% if page.lang == 'en' %}Order/shipping note (optional){% elsif page.lang == 'ja' %}注文・配送メモ（任意）{% else %}주문·배송 메모 (선택){% endif %}</label>
+              <input id="orpc-note" type="text" maxlength="80" aria-describedby="orpc-help orpc-limits" placeholder="{% if page.lang == 'en' %}e.g., invoice in email only{% elsif page.lang == 'ja' %}例: 納品書はメールのみ{% else %}예: 송장 사진만 있음{% endif %}" />
+            </div>
+          </div>
+          <div class="tool-row-grid pct-actions orpc-day-presets" aria-label="{% if page.lang == 'en' %}Quick deadline presets{% elsif page.lang == 'ja' %}期限クイック設定{% else %}기한 빠른 설정{% endif %}">
+            <button type="button" data-days="0">{% if page.lang == 'en' %}Today{% elsif page.lang == 'ja' %}今日{% else %}오늘{% endif %}</button>
+            <button type="button" data-days="1">{% if page.lang == 'en' %}Tomorrow{% elsif page.lang == 'ja' %}明日{% else %}내일{% endif %}</button>
+            <button type="button" data-days="3">3{% if page.lang == 'en' %} days{% elsif page.lang == 'ja' %}日{% else %}일{% endif %}</button>
+            <button type="button" data-days="7">7{% if page.lang == 'en' %} days{% elsif page.lang == 'ja' %}日{% else %}일{% endif %}</button>
+          </div>
           <label class="tool-check"><input id="orpc-photo" type="checkbox" checked /> {% if page.lang == 'en' %}Include photo evidence checklist{% elsif page.lang == 'ja' %}写真記録チェックを含める{% else %}사진 촬영 체크 포함{% endif %}</label>
           <div class="tool-row-grid pct-actions"><button id="orpc-run" type="button">{% if page.lang == 'en' %}Make checklist{% elsif page.lang == 'ja' %}チェックリスト作成{% else %}반품 체크리스트 만들기{% endif %}</button><button id="orpc-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button><button id="orpc-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button><button id="orpc-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button></div>
           <div class="tool-stats" aria-live="polite"><div><strong id="orpc-count">0</strong><span>{% if page.lang == 'en' %}Items{% elsif page.lang == 'ja' %}項目{% else %}구성품{% endif %}</span></div><div><strong id="orpc-urgency">-</strong><span>{% if page.lang == 'en' %}Urgency{% elsif page.lang == 'ja' %}緊急度{% else %}긴급도{% endif %}</span></div><div><strong id="orpc-photos">0</strong><span>{% if page.lang == 'en' %}Photos{% elsif page.lang == 'ja' %}写真{% else %}사진 항목{% endif %}</span></div><div><strong id="orpc-steps">0</strong><span>{% if page.lang == 'en' %}Steps{% elsif page.lang == 'ja' %}手順{% else %}체크 수{% endif %}</span></div></div>
           <p class="tool-result" id="orpc-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Add at least one item or component, then set the return condition to build a practical preparation checklist.{% elsif page.lang == 'ja' %}商品または付属品を1つ以上入力し、返品条件を選ぶと準備チェックリストを作れます。{% else %}상품이나 구성품을 1개 이상 입력하고 반품 조건을 고르면 접수 전 준비 체크리스트를 만듭니다.{% endif %}</p>
           <p class="tool-result" id="orpc-limits">{% if page.lang == 'en' %}Days left must be a whole number from 0 to 30. Up to 30 non-empty item lines are included in the checklist.{% elsif page.lang == 'ja' %}残り日数は0〜30の整数で入力してください。チェックリストには空でない項目を最大30件まで反映します。{% else %}남은 일수는 0~30 사이의 정수로 입력하세요. 빈 줄을 제외한 항목은 최대 30개까지 체크리스트에 반영합니다.{% endif %}</p>
           <label for="orpc-output">{% if page.lang == 'en' %}Generated return checklist{% elsif page.lang == 'ja' %}生成された返品チェックリスト{% else %}생성된 반품 체크리스트{% endif %}</label>
-          <textarea id="orpc-output" rows="16" readonly aria-label="{% if page.lang == 'en' %}Generated online return preparation checklist{% elsif page.lang == 'ja' %}生成されたオンライン返品準備チェックリスト{% else %}생성된 온라인 쇼핑 반품 준비 체크리스트{% endif %}" placeholder="{% if page.lang == 'en' %}Your return-prep checklist will appear here.{% elsif page.lang == 'ja' %}返品準備チェックリストがここに表示されます。{% else %}반품 준비 체크리스트가 여기에 표시됩니다.{% endif %}"></textarea>
+          <textarea id="orpc-output" rows="16" readonly aria-describedby="orpc-help orpc-limits" aria-label="{% if page.lang == 'en' %}Generated online return preparation checklist{% elsif page.lang == 'ja' %}生成されたオンライン返品準備チェックリスト{% else %}생성된 온라인 쇼핑 반품 준비 체크리스트{% endif %}" placeholder="{% if page.lang == 'en' %}Your return-prep checklist will appear here.{% elsif page.lang == 'ja' %}返品準備チェックリストがここに表示されます。{% else %}반품 준비 체크리스트가 여기에 표시됩니다.{% endif %}"></textarea>
         </div>
       {% when 'rainy-day-outing-planner' %}
         <div class="tool-ui">

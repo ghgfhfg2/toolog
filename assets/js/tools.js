@@ -17511,6 +17511,8 @@
     const daysEl = document.getElementById('orpc-days');
     const packageEl = document.getElementById('orpc-package');
     const pickupEl = document.getElementById('orpc-pickup');
+    const conditionEl = document.getElementById('orpc-condition');
+    const noteEl = document.getElementById('orpc-note');
     const photoEl = document.getElementById('orpc-photo');
     const runBtn = document.getElementById('orpc-run');
     const sampleBtn = document.getElementById('orpc-sample');
@@ -17527,55 +17529,96 @@
     const i18n = {
       ko: {
         title: '온라인 쇼핑 반품 준비 체크리스트', copied: '복사됨', copyDefault: '결과 복사', sample: '재킷\n택/라벨\n사은품 파우치', urgency: ['여유', '주의', '긴급'],
+        checklist: '체크리스트', photosTitle: '사진 증빙', noteTitle: '주문·배송 메모',
         empty: '상품이나 구성품을 1개 이상 입력해 주세요.',
         invalidDays: '남은 일수는 0~30 사이의 정수로 입력해 주세요.',
         cleared: '입력값을 초기화했습니다.',
+        duplicate: (n) => `중복 입력 ${n}개를 정리했습니다.`,
         omitted: (n) => `긴 목록은 앞 30개만 반영했습니다. ${n}개 항목은 생략했습니다.`,
         summary: (u,d) => `반품 기한까지 ${d}일 남았습니다. 긴급도는 ${u}입니다.`,
+        daySet: (d) => `반품 기한을 ${d}일 남음으로 설정했습니다.`,
         basics: ['쇼핑몰 반품 가능 기간과 배송비 조건 확인', '주문번호·상품명·옵션을 반품 접수 화면과 대조', '구성품을 모두 모아 누락 여부 확인'],
         photos: ['상품 전체 상태 사진 촬영', '택·라벨·구성품 사진 촬영', '포장 전 최종 구성 사진 남기기'],
         defect: ['불량·파손 부위를 가까이서 촬영', '수령 당시 박스 훼손이나 송장 사진 보관', '판매자 문의가 필요하면 증상 설명을 한 문장으로 정리'],
         wrong: ['주문한 옵션과 실제 수령 상품 차이를 캡처·사진으로 남기기', '오배송이면 사용 흔적이 생기기 전 재포장'],
         change: ['택 제거, 사용 흔적, 향수·오염 여부 확인', '단순 변심 배송비 차감 여부 확인'],
+        condition: {
+          sealed: '미개봉·택 보존 상태를 사진으로 남기기',
+          opened: '개봉 흔적이 있어도 미사용임을 보일 수 있게 전체 상태 확인',
+          tried: '시착 흔적, 향수, 오염, 주름 여부를 밝은 곳에서 재확인',
+          used: '사용 흔적이 있으면 반품 제한 가능성이 높으므로 판매자 정책과 문의 기록 확인'
+        },
         pkg: { original: '원박스와 완충재를 최대한 그대로 사용', partial: '부족한 완충재를 신문지·에어캡 등으로 보강', none: '튼튼한 박스와 완충재를 새로 준비' },
         pickup: { pickup: '회수 방문일에 문 앞 보관 위치와 연락 가능 상태 확인', dropoff: '접수 가능한 편의점·지점과 운송장 출력 필요 여부 확인', direct: '직접 발송 주소, 택배비 선불/착불 조건 확인' },
         components: '구성품'
       },
       en: {
         title: 'Online return preparation checklist', copied: 'Copied', copyDefault: 'Copy result', sample: 'Jacket\nTag/label\nGift pouch', urgency: ['Low', 'Watch', 'Urgent'],
+        checklist: 'Checklist', photosTitle: 'Photo evidence', noteTitle: 'Order/shipping note',
         empty: 'Enter at least one item or component.',
         invalidDays: 'Days left must be a whole number from 0 to 30.',
         cleared: 'Cleared the inputs.',
+        duplicate: (n) => `Removed ${n} duplicate item(s).`,
         omitted: (n) => `Only the first 30 non-empty lines are included. ${n} item(s) were omitted.`,
         summary: (u,d) => `${d} day(s) left before the return deadline. Urgency: ${u}.`,
+        daySet: (d) => `Set the return deadline to ${d} day(s) left.`,
         basics: ['Check the store return window and shipping-fee rules', 'Match order number, item name, and option with the return form', 'Gather every component and check for missing parts'],
         photos: ['Take a full product-condition photo', 'Photograph tags, labels, and components', 'Take one final photo before sealing the package'],
         defect: ['Photograph the defect or damage close up', 'Keep box damage and shipping-label photos if relevant', 'Write one clear sentence describing the issue'],
         wrong: ['Save proof of the ordered option versus received item', 'Repack before any use marks appear'],
         change: ['Check tag removal, use marks, scent, or stains', 'Confirm whether change-of-mind return shipping is deducted'],
+        condition: {
+          sealed: 'Keep proof that the item is unopened or the tag is intact',
+          opened: 'Check the full condition so opened packaging still looks unused',
+          tried: 'Recheck try-on marks, scent, stains, and wrinkles in good light',
+          used: 'If there are use marks, confirm the seller policy and keep inquiry records'
+        },
         pkg: { original: 'Use the original box and padding when possible', partial: 'Add paper, bubble wrap, or padding where packaging is missing', none: 'Prepare a sturdy new box and padding' },
         pickup: { pickup: 'Confirm pickup date, door location, and reachable contact', dropoff: 'Check drop-off location and label/waybill requirements', direct: 'Confirm return address and prepaid/collect shipping rule' },
         components: 'Components'
       },
       ja: {
         title: 'オンライン返品準備チェックリスト', copied: 'コピー完了', copyDefault: '結果をコピー', sample: 'ジャケット\nタグ・ラベル\nノベルティポーチ', urgency: ['余裕', '注意', '緊急'],
+        checklist: 'チェックリスト', photosTitle: '写真記録', noteTitle: '注文・配送メモ',
         empty: '商品または付属品を1つ以上入力してください。',
         invalidDays: '残り日数は0〜30の整数で入力してください。',
         cleared: '入力をクリアしました。',
+        duplicate: (n) => `重複入力${n}件を整理しました。`,
         omitted: (n) => `空でない行は先頭30件だけ反映しました。${n}件を省略しました。`,
         summary: (u,d) => `返品期限まで${d}日です。緊急度は${u}です。`,
+        daySet: (d) => `返品期限を残り${d}日に設定しました。`,
         basics: ['ショップの返品期間と送料条件を確認', '注文番号・商品名・オプションを返品申請画面と照合', '付属品をすべて集め、欠品がないか確認'],
         photos: ['商品の全体状態を撮影', 'タグ・ラベル・付属品を撮影', '梱包前に最終構成を撮影'],
         defect: ['不良・破損部分を近くで撮影', '箱の破損や送り状写真を保存', '問い合わせ用に症状を一文で整理'],
         wrong: ['注文内容と届いた商品との差を画像で残す', '誤配送なら使用跡が付く前に再梱包'],
         change: ['タグ外れ、使用跡、におい、汚れを確認', '自己都合返品の送料差し引きを確認'],
+        condition: {
+          sealed: '未開封またはタグが残っている状態を写真で残す',
+          opened: '開封済みでも未使用と分かるよう全体状態を確認',
+          tried: '試着跡、におい、汚れ、しわを明るい場所で再確認',
+          used: '使用跡がある場合は返品制限の可能性が高いため、販売者ポリシーと問い合わせ記録を確認'
+        },
         pkg: { original: '元箱と緩衝材をできるだけ使用', partial: '不足した緩衝材を紙やエアキャップで補強', none: '丈夫な箱と緩衝材を新しく準備' },
         pickup: { pickup: '集荷日、置き場所、連絡可能状態を確認', dropoff: '持込先と送り状・ラベルの要否を確認', direct: '返送先住所と送料の元払い/着払い条件を確認' },
         components: '付属品'
       }
     };
     const t = i18n[pageLang] || i18n.ko;
-    const lines = (v) => (v || '').split(/\n+/).map((s) => s.trim().replace(/\s+/g, ' ')).filter(Boolean);
+    const lines = (v) => {
+      const seen = new Set();
+      const unique = [];
+      let duplicates = 0;
+      (v || '').split(/\n+/).map((s) => s.trim().replace(/\s+/g, ' ')).filter(Boolean).forEach((item) => {
+        const key = item.toLocaleLowerCase();
+        if (seen.has(key)) {
+          duplicates += 1;
+        } else {
+          seen.add(key);
+          unique.push(item);
+        }
+      });
+      return { unique, duplicates };
+    };
     const copyText = async (val) => { try { await navigator.clipboard.writeText(val); } catch (_) { const ta=document.createElement('textarea'); ta.value=val; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } };
 
     const resetStats = () => {
@@ -17588,7 +17631,8 @@
     };
 
     const render = () => {
-      const allItems = lines(itemsEl.value);
+      const parsed = lines(itemsEl.value);
+      const allItems = parsed.unique;
       const items = allItems.slice(0, 30);
       const reason = reasonEl.value;
       const daysRaw = String(daysEl.value || '').trim();
@@ -17619,26 +17663,42 @@
       if (reason === 'change') checks.push(...t.change);
       if (reason === 'defect' && !photoEl.checked) checks.push(t.defect[2]);
       if (reason === 'wrong' && !photoEl.checked) checks.push(t.wrong[1]);
+      const condition = conditionEl?.value || 'opened';
+      if (t.condition[condition]) checks.push(t.condition[condition]);
       checks.push(t.pkg[packageEl.value], t.pickup[pickupEl.value]);
       if (days <= 1) checks.unshift(pageLang === 'en' ? 'Submit the return request today before packing is delayed' : pageLang === 'ja' ? '梱包が遅れる前に今日中に返品申請を完了' : '포장이 늦어지기 전에 오늘 안에 반품 접수부터 완료');
       countOut.textContent = formatNum(items.length);
       urgencyOut.textContent = t.urgency[urgencyIndex];
       photosOut.textContent = formatNum(photoList.length);
       stepsOut.textContent = formatNum(checks.length + photoList.length + items.length);
-      const parts = [`# ${t.title}`, '', t.summary(t.urgency[urgencyIndex], days), '', 'Checklist:', ...checks.map((x) => `- [ ] ${x}`)];
-      if (photoList.length) parts.push('', 'Photos:', ...photoList.map((x) => `- [ ] ${x}`));
+      const parts = [`# ${t.title}`, '', t.summary(t.urgency[urgencyIndex], days), '', `${t.checklist}:`, ...checks.map((x) => `- [ ] ${x}`)];
+      if (photoList.length) parts.push('', `${t.photosTitle}:`, ...photoList.map((x) => `- [ ] ${x}`));
       if (items.length) parts.push('', `${t.components}:`, ...items.map((x) => `- [ ] ${x}`));
-      if (allItems.length > items.length) parts.push('', `Note: ${t.omitted(allItems.length - items.length)}`);
+      const note = (noteEl?.value || '').trim().replace(/\s+/g, ' ');
+      if (note) parts.push('', `${t.noteTitle}: ${note}`);
+      if (allItems.length > items.length) parts.push('', `${t.noteTitle}: ${t.omitted(allItems.length - items.length)}`);
+      if (parsed.duplicates) parts.push('', `${t.noteTitle}: ${t.duplicate(parsed.duplicates)}`);
       output.value = parts.join('\n');
       copyBtn.disabled = false;
-      help.textContent = allItems.length > items.length ? `${t.summary(t.urgency[urgencyIndex], days)} ${t.omitted(allItems.length - items.length)}` : t.summary(t.urgency[urgencyIndex], days);
+      const helpNotes = [];
+      if (allItems.length > items.length) helpNotes.push(t.omitted(allItems.length - items.length));
+      if (parsed.duplicates) helpNotes.push(t.duplicate(parsed.duplicates));
+      help.textContent = [t.summary(t.urgency[urgencyIndex], days), ...helpNotes].join(' ');
       help.dataset.state = 'success';
     };
-    sampleBtn?.addEventListener('click', () => { itemsEl.value = t.sample; reasonEl.value='defect'; daysEl.value='2'; packageEl.value='partial'; pickupEl.value='pickup'; photoEl.checked=true; render(); itemsEl.focus(); });
+    sampleBtn?.addEventListener('click', () => { itemsEl.value = t.sample; reasonEl.value='defect'; daysEl.value='2'; packageEl.value='partial'; pickupEl.value='pickup'; if (conditionEl) conditionEl.value='opened'; if (noteEl) noteEl.value=''; photoEl.checked=true; render(); itemsEl.focus(); });
     runBtn?.addEventListener('click', render);
-    clearBtn?.addEventListener('click', () => { itemsEl.value = ''; daysEl.value = '3'; reasonEl.value = 'change'; packageEl.value = 'partial'; pickupEl.value = 'pickup'; photoEl.checked = true; resetStats(); help.textContent = t.cleared; help.dataset.state = ''; itemsEl.setAttribute('aria-invalid', 'false'); daysEl.setAttribute('aria-invalid', 'false'); itemsEl.focus(); });
+    clearBtn?.addEventListener('click', () => { itemsEl.value = ''; daysEl.value = '3'; reasonEl.value = 'change'; packageEl.value = 'partial'; pickupEl.value = 'pickup'; if (conditionEl) conditionEl.value='opened'; if (noteEl) noteEl.value=''; photoEl.checked = true; resetStats(); help.textContent = t.cleared; help.dataset.state = ''; itemsEl.setAttribute('aria-invalid', 'false'); daysEl.setAttribute('aria-invalid', 'false'); itemsEl.focus(); });
     copyBtn?.addEventListener('click', async () => { if (!output.value.trim()) { render(); } if (!output.value.trim()) return; await copyText(output.value.trim()); const old=copyBtn.textContent; copyBtn.textContent=t.copied; setTimeout(()=>{ copyBtn.textContent=old||t.copyDefault; },900); });
-    [itemsEl, reasonEl, daysEl, packageEl, pickupEl, photoEl].forEach((el) => { el?.addEventListener('input', render); el?.addEventListener('change', render); });
+    document.querySelectorAll('.orpc-day-presets [data-days]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        daysEl.value = btn.dataset.days || '0';
+        render();
+        if (output.value.trim()) help.textContent = t.daySet(daysEl.value);
+        daysEl.focus();
+      });
+    });
+    [itemsEl, reasonEl, daysEl, packageEl, pickupEl, conditionEl, noteEl, photoEl].forEach((el) => { el?.addEventListener('input', render); el?.addEventListener('change', render); });
     render();
   }
 
