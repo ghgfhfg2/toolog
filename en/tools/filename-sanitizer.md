@@ -55,18 +55,25 @@ Filename Sanitizer has several error-prone filename edge cases, including specia
 
 ## Especially useful for
 ### 1) Blog or CMS asset uploads
-Clean image names before uploading thumbnails and post assets.
+Clean thumbnail, screenshot, and post-asset names before uploading them to a blog or CMS.
 
 ### 2) Assignment and submission files
-Keep report, version, and submission-date naming rules more consistent.
+Make report titles, version labels, and submission dates follow one predictable file-name rule.
 
 ### 3) Shared team folders
-Reduce naming chaos before a folder grows too large to manage comfortably.
+Apply a simple naming pattern before a shared folder becomes hard to search or sort.
 
 ## Related tools
 - To clean pasted title lists first: [Text Line Break Cleaner]({{ '/en/tools/text-line-break-cleaner/' | relative_url }})
 - To adjust English case rules separately: [Case Converter]({{ '/en/tools/case-converter/' | relative_url }})
 - To check drafts for personal data before sharing: [Privacy Exposure Checker]({{ '/en/tools/privacy-exposure-checker/' | relative_url }})
+
+## Rules and limits
+- Characters that often cause filename problems, including `/ \ : * ? " < > |`, are treated like separators.
+- With extension keeping enabled, common final extensions such as `.png`, `.pdf`, `.xlsx`, `.tar.gz`, and `.min.js` are preserved as much as possible.
+- Names longer than the maximum length are shortened from the base name first so preserved extensions and duplicate suffixes remain at the end.
+- To avoid browser slowdowns, only the first 200 non-empty lines are processed.
+- This tool does not rename real files. Copy the cleaned names and apply them in your upload or batch-renaming workflow.
 
 ## FAQ
 ### Does it add extensions automatically?
@@ -81,15 +88,8 @@ Not always, but replacing risky punctuation with safer separators usually reduce
 ### Are duplicate names changed automatically?
 If duplicate adjustment is enabled, repeated results get suffixes such as `-2` and `-3`. The tool does not scan your actual folder, so confirm the final names before applying them.
 
-## Rules and limits
-- Characters that often cause filename problems, including `/ \ : * ? " < > |`, are treated like separators.
-- With extension keeping enabled, common final extensions such as `.png`, `.pdf`, `.xlsx`, `.tar.gz`, and `.min.js` are preserved as much as possible.
-- Names longer than the maximum length are shortened from the base name first so preserved extensions and duplicate suffixes remain at the end.
-- To avoid browser slowdowns, the first 200 non-empty lines are processed.
-
 ### Are compound extensions kept?
 Common compound extensions such as `.tar.gz`, `.min.js`, and `.d.ts` are treated as one extension. Dotfiles such as `.env` are kept as names instead of being misread as empty names with extensions.
-- This tool does not rename real files. Copy the cleaned names and apply them in your upload or batch-renaming workflow.
 
 ## Summary
 The Filename Sanitizer is a **browser-based utility for turning messy titles or inconsistent file names into safer, rule-based names for uploads, sharing, and batch rename preparation**.
