@@ -1138,7 +1138,17 @@ textarea:focus-visible {
 .fs-ui #fs-output {
   min-height: 220px;
 }
+.fs-ui .fs-inline-help {
+  align-self: end;
+  margin: 0;
+  font-size: .9rem;
+  line-height: 1.5;
+}
 .fs-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.fs-ui input:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
 .fs-ui #fs-summary[data-state="error"] { color: #fca5a5; }
 .fs-ui #fs-summary[data-state="warning"] { color: #fbbf24; }
 .fs-ui #fs-summary[data-state="success"] { color: #86efac; }
@@ -1148,6 +1158,11 @@ textarea:focus-visible {
 }
 .fs-stats strong {
   overflow-wrap: anywhere;
+}
+@media (max-width: 640px) {
+  .fs-ui .fs-inline-help {
+    align-self: stretch;
+  }
 }
 .iu-controls {
   grid-template-columns: minmax(0, 1fr) minmax(180px, .55fr);

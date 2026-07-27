@@ -8953,6 +8953,7 @@
     const removeEmojiEl = document.getElementById('fs-remove-emoji');
     const keepExtensionEl = document.getElementById('fs-keep-extension');
     const dedupeEl = document.getElementById('fs-dedupe');
+    const maxLengthEl = document.getElementById('fs-max-length');
     const sampleBtn = document.getElementById('fs-sample');
     const copyBtn = document.getElementById('fs-copy');
     const clearBtn = document.getElementById('fs-clear');
@@ -8962,11 +8963,11 @@
     const duplicateCountEl = document.getElementById('fs-duplicate-count');
     const summaryEl = document.getElementById('fs-summary');
     const outputEl = document.getElementById('fs-output');
-    if (!input || !separatorEl || !caseEl || !dateEnabledEl || !dateEl || !numberEnabledEl || !numberStartEl || !removeEmojiEl || !keepExtensionEl || !dedupeEl || !sampleBtn || !copyBtn || !clearBtn || !inputCountEl || !outputCountEl || !changedCountEl || !duplicateCountEl || !summaryEl || !outputEl) return;
+    if (!input || !separatorEl || !caseEl || !dateEnabledEl || !dateEl || !numberEnabledEl || !numberStartEl || !removeEmojiEl || !keepExtensionEl || !dedupeEl || !maxLengthEl || !sampleBtn || !copyBtn || !clearBtn || !inputCountEl || !outputCountEl || !changedCountEl || !duplicateCountEl || !summaryEl || !outputEl) return;
 
     const fsText = {
       ko: {
-        sample: '최종 발표 자료 v3!.pptx\n브랜드 소개서 2026 수정본.pdf\n회의 캡처 😀 04-27.png\n고객전달용 견적서(최종)(진짜최종).xlsx\n회의 캡처 04-27.png',
+        sample: '최종 발표 자료 v3!.pptx\n브랜드 소개서 2026 수정본.pdf\n회의 캡처 😀 04-27.png\n고객전달용 견적서(최종)(진짜최종).xlsx\n회의 캡처 04-27.png\n업로드용 긴 파일명 샘플 - 프로젝트 소개 문서 최종 공유 버전 2026년 7월 27일.pdf',
         idle: '파일명 목록을 붙여넣으면 공백, 특수문자, 순번 규칙을 한 번에 정리합니다.',
         copied: '결과를 복사했습니다.',
         copyDefault: '결과 복사',
@@ -8974,11 +8975,16 @@
         cleared: '입력과 결과를 초기화했습니다.',
         tooMany: (shown, total) => `항목이 많아 앞 ${shown}개만 처리했습니다. 전체 ${total}개 중 나머지는 나눠서 정리해 주세요.`,
         invalidStart: '시작 번호는 1~9999 사이의 정수로 입력해 주세요.',
-        summary: (changed, dupes, fixed) => changed ? `총 ${formatNum(changed)}개 항목을 정리했고, 중복 후보 ${formatNum(dupes)}개${fixed ? '를 자동 보정했습니다' : '를 확인했습니다'}.` : `이미 비교적 정돈된 파일명입니다. 중복 후보 ${formatNum(dupes)}개를 확인해 보세요.`,
+        invalidMax: '파일명 최대 길이는 20~255 사이의 정수로 입력해 주세요.',
+        summary: (changed, dupes, fixed, trimmed) => {
+          const duplicateText = `중복 후보 ${formatNum(dupes)}개${fixed ? '를 자동 보정했습니다' : '를 확인했습니다'}`;
+          const trimmedText = trimmed ? ` 긴 이름 ${formatNum(trimmed)}개도 줄였습니다.` : '';
+          return changed ? `총 ${formatNum(changed)}개 항목을 정리했고, ${duplicateText}.${trimmedText}` : `이미 비교적 정돈된 파일명입니다. 중복 후보 ${formatNum(dupes)}개를 확인해 보세요.`;
+        },
         empty: '정리된 파일명 목록이 여기에 표시됩니다.'
       },
       en: {
-        sample: 'Final presentation v3!.pptx\nBrand deck 2026 revised.pdf\nMeeting capture 😀 04-27.png\nClient estimate(final)(really-final).xlsx\nMeeting capture 04-27.png',
+        sample: 'Final presentation v3!.pptx\nBrand deck 2026 revised.pdf\nMeeting capture 😀 04-27.png\nClient estimate(final)(really-final).xlsx\nMeeting capture 04-27.png\nVery long upload filename sample - project overview final shared version July 27 2026.pdf',
         idle: 'Paste file names to normalize spaces, symbols, numbering, and duplicate candidates.',
         copied: 'Copied the cleaned file names.',
         copyDefault: 'Copy result',
@@ -8986,11 +8992,15 @@
         cleared: 'Cleared the input and result.',
         tooMany: (shown, total) => `Processed the first ${shown} items because the list is long. Split the remaining items from ${total} total lines into another run.`,
         invalidStart: 'Enter a whole starting number from 1 to 9999.',
-        summary: (changed, dupes, fixed) => changed ? `Cleaned ${formatNum(changed)} items and ${fixed ? 'made' : 'found'} ${formatNum(dupes)} duplicate candidates${fixed ? ' unique' : ''}.` : `These names were already fairly clean. Check ${formatNum(dupes)} duplicate candidates.`,
+        invalidMax: 'Enter a whole maximum length from 20 to 255 characters.',
+        summary: (changed, dupes, fixed, trimmed) => {
+          const trimmedText = trimmed ? ` and shortened ${formatNum(trimmed)} long names` : '';
+          return changed ? `Cleaned ${formatNum(changed)} items, ${fixed ? 'made' : 'found'} ${formatNum(dupes)} duplicate candidates${fixed ? ' unique' : ''}${trimmedText}.` : `These names were already fairly clean. Check ${formatNum(dupes)} duplicate candidates.`;
+        },
         empty: 'Cleaned file names will appear here.'
       },
       ja: {
-        sample: '最終発表資料 v3!.pptx\nブランド紹介 2026 修正版.pdf\n会議キャプチャ 😀 04-27.png\n顧客提出用見積書(最終)(本当に最終).xlsx\n会議キャプチャ 04-27.png',
+        sample: '最終発表資料 v3!.pptx\nブランド紹介 2026 修正版.pdf\n会議キャプチャ 😀 04-27.png\n顧客提出用見積書(最終)(本当に最終).xlsx\n会議キャプチャ 04-27.png\nアップロード用の長いファイル名サンプル プロジェクト紹介資料 最終共有版 2026年7月27日.pdf',
         idle: 'ファイル名を貼り付けると、空白・記号・連番・重複候補をまとめて整理します。',
         copied: '整理結果をコピーしました。',
         copyDefault: '結果をコピー',
@@ -8998,7 +9008,11 @@
         cleared: '入力と結果をクリアしました。',
         tooMany: (shown, total) => `項目が多いため先頭${shown}件のみ処理しました。全${total}件の残りは分けて整理してください。`,
         invalidStart: '開始番号は1〜9999の整数で入力してください。',
-        summary: (changed, dupes, fixed) => changed ? `合計${formatNum(changed)}件を整理し、重複候補${formatNum(dupes)}件${fixed ? 'を自動調整しました' : 'を確認しました'}。` : `比較的整ったファイル名です。重複候補${formatNum(dupes)}件を確認してください。`,
+        invalidMax: '最大文字数は20〜255の整数で入力してください。',
+        summary: (changed, dupes, fixed, trimmed) => {
+          const trimmedText = trimmed ? `、長い名前${formatNum(trimmed)}件を短縮しました` : '';
+          return changed ? `合計${formatNum(changed)}件を整理し、重複候補${formatNum(dupes)}件${fixed ? 'を自動調整しました' : 'を確認しました'}${trimmedText}。` : `比較的整ったファイル名です。重複候補${formatNum(dupes)}件を確認してください。`;
+        },
         empty: '整理されたファイル名がここに表示されます。'
       }
     };
@@ -9031,15 +9045,44 @@
 
     const splitExt = (line) => {
       if (!keepExtensionEl.checked) return { base: line, ext: '' };
-      const match = line.match(/^(.+?)(\.[A-Za-z0-9]{1,8})$/);
+      if (/^\.[A-Za-z0-9][A-Za-z0-9._-]*$/.test(line) && !line.slice(1).includes('.')) {
+        return { base: line, ext: '' };
+      }
+      const compound = line.match(/^(.+?)(\.(?:tar\.gz|tar\.bz2|tar\.xz|user\.js|d\.ts|min\.js))$/i);
+      if (compound) return { base: compound[1], ext: compound[2] };
+      const match = line.match(/^(.+?)(\.[A-Za-z0-9]{1,10})$/);
       if (!match) return { base: line, ext: '' };
       return { base: match[1], ext: match[2] };
     };
 
     const splitFinalExt = (line) => {
-      const match = line.match(/^(.+?)(\.[A-Za-z0-9]{1,8})$/);
+      const compound = line.match(/^(.+?)(\.(?:tar\.gz|tar\.bz2|tar\.xz|user\.js|d\.ts|min\.js))$/i);
+      if (compound) return { base: compound[1], ext: compound[2] };
+      const match = line.match(/^(.+?)(\.[A-Za-z0-9]{1,10})$/);
       if (!match) return { base: line, ext: '' };
       return { base: match[1], ext: match[2] };
+    };
+
+    const trimToLength = (name, maxLength) => {
+      const chars = [...name];
+      if (chars.length <= maxLength) return { value: name, trimmed: false };
+      const { base, ext } = splitFinalExt(name);
+      const extChars = [...ext];
+      const available = Math.max(1, maxLength - extChars.length);
+      const baseChars = [...base].slice(0, available).join('').replace(/[._-]+$/g, '');
+      const value = `${baseChars || 'untitled'}${extChars.join('')}`;
+      return { value: [...value].slice(0, maxLength).join(''), trimmed: true };
+    };
+
+    const appendUniqueSuffix = (name, suffix, attempt, maxLength) => {
+      const { base, ext } = splitFinalExt(name);
+      const suffixText = `${suffix}${attempt}`;
+      const extChars = [...ext];
+      const suffixChars = [...suffixText];
+      const available = Math.max(1, maxLength - extChars.length - suffixChars.length);
+      const baseChars = [...base].slice(0, available).join('').replace(/[._-]+$/g, '') || 'untitled';
+      const value = `${baseChars}${suffixText}${ext}`;
+      return { value, trimmed: [...value].length < [...`${base}${suffixText}${ext}`].length };
     };
 
     const sanitizeBase = (text, separator) => {
@@ -9097,8 +9140,10 @@
 
       const separator = separatorEl.value;
       const rawStart = Number(numberStartEl.value || 1);
-      if (!Number.isInteger(rawStart) || rawStart < 1 || rawStart > 9999) {
+      const rawMaxLength = Number(maxLengthEl.value || 120);
+      if (numberEnabledEl.checked && (!Number.isInteger(rawStart) || rawStart < 1 || rawStart > 9999)) {
         numberStartEl.setAttribute('aria-invalid', 'true');
+        maxLengthEl.setAttribute('aria-invalid', 'false');
         outputEl.value = '';
         resetStats();
         inputCountEl.textContent = allLines.length.toLocaleString(numberLocale);
@@ -9106,7 +9151,17 @@
         return;
       }
       numberStartEl.setAttribute('aria-invalid', 'false');
+      if (!Number.isInteger(rawMaxLength) || rawMaxLength < 20 || rawMaxLength > 255) {
+        maxLengthEl.setAttribute('aria-invalid', 'true');
+        outputEl.value = '';
+        resetStats();
+        inputCountEl.textContent = allLines.length.toLocaleString(numberLocale);
+        setSummary(t.invalidMax, 'error');
+        return;
+      }
+      maxLengthEl.setAttribute('aria-invalid', 'false');
       const start = rawStart;
+      const maxLength = rawMaxLength;
       const datePrefix = dateEnabledEl.checked ? formatDatePrefix(dateEl.value) : '';
       const numberWidth = Math.max(2, String(start + lines.length - 1).length);
 
@@ -9114,9 +9169,11 @@
       const usedFinal = {};
       let changed = 0;
       let duplicateCandidates = 0;
+      let trimmedCount = 0;
 
       const outputs = lines.map((line, index) => {
         const { base, ext } = splitExt(line);
+        let itemTrimmed = false;
         let name = sanitizeBase(base, separator);
         const parts = [];
         if (datePrefix) parts.push(datePrefix);
@@ -9124,21 +9181,26 @@
         parts.push(name);
         name = separator ? parts.filter(Boolean).join(separator) : parts.filter(Boolean).join('');
         let finalName = `${name}${ext}`;
+        const trimmed = trimToLength(finalName, maxLength);
+        finalName = trimmed.value;
+        if (trimmed.trimmed) itemTrimmed = true;
         const seenKey = finalName.toLocaleLowerCase();
         if (seen[seenKey]) {
           duplicateCandidates += 1;
         }
         if (dedupeEl.checked) {
-          const parsed = splitFinalExt(finalName);
           const suffix = separator || '-';
           let uniqueName = finalName;
           let attempt = seen[seenKey] ? seen[seenKey] + 1 : 2;
           while (usedFinal[uniqueName.toLocaleLowerCase()]) {
-            uniqueName = `${parsed.base}${suffix}${attempt}${parsed.ext}`;
+            const fitted = appendUniqueSuffix(finalName, suffix, attempt, maxLength);
+            uniqueName = fitted.value;
+            if (fitted.trimmed) itemTrimmed = true;
             attempt += 1;
           }
           finalName = uniqueName;
         }
+        if (itemTrimmed) trimmedCount += 1;
         if (finalName !== line) changed += 1;
         seen[seenKey] = (seen[seenKey] || 0) + 1;
         usedFinal[finalName.toLocaleLowerCase()] = true;
@@ -9151,13 +9213,20 @@
       duplicateCountEl.textContent = duplicateCandidates.toLocaleString(numberLocale);
       copyBtn.disabled = !outputs.length;
       const state = allLines.length > lines.length ? 'warning' : (duplicateCandidates && !dedupeEl.checked ? 'warning' : 'success');
-      setSummary(allLines.length > lines.length ? t.tooMany(lines.length, allLines.length) : t.summary(changed, duplicateCandidates, duplicateCandidates && dedupeEl.checked), state);
+      setSummary(allLines.length > lines.length ? t.tooMany(lines.length, allLines.length) : t.summary(changed, duplicateCandidates, duplicateCandidates && dedupeEl.checked, trimmedCount), state);
     };
 
-    [input, separatorEl, caseEl, dateEnabledEl, dateEl, numberEnabledEl, numberStartEl, removeEmojiEl, keepExtensionEl, dedupeEl].forEach((el) => {
+    const syncControls = () => {
+      dateEl.disabled = !dateEnabledEl.checked;
+      numberStartEl.disabled = !numberEnabledEl.checked;
+    };
+    syncControls();
+
+    [input, separatorEl, caseEl, dateEnabledEl, dateEl, numberEnabledEl, numberStartEl, removeEmojiEl, keepExtensionEl, dedupeEl, maxLengthEl].forEach((el) => {
       el.addEventListener('input', analyze);
       el.addEventListener('change', analyze);
     });
+    [dateEnabledEl, numberEnabledEl].forEach((el) => el.addEventListener('change', syncControls));
 
     sampleBtn.addEventListener('click', () => {
       input.value = t.sample;

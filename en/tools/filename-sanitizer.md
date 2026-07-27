@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Filename Sanitizer | Remove symbols, keep extensions, and fix duplicates
-description: Paste titles or file names to normalize spaces, special characters, repeated separators, extensions, date prefixes, sequence numbers, and duplicate candidates into safer copy-ready file names.
+title: Filename Sanitizer | Remove symbols, keep extensions, trim long names, and fix duplicates
+description: Paste titles or file names to normalize spaces, special characters, repeated separators, extensions, date prefixes, sequence numbers, long names, and duplicate candidates into safer copy-ready file names.
 lang: en
 permalink: /en/tools/filename-sanitizer/
 canonical_url: /en/tools/filename-sanitizer/
@@ -25,6 +25,8 @@ faq:
     a: Yes. Add one title or file name per line, then apply numbering and date rules to the whole batch.
   - q: How are duplicate file names handled?
     a: When duplicate adjustment is turned on, the tool appends a number to repeated results to reduce naming conflicts. Before applying the names, still check whether the destination folder already contains the same names.
+  - q: Can it shorten very long file names?
+    a: Yes. Set a maximum length and the tool trims the base name while keeping preserved extensions and duplicate suffixes at the end.
 ---
 
 ## Why use a filename sanitizer?
@@ -36,6 +38,7 @@ This tool helps you:
 - unify separator style
 - add a date prefix and sequence numbers
 - keep common extensions such as `.png`, `.pdf`, and `.xlsx`
+- shorten names that exceed your chosen maximum length
 - make duplicate filename candidates unique
 - copy a cleaner output list for the next step
 
@@ -43,8 +46,12 @@ This tool helps you:
 1. Paste titles or file names, one per line.
 2. Choose hyphen, underscore, or no separator.
 3. Optionally force English letters to lower/upper case.
-4. Turn on date prefix, sequence numbering, extension keeping, and duplicate adjustment as needed.
+4. Turn on date prefix, sequence numbering, extension keeping, maximum length, and duplicate adjustment as needed.
 5. Review the cleaned list, then copy it for folder cleanup, uploads, or batch rename preparation.
+
+## Why this tool was improved today
+Recent quality passes focused on tools such as Online Return Package Checker, Fraction Calculator, Body Fat Calculator, Emergency Bag Checklist Planner, Pomodoro Timer, and Parking Fee Calculator, so this pass avoided repeating them.
+Filename Sanitizer has several error-prone filename edge cases, including special characters, compound extensions, duplicate suffixes, and long upload names, making it a good candidate for a focused UI, SEO, and validation pass.
 
 ## Especially useful for
 ### 1) Blog or CMS asset uploads
@@ -76,8 +83,12 @@ If duplicate adjustment is enabled, repeated results get suffixes such as `-2` a
 
 ## Rules and limits
 - Characters that often cause filename problems, including `/ \ : * ? " < > |`, are treated like separators.
-- With extension keeping enabled, common final extensions such as `.png`, `.pdf`, and `.xlsx` are preserved as much as possible.
+- With extension keeping enabled, common final extensions such as `.png`, `.pdf`, `.xlsx`, `.tar.gz`, and `.min.js` are preserved as much as possible.
+- Names longer than the maximum length are shortened from the base name first so preserved extensions and duplicate suffixes remain at the end.
 - To avoid browser slowdowns, the first 200 non-empty lines are processed.
+
+### Are compound extensions kept?
+Common compound extensions such as `.tar.gz`, `.min.js`, and `.d.ts` are treated as one extension. Dotfiles such as `.env` are kept as names instead of being misread as empty names with extensions.
 - This tool does not rename real files. Copy the cleaned names and apply them in your upload or batch-renaming workflow.
 
 ## Summary

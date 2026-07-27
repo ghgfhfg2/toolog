@@ -485,6 +485,14 @@ layout: default
             <label class="tool-check"><input id="fs-dedupe" type="checkbox" checked /> {% if page.lang == 'en' %}Make duplicate names unique{% elsif page.lang == 'ja' %}重複名を自動調整{% else %}중복 파일명 자동 보정{% endif %}</label>
           </div>
 
+          <div class="tool-row-grid pct-grid">
+            <div>
+              <label for="fs-max-length">{% if page.lang == 'en' %}Maximum name length{% elsif page.lang == 'ja' %}最大文字数{% else %}파일명 최대 길이{% endif %}</label>
+              <input id="fs-max-length" type="number" min="20" max="255" step="1" value="120" inputmode="numeric" aria-describedby="fs-summary fs-limits" />
+            </div>
+            <p class="tool-result fs-inline-help">{% if page.lang == 'en' %}Long names are shortened before duplicate suffixes are added, while preserved extensions stay at the end.{% elsif page.lang == 'ja' %}長すぎる名前は重複番号を付ける前に短縮し、保持した拡張子は末尾に残します。{% else %}너무 긴 이름은 중복 번호를 붙이기 전에 줄이고, 보존한 확장자는 끝에 유지합니다.{% endif %}</p>
+          </div>
+
           <div class="tool-row-grid pct-actions">
             <button id="fs-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
             <button id="fs-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
@@ -499,7 +507,7 @@ layout: default
           </div>
 
           <p class="tool-result" id="fs-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Paste file names to normalize spaces, symbols, numbering, and duplicate candidates.{% elsif page.lang == 'ja' %}ファイル名を貼り付けると、空白・記号・連番・重複候補をまとめて整理します。{% else %}파일명 목록을 붙여넣으면 공백, 특수문자, 순번 규칙을 한 번에 정리합니다.{% endif %}</p>
-          <p class="tool-result" id="fs-limits">{% if page.lang == 'en' %}Up to 200 non-empty lines are processed. Starting number must be a whole number from 1 to 9999.{% elsif page.lang == 'ja' %}空でない行を最大200件まで処理します。開始番号は1〜9999の整数で入力してください。{% else %}빈 줄을 제외한 최대 200개 항목을 처리합니다. 시작 번호는 1~9999 사이의 정수로 입력하세요.{% endif %}</p>
+          <p class="tool-result" id="fs-limits">{% if page.lang == 'en' %}Up to 200 non-empty lines are processed. Starting number must be 1-9999, and maximum name length must be 20-255 characters.{% elsif page.lang == 'ja' %}空でない行を最大200件まで処理します。開始番号は1〜9999、最大文字数は20〜255の整数で入力してください。{% else %}빈 줄을 제외한 최대 200개 항목을 처리합니다. 시작 번호는 1~9999, 파일명 최대 길이는 20~255 사이의 정수로 입력하세요.{% endif %}</p>
           <div class="tool-row">
             <label for="fs-output">{% if page.lang == 'en' %}Cleaned file names{% elsif page.lang == 'ja' %}整理後のファイル名{% else %}정리된 파일명 목록{% endif %}</label>
             <textarea id="fs-output" rows="12" readonly placeholder="{% if page.lang == 'en' %}Cleaned file names will appear here.{% elsif page.lang == 'ja' %}整理されたファイル名がここに表示されます。{% else %}정리된 파일명 목록이 여기에 표시됩니다.{% endif %}"></textarea>
