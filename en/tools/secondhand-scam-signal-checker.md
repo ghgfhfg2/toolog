@@ -26,7 +26,7 @@ faq:
   - q: Is in-person trading always safe?
     a: Not always, but it usually lowers the risk of photo theft, hidden defects, and no-shipment problems because you can verify the item.
   - q: If safe payment is refused, should I stop right away?
-    a: For expensive items or weak-profile accounts, refusal of safe payment is a serious warning sign. Extra proof and protected payment matter.
+    a: For expensive items or accounts with little history, a strong refusal of protected payment deserves caution. At minimum, secure extra real photos, transaction records, and a way to verify the item.
 ---
 
 ## Why use this tool?
@@ -85,9 +85,22 @@ The tool reflects item-level risk too, so you can review the trade more conserva
 - If the other person refuses verification or rushes payment, pause the deal.
 
 ## Related tools
-- [Secondhand Price Message Generator]({{ '/en/tools/secondhand-price-message-generator/' | relative_url }})
-- [Secondhand Trade Checklist Planner]({{ '/en/tools/secondhand-trade-checklist-planner/' | relative_url }})
-- [Gift Idea Picker]({{ '/en/tools/gift-idea-picker/' | relative_url }})
+- Need a safer price-negotiation message? Try the [Secondhand Price Message Generator]({{ '/en/tools/secondhand-price-message-generator/' | relative_url }}).
+- Preparing the sale side too? Use the [Secondhand Trade Checklist Planner]({{ '/en/tools/secondhand-trade-checklist-planner/' | relative_url }}).
+- Buying as a gift and want safer options? Open the [Gift Idea Picker]({{ '/en/tools/gift-idea-picker/' | relative_url }}).
+
+## FAQ
+### If the risk score is low, can I pay right away?
+No. Even with a low score, it is still safer to recheck the market price, verify real photos, and keep transaction records.
+
+### What should I paste into the message note?
+Paste only the parts about payment, urgency, refusal of protected payment, avoidance of in-person verification, or moving to another messenger. You do not need to enter private details or full bank account numbers.
+
+### If the seller sounds friendly, is that enough to trust them?
+Not necessarily. Scam messages can sound overly polite or urgent. Payment protection and verifiable item proof matter more than tone.
+
+### Can sellers use this too?
+Yes. Sellers can also use it when a buyer asks for an unusual payment flow, pushes off-platform contact, or creates pressure around shipping and confirmation.
 
 ## Summary
 Secondhand Scam Signal Checker is a **checker-type tool** that reviews pricing, payment method, account trust, pressure language, and verification risk together before a used-item deal.
