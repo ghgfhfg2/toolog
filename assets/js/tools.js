@@ -16556,6 +16556,7 @@
     const message = document.getElementById('sssc-message');
     const sampleBtn = document.getElementById('sssc-sample');
     const copyBtn = document.getElementById('sssc-copy');
+    const clearBtn = document.getElementById('sssc-clear');
     const scoreEl = document.getElementById('sssc-score');
     const levelEl = document.getElementById('sssc-level');
     const signalsEl = document.getElementById('sssc-signals');
@@ -16566,26 +16567,177 @@
 
     if (!item || !priceGap || !payment || !pressure || !profile || !meet || !outside || !refuseSafe || !stockPhoto || !excuse || !message || !scoreEl || !levelEl || !signalsEl || !actionEl || !summaryEl || !listEl || !outputEl) return;
 
+    const i18n = {
+      ko: {
+        title: '[중고거래 사기 신호 점검 결과]',
+        detectedTitle: '감지된 위험 신호',
+        actionTitle: '지금 권장되는 대응',
+        initial: '거래 조건을 넣으면 사기 위험 신호와 지금 취해야 할 대응을 빠르게 정리합니다.',
+        noSignals: '입력된 조건에서 즉시 큰 경고 신호는 많지 않습니다.',
+        noSignalsSummary: '뚜렷한 위험 신호는 적지만, 시세·실사·결제 보호 여부는 계속 확인하는 편이 좋아요.',
+        defaultTip: '시세 비교, 실사 추가 확인, 플랫폼 내 기록 유지, 안전결제 가능 여부를 기본으로 확인하세요.',
+        outputNoSignal: '큰 경고 신호는 적지만, 기본 보호 절차는 유지하세요.',
+        outputDefaultTip: '시세 비교, 실사 확인, 안전결제 유지',
+        summary: (count, level, first) => `위험 신호 ${formatNum(count)}개를 기준으로 ${level} 단계로 봤어요. 특히 ${first.replace(/[.。]$/, '')}`,
+        copied: '복사됨',
+        copyDefault: '결과 복사',
+        copyFail: '자동 복사를 사용할 수 없습니다. 결과를 직접 선택해 복사해 주세요.',
+        cleared: '입력값을 초기화했습니다.',
+        levels: { low: '낮음', caution: '주의', high: '높음', veryHigh: '매우 높음' },
+        actions: { low: '기본 확인 유지', caution: '보호 장치 있는 방식만 진행', high: '결제 보류 후 추가 확인', veryHigh: '거래 중단 권장' },
+        headings: { score: '위험 점수', level: '위험 등급', action: '권장 대응', signals: '감지 신호' },
+        sample: '오늘 안 보내면 다른 분께 넘겨요. 안전결제는 안 되고 계좌로만 받아요. 군부대라 통화 어렵고 오픈채팅으로 주세요.',
+        signals: {
+          ticket: ['티켓·예약권·디지털 코드는 회수/취소 위험이 높아 확인이 더 어렵습니다.', '플랫폼 보호가 없는 거래라면 보수적으로 보세요.'],
+          digital: ['전자기기·고가 IT 기기는 사기 타깃이 되기 쉬운 품목입니다.', '직거래 테스트 또는 안전결제 우선으로 조건을 좁히세요.'],
+          fashion: ['명품·한정판은 가품/사진 도용 위험이 함께 붙습니다.', '구매 영수증·시리얼·실사 각도 추가 확인이 좋습니다.'],
+          lowPrice: ['시세보다 꽤 낮은 가격은 급매처럼 보여도 미끼일 수 있습니다.', '같은 모델 최근 거래가를 다시 비교해 보세요.'],
+          veryLowPrice: ['시세보다 지나치게 싼 가격은 대표적인 경고 신호입니다.', '입금 전 거래를 멈추고 진위부터 다시 확인하세요.'],
+          mixedPay: ['선입금 일부 요구는 책임 소재가 흐려질 수 있습니다.', '안전결제 또는 대면 확인 후 결제로 전환을 제안하세요.'],
+          prepay: ['전액 선입금만 요구하면 사기 위험이 크게 올라갑니다.', '거절하고 보호 가능한 결제 방식만 허용하세요.'],
+          rushed: ['빠른 결정을 재촉하는 말투는 판단을 흐리게 만들 수 있습니다.', '급해 보여도 추가 확인 전에는 결제하지 마세요.'],
+          pressure: ['강한 압박 판매는 사기/분쟁 상황에서 매우 흔한 패턴입니다.', '시간을 끌어도 거래가 유지되는지부터 보세요.'],
+          unclearProfile: ['계정 이력과 활동 정보가 부족합니다.', '후기·가입 시점·이전 판매 흔적을 더 확인하세요.'],
+          newProfile: ['새 계정 또는 정보가 거의 없는 계정은 경계가 필요합니다.', '대면 거래나 보호 결제 외 방식은 피하는 편이 안전합니다.'],
+          limitedMeet: ['실물 확인이 제한되면 하자·사진 도용 여부를 놓치기 쉽습니다.', '테스트 영상, 오늘 날짜 메모와 함께 찍은 실사 등을 추가 요청하세요.'],
+          noMeet: ['실물 확인을 계속 회피하면 신뢰도가 크게 떨어집니다.', '확인 거부가 계속되면 거래를 접는 쪽이 낫습니다.'],
+          outside: ['플랫폼 밖 메신저로 유도하면 신고·분쟁 기록이 약해집니다.', '가능하면 플랫폼 채팅 안에서만 대화 기록을 남기세요.'],
+          refuseSafe: ['안전결제/직거래 제안을 거부하면 보호 장치를 피하려는 신호일 수 있습니다.', '보호 장치를 거부하면 거래 중단을 우선 검토하세요.'],
+          stockPhoto: ['사진이 적거나 퍼온 느낌이면 실물 보유 여부부터 의심해야 합니다.', '배경 포함 실사, 특정 각도, 시리얼 일부 가린 사진을 요청해 보세요.'],
+          excuse: ['군인/해외/대리발송 같은 반복 사유는 확인 회피 패턴으로 자주 쓰입니다.', '확인 불가 사유가 길어질수록 거래 강행보다 중단이 안전합니다.'],
+          msgSafe: ['메시지에서 안전결제를 직접 거부하는 표현이 보입니다.', '안전결제 거부 사유보다 보호 가능 여부를 우선 보세요.'],
+          msgPayNow: ['즉시 입금을 압박하는 표현이 보입니다.', '압박 문구가 있어도 결제 전 확인 항목을 줄이지 마세요.'],
+          msgAvoid: ['직접 확인을 피하는 단서가 메시지에 있습니다.', '실물 확인 불가 거래는 보수적으로 판단하세요.'],
+          msgOutside: ['기록이 약한 결제·연락 수단을 선호하는 표현이 보입니다.', '플랫폼 내부 기록과 보호 결제를 유지하세요.']
+        }
+      },
+      en: {
+        title: '[Secondhand scam signal check result]',
+        detectedTitle: 'Detected warning signs',
+        actionTitle: 'Recommended next steps',
+        initial: 'Enter trade conditions to review scam warning signs and recommended next steps.',
+        noSignals: 'No major warning sign stands out from the current inputs.',
+        noSignalsSummary: 'Few clear warning signs were found, but still verify market price, real photos, and payment protection.',
+        defaultTip: 'Compare market prices, request real photos, keep records inside the platform, and prefer protected payment.',
+        outputNoSignal: 'Few major warning signs, but keep the basic safety steps.',
+        outputDefaultTip: 'Compare price, verify real item, keep protected payment',
+        summary: (count, level, first) => `Based on ${formatNum(count)} warning sign(s), this looks ${level}. Most notably: ${first.replace(/[.。]$/, '')}.`,
+        copied: 'Copied',
+        copyDefault: 'Copy result',
+        copyFail: 'Automatic copy is unavailable. Select the result manually to copy it.',
+        cleared: 'Cleared the inputs.',
+        levels: { low: 'low risk', caution: 'caution', high: 'high risk', veryHigh: 'very high risk' },
+        actions: { low: 'Keep basic checks', caution: 'Proceed only with protection', high: 'Pause payment and verify more', veryHigh: 'Stop the deal' },
+        headings: { score: 'Risk score', level: 'Risk level', action: 'Next action', signals: 'Warning signs' },
+        sample: 'Pay now or I will sell it to someone else. No protected payment, bank transfer only. I am on base, so calls are hard. Message me on open chat.',
+        signals: {
+          ticket: ['Tickets, reservations, and digital codes are hard to verify and may be canceled or reclaimed.', 'Be conservative if the platform offers no buyer protection.'],
+          digital: ['Electronics and high-value devices are common scam targets.', 'Narrow the deal to in-person testing or protected payment first.'],
+          fashion: ['Luxury, fashion, and limited items also carry counterfeit or stolen-photo risk.', 'Ask for receipts, serial details, and extra real photos from specific angles.'],
+          lowPrice: ['A price well below market can be bait even when it looks like a quick sale.', 'Compare recent completed deals for the same model.'],
+          veryLowPrice: ['An unrealistically cheap price is a classic warning sign.', 'Pause before paying and verify authenticity first.'],
+          mixedPay: ['Partial prepayment can blur responsibility if something goes wrong.', 'Suggest protected payment or payment after in-person verification.'],
+          prepay: ['Full prepayment only sharply increases scam risk.', 'Decline and allow only protected payment methods.'],
+          rushed: ['A rushed decision can weaken your judgment.', 'Do not pay before completing the checks.'],
+          pressure: ['Strong pressure selling is common in scam or dispute-prone situations.', 'See whether the deal remains available after you slow it down.'],
+          unclearProfile: ['The account history and activity are thin.', 'Check reviews, join date, and earlier sales activity.'],
+          newProfile: ['A new or nearly empty account needs caution.', 'Avoid unprotected payment unless in-person or protected options are available.'],
+          limitedMeet: ['Limited verification can hide defects or stolen photos.', 'Ask for a test video or a dated real photo.'],
+          noMeet: ['Repeated avoidance of real-item verification lowers trust significantly.', 'If verification keeps being refused, walking away is safer.'],
+          outside: ['Moving outside the platform weakens reports and dispute records.', 'Keep conversation records inside the platform when possible.'],
+          refuseSafe: ['Refusing protected payment or in-person trade may be an attempt to avoid safeguards.', 'Treat refusal of safeguards as a reason to stop.'],
+          stockPhoto: ['Too few or reused-looking photos raise doubts about real ownership.', 'Request real photos with background, angle, and partial serial details.'],
+          excuse: ['Repeated military, overseas, or proxy-shipping excuses are common verification-avoidance patterns.', 'The longer verification is impossible, the safer choice is to stop.'],
+          msgSafe: ['The message appears to directly refuse protected payment.', 'Focus on whether protection is possible, not only the reason given.'],
+          msgPayNow: ['The message includes immediate-payment pressure.', 'Do not shrink your verification checklist because of pressure.'],
+          msgAvoid: ['The message contains clues that direct verification is being avoided.', 'Judge no-verification deals conservatively.'],
+          msgOutside: ['The message favors weaker payment or contact records.', 'Keep platform records and protected payment.']
+        }
+      },
+      ja: {
+        title: '[中古取引詐欺シグナル点検結果]',
+        detectedTitle: '検出された危険サイン',
+        actionTitle: '今おすすめの対応',
+        initial: '取引条件を入れると、危険サインと推奨対応を整理します。',
+        noSignals: '現在の入力では大きな危険サインは多くありません。',
+        noSignalsSummary: '明確な危険サインは少なめですが、相場・実物写真・決済保護は必ず確認してください。',
+        defaultTip: '相場比較、実物写真の追加確認、プラットフォーム内の記録、安全決済可否を基本確認にしてください。',
+        outputNoSignal: '大きな危険サインは少なめですが、基本の安全確認は続けてください。',
+        outputDefaultTip: '相場比較、実物確認、安全決済の維持',
+        summary: (count, level, first) => `${formatNum(count)}件の危険サインをもとに、${level}と見ました。特に ${first.replace(/[.。]$/, '')}`,
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー',
+        copyFail: '自動コピーを利用できません。結果を手動で選択してコピーしてください。',
+        cleared: '入力をクリアしました。',
+        levels: { low: '低め', caution: '注意', high: '高め', veryHigh: '非常に高い' },
+        actions: { low: '基本確認を維持', caution: '保護ありの方法だけで進行', high: '支払い保留・追加確認', veryHigh: '取引中止を推奨' },
+        headings: { score: 'リスク点数', level: 'リスク等級', action: '推奨対応', signals: '危険サイン' },
+        sample: '今日払わないと他の人に譲ります。安全決済は不可で振込だけです。基地内なので通話は難しいです。オープンチャットで連絡してください。',
+        signals: {
+          ticket: ['チケット・予約券・デジタルコードは確認が難しく、取消や回収リスクがあります。', 'プラットフォーム保護がない取引は慎重に見てください。'],
+          digital: ['電子機器・高額IT機器は詐欺の標的になりやすい商品です。', '対面テストまたは安全決済を優先してください。'],
+          fashion: ['ブランド品・限定品は偽物や写真盗用リスクもあります。', '購入証明、シリアル、別角度の実物写真を確認しましょう。'],
+          lowPrice: ['相場よりかなり安い価格は、急ぎ売りに見えてもおとりの可能性があります。', '同じモデルの直近成約価格を再確認してください。'],
+          veryLowPrice: ['相場より極端に安い価格は代表的な警告サインです。', '支払い前に止まり、真偽を確認してください。'],
+          mixedPay: ['一部先払いは責任の所在があいまいになりがちです。', '安全決済または対面確認後の支払いを提案してください。'],
+          prepay: ['全額先払いだけを求める場合、詐欺リスクが大きく上がります。', '断って、保護される支払い方法だけにしましょう。'],
+          rushed: ['早く決めるよう急かす口調は判断を鈍らせます。', '急かされても確認前に支払わないでください。'],
+          pressure: ['強い圧迫販売は詐欺やトラブルでよく見られるパターンです。', 'こちらが時間を取っても取引が維持されるか確認してください。'],
+          unclearProfile: ['アカウント履歴や活動情報が不足しています。', 'レビュー、登録時期、過去の販売履歴を確認してください。'],
+          newProfile: ['新規または情報がほぼないアカウントは注意が必要です。', '対面取引や保護決済以外は避ける方が安全です。'],
+          limitedMeet: ['実物確認が限定されると、不具合や写真盗用を見落としやすくなります。', 'テスト動画や日付メモ付きの実物写真を追加で頼んでください。'],
+          noMeet: ['実物確認を何度も避ける場合、信頼度は大きく下がります。', '確認拒否が続くなら取引をやめる方が安全です。'],
+          outside: ['外部メッセンジャーへの移動は通報や紛争記録を弱くします。', 'できるだけプラットフォーム内に会話記録を残してください。'],
+          refuseSafe: ['安全決済や対面取引を拒むのは、保護手段を避けるサインかもしれません。', '保護手段を拒むなら中止を優先して検討してください。'],
+          stockPhoto: ['写真が少ない、または流用に見える場合は実物保有から疑う必要があります。', '背景入り実物写真、別角度、シリアル一部を隠した写真を頼みましょう。'],
+          excuse: ['軍・海外・代理発送などの理由は確認回避パターンとしてよく使われます。', '確認できない理由が長引くほど、中止する方が安全です。'],
+          msgSafe: ['メッセージ内に安全決済を直接拒む表現があります。', '拒否理由より、保護可能かどうかを優先してください。'],
+          msgPayNow: ['すぐ支払いを迫る表現があります。', '圧迫があっても支払い前の確認項目を減らさないでください。'],
+          msgAvoid: ['直接確認を避ける手がかりがメッセージにあります。', '実物確認不可の取引は慎重に判断してください。'],
+          msgOutside: ['記録が弱い決済・連絡手段を好む表現があります。', 'プラットフォーム内記録と保護決済を維持してください。']
+        }
+      }
+    }[pageLang] || {};
+
     const copyText = async (text) => {
       try {
         await navigator.clipboard.writeText(text);
+        return true;
       } catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          const ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+          return ok;
+        } catch (err) {
+          return false;
+        }
       }
+    };
+
+    const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[char]));
+
+    const setSummary = (text, state = '') => {
+      summaryEl.textContent = text;
+      summaryEl.dataset.state = state;
     };
 
     const build = () => {
       let score = 0;
       const signals = [];
       const actions = [];
-      const text = (message.value || '').toLowerCase();
+      const text = (message.value || '').normalize('NFKC').toLowerCase().slice(0, 4000);
 
       const add = (points, label, action) => {
         score += points;
@@ -16593,86 +16745,89 @@
         if (action) actions.push(action);
       };
 
-      if (item.value === 'ticket') add(12, '티켓·예약권·디지털 코드는 회수/취소 위험이 높아 확인이 더 어렵습니다.', '플랫폼 보호가 없는 거래라면 보수적으로 보세요.');
-      if (item.value === 'digital') add(8, '전자기기·고가 IT 기기는 사기 타깃이 되기 쉬운 품목입니다.', '직거래 테스트 또는 안전결제 우선으로 조건을 좁히세요.');
-      if (item.value === 'fashion') add(6, '명품·한정판은 가품/사진 도용 위험이 함께 붙습니다.', '구매 영수증·시리얼·실사 각도 추가 확인이 좋습니다.');
+      if (item.value === 'ticket') add(12, ...i18n.signals.ticket);
+      if (item.value === 'digital') add(8, ...i18n.signals.digital);
+      if (item.value === 'fashion') add(6, ...i18n.signals.fashion);
 
-      if (priceGap.value === 'low') add(12, '시세보다 꽤 낮은 가격은 급매처럼 보여도 미끼일 수 있습니다.', '같은 모델 최근 거래가를 다시 비교해 보세요.');
-      if (priceGap.value === 'very-low') add(24, '시세보다 지나치게 싼 가격은 대표적인 경고 신호입니다.', '입금 전 거래를 멈추고 진위부터 다시 확인하세요.');
+      if (priceGap.value === 'low') add(12, ...i18n.signals.lowPrice);
+      if (priceGap.value === 'very-low') add(24, ...i18n.signals.veryLowPrice);
 
-      if (payment.value === 'mixed') add(16, '선입금 일부 요구는 책임 소재가 흐려질 수 있습니다.', '안전결제 또는 대면 확인 후 결제로 전환을 제안하세요.');
-      if (payment.value === 'prepay') add(28, '전액 선입금만 요구하면 사기 위험이 크게 올라갑니다.', '거절하고 보호 가능한 결제 방식만 허용하세요.');
+      if (payment.value === 'mixed') add(16, ...i18n.signals.mixedPay);
+      if (payment.value === 'prepay') add(28, ...i18n.signals.prepay);
 
-      if (pressure.value === 'some') add(10, '빠른 결정을 재촉하는 말투는 판단을 흐리게 만들 수 있습니다.', '급해 보여도 추가 확인 전에는 결제하지 마세요.');
-      if (pressure.value === 'high') add(18, '강한 압박 판매는 사기/분쟁 상황에서 매우 흔한 패턴입니다.', '시간을 끌어도 거래가 유지되는지부터 보세요.');
+      if (pressure.value === 'some') add(10, ...i18n.signals.rushed);
+      if (pressure.value === 'high') add(18, ...i18n.signals.pressure);
 
-      if (profile.value === 'unclear') add(8, '계정 이력과 활동 정보가 부족합니다.', '후기·가입 시점·이전 판매 흔적을 더 확인하세요.');
-      if (profile.value === 'new') add(18, '새 계정 또는 정보가 거의 없는 계정은 경계가 필요합니다.', '대면 거래나 보호 결제 외 방식은 피하는 편이 안전합니다.');
+      if (profile.value === 'unclear') add(8, ...i18n.signals.unclearProfile);
+      if (profile.value === 'new') add(18, ...i18n.signals.newProfile);
 
-      if (meet.value === 'limited') add(8, '실물 확인이 제한되면 하자·사진 도용 여부를 놓치기 쉽습니다.', '테스트 영상, 오늘 날짜 메모와 함께 찍은 실사 등을 추가 요청하세요.');
-      if (meet.value === 'no') add(20, '실물 확인을 계속 회피하면 신뢰도가 크게 떨어집니다.', '확인 거부가 계속되면 거래를 접는 쪽이 낫습니다.');
+      if (meet.value === 'limited') add(8, ...i18n.signals.limitedMeet);
+      if (meet.value === 'no') add(20, ...i18n.signals.noMeet);
 
-      if (outside.checked) add(14, '플랫폼 밖 메신저로 유도하면 신고·분쟁 기록이 약해집니다.', '가능하면 플랫폼 채팅 안에서만 대화 기록을 남기세요.');
-      if (refuseSafe.checked) add(16, '안전결제/직거래 제안을 거부하면 보호 장치를 피하려는 신호일 수 있습니다.', '보호 장치를 거부하면 거래 중단을 우선 검토하세요.');
-      if (stockPhoto.checked) add(10, '사진이 적거나 퍼온 느낌이면 실물 보유 여부부터 의심해야 합니다.', '배경 포함 실사, 특정 각도, 시리얼 일부 가린 사진을 요청해 보세요.');
-      if (excuse.checked) add(12, '군인/해외/대리발송 같은 반복 사유는 확인 회피 패턴으로 자주 쓰입니다.', '확인 불가 사유가 길어질수록 거래 강행보다 중단이 안전합니다.');
+      if (outside.checked) add(14, ...i18n.signals.outside);
+      if (refuseSafe.checked) add(16, ...i18n.signals.refuseSafe);
+      if (stockPhoto.checked) add(10, ...i18n.signals.stockPhoto);
+      if (excuse.checked) add(12, ...i18n.signals.excuse);
 
       const keywordRules = [
-        { re: /안전결제.*안|안전결제 불가|안전결제는 안/, points: 18, label: '메시지에서 안전결제를 직접 거부하는 표현이 보입니다.', action: '안전결제 거부 사유보다 보호 가능 여부를 우선 보세요.' },
-        { re: /오늘 안|지금 입금|바로 입금|지금 보내/, points: 10, label: '즉시 입금을 압박하는 표현이 보입니다.', action: '압박 문구가 있어도 결제 전 확인 항목을 줄이지 마세요.' },
-        { re: /군부대|해외|출장 중|대리 발송/, points: 10, label: '직접 확인을 피하는 단서가 메시지에 있습니다.', action: '실물 확인 불가 거래는 보수적으로 판단하세요.' },
-        { re: /계좌만|현금만|문자 주세요|오픈채팅/, points: 10, label: '기록이 약한 결제·연락 수단을 선호하는 표현이 보입니다.', action: '플랫폼 내부 기록과 보호 결제를 유지하세요.' }
+        { re: /안전결제.*안|안전결제 불가|안전결제는 안|protected payment.*no|no protected payment|safe payment.*no|安全決済.*不可|安全決済.*できな|安全決済.*無理/, points: 18, key: 'msgSafe' },
+        { re: /오늘 안|지금 입금|바로 입금|지금 보내|pay now|send now|right now|今日払|今払|すぐ払/, points: 10, key: 'msgPayNow' },
+        { re: /군부대|해외|출장 중|대리 발송|on base|overseas|business trip|proxy shipping|基地|海外|出張中|代理発送/, points: 10, key: 'msgAvoid' },
+        { re: /계좌만|현금만|문자 주세요|오픈채팅|bank transfer only|cash only|open chat|text me|振込だけ|現金だけ|オープンチャット|sms/, points: 10, key: 'msgOutside' }
       ];
 
       keywordRules.forEach((rule) => {
-        if (rule.re.test(text)) add(rule.points, rule.label, rule.action);
+        if (rule.re.test(text)) add(rule.points, ...i18n.signals[rule.key]);
       });
 
       const uniqueActions = [...new Set(actions)];
-      let level = '낮음';
-      let action = '기본 확인 유지';
+      let level = i18n.levels.low;
+      let action = i18n.actions.low;
+      let state = 'success';
       if (score >= 70) {
-        level = '매우 높음';
-        action = '거래 중단 권장';
+        level = i18n.levels.veryHigh;
+        action = i18n.actions.veryHigh;
+        state = 'error';
       } else if (score >= 45) {
-        level = '높음';
-        action = '결제 보류 후 추가 확인';
+        level = i18n.levels.high;
+        action = i18n.actions.high;
+        state = 'over';
       } else if (score >= 25) {
-        level = '주의';
-        action = '보호 장치 있는 방식만 진행';
+        level = i18n.levels.caution;
+        action = i18n.actions.caution;
+        state = 'within';
       }
 
       scoreEl.textContent = String(score);
       levelEl.textContent = level;
       signalsEl.textContent = String(signals.length);
       actionEl.textContent = action;
-      summaryEl.textContent = signals.length
-        ? `위험 신호 ${signals.length}개를 기준으로 ${level} 단계로 봤어요. 특히 ${signals[0].replace('.', '')}`
-        : '뚜렷한 위험 신호는 적지만, 시세·실사·결제 보호 여부는 계속 확인하는 편이 좋아요.';
+      setSummary(signals.length ? i18n.summary(signals.length, level, signals[0]) : i18n.noSignalsSummary, state);
 
       listEl.innerHTML = `
         <div class="tool-card">
-          <strong>감지된 위험 신호</strong>
-          <ul>${(signals.length ? signals : ['입력된 조건에서 즉시 큰 경고 신호는 많지 않습니다.']).map((signal) => `<li>${signal}</li>`).join('')}</ul>
+          <strong>${escapeHtml(i18n.detectedTitle)}</strong>
+          <ul>${(signals.length ? signals : [i18n.noSignals]).map((signal) => `<li>${escapeHtml(signal)}</li>`).join('')}</ul>
         </div>
         <div class="tool-card">
-          <strong>지금 권장되는 대응</strong>
-          <ul>${(uniqueActions.length ? uniqueActions.slice(0, 5) : ['시세 비교, 실사 추가 확인, 플랫폼 내 기록 유지, 안전결제 가능 여부를 기본으로 확인하세요.']).map((tip) => `<li>${tip}</li>`).join('')}</ul>
+          <strong>${escapeHtml(i18n.actionTitle)}</strong>
+          <ul>${(uniqueActions.length ? uniqueActions.slice(0, 5) : [i18n.defaultTip]).map((tip) => `<li>${escapeHtml(tip)}</li>`).join('')}</ul>
         </div>
       `;
 
       outputEl.value = [
-        '[중고거래 사기 신호 점검 결과]',
-        `- 위험 점수: ${score}`,
-        `- 위험 등급: ${level}`,
-        `- 권장 대응: ${action}`,
+        i18n.title,
+        `- ${i18n.headings.score}: ${score}`,
+        `- ${i18n.headings.level}: ${level}`,
+        `- ${i18n.headings.action}: ${action}`,
         '',
-        '[감지 신호]',
-        ...(signals.length ? signals.map((signal, index) => `${index + 1}. ${signal}`) : ['1. 큰 경고 신호는 적지만, 기본 보호 절차는 유지하세요.']),
+        `[${i18n.headings.signals}]`,
+        ...(signals.length ? signals.map((signal, index) => `${index + 1}. ${signal}`) : [`1. ${i18n.outputNoSignal}`]),
         '',
-        '[권장 대응]',
-        ...(uniqueActions.length ? uniqueActions.slice(0, 5).map((tip, index) => `${index + 1}. ${tip}`) : ['1. 시세 비교, 실사 확인, 안전결제 유지'])
+        `[${i18n.actionTitle}]`,
+        ...(uniqueActions.length ? uniqueActions.slice(0, 5).map((tip, index) => `${index + 1}. ${tip}`) : [`1. ${i18n.outputDefaultTip}`])
       ].join('\n');
+      copyBtn.disabled = false;
     };
 
     sampleBtn.addEventListener('click', () => {
@@ -16686,17 +16841,39 @@
       refuseSafe.checked = true;
       stockPhoto.checked = true;
       excuse.checked = true;
-      message.value = '오늘 안 보내면 다른 분께 넘겨요. 안전결제는 안 되고 계좌로만 받아요. 군부대라 통화 어렵고 오픈채팅으로 주세요.';
+      message.value = i18n.sample;
       build();
+      message.focus();
     });
 
     copyBtn.addEventListener('click', async () => {
       if (!outputEl.value.trim()) build();
       if (!outputEl.value.trim()) return;
-      await copyText(outputEl.value.trim());
+      const ok = await copyText(outputEl.value.trim());
+      if (!ok) {
+        setSummary(i18n.copyFail, 'error');
+        outputEl.focus();
+        outputEl.select();
+        return;
+      }
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = i18n.copied;
+      setSummary(i18n.copied, 'success');
+      setTimeout(() => { copyBtn.textContent = old || i18n.copyDefault; }, 900);
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      item.value = 'general';
+      priceGap.value = 'normal';
+      payment.value = 'safe';
+      pressure.value = 'none';
+      profile.value = 'good';
+      meet.value = 'yes';
+      [outside, refuseSafe, stockPhoto, excuse].forEach(el => { el.checked = false; });
+      message.value = '';
+      build();
+      setSummary(i18n.cleared);
+      item.focus();
     });
 
     [item, priceGap, payment, pressure, profile, meet, outside, refuseSafe, stockPhoto, excuse, message].forEach((el) => {

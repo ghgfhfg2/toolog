@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Secondhand Scam Signal Checker | Quickly review warning signs before a used-item deal
-description: Enter the listing conditions and seller behavior to quickly review warning signs like full prepayment requests, unrealistically low pricing, and refusal of protected payment.
+title: Secondhand Scam Signal Checker | Check prepayment, payment refusal, and pricing risk
+description: Check secondhand scam warning signs before paying, including unrealistic pricing, full prepayment demands, protected payment refusal, off-platform chat, new accounts, and verification avoidance.
 lang: en
 permalink: /en/tools/secondhand-scam-signal-checker/
 canonical_url: /en/tools/secondhand-scam-signal-checker/
@@ -56,6 +56,8 @@ Then the tool summarizes:
 - detected warning signs
 - suggested next action
 
+Your note is processed in the browser only. For faster review, paste just the parts that mention payment, urgency, verification, outside chat, or refusal of protected payment.
+
 ## Good use cases
 ### 1) A listing looks suspiciously cheap
 A good deal can also be bait.
@@ -68,6 +70,19 @@ It becomes much easier to judge the situation when urgency, off-platform contact
 ### 3) You are buying expensive electronics, tickets, or collectible items
 These categories tend to attract more scams and disputes.
 The tool reflects item-level risk too, so you can review the trade more conservatively.
+
+## How to read the result
+- **Low risk**: Few warning signs stand out, but keep market-price checks, real-photo checks, and platform records.
+- **Caution**: Some signals overlap, such as partial prepayment, weak photos, or limited account history. Proceed only with buyer protection.
+- **High risk**: Payment method, account trust, and verification problems are stacking up. Pause payment and request stronger proof.
+- **Very high risk**: Full prepayment, urgency, verification avoidance, and off-platform contact are overlapping. Walking away is usually safer.
+
+## Minimum safety checklist
+- Compare recent completed prices for the same item.
+- Request real photos with today’s date or the seller’s nickname.
+- For expensive goods, ask for a test video, partial serial detail, and all included parts.
+- Keep payment and conversation records inside the platform when possible.
+- If the other person refuses verification or rushes payment, pause the deal.
 
 ## Related tools
 - [Secondhand Price Message Generator]({{ '/en/tools/secondhand-price-message-generator/' | relative_url }})

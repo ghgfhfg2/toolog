@@ -4777,91 +4777,93 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
         <div class="tool-ui">
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="sssc-item">거래 품목</label>
-              <select id="sssc-item">
-                <option value="digital">전자기기 / 고가 IT 기기</option>
-                <option value="fashion">명품 / 패션 / 한정판</option>
-                <option value="ticket">티켓 / 예약권 / 디지털 코드</option>
-                <option value="general">일반 생활용품</option>
+              <label for="sssc-item">{% if page.lang == 'en' %}Item type{% elsif page.lang == 'ja' %}商品タイプ{% else %}거래 품목{% endif %}</label>
+              <select id="sssc-item" aria-describedby="sssc-summary sssc-help">
+                <option value="digital">{% if page.lang == 'en' %}Electronics / high-value devices{% elsif page.lang == 'ja' %}電子機器・高額IT機器{% else %}전자기기 / 고가 IT 기기{% endif %}</option>
+                <option value="fashion">{% if page.lang == 'en' %}Luxury / fashion / limited edition{% elsif page.lang == 'ja' %}ブランド品・ファッション・限定品{% else %}명품 / 패션 / 한정판{% endif %}</option>
+                <option value="ticket">{% if page.lang == 'en' %}Tickets / reservations / digital codes{% elsif page.lang == 'ja' %}チケット・予約券・デジタルコード{% else %}티켓 / 예약권 / 디지털 코드{% endif %}</option>
+                <option value="general">{% if page.lang == 'en' %}General household item{% elsif page.lang == 'ja' %}一般生活用品{% else %}일반 생활용품{% endif %}</option>
               </select>
             </div>
             <div>
-              <label for="sssc-price-gap">시세 대비 가격</label>
-              <select id="sssc-price-gap">
-                <option value="normal">비슷하거나 약간 저렴함</option>
-                <option value="low">꽤 저렴함</option>
-                <option value="very-low">지나치게 저렴함</option>
+              <label for="sssc-price-gap">{% if page.lang == 'en' %}Price vs. market{% elsif page.lang == 'ja' %}相場との価格差{% else %}시세 대비 가격{% endif %}</label>
+              <select id="sssc-price-gap" aria-describedby="sssc-summary sssc-help">
+                <option value="normal">{% if page.lang == 'en' %}Similar or slightly cheaper{% elsif page.lang == 'ja' %}同程度または少し安い{% else %}비슷하거나 약간 저렴함{% endif %}</option>
+                <option value="low">{% if page.lang == 'en' %}Quite cheap{% elsif page.lang == 'ja' %}かなり安い{% else %}꽤 저렴함{% endif %}</option>
+                <option value="very-low">{% if page.lang == 'en' %}Unrealistically cheap{% elsif page.lang == 'ja' %}極端に安い{% else %}지나치게 저렴함{% endif %}</option>
               </select>
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="sssc-payment">결제 요구 방식</label>
-              <select id="sssc-payment">
-                <option value="safe">안전결제 / 대면 후 결제 가능</option>
-                <option value="mixed">선입금 일부 또는 애매한 방식</option>
-                <option value="prepay">전액 선입금만 요구</option>
+              <label for="sssc-payment">{% if page.lang == 'en' %}Requested payment{% elsif page.lang == 'ja' %}求められた支払い方法{% else %}결제 요구 방식{% endif %}</label>
+              <select id="sssc-payment" aria-describedby="sssc-summary sssc-help">
+                <option value="safe">{% if page.lang == 'en' %}Protected payment / pay after meeting{% elsif page.lang == 'ja' %}安全決済・対面後の支払い可{% else %}안전결제 / 대면 후 결제 가능{% endif %}</option>
+                <option value="mixed">{% if page.lang == 'en' %}Partial prepayment or unclear method{% elsif page.lang == 'ja' %}一部先払い・あいまいな方法{% else %}선입금 일부 또는 애매한 방식{% endif %}</option>
+                <option value="prepay">{% if page.lang == 'en' %}Full prepayment only{% elsif page.lang == 'ja' %}全額先払いのみ{% else %}전액 선입금만 요구{% endif %}</option>
               </select>
             </div>
             <div>
-              <label for="sssc-pressure">거래 압박 정도</label>
-              <select id="sssc-pressure">
-                <option value="none">보통</option>
-                <option value="some">빨리 결정하라고 재촉함</option>
-                <option value="high">지금 입금 안 하면 끝이라고 강하게 압박</option>
+              <label for="sssc-pressure">{% if page.lang == 'en' %}Pressure level{% elsif page.lang == 'ja' %}急かしの強さ{% else %}거래 압박 정도{% endif %}</label>
+              <select id="sssc-pressure" aria-describedby="sssc-summary sssc-help">
+                <option value="none">{% if page.lang == 'en' %}Normal{% elsif page.lang == 'ja' %}通常{% else %}보통{% endif %}</option>
+                <option value="some">{% if page.lang == 'en' %}Rushing the decision{% elsif page.lang == 'ja' %}早く決めるよう急かす{% else %}빨리 결정하라고 재촉함{% endif %}</option>
+                <option value="high">{% if page.lang == 'en' %}Strong “pay now or lose it” pressure{% elsif page.lang == 'ja' %}今払わないと終了と強く圧迫{% else %}지금 입금 안 하면 끝이라고 강하게 압박{% endif %}</option>
               </select>
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="sssc-profile">상대 계정 신뢰도</label>
-              <select id="sssc-profile">
-                <option value="good">거래 이력/후기/활동이 충분함</option>
-                <option value="unclear">이력은 적지만 완전 새 계정은 아님</option>
-                <option value="new">새 계정이거나 정보가 거의 없음</option>
+              <label for="sssc-profile">{% if page.lang == 'en' %}Account trust{% elsif page.lang == 'ja' %}アカウント信頼度{% else %}상대 계정 신뢰도{% endif %}</label>
+              <select id="sssc-profile" aria-describedby="sssc-summary sssc-help">
+                <option value="good">{% if page.lang == 'en' %}Enough history, reviews, and activity{% elsif page.lang == 'ja' %}取引履歴・レビュー・活動が十分{% else %}거래 이력/후기/활동이 충분함{% endif %}</option>
+                <option value="unclear">{% if page.lang == 'en' %}Some history, but not very clear{% elsif page.lang == 'ja' %}履歴は少ないが完全な新規ではない{% else %}이력은 적지만 완전 새 계정은 아님{% endif %}</option>
+                <option value="new">{% if page.lang == 'en' %}New or almost no visible information{% elsif page.lang == 'ja' %}新規または情報がほぼない{% else %}새 계정이거나 정보가 거의 없음{% endif %}</option>
               </select>
             </div>
             <div>
-              <label for="sssc-meet">실물 확인 가능 여부</label>
-              <select id="sssc-meet">
-                <option value="yes">직거래 / 테스트 가능</option>
-                <option value="limited">부분 확인만 가능</option>
-                <option value="no">확인 불가 / 핑계로 계속 회피</option>
+              <label for="sssc-meet">{% if page.lang == 'en' %}Item verification{% elsif page.lang == 'ja' %}実物確認{% else %}실물 확인 가능 여부{% endif %}</label>
+              <select id="sssc-meet" aria-describedby="sssc-summary sssc-help">
+                <option value="yes">{% if page.lang == 'en' %}In-person check / testing possible{% elsif page.lang == 'ja' %}対面確認・テスト可能{% else %}직거래 / 테스트 가능{% endif %}</option>
+                <option value="limited">{% if page.lang == 'en' %}Only partial verification possible{% elsif page.lang == 'ja' %}一部確認のみ可能{% else %}부분 확인만 가능{% endif %}</option>
+                <option value="no">{% if page.lang == 'en' %}No verification / keeps avoiding it{% elsif page.lang == 'ja' %}確認不可・理由をつけて回避{% else %}확인 불가 / 핑계로 계속 회피{% endif %}</option>
               </select>
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="sssc-outside" type="checkbox" /> 플랫폼 채팅 대신 오픈채팅·문자·다른 메신저로 유도</label>
-            <label class="tool-check"><input id="sssc-refuse-safe" type="checkbox" /> 안전결제/직거래 제안을 거부함</label>
+            <label class="tool-check"><input id="sssc-outside" type="checkbox" aria-describedby="sssc-summary" /> {% if page.lang == 'en' %}Pushes open chat, SMS, or another messenger instead of platform chat{% elsif page.lang == 'ja' %}プラットフォーム外のチャット・SMS・別メッセンジャーへ誘導{% else %}플랫폼 채팅 대신 오픈채팅·문자·다른 메신저로 유도{% endif %}</label>
+            <label class="tool-check"><input id="sssc-refuse-safe" type="checkbox" aria-describedby="sssc-summary" /> {% if page.lang == 'en' %}Refuses protected payment or in-person trade{% elsif page.lang == 'ja' %}安全決済・対面取引の提案を拒否{% else %}안전결제/직거래 제안을 거부함{% endif %}</label>
           </div>
           <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="sssc-stock-photo" type="checkbox" /> 사진이 너무 적거나 퍼온 듯함</label>
-            <label class="tool-check"><input id="sssc-excuse" type="checkbox" /> 군인/해외/대리발송 등 반복적인 사유로 확인을 피함</label>
+            <label class="tool-check"><input id="sssc-stock-photo" type="checkbox" aria-describedby="sssc-summary" /> {% if page.lang == 'en' %}Photos are too few or look reused{% elsif page.lang == 'ja' %}写真が少ない、または流用に見える{% else %}사진이 너무 적거나 퍼온 듯함{% endif %}</label>
+            <label class="tool-check"><input id="sssc-excuse" type="checkbox" aria-describedby="sssc-summary" /> {% if page.lang == 'en' %}Avoids verification with military, overseas, proxy-shipping, or similar excuses{% elsif page.lang == 'ja' %}軍・海外・代理発送などを理由に確認を避ける{% else %}군인/해외/대리발송 등 반복적인 사유로 확인을 피함{% endif %}</label>
           </div>
 
           <div class="tool-row">
-            <label for="sssc-message">상대 메시지 메모 (선택)</label>
-            <textarea id="sssc-message" rows="6" maxlength="2000" placeholder="예: 오늘 안 보내면 다른 분께 넘겨요. 안전결제는 안 되고 계좌로만 받아요. 군부대라 통화가 어렵습니다."></textarea>
+            <label for="sssc-message">{% if page.lang == 'en' %}Seller message note (optional){% elsif page.lang == 'ja' %}相手メッセージメモ（任意）{% else %}상대 메시지 메모 (선택){% endif %}</label>
+            <textarea id="sssc-message" rows="6" maxlength="4000" aria-describedby="sssc-summary sssc-help" placeholder="{% if page.lang == 'en' %}e.g. Pay now or I will sell to someone else. No protected payment, bank transfer only.{% elsif page.lang == 'ja' %}例: 今日払わないと他の人に譲ります。安全決済は不可で振込だけです。{% else %}예: 오늘 안 보내면 다른 분께 넘겨요. 안전결제는 안 되고 계좌로만 받아요. 군부대라 통화가 어렵습니다.{% endif %}"></textarea>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="sssc-sample" type="button">예시 넣기</button>
-            <button id="sssc-copy" type="button">결과 복사</button>
+            <button id="sssc-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
+            <button id="sssc-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="sssc-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
-            <div><strong id="sssc-score">0</strong><span>위험 점수</span></div>
-            <div><strong id="sssc-level">-</strong><span>위험 등급</span></div>
-            <div><strong id="sssc-signals">0</strong><span>감지 신호 수</span></div>
-            <div><strong id="sssc-action">-</strong><span>권장 대응</span></div>
+          <div class="tool-stats" aria-label="{% if page.lang == 'en' %}Scam signal check summary{% elsif page.lang == 'ja' %}詐欺シグナル点検結果{% else %}중고거래 사기 신호 점검 결과{% endif %}">
+            <div><strong id="sssc-score">0</strong><span>{% if page.lang == 'en' %}Risk score{% elsif page.lang == 'ja' %}リスク点数{% else %}위험 점수{% endif %}</span></div>
+            <div><strong id="sssc-level">-</strong><span>{% if page.lang == 'en' %}Risk level{% elsif page.lang == 'ja' %}リスク等級{% else %}위험 등급{% endif %}</span></div>
+            <div><strong id="sssc-signals">0</strong><span>{% if page.lang == 'en' %}Signals found{% elsif page.lang == 'ja' %}検出シグナル数{% else %}감지 신호 수{% endif %}</span></div>
+            <div><strong id="sssc-action">-</strong><span>{% if page.lang == 'en' %}Next action{% elsif page.lang == 'ja' %}推奨対応{% else %}권장 대응{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="sssc-summary">거래 조건을 넣으면 사기 위험 신호와 지금 취해야 할 대응을 빠르게 정리합니다.</p>
+          <p class="tool-result" id="sssc-help">{% if page.lang == 'en' %}This is a practical warning-sign checklist, not legal proof. Keep payment and chat records inside the platform when possible.{% elsif page.lang == 'ja' %}これは実用的な危険サイン整理用で、法的な確定判定ではありません。可能なら決済と会話記録はプラットフォーム内に残してください。{% else %}이 도구는 법적 확정 판단이 아니라 거래 전 위험 신호를 정리하는 실전 체크리스트입니다. 가능하면 결제와 대화 기록은 플랫폼 안에 남기세요.{% endif %}</p>
+          <p class="tool-result" id="sssc-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter trade conditions to review scam warning signs and recommended next steps.{% elsif page.lang == 'ja' %}取引条件を入れると、危険サインと推奨対応を整理します。{% else %}거래 조건을 넣으면 사기 위험 신호와 지금 취해야 할 대응을 빠르게 정리합니다.{% endif %}</p>
           <div id="sssc-list" class="bw-list"></div>
-          <textarea id="sssc-output" rows="16" readonly placeholder="점검 결과 요약이 여기에 표시됩니다."></textarea>
+          <textarea id="sssc-output" rows="16" readonly aria-label="{% if page.lang == 'en' %}Copy-ready scam signal check result{% elsif page.lang == 'ja' %}コピー用の詐欺シグナル点検結果{% else %}복사용 사기 신호 점검 결과{% endif %}" placeholder="{% if page.lang == 'en' %}A copy-ready risk summary will appear here.{% elsif page.lang == 'ja' %}コピーしやすい点検結果がここに表示されます。{% else %}점검 결과 요약이 여기에 표시됩니다.{% endif %}"></textarea>
         </div>
 
       {% else %}

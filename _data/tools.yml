@@ -466,9 +466,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 중고거래 조건과 상대 반응을 넣으면 선입금 요구, 시세보다 과하게 싼 가격, 안전결제 거부 같은 사기 신호를 빠르게 점검해요.
-  description_en: Enter listing conditions and seller behavior to quickly review warning signs like full prepayment requests, unrealistic pricing, and refusal of protected payment.
-  description_ja: 出品条件や相手の反応を入力すると、全額先払い要求、相場より極端に安い価格、安全決済拒否などの危険サインをまとめて確認できます。
+  description: 시세보다 싼 가격, 선입금 요구, 안전결제 거부, 외부 메신저 유도, 새 계정, 실물 확인 회피를 거래 전 빠르게 점검해요.
+  description_en: Review warning signs before a secondhand deal, including unrealistic pricing, prepayment demands, refusal of protected payment, off-platform contact, new accounts, and verification avoidance.
+  description_ja: 中古取引前に、極端に安い価格、先払い要求、安全決済拒否、外部連絡誘導、新規アカウント、実物確認回避をすばやく点検できます。
   url: /tools/secondhand-scam-signal-checker/
   url_en: /en/tools/secondhand-scam-signal-checker/
   url_ja: /ja/tools/secondhand-scam-signal-checker/
