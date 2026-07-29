@@ -371,8 +371,8 @@
   badge_en: New
   badge_ja: 新着
   description: 제품·서비스명, 문제 상황, 원하는 처리, 주문 정보를 넣으면 고객센터에 보낼 환불·교환·배송·오류 문의 문구를 정중한 톤으로 만들어요.
-  description_en: Generate polite refund, exchange, delivery, billing, or error report messages from issue details, desired resolution, and optional order info.
-  description_ja: 問題内容、希望する対応、任意の注文情報から、返金・交換・配送・請求・エラー報告の問い合わせ文を作成します。
+  description_en: Generate polite customer support messages for refunds, exchanges, delivery delays, billing problems, and app errors from issue details, desired resolution, and optional order info.
+  description_ja: 問題内容、希望する対応、任意の注文情報から、返金・交換・配送遅延・請求トラブル・アプリ不具合の問い合わせ文を作成します。
   url: /tools/customer-support-message-generator/
   url_en: /en/tools/customer-support-message-generator/
   url_ja: /ja/tools/customer-support-message-generator/

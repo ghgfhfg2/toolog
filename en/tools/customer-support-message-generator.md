@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Customer Support Message Generator | Write polite refund, exchange, and error inquiries
-description: Enter a product or service, issue, desired resolution, and order details to generate polite refund request, exchange, delivery delay, billing, or error report messages.
+title: Customer Support Message Generator | Write polite refund, exchange, delivery, and error inquiries
+description: Enter a product or service, issue, desired resolution, and order details to generate polite customer support messages for refunds, exchanges, delivery delays, billing problems, and app errors.
 lang: en
 permalink: /en/tools/customer-support-message-generator/
 canonical_url: /en/tools/customer-support-message-generator/
@@ -18,7 +18,7 @@ image:
 tool_key: customer-support-message-generator
 tool_type: generator
 topic_cluster: communication
-keywords: [customer support message, refund request, exchange request, support email, polite inquiry]
+keywords: [customer support message, refund request email, exchange request, delivery delay inquiry, billing issue message, support email template, polite complaint]
 related_tools: [message-tone-checker, secondhand-price-message-generator, schedule-coordination-message-generator]
 faq:
   - q: Does this decide whether I can get a refund?
@@ -35,7 +35,7 @@ faq:
 When you need a refund request, exchange inquiry, delivery delay check, billing correction, subscription issue, or app error report, it can be hard to decide **what details to include and in what order**. Too much emotion can hide the actual request, while a message that is too short often leads to follow-up questions and slower handling.
 
 This tool turns your product or service name, issue, desired resolution, order details, and preferred tone into a **clear, polite support message that does not miss the essentials**.
-It now checks that the issue and requested resolution are present, keeps optional order details separate, and gives you a draft that fits support chat, email, and contact form workflows.
+The improved flow checks that both the issue and requested resolution are present, treats product and order details as optional context, and gives you a draft that fits support chat, email, and contact form workflows.
 
 ## How to use it
 1. Enter the product or service name you are contacting support about.
@@ -44,12 +44,16 @@ It now checks that the issue and requested resolution are present, keeps optiona
 4. Add optional details such as order number, purchase date, and available attachments.
 5. Copy the generated text into a support chat, email, or inquiry form.
 
+If the product name or order details are blank, the draft uses a general phrase such as "the product or service." If the issue or desired resolution is blank, the tool shows a warning instead of creating a message that only looks complete.
+
 ## What the message tries to include
 - The product, service, order, or account context the support team needs first.
 - A short factual description of the issue without unnecessary blame.
 - The action you want, such as refund, exchange, redelivery, correction, or investigation.
 - Supporting details like dates, screenshots, receipts, or error messages when available.
 - A polite closing that asks for the next step or a response within a reasonable time.
+
+Use the firm tone when you need a clearer complaint message, but still keep the request factual. Use the brief tone when the support form has a small text box or you are writing in chat.
 
 ## Especially useful when
 ### 1) Requesting a refund or exchange calmly
@@ -63,6 +67,9 @@ It makes the next step—reshipment, refund, tracking check, or schedule confirm
 
 ### 4) Explaining billing or subscription errors
 It helps keep duplicate charges, cancellation problems, coupon issues, and receipt details in a clear order.
+
+### 5) Avoiding empty or incomplete support requests
+The generator separates required and optional fields, so you can quickly see what must be filled in before you send the message.
 
 ## Related tools
 - Check whether the message sounds too harsh or vague: [Message Tone Checker]({{ '/en/tools/message-tone-checker/' | relative_url }})
@@ -84,4 +91,4 @@ Not usually. Clear facts, a concrete request, and a reasonable response deadline
 
 ## Summary
 Customer Support Message Generator is a **generator-style tool for creating polite support inquiries from issue details and desired resolution**.
-The recent publishing flow leaned toward checker, picker, and utility tools, so this communication-focused generator adds a different use case without duplicating the surrounding tool lineup.
+It is useful for people searching for a customer support email template, refund request message, exchange request wording, delivery delay inquiry, billing issue explanation, or polite complaint draft.
