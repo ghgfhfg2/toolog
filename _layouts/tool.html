@@ -4450,69 +4450,70 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
         </div>
 
       {% when 'customer-support-message-generator' %}
-        <div class="tool-ui">
-          <p class="tool-result">문제 상황과 원하는 처리를 입력하면 고객센터에 보낼 정중한 문의 문구를 만듭니다.</p>
+        <div class="tool-ui csmg-ui">
+          <p class="tool-result" id="csmg-help">{% if page.lang == 'en' %}Write a support inquiry from the issue, desired resolution, and optional order details. Keep highly sensitive data out of the draft.{% elsif page.lang == 'ja' %}問題内容、希望する対応、任意の注文情報から問い合わせ文を作ります。機密性の高い情報は入力しないでください。{% else %}문제 상황과 원하는 처리를 입력하면 고객센터에 보낼 정중한 문의 문구를 만듭니다. 주민번호·전체 카드번호 같은 민감정보는 넣지 마세요.{% endif %}</p>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="csmg-item">제품·서비스명</label>
-              <input id="csmg-item" type="text" maxlength="80" placeholder="예: 무선 이어폰, 쇼핑몰 주문, 구독 서비스" />
+              <label for="csmg-item">{% if page.lang == 'en' %}Product or service{% elsif page.lang == 'ja' %}商品・サービス名{% else %}제품·서비스명{% endif %}</label>
+              <input id="csmg-item" type="text" maxlength="80" aria-describedby="csmg-summary csmg-help" placeholder="{% if page.lang == 'en' %}e.g. Wireless earbuds, online order, subscription{% elsif page.lang == 'ja' %}例: ワイヤレスイヤホン、通販注文、サブスク{% else %}예: 무선 이어폰, 쇼핑몰 주문, 구독 서비스{% endif %}" />
             </div>
             <div>
-              <label for="csmg-type">문의 유형</label>
+              <label for="csmg-type">{% if page.lang == 'en' %}Inquiry type{% elsif page.lang == 'ja' %}問い合わせ種別{% else %}문의 유형{% endif %}</label>
               <select id="csmg-type">
-                <option value="refund">환불 요청</option>
-                <option value="exchange">교환 요청</option>
-                <option value="delivery">배송 지연·누락</option>
-                <option value="error">앱·웹 오류</option>
-                <option value="as">AS·수리 문의</option>
-                <option value="billing">결제·청구 문의</option>
+                <option value="refund">{% if page.lang == 'en' %}Refund request{% elsif page.lang == 'ja' %}返金依頼{% else %}환불 요청{% endif %}</option>
+                <option value="exchange">{% if page.lang == 'en' %}Exchange request{% elsif page.lang == 'ja' %}交換依頼{% else %}교환 요청{% endif %}</option>
+                <option value="delivery">{% if page.lang == 'en' %}Delayed or missing delivery{% elsif page.lang == 'ja' %}配送遅延・不足{% else %}배송 지연·누락{% endif %}</option>
+                <option value="error">{% if page.lang == 'en' %}App or web error{% elsif page.lang == 'ja' %}アプリ・Webエラー{% else %}앱·웹 오류{% endif %}</option>
+                <option value="as">{% if page.lang == 'en' %}Repair or service request{% elsif page.lang == 'ja' %}修理・サポート依頼{% else %}AS·수리 문의{% endif %}</option>
+                <option value="billing">{% if page.lang == 'en' %}Payment or billing issue{% elsif page.lang == 'ja' %}支払い・請求問い合わせ{% else %}결제·청구 문의{% endif %}</option>
               </select>
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="csmg-order">주문번호·구매일(선택)</label>
-              <input id="csmg-order" type="text" maxlength="120" placeholder="예: 주문번호 1234, 5월 7일 구매" />
+              <label for="csmg-order">{% if page.lang == 'en' %}Order number or date (optional){% elsif page.lang == 'ja' %}注文番号・購入日（任意）{% else %}주문번호·구매일(선택){% endif %}</label>
+              <input id="csmg-order" type="text" maxlength="120" aria-describedby="csmg-summary csmg-help" placeholder="{% if page.lang == 'en' %}e.g. Order 1234, purchased May 7{% elsif page.lang == 'ja' %}例: 注文番号1234、5月7日購入{% else %}예: 주문번호 1234, 5월 7일 구매{% endif %}" />
             </div>
             <div>
-              <label for="csmg-tone">문구 톤</label>
+              <label for="csmg-tone">{% if page.lang == 'en' %}Message tone{% elsif page.lang == 'ja' %}文面のトーン{% else %}문구 톤{% endif %}</label>
               <select id="csmg-tone">
-                <option value="polite" selected>정중하고 차분하게</option>
-                <option value="firm">단호하지만 예의 있게</option>
-                <option value="brief">짧고 간단하게</option>
+                <option value="polite" selected>{% if page.lang == 'en' %}Polite and calm{% elsif page.lang == 'ja' %}丁寧で落ち着いた文面{% else %}정중하고 차분하게{% endif %}</option>
+                <option value="firm">{% if page.lang == 'en' %}Firm but respectful{% elsif page.lang == 'ja' %}はっきり、でも丁寧に{% else %}단호하지만 예의 있게{% endif %}</option>
+                <option value="brief">{% if page.lang == 'en' %}Brief and simple{% elsif page.lang == 'ja' %}短く簡潔に{% else %}짧고 간단하게{% endif %}</option>
               </select>
             </div>
           </div>
 
           <div class="tool-row">
-            <label for="csmg-problem">문제 상황</label>
-            <textarea id="csmg-problem" rows="5" maxlength="1000" placeholder="예: 상품을 받았는데 오른쪽 이어버드에서 소리가 나지 않습니다."></textarea>
+            <label for="csmg-problem">{% if page.lang == 'en' %}What happened{% elsif page.lang == 'ja' %}問題の内容{% else %}문제 상황{% endif %}</label>
+            <textarea id="csmg-problem" rows="5" maxlength="1000" aria-describedby="csmg-summary csmg-help" placeholder="{% if page.lang == 'en' %}e.g. I received the item, but the right earbud has no sound.{% elsif page.lang == 'ja' %}例: 商品を受け取りましたが、右側のイヤホンから音が出ません。{% else %}예: 상품을 받았는데 오른쪽 이어버드에서 소리가 나지 않습니다.{% endif %}"></textarea>
           </div>
           <div class="tool-row">
-            <label for="csmg-request">원하는 처리</label>
-            <textarea id="csmg-request" rows="4" maxlength="800" placeholder="예: 불량 확인 후 교환 또는 환불 가능 여부를 안내받고 싶습니다."></textarea>
+            <label for="csmg-request">{% if page.lang == 'en' %}Desired resolution{% elsif page.lang == 'ja' %}希望する対応{% else %}원하는 처리{% endif %}</label>
+            <textarea id="csmg-request" rows="4" maxlength="800" aria-describedby="csmg-summary csmg-help" placeholder="{% if page.lang == 'en' %}e.g. Please advise whether exchange or refund is possible after checking the defect.{% elsif page.lang == 'ja' %}例: 初期不良を確認のうえ、交換または返金の可否を案内してほしいです。{% else %}예: 불량 확인 후 교환 또는 환불 가능 여부를 안내받고 싶습니다.{% endif %}"></textarea>
           </div>
 
           <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="csmg-proof" type="checkbox" checked /> 사진·스크린샷 등 증빙 첨부 가능</label>
-            <label class="tool-check"><input id="csmg-deadline" type="checkbox" /> 답변 희망 기한 포함</label>
+            <label class="tool-check"><input id="csmg-proof" type="checkbox" checked /> {% if page.lang == 'en' %}I can attach photos, screenshots, or receipts{% elsif page.lang == 'ja' %}写真・スクリーンショット・領収書を添付できる{% else %}사진·스크린샷 등 증빙 첨부 가능{% endif %}</label>
+            <label class="tool-check"><input id="csmg-deadline" type="checkbox" /> {% if page.lang == 'en' %}Include a preferred response deadline{% elsif page.lang == 'ja' %}回答希望期限を含める{% else %}답변 희망 기한 포함{% endif %}</label>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="csmg-sample" type="button">예시 넣기</button>
-            <button id="csmg-copy" type="button">결과 복사</button>
+            <button id="csmg-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
+            <button id="csmg-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="csmg-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
-            <div><strong id="csmg-lines">0</strong><span>문장 수</span></div>
-            <div><strong id="csmg-chars">0</strong><span>글자 수</span></div>
-            <div><strong id="csmg-info">0</strong><span>포함 정보</span></div>
+          <div class="tool-stats csmg-stats" aria-label="{% if page.lang == 'en' %}Generated message summary{% elsif page.lang == 'ja' %}生成文の概要{% else %}생성 문구 요약{% endif %}">
+            <div><strong id="csmg-lines">0</strong><span>{% if page.lang == 'en' %}Sentences{% elsif page.lang == 'ja' %}文数{% else %}문장 수{% endif %}</span></div>
+            <div><strong id="csmg-chars">0</strong><span>{% if page.lang == 'en' %}Characters{% elsif page.lang == 'ja' %}文字数{% else %}글자 수{% endif %}</span></div>
+            <div><strong id="csmg-info">0</strong><span>{% if page.lang == 'en' %}Details included{% elsif page.lang == 'ja' %}含まれる情報{% else %}포함 정보{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="csmg-summary">입력하면 문의 문구가 여기에 표시됩니다.</p>
-          <textarea id="csmg-output" rows="14" readonly placeholder="생성된 고객센터 문의 문구가 여기에 표시됩니다."></textarea>
+          <p class="tool-result" id="csmg-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter the issue and desired resolution to generate a support message.{% elsif page.lang == 'ja' %}問題内容と希望する対応を入力すると問い合わせ文を生成します。{% else %}문제 상황과 원하는 처리를 입력하면 문의 문구가 여기에 표시됩니다.{% endif %}</p>
+          <textarea id="csmg-output" rows="14" readonly aria-describedby="csmg-summary" placeholder="{% if page.lang == 'en' %}The generated support message appears here.{% elsif page.lang == 'ja' %}生成された問い合わせ文がここに表示されます。{% else %}생성된 고객센터 문의 문구가 여기에 표시됩니다.{% endif %}"></textarea>
         </div>
 
       {% when 'cafe-work-seat-simulator' %}

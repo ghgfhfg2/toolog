@@ -895,6 +895,12 @@ textarea:focus-visible {
 .llc-ui #llc-summary[data-state="error"] { color: #fca5a5; }
 .llc-ui #llc-summary[data-state="warning"] { color: #fbbf24; }
 .llc-ui #llc-summary[data-state="success"] { color: #86efac; }
+.csmg-ui textarea[aria-invalid="true"] { border-color: #ef4444; }
+.csmg-ui #csmg-summary[data-state="warning"] { color: #fbbf24; }
+.csmg-ui #csmg-summary[data-state="error"] { color: #fca5a5; }
+.csmg-ui #csmg-summary[data-state="success"] { color: #86efac; }
+.csmg-ui .pct-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.tool-stats.csmg-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .bw-ui textarea {
   min-height: 220px;
   font-size: 16px;
@@ -1428,6 +1434,8 @@ textarea:focus-visible {
   .tc-stats { grid-template-columns: 1fr 1fr; }
   .llc-options,.llc-actions { grid-template-columns: 1fr; }
   .llc-stats { grid-template-columns: 1fr 1fr; }
+  .csmg-ui .pct-actions { grid-template-columns: 1fr; }
+  .tool-stats.csmg-stats { grid-template-columns: 1fr 1fr; }
   .knr-grid,.knr-options,.knr-actions { grid-template-columns: 1fr; }
   .bw-actions,
   .ebcp-actions { grid-template-columns: 1fr; }

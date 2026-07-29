@@ -15802,6 +15802,7 @@
     const deadlineEl = document.getElementById('csmg-deadline');
     const sampleBtn = document.getElementById('csmg-sample');
     const copyBtn = document.getElementById('csmg-copy');
+    const clearBtn = document.getElementById('csmg-clear');
     const linesEl = document.getElementById('csmg-lines');
     const charsEl = document.getElementById('csmg-chars');
     const infoEl = document.getElementById('csmg-info');
@@ -15811,64 +15812,215 @@
     if (!itemEl || !outputEl || !summaryEl) return;
 
     const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
       catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          const ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+          return ok;
+        } catch (err) {
+          return false;
+        }
       }
     };
 
-    const typeLabels = {
-      refund: '환불 요청',
-      exchange: '교환 요청',
-      delivery: '배송 지연·누락 문의',
-      error: '오류 신고',
-      as: 'AS·수리 문의',
-      billing: '결제·청구 문의'
-    };
-
-    const toneOpeners = {
-      polite: '안녕하세요. 아래 건에 대해 확인 부탁드립니다.',
-      firm: '안녕하세요. 아래 문제에 대해 빠른 확인과 명확한 안내를 부탁드립니다.',
-      brief: '안녕하세요. 문의드립니다.'
-    };
+    const csmgText = {
+      ko: {
+        initial: '문제 상황과 원하는 처리를 입력하면 문의 문구가 여기에 표시됩니다.',
+        missingProblem: '문제 상황을 입력해 주세요.',
+        missingRequest: '원하는 처리 방향을 입력해 주세요.',
+        copied: '문의 문구를 복사했습니다.',
+        copyEmpty: '복사할 문의 문구가 없습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다. 결과를 직접 선택해 복사해 주세요.',
+        cleared: '입력과 결과를 초기화했습니다.',
+        itemFallback: '해당 제품/서비스',
+        problemFallback: '문제 상황을 입력해 주세요.',
+        requestFallback: '가능한 처리 방법을 안내 부탁드립니다.',
+        typeLabels: {
+          refund: '환불 요청',
+          exchange: '교환 요청',
+          delivery: '배송 지연·누락 문의',
+          error: '오류 신고',
+          as: 'AS·수리 문의',
+          billing: '결제·청구 문의'
+        },
+        openers: {
+          polite: '안녕하세요. 아래 건에 대해 확인 부탁드립니다.',
+          firm: '안녕하세요. 아래 문제에 대해 빠른 확인과 명확한 안내를 부탁드립니다.',
+          brief: '안녕하세요. 문의드립니다.'
+        },
+        product: '제품/서비스',
+        inquiryType: '문의 유형',
+        order: '주문/구매 정보',
+        issueHead: '[문제 상황]',
+        requestHead: '[요청 사항]',
+        proof: '필요하시면 사진, 스크린샷, 영수증 등 확인 가능한 자료를 첨부하겠습니다.',
+        deadline: '가능하다면 영업일 기준 2~3일 이내에 답변 부탁드립니다.',
+        firmClose: '동일 문제가 반복되지 않도록 원인과 처리 가능 범위를 함께 안내해 주시면 감사하겠습니다.',
+        close: '확인 후 답변 부탁드립니다. 감사합니다.',
+        summary: (type, chars) => `${type} 문구를 ${formatNum(chars)}자 분량으로 만들었습니다. 보내기 전 개인정보와 주문 정보를 한 번 확인하세요.`,
+        sample: {
+          item: '무선 이어폰',
+          order: '주문번호 20260509-1234, 5월 8일 수령',
+          problem: '상품을 개봉해 사용해 보니 오른쪽 이어버드에서 소리가 나지 않습니다. 충전과 재연결을 여러 번 시도했지만 같은 증상이 반복됩니다.',
+          request: '초기 불량 여부를 확인한 뒤 교환 또는 환불 절차를 안내받고 싶습니다.'
+        }
+      },
+      en: {
+        initial: 'Enter the issue and desired resolution to generate a support message.',
+        missingProblem: 'Describe what happened before generating the message.',
+        missingRequest: 'Enter the resolution or next step you want.',
+        copied: 'Copied the support message.',
+        copyEmpty: 'There is no support message to copy.',
+        copyFail: 'Automatic copy is unavailable. Select the result manually to copy it.',
+        cleared: 'Cleared the input and result.',
+        itemFallback: 'the product or service',
+        problemFallback: 'Please describe what happened.',
+        requestFallback: 'Please advise the available resolution.',
+        typeLabels: {
+          refund: 'Refund request',
+          exchange: 'Exchange request',
+          delivery: 'Delayed or missing delivery inquiry',
+          error: 'Error report',
+          as: 'Repair or service request',
+          billing: 'Payment or billing inquiry'
+        },
+        openers: {
+          polite: 'Hello, I would appreciate your help with the case below.',
+          firm: 'Hello, please review the issue below and provide a clear next step.',
+          brief: 'Hello, I have a support inquiry.'
+        },
+        product: 'Product/service',
+        inquiryType: 'Inquiry type',
+        order: 'Order or purchase details',
+        issueHead: '[Issue]',
+        requestHead: '[Requested resolution]',
+        proof: 'I can attach photos, screenshots, receipts, or other proof if needed.',
+        deadline: 'If possible, please reply within 2-3 business days.',
+        firmClose: 'Please also let me know the cause and what can be done so the same issue does not repeat.',
+        close: 'Please review and let me know the next step. Thank you.',
+        summary: (type, chars) => `Created a ${formatNum(chars)}-character ${type}. Review personal and order details before sending.`,
+        sample: {
+          item: 'Wireless earbuds',
+          order: 'Order 20260509-1234, received May 8',
+          problem: 'After opening the package and trying the product, the right earbud has no sound. I tried charging and reconnecting it several times, but the same issue continues.',
+          request: 'Please check whether this is an initial defect and let me know the exchange or refund process.'
+        }
+      },
+      ja: {
+        initial: '問題内容と希望する対応を入力すると問い合わせ文を生成します。',
+        missingProblem: '問題の内容を入力してください。',
+        missingRequest: '希望する対応を入力してください。',
+        copied: '問い合わせ文をコピーしました。',
+        copyEmpty: 'コピーできる問い合わせ文がありません。',
+        copyFail: '自動コピーを利用できません。結果を手動で選択してコピーしてください。',
+        cleared: '入力と結果をクリアしました。',
+        itemFallback: '該当の商品・サービス',
+        problemFallback: '問題の内容を入力してください。',
+        requestFallback: '可能な対応方法をご案内ください。',
+        typeLabels: {
+          refund: '返金依頼',
+          exchange: '交換依頼',
+          delivery: '配送遅延・不足の問い合わせ',
+          error: 'エラー報告',
+          as: '修理・サポート依頼',
+          billing: '支払い・請求問い合わせ'
+        },
+        openers: {
+          polite: 'こんにちは。下記の件について確認をお願いいたします。',
+          firm: 'こんにちは。下記の問題について、早めの確認と明確な案内をお願いいたします。',
+          brief: 'こんにちは。問い合わせです。'
+        },
+        product: '商品・サービス',
+        inquiryType: '問い合わせ種別',
+        order: '注文・購入情報',
+        issueHead: '[問題の内容]',
+        requestHead: '[希望する対応]',
+        proof: '必要であれば、写真、スクリーンショット、領収書など確認できる資料を添付します。',
+        deadline: '可能であれば、2〜3営業日以内にご返信ください。',
+        firmClose: '同じ問題が繰り返されないよう、原因と対応可能な範囲もあわせてご案内いただけますと幸いです。',
+        close: 'ご確認のうえ、ご返信をお願いいたします。よろしくお願いいたします。',
+        summary: (type, chars) => `${formatNum(chars)}文字の${type}文を作成しました。送信前に個人情報と注文情報を確認してください。`,
+        sample: {
+          item: 'ワイヤレスイヤホン',
+          order: '注文番号20260509-1234、5月8日受け取り',
+          problem: '商品を開封して使用したところ、右側のイヤホンから音が出ません。充電と再接続を何度か試しましたが、同じ症状が続いています。',
+          request: '初期不良かどうか確認のうえ、交換または返金の手続きを案内してほしいです。'
+        }
+      }
+    }[pageLang] || {};
 
     const normalize = (value) => (value || '').trim().replace(/\s+\n/g, '\n').replace(/\n{3,}/g, '\n\n');
 
+    const setSummary = (message, state = '') => {
+      summaryEl.textContent = message;
+      summaryEl.dataset.state = state;
+    };
+
+    const resetStats = () => {
+      linesEl.textContent = '0';
+      charsEl.textContent = '0';
+      infoEl.textContent = '0';
+      outputEl.value = '';
+      copyBtn.disabled = true;
+    };
+
     const build = () => {
-      const item = normalize(itemEl.value) || '해당 제품/서비스';
+      const hasProblem = Boolean(normalize(problemEl.value));
+      const hasRequest = Boolean(normalize(requestEl.value));
+      const hasAnyUserText = [itemEl.value, orderEl.value, problemEl.value, requestEl.value].some((value) => Boolean(normalize(value)));
+      if (!hasAnyUserText) {
+        problemEl.setAttribute('aria-invalid', 'false');
+        requestEl.setAttribute('aria-invalid', 'false');
+        resetStats();
+        setSummary(csmgText.initial);
+        return;
+      }
+      problemEl.setAttribute('aria-invalid', hasProblem ? 'false' : 'true');
+      requestEl.setAttribute('aria-invalid', hasRequest ? 'false' : 'true');
+
+      if (!hasProblem || !hasRequest) {
+        resetStats();
+        setSummary(!hasProblem ? csmgText.missingProblem : csmgText.missingRequest, 'warning');
+        return;
+      }
+
+      const item = normalize(itemEl.value) || csmgText.itemFallback;
       const type = typeEl.value || 'refund';
       const order = normalize(orderEl.value);
-      const problem = normalize(problemEl.value) || '문제 상황을 입력해 주세요.';
-      const request = normalize(requestEl.value) || '가능한 처리 방법을 안내 부탁드립니다.';
+      const problem = normalize(problemEl.value) || csmgText.problemFallback;
+      const request = normalize(requestEl.value) || csmgText.requestFallback;
       const tone = toneEl.value || 'polite';
       const lines = [
-        toneOpeners[tone] || toneOpeners.polite,
+        csmgText.openers[tone] || csmgText.openers.polite,
         '',
-        `- 문의 유형: ${typeLabels[type] || '문의'}`,
-        `- 제품/서비스: ${item}`
+        `- ${csmgText.inquiryType}: ${csmgText.typeLabels[type] || csmgText.typeLabels.refund}`,
+        `- ${csmgText.product}: ${item}`
       ];
 
-      if (order) lines.push(`- 주문/구매 정보: ${order}`);
-      lines.push('', '[문제 상황]', problem, '', '[요청 사항]', request);
+      if (order) lines.push(`- ${csmgText.order}: ${order}`);
+      lines.push('', csmgText.issueHead, problem, '', csmgText.requestHead, request);
 
       if (proofEl.checked) {
-        lines.push('', '필요하시면 사진, 스크린샷, 영수증 등 확인 가능한 자료를 첨부하겠습니다.');
+        lines.push('', csmgText.proof);
       }
       if (deadlineEl.checked) {
-        lines.push('가능하다면 영업일 기준 2~3일 이내에 답변 부탁드립니다.');
+        lines.push(csmgText.deadline);
       }
 
       if (tone === 'firm') {
-        lines.push('', '동일 문제가 반복되지 않도록 원인과 처리 가능 범위를 함께 안내해 주시면 감사하겠습니다.');
+        lines.push('', csmgText.firmClose);
       }
-      lines.push('', '확인 후 답변 부탁드립니다. 감사합니다.');
+      lines.push('', csmgText.close);
 
       const text = lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
       const sentenceCount = (text.match(/[.!?。]|다\.|요\.|니다\./g) || []).length || text.split('\n').filter(Boolean).length;
@@ -15877,28 +16029,56 @@
       linesEl.textContent = formatNum(sentenceCount);
       charsEl.textContent = formatNum(text.length);
       infoEl.textContent = formatNum(infoCount);
-      summaryEl.textContent = `${typeLabels[type] || '문의'} 문구를 ${text.length.toLocaleString(numberLocale)}자 분량으로 만들었습니다. 보내기 전 개인정보와 주문 정보를 한 번 확인하세요.`;
+      copyBtn.disabled = false;
+      setSummary(csmgText.summary(csmgText.typeLabels[type] || csmgText.typeLabels.refund, text.length), 'success');
     };
 
     sampleBtn.addEventListener('click', () => {
-      itemEl.value = '무선 이어폰';
+      itemEl.value = csmgText.sample.item;
       typeEl.value = 'exchange';
-      orderEl.value = '주문번호 20260509-1234, 5월 8일 수령';
+      orderEl.value = csmgText.sample.order;
       toneEl.value = 'polite';
-      problemEl.value = '상품을 개봉해 사용해 보니 오른쪽 이어버드에서 소리가 나지 않습니다. 충전과 재연결을 여러 번 시도했지만 같은 증상이 반복됩니다.';
-      requestEl.value = '초기 불량 여부를 확인한 뒤 교환 또는 환불 절차를 안내받고 싶습니다.';
+      problemEl.value = csmgText.sample.problem;
+      requestEl.value = csmgText.sample.request;
       proofEl.checked = true;
       deadlineEl.checked = true;
       build();
+      problemEl.focus();
     });
 
     copyBtn.addEventListener('click', async () => {
-      if (!outputEl.value.trim()) build();
-      if (!outputEl.value.trim()) return;
-      await copyText(outputEl.value.trim());
+      if (!outputEl.value.trim()) {
+        setSummary(csmgText.copyEmpty, 'error');
+        problemEl.focus();
+        return;
+      }
+      const copied = await copyText(outputEl.value.trim());
+      if (!copied) {
+        setSummary(csmgText.copyFail, 'error');
+        outputEl.focus();
+        outputEl.select();
+        return;
+      }
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = csmgText.copied;
+      setSummary(csmgText.copied, 'success');
+      setTimeout(() => { copyBtn.textContent = old || csmgText.copied; }, 900);
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      itemEl.value = '';
+      orderEl.value = '';
+      problemEl.value = '';
+      requestEl.value = '';
+      typeEl.value = 'refund';
+      toneEl.value = 'polite';
+      proofEl.checked = true;
+      deadlineEl.checked = false;
+      resetStats();
+      problemEl.setAttribute('aria-invalid', 'false');
+      requestEl.setAttribute('aria-invalid', 'false');
+      setSummary(csmgText.cleared);
+      itemEl.focus();
     });
 
     [itemEl, typeEl, orderEl, toneEl, problemEl, requestEl, proofEl, deadlineEl].forEach((el) => {

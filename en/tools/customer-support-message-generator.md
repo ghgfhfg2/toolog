@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Customer Support Message Generator | Write polite refund, exchange, and error inquiries
-description: Enter a product or service, issue, desired resolution, and order details to generate a polite support message.
+description: Enter a product or service, issue, desired resolution, and order details to generate polite refund request, exchange, delivery delay, billing, or error report messages.
 lang: en
 permalink: /en/tools/customer-support-message-generator/
 canonical_url: /en/tools/customer-support-message-generator/
@@ -27,12 +27,15 @@ faq:
     a: The tool runs in your browser, but avoid entering highly sensitive data such as full card numbers, resident IDs, or account passwords.
   - q: Can it write a stronger complaint?
     a: It can be firm, but it keeps the message factual and polite instead of using threats or abusive language.
+  - q: Can it generate a message with missing fields?
+    a: The issue and desired resolution are required. Product and order details can be blank, but you should review the final message before sending.
 ---
 
 ## Why use the Customer Support Message Generator?
-When you need a refund, exchange, delivery check, billing correction, or bug report, it can be hard to decide **what details to include and in what order**. Too much emotion can hide the actual request, while a message that is too short often leads to follow-up questions and slower handling.
+When you need a refund request, exchange inquiry, delivery delay check, billing correction, subscription issue, or app error report, it can be hard to decide **what details to include and in what order**. Too much emotion can hide the actual request, while a message that is too short often leads to follow-up questions and slower handling.
 
 This tool turns your product or service name, issue, desired resolution, order details, and preferred tone into a **clear, polite support message that does not miss the essentials**.
+It now checks that the issue and requested resolution are present, keeps optional order details separate, and gives you a draft that fits support chat, email, and contact form workflows.
 
 ## How to use it
 1. Enter the product or service name you are contacting support about.
@@ -58,6 +61,9 @@ It prompts you to include where the error happened, when it happened, whether it
 ### 3) Asking about delayed or missing delivery
 It makes the next step—reshipment, refund, tracking check, or schedule confirmation—clear from the first message.
 
+### 4) Explaining billing or subscription errors
+It helps keep duplicate charges, cancellation problems, coupon issues, and receipt details in a clear order.
+
 ## Related tools
 - Check whether the message sounds too harsh or vague: [Message Tone Checker]({{ '/en/tools/message-tone-checker/' | relative_url }})
 - Need a secondhand negotiation message? [Secondhand Price Message Generator]({{ '/en/tools/secondhand-price-message-generator/' | relative_url }})
@@ -66,6 +72,9 @@ It makes the next step—reshipment, refund, tracking check, or schedule confirm
 ## FAQ
 ### Can I send the generated text as-is?
 Usually yes, but confirm order numbers, dates, attachments, requested deadlines, and personal details before sending.
+
+### What if I do not know the product name yet?
+You can leave it blank and the tool will use a generic product or service phrase. For faster support handling, add the exact item or service name before sending.
 
 ### Is this for legal dispute letters?
 No. This is for ordinary customer support inquiries. For serious disputes, high-value losses, cancellation conflicts, or contract issues, seek appropriate professional or official help.
