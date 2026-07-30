@@ -739,15 +739,15 @@ layout: default
           <textarea id="mtc-output" rows="12" readonly placeholder="{% if page.lang == 'en' %}The check memo will appear here.{% elsif page.lang == 'ja' %}点検結果メモがここに表示されます。{% else %}점검 결과 메모가 여기에 표시됩니다.{% endif %}"></textarea>
         </div>
       {% when 'password-strength-checker' %}
-        <div class="tool-ui">
+        <div class="tool-ui psc-ui">
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="psc-password">{% if page.lang == 'en' %}Password{% elsif page.lang == 'ja' %}パスワード{% else %}비밀번호 입력{% endif %}</label>
-              <input id="psc-password" type="password" maxlength="128" autocomplete="new-password" autocapitalize="off" spellcheck="false" inputmode="text" aria-describedby="psc-summary psc-output" placeholder="{% if page.lang == 'en' %}Enter a password to check.{% elsif page.lang == 'ja' %}点検するパスワードを入力してください。{% else %}점검할 비밀번호를 입력하세요.{% endif %}" />
+              <input id="psc-password" type="password" maxlength="128" autocomplete="new-password" autocapitalize="off" spellcheck="false" inputmode="text" aria-describedby="psc-summary psc-help psc-output" placeholder="{% if page.lang == 'en' %}Enter a password to check.{% elsif page.lang == 'ja' %}点検するパスワードを入力してください。{% else %}점검할 비밀번호를 입력하세요.{% endif %}" />
             </div>
             <div>
               <label for="psc-purpose">{% if page.lang == 'en' %}Account type{% elsif page.lang == 'ja' %}用途{% else %}사용 목적{% endif %}</label>
-              <select id="psc-purpose">
+              <select id="psc-purpose" aria-describedby="psc-summary psc-help">
                 <option value="general" selected>{% if page.lang == 'en' %}General site login{% elsif page.lang == 'ja' %}一般サイトのログイン{% else %}일반 사이트 로그인{% endif %}</option>
                 <option value="important">{% if page.lang == 'en' %}Finance / work / main account{% elsif page.lang == 'ja' %}金融・業務・メインアカウント{% else %}금융/업무/메인 계정{% endif %}</option>
                 <option value="temporary">{% if page.lang == 'en' %}Temporary / one-time account{% elsif page.lang == 'ja' %}一時・使い捨てアカウント{% else %}임시/1회성 계정{% endif %}</option>
@@ -759,25 +759,28 @@ layout: default
             <label class="tool-check"><input id="psc-show-password" type="checkbox" /> {% if page.lang == 'en' %}Show password{% elsif page.lang == 'ja' %}入力内容を表示{% else %}입력 내용 보기{% endif %}</label>
             <label class="tool-check"><input id="psc-allow-spaces" type="checkbox" checked /> {% if page.lang == 'en' %}Allow passwords with spaces{% elsif page.lang == 'ja' %}空白入りパスワードも許容{% else %}공백 포함 비밀번호도 허용{% endif %}</label>
           </div>
+          <p class="tool-result psc-help" id="psc-help">{% if page.lang == 'en' %}The password is checked locally only. The copied summary never includes the password itself.{% elsif page.lang == 'ja' %}パスワードはブラウザ内だけで点検します。コピーされるメモにパスワード本文は含めません。{% else %}비밀번호는 브라우저 안에서만 점검합니다. 복사되는 요약에는 비밀번호 원문을 넣지 않습니다.{% endif %}</p>
 
-          <div class="psc-meter" aria-hidden="true">
+          <div class="psc-meter" role="progressbar" aria-label="{% if page.lang == 'en' %}Password score meter{% elsif page.lang == 'ja' %}パスワードスコアメーター{% else %}비밀번호 점수 막대{% endif %}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
             <span id="psc-meter-bar"></span>
           </div>
 
           <div class="tool-row-grid pct-actions">
             <button id="psc-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 넣기{% endif %}</button>
-            <button id="psc-copy" type="button">{% if page.lang == 'en' %}Copy summary{% elsif page.lang == 'ja' %}点検結果をコピー{% else %}점검 요약 복사{% endif %}</button>
+            <button id="psc-copy" type="button" disabled>{% if page.lang == 'en' %}Copy summary{% elsif page.lang == 'ja' %}点検結果をコピー{% else %}점검 요약 복사{% endif %}</button>
+            <button id="psc-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
+          <div class="tool-stats psc-stats" aria-label="{% if page.lang == 'en' %}Password strength check summary{% elsif page.lang == 'ja' %}パスワード強度点検サマリー{% else %}비밀번호 강도 점검 요약{% endif %}">
             <div><strong id="psc-score">0</strong><span>{% if page.lang == 'en' %}Security score{% elsif page.lang == 'ja' %}安全スコア{% else %}보안 점수{% endif %}</span></div>
             <div><strong id="psc-grade">-</strong><span>{% if page.lang == 'en' %}Strength grade{% elsif page.lang == 'ja' %}強度ランク{% else %}강도 등급{% endif %}</span></div>
             <div><strong id="psc-length">0</strong><span>{% if page.lang == 'en' %}Length{% elsif page.lang == 'ja' %}長さ{% else %}길이{% endif %}</span></div>
             <div><strong id="psc-variety">0</strong><span>{% if page.lang == 'en' %}Character types{% elsif page.lang == 'ja' %}文字種類{% else %}문자 종류{% endif %}</span></div>
             <div><strong id="psc-risk">0</strong><span>{% if page.lang == 'en' %}Risk signals{% elsif page.lang == 'ja' %}注意シグナル{% else %}위험 신호{% endif %}</span></div>
+            <div><strong id="psc-crack-time">-</strong><span>{% if page.lang == 'en' %}Guessing estimate{% elsif page.lang == 'ja' %}推測時間の目安{% else %}추측 시간 추정{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="psc-summary">{% if page.lang == 'en' %}Enter a password to check length, character mix, repeated or sequential patterns, and guessability signals.{% elsif page.lang == 'ja' %}パスワードを入力すると、長さ、文字構成、繰り返し/連続パターン、推測されやすさをまとめて点検します。{% else %}비밀번호를 입력하면 길이, 문자 조합, 반복/연속 패턴, 쉬운 추측 가능성을 함께 점검합니다.{% endif %}</p>
+          <p class="tool-result" id="psc-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter a password to check length, character mix, repeated or sequential patterns, and guessability signals.{% elsif page.lang == 'ja' %}パスワードを入力すると、長さ、文字構成、繰り返し/連続パターン、推測されやすさをまとめて点検します。{% else %}비밀번호를 입력하면 길이, 문자 조합, 반복/연속 패턴, 쉬운 추측 가능성을 함께 점검합니다.{% endif %}</p>
           <div id="psc-list" class="bw-list" aria-live="polite"></div>
           <label for="psc-output">{% if page.lang == 'en' %}Check summary{% elsif page.lang == 'ja' %}点検結果メモ{% else %}점검 결과 메모{% endif %}</label>
           <textarea id="psc-output" rows="11" readonly placeholder="{% if page.lang == 'en' %}The summary will appear here.{% elsif page.lang == 'ja' %}点検結果がここに表示されます。{% else %}점검 요약이 여기에 표시됩니다.{% endif %}"></textarea>

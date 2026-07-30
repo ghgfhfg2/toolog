@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Password Strength Checker | Catch short, repeated, and guessable patterns fast
-description: Check short length, character mix, repeated characters, sequential patterns, common words, and year-like numbers in your browser before using a password.
+title: Password Strength Checker | Repeats, keyboard patterns, and guessing hints
+description: Check short length, character mix, repeated or keyboard patterns, common words, year-like numbers, space handling, and guessing-time hints in your browser.
 lang: en
 permalink: /en/tools/password-strength-checker/
 canonical_url: /en/tools/password-strength-checker/
@@ -34,7 +34,9 @@ This tool gives you a quick local check for:
 - character variety
 - repeated characters
 - sequential patterns
-- common words and year-like numbers
+- keyboard patterns
+- common words, year-like numbers, and edge spaces
+- a rough guessing-time hint
 
 It does not save the password or generate a new one for you. It works more like a checker that explains why the password you are about to use may be weak, then points out what to adjust before you sign up, reset a password, or review an important account.
 
@@ -43,19 +45,20 @@ It does not save the password or generate a new one for you. It works more like 
 2. Choose whether it is for a general login, an important account, or a temporary account.
 3. Turn on password visibility only if you need to double-check what you typed.
 4. Check the score, strength grade, length, character type count, risk signal count, and meter.
-5. Read the warning list and improvement tips, then revise the password if needed.
+5. Review the rough guessing-time hint.
+6. Read the warning list and improvement tips, then revise the password if needed.
 
 ## How to use it
 1. Enter the password you want to review.
 2. Pick whether it is for a general, important, or temporary account.
 3. Toggle password visibility or space handling only when you need to.
-4. Review the score, grade, meter, and warning list.
+4. Review the score, grade, meter, guessing hint, and warning list.
 5. Use the improvement tips to make the password harder to guess.
 6. Copy the check summary if you want to keep a security review note.
 
 ## FAQ
 ### What weak patterns does it check first?
-It checks short length, low character variety, repeated characters, sequences such as `123`, `abc`, or `qwerty`, common words, and year-like numbers.
+It checks short length, low character variety, repeated characters, sequences such as `123`, `abc`, or `qwerty`, keyboard walks such as `1qaz`, common words, year-like numbers, and leading or trailing spaces.
 
 ### Is this a full security audit?
 No. It is a fast local check for obvious password weaknesses. Reuse, breach history, two-factor authentication, and the site’s own security still matter.
@@ -66,6 +69,9 @@ Not always. Adding one symbol to a short or predictable password is usually not 
 ### Can I use it with a password manager?
 Yes. A practical workflow is to store unique passwords in a password manager and use this checker to review a new candidate before saving it.
 
+### Is the guessing-time estimate exact?
+No. It is a rough hint based on length, character pool, and visible risk signals. Real risk changes with password reuse, breach history, site security, attack method, and two-factor authentication.
+
 ## Especially useful for
 ### 1) New account signups
 Check whether a password is only *looking* complex instead of actually being strong. A password like `Spring2026!Seoul` may look varied, but it still includes a season, a current year, and a place name.
@@ -75,6 +81,9 @@ If you keep using word + year style passwords, this makes the weakness easier to
 
 ### 3) Important accounts
 Email, banking, work, and main social accounts deserve longer and more unique passwords.
+
+### 4) Mobile typing checks
+Mobile keyboards, Caps Lock, and leading or trailing spaces can change what you actually enter. Use the visibility toggle only when needed; copied summaries do not include the password itself.
 
 ## Examples
 ### Example 1) Common season + year pattern

@@ -9787,22 +9787,28 @@
     const allowSpaces = document.getElementById('psc-allow-spaces');
     const sampleBtn = document.getElementById('psc-sample');
     const copyBtn = document.getElementById('psc-copy');
+    const clearBtn = document.getElementById('psc-clear');
     const scoreEl = document.getElementById('psc-score');
     const gradeEl = document.getElementById('psc-grade');
     const lengthEl = document.getElementById('psc-length');
     const varietyEl = document.getElementById('psc-variety');
     const riskEl = document.getElementById('psc-risk');
+    const crackTimeEl = document.getElementById('psc-crack-time');
     const summaryEl = document.getElementById('psc-summary');
+    const meter = document.querySelector('.psc-meter');
     const meterBar = document.getElementById('psc-meter-bar');
     const listEl = document.getElementById('psc-list');
     const outputEl = document.getElementById('psc-output');
-    if (!input || !purpose || !showPassword || !allowSpaces || !sampleBtn || !copyBtn || !scoreEl || !gradeEl || !lengthEl || !varietyEl || !riskEl || !summaryEl || !meterBar || !listEl || !outputEl) return;
+    if (!input || !purpose || !showPassword || !allowSpaces || !sampleBtn || !copyBtn || !clearBtn || !scoreEl || !gradeEl || !lengthEl || !varietyEl || !riskEl || !crackTimeEl || !summaryEl || !meter || !meterBar || !listEl || !outputEl) return;
 
     const t = {
       ko: {
         idle: '비밀번호를 입력하면 길이, 문자 조합, 반복/연속 패턴, 쉬운 추측 가능성을 함께 점검합니다.',
         copied: '점검 요약을 복사했어요.',
         emptyCopy: '복사할 점검 결과가 아직 없어요.',
+        copyFail: '자동 복사를 사용할 수 없어 요약을 직접 선택해 복사해 주세요.',
+        cleared: '입력값과 점검 결과를 초기화했습니다.',
+        caps: 'Caps Lock이 켜져 있어 의도와 다른 대문자가 입력될 수 있습니다.',
         sample: 'Spring2026!Seoul',
         grade: ['매우 약함', '약함', '보통', '강함', '매우 강함'],
         purposeLabel: { general: '일반 사이트 로그인', important: '금융/업무/메인 계정', temporary: '임시/1회성 계정' },
@@ -9824,11 +9830,27 @@
         tipCommon: '잘 알려진 단어 대신 개인만 아는 조합이나 긴 문장형 구조를 쓰세요.',
         warnYear: '연도처럼 추측하기 쉬운 숫자 조합이 들어 있습니다.',
         tipYear: '생년, 기념일, 현재 연도처럼 유추 가능한 숫자는 피하세요.',
+        warnKeyboard: '키보드에서 가까운 키를 순서대로 누른 패턴이 보입니다.',
+        tipKeyboard: '키보드 배열을 따라가는 문자열 대신 관련 없는 단어 여러 개를 조합해 보세요.',
+        warnEdge: '앞뒤 공백은 사이트에 따라 저장·로그인 과정에서 잘리거나 다르게 처리될 수 있습니다.',
+        tipEdge: '비밀번호 앞뒤 공백은 피하고, 중간 공백만 의도적으로 쓰는 편이 안전합니다.',
+        warnOnlySpaces: '공백만으로 된 비밀번호는 대부분의 서비스에서 사용할 수 없거나 매우 취약합니다.',
+        tipOnlySpaces: '서로 관련 없는 단어와 숫자, 기호를 섞은 긴 문장형 비밀번호로 바꿔보세요.',
         warnImportant: '중요 계정용으로는 길이가 더 긴 편이 안전합니다.',
+        warnReuse: '중요 계정은 다른 사이트에서 쓰던 비밀번호를 재사용하지 않는 것이 핵심입니다.',
         summaryRisk: (count, important) => `${count}개의 위험 신호가 보여요. ${important ? '특히 중요한 계정이라면 더 강한 조합이 좋습니다.' : '아래 항목을 손보면 강도가 올라갑니다.'}`,
         danger: '위험 신호',
         tip: '개선 팁',
         good: '좋은 점',
+        crack: {
+          instant: '즉시',
+          seconds: '몇 초',
+          minutes: '몇 분',
+          hours: '몇 시간',
+          days: '며칠',
+          months: '몇 달',
+          years: '수년 이상'
+        },
         gradeLabel: (grade, purposeLabel, score) => `${purposeLabel} 기준 점검 점수는 ${score}점입니다.`,
         output: {
           purpose: '사용 목적',
@@ -9838,6 +9860,7 @@
           lengthUnit: '자',
           variety: '문자 종류',
           varietyUnit: '종',
+          guess: '추측 시간 추정',
           riskCount: '위험 신호 수',
           riskUnit: '개',
           risks: '위험 신호',
@@ -9850,6 +9873,9 @@
         idle: 'Enter a password to check length, character mix, repeated or sequential patterns, and guessability signals.',
         copied: 'Copied the summary.',
         emptyCopy: 'There is no summary to copy yet.',
+        copyFail: 'Automatic copy is unavailable. Select the summary and copy it manually.',
+        cleared: 'Cleared the input and check result.',
+        caps: 'Caps Lock appears to be on, so uppercase letters may be entered unintentionally.',
         sample: 'Spring2026!Seoul',
         grade: ['Very weak', 'Weak', 'Fair', 'Strong', 'Very strong'],
         purposeLabel: { general: 'General site login', important: 'Finance / work / main account', temporary: 'Temporary / one-time account' },
@@ -9871,11 +9897,27 @@
         tipCommon: 'Use a less obvious combination or a longer phrase that only you would know.',
         warnYear: 'It includes an easy-to-guess year-like number.',
         tipYear: 'Avoid birth years, anniversaries, or the current year when possible.',
+        warnKeyboard: 'A nearby-key keyboard pattern is visible.',
+        tipKeyboard: 'Avoid strings that follow the keyboard layout; combine unrelated words instead.',
+        warnEdge: 'Leading or trailing spaces may be trimmed or handled differently by some services.',
+        tipEdge: 'Avoid spaces at the start or end; use only intentional spaces in the middle.',
+        warnOnlySpaces: 'A password made only of spaces is usually unusable or very weak.',
+        tipOnlySpaces: 'Switch to a long passphrase with unrelated words, numbers, and symbols.',
         warnImportant: 'For important accounts, a longer password is safer.',
+        warnReuse: 'For important accounts, avoid reusing a password from another site.',
         summaryRisk: (count, important) => `${count} risk signal(s) appeared. ${important ? 'Because this is an important account, a stronger structure is recommended.' : 'Fixing the items below should improve the score.'}`,
         danger: 'Risk signal',
         tip: 'Improvement tip',
         good: 'What looks good',
+        crack: {
+          instant: 'Instant',
+          seconds: 'Seconds',
+          minutes: 'Minutes',
+          hours: 'Hours',
+          days: 'Days',
+          months: 'Months',
+          years: 'Years+'
+        },
         gradeLabel: (grade, purposeLabel, score) => `For ${purposeLabel}, the check score is ${score}.`,
         output: {
           purpose: 'Account type',
@@ -9885,6 +9927,7 @@
           lengthUnit: ' chars',
           variety: 'Character types',
           varietyUnit: ' types',
+          guess: 'Guessing estimate',
           riskCount: 'Risk signals',
           riskUnit: ' items',
           risks: 'Risk signals',
@@ -9897,6 +9940,9 @@
         idle: 'パスワードを入力すると、長さ、文字構成、繰り返し/連続パターン、推測されやすさをまとめて点検します。',
         copied: '点検結果をコピーしました。',
         emptyCopy: 'まだコピーする点検結果がありません。',
+        copyFail: '自動コピーを利用できません。メモを選択して手動でコピーしてください。',
+        cleared: '入力値と点検結果をクリアしました。',
+        caps: 'Caps Lockがオンのため、意図せず大文字が入力される可能性があります。',
         sample: 'Spring2026!Seoul',
         grade: ['とても弱い', '弱い', '普通', '強い', 'とても強い'],
         purposeLabel: { general: '一般サイトのログイン', important: '金融・業務・メインアカウント', temporary: '一時・使い捨てアカウント' },
@@ -9918,11 +9964,27 @@
         tipCommon: 'よく知られた単語の代わりに、自分だけが分かる組み合わせや長めのフレーズを使ってください。',
         warnYear: '年号のような推測しやすい数字が含まれています。',
         tipYear: '生年、記念日、今年の年号のような推測しやすい数字は避けましょう。',
+        warnKeyboard: 'キーボード上で近いキーを順番に押したようなパターンが見えます。',
+        tipKeyboard: 'キーボード配列に沿った文字列ではなく、関連の薄い単語を組み合わせてください。',
+        warnEdge: '前後の空白はサービスによって削除されたり、別扱いされたりする場合があります。',
+        tipEdge: '先頭・末尾の空白は避け、空白を使うなら途中だけにしましょう。',
+        warnOnlySpaces: '空白だけのパスワードは、多くのサービスで使えないか非常に弱くなります。',
+        tipOnlySpaces: '関連の薄い単語、数字、記号を混ぜた長いパスフレーズに変えてください。',
         warnImportant: '重要アカウント用としては、もう少し長いほうが安全です。',
+        warnReuse: '重要アカウントでは、他サイトで使ったパスワードの再利用を避けることが重要です。',
         summaryRisk: (count, important) => `${count}件の注意シグナルがあります。${important ? '重要アカウントなら、さらに強い構成がおすすめです。' : '下の項目を直すと強度が上がります。'}`,
         danger: '注意シグナル',
         tip: '改善ヒント',
         good: '良い点',
+        crack: {
+          instant: 'すぐ',
+          seconds: '数秒',
+          minutes: '数分',
+          hours: '数時間',
+          days: '数日',
+          months: '数か月',
+          years: '数年以上'
+        },
         gradeLabel: (grade, purposeLabel, score) => `${purposeLabel} 基準の点検スコアは ${score} 点です。`,
         output: {
           purpose: '用途',
@@ -9932,6 +9994,7 @@
           lengthUnit: '文字',
           variety: '文字種類',
           varietyUnit: '種類',
+          guess: '推測時間の目安',
           riskCount: '注意シグナル数',
           riskUnit: '件',
           risks: '注意シグナル',
@@ -9977,13 +10040,42 @@
 
     const hasSequential = (text) => {
       const lower = text.toLowerCase();
-      const sequences = ['0123456789', '9876543210', 'abcdefghijklmnopqrstuvwxyz', 'zyxwvutsrqponmlkjihgfedcba', 'qwertyuiop', 'poiuytrewq', 'asdfghjkl', 'lkjhgfdsa'];
+      const sequences = ['0123456789', '9876543210', 'abcdefghijklmnopqrstuvwxyz', 'zyxwvutsrqponmlkjihgfedcba', 'qwertyuiop', 'poiuytrewq', 'asdfghjkl', 'lkjhgfdsa', 'zxcvbnm', 'mnbvcxz'];
       return sequences.some((seq) => {
         for (let i = 0; i <= seq.length - 3; i += 1) {
           if (lower.includes(seq.slice(i, i + 3))) return true;
         }
         return false;
       });
+    };
+
+    const hasKeyboardWalk = (text) => {
+      const lower = text.toLowerCase();
+      const patterns = ['1qaz', 'zaq1', '2wsx', 'xsw2', '3edc', 'cde3', 'qazwsx', 'xswzaq', 'qweasd', 'dsaewq', 'asdf', 'fdsa', 'zxcv', 'vcxz'];
+      return patterns.some((pattern) => lower.includes(pattern));
+    };
+
+    const estimatePoolSize = (classes) => {
+      let pool = 0;
+      if (classes.lower) pool += 26;
+      if (classes.upper) pool += 26;
+      if (classes.number) pool += 10;
+      if (classes.symbol) pool += 32;
+      if (classes.space) pool += 1;
+      return Math.max(pool, 1);
+    };
+
+    const estimateGuessLabel = (value, classes, warningsCount) => {
+      if (!value.length) return '-';
+      const entropyBits = Math.log2(estimatePoolSize(classes)) * value.length;
+      const adjustedBits = Math.max(0, entropyBits - (warningsCount * 7));
+      if (adjustedBits < 28) return t.crack.instant;
+      if (adjustedBits < 36) return t.crack.seconds;
+      if (adjustedBits < 44) return t.crack.minutes;
+      if (adjustedBits < 52) return t.crack.hours;
+      if (adjustedBits < 60) return t.crack.days;
+      if (adjustedBits < 72) return t.crack.months;
+      return t.crack.years;
     };
 
     const analyze = (raw) => {
@@ -9996,6 +10088,7 @@
         space: /\s/.test(value)
       };
       const variety = [classes.lower, classes.upper, classes.number, classes.symbol, classes.space && allowSpaces.checked].filter(Boolean).length;
+      const visibleLength = [...value].length;
       let score = Math.min(40, value.length * 3);
       score += Math.min(24, variety * 6);
       if (value.length >= 16) score += 10;
@@ -10004,8 +10097,20 @@
       const warnings = [];
       const tips = [];
 
+      if (!value.length) {
+        return { value, score: 0, grade: '-', variety: 0, risks: 0, warnings: [], tips: [], guessLabel: '-', summary: t.idle };
+      }
+
       if (!value.trim()) {
-        return { value, score: 0, grade: '-', variety: 0, risks: 0, warnings: [], tips: [], summary: t.idle };
+        score -= 35;
+        warnings.push(t.warnOnlySpaces);
+        tips.push(t.tipOnlySpaces);
+      }
+
+      if (/^\s|\s$/.test(value)) {
+        score -= 8;
+        warnings.push(t.warnEdge);
+        tips.push(t.tipEdge);
       }
 
       if (value.length < 10) {
@@ -10040,8 +10145,14 @@
         tips.push(t.tipSeq);
       }
 
+      if (hasKeyboardWalk(value)) {
+        score -= 12;
+        warnings.push(t.warnKeyboard);
+        tips.push(t.tipKeyboard);
+      }
+
       const lowered = value.toLowerCase();
-      const commonWords = ['password', 'admin', 'qwer', 'welcome', 'letmein', 'iloveyou', 'abc123', '0000', '1111', '1234', '12345', '123456', 'korea', 'seoul'];
+      const commonWords = ['password', 'passw0rd', 'admin', 'administrator', 'qwer', 'qwerty', 'welcome', 'letmein', 'iloveyou', 'abc123', '0000', '1111', '1234', '12345', '123456', 'korea', 'seoul', 'kakao', 'naver', 'google', 'login'];
       const hitCommon = commonWords.filter((word) => lowered.includes(word));
       if (hitCommon.length) {
         score -= 16;
@@ -10060,12 +10171,15 @@
         score -= 10;
         warnings.push(t.warnImportant);
       }
+      if (purpose.value === 'important') {
+        tips.push(t.warnReuse);
+      }
       if (purpose.value === 'temporary' && value.length >= 12 && variety >= 3) score += 4;
 
       score = Math.max(0, Math.min(100, score));
       const gradeIndex = score >= 85 ? 4 : score >= 70 ? 3 : score >= 50 ? 2 : score >= 30 ? 1 : 0;
       const summary = warnings.length ? t.summaryRisk(warnings.length, purpose.value === 'important') : t.ok;
-      return { value, score, grade: t.grade[gradeIndex], variety, risks: warnings.length, warnings, tips: [...new Set(tips)].slice(0, 4), summary };
+      return { value, score, grade: t.grade[gradeIndex], visibleLength, variety, risks: warnings.length, warnings, tips: [...new Set(tips)].slice(0, 5), guessLabel: estimateGuessLabel(value, classes, warnings.length), summary };
     };
 
     const render = () => {
@@ -10073,14 +10187,17 @@
       const result = analyze(input.value || '');
       scoreEl.textContent = formatNum(result.score);
       gradeEl.textContent = result.grade;
-      lengthEl.textContent = formatNum(result.value.length);
+      lengthEl.textContent = formatNum(result.visibleLength || 0);
       varietyEl.textContent = formatNum(result.variety);
       riskEl.textContent = formatNum(result.risks);
+      crackTimeEl.textContent = result.guessLabel;
       summaryEl.textContent = result.summary;
       meterBar.style.width = `${result.score}%`;
       meterBar.dataset.grade = result.score >= 70 ? 'good' : (result.score >= 50 ? 'fair' : 'weak');
+      meter.setAttribute('aria-valuenow', String(result.score));
+      copyBtn.disabled = !result.value.length;
 
-      if (!result.value.trim()) {
+      if (!result.value.length) {
         listEl.innerHTML = `<div class="bw-item"><p>${escapeHtml(t.noList)}</p></div>`;
         outputEl.value = '';
         return;
@@ -10103,24 +10220,46 @@
         `- ${t.output.purpose}: ${t.purposeLabel[purpose.value] || t.purposeLabel.general}`,
         `- ${t.output.score}: ${result.score}/100`,
         `- ${t.output.grade}: ${result.grade}`,
-        `- ${t.output.length}: ${result.value.length}${t.output.lengthUnit}`,
+        `- ${t.output.length}: ${result.visibleLength}${t.output.lengthUnit}`,
         `- ${t.output.variety}: ${result.variety}${t.output.varietyUnit}`,
+        `- ${t.output.guess}: ${result.guessLabel}`,
         `- ${t.output.riskCount}: ${result.risks}${t.output.riskUnit}`,
         result.warnings.length ? `- ${t.output.risks}: ${result.warnings.join(' / ')}` : `- ${t.output.risks}: ${t.output.noRisk}`,
         result.tips.length ? `- ${t.output.tips}: ${result.tips.join(' / ')}` : `- ${t.output.tips}: ${t.output.defaultTip}`
       ].join('\n');
     };
 
-    [input, purpose].forEach((el) => el.addEventListener('input', render));
+    input.addEventListener('input', render);
+    purpose.addEventListener('change', render);
+    input.addEventListener('keydown', (event) => {
+      if (event.getModifierState && event.getModifierState('CapsLock')) {
+        summaryEl.textContent = t.caps;
+      }
+    });
     [showPassword, allowSpaces].forEach((el) => el.addEventListener('change', render));
-    sampleBtn.addEventListener('click', () => { input.value = t.sample; render(); });
+    sampleBtn.addEventListener('click', () => { input.value = t.sample; render(); input.focus(); });
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      showPassword.checked = false;
+      allowSpaces.checked = true;
+      purpose.value = 'general';
+      render();
+      summaryEl.textContent = t.cleared;
+      input.focus();
+    });
     copyBtn.addEventListener('click', async () => {
       if (!outputEl.value.trim()) {
         summaryEl.textContent = t.emptyCopy;
         return;
       }
-      await copyText(outputEl.value);
-      summaryEl.textContent = t.copied;
+      try {
+        await copyText(outputEl.value);
+        summaryEl.textContent = t.copied;
+      } catch (_) {
+        outputEl.focus();
+        outputEl.select();
+        summaryEl.textContent = t.copyFail;
+      }
     });
     render();
   }

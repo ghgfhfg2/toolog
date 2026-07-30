@@ -610,9 +610,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 짧은 길이, 문자 조합 부족, 반복 문자, 연속 패턴, 흔한 단어와 연도 포함 여부를 브라우저 안에서 빠르게 확인해요.
-  description_en: Check short length, character mix, repeated characters, sequential patterns, common words, and year-like numbers in your browser.
-  description_ja: 短すぎる長さ、文字種類不足、繰り返し、連続パターン、よくある単語、年号風の数字をブラウザ内ですばやく点検できます。
+  description: 짧은 길이, 문자 조합 부족, 반복·키보드 패턴, 흔한 단어, 연도, 공백 처리와 추측 시간 힌트를 브라우저 안에서 빠르게 확인해요.
+  description_en: Check short length, character mix, repeated or keyboard patterns, common words, year-like numbers, space handling, and guessing-time hints in your browser.
+  description_ja: 短さ、文字種類不足、繰り返し・キーボード配列、よくある単語、年号、空白処理、推測時間の目安をブラウザ内で点検できます。
   url: /tools/password-strength-checker/
   url_en: /en/tools/password-strength-checker/
   url_ja: /ja/tools/password-strength-checker/
