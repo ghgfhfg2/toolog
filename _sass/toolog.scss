@@ -862,6 +862,8 @@ textarea:focus-visible {
 .maie-ui .tool-result[data-state="error"] { border-color: #ef4444; }
 .maie-ui .tool-result[data-state="warning"] { border-color: #f59e0b; }
 .maie-ui .tool-result[data-state="success"] { border-color: #16a34a; }
+.maie-alerts:empty { display: none; }
+.maie-alerts div { border-left: 3px solid #f59e0b; }
 .ebcp-ui input[aria-invalid="true"] { border-color: #ef4444; }
 .ebcp-ui .tool-result[data-state="error"] { border-color: #ef4444; }
 .ebcp-ui .tool-result[data-state="success"] { border-color: #16a34a; }
