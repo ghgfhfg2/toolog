@@ -1,6 +1,6 @@
 ---
-title: 개인정보 노출 점검기 | 전화번호·이메일·긴 숫자열 공유 전 확인
-description: 개인정보 노출 점검기로 메시지, 공지문, 상담 기록, 문서 초안 속 전화번호, 이메일, 주민등록번호 유사 패턴, 카드/계좌번호형 숫자열을 찾아 마스킹 결과까지 확인하세요.
+title: 개인정보 노출 점검기 | 전화번호·이메일·계좌번호 공유 전 확인
+description: 개인정보 노출 점검기로 메시지, 공지문, 상담 기록, 문서 초안 속 전화번호, 이메일, 주민등록번호 유사 패턴, 카드·계좌번호형 숫자열, 링크·메신저 ID를 찾아 마스킹 결과까지 확인하세요.
 category: text
 category_label: 텍스트/보안점검
 thumbnail: /assets/thumbs/privacy-exposure-checker.svg
@@ -10,8 +10,8 @@ image:
 tool_key: privacy-exposure-checker
 tool_type: checker
 topic_cluster: privacy
-keywords: [개인정보 노출 점검기, 개인정보 마스킹, 전화번호 가리기, 이메일 마스킹, 주민등록번호 검사, 민감정보 점검]
-related_tools: [readability-checker, text-line-break-cleaner, schedule-coordination-message-generator]
+keywords: [개인정보 노출 점검기, 개인정보 마스킹, 전화번호 가리기, 이메일 마스킹, 계좌번호 마스킹, 주민등록번호 검사, 민감정보 점검]
+related_tools: [privacy-masker, readability-checker, text-line-break-cleaner, schedule-coordination-message-generator]
 faq:
   - q: 입력한 문서가 서버로 전송되거나 저장되나요?
     a: 아니요. 이 도구는 브라우저 안에서만 동작하며 입력한 텍스트를 서버로 전송하거나 저장하지 않습니다.
@@ -28,6 +28,10 @@ faq:
 이 도구는 그런 실수를 줄이기 위해 만들었습니다.
 텍스트를 붙여넣으면 **개인정보 노출 가능성이 있는 패턴을 바로 찾아주고, 마스킹 예시까지 함께 보여줍니다.**
 
+## 오늘 개선 대상으로 고른 이유
+최근 품질 개선 이력이 `meeting-action-item-extractor`, `password-strength-checker`, `customer-support-message-generator`, `secondhand-scam-signal-checker`, `filename-sanitizer`, `online-return-package-checker`에 집중되어 있어 같은 툴 반복을 피했습니다.
+`privacy-exposure-checker`는 공유 전 안전 점검 도구라 빈값, 긴 입력, URL·메신저 ID, 카드/계좌번호 오탐 같은 오류 가능성이 사용자 신뢰에 직접 영향을 주기 때문에 오늘 개선 대상으로 골랐습니다.
+
 ## 이런 상황에서 특히 유용해요
 ### 1) 공지문이나 안내 메시지 발송 전 점검
 단체 공지나 신청 안내문에 연락처, 링크, 계좌 정보가 섞여 있을 때 어떤 부분이 그대로 드러나는지 빠르게 확인할 수 있습니다.
@@ -40,7 +44,7 @@ faq:
 
 ## 어떻게 동작하나요?
 1. 점검할 텍스트를 붙여넣습니다.
-2. 전화번호, 이메일, 주민등록/사업자/카드번호형 패턴, 계좌형 숫자열, 링크 유도 표현을 검사합니다.
+2. 전화번호, 이메일, 주민등록/사업자/카드번호형 패턴, 계좌형 숫자열, 링크·메신저 ID 유도 표현을 검사합니다.
 3. 감지된 항목을 유형별로 보여줍니다.
 4. 체크박스로 원하는 항목만 마스킹해 결과를 확인합니다.
 5. 마스킹 결과를 복사해 안전한 공유용 초안으로 활용합니다.
@@ -55,6 +59,7 @@ faq:
 ## 점검할 수 있는 항목과 한계
 이 도구는 정규식 기반으로 **전화번호, 이메일, 주민등록번호/사업자등록번호처럼 보이는 숫자, 카드번호형 긴 숫자열, 계좌번호처럼 보이는 구분 숫자, URL과 메신저 ID 유도 표현**을 우선 찾습니다.
 마스킹 옵션을 끄면 감지는 유지하되 원문을 그대로 보여주므로, 공개가 필요한 대표 연락처와 가려야 하는 개인 연락처를 나누어 검토할 수 있습니다.
+링크와 메신저 ID는 기본적으로 감지만 하고, 필요할 때 `링크/메신저 ID 마스킹` 옵션을 켜서 공유용 초안에서 `[LINK]` 또는 일부 가림 형태로 바꿀 수 있습니다.
 
 다만 이름, 상세 주소, 회사 내부 코드, 주문번호, 고객번호처럼 **문맥을 알아야 민감한 정보**는 자동으로 완벽히 판단하기 어렵습니다.
 따라서 이 페이지는 발송 전 1차 개인정보 노출 점검기로 쓰고, 실제 공유 전에는 사람이 마지막으로 읽어보는 흐름이 가장 안전합니다.
@@ -80,6 +85,7 @@ faq:
 
 ## 함께 쓰면 좋은 도구
 - 문장을 더 읽기 쉽게 다듬고 싶다면: [문장 가독성 점검기]({{ '/tools/readability-checker/' | relative_url }})
+- 감지 유형별 치환 방식을 더 세밀하게 고르고 싶다면: [개인정보 마스킹 도구]({{ '/tools/privacy-masker/' | relative_url }})
 - 복붙한 원문 줄바꿈을 먼저 정리하려면: [텍스트 줄바꿈 정리기]({{ '/tools/text-line-break-cleaner/' | relative_url }})
 - 최종 안내 메시지를 정중하게 다시 만들고 싶다면: [일정 조율 메시지 생성기]({{ '/tools/schedule-coordination-message-generator/' | relative_url }})
 

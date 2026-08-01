@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Privacy Exposure Checker | Find phone numbers, emails, and long number strings before sharing
-description: Scan messages, notices, support notes, and document drafts for phone numbers, emails, ID-like patterns, card/account-style number strings, links, and messenger prompts, then review a masked version before sharing.
+title: Privacy Exposure Checker | Find phones, emails, accounts, and IDs before sharing
+description: Scan messages, notices, support notes, and document drafts for phone numbers, emails, ID-like patterns, card/account-style number strings, links, and messenger IDs, then review a masked version before sharing.
 lang: en
 permalink: /en/tools/privacy-exposure-checker/
 canonical_url: /en/tools/privacy-exposure-checker/
@@ -18,8 +18,8 @@ image:
 tool_key: privacy-exposure-checker
 tool_type: checker
 topic_cluster: privacy
-keywords: [privacy exposure checker, text masking tool, phone number masking, email masking, sensitive data checker]
-related_tools: [readability-checker, text-line-break-cleaner, schedule-coordination-message-generator]
+keywords: [privacy exposure checker, text masking tool, phone number masking, email masking, account number masking, sensitive data checker]
+related_tools: [privacy-masker, readability-checker, text-line-break-cleaner, schedule-coordination-message-generator]
 faq:
   - q: Are my inputs uploaded or stored?
     a: No. The tool runs entirely in the browser and does not send or save your text on a server.
@@ -35,6 +35,10 @@ Phone numbers, emails, ID-like numbers, card-number-like strings, and account-st
 
 This tool helps you run a quick final check before sharing.
 Paste text, review detected patterns, and copy a masked version if needed.
+
+## Why this tool was selected today
+Recent quality passes focused on `meeting-action-item-extractor`, `password-strength-checker`, `customer-support-message-generator`, `secondhand-scam-signal-checker`, `filename-sanitizer`, and `online-return-package-checker`, so this pass avoided repeating those tools.
+`privacy-exposure-checker` was selected because privacy review has a high cost when detection, masking, or mobile review fails.
 
 ## Especially useful for
 ### 1) Checking notices before sending
@@ -56,6 +60,7 @@ Even after editing, long number strings and contact details are easy to miss. Th
 ## What it checks and what it cannot know
 The checker looks for **phone numbers, email addresses, ID-like numbers, business-ID-like numbers, long card-like digit strings, account-style digit groups, URLs, and messenger or external-chat prompts**.
 If you turn off a masking option, the item is still detected, but the output keeps that part unchanged so you can separate public contact details from private ones.
+Links and messenger IDs are detected by default and can be masked with the link/ID option when you want the sharing draft to hide them too.
 
 Pattern checks are only a first pass.
 Names, addresses, internal project codes, order numbers, and context-sensitive details may still be private even when they do not match a fixed pattern, so read the final draft once before sending.
@@ -66,6 +71,7 @@ Review the detected items, keep public links if needed, mask private contact det
 
 ## Related tools
 - To improve readability afterward: [Readability Checker]({{ '/en/tools/readability-checker/' | relative_url }})
+- To choose more detailed replacement styles: [Privacy Masker]({{ '/en/tools/privacy-masker/' | relative_url }})
 - To clean pasted line breaks first: [Text Line Break Cleaner]({{ '/en/tools/text-line-break-cleaner/' | relative_url }})
 - To rewrite the final message more neatly: [Schedule Coordination Message Generator]({{ '/en/tools/schedule-coordination-message-generator/' | relative_url }})
 

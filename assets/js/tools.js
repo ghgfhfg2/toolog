@@ -9523,8 +9523,11 @@
     const maskId = document.getElementById('pec-mask-id');
     const maskEmail = document.getElementById('pec-mask-email');
     const maskAccount = document.getElementById('pec-mask-account');
+    const maskLink = document.getElementById('pec-mask-link');
     const copyBtn = document.getElementById('pec-copy');
     const sampleBtn = document.getElementById('pec-sample');
+    const selectAllBtn = document.getElementById('pec-select-all');
+    const clearMasksBtn = document.getElementById('pec-clear-masks');
     const clearBtn = document.getElementById('pec-clear');
     const totalEl = document.getElementById('pec-total');
     const contactEl = document.getElementById('pec-contact');
@@ -9533,7 +9536,7 @@
     const summaryEl = document.getElementById('pec-summary');
     const listEl = document.getElementById('pec-list');
     const outputEl = document.getElementById('pec-output');
-    if (!input || !maskPhone || !maskId || !maskEmail || !maskAccount || !copyBtn || !sampleBtn || !clearBtn || !totalEl || !contactEl || !idnumEl || !linkEl || !summaryEl || !listEl || !outputEl) return;
+    if (!input || !maskPhone || !maskId || !maskEmail || !maskAccount || !maskLink || !copyBtn || !sampleBtn || !selectAllBtn || !clearMasksBtn || !clearBtn || !totalEl || !contactEl || !idnumEl || !linkEl || !summaryEl || !listEl || !outputEl) return;
 
     const copyText = async (text) => {
       try { await navigator.clipboard.writeText(text); }
@@ -9558,6 +9561,8 @@
         copied: '마스킹 결과를 복사했어요.',
         emptyCopy: '복사할 마스킹 결과가 아직 없어요.',
         cleared: '입력과 마스킹 결과를 초기화했어요.',
+        masksSelected: '모든 항목을 마스킹 대상으로 선택했어요.',
+        masksCleared: '마스킹 선택을 모두 해제했어요. 감지는 계속 유지됩니다.',
         catContact: '연락처/이메일',
         catId: '식별번호/긴 숫자열',
         catLink: '링크/아이디 유도',
@@ -9586,6 +9591,8 @@
         copied: 'Copied the masked result.',
         emptyCopy: 'There is no masked result to copy yet.',
         cleared: 'Cleared the input and masked result.',
+        masksSelected: 'Selected every category for masking.',
+        masksCleared: 'Cleared every mask choice. Detection stays on.',
         catContact: 'Contact/email',
         catId: 'ID-like/long number',
         catLink: 'Link/ID prompt',
@@ -9614,6 +9621,8 @@
         copied: 'マスキング結果をコピーしました。',
         emptyCopy: 'コピーできるマスキング結果がまだありません。',
         cleared: '入力とマスキング結果をクリアしました。',
+        masksSelected: 'すべての項目をマスキング対象にしました。',
+        masksCleared: 'マスキング選択をすべて解除しました。検出は続きます。',
         catContact: '連絡先/メール',
         catId: '番号系/長い数字列',
         catLink: 'リンク/ID誘導',
@@ -9643,8 +9652,8 @@
       { key: 'biz', cat: 'id', label: '사업자등록번호 유사', risk: 'high', re: /\b\d{3}[- ]?\d{2}[- ]?\d{5}\b/g },
       { key: 'card', cat: 'id', label: '카드번호 유사', risk: 'high', re: /\b(?:\d[ -]*?){13,19}\b/g },
       { key: 'account', cat: 'id', label: '계좌/긴 숫자열 유사', risk: 'medium', re: /\b\d{2,6}[- ]\d{2,6}[- ]\d{3,8}\b/g },
-      { key: 'url', cat: 'link', label: 'URL 링크', risk: 'low', re: /https?:\/\/[^\s]+|www\.[^\s]+/gi },
-      { key: 'messenger', cat: 'link', label: '메신저/아이디 유도', risk: 'low', re: /(카카오톡\s*ID|카톡\s*아이디|오픈채팅|텔레그램\s*@?\w+|디엠\s*주세요|DM\s*me|open\s?chat|telegram\s*@?\w+)/gi }
+      { key: 'url', cat: 'link', label: 'URL 링크', risk: 'low', re: /\b(?:https?:\/\/|www\.)[^\s<>"']+/gi },
+      { key: 'messenger', cat: 'link', label: '메신저/아이디 유도', risk: 'low', re: /(카카오톡\s*ID\s*:?\s*[\w.-]+|카톡\s*아이디\s*:?\s*[\w.-]+|오픈채팅\s*:?\s*[^\s]+|텔레그램\s*@?[\w.-]+|telegram\s*@?[\w.-]+|디엠\s*주세요|DM\s*me|open\s?chat\s*:?\s*[^\s]*)/gi }
     ];
 
     const maskers = {
@@ -9662,8 +9671,8 @@
         const digitIndex = value.slice(0, index + 1).replace(/\D/g, '').length - 1;
         return digitIndex < 3 || digitIndex >= digits.length - 2 ? char : '*';
       }),
-      url: (value) => value,
-      messenger: (value) => value
+      url: () => '[LINK]',
+      messenger: (value) => value.replace(/(@?[\w.-]+)$/i, (match) => match.length > 1 ? `${match.slice(0, 1)}${'*'.repeat(Math.min(8, Math.max(3, match.length - 1)))}` : '[ID]')
     };
 
     const shouldMask = (key) => {
@@ -9671,7 +9680,13 @@
       if (key === 'email') return maskEmail.checked;
       if (['rrn', 'biz', 'card'].includes(key)) return maskId.checked;
       if (key === 'account') return maskAccount.checked;
+      if (['url', 'messenger'].includes(key)) return maskLink.checked;
       return false;
+    };
+
+    const setSummary = (message, state = '') => {
+      summaryEl.textContent = message;
+      summaryEl.dataset.state = state;
     };
 
     const escapeHtml = (value) => value
@@ -9685,7 +9700,8 @@
         rule.re.lastIndex = 0;
         const matches = [...text.matchAll(rule.re)];
         matches.forEach((match) => {
-          const raw = match[0];
+          let raw = match[0];
+          if (rule.key === 'url') raw = raw.replace(/[),.;!?]+$/g, '');
           const digits = raw.replace(/\D/g, '');
           if (rule.key === 'card' && (digits.length < 13 || digits.length > 19)) return;
           items.push({
@@ -9697,7 +9713,7 @@
           });
         });
       });
-      const priority = { rrn: 1, biz: 1, card: 2, account: 3, phone: 4, email: 4, url: 5, messenger: 5 };
+      const priority = { rrn: 1, biz: 1, card: 2, phone: 3, email: 3, account: 4, url: 5, messenger: 5 };
       const sorted = items.sort((a, b) => a.index - b.index || (priority[a.key] || 9) - (priority[b.key] || 9) || (b.end - b.index) - (a.end - a.index));
       const filtered = [];
       sorted.forEach((item) => {
@@ -9732,7 +9748,8 @@
       contactEl.textContent = formatNum(counts.contact);
       idnumEl.textContent = formatNum(counts.id);
       linkEl.textContent = formatNum(counts.link);
-      summaryEl.textContent = text.trim() ? (items.length ? t.caution(items.length) : t.clean) : t.idle;
+      input.setAttribute('aria-invalid', 'false');
+      setSummary(text.trim() ? (items.length ? t.caution(items.length) : t.clean) : t.idle, text.trim() && items.length ? 'warning' : (text.trim() ? 'success' : ''));
       outputEl.value = text.trim() ? applyMask(text, items) : '';
       copyBtn.disabled = !outputEl.value.trim();
 
@@ -9753,29 +9770,39 @@
           <div class="tool-card">
             <strong>${escapeHtml(t.labels[item.key] || item.label)}</strong>
             <p>${escapeHtml(categoryLabel)} · ${escapeHtml(t.risk)} ${escapeHtml(riskLabel)}</p>
-            <p><code>${escapeHtml(item.value)}</code></p>
-            <p>${escapeHtml(t.maskedExample)}: <code>${escapeHtml(item.masked)}</code></p>
+            <p><code title="${escapeHtml(item.value)}">${escapeHtml(item.value)}</code></p>
+            <p>${escapeHtml(t.maskedExample)}: <code title="${escapeHtml(item.masked)}">${escapeHtml(item.masked)}</code></p>
           </div>
         `;
       }).join('');
     };
 
     input.addEventListener('input', render);
-    [maskPhone, maskId, maskEmail, maskAccount].forEach((el) => el.addEventListener('change', render));
+    [maskPhone, maskId, maskEmail, maskAccount, maskLink].forEach((el) => el.addEventListener('change', render));
     sampleBtn.addEventListener('click', () => { input.value = t.sample; render(); input.focus(); });
+    selectAllBtn.addEventListener('click', () => {
+      [maskPhone, maskId, maskEmail, maskAccount, maskLink].forEach((el) => { el.checked = true; });
+      render();
+      setSummary(t.masksSelected, 'success');
+    });
+    clearMasksBtn.addEventListener('click', () => {
+      [maskPhone, maskId, maskEmail, maskAccount, maskLink].forEach((el) => { el.checked = false; });
+      render();
+      setSummary(t.masksCleared, 'warning');
+    });
     clearBtn.addEventListener('click', () => {
       input.value = '';
       render();
-      summaryEl.textContent = t.cleared;
+      setSummary(t.cleared);
       input.focus();
     });
     copyBtn.addEventListener('click', async () => {
       if (!outputEl.value.trim()) {
-        summaryEl.textContent = t.emptyCopy;
+        setSummary(t.emptyCopy, 'error');
         return;
       }
       await copyText(outputEl.value);
-      summaryEl.textContent = t.copied;
+      setSummary(t.copied, 'success');
     });
     render();
   }

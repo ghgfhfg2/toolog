@@ -661,7 +661,7 @@ layout: default
           <div id="dbp-list" class="bw-list"></div>
         </div>
       {% when 'privacy-exposure-checker' %}
-        <div class="tool-ui">
+        <div class="tool-ui pec-ui">
           <div class="tool-row">
             <label for="pec-input">{% if page.lang == 'en' %}Draft text to check{% elsif page.lang == 'ja' %}確認する下書きテキスト{% else %}점검할 문서/메시지{% endif %}</label>
             <textarea id="pec-input" rows="10" maxlength="20000" aria-describedby="pec-summary pec-help" placeholder="{% if page.lang == 'en' %}Paste a message, notice, report draft, or support note before sharing.{% elsif page.lang == 'ja' %}共有前のメッセージ、お知らせ、レポート下書き、サポートメモを貼り付けてください。{% else %}메시지, 문서 초안, 공지문, 상담 메모 등을 붙여넣어 개인정보 노출 가능성을 점검하세요.{% endif %}"></textarea>
@@ -675,11 +675,14 @@ layout: default
           <div class="tool-row-grid pct-grid" aria-label="{% if page.lang == 'en' %}Additional masking options{% elsif page.lang == 'ja' %}追加マスキング設定{% else %}추가 마스킹 옵션{% endif %}">
             <label class="tool-check"><input id="pec-mask-email" type="checkbox" checked /> {% if page.lang == 'en' %}Mask email addresses{% elsif page.lang == 'ja' %}メールアドレスをマスキング{% else %}이메일 마스킹{% endif %}</label>
             <label class="tool-check"><input id="pec-mask-account" type="checkbox" checked /> {% if page.lang == 'en' %}Mask account-style or long number strings{% elsif page.lang == 'ja' %}口座番号風・長い数字列をマスキング{% else %}계좌/긴 숫자열 마스킹{% endif %}</label>
+            <label class="tool-check"><input id="pec-mask-link" type="checkbox" /> {% if page.lang == 'en' %}Mask links and messenger IDs{% elsif page.lang == 'ja' %}リンク・メッセンジャーIDをマスキング{% else %}링크/메신저 ID 마스킹{% endif %}</label>
           </div>
 
           <div class="tool-row-grid pct-actions">
             <button id="pec-copy" type="button" disabled>{% if page.lang == 'en' %}Copy masked result{% elsif page.lang == 'ja' %}マスキング結果をコピー{% else %}마스킹 결과 복사{% endif %}</button>
             <button id="pec-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 넣기{% endif %}</button>
+            <button id="pec-select-all" type="button">{% if page.lang == 'en' %}Select all masks{% elsif page.lang == 'ja' %}すべて選択{% else %}마스킹 전체 선택{% endif %}</button>
+            <button id="pec-clear-masks" type="button">{% if page.lang == 'en' %}Clear mask choices{% elsif page.lang == 'ja' %}選択解除{% else %}마스킹 선택 해제{% endif %}</button>
             <button id="pec-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 

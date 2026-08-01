@@ -1076,6 +1076,16 @@ textarea:focus-visible {
   overflow-wrap: anywhere;
   line-height: 1.2;
 }
+.pec-ui .pct-actions { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.pec-ui .tool-card code {
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.pec-ui #pec-summary[data-state="error"] { color: #fca5a5; }
+.pec-ui #pec-summary[data-state="warning"] { color: #fbbf24; }
+.pec-ui #pec-summary[data-state="success"] { color: #86efac; }
 .tool-stats { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: .5rem; }
 .tool-stats > div { border: 1px solid var(--line); border-radius: 10px; padding: .65rem; background: #1f2937; }
 .tool-stats strong { display:block; font-size: 1.05rem; }
@@ -1472,6 +1482,8 @@ textarea:focus-visible {
   .pt-actions { grid-template-columns: 1fr; }
   .psc-ui .pct-actions { grid-template-columns: 1fr; }
   .tool-stats.psc-stats { grid-template-columns: 1fr 1fr; }
+  .pec-ui .pct-actions,
+  .pec-ui .pct-grid { grid-template-columns: 1fr; }
   .tool-stats { grid-template-columns: 1fr 1fr; }
   .fc-filter-grid,
   .font-change-controls { grid-template-columns: 1fr; }
