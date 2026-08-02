@@ -285,6 +285,12 @@
     const to = document.getElementById('uc-to');
     const out = document.getElementById('uc-result');
     const swap = document.getElementById('uc-swap');
+    const sample = document.getElementById('uc-sample');
+    const copy = document.getElementById('uc-copy');
+    const clear = document.getElementById('uc-clear');
+    const sourceOut = document.getElementById('uc-source');
+    const targetOut = document.getElementById('uc-target');
+    const categoryOut = document.getElementById('uc-category');
 
     const maps = {
       length: { mm:0.001, cm:0.01, m:1, km:1000, inch:0.0254, ft:0.3048, yd:0.9144, mile:1609.344 },
@@ -312,10 +318,54 @@
     const labels = unitLabelsByLang[pageLang] || unitLabelsByLang.ko;
 
     const ucText = {
-      ko: { empty: '변환할 값을 입력해 주세요.', invalid: '유효한 숫자를 입력해 주세요.', absoluteZero: '절대영도보다 낮은 온도는 계산할 수 없습니다.' },
-      en: { empty: 'Enter a value to convert.', invalid: 'Enter a valid number.', absoluteZero: 'Temperatures below absolute zero cannot be converted.' },
-      ja: { empty: '変換する値を入力してください。', invalid: '有効な数値を入力してください。', absoluteZero: '絶対零度未満の温度は計算できません。' }
-    }[pageLang] || { result: '결과' };
+      ko: {
+        empty: '변환할 값을 입력해 주세요.',
+        invalid: '유효한 숫자를 입력해 주세요.',
+        tooLarge: '값이 너무 큽니다. 1e15 이하의 숫자로 입력해 주세요.',
+        absoluteZero: '절대영도보다 낮은 온도는 계산할 수 없습니다.',
+        copied: '변환 결과를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력값을 초기화했습니다.',
+        category: { length: '길이', weight: '무게', temperature: '온도' },
+        sample: { length: { value: '12', from: 'inch', to: 'cm' }, weight: { value: '2.2', from: 'lb', to: 'kg' }, temperature: { value: '98.6', from: 'f', to: 'c' } }
+      },
+      en: {
+        empty: 'Enter a value to convert.',
+        invalid: 'Enter a valid number.',
+        tooLarge: 'The value is too large. Enter a number no greater than 1e15.',
+        absoluteZero: 'Temperatures below absolute zero cannot be converted.',
+        copied: 'Copied the conversion result.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared the value.',
+        category: { length: 'Length', weight: 'Weight', temperature: 'Temperature' },
+        sample: { length: { value: '12', from: 'inch', to: 'cm' }, weight: { value: '2.2', from: 'lb', to: 'kg' }, temperature: { value: '98.6', from: 'f', to: 'c' } }
+      },
+      ja: {
+        empty: '変換する値を入力してください。',
+        invalid: '有効な数値を入力してください。',
+        tooLarge: '値が大きすぎます。1e15以下の数値を入力してください。',
+        absoluteZero: '絶対零度未満の温度は計算できません。',
+        copied: '変換結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力値をクリアしました。',
+        category: { length: '長さ', weight: '重さ', temperature: '温度' },
+        sample: { length: { value: '12', from: 'inch', to: 'cm' }, weight: { value: '2.2', from: 'lb', to: 'kg' }, temperature: { value: '98.6', from: 'f', to: 'c' } }
+      }
+    }[pageLang] || {};
+    let currentSummary = '';
+
+    const resetStats = () => {
+      [sourceOut, targetOut, categoryOut].forEach((el) => { if (el) el.textContent = '-'; });
+      if (copy) copy.disabled = true;
+      currentSummary = '';
+    };
+
+    const setStatus = (message, state = '') => {
+      out.textContent = message;
+      out.dataset.state = state;
+      value.setAttribute('aria-invalid', state === 'error' ? 'true' : 'false');
+      if (state === 'error' || state === '') resetStats();
+    };
 
     const fillUnits = () => {
       const t = type.value || 'length';
@@ -341,24 +391,23 @@
       (unit === 'k' && v < 0)
     );
 
-    const showMessage = (message, invalid = false) => {
-      out.textContent = message;
-      value.setAttribute('aria-invalid', invalid ? 'true' : 'false');
-    };
-
     const run = () => {
       const t = type.value || 'length';
       if (value.value.trim() === '') {
-        showMessage(ucText.empty);
+        setStatus(ucText.empty);
         return;
       }
       const v = Number(value.value);
       if (!Number.isFinite(v)) {
-        showMessage(ucText.invalid, true);
+        setStatus(ucText.invalid, 'error');
+        return;
+      }
+      if (Math.abs(v) > 1000000000000000) {
+        setStatus(ucText.tooLarge, 'error');
         return;
       }
       if (t === 'temperature' && isBelowAbsoluteZero(v, from.value)) {
-        showMessage(ucText.absoluteZero, true);
+        setStatus(ucText.absoluteZero, 'error');
         return;
       }
       let result = 0;
@@ -373,10 +422,18 @@
       const toLabel = to.options[to.selectedIndex]?.text || '';
       const source = v.toLocaleString(numberLocale, { maximumFractionDigits: 10 });
       const converted = result.toLocaleString(numberLocale, { maximumFractionDigits: 10 });
-      showMessage(`${source} ${fromLabel} = ${converted} ${toLabel}`);
+      currentSummary = `${source} ${fromLabel} = ${converted} ${toLabel}`;
+      out.textContent = currentSummary;
+      out.dataset.state = 'success';
+      value.setAttribute('aria-invalid', 'false');
+      if (sourceOut) sourceOut.textContent = `${source} ${fromLabel}`;
+      if (targetOut) targetOut.textContent = `${converted} ${toLabel}`;
+      if (categoryOut) categoryOut.textContent = ucText.category?.[t] || t;
+      if (copy) copy.disabled = false;
     };
 
     [value, from, to].forEach(el => el?.addEventListener('input', run));
+    [from, to].forEach(el => el?.addEventListener('change', run));
     type?.addEventListener('change', fillUnits);
     swap?.addEventListener('click', () => {
       const oldFrom = from.value;
@@ -384,6 +441,29 @@
       to.value = oldFrom;
       run();
       value.focus();
+    });
+    sample?.addEventListener('click', () => {
+      const t = type.value || 'length';
+      const preset = ucText.sample?.[t] || ucText.sample?.length;
+      value.value = preset.value;
+      from.value = preset.from;
+      to.value = preset.to;
+      run();
+      value.focus();
+    });
+    clear?.addEventListener('click', () => {
+      value.value = '';
+      setStatus(ucText.cleared);
+      value.focus();
+    });
+    copy?.addEventListener('click', async () => {
+      if (!currentSummary) return;
+      try {
+        await navigator.clipboard.writeText(currentSummary);
+        setStatus(ucText.copied, 'success');
+      } catch (_) {
+        setStatus(ucText.copyFail, 'error');
+      }
     });
     fillUnits();
   }
