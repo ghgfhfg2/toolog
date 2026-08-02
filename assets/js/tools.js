@@ -458,11 +458,19 @@
     });
     copy?.addEventListener('click', async () => {
       if (!currentSummary) return;
+      const summary = currentSummary;
       try {
-        await navigator.clipboard.writeText(currentSummary);
-        setStatus(ucText.copied, 'success');
+        await navigator.clipboard.writeText(summary);
+        out.textContent = ucText.copied;
+        out.dataset.state = 'success';
+        value.setAttribute('aria-invalid', 'false');
+        setTimeout(() => {
+          if (currentSummary === summary) out.textContent = summary;
+        }, 900);
       } catch (_) {
-        setStatus(ucText.copyFail, 'error');
+        out.textContent = `${summary} · ${ucText.copyFail}`;
+        out.dataset.state = 'error';
+        value.setAttribute('aria-invalid', 'false');
       }
     });
     fillUnits();
