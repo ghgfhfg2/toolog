@@ -4,7 +4,12 @@ description: JSON 합치기 도구로 여러 JSON 파일이나 붙여넣은 API 
 category: data
 category_label: 데이터/JSON 유틸리티
 thumbnail: /assets/thumbs/json-merge.svg
+image:
+  path: /assets/thumbs/json-merge.svg
+  alt: JSON 합치기 도구 썸네일
 tool_key: json-merge
+tool_type: utility
+topic_cluster: data
 keywords: [json 합치기, json 병합, 여러 json 파일 하나로, json merge, json 배열 합치기, json 객체 병합]
 related_tools: [link-list-cleaner, text-counter, case-converter]
 faq:
@@ -29,6 +34,10 @@ faq:
 
 API 응답을 페이지별로 저장했거나, 여러 배치 결과를 하나의 `merged.json`으로 만들어야 할 때 파일을 다시 서버에 올리지 않고 로컬 브라우저에서 확인할 수 있습니다. 작은 응답 조각은 파일로 저장하지 않고 바로 붙여넣어 JSON 배열 합치기와 객체 병합 결과를 테스트할 수 있습니다.
 
+## 오늘 개선 대상으로 고른 이유
+최근 품질 개선 이력이 `unit-converter`, `privacy-exposure-checker`, `meeting-action-item-extractor`, `password-strength-checker`, `customer-support-message-generator`, `secondhand-scam-signal-checker`, `filename-sanitizer`에 집중되어 있어 같은 툴 반복을 피했습니다.
+`json-merge`는 파일 업로드, 직접 붙여넣기, JSON 파싱, 대용량 제한, 객체 키 충돌처럼 오류 가능성이 높은 입력 흐름이 많고, 데이터 실무 검색 의도도 분명해 오늘의 기존 툴 품질 개선 대상으로 골랐습니다.
+
 ## 핵심 기능
 - JSON 파일 다중 업로드
 - API 응답·로그 조각 직접 붙여넣기
@@ -38,6 +47,7 @@ API 응답을 페이지별로 저장했거나, 여러 배치 결과를 하나의
 - 결과 미리보기 + 결과 복사 + `merged.json` 다운로드
 - 중복 배열 항목 제거 + 객체 키 충돌 개수 확인
 - 잘못된 JSON, 수동 모드 구조 불일치, 과도한 파일 크기 안내
+- 선택한 파일 개별 제거와 붙여넣기 용량 안내
 - 예시 데이터로 병합 방식 먼저 확인
 
 ## 사용 방법

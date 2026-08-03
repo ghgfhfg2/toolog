@@ -10855,10 +10855,11 @@
     const sizeOut = document.getElementById('jm-size');
     const filesSummary = document.getElementById('jm-files-summary');
     const fileList = document.getElementById('jm-file-list');
+    const manualMeter = document.getElementById('jm-manual-meter');
     const sampleBtn = document.getElementById('jm-sample');
     const clearBtn = document.getElementById('jm-clear');
 
-    if (!filesInput || !manualInput || !modeSel || !runBtn || !copyBtn || !output || !download || !help || !fileCount || !itemCount || !conflictCount || !sizeOut || !filesSummary || !fileList || !sampleBtn || !clearBtn) return;
+    if (!filesInput || !manualInput || !modeSel || !runBtn || !copyBtn || !output || !download || !help || !fileCount || !itemCount || !conflictCount || !sizeOut || !filesSummary || !fileList || !manualMeter || !sampleBtn || !clearBtn) return;
 
     const jmI18n = {
       ko: {
@@ -10867,12 +10868,15 @@
         parseFail: (name) => `JSON 파싱 실패: ${name}. 쉼표, 따옴표, 중괄호가 맞는지 확인하세요.`,
         needInput: '먼저 JSON 파일을 선택하거나 JSON 텍스트를 붙여넣으세요.',
         manualReady: (count, size) => `붙여넣은 JSON ${count}개 감지 · ${size}MB · 파일과 함께 병합할 수 있습니다.`,
+        manualEmpty: '아직 붙여넣은 JSON이 없습니다.',
+        manualMeter: (count, size) => `붙여넣은 JSON ${count}개 · ${size}MB`,
         tooManyFiles: (count) => `파일이 ${count}개 선택되었습니다. 한 번에 최대 50개까지 합칠 수 있습니다.`,
         tooLarge: (size) => `선택한 파일의 합계가 ${size}MB입니다. 브라우저 보호를 위해 20MB 이하로 줄여 주세요.`,
         manualTooLarge: (size) => `붙여넣은 JSON이 ${size}MB입니다. 브라우저 보호를 위해 파일 포함 20MB 이하로 줄여 주세요.`,
         filesReady: (count, size) => `${count}개 파일 선택됨 · 합계 ${size}MB · 파일은 브라우저 안에서만 처리됩니다.`,
         mixedReady: (files, blocks, size) => `파일 ${files}개 + 붙여넣은 JSON ${blocks}개 준비됨 · 합계 ${size}MB`,
         filePill: (name, size) => `${name} · ${size}KB`,
+        removeFile: (name) => `${name} 파일 제거`,
         invalidObjectMode: '객체 키 병합은 모든 파일의 루트가 JSON 객체일 때만 사용할 수 있습니다.',
         invalidObjectArrayMode: '공통 배열 이어붙이기는 모든 파일이 같은 이름의 배열 키를 가진 JSON 객체여야 합니다.',
         emptyFile: (name) => `빈 JSON 파일은 병합할 수 없습니다: ${name}`,
@@ -10900,12 +10904,15 @@
         parseFail: (name) => `JSON parse failed: ${name}. Check commas, quotes, and braces.`,
         needInput: 'Select JSON files or paste JSON text first.',
         manualReady: (count, size) => `${count} pasted JSON block(s) detected · ${size} MB · You can merge them with uploaded files.`,
+        manualEmpty: 'No pasted JSON yet.',
+        manualMeter: (count, size) => `${count} pasted JSON block(s) · ${size} MB`,
         tooManyFiles: (count) => `${count} files selected. You can merge up to 50 files at once.`,
         tooLarge: (size) => `Selected files total ${size} MB. Reduce the total to 20 MB or less to protect browser memory.`,
         manualTooLarge: (size) => `Pasted JSON totals ${size} MB. Keep files plus pasted text under 20 MB to protect browser memory.`,
         filesReady: (count, size) => `${count} file(s) selected · ${size} MB total · Files stay in this browser.`,
         mixedReady: (files, blocks, size) => `${files} file(s) + ${blocks} pasted JSON block(s) ready · ${size} MB total`,
         filePill: (name, size) => `${name} · ${size} KB`,
+        removeFile: (name) => `Remove ${name}`,
         invalidObjectMode: 'Object key merge requires every file root to be a JSON object.',
         invalidObjectArrayMode: 'Common-array merge requires JSON objects that share an array key with the same name.',
         emptyFile: (name) => `Empty JSON files cannot be merged: ${name}`,
@@ -10933,12 +10940,15 @@
         parseFail: (name) => `JSONの解析に失敗しました: ${name}。カンマ、引用符、中括弧を確認してください。`,
         needInput: '先にJSONファイルを選択するか、JSONテキストを貼り付けてください。',
         manualReady: (count, size) => `貼り付けJSON ${count}件を検出 · 合計${size}MB · ファイルと一緒に結合できます。`,
+        manualEmpty: '貼り付けJSONはまだありません。',
+        manualMeter: (count, size) => `貼り付けJSON ${count}件 · ${size}MB`,
         tooManyFiles: (count) => `${count}個のファイルが選択されています。一度に結合できるのは最大50個です。`,
         tooLarge: (size) => `選択ファイルの合計は${size}MBです。ブラウザ保護のため20MB以下に減らしてください。`,
         manualTooLarge: (size) => `貼り付けJSONは${size}MBです。ファイルを含め20MB以下に減らしてください。`,
         filesReady: (count, size) => `${count}個選択 · 合計${size}MB · ファイルはブラウザ内だけで処理されます。`,
         mixedReady: (files, blocks, size) => `ファイル${files}個 + 貼り付けJSON ${blocks}件 · 合計${size}MB`,
         filePill: (name, size) => `${name} · ${size}KB`,
+        removeFile: (name) => `${name}を削除`,
         invalidObjectMode: 'オブジェクトキー結合は、すべてのファイルのルートがJSONオブジェクトの場合のみ使用できます。',
         invalidObjectArrayMode: '共通配列の連結には、同じ名前の配列キーを持つJSONオブジェクトが必要です。',
         emptyFile: (name) => `空のJSONファイルはマージできません: ${name}`,
@@ -10967,6 +10977,7 @@
     const MAX_PREVIEW_CHARS = 120000;
     let downloadUrl = '';
     let currentResult = '';
+    let selectedFiles = [];
 
     const fmt = (n) => Number(n || 0).toLocaleString(numberLocale);
     const formatMb = (bytes) => (bytes / (1024 * 1024)).toLocaleString(numberLocale, { maximumFractionDigits: 2 });
@@ -11037,7 +11048,21 @@
       fileList.replaceChildren();
       files.slice(0, 8).forEach((file) => {
         const pill = document.createElement('span');
-        pill.textContent = jmText.filePill(file.name, formatKb(file.size));
+        pill.className = 'jm-file-pill';
+        const text = document.createElement('span');
+        text.className = 'jm-file-pill__text';
+        text.textContent = jmText.filePill(file.name, formatKb(file.size));
+        const remove = document.createElement('button');
+        remove.className = 'jm-file-pill__remove';
+        remove.type = 'button';
+        remove.textContent = 'x';
+        remove.setAttribute('aria-label', jmText.removeFile(file.name));
+        remove.addEventListener('click', () => {
+          selectedFiles = selectedFiles.filter((item) => item !== file);
+          filesInput.value = '';
+          updateInputState();
+        });
+        pill.append(text, remove);
         fileList.appendChild(pill);
       });
       if (files.length > 8) {
@@ -11077,13 +11102,15 @@
       if (files.length > MAX_FILES) return jmText.tooManyFiles(files.length);
       const manualBytes = byteLength(manualBlocks.join('\n---\n'));
       const totalBytes = files.reduce((sum, file) => sum + file.size, 0) + manualBytes;
+      if (!files.length && manualBytes > MAX_TOTAL_BYTES) return jmText.manualTooLarge(formatMb(manualBytes));
       if (totalBytes > MAX_TOTAL_BYTES) return jmText.tooLarge(formatMb(totalBytes));
       return '';
     };
 
     const updateInputState = () => {
-      const files = Array.from(filesInput.files || []);
+      const files = selectedFiles;
       const manualBlocks = splitManualBlocks();
+      const manualBytes = byteLength(manualBlocks.join('\n---\n'));
       const totalBytes = files.reduce((sum, file) => sum + file.size, 0) + byteLength(manualBlocks.join('\n---\n'));
       const error = validateInputs(files, manualBlocks);
       clearResult();
@@ -11092,6 +11119,8 @@
       filesInput.setAttribute('aria-invalid', error && files.length ? 'true' : 'false');
       manualInput.setAttribute('aria-invalid', error && manualBlocks.length ? 'true' : 'false');
       renderFileList(files);
+      manualMeter.textContent = manualBlocks.length ? jmText.manualMeter(manualBlocks.length, formatMb(manualBytes)) : jmText.manualEmpty;
+      manualMeter.dataset.state = error && manualBlocks.length ? 'error' : '';
       let readyText = error;
       if (!readyText && files.length && manualBlocks.length) readyText = jmText.mixedReady(files.length, manualBlocks.length, formatMb(totalBytes));
       else if (!readyText && files.length) readyText = jmText.filesReady(files.length, formatMb(totalBytes));
@@ -11101,7 +11130,10 @@
       setHelp(readyText, error ? 'error' : '');
     };
 
-    filesInput.addEventListener('change', updateInputState);
+    filesInput.addEventListener('change', () => {
+      selectedFiles = Array.from(filesInput.files || []);
+      updateInputState();
+    });
     manualInput.addEventListener('input', updateInputState);
 
     [modeSel, dedupeChk].forEach((control) => control?.addEventListener('change', () => {
@@ -11111,7 +11143,7 @@
     }));
 
     runBtn.addEventListener('click', async () => {
-      const files = Array.from(filesInput.files || []);
+      const files = selectedFiles;
       const manualBlocks = splitManualBlocks();
       const inputError = validateInputs(files, manualBlocks);
       if (inputError) {
@@ -11213,6 +11245,7 @@
       modeSel.value = 'object-array-concat';
       dedupeChk.checked = true;
       filesInput.value = '';
+      selectedFiles = [];
       manualInput.value = [
         JSON.stringify({ source: 'page-1', items: [{ id: 1, title: 'alpha' }, { id: 2, title: 'beta' }], updatedAt: '2026-07-01' }, null, 2),
         JSON.stringify({ source: 'page-2', items: [{ id: 2, title: 'beta' }, { id: 3, title: 'gamma' }], updatedAt: '2026-07-02' }, null, 2)
@@ -11226,12 +11259,15 @@
     clearBtn.addEventListener('click', () => {
       clearResult();
       filesInput.value = '';
+      selectedFiles = [];
       manualInput.value = '';
       fileCount.textContent = '0';
       runBtn.disabled = true;
       filesInput.setAttribute('aria-invalid', 'false');
       manualInput.setAttribute('aria-invalid', 'false');
       fileList.replaceChildren();
+      manualMeter.textContent = jmText.manualEmpty;
+      manualMeter.dataset.state = '';
       filesSummary.textContent = jmText.idle;
       filesSummary.dataset.state = '';
       setHelp(jmText.cleared);
