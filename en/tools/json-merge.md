@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: JSON Merge | Combine Files, Pasted JSON, Arrays, and Objects
-description: Merge JSON files or pasted API responses in your browser. Concatenate arrays, merge object keys and shared arrays, remove duplicates, review key conflicts, copy results, and download merged.json.
+title: JSON Merge | Combine Files, Pasted JSON, Arrays, Objects, and Remove Duplicates
+description: Merge JSON files or pasted API responses in your browser. Concatenate arrays, merge object keys and shared arrays, remove duplicates, remove selected files, check pasted size, review key conflicts, copy results, and download merged.json.
 lang: en
 permalink: /en/tools/json-merge/
 canonical_url: /en/tools/json-merge/
@@ -24,6 +24,8 @@ faq:
     a: Each run accepts up to 50 files with a 20 MB combined limit to protect browser memory. If the result is large, the preview is shortened but the downloaded file keeps the full output.
   - q: Can I paste JSON instead of choosing files?
     a: Yes. Paste an API response or small JSON snippet directly. Separate multiple documents with a line containing only --- and merge them with files if needed.
+  - q: Can I remove only one selected JSON file?
+    a: Yes. After selecting files, remove individual files from the on-page file list before running the merge.
 alternate_urls:
   ko: /tools/json-merge/
   en: /en/tools/json-merge/
@@ -37,6 +39,11 @@ Examples: paged API exports, chunked logs, and batch output files.
 
 It is useful when you saved API responses page by page or need to turn several batch outputs into one `merged.json` without uploading private data elsewhere. For smaller snippets, paste JSON directly instead of saving temporary files, then test the same array merge or object merge behavior.
 
+## Why this tool was refreshed today
+Recent quality passes had already focused on tools such as unit conversion, privacy checks, action-item extraction, password strength checks, customer support message generation, scam-signal checks, and filename cleanup, so this update avoids repeating the same tool.
+
+`json-merge` was selected because it has several failure-prone input paths: file upload, direct paste, JSON parsing, large-size limits, and object-key conflicts. It also matches a clear data-work search intent for people trying to combine JSON files, merge arrays, or test pasted API responses locally.
+
 ## Key features
 - Multi-file JSON upload
 - Direct paste input for API responses and log snippets
@@ -46,14 +53,16 @@ It is useful when you saved API responses page by page or need to turn several b
 - Preview + copy result + `merged.json` download
 - Optional array deduplication + object key conflict count
 - Clear errors for invalid JSON, incompatible manual modes, and excessive file size
+- Individual selected-file removal and pasted JSON size guidance
 - Sample data to test the merge behavior before choosing files
 
 ## How to use
 1. Upload multiple JSON files.
 2. If you do not have files, paste JSON text directly. Use a line containing only `---` between multiple documents.
-3. Pick a merge mode (default: Auto).
-4. Click **Merge JSON**.
-5. Review, copy, or download the result.
+3. Remove any selected file you do not want to include, and check the pasted-size message if you added manual JSON.
+4. Pick a merge mode (default: Auto).
+5. Click **Merge JSON**.
+6. Review, copy, or download the result.
 
 ## Notes
 - In object-merge mode, duplicate keys are overwritten by later files.
@@ -61,6 +70,7 @@ It is useful when you saved API responses page by page or need to turn several b
 - Array deduplication compares objects with sorted keys, so `{ "a": 1, "b": 2 }` and `{ "b": 2, "a": 1 }` count as the same item.
 - To protect browser memory, each run accepts up to 50 files with a combined size of 20 MB.
 - Uploaded files and pasted JSON share the same 20 MB total limit.
+- If no files or pasted JSON are present, the merge button stays disabled and the page shows an empty-input message.
 - Uploaded files and merged results stay in your current browser and are never sent to a server.
 
 ## Related tools
