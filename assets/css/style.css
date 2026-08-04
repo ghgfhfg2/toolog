@@ -1118,6 +1118,13 @@ a:hover { color: #fff; text-decoration: none; }
 .ir-ui input[aria-invalid="true"] { border-color: #ef4444; }
 .ir-ui #ir-result[data-state="error"] { color: #fca5a5; }
 .ir-ui #ir-result[data-state="success"] { color: #86efac; }
+.ir-ui #ir-download[aria-disabled="true"] {
+  opacity: .55;
+  pointer-events: none;
+}
+.ir-ui canvas[hidden] {
+  display: none;
+}
 .pc-controls {
   grid-template-columns: minmax(0, 1fr) minmax(140px, .45fr);
 }

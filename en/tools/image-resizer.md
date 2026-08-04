@@ -40,6 +40,7 @@ Images often get cropped or look blurry when uploaded with the wrong dimensions.
 This tool helps you resize photos, change image dimensions, and convert to WebP quickly before publishing.
 Processing happens in your browser, so it is useful for thumbnails, social share images, and blog cover images without an upload step.
 You can enter exact width and height, pick a preset, and choose whether to keep the whole image or crop into the target frame.
+It is a practical first step for product images, blog thumbnails, Instagram square posts, Open Graph share cards, and other uploads that require exact image dimensions.
 
 ## Key features
 - Presets: Instagram square (1080×1080), OG (1200×630), blog thumbnail, and more
@@ -83,9 +84,11 @@ Check the canvas preview and output details, then download the resized image.
 
 ## SEO checklist
 Right-sized images can reduce unnecessary resource loading, which helps page speed and user experience.
+After resizing, preview the image where it will be published so cropping, blur, and file-size limits do not hurt search snippets or social previews.
 
 - Reference: [Google Search Central - Image SEO](https://developers.google.com/search/docs/appearance/google-images)
 - Internal workflow: finish with [PNG Compressor]({{ '/en/tools/png-compressor/' | relative_url }}) when you need a lighter upload.
+- Internal workflow: use the [YouTube Image Kit Maker]({{ '/en/tools/youtube-image-kit/' | relative_url }}) when you need thumbnails, banners, and icons as one matched set.
 
 ## Summary
 Image Resizer is a basic utility for avoiding upload failures, distorted ratios, and slow-loading oversized images.
