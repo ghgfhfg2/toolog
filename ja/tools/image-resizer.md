@@ -1,6 +1,6 @@
 ---
 layout: tool
-title: 画像リサイズツール | サイズ変更・切り抜き・WebP変換
+title: 画像リサイズツール | サイズ変更・WebP変換
 description: 画像を指定ピクセルへリサイズし、WebP/PNG/JPEG保存、品質調整、切り抜き・余白、Instagram・ブログ・OG用プリセットまでブラウザ内で処理します。
 lang: ja
 permalink: /ja/tools/image-resizer/

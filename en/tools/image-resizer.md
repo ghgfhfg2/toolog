@@ -1,6 +1,6 @@
 ---
 layout: tool
-title: Image Resizer | Resize, Crop, and Convert to WebP
+title: Image Resizer | Resize, Crop, WebP
 description: Resize images to exact pixels in your browser with WebP/PNG/JPEG output, quality control, crop or padding modes, Instagram, blog, and OG presets.
 lang: en
 permalink: /en/tools/image-resizer/

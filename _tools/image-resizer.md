@@ -1,5 +1,5 @@
 ---
-title: 이미지 리사이저 | 사진 크기 조절·크롭·WebP 변환
+title: 이미지 리사이저 | 사진 크기·크롭·WebP 변환
 description: 이미지 리사이저로 사진 크기를 원하는 픽셀로 변경하고 WebP/PNG/JPEG 저장, 품질 조절, 크롭·여백 맞춤, 인스타·블로그·OG 프리셋까지 브라우저에서 처리하세요.
 category: image
 category_label: 이미지/그래픽
