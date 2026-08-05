@@ -1563,8 +1563,8 @@
 
 - id: youtube-image-kit
   title: 유튜브 이미지 세트 메이커
-  title_en: YouTube Image Kit Maker
-  title_ja: YouTube画像セットメーカー
+  title_en: YouTube Thumbnail and Banner Maker
+  title_ja: YouTubeサムネイル・バナー作成ツール
   category: image
   category_label: 이미지/그래픽
   category_label_en: Image/Graphics
@@ -1573,8 +1573,8 @@
   badge_en: New
   badge_ja: 新着
   description: 이미지 1장으로 썸네일·쇼츠·배너·아이콘·워터마크를 WebP·PNG·JPEG로 만들고 GIF 첫 프레임, 대용량 제한, 총 용량을 확인해요.
-  description_en: Generate YouTube thumbnail, Shorts cover, banner, icon, and watermark from one image as WebP, PNG, or JPEG, with GIF first-frame, large-file, and total size checks.
-  description_ja: 画像1枚からYouTubeサムネ・ショート・バナー・アイコン・透かしをWebP・PNG・JPEGで生成し、GIF先頭フレーム、大容量制限、合計容量も確認できます。
+  description_en: Create YouTube thumbnail, Shorts cover, banner, icon, and watermark files from one image as WebP, PNG, or JPEG, with GIF first-frame, large-file, and total size checks.
+  description_ja: 画像1枚からYouTubeサムネ・ショート・バナー・アイコン・透かしをWebP・PNG・JPEGで作成し、GIF先頭フレーム、大容量制限、合計容量も確認できます。
   url: /tools/youtube-image-kit/
   url_en: /en/tools/youtube-image-kit/
   url_ja: /ja/tools/youtube-image-kit/
