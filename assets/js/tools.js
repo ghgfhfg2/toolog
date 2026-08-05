@@ -1585,6 +1585,7 @@
     const wrap = document.getElementById('ytk-list');
     const result = document.getElementById('ytk-result');
     const warning = document.getElementById('ytk-warning');
+    const formatNote = document.getElementById('ytk-format-note');
     const allBtn = document.getElementById('ytk-download-all');
     const clearBtn = document.getElementById('ytk-clear');
     const originalOut = document.getElementById('ytk-original');
@@ -1605,15 +1606,18 @@
         idle: '이미지를 선택하면 유튜브 업로드 이미지 세트를 브라우저에서 생성합니다.',
         empty: '먼저 기준 이미지를 선택해 주세요.',
         badType: 'PNG, JPEG, WebP, GIF 이미지만 사용할 수 있습니다.',
-        tooBigFile: '파일 용량이 큽니다. 모바일에서는 생성이 느리거나 실패할 수 있습니다.',
+        tooBigFile: '파일 용량이 25MB를 넘습니다. 이미지 리사이저로 줄인 뒤 다시 시도해 주세요.',
+        heavyFile: '파일 용량이 큽니다. 모바일에서는 생성이 느릴 수 있으니 WebP와 cover 모드부터 확인해 보세요.',
+        gifStatic: 'GIF는 애니메이션이 아니라 첫 프레임을 기준으로 정지 이미지 세트를 만듭니다.',
         smallSource: '원본이 썸네일 권장 크기(1280x720)보다 작아 일부 결과가 흐릴 수 있습니다.',
-        tooLarge: '이미지 해상도가 너무 큽니다. 8000만 픽셀 이하 이미지로 줄인 뒤 다시 시도해 주세요.',
+        tooLarge: '이미지 해상도가 너무 큽니다. 4,000만 픽셀 이하 이미지로 줄인 뒤 다시 시도해 주세요.',
         loading: '이미지를 불러오는 중입니다...',
         failed: '이미지를 읽지 못했습니다. 다른 파일로 다시 시도해 주세요.',
         ready: (w, h) => `원본: ${w}x${h}px · 생성 준비 완료`,
         generating: '출력 이미지를 생성하는 중입니다...',
         generateFailed: '출력 이미지를 생성하지 못했습니다. 더 작은 이미지나 다른 포맷으로 다시 시도해 주세요.',
         emptyAfterGenerate: '생성된 출력이 없습니다. 포맷을 바꾸거나 더 작은 이미지로 다시 시도해 주세요.',
+        stale: '옵션이 바뀌었습니다. 새 설정을 반영하려면 다시 생성해 주세요.',
         cleared: '입력과 생성 결과를 초기화했습니다.',
         downloadAll: (count) => `${count}개 파일 다운로드를 시작했습니다. 브라우저가 여러 다운로드 허용을 물어볼 수 있습니다.`,
         download: (label) => `${label} 다운로드`,
@@ -1632,15 +1636,18 @@
         idle: 'Choose an image to generate a YouTube upload image set in your browser.',
         empty: 'Choose a source image first.',
         badType: 'Use a PNG, JPEG, WebP, or GIF image.',
-        tooBigFile: 'This file is large. Generation may be slow or fail on mobile browsers.',
+        tooBigFile: 'The file is over 25 MB. Resize it first, then try again.',
+        heavyFile: 'This file is large. On mobile, generation may be slow; start with WebP and cover mode.',
+        gifStatic: 'GIF input is treated as a still first frame, not an animation.',
         smallSource: 'The source is below the recommended thumbnail size (1280x720), so some outputs may look soft.',
-        tooLarge: 'The image resolution is too large. Resize it below 80 million pixels and try again.',
+        tooLarge: 'The image resolution is too large. Resize it below 40 million pixels and try again.',
         loading: 'Loading image...',
         failed: 'Could not read the image. Try another file.',
         ready: (w, h) => `Original: ${w}x${h}px · Ready to generate`,
         generating: 'Generating output images...',
         generateFailed: 'Could not generate the outputs. Try a smaller image or another format.',
         emptyAfterGenerate: 'No outputs were generated. Try another format or a smaller source image.',
+        stale: 'Options changed. Generate again to update the files.',
         cleared: 'Cleared the input and generated outputs.',
         downloadAll: (count) => `Started downloading ${count} files. Your browser may ask to allow multiple downloads.`,
         download: (label) => `Download ${label}`,
@@ -1659,15 +1666,18 @@
         idle: '画像を選ぶと、YouTube投稿用画像セットをブラウザ内で生成できます。',
         empty: '先に元画像を選択してください。',
         badType: 'PNG、JPEG、WebP、GIF画像を使用してください。',
-        tooBigFile: 'ファイル容量が大きいため、モバイルでは生成が遅くなるか失敗する場合があります。',
+        tooBigFile: 'ファイルが25MBを超えています。先にリサイズしてから再試行してください。',
+        heavyFile: 'ファイル容量が大きいため、モバイルでは生成が遅くなる場合があります。まずWebPとcoverで確認してください。',
+        gifStatic: 'GIFはアニメーションではなく、静止した先頭フレームとして処理します。',
         smallSource: '元画像が推奨サムネイルサイズ（1280x720）未満のため、一部の出力がぼやける場合があります。',
-        tooLarge: '画像解像度が大きすぎます。8000万ピクセル以下に縮小してから再試行してください。',
+        tooLarge: '画像解像度が大きすぎます。4000万ピクセル以下に縮小してから再試行してください。',
         loading: '画像を読み込んでいます...',
         failed: '画像を読み込めませんでした。別のファイルで再試行してください。',
         ready: (w, h) => `元画像: ${w}x${h}px · 生成準備完了`,
         generating: '出力画像を生成しています...',
         generateFailed: '出力画像を生成できませんでした。小さめの画像または別形式で再試行してください。',
         emptyAfterGenerate: '生成された出力がありません。形式を変えるか、小さめの画像で再試行してください。',
+        stale: 'オプションが変わりました。新しい設定で再生成してください。',
         cleared: '入力と生成結果をクリアしました。',
         downloadAll: (count) => `${count}個のファイルのダウンロードを開始しました。ブラウザが複数ダウンロードの許可を求める場合があります。`,
         download: (label) => `${label} をダウンロード`,
@@ -1686,15 +1696,18 @@
       idle: '이미지를 선택하면 유튜브 업로드 이미지 세트를 브라우저에서 생성합니다.',
       empty: '먼저 기준 이미지를 선택해 주세요.',
       badType: 'PNG, JPEG, WebP, GIF 이미지만 사용할 수 있습니다.',
-      tooBigFile: '파일 용량이 큽니다. 모바일에서는 생성이 느리거나 실패할 수 있습니다.',
+      tooBigFile: '파일 용량이 25MB를 넘습니다. 이미지 리사이저로 줄인 뒤 다시 시도해 주세요.',
+      heavyFile: '파일 용량이 큽니다. 모바일에서는 생성이 느릴 수 있으니 WebP와 cover 모드부터 확인해 보세요.',
+      gifStatic: 'GIF는 애니메이션이 아니라 첫 프레임을 기준으로 정지 이미지 세트를 만듭니다.',
       smallSource: '원본이 썸네일 권장 크기(1280x720)보다 작아 일부 결과가 흐릴 수 있습니다.',
-      tooLarge: '이미지 해상도가 너무 큽니다. 8000만 픽셀 이하 이미지로 줄인 뒤 다시 시도해 주세요.',
+      tooLarge: '이미지 해상도가 너무 큽니다. 4,000만 픽셀 이하 이미지로 줄인 뒤 다시 시도해 주세요.',
       loading: '이미지를 불러오는 중입니다...',
       failed: '이미지를 읽지 못했습니다. 다른 파일로 다시 시도해 주세요.',
       ready: (w, h) => `원본: ${w}x${h}px · 생성 준비 완료`,
       generating: '출력 이미지를 생성하는 중입니다...',
       generateFailed: '출력 이미지를 생성하지 못했습니다. 더 작은 이미지나 다른 포맷으로 다시 시도해 주세요.',
       emptyAfterGenerate: '생성된 출력이 없습니다. 포맷을 바꾸거나 더 작은 이미지로 다시 시도해 주세요.',
+      stale: '옵션이 바뀌었습니다. 새 설정을 반영하려면 다시 생성해 주세요.',
       cleared: '입력과 생성 결과를 초기화했습니다.',
       downloadAll: (count) => `${count}개 파일 다운로드를 시작했습니다. 브라우저가 여러 다운로드 허용을 물어볼 수 있습니다.`,
       download: (label) => `${label} 다운로드`,
@@ -1714,7 +1727,9 @@
     let img = null;
     let renders = [];
     let objectUrls = [];
-    const maxFileBytes = 30 * 1024 * 1024;
+    const maxFileBytes = 25 * 1024 * 1024;
+    const heavyFileBytes = 12 * 1024 * 1024;
+    const maxSourcePixels = 40000000;
 
     const formatBytes = (bytes) => {
       if (!Number.isFinite(bytes) || bytes <= 0) return '-';
@@ -1752,6 +1767,17 @@
       if (formatOut) formatOut.textContent = getFormatLabel();
       if (qualityLabel) qualityLabel.textContent = `${Math.round(Number(quality.value || 0.86) * 100)}%`;
       quality.disabled = mime === 'image/png';
+      if (formatNote && mime === 'image/png') {
+        formatNote.dataset.state = 'muted';
+      } else if (formatNote) {
+        formatNote.dataset.state = '';
+      }
+    };
+
+    const markStale = () => {
+      if (!img || !renders.length) return;
+      resetOutputs();
+      setStatus(ytkText.stale, 'warning');
     };
 
     const drawFrame = (ctx, image, w, h, mode, bgColor) => {
@@ -1773,6 +1799,7 @@
 
     file?.addEventListener('change', () => {
       const f = file.files?.[0];
+      const warnings = [];
       resetOutputs();
       img = null;
       if (originalOut) originalOut.textContent = '-';
@@ -1789,12 +1816,19 @@
         file.value = '';
         return;
       }
-      if (f.size > maxFileBytes) setWarning(ytkText.tooBigFile, 'warning');
+      if (f.size > maxFileBytes) {
+        file.setAttribute('aria-invalid', 'true');
+        setStatus(ytkText.tooBigFile, 'error');
+        file.value = '';
+        return;
+      }
+      if (f.size > heavyFileBytes) warnings.push(ytkText.heavyFile);
+      if (/^image\/gif$/i.test(f.type || '') || /\.gif$/i.test(f.name || '')) warnings.push(ytkText.gifStatic);
       setStatus(ytkText.loading);
       const u = URL.createObjectURL(f);
       const i = new Image();
       i.onload = () => {
-        if (i.width * i.height > 80000000) {
+        if (i.width * i.height > maxSourcePixels) {
           URL.revokeObjectURL(u);
           file.setAttribute('aria-invalid', 'true');
           setStatus(ytkText.tooLarge, 'error');
@@ -1803,8 +1837,9 @@
         }
         img = i;
         URL.revokeObjectURL(u);
-        if (originalOut) originalOut.textContent = `${i.width}x${i.height}`;
-        if (i.width < 1280 || i.height < 720) setWarning(ytkText.smallSource, 'warning');
+        if (originalOut) originalOut.textContent = `${formatNum(i.width)}x${formatNum(i.height)} · ${formatBytes(f.size)}`;
+        if (i.width < 1280 || i.height < 720) warnings.push(ytkText.smallSource);
+        if (warnings.length) setWarning(warnings.join(' '), 'warning');
         setStatus(ytkText.ready(i.width, i.height), 'success');
       };
       i.onerror = () => {
@@ -1816,8 +1851,18 @@
     });
 
     [format, quality].forEach((el) => {
-      el?.addEventListener('input', updateControls);
-      el?.addEventListener('change', updateControls);
+      el?.addEventListener('input', () => {
+        updateControls();
+        markStale();
+      });
+      el?.addEventListener('change', () => {
+        updateControls();
+        markStale();
+      });
+    });
+    [fit, bg].forEach((el) => {
+      el?.addEventListener('input', markStale);
+      el?.addEventListener('change', markStale);
     });
     updateControls();
 

@@ -1269,6 +1269,15 @@ textarea:focus-visible {
   margin-bottom: .4rem;
   font-size: .82rem;
 }
+.ytk-ui #ytk-result[data-state="warning"] {
+  color: #fbbf24;
+}
+.ytk-note {
+  font-size: .88rem;
+}
+.ytk-note[data-state="muted"] {
+  color: var(--muted);
+}
 #ytk-run,
 #ytk-download-all {
   cursor: pointer;
