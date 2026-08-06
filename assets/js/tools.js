@@ -2573,6 +2573,8 @@
         copied: '복사됨',
         copyDefault: '전체 복사',
         copyOne: '복사',
+        outputHiddenLabel: '생성된 비밀번호가 화면에서 숨겨져 있습니다.',
+        outputVisibleLabel: '생성된 비밀번호',
         copyEmpty: '복사할 비밀번호가 없습니다.',
         copyFail: '자동 복사를 사용할 수 없습니다.',
         cleared: '생성 결과를 지웠습니다.'
@@ -2598,6 +2600,8 @@
         copied: 'Copied',
         copyDefault: 'Copy all',
         copyOne: 'Copy',
+        outputHiddenLabel: 'Generated passwords are hidden on screen',
+        outputVisibleLabel: 'Generated passwords',
         copyEmpty: 'There are no generated passwords to copy.',
         copyFail: 'Automatic copy is unavailable.',
         cleared: 'Cleared the generated passwords.'
@@ -2623,6 +2627,8 @@
         copied: 'コピー完了',
         copyDefault: 'すべてコピー',
         copyOne: 'コピー',
+        outputHiddenLabel: '生成されたパスワードは画面上で非表示です。',
+        outputVisibleLabel: '生成されたパスワード',
         copyEmpty: 'コピーできるパスワードがありません。',
         copyFail: '自動コピーを利用できません。',
         cleared: '生成結果をクリアしました。'
@@ -2734,7 +2740,7 @@
       const masked = !showResult.checked;
       output.classList.toggle('pg-masked', masked);
       listOut.classList.toggle('pg-masked', masked);
-      output.setAttribute('aria-label', masked ? 'Generated passwords are hidden on screen' : 'Generated passwords');
+      output.setAttribute('aria-label', masked ? pwText.outputHiddenLabel : pwText.outputVisibleLabel);
     };
 
     const copyText = async (text) => {
