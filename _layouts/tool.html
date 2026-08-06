@@ -2512,6 +2512,23 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           </fieldset>
           <label class="tool-check pg-wide-check"><input id="pw-exclude-similar" type="checkbox" /> {% if page.lang == 'en' %}Exclude similar characters (O/0, l/I/1, etc.){% elsif page.lang == 'ja' %}紛らわしい文字を除外（O/0, l/I/1 など）{% else %}헷갈리는 문자 제외 (O/0, l/I/1 등){% endif %}</label>
 
+          <div class="tool-row-grid pg-preferences">
+            <div>
+              <label for="pw-symbol-preset">{% if page.lang == 'en' %}Symbol set{% elsif page.lang == 'ja' %}記号セット{% else %}특수문자 범위{% endif %}</label>
+              <select id="pw-symbol-preset" aria-describedby="pw-status pw-help">
+                <option value="safe">{% if page.lang == 'en' %}Website-friendly symbols{% elsif page.lang == 'ja' %}サイトで使いやすい記号{% else %}사이트 호환 특수문자{% endif %}</option>
+                <option value="full">{% if page.lang == 'en' %}Wider symbol set{% elsif page.lang == 'ja' %}広めの記号セット{% else %}넓은 특수문자 범위{% endif %}</option>
+              </select>
+            </div>
+            <label class="tool-check"><input id="pw-show-result" type="checkbox" checked /> {% if page.lang == 'en' %}Show generated passwords on screen{% elsif page.lang == 'ja' %}生成結果を画面に表示{% else %}생성 결과를 화면에 표시{% endif %}</label>
+          </div>
+
+          <div class="tool-row-grid pg-recommendations" aria-label="{% if page.lang == 'en' %}Recommended password length presets{% elsif page.lang == 'ja' %}推奨パスワード長プリセット{% else %}권장 비밀번호 길이 프리셋{% endif %}">
+            <button type="button" data-pw-length="12">{% if page.lang == 'en' %}Regular 12{% elsif page.lang == 'ja' %}通常 12{% else %}일반 12자{% endif %}</button>
+            <button type="button" data-pw-length="16">{% if page.lang == 'en' %}Important 16{% elsif page.lang == 'ja' %}重要 16{% else %}중요 16자{% endif %}</button>
+            <button type="button" data-pw-length="24">{% if page.lang == 'en' %}Admin 24{% elsif page.lang == 'ja' %}管理者 24{% else %}관리자 24자{% endif %}</button>
+          </div>
+
           <div class="tool-row-grid pg-actions">
             <button id="pw-run" type="button">{% if page.lang == 'en' %}Generate passwords{% elsif page.lang == 'ja' %}パスワード生成{% else %}비밀번호 생성{% endif %}</button>
             <button id="pw-copy-all" type="button" disabled>{% if page.lang == 'en' %}Copy all{% elsif page.lang == 'ja' %}すべてコピー{% else %}전체 복사{% endif %}</button>
@@ -2529,8 +2546,9 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
 
           <div class="tool-row">
             <label for="pw-output">{% if page.lang == 'en' %}Generated passwords{% elsif page.lang == 'ja' %}生成されたパスワード{% else %}생성된 비밀번호{% endif %}</label>
-            <textarea id="pw-output" rows="7" readonly aria-describedby="pw-status pw-help" placeholder="{% if page.lang == 'en' %}Generated passwords appear here.{% elsif page.lang == 'ja' %}生成されたパスワードがここに表示されます。{% else %}생성된 비밀번호가 여기에 표시됩니다.{% endif %}"></textarea>
+            <textarea id="pw-output" rows="5" readonly aria-describedby="pw-status pw-help" placeholder="{% if page.lang == 'en' %}Generated passwords appear here.{% elsif page.lang == 'ja' %}生成されたパスワードがここに表示されます。{% else %}생성된 비밀번호가 여기에 표시됩니다.{% endif %}"></textarea>
           </div>
+          <div id="pw-list" class="pg-list" aria-label="{% if page.lang == 'en' %}Generated password list with copy buttons{% elsif page.lang == 'ja' %}コピー操作付き生成パスワード一覧{% else %}복사 버튼이 있는 생성 비밀번호 목록{% endif %}"></div>
           <p class="tool-result" id="pw-help">{% if page.lang == 'en' %}Uses crypto.getRandomValues when available. Passwords stay in this browser; save them in a password manager before leaving the page.{% elsif page.lang == 'ja' %}利用可能な場合は crypto.getRandomValues を使用します。パスワードはこのブラウザ内だけで作成されるため、ページを離れる前にパスワードマネージャーへ保存してください。{% else %}가능한 경우 crypto.getRandomValues를 사용합니다. 비밀번호는 이 브라우저 안에서만 만들어지므로 페이지를 떠나기 전에 비밀번호 관리자에 저장하세요.{% endif %}</p>
         </div>
       {% when 'pyeong-calculator' %}

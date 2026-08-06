@@ -1509,9 +1509,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 길이·문자조합·헷갈리는 문자 제외 옵션으로 강력한 랜덤 비밀번호를 만들고 엔트로피와 강도 추정을 확인해요.
-  description_en: Generate strong random passwords with length, character sets, similar-character exclusion, entropy, and strength estimates.
-  description_ja: 長さ・文字種・紛らわしい文字の除外を指定し、エントロピーと強度目安を確認しながら強力なランダムパスワードを生成します。
+  description: 길이·문자조합·사이트 호환 특수문자·화면 숨김 옵션으로 강력한 랜덤 비밀번호를 만들고 엔트로피와 강도 추정을 확인해요.
+  description_en: Generate strong random passwords with length, character sets, website-friendly symbols, screen hiding, entropy, and strength estimates.
+  description_ja: 長さ・文字種・サイト互換記号・画面非表示を指定し、エントロピーと強度目安を確認しながら強力なランダムパスワードを生成します。
   url: /tools/password-generator/
   url_en: /en/tools/password-generator/
   url_ja: /ja/tools/password-generator/

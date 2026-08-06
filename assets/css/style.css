@@ -760,7 +760,10 @@ a:hover { color: #fff; text-decoration: none; }
 .vat-ui #vat-status[data-state="success"] { color: #86efac; }
 .pg-number-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .pg-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pg-preferences { grid-template-columns: 1fr 1.25fr; align-items: stretch; }
+.pg-recommendations { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .pg-number-grid > div { display: grid; gap: .35rem; min-width: 0; }
+.pg-preferences > div { display: grid; gap: .35rem; min-width: 0; }
 .pg-options { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
 .pg-fieldset {
   margin: 0;
@@ -797,6 +800,32 @@ a:hover { color: #fff; text-decoration: none; }
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: .95rem;
   line-height: 1.5;
+}
+.pg-list {
+  display: grid;
+  gap: .45rem;
+}
+.pg-list:empty { display: none; }
+.pg-list-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .5rem;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: .5rem;
+  background: #111827;
+}
+.pg-secret-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .9rem;
+  color: #e5e7eb;
+}
+.pg-masked,
+.pg-masked .pg-secret-text {
+  -webkit-text-security: disc;
 }
 .llc-options { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; }
 .llc-options .tool-check {
@@ -1533,6 +1562,9 @@ a:hover { color: #fff; text-decoration: none; }
   .tc-stats { grid-template-columns: 1fr 1fr; }
   .llc-options,.llc-actions { grid-template-columns: 1fr; }
   .llc-stats { grid-template-columns: 1fr 1fr; }
+  .pg-options,.pg-actions,.pg-preferences,.pg-recommendations { grid-template-columns: 1fr; }
+  .pg-list-row { grid-template-columns: 1fr; }
+  .pg-list-row button { width: 100%; }
   .csmg-ui .pct-actions { grid-template-columns: 1fr; }
   .tool-stats.csmg-stats { grid-template-columns: 1fr 1fr; }
   .knr-grid,.knr-options,.knr-actions { grid-template-columns: 1fr; }

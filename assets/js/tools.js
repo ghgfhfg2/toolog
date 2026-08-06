@@ -2535,10 +2535,13 @@
     const number = document.getElementById('pw-number');
     const symbol = document.getElementById('pw-symbol');
     const excludeSimilar = document.getElementById('pw-exclude-similar');
+    const symbolPreset = document.getElementById('pw-symbol-preset');
+    const showResult = document.getElementById('pw-show-result');
     const runBtn = document.getElementById('pw-run');
     const copyAllBtn = document.getElementById('pw-copy-all');
     const clearBtn = document.getElementById('pw-clear');
     const output = document.getElementById('pw-output');
+    const listOut = document.getElementById('pw-list');
     const strength = document.getElementById('pw-strength');
     const poolOut = document.getElementById('pw-pool');
     const combosOut = document.getElementById('pw-combos');
@@ -2546,7 +2549,7 @@
     const status = document.getElementById('pw-status');
     const help = document.getElementById('pw-help');
 
-    if (!lenInput || !countInput || !upper || !lower || !number || !symbol || !runBtn || !copyAllBtn || !clearBtn || !output || !strength || !poolOut || !combosOut || !bitsOut || !status || !help) return;
+    if (!lenInput || !countInput || !upper || !lower || !number || !symbol || !symbolPreset || !showResult || !runBtn || !copyAllBtn || !clearBtn || !output || !listOut || !strength || !poolOut || !combosOut || !bitsOut || !status || !help) return;
 
     const pwI18n = {
       ko: {
@@ -2564,8 +2567,12 @@
         preview: (pool, bits) => `문자풀 ${pool}자, 예상 엔트로피 ${bits} bit입니다.`,
         generatedAll: (length, count) => `길이 ${length}, ${count}개 생성 완료. 각 비밀번호는 선택한 모든 문자 유형을 최소 1개 이상 포함합니다.`,
         generatedPartial: (size, count) => `중복 없는 비밀번호 ${size}개를 생성했습니다. (요청 ${count}개, 문자풀/길이 조합 제한)`,
+        goodLength: '중요 계정에는 16자 이상을 권장합니다.',
+        presetApplied: (length) => `${length}자 권장 길이를 적용했습니다.`,
+        copiedOne: '선택한 비밀번호를 복사했습니다.',
         copied: '복사됨',
         copyDefault: '전체 복사',
+        copyOne: '복사',
         copyEmpty: '복사할 비밀번호가 없습니다.',
         copyFail: '자동 복사를 사용할 수 없습니다.',
         cleared: '생성 결과를 지웠습니다.'
@@ -2585,8 +2592,12 @@
         preview: (pool, bits) => `Pool size is ${pool} characters with about ${bits} bits of entropy.`,
         generatedAll: (length, count) => `Generated ${count} password(s) at length ${length}. Each password includes every selected character type at least once.`,
         generatedPartial: (size, count) => `Generated ${size} unique password(s). (Requested: ${count}; limited by pool/length combination)`,
+        goodLength: 'Use 16 or more characters for important accounts.',
+        presetApplied: (length) => `Applied the ${length}-character recommendation.`,
+        copiedOne: 'Copied the selected password.',
         copied: 'Copied',
         copyDefault: 'Copy all',
+        copyOne: 'Copy',
         copyEmpty: 'There are no generated passwords to copy.',
         copyFail: 'Automatic copy is unavailable.',
         cleared: 'Cleared the generated passwords.'
@@ -2606,8 +2617,12 @@
         preview: (pool, bits) => `文字プールは${pool}文字、推定エントロピーは${bits} bitです。`,
         generatedAll: (length, count) => `長さ${length}で${count}件生成しました。各パスワードは選択した文字種をすべて最低1文字含みます。`,
         generatedPartial: (size, count) => `重複なしパスワードを${size}件生成しました。（要求${count}件、文字プール/長さの組み合わせ制限）`,
+        goodLength: '重要なアカウントには16文字以上がおすすめです。',
+        presetApplied: (length) => `${length}文字の推奨長を適用しました。`,
+        copiedOne: '選択したパスワードをコピーしました。',
         copied: 'コピー完了',
         copyDefault: 'すべてコピー',
+        copyOne: 'コピー',
         copyEmpty: 'コピーできるパスワードがありません。',
         copyFail: '自動コピーを利用できません。',
         cleared: '生成結果をクリアしました。'
@@ -2619,7 +2634,8 @@
       upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
       lower: 'abcdefghijklmnopqrstuvwxyz',
       number: '0123456789',
-      symbol: '!@#$%^&*()_+-=[]{}|;:,.<>?/~'
+      symbolSafe: '!@#$%^&*_-+=?',
+      symbolFull: '!@#$%^&*()_+-=[]{}|;:,.<>?/~'
     };
     const SIMILAR = new Set(['O', '0', 'o', 'I', 'l', '1', 'B', '8', 'S', '5', 'Z', '2']);
 
@@ -2662,7 +2678,7 @@
       if (upper.checked) chosen.push({ key: 'upper', chars: SETS.upper });
       if (lower.checked) chosen.push({ key: 'lower', chars: SETS.lower });
       if (number.checked) chosen.push({ key: 'number', chars: SETS.number });
-      if (symbol.checked) chosen.push({ key: 'symbol', chars: SETS.symbol });
+      if (symbol.checked) chosen.push({ key: 'symbol', chars: symbolPreset.value === 'full' ? SETS.symbolFull : SETS.symbolSafe });
 
       const removeSimilar = excludeSimilar.checked;
       const normalized = chosen.map((set) => {
@@ -2710,7 +2726,57 @@
 
     const clearResult = () => {
       output.value = '';
+      listOut.innerHTML = '';
       copyAllBtn.disabled = true;
+    };
+
+    const applyVisibility = () => {
+      const masked = !showResult.checked;
+      output.classList.toggle('pg-masked', masked);
+      listOut.classList.toggle('pg-masked', masked);
+      output.setAttribute('aria-label', masked ? 'Generated passwords are hidden on screen' : 'Generated passwords');
+    };
+
+    const copyText = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        if (!ok) throw new Error('copy failed');
+      }
+    };
+
+    const renderPasswordList = (passwords) => {
+      listOut.innerHTML = '';
+      passwords.forEach((password, idx) => {
+        const row = document.createElement('div');
+        row.className = 'pg-list-row';
+        const text = document.createElement('code');
+        text.className = 'pg-secret-text';
+        text.textContent = password;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = pwText.copyOne;
+        btn.setAttribute('aria-label', `${pwText.copyOne} ${idx + 1}`);
+        btn.addEventListener('click', async () => {
+          try {
+            await copyText(password);
+            setStatus(pwText.copiedOne, 'success');
+          } catch (_) {
+            setStatus(pwText.copyFail, 'error');
+          }
+        });
+        row.append(text, btn);
+        listOut.append(row);
+      });
+      applyVisibility();
     };
 
     const generate = () => {
@@ -2774,25 +2840,11 @@
       output.value = list.join('\n');
       copyAllBtn.disabled = !list.length;
       if (list.length === count) {
-        setStatus(pwText.generatedAll(length, count), 'success');
+        setStatus(`${pwText.generatedAll(length, count)} ${length < 16 ? pwText.goodLength : ''}`.trim(), 'success');
       } else {
         setStatus(pwText.generatedPartial(list.length, count), 'warning');
       }
-    };
-
-    const copyText = async (text) => {
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-      }
+      renderPasswordList(list);
     };
 
     const previewStats = () => {
@@ -2820,9 +2872,26 @@
       setStatus(pwText.preview(pool.length.toLocaleString(numberLocale), bits.toLocaleString(numberLocale, { maximumFractionDigits: 1 })));
     };
 
+    const updateControls = () => {
+      symbolPreset.disabled = !symbol.checked;
+      applyVisibility();
+    };
+
     runBtn.addEventListener('click', generate);
     [lenInput, countInput].forEach((el) => el.addEventListener('input', previewStats));
-    [upper, lower, number, symbol, excludeSimilar].forEach((el) => el.addEventListener('change', previewStats));
+    [upper, lower, number, symbol, excludeSimilar, symbolPreset].forEach((el) => el.addEventListener('change', () => {
+      updateControls();
+      previewStats();
+    }));
+    showResult.addEventListener('change', applyVisibility);
+    document.querySelectorAll('[data-pw-length]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        lenInput.value = btn.dataset.pwLength || '16';
+        previewStats();
+        setStatus(pwText.presetApplied(lenInput.value));
+        lenInput.focus();
+      });
+    });
 
     copyAllBtn.addEventListener('click', async () => {
       if (!output.value.trim()) {
@@ -2846,6 +2915,7 @@
       output.focus();
     });
 
+    updateControls();
     generate();
   }
 
