@@ -723,6 +723,15 @@ layout: default
                 <option value="quick">{% if page.lang == 'en' %}Quick internal chat{% elsif page.lang == 'ja' %}素早い社内チャット{% else %}빠른 내부 메신저{% endif %}</option>
               </select>
             </div>
+            <div>
+              <label for="mtc-purpose">{% if page.lang == 'en' %}Message purpose{% elsif page.lang == 'ja' %}目的{% else %}메시지 목적{% endif %}</label>
+              <select id="mtc-purpose" aria-describedby="mtc-summary mtc-help">
+                <option value="request" selected>{% if page.lang == 'en' %}Request or review ask{% elsif page.lang == 'ja' %}確認・依頼{% else %}요청/검토 부탁{% endif %}</option>
+                <option value="followup">{% if page.lang == 'en' %}Follow-up{% elsif page.lang == 'ja' %}フォローアップ{% else %}후속 확인{% endif %}</option>
+                <option value="apology">{% if page.lang == 'en' %}Apology or delay notice{% elsif page.lang == 'ja' %}謝罪・遅延連絡{% else %}사과/지연 안내{% endif %}</option>
+                <option value="notice">{% if page.lang == 'en' %}Notice or announcement{% elsif page.lang == 'ja' %}案内・告知{% else %}안내/공지{% endif %}</option>
+              </select>
+            </div>
           </div>
           <div class="tool-row">
             <label for="mtc-input">{% if page.lang == 'en' %}Message draft{% elsif page.lang == 'ja' %}メッセージ下書き{% else %}메시지 초안{% endif %}</label>
@@ -746,7 +755,7 @@ layout: default
             <div><strong id="mtc-length">0</strong><span>{% if page.lang == 'en' %}Characters{% elsif page.lang == 'ja' %}文字数{% else %}글자 수{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="mtc-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Paste a message to check directness, politeness, request clarity, deadline cues, and length burden together.{% elsif page.lang == 'ja' %}メッセージを入力すると、強さ、丁寧さ、依頼/期限の明確さ、文量負担をまとめて点検します。{% else %}메시지를 넣으면 직설성, 정중함, 요청/마감 언급, 길이 부담을 함께 점검합니다.{% endif %}</p>
+          <p class="tool-result" id="mtc-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Paste a message to check directness, politeness, request clarity, timing cues, punctuation pressure, and length burden together.{% elsif page.lang == 'ja' %}メッセージを入力すると、強さ、丁寧さ、依頼/期限の明確さ、句読点の圧、文量負担をまとめて点検します。{% else %}메시지를 넣으면 직설성, 정중함, 요청/마감 언급, 구두점 압박, 길이 부담을 함께 점검합니다.{% endif %}</p>
           <p class="tool-result" id="mtc-help">{% if page.lang == 'en' %}Input stays in your browser and is limited to 5,000 characters. Very short, mixed-language, or relationship-specific messages may need manual judgment after the signal check.{% elsif page.lang == 'ja' %}入力内容はブラウザ内だけで処理され、最大5,000文字まで点検できます。短文、混在言語、関係性に左右される文面は点検後に人の判断で調整してください。{% else %}입력 내용은 브라우저 안에서만 처리되며 최대 5,000자까지 점검합니다. 짧은 문장, 혼합 언어, 관계성에 따라 달라지는 표현은 점검 신호를 본 뒤 직접 판단해 주세요.{% endif %}</p>
           <div id="mtc-list" class="bw-list" aria-live="polite"></div>
           <label for="mtc-output">{% if page.lang == 'en' %}Check memo{% elsif page.lang == 'ja' %}点検メモ{% else %}점검 결과 메모{% endif %}</label>

@@ -1021,7 +1021,8 @@ a:hover { color: #fff; text-decoration: none; }
   min-height: 190px;
   font-size: 16px;
 }
-.mtc-context-grid { grid-template-columns: minmax(220px, 360px); }
+.mtc-context-grid { grid-template-columns: repeat(2, minmax(220px, 360px)); }
+.mtc-context-grid > div { min-width: 0; }
 .mtc-ui .pct-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .tool-stats.mtc-stats { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 .tool-stats.mtc-stats strong {
@@ -1039,6 +1040,14 @@ a:hover { color: #fff; text-decoration: none; }
 .mtc-ui #mtc-summary[data-state="error"] { color: #fca5a5; }
 .mtc-ui #mtc-summary[data-state="warning"] { color: #fbbf24; }
 .mtc-ui #mtc-summary[data-state="success"] { color: #86efac; }
+.mtc-ui .bw-list .tool-card {
+  border-radius: 8px;
+  padding: .7rem .8rem;
+}
+.mtc-ui .bw-list .tool-card .tool-result {
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
 .mtc-ui button:disabled {
   opacity: .55;
   cursor: not-allowed;

@@ -1065,6 +1065,47 @@ textarea:focus-visible {
   overflow-wrap: anywhere;
   line-height: 1.18;
 }
+.mtc-ui textarea {
+  min-height: 190px;
+  font-size: 16px;
+}
+.mtc-context-grid { grid-template-columns: repeat(2, minmax(220px, 360px)); }
+.mtc-context-grid > div { min-width: 0; }
+.mtc-ui .pct-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.tool-stats.mtc-stats { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.tool-stats.mtc-stats strong {
+  overflow-wrap: anywhere;
+  line-height: 1.3;
+}
+.mtc-count {
+  margin-top: .35rem;
+  text-align: right;
+  font-size: .82rem;
+}
+.mtc-ui textarea[aria-invalid="true"] { border-color: #ef4444; }
+.mtc-ui .mtc-count[data-state="warning"] { color: #fbbf24; }
+.mtc-ui .mtc-count[data-state="error"] { color: #fca5a5; }
+.mtc-ui #mtc-summary[data-state="error"] { color: #fca5a5; }
+.mtc-ui #mtc-summary[data-state="warning"] { color: #fbbf24; }
+.mtc-ui #mtc-summary[data-state="success"] { color: #86efac; }
+.mtc-ui .bw-list .tool-card {
+  border-radius: 8px;
+  padding: .7rem .8rem;
+}
+.mtc-ui .bw-list .tool-card .tool-result {
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.mtc-ui button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+.mtc-ui #mtc-output {
+  min-height: 160px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .95rem;
+  line-height: 1.5;
+}
 .frac-main-grid { grid-template-columns: minmax(0, 1fr) minmax(120px, .35fr) minmax(0, 1fr); }
 .frac-field { display: grid; gap: .4rem; min-width: 0; }
 .frac-pair { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: .5rem; align-items: center; }

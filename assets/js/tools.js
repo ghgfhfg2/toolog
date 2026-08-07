@@ -15748,6 +15748,7 @@
 
   if (slug === 'message-tone-checker') {
     const contextEl = document.getElementById('mtc-context');
+    const purposeEl = document.getElementById('mtc-purpose');
     const inputEl = document.getElementById('mtc-input');
     const runBtn = document.getElementById('mtc-run');
     const sampleBtn = document.getElementById('mtc-sample');
@@ -15763,7 +15764,7 @@
     const countEl = document.getElementById('mtc-count');
     const listEl = document.getElementById('mtc-list');
     const outputEl = document.getElementById('mtc-output');
-    if (!contextEl || !inputEl || !runBtn || !sampleBtn || !copyBtn || !clearBtn || !statusEl || !directEl || !softEl || !requestEl || !deadlineEl || !lengthEl || !summaryEl || !countEl || !listEl || !outputEl) return;
+    if (!contextEl || !purposeEl || !inputEl || !runBtn || !sampleBtn || !copyBtn || !clearBtn || !statusEl || !directEl || !softEl || !requestEl || !deadlineEl || !lengthEl || !summaryEl || !countEl || !listEl || !outputEl) return;
 
     const mtcText = {
       ko: {
@@ -15784,6 +15785,9 @@
         vagueRequest: '요청 모호',
         missingDeadline: '마감 누락',
         long: '조금 김',
+        pressure: '압박 신호',
+        missingOpening: '도입 부족',
+        apologyNeedsAction: '후속 조치 필요',
         unclear: '판단 보류',
         noInput: '-',
         requestOk: '명확',
@@ -15803,12 +15807,17 @@
         noteRequest: '`확인 부탁드립니다`, `회신 부탁드립니다`, `공유 부탁드립니다`처럼 행동 요청을 한 번은 명시해보세요.',
         noteDeadline: '오늘/내일/오후 4시 전처럼 시점을 넣으면 상대가 처리 우선순위를 잡기 쉬워집니다.',
         noteLong: '설명이 길다면 핵심 요청 문장을 앞에 두고 배경 설명은 뒤로 정리해보세요.',
+        notePunctuation: '느낌표, 물음표, 대문자 강조가 겹치면 재촉처럼 보일 수 있어 하나로 줄이는 편이 안전합니다.',
+        noteLongLine: '한 줄이 너무 길면 모바일 메신저에서 읽기 어렵습니다. 핵심 요청, 배경, 기한을 줄바꿈으로 나눠보세요.',
+        noteExternalOpening: '외부 커뮤니케이션은 짧은 인사나 맥락 한 문장을 먼저 두면 요청이 덜 갑작스럽게 보입니다.',
+        noteApologyAction: '사과나 지연 안내라면 원인보다 재확인 시점, 다음 조치, 보완 방법을 한 문장 넣어보세요.',
         noteShort: '짧은 메시지는 목적어와 기한이 빠지기 쉽습니다. 무엇을 언제까지 원하는지 한 번 더 확인해보세요.',
         noteNearLimit: '입력 길이가 5,000자 제한에 가까워졌습니다. 핵심 요청과 배경 설명을 분리하면 복사·공유가 쉬워집니다.',
         noteOk: '요청과 시점이 비교적 분명합니다. 보내기 전 호칭·첨부 여부만 마지막으로 확인해보세요.',
         count: (n) => `${formatNum(n)} / 5,000자`,
         heading: '[메시지 톤 점검 결과]',
         context: '상황 기준',
+        purpose: '메시지 목적',
         tone: '톤 요약',
         direct: '직설 표현',
         soft: '완충/사과 표현',
@@ -15835,6 +15844,9 @@
         vagueRequest: 'Vague request',
         missingDeadline: 'No timing cue',
         long: 'A bit long',
+        pressure: 'Pressure cues',
+        missingOpening: 'Needs opening',
+        apologyNeedsAction: 'Needs next step',
         unclear: 'Needs context',
         noInput: '-',
         requestOk: 'Clear',
@@ -15854,12 +15866,17 @@
         noteRequest: 'State the action once, such as "please review", "please reply", or "please share".',
         noteDeadline: 'Add a clear timing cue such as today, tomorrow, or before 4 PM.',
         noteLong: 'Put the main ask first and move background details after it.',
+        notePunctuation: 'Repeated exclamation marks, question marks, or ALL CAPS can read as pressure. Reduce them before sending.',
+        noteLongLine: 'A very long line is hard to scan in mobile chat. Split the main ask, background, and timing into separate lines.',
+        noteExternalOpening: 'For external communication, add a brief greeting or context line before the request so it does not feel abrupt.',
+        noteApologyAction: 'For an apology or delay notice, add the next action, new timing, or recovery step in one clear sentence.',
         noteShort: 'Short messages often miss the object or deadline. Check what you need and by when.',
         noteNearLimit: 'The draft is close to the 5,000-character limit. Splitting the main ask and background can make it easier to copy and review.',
         noteOk: 'The request and timing look reasonably clear. Check the recipient name and attachments before sending.',
         count: (n) => `${formatNum(n)} / 5,000 characters`,
         heading: '[Message Tone Check]',
         context: 'Context',
+        purpose: 'Purpose',
         tone: 'Tone summary',
         direct: 'Direct signals',
         soft: 'Softening words',
@@ -15886,6 +15903,9 @@
         vagueRequest: '依頼が曖昧',
         missingDeadline: '期限なし',
         long: '少し長い',
+        pressure: '圧が強め',
+        missingOpening: '導入不足',
+        apologyNeedsAction: '次の対応不足',
         unclear: '文脈判断',
         noInput: '-',
         requestOk: '明確',
@@ -15905,12 +15925,17 @@
         noteRequest: '「確認をお願いします」「返信をお願いします」「共有してください」のように行動を一度明示しましょう。',
         noteDeadline: '今日、明日、16時までなど、処理の目安になる時間を入れると親切です。',
         noteLong: '説明が長い場合は、中心の依頼を先に置き、背景説明を後ろに回しましょう。',
+        notePunctuation: '感嘆符、疑問符、英字大文字の強調が重なると急かしている印象になりやすいため、控えめにしましょう。',
+        noteLongLine: '長すぎる一行はモバイルのチャットで読みにくくなります。依頼、背景、期限を行分けしてみてください。',
+        noteExternalOpening: '外部向けの文面では、短い挨拶や前提を先に置くと依頼が唐突に見えにくくなります。',
+        noteApologyAction: '謝罪や遅延連絡では、理由だけでなく次の対応、再確認時点、補足方法を一文で入れましょう。',
         noteShort: '短文では対象や期限が抜けやすいです。何をいつまでに求めるのか確認してください。',
         noteNearLimit: '入力が5,000文字の上限に近づいています。中心の依頼と背景説明を分けると確認しやすくなります。',
         noteOk: '依頼と時点は比較的明確です。送信前に宛名や添付の有無だけ確認してください。',
         count: (n) => `${formatNum(n)} / 5,000 文字`,
         heading: '[メッセージトーン点検結果]',
         context: '利用場面',
+        purpose: '目的',
         tone: 'トーン要約',
         direct: '強い表現',
         soft: '緩衝/謝罪表現',
@@ -15940,6 +15965,21 @@
       /오늘|내일|모레|이번 주|다음 주|까지|전까지|오전|오후|\d{1,2}시|\d{1,2}:\d{2}|\d+일/gi,
       /\btoday\b|\btomorrow\b|this week|next week|by\b|before\b|until\b|AM\b|PM\b|\d{1,2}:\d{2}/gi,
       /今日|明日|今週|来週|まで|午前|午後|\d{1,2}時|\d{1,2}:\d{2}/gi
+    ];
+    const greetingPatterns = [
+      /안녕하세요|안녕하십니까|수고|확인 감사|공유 감사|메일 감사|연락 감사/gi,
+      /\bhi\b|\bhello\b|good (morning|afternoon|evening)|thank you|thanks for|hope you/gi,
+      /お世話になっております|お疲れさま|こんにちは|ご連絡ありがとうございます|共有ありがとうございます/gi
+    ];
+    const apologyPatterns = [
+      /죄송|송구|사과|지연|늦어|누락|실수/gi,
+      /sorry|apologize|apology|delay|late|missed|mistake/gi,
+      /申し訳|すみません|謝罪|遅れ|遅延|失念/gi
+    ];
+    const recoveryPatterns = [
+      /다시|수정|보완|재전달|재공유|확인 후|오늘|내일|까지|조치|안내드리/gi,
+      /next|again|update|fix|correct|send|share|by\b|today|tomorrow|follow up/gi,
+      /再度|修正|対応|共有|送付|確認後|今日|明日|まで|改めて/gi
     ];
 
     const getMatches = (text, patternGroups) => {
@@ -15995,11 +16035,14 @@
       const rawText = inputEl.value || '';
       const text = rawText.trim();
       const context = contextEl.value || 'work';
+      const purpose = purposeEl.value || 'request';
       const sentenceParts = text.split(/[.!?。！？\n]+/u).map((part) => part.trim()).filter(Boolean);
       const sentenceCount = sentenceParts.length || 1;
       const charCount = [...text].length;
       const rawCharCount = [...rawText].length;
       const avgSentence = text ? charCount / sentenceCount : 0;
+      const lines = rawText.split(/\r\n|\r|\n/);
+      const longestLine = Math.max(0, ...lines.map((line) => [...line.trim()].length));
       const directMatches = uniqueShort(getMatches(text, directPatterns));
       const softMatches = uniqueShort(getMatches(text, softPatterns));
       const directCount = getMatches(text, directPatterns).length;
@@ -16007,6 +16050,10 @@
       const requestCount = countMatches(text, requestPatterns);
       const hasDeadline = hasAnyMatch(text, deadlinePatterns);
       const hasRequest = requestCount > 0;
+      const hasGreeting = hasAnyMatch(text, greetingPatterns);
+      const hasApology = hasAnyMatch(text, apologyPatterns);
+      const hasRecovery = hasAnyMatch(text, recoveryPatterns);
+      const punctuationPressure = /[!?！？]{2,}/u.test(text) || (text.match(/\b[A-Z]{3,}\b/g) || []).length >= 2;
       const directThreshold = context === 'quick' ? 3 : (context === 'external' ? 1 : 2);
       const softThreshold = context === 'quick' ? 3 : (context === 'external' ? 5 : 4);
       countEl.textContent = mtcText.count(rawCharCount);
@@ -16076,6 +16123,30 @@
         notes.push(mtcText.noteLong);
       }
 
+      if (punctuationPressure) {
+        if (status === mtcText.balanced) status = mtcText.pressure;
+        state = state === 'success' ? 'warning' : state;
+        notes.push(mtcText.notePunctuation);
+      }
+
+      if (longestLine >= 160) {
+        if (status === mtcText.balanced) status = mtcText.long;
+        state = state === 'success' ? 'warning' : state;
+        notes.push(mtcText.noteLongLine);
+      }
+
+      if (context === 'external' && !hasGreeting && charCount >= 25) {
+        if (status === mtcText.balanced) status = mtcText.missingOpening;
+        state = state === 'success' ? 'warning' : state;
+        notes.push(mtcText.noteExternalOpening);
+      }
+
+      if (purpose === 'apology' && hasApology && !hasRecovery) {
+        if (status === mtcText.balanced) status = mtcText.apologyNeedsAction;
+        state = state === 'success' ? 'warning' : state;
+        notes.push(mtcText.noteApologyAction);
+      }
+
       if (rawCharCount >= 4500) {
         state = state === 'success' ? 'warning' : state;
         notes.push(mtcText.noteNearLimit);
@@ -16100,6 +16171,7 @@
       outputEl.value = [
         mtcText.heading,
         `- ${mtcText.context}: ${contextEl.options[contextEl.selectedIndex].text}`,
+        `- ${mtcText.purpose}: ${purposeEl.options[purposeEl.selectedIndex].text}`,
         `- ${mtcText.tone}: ${status}`,
         `- ${mtcText.direct}: ${directCount}`,
         `- ${mtcText.soft}: ${softCount}`,
@@ -16137,7 +16209,7 @@
       copyBtn.textContent = mtcText.copied;
       setTimeout(() => { copyBtn.textContent = old || mtcText.copyDefault; }, 900);
     });
-    [contextEl, inputEl].forEach((el) => {
+    [contextEl, purposeEl, inputEl].forEach((el) => {
       el.addEventListener('input', render);
       el.addEventListener('change', render);
     });
