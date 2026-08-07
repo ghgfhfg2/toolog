@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Message Tone Checker | Review work email and chat wording before sending
-description: Paste a work email, Slack or chat draft, or request note to review blunt phrasing, repeated apologies, request clarity, timing cues, punctuation pressure, long lines, and length burden before sending.
+title: Message Tone Checker | Check Work Emails and Chat Drafts Before Sending
+description: Check work email, Slack, Teams, and chat drafts before sending. Review blunt wording, repeated apologies, request clarity, timing cues, punctuation pressure, long lines, and length burden in your browser.
 lang: en
 permalink: /en/tools/message-tone-checker/
 canonical_url: /en/tools/message-tone-checker/
@@ -14,7 +14,7 @@ image:
 tool_key: message-tone-checker
 tool_type: checker
 topic_cluster: communication
-keywords: [message tone checker, work message tone review, email draft tone check, request wording checker, communication clarity checker]
+keywords: [message tone checker, work message tone review, email draft tone check, Slack message tone checker, Teams chat wording, request wording checker, punctuation pressure checker]
 related_tools: [schedule-coordination-message-generator, readability-checker, meeting-action-item-organizer]
 faq:
   - q: Does this tool fully rewrite my message like AI?
@@ -27,8 +27,8 @@ faq:
     a: It is most useful for requests, follow-ups, schedule checks, and review messages where the recipient needs to take action. Pasting the full draft gives better signals than a single short phrase.
   - q: Can it check long drafts?
     a: It checks up to 5,000 characters in your browser. For long drafts, use the character count and notes to separate the main ask from background details.
-  - q: Does it check punctuation pressure?
-    a: Yes. Repeated exclamation or question marks, ALL CAPS emphasis, and very long mobile-unfriendly lines are treated as extra pressure or readability signals.
+  - q: Does it check pressure from punctuation and ALL CAPS?
+    a: Yes. Repeated exclamation marks, repeated question marks, ALL CAPS emphasis, and very long mobile-unfriendly lines are treated as pressure or readability signals.
 ---
 
 ## Why use a Message Tone Checker?
@@ -42,7 +42,7 @@ This is especially easy to miss when:
 - a long explanation may make the recipient miss the main action
 - you need to send quickly but want one final tone check
 
-The checker reviews **directness, repeated softening, request clarity, timing cues, punctuation pressure, long lines, character count, and length burden** together before you send, so you can adjust both the impression and the actionability of the message.
+This browser-based checker reviews **directness, repeated softening, request clarity, timing cues, punctuation pressure, long lines, character count, and length burden** together before you send, so you can adjust both the impression and the actionability of the message.
 
 ## Why this tool was improved today
 Recent quality passes focused on `password-generator`, `youtube-image-kit`, `image-resizer`, `json-merge`, `unit-converter`, and `privacy-exposure-checker`, so this pass avoided repeating them.
@@ -66,12 +66,12 @@ Recent quality passes focused on `password-generator`, `youtube-image-kit`, `ima
 
 It does not force one "correct" rewrite. It works more like a quick pre-send review of how the message may land and whether the recipient can act on it.
 
-## Especially useful for
-### 1. Urgent chat requests
+## Common pre-send checks
+### 1. Urgent Slack or Teams requests
 Words such as `ASAP`, `right now`, `urgent`, or `why has this not` can feel like pressure when they appear without context.
 A quick check helps you soften the wording before sending.
 
-### 2. Email or client response drafts
+### 2. Work email or client response drafts
 Too much apology can weaken the main ask, while overly firm wording can feel cold.
 This is where balancing politeness and clarity matters.
 
@@ -86,6 +86,8 @@ The checker helps confirm that the request and timing appear together.
 4. Click `Check tone`.
 5. Review the tone summary and detected items.
 6. Use `Copy result` if you want to keep the check memo.
+
+If the input is empty, the page keeps the memo blank and asks you to paste a draft first. If the message is close to 5,000 characters, the check highlights the length limit so you can split the main ask from background details before sending.
 
 ## What it checks
 This tool is a quick signal checker, not an automatic rewrite engine. It is tuned for work email tone checks, Slack message reviews, and request wording where the recipient should understand the next action quickly.
