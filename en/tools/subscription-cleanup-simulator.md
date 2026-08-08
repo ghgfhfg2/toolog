@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Subscription Cleanup Priority Simulator | Sort what to keep, pause, or cancel
-description: Use the Subscription Cleanup Priority Simulator to review streaming, music, AI, cloud, and productivity subscriptions by price, usage, replacement options, and billing urgency.
+description: Use the Subscription Cleanup Priority Simulator to review streaming, music, AI, cloud, and productivity subscriptions by price, usage, replacement options, and billing urgency, then sort keep, pause, and cancel candidates.
 lang: en
 permalink: /en/tools/subscription-cleanup-simulator/
 canonical_url: /en/tools/subscription-cleanup-simulator/
@@ -24,6 +24,10 @@ faq:
   - q: Is my subscription list stored?
     a: No. The tool runs in your browser and does not save or send your subscription entries to the server.
 ---
+
+## Why this tool was improved today
+Recent quality passes focused on tools such as `customer-support-message-generator`, `hangul-keyboard-layout-converter`, `password-strength-checker`, `message-tone-checker`, `json-merge`, and `fraction-calculator`, so this pass avoids repeating the same tool.
+`subscription-cleanup-simulator` has several error-prone input paths, including cost values, blank rows, long service names, copied results, and urgent billing labels, while mobile users need a cleaner flow for entering several subscriptions in a row.
 
 ## Why use a subscription cleanup priority simulator?
 Subscriptions often feel small one by one, but once several pile up they start acting like a fixed monthly cost.
@@ -72,6 +76,12 @@ By reflecting essential work use and shared plans, the result is more realistic 
 4. Review the results under cancel first, review/pause, and keep.
 5. Copy the result if you want to use it in notes or a monthly budget check.
 
+## Input checks to know
+- Monthly cost accepts numbers from 0 to 10,000,000.
+- If you enter a service name but leave the cost blank, that row is not included until a cost is added.
+- Shared plans and work-essential subscriptions are adjusted so they are not pushed into cancel-first only because of price.
+- Results are calculated in your browser. Actual cancellation or plan changes still need to be checked inside each service.
+
 ## Example use cases
 ### Example 1) A mix of video, music, and AI subscriptions
 - Netflix: used sometimes, shared, billing soon
@@ -107,6 +117,9 @@ Not necessarily. A high replacement score is better treated as a signal that the
 
 ### Can I review more than five subscriptions?
 The current screen compares up to five at once. In practice, it works best to start with the subscriptions that cost the most or that you debate most often.
+
+### Can I enter long service names?
+Service names are limited to 60 characters for readability. Special characters are handled safely in the result list and copied summary.
 
 ## Summary
 The Subscription Cleanup Priority Simulator is a **simulator-type tool that helps you organize monthly subscriptions into keep, review/pause, and cancel-first order by looking at usage, replacement options, and essential status, not just price**.

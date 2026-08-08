@@ -15062,12 +15062,19 @@
     const t = {
       ko: {
         unit: '원',
+        title: '[구독 정리 우선순위]',
         keep: '유지',
         pause: '보류 검토',
         cancel: '해지 우선',
+        keepHint: '현재 조건에서는 유지해도 되는 항목입니다.',
+        pauseHint: '이번 달에는 보류하거나 더 싼 대안을 확인해 보세요.',
+        cancelHint: '해지 또는 일시정지를 먼저 검토할 후보입니다.',
         empty: '구독 정보를 입력하면 유지, 보류, 해지 우선순위를 정리해 드립니다.',
+        invalidCost: '월 구독료는 0원 이상 1,000만 원 이하의 숫자로 입력해 주세요.',
+        nameOnly: '서비스명을 입력했다면 월 구독료도 함께 넣어 주세요.',
         summary: (count, total, cancel, pause) => `${count}개 구독, 월 ${total}${'원'} 중 해지 우선 ${cancel}${'원'}, 보류 검토 ${pause}${'원'}입니다.`,
         urgent: '이번 주 안에 확인 권장',
+        score: '점수',
         reasonCost: '비용 부담이 큰 편',
         reasonUsage: '사용 빈도가 낮음',
         reasonAlt: '대체 수단이 있음',
@@ -15075,16 +15082,24 @@
         reasonEssential: '업무·학습에 직접 필요',
         reasonSoon: '다음 결제가 가까움',
         copyDefault: '결과 복사',
-        copied: '복사됨!'
+        copied: '복사됨!',
+        copyEmpty: '복사할 정리 결과가 아직 없습니다.'
       },
       en: {
         unit: '',
+        title: '[Subscription cleanup priority]',
         keep: 'Keep',
         pause: 'Review / pause',
         cancel: 'Cancel first',
+        keepHint: 'This looks reasonable to keep under the current conditions.',
+        pauseHint: 'Review it this month or compare a cheaper replacement.',
+        cancelHint: 'Review cancellation or pausing this item first.',
         empty: 'Add subscriptions to organize a practical keep, pause, or cancel order.',
+        invalidCost: 'Enter monthly costs from 0 to 10,000,000.',
+        nameOnly: 'If you enter a service name, add the monthly cost too.',
         summary: (count, total, cancel, pause) => `${count} subscriptions, ${total} total per month, ${cancel} in cancel-first savings, ${pause} in review pool.`,
         urgent: 'Check this within the week',
+        score: 'Score',
         reasonCost: 'High monthly cost',
         reasonUsage: 'Low usage',
         reasonAlt: 'Easy replacement exists',
@@ -15092,16 +15107,24 @@
         reasonEssential: 'Directly needed for work or study',
         reasonSoon: 'Billing date is close',
         copyDefault: 'Copy result',
-        copied: 'Copied!'
+        copied: 'Copied!',
+        copyEmpty: 'There is no cleanup result to copy yet.'
       },
       ja: {
         unit: '円',
+        title: '[サブスク整理優先度]',
         keep: '維持',
         pause: '保留検討',
         cancel: '解約優先',
+        keepHint: '現在の条件では維持してよさそうな項目です。',
+        pauseHint: '今月中に保留または安い代替を確認しましょう。',
+        cancelHint: '解約または一時停止を先に検討する候補です。',
         empty: 'サブスク情報を入力すると、維持・保留・解約の優先順位を整理します。',
+        invalidCost: '月額料金は0以上10,000,000以下の数字で入力してください。',
+        nameOnly: 'サービス名を入力した場合は、月額料金も入れてください。',
         summary: (count, total, cancel, pause) => `${count}件、月額合計 ${total}${'円'}、解約優先 ${cancel}${'円'}、保留検討 ${pause}${'円'}です。`,
         urgent: '今週中の確認がおすすめ',
+        score: 'スコア',
         reasonCost: '月額負担が大きい',
         reasonUsage: '利用頻度が低い',
         reasonAlt: '代替手段がある',
@@ -15109,29 +15132,57 @@
         reasonEssential: '仕事・学習に必要',
         reasonSoon: '次回決済が近い',
         copyDefault: '結果をコピー',
-        copied: 'コピーしました!'
+        copied: 'コピーしました!',
+        copyEmpty: 'コピーできる整理結果がまだありません。'
       }
     }[pageLang] || {
-      unit: '원', keep: '유지', pause: '보류 검토', cancel: '해지 우선',
+      unit: '원', title: '[구독 정리 우선순위]', keep: '유지', pause: '보류 검토', cancel: '해지 우선',
+      keepHint: '현재 조건에서는 유지해도 되는 항목입니다.', pauseHint: '이번 달에는 보류하거나 더 싼 대안을 확인해 보세요.', cancelHint: '해지 또는 일시정지를 먼저 검토할 후보입니다.',
       empty: '구독 정보를 입력하면 유지, 보류, 해지 우선순위를 정리해 드립니다.',
+      invalidCost: '월 구독료는 0원 이상 1,000만 원 이하의 숫자로 입력해 주세요.', nameOnly: '서비스명을 입력했다면 월 구독료도 함께 넣어 주세요.',
       summary: (count, total, cancel, pause) => `${count}개 구독, 월 ${total}원 중 해지 우선 ${cancel}원, 보류 검토 ${pause}원입니다.`,
-      urgent: '이번 주 안에 확인 권장', reasonCost: '비용 부담이 큰 편', reasonUsage: '사용 빈도가 낮음', reasonAlt: '대체 수단이 있음', reasonShared: '공유 중이라 체감 단가가 낮음', reasonEssential: '업무·학습에 직접 필요', reasonSoon: '다음 결제가 가까움', copyDefault: '결과 복사', copied: '복사됨!'
+      urgent: '이번 주 안에 확인 권장', score: '점수', reasonCost: '비용 부담이 큰 편', reasonUsage: '사용 빈도가 낮음', reasonAlt: '대체 수단이 있음', reasonShared: '공유 중이라 체감 단가가 낮음', reasonEssential: '업무·학습에 직접 필요', reasonSoon: '다음 결제가 가까움', copyDefault: '결과 복사', copied: '복사됨!', copyEmpty: '복사할 정리 결과가 아직 없습니다.'
     };
 
     const fmtMoney = (value) => `${formatNum(value)}${t.unit}`;
+    const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (ch) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[ch]));
     const scoreUsage = { high: -5, medium: 0, low: 5 };
     const scoreAlt = { none: -3, partial: 1, easy: 4 };
     const scoreBilling = { soon: 3, week: 1, later: 0 };
 
-    const getRows = () => rows.map((row) => ({
-      name: (row.name.value || '').trim(),
-      cost: Number(row.cost.value || 0),
-      usage: row.usage.value || 'high',
-      alt: row.alt.value || 'none',
-      billing: row.billing.value || 'later',
-      shared: !!row.shared.checked,
-      essential: !!row.essential.checked
-    })).filter((item) => item.name && item.cost > 0);
+    const parseRows = () => {
+      const warnings = [];
+      const items = [];
+      rows.forEach((row) => {
+        const name = (row.name.value || '').trim().slice(0, 60);
+        const rawCost = (row.cost.value || '').trim();
+        const cost = rawCost ? Number(rawCost) : 0;
+        const invalidCost = rawCost && (!Number.isFinite(cost) || cost < 0 || cost > 10000000);
+        const missingCost = name && !rawCost;
+        row.cost.setAttribute('aria-invalid', invalidCost || missingCost ? 'true' : 'false');
+        if (invalidCost) warnings.push(t.invalidCost);
+        if (missingCost) warnings.push(t.nameOnly);
+        if (!name || invalidCost || !rawCost) return;
+        items.push({
+          name,
+          cost,
+          usage: row.usage.value || 'high',
+          alt: row.alt.value || 'none',
+          billing: row.billing.value || 'later',
+          shared: !!row.shared.checked,
+          essential: !!row.essential.checked
+        });
+      });
+      return { items, warnings: [...new Set(warnings)] };
+    };
+
+    const getRows = () => parseRows().items;
 
     const classify = (item) => {
       let score = 0;
@@ -15158,7 +15209,8 @@
     };
 
     const render = () => {
-      const items = getRows().map((item) => {
+      const parsed = parseRows();
+      const items = parsed.items.map((item) => {
         const decision = classify(item);
         const score = (item.cost >= 20000 ? 4 : item.cost >= 10000 ? 2 : 0)
           + (scoreUsage[item.usage] || 0)
@@ -15181,22 +15233,28 @@
       cancelSaveEl.textContent = fmtMoney(cancelSave);
       pauseSaveEl.textContent = fmtMoney(pauseSave);
       urgentEl.textContent = formatNum(urgent);
+      copyBtn.disabled = !items.length;
 
       if (!items.length) {
-        helpEl.textContent = t.empty;
+        helpEl.textContent = parsed.warnings[0] || t.empty;
+        helpEl.dataset.state = parsed.warnings.length ? 'error' : '';
         outputEl.innerHTML = '';
         return;
       }
 
-      helpEl.textContent = t.summary(items.length, formatNum(total), formatNum(cancelSave), formatNum(pauseSave));
+      helpEl.textContent = parsed.warnings[0] || t.summary(items.length, formatNum(total), formatNum(cancelSave), formatNum(pauseSave));
+      helpEl.dataset.state = parsed.warnings.length ? 'error' : 'success';
       outputEl.innerHTML = items.map((item, index) => {
         const badge = item.decision === 'cancel' ? t.cancel : item.decision === 'pause' ? t.pause : t.keep;
+        const hint = item.decision === 'cancel' ? t.cancelHint : item.decision === 'pause' ? t.pauseHint : t.keepHint;
         const urgentText = item.billing !== 'later' ? `<p>${t.urgent}</p>` : '';
+        const reasons = item.reasons.length ? item.reasons.join(' · ') : hint;
         return `
-          <div class="bw-item">
-            <strong>${index + 1}. ${item.name} · ${badge}</strong>
-            <p>${fmtMoney(item.cost)} / score ${item.score}</p>
-            <p>${item.reasons.length ? item.reasons.join(' · ') : '-'}</p>
+          <div class="bw-item scs-output__item" data-decision="${item.decision}">
+            <strong>${index + 1}. ${escapeHtml(item.name)} · ${badge}</strong>
+            <p>${fmtMoney(item.cost)} / ${t.score} ${item.score}</p>
+            <p>${escapeHtml(reasons)}</p>
+            <p>${escapeHtml(hint)}</p>
             ${urgentText}
           </div>
         `;
@@ -15255,18 +15313,23 @@
         row.cost.value = '';
         row.usage.value = 'high';
         row.alt.value = 'none';
-        row.billing.value = 'soon';
+        row.billing.value = 'later';
         row.shared.checked = false;
         row.essential.checked = false;
+        row.cost.setAttribute('aria-invalid', 'false');
       });
       render();
     });
 
     copyBtn?.addEventListener('click', async () => {
       const items = getRows().map((item) => ({ ...item, decision: classify(item), reasons: reasonList(item) }));
-      if (!items.length) return;
+      if (!items.length) {
+        helpEl.textContent = t.copyEmpty;
+        helpEl.dataset.state = 'error';
+        return;
+      }
       const text = [
-        '[Subscription cleanup priority]',
+        t.title,
         ...items.map((item) => `- ${item.name}: ${item.decision === 'cancel' ? t.cancel : item.decision === 'pause' ? t.pause : t.keep} / ${fmtMoney(item.cost)} / ${item.reasons.join(', ')}`)
       ].join('\n');
       await copyText(text);
