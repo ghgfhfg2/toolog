@@ -11487,6 +11487,7 @@
     const clearInputBtn = document.getElementById('fc-clear-input');
     const sampleBtn = document.getElementById('fc-sample');
     const copyVisibleBtn = document.getElementById('fc-copy-visible');
+    const groupButtons = Array.from(document.querySelectorAll('[data-fc-group]'));
     const charCount = document.getElementById('fc-char-count');
     const styleCount = document.getElementById('fc-style-count');
     const convertedCount = document.getElementById('fc-converted-count');
@@ -11497,6 +11498,7 @@
     let favorites = new Set();
     let onlyFav = false;
     let showAll = false;
+    let activeGroup = 'all';
     let visibleResults = [];
 
     try {
@@ -11808,12 +11810,19 @@
       'circled','parenthesized','full-width','upside-down','strike-through','underline','slash','crossed',
       'overline','underline-overline','long-strike','double-slash','superscript','subscript','thai-comb-1a5a','wing-only','mini-bottom-align','bottom-mix'
     ]);
+    const styleGroups = {
+      clean: new Set(['normal','bold','italic','bold-italic','sans','sans-bold','sans-italic','sans-bold-italic','double-struck','monospace','small-caps','small-caps-strict','full-width']),
+      decorative: new Set(['script','script-bold','fraktur','fraktur-bold','circled','circled-negative','squared','squared-negative','parenthesized','regional-indicator','wing-only','alt-alpha','alt-cyrillic','alt-box']),
+      marks: new Set(['strike-through','underline','slash','crossed','overline','underline-overline','long-strike','double-slash','superscript','subscript','bottom-mix','mini-bottom-align','tiny-subscript-final']),
+      experimental: new Set(['upside-down','cloud-top','double-top','dot-below','zigzag-combo','joiner','spark-combo','khmer-mark','thai-comb-1a5a'])
+    };
 
     const fcText = {
       ko: {
         visible: (n) => `${formatNum(n)}개 스타일을 표시하고 있습니다. 스타일을 선택하면 결과를 복사합니다.`,
         empty: '입력 전에는 예시 문구로 스타일을 미리 볼 수 있습니다.',
         noMatch: '검색 조건에 맞는 스타일이 없습니다.',
+        noGroup: '선택한 그룹에 표시할 스타일이 없습니다. 확장 폰트 보기를 켜거나 다른 그룹을 선택해 주세요.',
         noFav: '즐겨찾기된 폰트가 없습니다.',
         noVisible: '복사할 표시 스타일이 없습니다.',
         truncated: '입력은 최대 500자까지 지원합니다. 초과한 내용은 잘라냈습니다.',
@@ -11825,12 +11834,14 @@
         favAdded: (label) => `${label} 스타일을 즐겨찾기에 추가했습니다.`,
         favRemoved: (label) => `${label} 스타일을 즐겨찾기에서 제거했습니다.`,
         sample: 'daily mood 2026',
+        filteredBy: (group) => `${group} 그룹으로 좁혀 보고 있습니다.`,
         copyLabel: (label) => `${label} 스타일 결과 복사`
       },
       en: {
         visible: (n) => `Showing ${formatNum(n)} styles. Select a style to copy its result.`,
         empty: 'Previewing styles with sample text until you enter your own.',
         noMatch: 'No styles match your search.',
+        noGroup: 'No styles are visible in this group. Turn on extended styles or choose another group.',
         noFav: 'No favorite styles yet.',
         noVisible: 'There are no visible styles to copy.',
         truncated: 'Input is limited to 500 characters. Extra text was trimmed.',
@@ -11842,12 +11853,14 @@
         favAdded: (label) => `Added ${label} to favorites.`,
         favRemoved: (label) => `Removed ${label} from favorites.`,
         sample: 'daily mood 2026',
+        filteredBy: (group) => `Filtering by the ${group} group.`,
         copyLabel: (label) => `Copy ${label} style result`
       },
       ja: {
         visible: (n) => `${formatNum(n)}件のスタイルを表示しています。選択すると結果をコピーします。`,
         empty: '入力前はサンプル文でスタイルをプレビューできます。',
         noMatch: '検索条件に一致するスタイルがありません。',
+        noGroup: 'このグループに表示できるスタイルがありません。拡張スタイルをオンにするか、別のグループを選んでください。',
         noFav: 'お気に入り登録されたスタイルがありません。',
         noVisible: 'コピーできる表示スタイルがありません。',
         truncated: '入力は最大500文字です。超過分を削除しました。',
@@ -11859,8 +11872,15 @@
         favAdded: (label) => `${label}をお気に入りに追加しました。`,
         favRemoved: (label) => `${label}をお気に入りから削除しました。`,
         sample: 'daily mood 2026',
+        filteredBy: (group) => `${group}グループで絞り込んでいます。`,
         copyLabel: (label) => `${label}スタイルの結果をコピー`
       }
+    }[pageLang] || {};
+
+    const groupLabels = {
+      ko: { all: '전체', clean: '깔끔한 글씨', decorative: '꾸밈 문자', marks: '줄·기호', experimental: '특수 효과' },
+      en: { all: 'all', clean: 'clean', decorative: 'decorative', marks: 'lines and marks', experimental: 'experimental' },
+      ja: { all: 'すべて', clean: '読みやすい', decorative: '装飾', marks: '線・記号', experimental: '実験的' }
     }[pageLang] || {};
 
     const setStatus = (message, state = '') => {
@@ -11916,6 +11936,9 @@
           ? `拡張スタイル表示: ${showAll ? 'ON' : 'OFF'}`
           : `확장 폰트 보기: ${showAll ? 'ON' : 'OFF'}`;
       if (showAllBtn) showAllBtn.setAttribute('aria-pressed', showAll ? 'true' : 'false');
+      groupButtons.forEach((button) => {
+        button.setAttribute('aria-pressed', button.dataset.fcGroup === activeGroup ? 'true' : 'false');
+      });
     };
 
     const render = () => {
@@ -11931,13 +11954,17 @@
       list.innerHTML = '';
       visibleResults = [];
       let targets = showAll ? fontMap : fontMap.filter((f) => safeKeys.has(f.key));
+      if (activeGroup !== 'all') {
+        const groupSet = styleGroups[activeGroup] || new Set();
+        targets = targets.filter((f) => groupSet.has(f.key));
+      }
       if (onlyFav) targets = targets.filter((f) => favorites.has(f.key));
-      if (query) targets = targets.filter((f) => `${f.key} ${f.label} ${getStyleLabel(f)}`.toLocaleLowerCase().includes(query));
+      if (query) targets = targets.filter((f) => `${f.key} ${f.label} ${getStyleLabel(f)} ${Object.entries(styleGroups).filter(([, set]) => set.has(f.key)).map(([name]) => groupLabels[name] || name).join(' ')}`.toLocaleLowerCase().includes(query));
       if (charCount) charCount.textContent = formatNum([...value].length);
       if (styleCount) styleCount.textContent = formatNum(targets.length);
 
       if (!targets.length) {
-        const message = query ? fcText.noMatch : fcText.noFav;
+        const message = query ? fcText.noMatch : (onlyFav ? fcText.noFav : fcText.noGroup);
         const empty = document.createElement('div');
         empty.className = 'empty-state';
         empty.setAttribute('role', 'listitem');
@@ -12032,7 +12059,8 @@
       if (convertedCount) convertedCount.textContent = formatNum(changed);
       if (unchangedCount) unchangedCount.textContent = formatNum(unchanged);
       if (copyVisibleBtn) copyVisibleBtn.disabled = !visibleResults.length;
-      setStatus(wasTrimmed ? fcText.truncated : (value ? fcText.visible(targets.length) : fcText.empty), wasTrimmed ? 'warning' : '');
+      const groupHint = activeGroup === 'all' ? '' : ` ${fcText.filteredBy(groupLabels[activeGroup] || activeGroup)}`;
+      setStatus(wasTrimmed ? fcText.truncated : `${value ? fcText.visible(targets.length) : fcText.empty}${groupHint}`, wasTrimmed ? 'warning' : '');
     };
 
     let timer;
@@ -12052,6 +12080,14 @@
       showAll = !showAll;
       updateButtonsText();
       render();
+    });
+
+    groupButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        activeGroup = button.dataset.fcGroup || 'all';
+        updateButtonsText();
+        render();
+      });
     });
 
     clearFavBtn?.addEventListener('click', () => {

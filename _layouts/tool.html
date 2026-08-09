@@ -2446,6 +2446,14 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <button id="fc-copy-visible" type="button">{% if page.lang == 'en' %}Copy visible styles{% elsif page.lang == 'ja' %}表示スタイルをコピー{% else %}표시된 스타일 복사{% endif %}</button>
             <button id="fc-clear-fav" type="button">{% if page.lang == 'en' %}Reset favorites{% elsif page.lang == 'ja' %}お気に入りをリセット{% else %}즐겨찾기 초기화{% endif %}</button>
           </div>
+          <fieldset class="font-change-groups" aria-describedby="fc-status">
+            <legend>{% if page.lang == 'en' %}Style group{% elsif page.lang == 'ja' %}スタイルグループ{% else %}스타일 그룹{% endif %}</legend>
+            <button type="button" data-fc-group="all" aria-pressed="true">{% if page.lang == 'en' %}All{% elsif page.lang == 'ja' %}すべて{% else %}전체{% endif %}</button>
+            <button type="button" data-fc-group="clean" aria-pressed="false">{% if page.lang == 'en' %}Clean{% elsif page.lang == 'ja' %}読みやすい{% else %}깔끔한 글씨{% endif %}</button>
+            <button type="button" data-fc-group="decorative" aria-pressed="false">{% if page.lang == 'en' %}Decorative{% elsif page.lang == 'ja' %}装飾{% else %}꾸밈 문자{% endif %}</button>
+            <button type="button" data-fc-group="marks" aria-pressed="false">{% if page.lang == 'en' %}Lines & marks{% elsif page.lang == 'ja' %}線・記号{% else %}줄·기호{% endif %}</button>
+            <button type="button" data-fc-group="experimental" aria-pressed="false">{% if page.lang == 'en' %}Experimental{% elsif page.lang == 'ja' %}実験的{% else %}특수 효과{% endif %}</button>
+          </fieldset>
           <div class="tool-stats fc-stats" aria-label="{% if page.lang == 'en' %}Font conversion summary{% elsif page.lang == 'ja' %}フォント変換の概要{% else %}폰트 변환 요약{% endif %}">
             <div><strong id="fc-char-count">0</strong><span>{% if page.lang == 'en' %}Characters{% elsif page.lang == 'ja' %}文字数{% else %}글자 수{% endif %}</span></div>
             <div><strong id="fc-style-count">0</strong><span>{% if page.lang == 'en' %}Visible styles{% elsif page.lang == 'ja' %}表示スタイル{% else %}표시 스타일{% endif %}</span></div>

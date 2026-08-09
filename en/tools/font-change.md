@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Font Style Converter | Copy Unicode Text for Instagram & Social Media
-description: Convert letters and numbers into Unicode font styles in real time, search style names, save favorites, and copy one style or all visible candidates for Instagram bios, nicknames, social profiles, and captions.
+description: Convert letters and numbers into Unicode font styles in real time, filter by style group, search style names, save favorites, and copy one style or all visible candidates for Instagram bios, nicknames, social profiles, and captions.
 lang: en
 permalink: /en/tools/font-change/
 canonical_url: /en/tools/font-change/
@@ -27,6 +27,8 @@ faq:
     a: The input is limited to 500 characters to keep mobile preview and copy interactions responsive. It is best for bios, nicknames, titles, and short captions.
   - q: Can I search by style name?
     a: Yes. Search terms such as bold, underline, circled, monospace, superscript, or full-width narrow the preview list immediately.
+  - q: How can I reduce a long style list?
+    a: Use the Clean, Decorative, Lines & marks, or Experimental group filters to review the most relevant Unicode font candidates first.
 alternate_urls:
   ko: /tools/font-change/
   en: /en/tools/font-change/
@@ -38,6 +40,7 @@ When styling an Instagram bio, channel name, social profile, or short caption, j
 
 ## Key features
 - Live conversion while typing
+- Style group filters for clean, decorative, line/mark, and experimental Unicode text
 - Search by plain style names such as bold, circled, underline, monospace, and superscript
 - Multiple Unicode style previews
 - Copy one style with a click or keyboard, or copy all visible style candidates
@@ -48,7 +51,7 @@ When styling an Instagram bio, channel name, social profile, or short caption, j
 
 ## How to use
 1. Enter your text.
-2. Search by style name, expand the style list, or show only your favorites.
+2. Choose a style group, search by style name, expand the style list, or show only your favorites.
 3. Click the style you want to copy, or copy all visible styles when you want to compare candidates elsewhere.
 
 > Unicode font styles do not install or change an actual font file. They replace Latin letters and numbers with similar-looking Unicode characters. Korean, Japanese, and other characters may stay unchanged, and some platforms may not support every styled character.
@@ -58,6 +61,7 @@ When styling an Instagram bio, channel name, social profile, or short caption, j
 - Testing nickname or channel-name variants
 - Creating highlighted event/promotional text quickly
 - Comparing which Unicode styles stay readable on your target platform before posting
+- Narrowing the list to readable social-media font styles before trying more decorative effects
 
 ## Input and compatibility notes
 This tool is designed for short social text, not long documents. Input is capped at 500 characters for smoother mobile preview and copy behavior. If a platform shows blank boxes or broken symbols, switch to a simpler style such as bold, sans, monospace, underline, or full-width.

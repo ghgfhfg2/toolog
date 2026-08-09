@@ -1386,6 +1386,28 @@ textarea:focus-visible {
   min-height: 42px;
   width: 100%;
 }
+.font-change-groups {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: .45rem;
+  margin: 0;
+  padding: .65rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(15,23,42,.55);
+}
+.font-change-groups legend {
+  padding: 0 .35rem;
+  color: var(--muted);
+  font-size: .86rem;
+}
+.font-change-groups button {
+  min-height: 38px;
+}
+.font-change-groups button[aria-pressed="true"] {
+  border-color: #60a5fa;
+  background: #172554;
+}
 .fc-filter-grid {
   grid-template-columns: minmax(0, 1fr) minmax(160px, auto);
 }
@@ -1415,7 +1437,6 @@ textarea:focus-visible {
   color: var(--text);
   border-radius: 10px;
   padding: .7rem .75rem;
-  cursor: pointer;
   transition: border-color .12s ease, background .12s ease;
 }
 .font-preview-item:hover {
@@ -1424,7 +1445,8 @@ textarea:focus-visible {
 }
 .font-preview-body:focus-visible,
 .font-fav-btn:focus-visible,
-.font-change-controls button:focus-visible {
+.font-change-controls button:focus-visible,
+.font-change-groups button:focus-visible {
   outline: 2px solid #93c5fd;
   outline-offset: 2px;
 }
@@ -1452,6 +1474,7 @@ textarea:focus-visible {
 .font-preview-body {
   display: block;
   padding-right: 2rem;
+  cursor: pointer;
 }
 .font-preview-text {
   display: block;
@@ -1596,6 +1619,8 @@ textarea:focus-visible {
   .tool-stats { grid-template-columns: 1fr 1fr; }
   .fc-filter-grid,
   .font-change-controls { grid-template-columns: 1fr; }
+  .font-change-groups { grid-template-columns: 1fr 1fr; }
+  .font-change-groups button:first-of-type { grid-column: 1 / -1; }
   .font-change-ui #fc-input {
     min-height: 150px;
   }
