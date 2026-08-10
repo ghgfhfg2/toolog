@@ -3287,11 +3287,13 @@
     const linesOut = document.getElementById('dfn-lines');
     const convertedOut = document.getElementById('dfn-converted');
     const ambiguousOut = document.getElementById('dfn-ambiguous');
+    const invalidOut = document.getElementById('dfn-invalid');
     const formatOut = document.getElementById('dfn-format-out');
     const summary = document.getElementById('dfn-summary');
     const warningList = document.getElementById('dfn-warning-list');
+    const changeList = document.getElementById('dfn-change-list');
 
-    if (!input || !format || !slashOrder || !extract || !keepInvalid || !output || !linesOut || !convertedOut || !ambiguousOut || !formatOut || !summary) return;
+    if (!input || !format || !slashOrder || !extract || !keepInvalid || !output || !linesOut || !convertedOut || !ambiguousOut || !invalidOut || !formatOut || !summary) return;
 
     const dfnText = {
       ko: {
@@ -3305,6 +3307,9 @@
         invalidTitle: '변환되지 않은 입력',
         invalidDropped: (count) => `${formatNum(count)}개 줄은 해석되지 않아 결과에서 제외했어요.`,
         invalidKept: (count) => `${formatNum(count)}개 입력은 날짜로 해석되지 않아 원문을 유지했어요.`,
+        moreWarnings: (count) => `외 ${formatNum(count)}개 항목은 목록에서 생략했어요.`,
+        changedTitle: '변환된 예시',
+        noChanged: '변환된 줄 예시가 여기에 표시됩니다.',
         yearRange: '연도는 1000~9999 범위만 변환합니다.',
         formatNames: { iso: 'YYYY-MM-DD', dot: 'YYYY. M. D.', slash: 'YYYY/MM/DD', korean: 'YYYY년 M월 D일 (요일)' },
         sample: [
@@ -3326,6 +3331,9 @@
         invalidTitle: 'Unconverted input',
         invalidDropped: (count) => `${formatNum(count)} unparsed line(s) were omitted from the result.`,
         invalidKept: (count) => `${formatNum(count)} input item(s) could not be parsed and were kept as-is.`,
+        moreWarnings: (count) => `${formatNum(count)} more item(s) are not shown in this list.`,
+        changedTitle: 'Converted examples',
+        noChanged: 'Converted line examples will appear here.',
         yearRange: 'Only years from 1000 to 9999 are converted.',
         formatNames: { iso: 'YYYY-MM-DD', dot: 'YYYY. M. D.', slash: 'YYYY/MM/DD', korean: 'YYYY년 M월 D일 (weekday)' },
         sample: [
@@ -3347,6 +3355,9 @@
         invalidTitle: '変換されなかった入力',
         invalidDropped: (count) => `${formatNum(count)}行は解釈できなかったため結果から除外しました。`,
         invalidKept: (count) => `${formatNum(count)}件は日付として解釈できず、原文のまま残しました。`,
+        moreWarnings: (count) => `ほか${formatNum(count)}件は一覧では省略しました。`,
+        changedTitle: '変換例',
+        noChanged: '変換された行の例がここに表示されます。',
         yearRange: '年は1000〜9999の範囲のみ変換します。',
         formatNames: { iso: 'YYYY-MM-DD', dot: 'YYYY. M. D.', slash: 'YYYY/MM/DD', korean: 'YYYY年 M月 D日 (曜日)' },
         sample: [
@@ -3468,11 +3479,17 @@
       let ambiguous = 0;
       let out = line;
       const warnings = [];
+      const invalids = [];
 
       patterns.forEach((pattern) => {
-        out = out.replace(pattern, (token) => {
+        out = out.replace(pattern, (token, ...args) => {
+          const offset = args[args.length - 2];
+          const before = out[offset - 1] || '';
           const parsed = parseCandidate(token);
-          if (!parsed.date) return token;
+          if (!parsed.date) {
+            if (!/\d/.test(before)) invalids.push(token);
+            return token;
+          }
           converted += 1;
           if (parsed.ambiguous) {
             ambiguous += 1;
@@ -3482,13 +3499,15 @@
         });
       });
 
-      return { text: out, converted, ambiguous, warnings };
+      return { text: out, converted, ambiguous, warnings, invalids };
     };
 
     const renderWarnings = (items, invalidItems, dropped, keptInvalid) => {
       if (!warningList) return;
-      const warnings = [...new Set(items)].slice(0, 8);
-      const invalids = [...new Set(invalidItems)].slice(0, 8);
+      const allWarnings = [...new Set(items)];
+      const allInvalids = [...new Set(invalidItems)];
+      const warnings = allWarnings.slice(0, 8);
+      const invalids = allInvalids.slice(0, 8);
       const parts = [];
       if (warnings.length) {
         parts.push(`<p><strong>${escapeHtml(dfnText.warningsTitle || 'Dates to review')}</strong>: ${warnings.map((item) => `<code>${escapeHtml(item)}</code>`).join(' ')}</p>`);
@@ -3496,6 +3515,8 @@
       if (invalids.length) {
         parts.push(`<p><strong>${escapeHtml(dfnText.invalidTitle || 'Unconverted input')}</strong>: ${invalids.map((item) => `<code>${escapeHtml(item)}</code>`).join(' ')}</p>`);
       }
+      const hiddenCount = Math.max(0, allWarnings.length - warnings.length) + Math.max(0, allInvalids.length - invalids.length);
+      if (hiddenCount > 0 && dfnText.moreWarnings) parts.push(`<p>${escapeHtml(dfnText.moreWarnings(hiddenCount))}</p>`);
       if (dropped > 0) {
         parts.push(`<p>${escapeHtml(dfnText.invalidDropped ? dfnText.invalidDropped(dropped) : `${dropped} unparsed line(s) omitted.`)}</p>`);
       } else if (keptInvalid > 0) {
@@ -3504,17 +3525,29 @@
       warningList.innerHTML = parts.join('');
     };
 
+    const renderChanges = (items) => {
+      if (!changeList) return;
+      const rows = items.slice(0, 5);
+      if (!rows.length) {
+        changeList.innerHTML = `<p>${escapeHtml(dfnText.noChanged || 'Converted line examples will appear here.')}</p>`;
+        return;
+      }
+      changeList.innerHTML = `<p><strong>${escapeHtml(dfnText.changedTitle || 'Converted examples')}</strong></p><ol>${rows.map((item) => `<li><code>${escapeHtml(item.before)}</code><span aria-hidden="true"> → </span><code>${escapeHtml(item.after)}</code></li>`).join('')}</ol>`;
+    };
+
     const render = () => {
       if (!input.value.trim()) {
         output.value = '';
         linesOut.textContent = '0';
         convertedOut.textContent = '0';
         ambiguousOut.textContent = '0';
+        invalidOut.textContent = '0';
         formatOut.textContent = (dfnText.formatNames && dfnText.formatNames[format.value]) || format.options[format.selectedIndex]?.text || '-';
         copyBtn.disabled = true;
         input.setAttribute('aria-invalid', 'false');
         setSummary(dfnText.empty || 'Paste mixed date text to normalize it into one format.');
         renderWarnings([], [], 0, 0);
+        renderChanges([]);
         return;
       }
 
@@ -3523,8 +3556,10 @@
       let ambiguous = 0;
       let dropped = 0;
       let keptInvalid = 0;
+      let inlineInvalid = 0;
       const warnings = [];
       const invalidItems = [];
+      const changedItems = [];
 
       const result = rows.map((line) => {
         const trimmed = line.trim();
@@ -3535,7 +3570,13 @@
           converted += inline.converted;
           ambiguous += inline.ambiguous;
           warnings.push(...inline.warnings);
-          if (inline.converted > 0) return inline.text;
+          invalidItems.push(...inline.invalids.map((item) => item.slice(0, 80)));
+          inlineInvalid += inline.invalids.length;
+          if (inline.converted > 0) {
+            if (inline.text !== line) changedItems.push({ before: line.slice(0, 90), after: inline.text.slice(0, 90) });
+            return inline.text;
+          }
+          if (inline.invalids.length > 0) return keepInvalid.checked ? line : null;
         }
 
         const parsed = parseCandidate(trimmed);
@@ -3545,7 +3586,9 @@
             ambiguous += 1;
             warnings.push(parsed.token || trimmed);
           }
-          return formatDate(parsed.date);
+          const next = formatDate(parsed.date);
+          if (next !== trimmed) changedItems.push({ before: trimmed.slice(0, 90), after: next.slice(0, 90) });
+          return next;
         }
 
         if (!keepInvalid.checked) dropped += 1;
@@ -3558,6 +3601,7 @@
       linesOut.textContent = formatNum(rows.filter((line) => line.trim()).length);
       convertedOut.textContent = formatNum(converted);
       ambiguousOut.textContent = formatNum(ambiguous);
+      invalidOut.textContent = formatNum(dropped + keptInvalid + inlineInvalid);
       formatOut.textContent = (dfnText.formatNames && dfnText.formatNames[format.value]) || format.options[format.selectedIndex]?.text || '-';
       copyBtn.disabled = !output.value.trim();
       input.setAttribute('aria-invalid', converted ? 'false' : 'true');
@@ -3567,6 +3611,7 @@
         setSummary(dfnText.none, 'error');
       }
       renderWarnings(warnings, invalidItems, dropped, keptInvalid);
+      renderChanges(changedItems);
     };
 
     sampleBtn?.addEventListener('click', () => {

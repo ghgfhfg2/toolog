@@ -962,6 +962,42 @@ textarea:focus-visible {
 .csmg-ui #csmg-summary[data-state="success"] { color: #86efac; }
 .csmg-ui .pct-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .tool-stats.csmg-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.dfn-ui textarea[aria-invalid="true"] { border-color: #ef4444; }
+.dfn-ui #dfn-summary[data-state="error"] { color: #fca5a5; }
+.dfn-ui #dfn-summary[data-state="warning"] { color: #fbbf24; }
+.dfn-ui #dfn-summary[data-state="success"] { color: #86efac; }
+.dfn-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.dfn-output-row {
+  display: grid;
+  gap: .35rem;
+}
+.dfn-ui #dfn-output {
+  min-height: 180px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.dfn-change-list {
+  border: 1px solid rgba(148, 163, 184, .24);
+  background: rgba(15, 23, 42, .42);
+  border-radius: 10px;
+  padding: .75rem .85rem;
+}
+.dfn-change-list p {
+  margin: 0 0 .45rem;
+  color: #cbd5e1;
+}
+.dfn-change-list ol {
+  display: grid;
+  gap: .45rem;
+  margin: 0;
+  padding-left: 1.2rem;
+}
+.dfn-change-list li {
+  color: #cbd5e1;
+  overflow-wrap: anywhere;
+}
+.dfn-change-list code {
+  white-space: normal;
+}
 .bw-ui textarea {
   min-height: 220px;
   font-size: 16px;
@@ -1617,6 +1653,7 @@ textarea:focus-visible {
   .pec-ui .pct-actions,
   .pec-ui .pct-grid { grid-template-columns: 1fr; }
   .tool-stats { grid-template-columns: 1fr 1fr; }
+  .tool-stats.dfn-stats { grid-template-columns: 1fr 1fr; }
   .fc-filter-grid,
   .font-change-controls { grid-template-columns: 1fr; }
   .font-change-groups { grid-template-columns: 1fr 1fr; }

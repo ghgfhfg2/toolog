@@ -2364,10 +2364,11 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <button id="dfn-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
+          <div class="tool-stats dfn-stats">
             <div><strong id="dfn-lines">0</strong><span>{% if page.lang == 'en' %}Input lines{% elsif page.lang == 'ja' %}入力行数{% else %}입력 줄 수{% endif %}</span></div>
             <div><strong id="dfn-converted">0</strong><span>{% if page.lang == 'en' %}Converted dates{% elsif page.lang == 'ja' %}変換成功{% else %}변환 성공{% endif %}</span></div>
             <div><strong id="dfn-ambiguous">0</strong><span>{% if page.lang == 'en' %}Needs review{% elsif page.lang == 'ja' %}要確認{% else %}해석 주의{% endif %}</span></div>
+            <div><strong id="dfn-invalid">0</strong><span>{% if page.lang == 'en' %}Invalid/unparsed{% elsif page.lang == 'ja' %}不正・未変換{% else %}오류/미변환{% endif %}</span></div>
             <div><strong id="dfn-format-out">-</strong><span>{% if page.lang == 'en' %}Output format{% elsif page.lang == 'ja' %}出力形式{% else %}출력 형식{% endif %}</span></div>
           </div>
 
@@ -2375,9 +2376,10 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="dfn-help">{% if page.lang == 'en' %}Ambiguous slash dates such as 05/10/2026 are counted separately so you can review them before sharing.{% elsif page.lang == 'ja' %}05/10/2026 のように迷いやすい日付は別途カウントし、共有前に確認できます。{% else %}05/10/2026처럼 월/일 해석이 헷갈리는 날짜는 별도로 표시해 공유 전에 확인할 수 있습니다.{% endif %}</p>
           <div class="tool-row dfn-output-row">
             <label for="dfn-output">{% if page.lang == 'en' %}Normalized result{% elsif page.lang == 'ja' %}整理結果{% else %}정리 결과{% endif %}</label>
-            <textarea id="dfn-output" rows="12" readonly placeholder="{% if page.lang == 'en' %}Normalized dates appear here.{% elsif page.lang == 'ja' %}整理結果がここに表示されます。{% else %}정리 결과가 여기에 표시됩니다.{% endif %}"></textarea>
+            <textarea id="dfn-output" rows="12" readonly aria-describedby="dfn-summary dfn-warning-list" placeholder="{% if page.lang == 'en' %}Normalized dates appear here.{% elsif page.lang == 'ja' %}整理結果がここに表示されます。{% else %}정리 결과가 여기에 표시됩니다.{% endif %}"></textarea>
           </div>
           <div id="dfn-warning-list" class="bw-list" aria-live="polite"></div>
+          <div id="dfn-change-list" class="dfn-change-list" aria-live="polite"></div>
         </div>
       {% when 'json-merge' %}
         <div class="tool-ui jm-ui">

@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Date Format Normalizer | Standardize dates in documents and announcements
-description: Use Date Format Normalizer to convert mixed yyyy-mm-dd, Korean date text, May 4th, 2026, 20260504, and 05/10/2026 date styles into one format, with invalid dates and ambiguous month/day dates flagged for review.
+description: Use Date Format Normalizer to convert mixed yyyy-mm-dd, Korean date text, May 4th, 2026, 20260504, and 05/10/2026 date styles into one format, with invalid dates, ambiguous month/day dates, and before/after examples flagged for review.
 lang: en
 permalink: /en/tools/date-format-normalizer/
 canonical_url: /en/tools/date-format-normalizer/
@@ -39,13 +39,17 @@ When you clean up documents, announcements, meeting notes, or spreadsheet drafts
 - `May 4, 2026`
 - `20260504`
 
-Date Format Normalizer reads these common date expressions and converts them into one consistent output style. It can also find dates inside full sentences and flags slash dates such as `05/10/2026` when the order could be month/day or day/month. Invalid dates such as `2026-02-30` remain visible for review instead of silently becoming a different date.
+Date Format Normalizer reads these common date expressions and converts them into one consistent output style. It can also find dates inside full sentences and flags slash dates such as `05/10/2026` when the order could be month/day or day/month. Invalid dates such as `2026-02-30` remain visible for review instead of silently becoming a different date, and before/after examples make it easier to audit the changed lines.
 
 ## How to use it
 1. Paste date-only lines or text that contains dates.
 2. Choose an output format: `2026-05-04`, `2026. 5. 4.`, `2026/05/04`, or a weekday format such as `2026. 5. 4. (Mon)`.
 3. Set the slash-date interpretation rule if your text includes dates such as `05/10/2026`.
 4. Copy the normalized result into announcements, docs, Notion pages, spreadsheets, or shared notes.
+
+## Why this tool was improved today
+Recent quality passes focused on tools such as `font-change`, `subscription-cleanup-simulator`, `message-tone-checker`, `password-generator`, `youtube-image-kit`, and `image-resizer`, so this pass avoids repeating the same tool.
+`date-format-normalizer` has higher error risk because it is used before publishing documents and must handle invalid dates, ambiguous slash dates, and dates embedded in full sentences. That makes clearer mobile review feedback and stronger edge-case handling worth prioritizing.
 
 ## Supported input examples
 - Numeric dates: `2026-05-04`, `2026.5.4`, `20260504`
@@ -63,6 +67,9 @@ You can convert one-date-per-line lists or turn on inline extraction to normaliz
 
 ### 3. Mixing English month names with Korean or ISO-style dates
 English month dates such as `May 4, 2026` can be converted into a weekday format or a clean ISO date.
+
+### 4. Reviewing date errors before publishing
+Impossible dates, unconverted lines, and month/day ambiguity are summarized so you can catch risky items before sharing the document.
 
 ## FAQ
 ### Why are some slash dates marked for review?
@@ -86,4 +93,4 @@ No. This tool focuses on date formatting. Use a timezone or time calculator when
 - [Hangul Keyboard Layout Converter]({{ '/en/tools/hangul-keyboard-layout-converter/' | relative_url }})
 
 ## Summary
-Date Format Normalizer is a **converter-type tool** for standardizing mixed date expressions in documents, announcements, memos, and spreadsheet drafts while keeping ambiguous slash dates, invalid calendar dates, and unconverted input visible for review.
+Date Format Normalizer is a **converter-type tool** for standardizing mixed date expressions in documents, announcements, memos, and spreadsheet drafts while keeping ambiguous slash dates, invalid calendar dates, unconverted input, and before/after examples visible for review.
