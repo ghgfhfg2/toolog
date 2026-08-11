@@ -10619,21 +10619,25 @@
     const charsOut = document.getElementById('hklc-chars');
     const hangulOut = document.getElementById('hklc-hangul');
     const englishOut = document.getElementById('hklc-english');
+    const changedOut = document.getElementById('hklc-changed');
     const modeOut = document.getElementById('hklc-mode-out');
     const help = document.getElementById('hklc-help');
     const output = document.getElementById('hklc-output');
 
-    if (!input || !mode || !preview || !sampleBtn || !swapBtn || !copyBtn || !clearBtn || !charsOut || !hangulOut || !englishOut || !modeOut || !help || !output) return;
+    if (!input || !mode || !preview || !sampleBtn || !swapBtn || !copyBtn || !clearBtn || !charsOut || !hangulOut || !englishOut || !changedOut || !modeOut || !help || !output) return;
 
     const textMap = {
       ko: {
         idle: '입력 대기',
         auto: '자동 판별',
+        autoMixed: '자동 판별(줄별 혼합)',
         enToKo: '영어 → 한글 복원',
         koToEn: '한글 → 영어 복원',
         helpIdle: '잘못 입력된 텍스트를 넣으면 한/영 키 배열 기준으로 복원합니다.',
-        helpResult: (direction) => `${direction} 기준으로 복원 결과를 만들었습니다. 짧은 혼합 문자열은 방향을 직접 바꾸면 더 정확할 수 있습니다.`,
-        helpNoConvertible: '변환할 수 있는 한글/영문 키가 거의 없습니다. 일반 기호나 숫자는 그대로 유지됩니다.',
+        helpResult: (direction, changed) => `${direction} 기준으로 ${formatNum(changed)}글자를 바꿨습니다. 짧은 혼합 문자열은 방향을 직접 바꾸면 더 정확할 수 있습니다.`,
+        helpNoChange: '입력은 읽었지만 바뀐 글자가 없습니다. 숫자·기호만 있거나 이미 원하는 키 배열일 수 있습니다.',
+        helpNoConvertible: '변환할 수 있는 한글/영문 키가 없습니다. 일반 기호나 숫자는 그대로 유지됩니다.',
+        tooLong: '입력은 최대 20,000자까지 지원합니다. 긴 문장은 나눠서 복원해 주세요.',
         copied: '결과를 복사했습니다.',
         copyEmpty: '복사할 복원 결과가 없습니다.',
         copyFail: '자동 복사를 사용할 수 없습니다. 결과를 직접 선택해 복사해 주세요.',
@@ -10644,11 +10648,14 @@
       en: {
         idle: 'Waiting',
         auto: 'Auto detect',
+        autoMixed: 'Auto detect by line',
         enToKo: 'English → Korean',
         koToEn: 'Korean → English',
         helpIdle: 'Paste mistyped text to recover it using the Korean/English keyboard layout mapping.',
-        helpResult: (direction) => `Recovered with ${direction}. For short mixed strings, manual direction selection may be more accurate.`,
-        helpNoConvertible: 'There are almost no convertible Korean or English keys. Numbers and symbols are preserved.',
+        helpResult: (direction, changed) => `Recovered ${formatNum(changed)} character(s) with ${direction}. For short mixed strings, manual direction selection may be more accurate.`,
+        helpNoChange: 'The input was read, but no characters changed. It may contain only numbers, symbols, or already-correct text.',
+        helpNoConvertible: 'No convertible Korean or English keys were found. Numbers and symbols are preserved.',
+        tooLong: 'Input is limited to 20,000 characters. Split longer text before recovering it.',
         copied: 'Copied the recovered result.',
         copyEmpty: 'There is no recovered result to copy yet.',
         copyFail: 'Automatic copy is unavailable. Select and copy the result manually.',
@@ -10659,11 +10666,14 @@
       ja: {
         idle: '入力待ち',
         auto: '自動判定',
+        autoMixed: '行ごとに自動判定',
         enToKo: '英語 → ハングル復元',
         koToEn: 'ハングル → 英語復元',
         helpIdle: '誤入力テキストを貼り付けると、韓/英キーボード配列に基づいて復元します。',
-        helpResult: (direction) => `${direction}を基準に復元しました。短い混在文字列は方向を手動で選ぶとより正確な場合があります。`,
-        helpNoConvertible: '変換できるハングルまたは英字キーがほとんどありません。数字や記号はそのまま維持されます。',
+        helpResult: (direction, changed) => `${direction}を基準に${formatNum(changed)}文字を変換しました。短い混在文字列は方向を手動で選ぶとより正確な場合があります。`,
+        helpNoChange: '入力は読み取りましたが、変換された文字はありません。数字・記号のみ、またはすでに意図した配列の可能性があります。',
+        helpNoConvertible: '変換できるハングルまたは英字キーがありません。数字や記号はそのまま維持されます。',
+        tooLong: '入力は最大20,000文字まで対応します。長い文章は分けて復元してください。',
         copied: '復元結果をコピーしました。',
         copyEmpty: 'コピーできる復元結果がまだありません。',
         copyFail: '自動コピーを利用できません。結果を手動で選択してコピーしてください。',
@@ -10672,9 +10682,9 @@
         sample: 'dkssudgktpdy\nㅗ디ㅣㅐ\nrkatkgkqslek'
       }
     }[pageLang] || {
-      idle: '입력 대기', auto: '자동 판별', enToKo: '영어 → 한글 복원', koToEn: '한글 → 영어 복원',
+      idle: '입력 대기', auto: '자동 판별', autoMixed: '자동 판별(줄별 혼합)', enToKo: '영어 → 한글 복원', koToEn: '한글 → 영어 복원',
       helpIdle: '잘못 입력된 텍스트를 넣으면 한/영 키 배열 기준으로 복원합니다.',
-      helpResult: (direction) => `${direction} 기준으로 복원 결과를 만들었습니다.`, helpNoConvertible: '변환할 수 있는 문자가 거의 없습니다.',
+      helpResult: (direction, changed) => `${direction} 기준으로 ${formatNum(changed)}글자를 바꿨습니다.`, helpNoChange: '입력은 읽었지만 바뀐 글자가 없습니다.', helpNoConvertible: '변환할 수 있는 문자가 없습니다.',
       copied: '결과를 복사했습니다.', copyEmpty: '복사할 복원 결과가 없습니다.', copyFail: '자동 복사를 사용할 수 없습니다.',
       cleared: '입력과 결과를 초기화했습니다.', copyDefault: '결과 복사', sample: 'dkssudgktpdy\nㅗ디ㅣㅐ\nrkatkgkqslek'
     };
@@ -10730,6 +10740,17 @@
       if (englishCount === 0 && hangulCount === 0) return 'en-to-ko';
       if (englishCount >= hangulCount) return 'en-to-ko';
       return 'ko-to-en';
+    };
+
+    const countChangedChars = (before, after) => {
+      const left = Array.from(before);
+      const right = Array.from(after);
+      const max = Math.max(left.length, right.length);
+      let count = 0;
+      for (let i = 0; i < max; i += 1) {
+        if (left[i] !== right[i]) count += 1;
+      }
+      return count;
     };
 
     const convertEnToKo = (value) => {
@@ -10810,6 +10831,36 @@
       return JAMO_TO_ENG[char] || char;
     }).join('');
 
+    const convertWithDirection = (value, direction) => (
+      direction === 'ko-to-en' ? convertKoToEn(value) : convertEnToKo(value)
+    );
+
+    const recover = (value) => {
+      if (mode.value !== 'auto') {
+        const direction = mode.value;
+        return {
+          converted: convertWithDirection(value, direction),
+          direction,
+          label: direction === 'ko-to-en' ? textMap.koToEn : textMap.enToKo
+        };
+      }
+
+      const directions = new Set();
+      const converted = value.split(/(\r\n|\r|\n)/).map((part) => {
+        if (/^\r\n$|^\r$|^\n$/.test(part)) return part;
+        if (!part) return part;
+        const direction = chooseDirection(part, 'auto');
+        directions.add(direction);
+        return convertWithDirection(part, direction);
+      }).join('');
+
+      const onlyDirection = directions.size === 1 ? Array.from(directions)[0] : null;
+      const label = onlyDirection
+        ? `${textMap.auto}: ${onlyDirection === 'ko-to-en' ? textMap.koToEn : textMap.enToKo}`
+        : textMap.autoMixed;
+      return { converted, direction: onlyDirection || 'auto-mixed', label };
+    };
+
     const setHelp = (message, state = '') => {
       help.textContent = message;
       help.dataset.state = state;
@@ -10838,25 +10889,32 @@
 
     const render = () => {
       const value = input.value || '';
+      const length = Array.from(value).length;
       const englishCount = (value.match(/[A-Za-z]/g) || []).length;
       const hangulCount = (value.match(/[가-힣ㄱ-ㅎㅏ-ㅣ]/g) || []).length;
-      const direction = chooseDirection(value, mode.value);
-      const converted = direction === 'ko-to-en' ? convertKoToEn(value) : convertEnToKo(value);
-      const directionLabel = direction === 'ko-to-en' ? textMap.koToEn : textMap.enToKo;
+      const convertibleCount = englishCount + hangulCount;
+      const recovered = recover(value);
+      const converted = recovered.converted;
+      const changedCount = countChangedChars(value, converted);
 
-      charsOut.textContent = formatNum(value.length);
+      charsOut.textContent = formatNum(length);
       hangulOut.textContent = formatNum(hangulCount);
       englishOut.textContent = formatNum(englishCount);
-      modeOut.textContent = value ? directionLabel : '-';
-      preview.value = value ? directionLabel : textMap.idle;
-      input.setAttribute('aria-invalid', 'false');
-      copyBtn.disabled = !converted;
+      changedOut.textContent = formatNum(changedCount);
+      modeOut.textContent = value ? recovered.label : '-';
+      preview.value = value ? recovered.label : textMap.idle;
+      input.setAttribute('aria-invalid', length > 20000 ? 'true' : 'false');
+      copyBtn.disabled = !converted || convertibleCount === 0 || changedCount === 0 || length > 20000;
       if (!value) {
         setHelp(textMap.helpIdle);
-      } else if (englishCount === 0 && hangulCount === 0) {
+      } else if (length > 20000) {
+        setHelp(textMap.tooLong, 'error');
+      } else if (convertibleCount === 0) {
         setHelp(textMap.helpNoConvertible, 'warning');
+      } else if (changedCount === 0) {
+        setHelp(textMap.helpNoChange, 'warning');
       } else {
-        setHelp(textMap.helpResult(directionLabel), 'success');
+        setHelp(textMap.helpResult(recovered.label, changedCount), 'success');
       }
       output.value = converted;
     };

@@ -2199,7 +2199,7 @@ layout: default
               </select>
             </div>
             <div>
-              <label for="hklc-preview">{% if page.lang == 'en' %}Detected result{% elsif page.lang == 'ja' %}判定結果{% else %}판별 결과{% endif %}</label>
+              <label for="hklc-preview">{% if page.lang == 'en' %}Detected direction{% elsif page.lang == 'ja' %}判定方向{% else %}판별 방향{% endif %}</label>
               <input id="hklc-preview" type="text" readonly value="{% if page.lang == 'en' %}Waiting{% elsif page.lang == 'ja' %}入力待ち{% else %}입력 대기{% endif %}" />
             </div>
           </div>
@@ -2215,6 +2215,7 @@ layout: default
             <div><strong id="hklc-chars">0</strong><span>{% if page.lang == 'en' %}Input characters{% elsif page.lang == 'ja' %}入力文字数{% else %}입력 글자 수{% endif %}</span></div>
             <div><strong id="hklc-hangul">0</strong><span>{% if page.lang == 'en' %}Hangul/jamo{% elsif page.lang == 'ja' %}ハングル/字母{% else %}한글/자모 수{% endif %}</span></div>
             <div><strong id="hklc-english">0</strong><span>{% if page.lang == 'en' %}English keys{% elsif page.lang == 'ja' %}英字キー{% else %}영문 키 수{% endif %}</span></div>
+            <div><strong id="hklc-changed">0</strong><span>{% if page.lang == 'en' %}Changed chars{% elsif page.lang == 'ja' %}変更文字数{% else %}바뀐 글자 수{% endif %}</span></div>
             <div><strong id="hklc-mode-out">-</strong><span>{% if page.lang == 'en' %}Applied direction{% elsif page.lang == 'ja' %}適用方向{% else %}적용 방향{% endif %}</span></div>
           </div>
 
