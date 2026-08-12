@@ -19419,10 +19419,13 @@
     const gapEl = document.getElementById('gbc-gap');
     const itemCountEl = document.getElementById('gbc-item-count');
     const missingCountEl = document.getElementById('gbc-missing-count');
+    const mustLeftEl = document.getElementById('gbc-must-left');
+    const cutTotalEl = document.getElementById('gbc-cut-total');
     const meter = document.querySelector('.gbc-meter');
     const meterBar = document.getElementById('gbc-meter-bar');
     const summary = document.getElementById('gbc-summary');
     const output = document.getElementById('gbc-output');
+    const budgetChips = Array.from(document.querySelectorAll('[data-gbc-budget]'));
     if (!budgetEl || !input) return;
 
     const i18n = {
@@ -19433,11 +19436,13 @@
         exact: '예산에 정확히 맞았습니다. 결제 전 가격 변동만 한 번 더 확인하세요.',
         empty: '장보기 목록을 한 줄에 하나씩 입력해 주세요.',
         invalidBudget: '예산은 0원 이상 100,000,000원 이하의 정수로 입력해 주세요.',
-        tooMany: '품목은 최대 200줄까지 점검할 수 있어요. 목록을 나눠서 확인해 주세요.',
+        tooMany: (count) => `품목은 최대 200줄까지 점검할 수 있어요. ${formatNum(count)}줄은 제외했으니 목록을 나눠서 확인해 주세요.`,
         invalidPrice: (count) => `가격 형식이 애매한 줄 ${formatNum(count)}개는 합계에서 제외했어요. 정수 가격으로 고쳐주세요.`,
         noPricedItems: '가격이 있는 품목이 없습니다. 예상 가격을 함께 입력하면 예산을 점검할 수 있어요.',
+        mustOver: (n) => `필수 품목만으로도 예산보다 ${formatNum(n)}원 초과합니다. 예산을 올리거나 필수 품목 가격을 다시 확인하세요.`,
         usage: (pct) => `예산 사용률 ${formatNum(pct)}%`,
-        noPrice: '가격 없음', must: '필수', optional: '선택/보류', normal: '일반', cut: '줄일 후보', keep: '구매 유지 후보', unpriced: '가격 확인 필요', copied: '결과를 복사했어요.', copyEmpty: '복사할 점검 결과가 없습니다.', copyFail: '자동 복사를 사용할 수 없습니다.', cleared: '입력값을 초기화했습니다.'
+        dupes: (count) => `중복 의심 품목 ${formatNum(count)}개를 찾았습니다. 같은 품목을 두 번 담았는지 확인하세요.`,
+        noPrice: '가격 없음', must: '필수', optional: '선택/보류', normal: '일반', cut: '줄일 후보', keep: '구매 유지 후보', unpriced: '가격 확인 필요', duplicates: '중복 의심 품목', copied: '결과를 복사했어요.', copyEmpty: '복사할 점검 결과가 없습니다.', copyFail: '자동 복사를 사용할 수 없습니다.', cleared: '입력값을 초기화했습니다.'
       },
       en: {
         sample: 'Rice 32900 must\nMilk 3200 must\nEggs 7800 must\nSalad greens 4500 optional\nSnack 2500 optional\nDetergent 8900 later\nFrozen meal deal 12900 later',
@@ -19446,11 +19451,13 @@
         exact: 'This exactly matches your budget. Check final prices once before checkout.',
         empty: 'Enter one grocery item per line.',
         invalidBudget: 'Enter a whole-number budget from 0 to 100,000,000.',
-        tooMany: 'Check up to 200 item lines at a time. Split longer lists into smaller batches.',
+        tooMany: (count) => `Check up to 200 item lines at a time. ${formatNum(count)} lines were skipped; split longer lists into smaller batches.`,
         invalidPrice: (count) => `${formatNum(count)} lines have unclear prices and were excluded from totals. Use whole-number prices.`,
         noPricedItems: 'No priced items were found. Add estimated prices to check the budget.',
+        mustOver: (n) => `Must-buy items alone exceed the budget by ${formatNum(n)}. Raise the budget or recheck essential prices.`,
         usage: (pct) => `Budget usage ${formatNum(pct)}%`,
-        noPrice: 'no price', must: 'must-buy', optional: 'optional/later', normal: 'regular', cut: 'cut candidates', keep: 'keep candidates', unpriced: 'needs price check', copied: 'Result copied.', copyEmpty: 'There is no budget check result to copy yet.', copyFail: 'Automatic copy is unavailable.', cleared: 'Cleared the inputs.'
+        dupes: (count) => `Found ${formatNum(count)} possible duplicate item(s). Check whether the same item was added twice.`,
+        noPrice: 'no price', must: 'must-buy', optional: 'optional/later', normal: 'regular', cut: 'cut candidates', keep: 'keep candidates', unpriced: 'needs price check', duplicates: 'possible duplicates', copied: 'Result copied.', copyEmpty: 'There is no budget check result to copy yet.', copyFail: 'Automatic copy is unavailable.', cleared: 'Cleared the inputs.'
       },
       ja: {
         sample: '米 32900 必須\n牛乳 3200 必須\n卵 7800 必須\nサラダ野菜 4500 任意\nお菓子 2500 任意\n洗剤 8900 あとで\n冷凍食品セール 12900 あとで',
@@ -19459,11 +19466,13 @@
         exact: '予算とちょうど一致しています。会計前に価格変動だけ確認しましょう。',
         empty: '買い物リストを1行に1品目ずつ入力してください。',
         invalidBudget: '予算は0以上100,000,000以下の整数で入力してください。',
-        tooMany: '品目は最大200行まで確認できます。長いリストは分けてください。',
+        tooMany: (count) => `品目は最大200行まで確認できます。${formatNum(count)}行は除外しました。長いリストは分けてください。`,
         invalidPrice: (count) => `価格が曖昧な行${formatNum(count)}件は合計から除外しました。整数価格に直してください。`,
         noPricedItems: '価格のある品目がありません。予想価格を入れると予算を確認できます。',
+        mustOver: (n) => `必須品目だけで予算を${formatNum(n)}超えています。予算または必須品目の価格を確認してください。`,
         usage: (pct) => `予算使用率 ${formatNum(pct)}%`,
-        noPrice: '価格なし', must: '必須', optional: '任意/あとで', normal: '通常', cut: '削減候補', keep: '購入候補', unpriced: '価格確認が必要', copied: '結果をコピーしました。', copyEmpty: 'コピーできる確認結果がまだありません。', copyFail: '自動コピーを利用できません。', cleared: '入力をクリアしました。'
+        dupes: (count) => `重複の可能性がある品目を${formatNum(count)}件見つけました。同じ品目を二度入れていないか確認してください。`,
+        noPrice: '価格なし', must: '必須', optional: '任意/あとで', normal: '通常', cut: '削減候補', keep: '購入候補', unpriced: '価格確認が必要', duplicates: '重複の可能性', copied: '結果をコピーしました。', copyEmpty: 'コピーできる確認結果がまだありません。', copyFail: '自動コピーを利用できません。', cleared: '入力をクリアしました。'
       }
     }[pageLang] || null;
     const t = i18n || { sample: '', over: (n) => `${n}`, left: (n) => `${n}`, noPrice: 'no price', must: 'must', optional: 'optional', normal: 'normal', cut: 'cut', keep: 'keep', copied: 'copied' };
@@ -19484,6 +19493,8 @@
       gapEl.textContent = money(0);
       itemCountEl.textContent = '0';
       missingCountEl.textContent = '0';
+      if (mustLeftEl) mustLeftEl.textContent = money(0);
+      if (cutTotalEl) cutTotalEl.textContent = money(0);
       if (meter && meterBar) {
         meter.setAttribute('aria-valuenow', '0');
         meterBar.style.width = '0%';
@@ -19511,7 +19522,8 @@
         if (last) name = line.replace(last[0], '').trim().replace(/[-–—:,]+$/, '').trim();
         const type = mustRe.test(line) ? 'must' : (optionalRe.test(line) ? 'optional' : 'normal');
         name = name.replace(mustRe, '').replace(optionalRe, '').trim().replace(/\s{2,}/g, ' ') || line;
-        return { raw: line, name, price: parsed.value, type, hasPrice: Boolean(last) && !parsed.invalid, invalidPrice: Boolean(last) && parsed.invalid };
+        const key = name.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
+        return { raw: line, name, key, price: parsed.value, type, hasPrice: Boolean(last) && !parsed.invalid, invalidPrice: Boolean(last) && parsed.invalid };
       });
       return { items, omitted: Math.max(0, lines.length - limitedLines.length) };
     };
@@ -19551,6 +19563,10 @@
       gapEl.textContent = gap >= 0 ? `+${money(gap)}` : `-${money(Math.abs(gap))}`;
       itemCountEl.textContent = formatNum(items.length);
       missingCountEl.textContent = formatNum(totals.missing);
+      if (mustLeftEl) {
+        const mustLeft = budget - totals.must;
+        mustLeftEl.textContent = mustLeft >= 0 ? `+${money(mustLeft)}` : `-${money(Math.abs(mustLeft))}`;
+      }
       const usagePct = budget > 0 ? Math.round((totals.total / budget) * 100) : (totals.total > 0 ? 100 : 0);
       const meterPct = Math.min(100, Math.max(0, usagePct));
       if (meter && meterBar) {
@@ -19559,9 +19575,18 @@
         meterBar.style.width = `${meterPct}%`;
         meterBar.dataset.state = usagePct > 100 ? 'over' : (usagePct === 100 ? 'exact' : 'within');
       }
-      if (omitted > 0) setStatus(t.tooMany, 'warning');
+      const duplicateGroups = [...items.reduce((map, item) => {
+        if (!item.key) return map;
+        if (!map.has(item.key)) map.set(item.key, []);
+        map.get(item.key).push(item);
+        return map;
+      }, new Map()).values()].filter(group => group.length > 1);
+      const duplicateCount = duplicateGroups.reduce((sum, group) => sum + group.length, 0);
+      if (omitted > 0) setStatus(t.tooMany(omitted), 'warning');
       else if (totals.invalid > 0) setStatus(t.invalidPrice(totals.invalid), 'warning');
       else if (!totals.priced) setStatus(t.noPricedItems, 'warning');
+      else if (totals.must > budget) setStatus(t.mustOver(totals.must - budget), 'warning');
+      else if (duplicateCount > 0) setStatus(t.dupes(duplicateCount), 'warning');
       else if (gap > 0) setStatus(t.left(gap), 'success');
       else if (gap === 0) setStatus(t.exact, 'success');
       else setStatus(t.over(Math.abs(gap)), 'warning');
@@ -19572,10 +19597,13 @@
         return (rank[a.type] - rank[b.type]) || (b.price - a.price);
       });
       const cut = sorted.filter(it => it.type !== 'must' && it.hasPrice).slice(0, 6);
+      const cutTotal = cut.reduce((sum, item) => sum + item.price, 0);
+      if (cutTotalEl) cutTotalEl.textContent = money(cutTotal);
       const keep = items.filter(it => it.type === 'must').concat(items.filter(it => it.type === 'normal')).slice(0, 12);
       const unpriced = items.filter(it => !it.hasPrice).slice(0, 8);
+      const duplicateLines = duplicateGroups.slice(0, 5).map(group => `- ${group[0].name} × ${formatNum(group.length)}`);
       const label = (it) => it.type === 'must' ? t.must : (it.type === 'optional' ? t.optional : t.normal);
-      const line = (it) => `- [${label(it)}] ${it.name} · ${it.price ? money(it.price) : t.noPrice}`;
+      const line = (it) => `- [${label(it)}] ${it.name} · ${it.hasPrice ? money(it.price) : t.noPrice}`;
       currentOutput = [
         `${summary.textContent}`,
         `${t.usage(usagePct)}`,
@@ -19587,7 +19615,10 @@
         ...(cut.length ? cut.map(line) : ['-']),
         ``,
         `${t.unpriced}`,
-        ...(unpriced.length ? unpriced.map(line) : ['-'])
+        ...(unpriced.length ? unpriced.map(line) : ['-']),
+        ``,
+        `${t.duplicates}`,
+        ...(duplicateLines.length ? duplicateLines : ['-'])
       ].join('\n');
       output.value = currentOutput;
       copyBtn.disabled = !currentOutput;
@@ -19596,6 +19627,13 @@
     runBtn?.addEventListener('click', render);
     [budgetEl, modeEl, input].forEach(el => el.addEventListener('input', render));
     sampleBtn?.addEventListener('click', () => { input.value = t.sample; render(); input.focus(); });
+    budgetChips.forEach((button) => {
+      button.addEventListener('click', () => {
+        budgetEl.value = button.dataset.gbcBudget || budgetEl.value;
+        render();
+        input.focus();
+      });
+    });
     clearBtn?.addEventListener('click', () => {
       input.value = '';
       budgetEl.value = '80000';

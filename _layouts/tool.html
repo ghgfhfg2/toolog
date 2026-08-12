@@ -4313,6 +4313,11 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <div>
               <label for="gbc-budget">{% if page.lang == 'en' %}Budget{% elsif page.lang == 'ja' %}予算{% else %}이번 장보기 예산{% endif %}</label>
               <input id="gbc-budget" type="number" min="0" max="100000000" step="100" value="80000" inputmode="numeric" aria-describedby="gbc-summary gbc-help" />
+              <div class="gbc-budget-chips" aria-label="{% if page.lang == 'en' %}Quick budget presets{% elsif page.lang == 'ja' %}予算クイック設定{% else %}예산 빠른 입력{% endif %}">
+                <button type="button" data-gbc-budget="50000">{% if page.lang == 'en' %}50k{% elsif page.lang == 'ja' %}5万{% else %}5만원{% endif %}</button>
+                <button type="button" data-gbc-budget="80000">{% if page.lang == 'en' %}80k{% elsif page.lang == 'ja' %}8万{% else %}8만원{% endif %}</button>
+                <button type="button" data-gbc-budget="120000">{% if page.lang == 'en' %}120k{% elsif page.lang == 'ja' %}12万{% else %}12만원{% endif %}</button>
+              </div>
             </div>
             <div>
               <label for="gbc-mode">{% if page.lang == 'en' %}Cut suggestion mode{% elsif page.lang == 'ja' %}削減候補モード{% else %}줄일 후보 기준{% endif %}</label>
@@ -4339,6 +4344,8 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <div><strong id="gbc-gap">0</strong><span>{% if page.lang == 'en' %}Over / left{% elsif page.lang == 'ja' %}超過/残り{% else %}초과/남은 금액{% endif %}</span></div>
             <div><strong id="gbc-item-count">0</strong><span>{% if page.lang == 'en' %}Item lines{% elsif page.lang == 'ja' %}品目行{% else %}품목 줄{% endif %}</span></div>
             <div><strong id="gbc-missing-count">0</strong><span>{% if page.lang == 'en' %}Need prices{% elsif page.lang == 'ja' %}価格未入力{% else %}가격 확인{% endif %}</span></div>
+            <div><strong id="gbc-must-left">0</strong><span>{% if page.lang == 'en' %}After must-buy{% elsif page.lang == 'ja' %}必須後の残り{% else %}필수 후 잔액{% endif %}</span></div>
+            <div><strong id="gbc-cut-total">0</strong><span>{% if page.lang == 'en' %}Cut candidates{% elsif page.lang == 'ja' %}削減候補額{% else %}줄일 후보 합계{% endif %}</span></div>
           </div>
           <div class="gbc-meter" role="progressbar" aria-label="{% if page.lang == 'en' %}Budget usage{% elsif page.lang == 'ja' %}予算使用率{% else %}예산 사용률{% endif %}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="gbc-meter-bar"></span></div>
           <p class="tool-result" id="gbc-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter a grocery list to check it against your budget.{% elsif page.lang == 'ja' %}買い物リストを入力すると予算に合うか確認できます。{% else %}장보기 목록을 넣으면 예산 초과 여부와 줄일 후보를 보여줍니다.{% endif %}</p>

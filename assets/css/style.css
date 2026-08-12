@@ -1020,8 +1020,19 @@ a:hover { color: #fff; text-decoration: none; }
 .gpa-ui #gpa-help[data-state="success"] { color: #86efac; }
 .gbc-grid { grid-template-columns: minmax(0, 1fr) minmax(180px, .55fr); }
 .gbc-grid > div { display: grid; gap: .35rem; min-width: 0; }
+.gbc-budget-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+.gbc-budget-chips button {
+  padding: .42rem .65rem;
+  min-height: 34px;
+  border-radius: 999px;
+  font-size: .85rem;
+}
 .gbc-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.gbc-stats { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.gbc-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .gbc-stats strong {
   overflow-wrap: anywhere;
   line-height: 1.3;
