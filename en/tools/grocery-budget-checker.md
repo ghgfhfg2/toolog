@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Grocery Budget Checker | Budget usage, savings list, and cut candidates
-description: Enter a grocery list, estimated prices, and a budget to split must-buy and optional items, see budget usage, after-must-buy balance, duplicate suspects, and cut candidates in your browser.
+title: Grocery Budget Checker | Track budget usage and trim your shopping list
+description: Paste a grocery list with estimated prices and a budget to review must-buy items, optional items, budget usage, after-must-buy balance, missing prices, duplicates, and cut candidates in your browser.
 lang: en
 permalink: /en/tools/grocery-budget-checker/
 canonical_url: /en/tools/grocery-budget-checker/
@@ -18,7 +18,7 @@ image:
 tool_key: grocery-budget-checker
 tool_type: checker
 topic_cluster: shopping
-keywords: [grocery budget, grocery savings, shopping list, grocery checklist, budget overrun check, grocery cart budget]
+keywords: [grocery budget checker, grocery savings, shopping list budget, grocery checklist, budget overrun check, grocery cart budget]
 related_tools: [ingredient-expiry-priority-checker, household-chore-picker, secondhand-scam-signal-checker]
 faq:
   - q: Is this an exact household accounting calculator?
@@ -35,12 +35,12 @@ faq:
 
 ## Why this tool was selected for today's improvement
 Recent quality passes focused on `hangul-keyboard-layout-converter`, `date-format-normalizer`, `font-change`, `subscription-cleanup-simulator`, `message-tone-checker`, `password-generator`, `youtube-image-kit`, `image-resizer`, and `json-merge`, so this pass avoids repeating the same tool.
-`grocery-budget-checker` was selected because pasted cart text, missing prices, invalid price formats, long lists, duplicate items, and mobile result scanning all create practical error and usability risks.
+`grocery-budget-checker` was selected because pasted cart text, missing prices, invalid price formats, long lists, duplicate items, and mobile result scanning all create real usability risks.
 
 ## Why use the Grocery Budget Checker?
 When you shop at a supermarket or online grocery store, small extra items can quickly push the total beyond your budget. It gets even harder when ingredients, snacks, household supplies, and sale items are mixed together, because “must buy now” and “can wait until next time” items are not always obvious.
 
-This tool takes your grocery list and estimated prices, then quickly shows **must-buy total, optional-item total, budget usage, after-must-buy balance, over-budget amount, items that still need prices, possible duplicate items, and candidates to cut**. It is not a detailed accounting tool; it is a practical checker for trimming the list right before shopping.
+This tool takes your grocery list and estimated prices, then quickly shows **must-buy total, optional-item total, budget usage, balance after must-buy items, over-budget amount, items that still need prices, possible duplicates, and candidates to cut**. It is not a detailed accounting tool; it is a practical checker for trimming the list right before shopping.
 
 ## How to use it
 1. Enter your grocery budget for this trip.
@@ -69,8 +69,8 @@ Lines with `must`, `needed`, or `required` are treated as must-buy items. Lines 
 ### 1) Before checking out an online cart
 Paste the items already in your cart and quickly see which optional items are pushing the total over budget.
 
-### 2) When you want to reduce food spending
-Separating essential ingredients from snacks, backups, and sale items makes it much clearer what can be postponed or removed.
+### 2) When you want to reduce grocery spending
+Separating essential ingredients from snacks, pantry backups, and sale items makes it much clearer what can be postponed or removed.
 
 ### 3) When combining a family grocery list
 Put everyone’s items into one list and use the result to spot duplicates or lower-priority items.
@@ -78,7 +78,7 @@ Put everyone’s items into one list and use the result to spot duplicates or lo
 ## Error and edge-case handling
 - Budget must be a whole number from 0 to 100,000,000.
 - Up to 200 item lines are checked at once.
-- Decimal prices, overly large prices, and unclear numeric values are excluded from totals and kept in the price-check section.
+- Decimal prices, overly large prices, and unclear numeric values are excluded from totals and kept in the needs-price section.
 - Similar item names are grouped as possible duplicates. Add package size or quantity to the name when two similar items are intentionally different.
 - If must-buy items alone exceed the budget, the tool tells you to recheck essential prices or the budget before cutting optional items.
 - The budget usage bar turns red when the estimated total exceeds the budget, which makes the state easier to read on mobile.
@@ -105,4 +105,4 @@ The tool checks up to 200 item lines at a time. For very large shopping trips, s
 Yes, but long product names, quantities, and coupon text can make prices harder to read. Check the needs-price and possible-duplicate sections before using the result.
 
 ## Summary
-The Grocery Budget Checker is a **checker-style tool that reviews estimated grocery spending and item priorities to show budget usage, after-must-buy balance, duplicate suspects, and candidates to cut**. Use it before online grocery checkout, before visiting a store, or when combining a shared household shopping list.
+The Grocery Budget Checker is a **shopping-list budget tool that reviews estimated grocery spending and item priorities to show budget usage, balance after must-buy items, possible duplicates, and candidates to cut**. Use it before online grocery checkout, before visiting a store, or when combining a shared household shopping list.

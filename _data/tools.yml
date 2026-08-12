@@ -242,7 +242,7 @@
 - id: grocery-budget-checker
   title: 장보기 예산 초과 점검기
   title_en: Grocery Budget Checker
-  title_ja: 買い物予算オーバーチェッカー
+  title_ja: 買い物予算チェッカー
   category: food
   category_label: 생활/장보기 예산 점검
   category_label_en: Food/Grocery Budget
@@ -251,8 +251,8 @@
   badge_en: New
   badge_ja: 新着
   description: 장보기 목록, 예상 가격, 예산을 넣으면 필수·선택 품목, 예산 사용률, 필수품 후 잔액, 중복 의심 품목, 줄일 후보를 브라우저에서 빠르게 점검해요.
-  description_en: Enter a grocery list, estimated prices, and a budget to split must-buy and optional items, see budget usage, after-must-buy balance, duplicate suspects, and cut candidates.
-  description_ja: 買い物リスト、予想価格、予算を入力すると、必須・任意品目、予算使用率、必須後の残り、重複候補、削減候補をブラウザ内ですばやく確認できます。
+  description_en: Paste a grocery list with estimated prices and a budget to review must-buy items, optional items, budget usage, after-must-buy balance, missing prices, duplicates, and cut candidates.
+  description_ja: 買い物リスト、予想価格、予算を入力すると、必須品目、任意品目、予算使用率、必須品目後の残額、価格未入力、重複候補、削減候補をブラウザ内で確認できます。
   url: /tools/grocery-budget-checker/
   url_en: /en/tools/grocery-budget-checker/
   url_ja: /ja/tools/grocery-budget-checker/
