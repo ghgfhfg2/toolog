@@ -14,7 +14,7 @@ category_label: 食べ物/買い物予算
 thumbnail: /assets/thumbs/ja/grocery-budget-checker.svg
 image:
   path: /assets/thumbs/ja/grocery-budget-checker.svg
-  alt: 買い物予算オーバーチェッカーのサムネイル
+  alt: 買い物予算チェッカーのサムネイル
 tool_key: grocery-budget-checker
 tool_type: checker
 topic_cluster: shopping
