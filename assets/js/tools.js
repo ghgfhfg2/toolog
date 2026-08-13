@@ -757,109 +757,158 @@
     const status = document.getElementById('cc-status');
     const chars = document.getElementById('cc-chars');
     const wordsOut = document.getElementById('cc-words');
+    const modeOut = document.getElementById('cc-mode');
+    const outputChars = document.getElementById('cc-output-chars');
     const copy = document.getElementById('cc-copy');
     const clear = document.getElementById('cc-clear');
     const sample = document.getElementById('cc-sample');
-    const buttons = [...document.querySelectorAll('.cc-grid button')];
+    const lineMode = document.getElementById('cc-line-mode');
+    const buttons = [...document.querySelectorAll('.cc-grid button[data-mode]')];
     if (!input || !output || !status) return;
 
     const ccText = {
       ko: {
         empty: '변환할 텍스트를 먼저 입력해 주세요.',
         ready: '텍스트를 입력한 뒤 변환 형식을 선택하세요.',
-        converted: (mode) => `${mode} 형식으로 변환했습니다.`,
+        converted: (mode, count) => `${mode} 형식으로 변환했습니다. 결과 ${formatNum(count)}자입니다.`,
+        noWords: '선택한 형식으로 바꿀 영문·숫자 단어를 찾지 못했습니다.',
         copied: '변환 결과를 복사했습니다.',
         copyEmpty: '복사할 변환 결과가 없습니다.',
         copyFail: '자동 복사를 사용할 수 없습니다. 결과를 직접 선택해 복사해 주세요.',
-        sample: 'customerOrder ID API_response',
+        sample: 'customerOrder ID API_response\nuser display name',
         cleared: '입력과 결과를 초기화했습니다.'
       },
       en: {
         empty: 'Enter text before choosing a conversion style.',
         ready: 'Enter text, then choose a conversion style.',
-        converted: (mode) => `Converted to ${mode}.`,
+        converted: (mode, count) => `Converted to ${mode}. Result length: ${formatNum(count)} characters.`,
+        noWords: 'No letters or numbers were found for that conversion style.',
         copied: 'Copied the converted result.',
         copyEmpty: 'There is no converted result to copy.',
         copyFail: 'Automatic copy is unavailable. Select and copy the result manually.',
-        sample: 'customerOrder ID API_response',
+        sample: 'customerOrder ID API_response\nuser display name',
         cleared: 'Cleared the input and result.'
       },
       ja: {
         empty: '変換するテキストを先に入力してください。',
         ready: 'テキストを入力して変換形式を選んでください。',
-        converted: (mode) => `${mode}形式に変換しました。`,
+        converted: (mode, count) => `${mode}形式に変換しました。結果は${formatNum(count)}文字です。`,
+        noWords: 'この形式に変換できる文字・数字の単語が見つかりません。',
         copied: '変換結果をコピーしました。',
         copyEmpty: 'コピーする変換結果がありません。',
         copyFail: '自動コピーを利用できません。結果を選択してコピーしてください。',
-        sample: 'customerOrder ID API_response',
+        sample: 'customerOrder ID API_response\nuser display name',
         cleared: '入力と結果をクリアしました。'
       }
     }[pageLang];
+
+    let activeMode = '';
+
+    const setStatus = (message, state = '') => {
+      status.textContent = message;
+      status.dataset.state = state;
+    };
 
     const splitWords = (text) => text
       .replace(/([\p{Ll}\p{N}])(\p{Lu})/gu, '$1 $2')
       .replace(/(\p{Lu})(\p{Lu}\p{Ll})/gu, '$1 $2')
       .match(/[\p{L}\p{N}]+/gu) || [];
     const capitalize = (word) => word ? word[0].toUpperCase() + word.slice(1).toLowerCase() : '';
+    const setButtonState = (mode) => {
+      buttons.forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.mode === mode)));
+      modeOut.textContent = buttons.find(btn => btn.dataset.mode === mode)?.textContent || '-';
+    };
+    const updateOutputState = () => {
+      outputChars.textContent = formatNum([...output.value].length);
+      copy.disabled = !output.value;
+    };
     const updateStats = () => {
       const text = input.value || '';
       chars.textContent = formatNum([...text].length);
       wordsOut.textContent = formatNum(splitWords(text).length);
       if (!text.trim()) {
         output.value = '';
-        buttons.forEach(btn => btn.setAttribute('aria-pressed', 'false'));
-        status.textContent = ccText.ready;
+        activeMode = '';
+        setButtonState('');
+        updateOutputState();
+        setStatus(ccText.ready);
+      } else if (activeMode) {
+        convert(activeMode, false);
+      } else {
+        updateOutputState();
       }
     };
-    const convert = (mode) => {
-      const text = input.value || '';
-      if (!text.trim()) {
-        output.value = '';
-        status.textContent = ccText.empty;
-        input.focus();
-        return;
-      }
+    const convertSingle = (text, mode) => {
       const words = splitWords(text);
       const lowerWords = words.map(word => word.toLowerCase());
+      if (!words.length && !['upper', 'lower'].includes(mode)) return null;
       const results = {
         upper: () => text.toUpperCase(),
         lower: () => text.toLowerCase(),
         title: () => words.map(capitalize).join(' '),
         camel: () => lowerWords.map((word, index) => index ? capitalize(word) : word).join(''),
+        pascal: () => lowerWords.map(capitalize).join(''),
         snake: () => lowerWords.join('_'),
+        constant: () => lowerWords.join('_').toUpperCase(),
         kebab: () => lowerWords.join('-')
       };
-      output.value = (results[mode] || results.lower)();
-      buttons.forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.mode === mode)));
-      status.textContent = ccText.converted(buttons.find(btn => btn.dataset.mode === mode)?.textContent || mode);
+      return (results[mode] || results.lower)();
+    };
+    const convert = (mode, shouldFocus = true) => {
+      const text = input.value || '';
+      if (!text.trim()) {
+        output.value = '';
+        updateOutputState();
+        setStatus(ccText.empty, 'error');
+        if (shouldFocus) input.focus();
+        return;
+      }
+      const converted = lineMode?.checked
+        ? text.split(/\r\n|\r|\n/).map(line => convertSingle(line, mode) ?? '').join('\n')
+        : convertSingle(text, mode);
+      if (converted === null) {
+        output.value = '';
+        updateOutputState();
+        setStatus(ccText.noWords, 'error');
+        return;
+      }
+      output.value = converted;
+      activeMode = mode;
+      setButtonState(mode);
+      updateOutputState();
+      setStatus(ccText.converted(modeOut.textContent, [...output.value].length), 'success');
     };
 
     buttons.forEach(btn => btn.addEventListener('click', () => convert(btn.dataset.mode)));
     input.addEventListener('input', updateStats);
+    lineMode?.addEventListener('change', () => {
+      if (activeMode) convert(activeMode, false);
+    });
     sample?.addEventListener('click', () => {
       input.value = ccText.sample;
-      updateStats();
       convert('camel');
+      input.focus();
     });
     clear?.addEventListener('click', () => {
       input.value = '';
       output.value = '';
+      activeMode = '';
       updateStats();
-      status.textContent = ccText.cleared;
+      setStatus(ccText.cleared);
       input.focus();
     });
     copy?.addEventListener('click', async () => {
       if (!output.value) {
-        status.textContent = ccText.copyEmpty;
+        setStatus(ccText.copyEmpty, 'error');
         return;
       }
       try {
         await navigator.clipboard.writeText(output.value);
-        status.textContent = ccText.copied;
+        setStatus(ccText.copied, 'success');
       } catch (_) {
         output.focus();
         output.select();
-        status.textContent = ccText.copyFail;
+        setStatus(ccText.copyFail, 'error');
       }
     });
     updateStats();
