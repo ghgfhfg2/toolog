@@ -1,6 +1,6 @@
 ---
 layout: tool
-title: Case Converter | camelCase, PascalCase, snake_case
+title: Case Converter | Text Case Formatter
 description: "Convert text to UPPERCASE, lowercase, Title Case, camelCase, PascalCase, snake_case, CONSTANT_CASE, or kebab-case with line-by-line conversion and one-click copy."
 lang: en
 permalink: /en/tools/case-converter/

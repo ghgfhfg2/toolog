@@ -1,5 +1,5 @@
 ---
-title: 대소문자 변환기 | camelCase·PascalCase·snake_case 변환
+title: 대소문자 변환기 | 케이스 변환
 description: 대소문자 변환기로 UPPERCASE, lowercase, Title Case, camelCase, PascalCase, snake_case, CONSTANT_CASE, kebab-case를 줄별로 변환하고 코드·문서 필드명을 빠르게 통일하세요.
 category: text
 category_label: 텍스트/편집

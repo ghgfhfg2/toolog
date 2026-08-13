@@ -1,6 +1,6 @@
 ---
 layout: tool
-title: 大文字/小文字変換ツール | camelCase・PascalCase・snake_case
+title: 大文字/小文字変換ツール | ケース変換
 description: UPPERCASE、lowercase、Title Case、camelCase、PascalCase、snake_case、CONSTANT_CASE、kebab-caseへ行ごとに変換し、結果をコピーできます。
 lang: ja
 permalink: /ja/tools/case-converter/
