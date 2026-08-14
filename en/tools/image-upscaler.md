@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Image Upscaler | Enlarge and Sharpen Low-Resolution Photos
-description: Upscale PNG, JPEG, or WebP images with 1x enhancement or 2x, 3x, and 4x enlargement, sharpening, denoise, WebP/PNG/JPEG output, quality control, and safer browser limits.
+description: Upscale low-resolution PNG, JPEG, or WebP images with 1x enhancement or 2x, 3x, and 4x enlargement, sharpening, denoise, WebP/PNG/JPEG output, quality control, file-size warnings, and safer browser limits.
 lang: en
 permalink: /en/tools/image-upscaler/
 canonical_url: /en/tools/image-upscaler/
@@ -31,19 +31,19 @@ alternate_urls:
   ja: /ja/tools/image-upscaler/
 ---
 
-## Why use an image upscaler?
-Directly enlarging a small image often makes pixels and edges look blurry, especially in thumbnails or article images. This tool helps you **enlarge low-resolution images with less visible quality loss** by scaling them and applying optional sharpening or noise reduction.
-It is useful for small product thumbnails, blog images, old screenshots, or logo drafts that need a quick quality check before reuse.
-
 ## Why this tool was improved today
 Recent quality passes focused on tools such as `grocery-budget-checker`, `unit-converter`, `privacy-exposure-checker`, `json-merge`, `image-resizer`, and `youtube-image-kit`, so this pass avoided repeating the same tool.
 `image-upscaler` has several failure-prone conditions: unsupported files, oversized images, 4x pixel limits, PNG quality behavior, and JPEG transparency handling. Those made it a good candidate for today's existing-tool quality pass.
+
+## Why use an image upscaler?
+Directly enlarging a small image often makes pixels and edges look blurry, especially in thumbnails or article images. This tool helps you **enlarge low-resolution images with less visible quality loss** by scaling them and applying optional sharpening or noise reduction.
+It is useful for small product thumbnails, blog images, old screenshots, or logo drafts that need a quick quality check before reuse.
 
 ## Key features
 - 1x enhancement-only mode plus 2x, 3x, and 4x upscaling
 - Sharpening and noise-reduction options
 - PNG, WebP, and JPEG output with quality control
-- PNG quality-slider disabling and JPEG white-background transparency notice
+- PNG quality-slider disabling and JPEG white-background transparency handling
 - Output resolution, file size, and enhancement summary
 - Warning when the enhanced result is larger than the source
 - File type, 25 MB file, and 12 megapixel output safeguards
@@ -67,10 +67,10 @@ Recent quality passes focused on tools such as `grocery-budget-checker`, `unit-c
 - After upscaling, use the [PNG Compressor]({{ '/en/tools/png-compressor/' | relative_url }}) to reduce the output file size.
 
 ## Search-intent guide
-- For "sharpen image", start with 1x or 2x plus sharpening.
-- For "enlarge photo", compare 2x first, then try 3x only if the source still holds up.
-- For "restore low resolution image", remember this is not a generative AI restorer. It improves perceived clarity without recreating missing detail.
-- For YouTube thumbnails and channel assets, combine it with the [YouTube Image Kit]({{ '/en/tools/youtube-image-kit/' | relative_url }}).
+- For "sharpen image", start with 1x enhancement or 2x plus sharpening.
+- For "enlarge photo", save a 2x result first, then compare 3x if the source still holds up.
+- For "restore low resolution image", treat this as an edge and clarity enhancer, not a generative AI restorer that recreates missing detail.
+- For YouTube thumbnails or channel images, combine it with the [YouTube Image Kit]({{ '/en/tools/youtube-image-kit/' | relative_url }}).
 
 ## FAQ
 ### Does this restore images like an AI upscaler?
@@ -83,7 +83,7 @@ Use WebP or JPEG for photos when file size matters. Use PNG or WebP for transpar
 Yes, but large images can hit mobile memory limits. The 25 MB and 12 megapixel limits are there to keep the page responsive.
 
 ## Summary
-Use this image upscaler when a small source image is difficult to reuse. It provides a quick way to enlarge, enhance, preview, and download an image without uploading it to a server. If the result becomes too large, resize first and compress after saving.
+Use this image upscaler when a small source image is difficult to reuse. It provides a quick way to enlarge, enhance, preview, and download an image without uploading it to a server. If the result becomes too large, resize first and compress after saving for a steadier image-upload workflow.
 
 ## Related tools
 - [PNG Compressor]({{ '/en/tools/png-compressor/' | relative_url }})
