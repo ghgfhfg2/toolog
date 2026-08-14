@@ -35,11 +35,17 @@ alternate_urls:
 Directly enlarging a small image often makes pixels and edges look blurry, especially in thumbnails or article images. This tool helps you **enlarge low-resolution images with less visible quality loss** by scaling them and applying optional sharpening or noise reduction.
 It is useful for small product thumbnails, blog images, old screenshots, or logo drafts that need a quick quality check before reuse.
 
+## Why this tool was improved today
+Recent quality passes focused on tools such as `grocery-budget-checker`, `unit-converter`, `privacy-exposure-checker`, `json-merge`, `image-resizer`, and `youtube-image-kit`, so this pass avoided repeating the same tool.
+`image-upscaler` has several failure-prone conditions: unsupported files, oversized images, 4x pixel limits, PNG quality behavior, and JPEG transparency handling. Those made it a good candidate for today's existing-tool quality pass.
+
 ## Key features
 - 1x enhancement-only mode plus 2x, 3x, and 4x upscaling
 - Sharpening and noise-reduction options
 - PNG, WebP, and JPEG output with quality control
+- PNG quality-slider disabling and JPEG white-background transparency notice
 - Output resolution, file size, and enhancement summary
+- Warning when the enhanced result is larger than the source
 - File type, 25 MB file, and 12 megapixel output safeguards
 - Private browser-based processing and image download
 
@@ -55,6 +61,7 @@ It is useful for small product thumbnails, blog images, old screenshots, or logo
 - Use noise reduction for grainy photos. For text and logos, try sharpening alone first.
 - WebP is a good default for photos when file size matters. PNG or WebP is safer for transparent logos.
 - JPEG cannot preserve transparency, so avoid it for transparent icons or logos.
+- PNG is lossless, so the quality slider is ignored. Compare WebP or JPEG when file size matters.
 - Files are limited to 25 MB and output is limited to 12 megapixels to prevent the browser from becoming unresponsive. Choose a lower scale if the selected output exceeds the limit.
 - If a source is too large, resize it first with [Image Resizer]({{ '/en/tools/image-resizer/' | relative_url }}) and then upscale only the needed version.
 - After upscaling, use the [PNG Compressor]({{ '/en/tools/png-compressor/' | relative_url }}) to reduce the output file size.

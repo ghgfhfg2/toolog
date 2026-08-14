@@ -2278,9 +2278,11 @@
     const formatSel = document.getElementById('iu-format');
     const quality = document.getElementById('iu-quality');
     const qualityLabel = document.getElementById('iu-quality-label');
+    const reset = document.getElementById('iu-reset');
     const canvas = document.getElementById('iu-canvas');
     const link = document.getElementById('iu-download');
     const result = document.getElementById('iu-result');
+    const warning = document.getElementById('iu-warning');
     const originalOut = document.getElementById('iu-original');
     const targetOut = document.getElementById('iu-target');
     const sizeOut = document.getElementById('iu-size');
@@ -2298,6 +2300,11 @@
         processing: '이미지를 보정하고 있습니다. 큰 이미지는 잠시 걸릴 수 있습니다.',
         failed: '이미지 처리에 실패했습니다. 더 작은 이미지나 낮은 배율로 다시 시도해 주세요.',
         done: (w, h, format) => `${w}×${h}px 보정이 끝났습니다. 미리보기를 확인하고 ${format} 파일을 다운로드하세요.`,
+        reset: '입력과 결과를 초기화했습니다.',
+        pngQuality: 'PNG는 무손실 출력이라 품질 슬라이더가 적용되지 않습니다.',
+        jpegTransparency: 'JPEG는 투명 배경을 유지하지 못해 흰 배경으로 합성해 저장합니다.',
+        larger: '결과 파일이 원본보다 커졌습니다. WebP/JPEG 품질을 낮추거나 PNG 압축기를 함께 사용해 보세요.',
+        saved: (pct) => `원본보다 약 ${pct}% 작아졌습니다.`,
         mode1x: '1x 보정',
         modeUpscale: (scale) => `${scale}x 업스케일`,
         denoiseOn: '노이즈 감소',
@@ -2315,6 +2322,11 @@
         processing: 'Enhancing the image. Large images may take a moment.',
         failed: 'Image processing failed. Try a smaller image or lower scale.',
         done: (w, h, format) => `${w}×${h}px enhancement complete. Review the preview and download the ${format} file.`,
+        reset: 'Cleared the input and result.',
+        pngQuality: 'PNG is lossless, so the quality slider is ignored.',
+        jpegTransparency: 'JPEG cannot keep transparency, so transparent pixels are saved on a white background.',
+        larger: 'The output file is larger than the original. Try lower WebP/JPEG quality or compress the result afterward.',
+        saved: (pct) => `About ${pct}% smaller than the original.`,
         mode1x: '1x enhance',
         modeUpscale: (scale) => `${scale}x upscale`,
         denoiseOn: 'Denoise',
@@ -2332,6 +2344,11 @@
         processing: '画像を補正しています。大きな画像は少し時間がかかります。',
         failed: '画像処理に失敗しました。小さい画像または低い倍率で再試行してください。',
         done: (w, h, format) => `${w}×${h}pxの補正が完了しました。プレビューを確認して${format}ファイルを保存できます。`,
+        reset: '入力と結果をリセットしました。',
+        pngQuality: 'PNGは可逆出力のため、品質スライダーは無効です。',
+        jpegTransparency: 'JPEGは透過を保持できないため、透明部分は白背景で保存されます。',
+        larger: '出力ファイルが元画像より大きくなりました。WebP/JPEGの品質を下げるか、保存後に圧縮してください。',
+        saved: (pct) => `元画像より約${pct}%小さくなりました。`,
         mode1x: '1x 補正',
         modeUpscale: (scale) => `${scale}x アップスケール`,
         denoiseOn: 'ノイズ低減',
@@ -2356,6 +2373,11 @@
       result.textContent = message;
       result.dataset.state = state;
     };
+    const setWarning = (message = '') => {
+      if (!warning) return;
+      warning.textContent = message;
+      warning.hidden = !message;
+    };
     const setDownload = (url = '') => {
       if (outputUrl) URL.revokeObjectURL(outputUrl);
       outputUrl = url;
@@ -2371,7 +2393,11 @@
     };
     const updateQualityLabel = () => {
       if (!qualityLabel || !quality) return;
-      qualityLabel.textContent = `${Math.round(Number(quality.value || 0.86) * 100)}%`;
+      const png = (formatSel?.value || 'image/webp') === 'image/png';
+      const percent = Math.round(Number(quality.value || 0.86) * 100);
+      qualityLabel.textContent = png ? 'PNG' : `${percent}%`;
+      quality.disabled = png;
+      quality.setAttribute('aria-label', png ? iuText.pngQuality : `Quality ${percent}%`);
     };
     const modeText = () => {
       const scale = Number(scaleSel.value || 1);
@@ -2388,6 +2414,7 @@
       run.disabled = w * h > maxPixels;
       if (w * h > maxPixels) setStatus(iuText.tooLarge(formatNum(w), formatNum(h)), 'error');
       else if (!outputUrl) setStatus(iuText.ready);
+      setWarning((formatSel?.value || 'image/webp') === 'image/jpeg' ? iuText.jpegTransparency : '');
     };
 
     file?.addEventListener('change', () => {
@@ -2396,8 +2423,10 @@
       run.disabled = true;
       canvas.hidden = true;
       setDownload();
+      setWarning();
       resetStats();
       if (!f) {
+        file.setAttribute('aria-invalid', 'false');
         setStatus(iuText.empty);
         return;
       }
@@ -2489,15 +2518,39 @@
     quality?.addEventListener('input', () => {
       updateQualityLabel();
       setDownload();
+      setWarning((formatSel?.value || 'image/webp') === 'image/jpeg' ? iuText.jpegTransparency : '');
       if (sizeOut) sizeOut.textContent = '-';
       if (img && !outputUrl) setStatus(iuText.ready);
     });
     [scaleSel, sharp, denoise, formatSel].forEach((el) => el?.addEventListener('change', () => {
+      updateQualityLabel();
       setDownload();
       canvas.hidden = true;
       if (sizeOut) sizeOut.textContent = '-';
       updateTarget();
     }));
+
+    reset?.addEventListener('click', () => {
+      file.value = '';
+      scaleSel.value = '2';
+      sharp.checked = true;
+      denoise.checked = false;
+      formatSel.value = 'image/webp';
+      if (quality) quality.value = '0.86';
+      img = null;
+      originBytes = 0;
+      run.disabled = true;
+      canvas.hidden = true;
+      canvas.removeAttribute('width');
+      canvas.removeAttribute('height');
+      setDownload();
+      setWarning();
+      resetStats();
+      updateQualityLabel();
+      file.setAttribute('aria-invalid', 'false');
+      setStatus(iuText.reset);
+      file.focus();
+    });
 
     run?.addEventListener('click', () => {
       if (!img) {
@@ -2520,6 +2573,10 @@
       const ctx = canvas.getContext('2d');
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
+      if ((formatSel?.value || 'image/webp') === 'image/jpeg') {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, w, h);
+      }
 
       const stepCanvas = document.createElement('canvas');
       const stepCtx = stepCanvas.getContext('2d');
@@ -2557,7 +2614,7 @@
           const outputQuality = Number(quality?.value || 0.86);
           link.download = `upscaled-image.${extensionFor(mime)}`;
           canvas.toBlob((blob) => {
-            run.disabled = false;
+            run.disabled = w * h > maxPixels;
             if (!blob) {
               setStatus(iuText.failed, 'error');
               return;
@@ -2566,10 +2623,13 @@
             canvas.hidden = false;
             if (sizeOut) sizeOut.textContent = formatBytes(blob.size);
             if (modeOut) modeOut.textContent = modeText();
+            const savedPct = originBytes && blob.size < originBytes ? Math.round((1 - (blob.size / originBytes)) * 100) : 0;
+            if (blob.size > originBytes && originBytes) setWarning(iuText.larger);
+            else setWarning(savedPct ? iuText.saved(savedPct) : ((mime === 'image/jpeg') ? iuText.jpegTransparency : ''));
             setStatus(iuText.done(formatNum(w), formatNum(h), iuText.formatNames[mime] || 'image'), 'success');
-          }, mime, outputQuality);
+          }, mime, mime === 'image/png' ? undefined : outputQuality);
         } catch (_) {
-          run.disabled = false;
+          run.disabled = w * h > maxPixels;
           setStatus(iuText.failed, 'error');
         }
       }, 20);

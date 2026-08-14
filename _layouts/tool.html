@@ -351,7 +351,7 @@ layout: default
           <div class="tool-row-grid iu-controls">
             <div>
               <label for="iu-scale">{% if page.lang == 'en' %}Scale{% elsif page.lang == 'ja' %}拡大倍率{% else %}확대 배율{% endif %}</label>
-              <select id="iu-scale">
+              <select id="iu-scale" aria-describedby="iu-result iu-help">
               <option value="1">{% if page.lang == 'en' %}1x (enhance only, no upscale){% elsif page.lang == 'ja' %}1x（拡大なし・補正のみ）{% else %}1x (업스케일 없이 보정만){% endif %}</option>
               <option value="2">{% if page.lang == 'en' %}2x upscale{% elsif page.lang == 'ja' %}2倍アップスケール{% else %}2x 업스케일{% endif %}</option>
               <option value="3">{% if page.lang == 'en' %}3x upscale{% elsif page.lang == 'ja' %}3倍アップスケール{% else %}3x 업스케일{% endif %}</option>
@@ -359,6 +359,7 @@ layout: default
               </select>
             </div>
             <button id="iu-run" type="button" disabled>{% if page.lang == 'en' %}Run enhancement{% elsif page.lang == 'ja' %}補正を実行{% else %}화질 보정 실행{% endif %}</button>
+            <button id="iu-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
           <div class="iu-options" role="group" aria-label="{% if page.lang == 'en' %}Enhancement options{% elsif page.lang == 'ja' %}補正オプション{% else %}화질 보정 옵션{% endif %}">
             <label class="tool-check"><input id="iu-sharp" type="checkbox" checked /> {% if page.lang == 'en' %}Sharpen (light){% elsif page.lang == 'ja' %}シャープ補正（軽め）{% else %}선명도 보정(가벼운 샤픈){% endif %}</label>
@@ -379,13 +380,14 @@ layout: default
             </div>
           </div>
           <p class="tool-result" id="iu-result" role="status" aria-live="polite">{% if page.lang == 'en' %}Choose an image, then run enhancement. (1x applies enhancement only.){% elsif page.lang == 'ja' %}画像を選んで補正を実行してください。（1xは拡大せず補正のみ）{% else %}이미지를 선택한 뒤 보정을 실행하세요. (1x는 확대 없이 보정만 적용){% endif %}</p>
+          <p class="tool-result iu-warning" id="iu-warning" aria-live="polite" hidden></p>
           <div class="tool-stats iu-stats" aria-label="{% if page.lang == 'en' %}Upscale summary{% elsif page.lang == 'ja' %}アップスケール概要{% else %}업스케일 요약{% endif %}">
             <div><strong id="iu-original">-</strong><span>{% if page.lang == 'en' %}Original{% elsif page.lang == 'ja' %}元画像{% else %}원본{% endif %}</span></div>
             <div><strong id="iu-target">-</strong><span>{% if page.lang == 'en' %}Target{% elsif page.lang == 'ja' %}出力予定{% else %}예상 결과{% endif %}</span></div>
             <div><strong id="iu-size">-</strong><span>{% if page.lang == 'en' %}Output size{% elsif page.lang == 'ja' %}出力容量{% else %}결과 용량{% endif %}</span></div>
             <div><strong id="iu-mode">-</strong><span>{% if page.lang == 'en' %}Enhancement{% elsif page.lang == 'ja' %}補正{% else %}보정 방식{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="iu-help">{% if page.lang == 'en' %}PNG, JPEG, and WebP are supported. Output is limited to 12 megapixels and files over 25 MB are blocked to prevent browser crashes. JPEG cannot keep transparency.{% elsif page.lang == 'ja' %}PNG・JPEG・WebPに対応しています。ブラウザ停止を防ぐため、出力は最大1,200万画素、ファイルは25MBまでです。JPEGは透過を保持できません。{% else %}PNG, JPEG, WebP를 지원하며 브라우저 멈춤 방지를 위해 결과는 최대 1,200만 화소, 파일은 25MB까지 처리합니다. JPEG는 투명 배경을 유지할 수 없습니다.{% endif %}</p>
+          <p class="tool-result" id="iu-help">{% if page.lang == 'en' %}PNG, JPEG, and WebP are supported. PNG ignores the quality slider. Output is limited to 12 megapixels and files over 25 MB are blocked to prevent browser crashes. JPEG cannot keep transparency and is saved on a white background.{% elsif page.lang == 'ja' %}PNG・JPEG・WebPに対応しています。PNGでは品質スライダーは無効です。ブラウザ停止を防ぐため、出力は最大1,200万画素、ファイルは25MBまでです。JPEGは透過を保持できず、白背景で保存されます。{% else %}PNG, JPEG, WebP를 지원하며 PNG는 품질 슬라이더가 적용되지 않습니다. 브라우저 멈춤 방지를 위해 결과는 최대 1,200만 화소, 파일은 25MB까지 처리합니다. JPEG는 투명 배경을 유지할 수 없어 흰 배경으로 저장됩니다.{% endif %}</p>
           <canvas id="iu-canvas" aria-label="{% if page.lang == 'en' %}Enhanced image preview{% elsif page.lang == 'ja' %}補正後画像プレビュー{% else %}보정 이미지 미리보기{% endif %}" hidden></canvas>
           <a id="iu-download" class="open-link" download="upscaled-image.webp" aria-disabled="true">{% if page.lang == 'en' %}Download enhanced image{% elsif page.lang == 'ja' %}補正済み画像をダウンロード{% else %}보정 이미지 다운로드{% endif %}</a>
         </div>

@@ -1283,7 +1283,7 @@ a:hover { color: #fff; text-decoration: none; }
   word-break: keep-all;
 }
 .iu-controls {
-  grid-template-columns: minmax(0, 1fr) minmax(180px, .55fr);
+  grid-template-columns: minmax(0, 1fr) minmax(150px, .45fr) minmax(110px, .32fr);
 }
 .iu-controls > div {
   display: grid;
@@ -1321,6 +1321,12 @@ a:hover { color: #fff; text-decoration: none; }
 .iu-ui input[aria-invalid="true"] { border-color: #ef4444; }
 .iu-ui #iu-result[data-state="error"] { color: #fca5a5; }
 .iu-ui #iu-result[data-state="success"] { color: #86efac; }
+.iu-warning {
+  border: 1px solid rgba(251, 191, 36, .45);
+  border-radius: 10px;
+  padding: .65rem .75rem;
+  background: rgba(251, 191, 36, .08);
+}
 .iu-ui canvas[hidden] {
   display: none !important;
 }

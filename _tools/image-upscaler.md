@@ -4,8 +4,11 @@ description: 저해상도 PNG·JPEG·WebP 이미지를 1x 보정 또는 2x·3x·
 category: image
 category_label: 이미지/그래픽
 thumbnail: /assets/thumbs/image-upscaler.svg
+image:
+  path: /assets/thumbs/image-upscaler.svg
+  alt: 이미지 업스케일러 결과 미리보기
 tool_key: image-upscaler
-keywords: [이미지 업스케일, 사진 화질 개선, 저화질 이미지 복원, 이미지 확대, 이미지 선명하게, webp 저장]
+keywords: [이미지 업스케일, 이미지 업스케일러, 사진 화질 개선, 저화질 이미지 복원, 이미지 확대, 이미지 선명하게, webp 저장]
 related_tools: [image-resizer, png-compressor, youtube-image-kit]
 faq:
   - q: AI 업스케일처럼 완전히 복원되나요?
@@ -20,6 +23,10 @@ faq:
     a: 아니요. 업로드한 이미지는 브라우저 내에서 처리됩니다.
 ---
 
+## 오늘 개선 대상으로 고른 이유
+최근 품질 개선 이력이 `grocery-budget-checker`, `unit-converter`, `privacy-exposure-checker`, `json-merge`, `image-resizer`, `youtube-image-kit` 등에 집중되어 있어 같은 툴 반복을 피했습니다.
+`image-upscaler`는 파일 형식, 대용량 이미지, 4x 확대 시 픽셀 제한, PNG 품질 슬라이더, JPEG 투명 배경 처리처럼 오류 가능성이 높은 입력·출력 조건이 많아 오늘의 기존 툴 품질 개선 대상으로 골랐습니다.
+
 ## 이미지 업스케일러가 필요한 이유
 작은 이미지를 그대로 늘리면 픽셀이 뭉개져 보이고, 썸네일/본문 삽입 시 품질이 급격히 떨어집니다.
 이 도구는 업스케일 후 가벼운 선명도 보정을 적용해 **저화질 이미지를 더 또렷하게 확대**할 수 있도록 도와줍니다.
@@ -29,7 +36,9 @@ faq:
 - 1x 보정 전용 모드와 2x / 3x / 4x 확대
 - 선명도 보정과 노이즈 감소 옵션
 - PNG / WebP / JPEG 출력 포맷과 품질 조절
+- PNG 선택 시 품질 슬라이더 비활성화, JPEG 선택 시 흰 배경 합성 안내
 - 결과 해상도·용량·보정 방식 확인
+- 원본보다 결과 용량이 커질 때 후속 압축 안내
 - 파일 형식, 25MB 초과, 1,200만 화소 초과 출력 오류 안내
 - 서버 업로드 없이 브라우저 내 처리 및 다운로드
 
@@ -45,6 +54,7 @@ faq:
 - 노이즈 감소는 사진의 거친 입자를 줄일 때만 켜고, 글자·로고 이미지는 선명도 보정만 먼저 확인하세요.
 - 사진은 WebP로 저장하면 용량과 품질 균형이 좋고, 투명 배경이 있는 로고는 PNG 또는 WebP가 안전합니다.
 - JPEG는 투명 배경을 유지하지 못하므로 로고·아이콘에는 권장하지 않습니다.
+- PNG는 무손실 저장이라 품질 슬라이더가 적용되지 않습니다. 용량이 중요하면 WebP/JPEG로 비교하세요.
 - 브라우저가 멈추지 않도록 파일은 25MB, 출력은 최대 1,200만 화소로 제한됩니다.
 - 제한에 걸리면 [이미지 리사이저]({{ '/tools/image-resizer/' | relative_url }})에서 먼저 원본 픽셀을 줄인 뒤 2x 확대를 시도하세요.
 - 업스케일 후 [PNG 압축기]({{ '/tools/png-compressor/' | relative_url }})로 용량 최적화를 함께 진행하세요.
