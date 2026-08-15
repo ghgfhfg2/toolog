@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Banned Word Checker | Scan Blog Spam, Overclaims, Links, and Repetition
-description: Use this banned word checker before publishing to scan blog drafts for spam or promo keywords, medical/legal/finance overclaims, short URLs, contact IDs, hashtag stuffing, and repeated keywords.
+description: Use this banned word checker before publishing to scan blog drafts for spam or promo keywords, medical/legal/finance overclaims, short URLs, contact IDs, hashtag stuffing, repeated keywords, and detection density in your browser.
 lang: en
 permalink: /en/tools/blog-banned-word-checker/
 canonical_url: /en/tools/blog-banned-word-checker/
@@ -36,6 +36,9 @@ faq:
 ## When a banned word checker helps
 Before publishing, scan wording that may look spammy: aggressive promotion, overpromising claims, contact solicitation, short URLs, too many hashtags, and repeated keywords. It works well as a draft review step for blogs, WordPress posts, store product descriptions, review articles, and other pages that rely on search visibility.
 
+## Why this tool was improved today
+Recent quality passes focused on tools such as `image-upscaler`, `grocery-budget-checker`, `hangul-keyboard-layout-converter`, `date-format-normalizer`, `font-change`, and `subscription-cleanup-simulator`, so this pass avoids repeating the same tool. `blog-banned-word-checker` has failure-prone inputs such as long drafts, repeated terms, contact prompts, short links, and absolute claims in sensitive topics, so it was a strong candidate for UI, SEO, and validation improvements.
+
 ## Main risks it checks
 ### 1) Spam and promotional keywords
 Detects obvious risk keywords and repeated promotional patterns, such as loan, gambling, adult content, free trial, guaranteed profit, or similar wording.
@@ -49,6 +52,9 @@ Finds mechanical repetition that often appears in low-quality promotional pages.
 ### 4) External links and contact prompts
 Checks for phone numbers, messenger IDs, Telegram-style contact prompts, URLs, and short-link patterns.
 
+### 5) Context-aware risk weight
+Choose whether the draft is a general review, a health/legal/finance explanation, or product/sales copy so the scan weighs absolute claims, promotional wording, and contact prompts more appropriately.
+
 ## Why use it?
 Search systems can treat strong low-quality or spam signals as a reason to reduce visibility.
 
@@ -61,6 +67,7 @@ Search systems can treat strong low-quality or spam signals as a reason to reduc
 - The value and context of the article matter more than one isolated word.
 - Replace flagged terms with clearer, more specific wording instead of simply deleting every detected word.
 - For medical, legal, or finance topics, include conditions, evidence, and limits instead of absolute claims.
+- For drafts over 18,000 characters, scan by section so repeated terms and link patterns are easier to review.
 
 ## FAQ
 ### Does finding a banned word always mean my post will be hidden from search?

@@ -9133,6 +9133,7 @@
 
   if (slug === 'blog-banned-word-checker') {
     const input = document.getElementById('bw-input');
+    const contextEl = document.getElementById('bw-context');
     const summary = document.getElementById('bw-summary');
     const list = document.getElementById('bw-list');
     const totalEl = document.getElementById('bw-total');
@@ -9140,6 +9141,7 @@
     const claimEl = document.getElementById('bw-claim');
     const linkEl = document.getElementById('bw-link');
     const charsEl = document.getElementById('bw-chars');
+    const densityEl = document.getElementById('bw-density');
     const sampleBtn = document.getElementById('bw-sample');
     const copyBtn = document.getElementById('bw-copy');
     const clearBtn = document.getElementById('bw-clear');
@@ -9154,10 +9156,15 @@
         catLinks: '외부 링크/단축 URL',
         catRepeat: '과도한 키워드 반복',
         catHashtag: '해시태그 남발',
+        catLength: '긴 글 검수 안내',
         countHit: '건',
         countItem: '개',
         countTimes: '회',
+        contextPrefix: '검사 용도',
+        contextLabels: { general: '일반 블로그/후기', sensitive: '의료/법률/금융', commerce: '상품 소개/판매문' },
         hashtagDetail: '해시태그 수가 많습니다. 본문 맥락과 직접 관련된 태그만 최소화하세요.',
+        densityDetail: (n) => `1,000자당 주의 신호가 ${formatNum(n)}건입니다. 글 전체에서 같은 표현이 반복되는지 확인하세요.`,
+        nearLimit: '입력이 18,000자를 넘었습니다. 매우 긴 글은 문단별로 나누어 점검하면 누락 검수가 줄어듭니다.',
         emptyState: '현재 기준으로 감지된 금칙/주의 패턴이 없습니다.',
         idle: '텍스트를 입력하면 금칙/주의 패턴을 실시간 점검합니다.',
         tooLong: '최대 20,000자까지만 검사합니다. 글을 나누어 점검해 주세요.',
@@ -9178,10 +9185,15 @@
         catLinks: 'External links / short URLs',
         catRepeat: 'Excessive keyword repetition',
         catHashtag: 'Hashtag stuffing',
+        catLength: 'Long-draft review',
         countHit: ' hits',
         countItem: ' items',
         countTimes: ' times',
+        contextPrefix: 'Writing context',
+        contextLabels: { general: 'General blog / review', sensitive: 'Health / legal / finance', commerce: 'Product / sales copy' },
         hashtagDetail: 'Too many hashtags detected. Keep only tags that are directly relevant to the content.',
+        densityDetail: (n) => `${formatNum(n)} caution signals per 1,000 characters. Review whether the same wording is repeated across the draft.`,
+        nearLimit: 'The draft is over 18,000 characters. For very long posts, scan by section to reduce review misses.',
         emptyState: 'No banned/risky pattern detected with the current rules.',
         idle: 'Paste text to scan banned/risky patterns in real time.',
         tooLong: 'Only the first 20,000 characters can be checked. Split longer drafts into sections.',
@@ -9202,10 +9214,15 @@
         catLinks: '外部リンク/短縮URL',
         catRepeat: 'キーワードの過剰反復',
         catHashtag: 'ハッシュタグ過多',
+        catLength: '長文確認',
         countHit: '件',
         countItem: '個',
         countTimes: '回',
+        contextPrefix: '文章の用途',
+        contextLabels: { general: '一般ブログ・レビュー', sensitive: '医療・法律・金融', commerce: '商品紹介・販売文' },
         hashtagDetail: 'ハッシュタグが多すぎます。本文と直接関係するタグだけに絞ってください。',
+        densityDetail: (n) => `1,000字あたり${formatNum(n)}件の注意シグナルがあります。同じ表現が文章全体で繰り返されていないか確認してください。`,
+        nearLimit: '入力が18,000字を超えています。長い文章は段落ごとに分けて確認すると見落としを減らせます。',
         emptyState: '現在の基準では禁止語/注意パターンは検出されませんでした。',
         idle: 'テキストを入力すると、禁止語/注意パターンをリアルタイムで点検します。',
         tooLong: '最大20,000文字まで点検できます。長い文章は分けて確認してください。',
@@ -9245,58 +9262,83 @@
       return { tags, over: tags.length >= 8 };
     };
 
+    const contextWeight = (tag) => {
+      const context = contextEl?.value || 'general';
+      if (context === 'sensitive' && tag === 'claim') return 2;
+      if (context === 'commerce' && (tag === 'spam' || tag === 'link')) return 1.5;
+      return 1;
+    };
+
+    const makeItem = (title, tagText, body, state = '') => {
+      const item = document.createElement('div');
+      item.className = 'bw-item';
+      if (state) item.dataset.state = state;
+      item.innerHTML = `<strong><span></span><span class="bw-tag"></span></strong><p></p>`;
+      item.querySelector('strong span:first-child').textContent = title;
+      item.querySelector('.bw-tag').textContent = tagText;
+      item.querySelector('p').textContent = body;
+      return item;
+    };
+
     const render = () => {
       const text = input.value || '';
       const charCount = [...text].length;
       list.innerHTML = '';
       let total = 0, spam = 0, claim = 0, link = 0;
+      let weightedTotal = 0;
+      let advisoryCount = 0;
       const copyLines = [];
       if (charsEl) charsEl.textContent = formatNum(charCount);
       input.setAttribute('aria-invalid', charCount > 20000 ? 'true' : 'false');
+      copyLines.push(`${t.contextPrefix}: ${t.contextLabels?.[contextEl?.value || 'general'] || ''}`.trim());
 
       rules.forEach((rule) => {
         const matches = text.match(rule.re) || [];
         if (!matches.length) return;
         total += matches.length;
+        weightedTotal += matches.length * contextWeight(rule.tag);
         if (rule.tag === 'spam') spam += matches.length;
         if (rule.tag === 'claim') claim += matches.length;
         if (rule.tag === 'link') link += matches.length;
 
-        const item = document.createElement('div');
-        item.className = 'bw-item';
         const uniq = Array.from(new Set(matches.map((m) => m.trim()))).slice(0, 8).join(', ');
-        item.innerHTML = `<strong>${rule.cat}<span class="bw-tag">${formatNum(matches.length)}${t.countHit}</span></strong><p></p>`;
-        item.querySelector('p').textContent = uniq;
-        list.appendChild(item);
+        list.appendChild(makeItem(rule.cat, `${formatNum(matches.length)}${t.countHit}`, uniq, rule.tag));
         copyLines.push(`${rule.cat}: ${uniq}`);
       });
 
       const rep = repetitionCheck(text);
       if (rep.bad.length) {
-        const item = document.createElement('div');
-        item.className = 'bw-item';
         const view = rep.bad.map(([w,n]) => `${w}(${n}${t.countTimes})`).join(', ');
-        item.innerHTML = `<strong>${t.catRepeat}<span class="bw-tag">${formatNum(rep.bad.length)}${t.countItem}</span></strong><p></p>`;
-        item.querySelector('p').textContent = view;
-        list.appendChild(item);
+        list.appendChild(makeItem(t.catRepeat, `${formatNum(rep.bad.length)}${t.countItem}`, view, 'spam'));
         copyLines.push(`${t.catRepeat}: ${view}`);
         total += rep.bad.length;
+        weightedTotal += rep.bad.length * contextWeight('spam');
         spam += rep.bad.length;
       }
 
       const hs = hashtagCheck(text);
       if (hs.over) {
-        const item = document.createElement('div');
-        item.className = 'bw-item';
-        item.innerHTML = `<strong>${t.catHashtag}<span class="bw-tag">${formatNum(hs.tags.length)}${t.countItem}</span></strong><p></p>`;
-        item.querySelector('p').textContent = t.hashtagDetail;
-        list.appendChild(item);
+        list.appendChild(makeItem(t.catHashtag, `${formatNum(hs.tags.length)}${t.countItem}`, t.hashtagDetail, 'spam'));
         copyLines.push(`${t.catHashtag}: ${t.hashtagDetail}`);
         total += hs.tags.length;
+        weightedTotal += hs.tags.length * contextWeight('spam');
         spam += hs.tags.length;
       }
 
-      if (!total) {
+      const density = charCount ? Math.round((total / charCount) * 1000) : 0;
+      if (densityEl) densityEl.textContent = formatNum(density);
+      if (density >= 8 && text.trim()) {
+        list.appendChild(makeItem(t.catRepeat, `${formatNum(density)}/1,000`, t.densityDetail(density), 'warning'));
+        copyLines.push(`${t.catRepeat}: ${t.densityDetail(density)}`);
+        advisoryCount += 1;
+      }
+      if (charCount > 18000 && charCount <= 20000) {
+        list.appendChild(makeItem(t.catLength, `${formatNum(charCount)}`, t.nearLimit, 'warning'));
+        copyLines.push(t.nearLimit);
+        advisoryCount += 1;
+      }
+
+      if (!total && !advisoryCount) {
         list.innerHTML = `<div class="empty-state">${t.emptyState}</div>`;
       }
 
@@ -9306,7 +9348,9 @@
       linkEl.textContent = formatNum(link);
       if (copyBtn) {
         copyBtn.disabled = !text.trim();
-        copyBtn.dataset.copyText = copyLines.length ? copyLines.join('\n') : t.clean;
+        const filteredCopyLines = copyLines.filter(Boolean);
+        if (text.trim() && !total && !advisoryCount) filteredCopyLines.push(t.clean);
+        copyBtn.dataset.copyText = filteredCopyLines.length ? filteredCopyLines.join('\n') : t.clean;
       }
 
       if (summary) {
@@ -9316,9 +9360,13 @@
           summary.textContent = t.tooLong;
           summary.dataset.state = 'error';
         }
-        else if (total >= 15) summary.textContent = t.highRisk(total);
-        else if (total >= 6) summary.textContent = t.caution(total);
+        else if (weightedTotal >= 15) summary.textContent = t.highRisk(total);
+        else if (weightedTotal >= 6) summary.textContent = t.caution(total);
         else if (total > 0) summary.textContent = t.mild(total);
+        else if (advisoryCount > 0) {
+          summary.textContent = t.nearLimit;
+          summary.dataset.state = 'warning';
+        }
         else summary.textContent = t.clean;
       }
     };
@@ -9343,6 +9391,7 @@
       clearTimeout(timer);
       timer = setTimeout(render, 80);
     });
+    contextEl?.addEventListener('change', render);
     sampleBtn?.addEventListener('click', () => {
       input.value = t.sample;
       render();

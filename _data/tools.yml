@@ -1635,9 +1635,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 블로그 발행 전 스팸·홍보 키워드, 과장 표현, 연락처·단축 URL, 해시태그 남발과 반복 키워드를 실시간으로 점검해요.
-  description_en: Scan text in real time for spam, overclaim wording, abuse patterns, and risky external-link signals.
-  description_ja: テキスト内のスパム・誇大表現・不正利用パターン・外部リンクリスクをリアルタイムで検出します。
+  description: 블로그 발행 전 스팸·홍보 키워드, 과장 표현, 연락처·단축 URL, 해시태그 남발, 반복 키워드 밀도와 글 용도별 위험도를 실시간으로 점검해요.
+  description_en: Scan text in real time for spam, overclaim wording, contact prompts, short links, hashtag stuffing, repeated-keyword density, and context-weighted writing risks.
+  description_ja: スパム・誇大表現・連絡先誘導・短縮URL・ハッシュタグ過多・反復語密度・用途別リスクをリアルタイムで確認します。
   url: /tools/blog-banned-word-checker/
   url_en: /en/tools/blog-banned-word-checker/
   url_ja: /ja/tools/blog-banned-word-checker/
