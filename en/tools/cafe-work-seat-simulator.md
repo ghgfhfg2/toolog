@@ -34,7 +34,7 @@ Good seats disappear faster than expected when you walk into a cafe to work on a
 
 This tool lets you enter up to four seat candidates and compare them by **outlet access, noise, lighting, traffic flow, stay length, and work purpose**. It is not a precise spatial analysis tool; it is a lightweight simulator for quickly choosing where to sit after entering a cafe.
 
-I chose this existing tool for today’s quality pass because recent improvements focused on tools such as `blog-banned-word-checker`, `image-upscaler`, `case-converter`, `grocery-budget-checker`, and `hangul-keyboard-layout-converter`, while this simulator still had Korean-only controls on the English and Japanese pages. That made mobile and multilingual usability the highest-impact fix.
+This update also brings the English page into line with the improved Korean version: the run UI, empty-state guidance, duplicate-name handling, mobile scanability, and search wording now support people looking for cafe seat recommendations, laptop-friendly cafe seats, outlet seats, or study seats.
 
 ## How to use it
 1. Choose today’s purpose: laptop work, study, reading, or calls/meetings.

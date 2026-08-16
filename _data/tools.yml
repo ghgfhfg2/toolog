@@ -179,8 +179,8 @@
   badge_en: New
   badge_ja: 新着
   description: 카페에서 노트북 작업이나 공부를 할 때 콘센트, 소음, 조명, 동선, 체류 시간을 기준으로 어떤 자리가 더 편한지 비교해요.
-  description_en: Compare cafe seat candidates for laptop work or study by outlet access, noise, lighting, traffic, and stay length.
-  description_ja: カフェで作業や勉強をするとき、電源・騒音・照明・人の動線・滞在時間で席候補を比較できます。
+  description_en: Compare cafe seat candidates for laptop work or study by outlet access, noise, lighting, traffic flow, and stay length.
+  description_ja: カフェでノートPC作業や勉強をするとき、電源・騒音・照明・人の動線・滞在時間で席候補を比較できます。
   url: /tools/cafe-work-seat-simulator/
   url_en: /en/tools/cafe-work-seat-simulator/
   url_ja: /ja/tools/cafe-work-seat-simulator/
