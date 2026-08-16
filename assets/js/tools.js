@@ -17015,6 +17015,7 @@
     });
     const sampleBtn = document.getElementById('cwss-sample');
     const copyBtn = document.getElementById('cwss-copy');
+    const clearBtn = document.getElementById('cwss-clear');
     const countEl = document.getElementById('cwss-count');
     const topEl = document.getElementById('cwss-top');
     const powerScoreEl = document.getElementById('cwss-power-score');
@@ -17038,13 +17039,123 @@
       }
     };
 
-    const labels = {
-      power: { table: '자리에서 바로 사용', near: '가까이에 있음', far: '멀거나 애매함', none: '없음' },
-      noise: { quiet: '조용함', normal: '보통', busy: '소음 많음' },
-      seat: { table: '일반 테이블', bar: '바/높은 테이블', sofa: '소파·낮은 테이블', window: '창가 좌석' },
-      light: { soft: '적당함', bright: '밝음', glare: '눈부심 있음', dark: '어두움' },
-      traffic: { low: '동선 적음', mid: '동선 보통', high: '동선 많음' }
+    const i18n = {
+      ko: {
+        title: '카페 작업 자리 비교 결과',
+        empty: '후보 자리를 1개 이상 입력하면 추천 순위가 표시됩니다.',
+        cleared: '입력값을 초기화했습니다.',
+        copied: '복사됨',
+        copyDefault: '결과 복사',
+        duplicate: (n) => `중복 자리 이름 ${n}개를 정리했습니다.`,
+        top: (name, score, reason) => `1순위는 ${name}입니다. 점수 ${score}점 - ${reason}`,
+        meta: (count, purpose, duration) => `비교한 자리 ${count}개 / 목적: ${purpose} / 체류: ${duration}`,
+        row: (rank, item, labels, reason) => `${rank}. ${item.name} - ${item.score}점\n   조건: 콘센트 ${labels.power[item.power]}, 소음 ${labels.noise[item.noise]}, 좌석 ${labels.seat[item.seat]}, 조명 ${labels.light[item.light]}, ${labels.traffic[item.traffic]}\n   이유: ${reason}`,
+        purpose: { work: '노트북 작업', study: '공부/집중', reading: '독서/메모', call: '통화·화상회의' },
+        duration: { short: '30분 안팎', medium: '1~2시간', long: '3시간 이상' },
+        labels: {
+          power: { table: '자리에서 바로 사용', near: '가까이에 있음', far: '멀거나 애매함', none: '없음' },
+          noise: { quiet: '조용함', normal: '보통', busy: '소음 많음' },
+          seat: { table: '일반 테이블', bar: '바/높은 테이블', sofa: '소파·낮은 테이블', window: '창가 좌석' },
+          light: { soft: '적당함', bright: '밝음', glare: '눈부심 있음', dark: '어두움' },
+          traffic: { low: '동선 적음', mid: '동선 보통', high: '동선 많음' }
+        },
+        reasons: {
+          goodPower: '충전 접근성이 좋음',
+          badPower: '충전이 필요하면 불리함',
+          quiet: '집중하기 조용함',
+          busy: '주변 소음이 많음',
+          stableTable: '노트북을 놓기 안정적임',
+          longBar: '오래 앉기에는 피로할 수 있음',
+          glare: '눈부심을 확인해야 함',
+          highTraffic: '사람 동선이 잦음',
+          readingWindow: '독서·메모에 분위기가 좋음',
+          neutral: '전체 조건이 무난함'
+        },
+        samples: [
+          ['벽쪽 콘센트 2인석', 'table', 'normal', 'table', 'soft', 'mid'],
+          ['창가 바 테이블', 'near', 'quiet', 'bar', 'bright', 'low'],
+          ['중앙 소파 자리', 'none', 'busy', 'sofa', 'glare', 'high'],
+          ['구석 작은 테이블', 'far', 'quiet', 'table', 'dark', 'low']
+        ]
+      },
+      en: {
+        title: 'Cafe work seat comparison result',
+        empty: 'Enter at least one seat candidate to see a ranking.',
+        cleared: 'Cleared the inputs.',
+        copied: 'Copied',
+        copyDefault: 'Copy result',
+        duplicate: (n) => `Merged ${n} duplicate seat name(s).`,
+        top: (name, score, reason) => `Top pick: ${name}. Score ${score} - ${reason}`,
+        meta: (count, purpose, duration) => `${count} seat(s) compared / Purpose: ${purpose} / Stay: ${duration}`,
+        row: (rank, item, labels, reason) => `${rank}. ${item.name} - ${item.score}\n   Conditions: outlet ${labels.power[item.power]}, noise ${labels.noise[item.noise]}, seat ${labels.seat[item.seat]}, lighting ${labels.light[item.light]}, ${labels.traffic[item.traffic]}\n   Why: ${reason}`,
+        purpose: { work: 'Laptop work', study: 'Study/focus', reading: 'Reading/notes', call: 'Calls/video meetings' },
+        duration: { short: 'About 30 minutes', medium: '1-2 hours', long: '3+ hours' },
+        labels: {
+          power: { table: 'at the seat', near: 'nearby', far: 'far or uncertain', none: 'none' },
+          noise: { quiet: 'quiet', normal: 'normal', busy: 'busy' },
+          seat: { table: 'regular table', bar: 'bar/high table', sofa: 'sofa/low table', window: 'window seat' },
+          light: { soft: 'comfortable', bright: 'bright', glare: 'glare present', dark: 'somewhat dark' },
+          traffic: { low: 'low traffic', mid: 'moderate traffic', high: 'heavy traffic' }
+        },
+        reasons: {
+          goodPower: 'good charging access',
+          badPower: 'weak if charging is needed',
+          quiet: 'quiet enough for focus',
+          busy: 'nearby noise is high',
+          stableTable: 'stable for laptop work',
+          longBar: 'may be tiring for a long stay',
+          glare: 'glare needs checking',
+          highTraffic: 'people pass by often',
+          readingWindow: 'pleasant for reading or notes',
+          neutral: 'overall conditions are balanced'
+        },
+        samples: [
+          ['Wall outlet two-person table', 'table', 'normal', 'table', 'soft', 'mid'],
+          ['Window bar table', 'near', 'quiet', 'bar', 'bright', 'low'],
+          ['Central sofa seat', 'none', 'busy', 'sofa', 'glare', 'high'],
+          ['Small corner table', 'far', 'quiet', 'table', 'dark', 'low']
+        ]
+      },
+      ja: {
+        title: 'カフェ作業席の比較結果',
+        empty: '席候補を1つ以上入力するとおすすめ順位が表示されます。',
+        cleared: '入力をクリアしました。',
+        copied: 'コピー完了',
+        copyDefault: '結果をコピー',
+        duplicate: (n) => `重複した席名${n}件をまとめました。`,
+        top: (name, score, reason) => `おすすめ1位は${name}です。スコア${score} - ${reason}`,
+        meta: (count, purpose, duration) => `比較した席 ${count}件 / 目的: ${purpose} / 滞在: ${duration}`,
+        row: (rank, item, labels, reason) => `${rank}. ${item.name} - ${item.score}点\n   条件: 電源 ${labels.power[item.power]}、騒音 ${labels.noise[item.noise]}、座席 ${labels.seat[item.seat]}、照明 ${labels.light[item.light]}、${labels.traffic[item.traffic]}\n   理由: ${reason}`,
+        purpose: { work: 'ノートPC作業', study: '勉強・集中', reading: '読書・メモ', call: '通話・ビデオ会議' },
+        duration: { short: '30分前後', medium: '1〜2時間', long: '3時間以上' },
+        labels: {
+          power: { table: '席で使える', near: '近くにある', far: '遠い・微妙', none: 'なし' },
+          noise: { quiet: '静か', normal: '普通', busy: '騒がしい' },
+          seat: { table: '通常テーブル', bar: 'カウンター・高いテーブル', sofa: 'ソファ・低いテーブル', window: '窓際席' },
+          light: { soft: 'ちょうどよい', bright: '明るい', glare: 'まぶしさあり', dark: 'やや暗い' },
+          traffic: { low: '動線少なめ', mid: '動線普通', high: '動線多め' }
+        },
+        reasons: {
+          goodPower: '充電しやすい',
+          badPower: '充電が必要な時は不利',
+          quiet: '集中しやすい静かさ',
+          busy: '周辺の騒音が多い',
+          stableTable: 'ノートPCを置きやすい',
+          longBar: '長時間だと疲れやすい',
+          glare: 'まぶしさの確認が必要',
+          highTraffic: '人の通りが多い',
+          readingWindow: '読書やメモに向く雰囲気',
+          neutral: '全体の条件が無難'
+        },
+        samples: [
+          ['壁側の電源2人席', 'table', 'normal', 'table', 'soft', 'mid'],
+          ['窓際カウンター席', 'near', 'quiet', 'bar', 'bright', 'low'],
+          ['中央ソファ席', 'none', 'busy', 'sofa', 'glare', 'high'],
+          ['隅の小さなテーブル', 'far', 'quiet', 'table', 'dark', 'low']
+        ]
+      }
     };
+    const t = i18n[pageLang] || i18n.ko;
 
     const scoreItem = (item, purpose, duration, needCharge, preferQuiet) => {
       let score = 55;
@@ -17086,17 +17197,29 @@
 
     const reasonFor = (item, purpose, duration, needCharge, preferQuiet) => {
       const reasons = [];
-      if (needCharge && (item.power === 'table' || item.power === 'near')) reasons.push('충전 접근성이 좋음');
-      if (needCharge && (item.power === 'far' || item.power === 'none')) reasons.push('충전이 필요하면 불리함');
-      if (preferQuiet && item.noise === 'quiet') reasons.push('집중하기 조용함');
-      if (item.noise === 'busy') reasons.push('주변 소음이 많음');
-      if (item.seat === 'table') reasons.push('노트북을 놓기 안정적임');
-      if (duration === 'long' && item.seat === 'bar') reasons.push('오래 앉기에는 피로할 수 있음');
-      if (item.light === 'glare') reasons.push('눈부심을 확인해야 함');
-      if (item.traffic === 'high') reasons.push('사람 동선이 잦음');
-      if (purpose === 'reading' && item.seat === 'window') reasons.push('독서·메모에 분위기가 좋음');
-      if (!reasons.length) reasons.push('전체 조건이 무난함');
+      if (needCharge && (item.power === 'table' || item.power === 'near')) reasons.push(t.reasons.goodPower);
+      if (needCharge && (item.power === 'far' || item.power === 'none')) reasons.push(t.reasons.badPower);
+      if (preferQuiet && item.noise === 'quiet') reasons.push(t.reasons.quiet);
+      if (item.noise === 'busy') reasons.push(t.reasons.busy);
+      if (item.seat === 'table') reasons.push(t.reasons.stableTable);
+      if (duration === 'long' && item.seat === 'bar') reasons.push(t.reasons.longBar);
+      if (item.light === 'glare') reasons.push(t.reasons.glare);
+      if (item.traffic === 'high') reasons.push(t.reasons.highTraffic);
+      if (purpose === 'reading' && item.seat === 'window') reasons.push(t.reasons.readingWindow);
+      if (!reasons.length) reasons.push(t.reasons.neutral);
       return reasons.join(', ');
+    };
+
+    const resetOutput = () => {
+      countEl.textContent = '0';
+      topEl.textContent = '-';
+      powerScoreEl.textContent = '0';
+      focusScoreEl.textContent = '0';
+      summaryEl.textContent = t.empty;
+      summaryEl.dataset.state = '';
+      outputEl.value = '';
+      copyBtn.disabled = true;
+      rows.forEach((row) => row.name?.setAttribute('aria-invalid', 'false'));
     };
 
     const build = () => {
@@ -17104,9 +17227,19 @@
       const duration = durationEl.value || 'medium';
       const needCharge = !!chargeEl.checked;
       const preferQuiet = !!quietEl.checked;
+      const seen = new Set();
+      let duplicates = 0;
       const items = rows.map((row, idx) => {
-        const name = (row.name.value || '').trim();
+        const name = (row.name.value || '').trim().replace(/\s+/g, ' ');
         if (!name) return null;
+        const key = name.toLocaleLowerCase();
+        if (seen.has(key)) {
+          duplicates += 1;
+          row.name.setAttribute('aria-invalid', 'true');
+          return null;
+        }
+        seen.add(key);
+        row.name.setAttribute('aria-invalid', 'false');
         const item = {
           index: idx + 1,
           name,
@@ -17121,11 +17254,7 @@
 
       countEl.textContent = String(items.length);
       if (!items.length) {
-        topEl.textContent = '-';
-        powerScoreEl.textContent = '0';
-        focusScoreEl.textContent = '0';
-        summaryEl.textContent = '후보 자리를 입력하면 추천 순위가 표시됩니다.';
-        outputEl.value = '';
+        resetOutput();
         return;
       }
 
@@ -17133,25 +17262,44 @@
       topEl.textContent = top.name.length > 12 ? `${top.name.slice(0, 12)}…` : top.name;
       powerScoreEl.textContent = String(top.powerScore);
       focusScoreEl.textContent = String(top.focusScore);
-      summaryEl.textContent = `1순위는 ${top.name}입니다. 점수 ${top.score}점 — ${reasonFor(top, purpose, duration, needCharge, preferQuiet)}`;
+      const reason = reasonFor(top, purpose, duration, needCharge, preferQuiet);
+      summaryEl.textContent = [t.top(top.name, top.score, reason), duplicates ? t.duplicate(duplicates) : ''].filter(Boolean).join(' ');
+      summaryEl.dataset.state = duplicates ? 'warning' : 'success';
 
-      outputEl.value = ['카페 작업 자리 비교 결과', ...items.map((item, idx) => {
-        return `${idx + 1}. ${item.name} - ${item.score}점\n   조건: 콘센트 ${labels.power[item.power]}, 소음 ${labels.noise[item.noise]}, 좌석 ${labels.seat[item.seat]}, 조명 ${labels.light[item.light]}, ${labels.traffic[item.traffic]}\n   이유: ${reasonFor(item, purpose, duration, needCharge, preferQuiet)}`;
-      })].join('\n\n');
+      outputEl.value = [
+        t.title,
+        t.meta(items.length, t.purpose[purpose], t.duration[duration]),
+        '',
+        ...items.map((item, idx) => t.row(idx + 1, item, t.labels, reasonFor(item, purpose, duration, needCharge, preferQuiet)))
+      ].join('\n\n');
+      copyBtn.disabled = false;
     };
 
     sampleBtn?.addEventListener('click', () => {
-      const samples = [
-        ['벽쪽 콘센트 2인석', 'table', 'normal', 'table', 'soft', 'mid'],
-        ['창가 바 테이블', 'near', 'quiet', 'bar', 'bright', 'low'],
-        ['중앙 소파 자리', 'none', 'busy', 'sofa', 'glare', 'high'],
-        ['구석 작은 테이블', 'far', 'quiet', 'table', 'dark', 'low']
-      ];
-      samples.forEach((s, idx) => {
+      t.samples.forEach((s, idx) => {
         const row = rows[idx];
         row.name.value = s[0]; row.power.value = s[1]; row.noise.value = s[2]; row.seat.value = s[3]; row.light.value = s[4]; row.traffic.value = s[5];
       });
       build();
+      rows[0].name?.focus();
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      rows.forEach((row) => {
+        row.name.value = '';
+        row.power.value = 'near';
+        row.noise.value = 'quiet';
+        row.seat.value = 'table';
+        row.light.value = 'soft';
+        row.traffic.value = 'low';
+      });
+      purposeEl.value = 'work';
+      durationEl.value = 'medium';
+      chargeEl.checked = true;
+      quietEl.checked = true;
+      resetOutput();
+      summaryEl.textContent = t.cleared;
+      rows[0].name?.focus();
     });
 
     copyBtn?.addEventListener('click', async () => {
@@ -17159,8 +17307,8 @@
       if (!outputEl.value.trim()) return;
       await copyText(outputEl.value);
       const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      copyBtn.textContent = t.copied;
+      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
     });
 
     [purposeEl, durationEl, chargeEl, quietEl, ...rows.flatMap(row => Object.values(row))].forEach((el) => {

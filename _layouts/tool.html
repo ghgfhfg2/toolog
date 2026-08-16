@@ -4608,106 +4608,112 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
         </div>
 
       {% when 'cafe-work-seat-simulator' %}
-        <div class="tool-ui">
-          <p class="tool-result">카페 좌석 후보 4개까지 콘센트, 소음, 조명, 동선, 체류 시간을 기준으로 비교해 추천 순서를 정리합니다.</p>
+        <div class="tool-ui cwss-ui">
+          <p class="tool-result" id="cwss-intro">
+            {% if page.lang == 'en' %}Compare up to four cafe seats by outlet access, noise, lighting, traffic, stay length, and today’s work purpose.
+            {% elsif page.lang == 'ja' %}最大4つのカフェ席候補を、電源・騒音・照明・動線・滞在時間・今日の目的で比較します。
+            {% else %}카페 좌석 후보 4개까지 콘센트, 소음, 조명, 동선, 체류 시간, 오늘의 목적을 기준으로 비교해 추천 순서를 정리합니다.{% endif %}
+          </p>
 
           <div class="tool-row-grid pct-grid">
             <div>
-              <label for="cwss-purpose">오늘의 목적</label>
-              <select id="cwss-purpose">
-                <option value="work" selected>노트북 작업</option>
-                <option value="study">공부/집중</option>
-                <option value="reading">독서/메모</option>
-                <option value="call">통화·화상회의</option>
+              <label for="cwss-purpose">{% if page.lang == 'en' %}Today’s purpose{% elsif page.lang == 'ja' %}今日の目的{% else %}오늘의 목적{% endif %}</label>
+              <select id="cwss-purpose" aria-describedby="cwss-summary cwss-intro">
+                <option value="work" selected>{% if page.lang == 'en' %}Laptop work{% elsif page.lang == 'ja' %}ノートPC作業{% else %}노트북 작업{% endif %}</option>
+                <option value="study">{% if page.lang == 'en' %}Study/focus{% elsif page.lang == 'ja' %}勉強・集中{% else %}공부/집중{% endif %}</option>
+                <option value="reading">{% if page.lang == 'en' %}Reading/notes{% elsif page.lang == 'ja' %}読書・メモ{% else %}독서/메모{% endif %}</option>
+                <option value="call">{% if page.lang == 'en' %}Calls/video meetings{% elsif page.lang == 'ja' %}通話・ビデオ会議{% else %}통화·화상회의{% endif %}</option>
               </select>
             </div>
             <div>
-              <label for="cwss-duration">예상 체류 시간</label>
-              <select id="cwss-duration">
-                <option value="short">30분 안팎</option>
-                <option value="medium" selected>1~2시간</option>
-                <option value="long">3시간 이상</option>
+              <label for="cwss-duration">{% if page.lang == 'en' %}Expected stay{% elsif page.lang == 'ja' %}予想滞在時間{% else %}예상 체류 시간{% endif %}</label>
+              <select id="cwss-duration" aria-describedby="cwss-summary cwss-intro">
+                <option value="short">{% if page.lang == 'en' %}About 30 minutes{% elsif page.lang == 'ja' %}30分前後{% else %}30분 안팎{% endif %}</option>
+                <option value="medium" selected>{% if page.lang == 'en' %}1–2 hours{% elsif page.lang == 'ja' %}1〜2時間{% else %}1~2시간{% endif %}</option>
+                <option value="long">{% if page.lang == 'en' %}3+ hours{% elsif page.lang == 'ja' %}3時間以上{% else %}3시간 이상{% endif %}</option>
               </select>
             </div>
           </div>
 
-          <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="cwss-charge" type="checkbox" checked /> 충전이 필요해요</label>
-            <label class="tool-check"><input id="cwss-quiet" type="checkbox" checked /> 조용한 자리를 선호해요</label>
+          <div class="tool-row-grid pct-grid cwss-options">
+            <label class="tool-check"><input id="cwss-charge" type="checkbox" checked aria-describedby="cwss-summary" /> {% if page.lang == 'en' %}Charging is needed{% elsif page.lang == 'ja' %}充電が必要{% else %}충전이 필요해요{% endif %}</label>
+            <label class="tool-check"><input id="cwss-quiet" type="checkbox" checked aria-describedby="cwss-summary" /> {% if page.lang == 'en' %}Prefer a quiet seat{% elsif page.lang == 'ja' %}静かな席を優先{% else %}조용한 자리를 선호해요{% endif %}</label>
           </div>
 
           {% for i in (1..4) %}
-          <div class="tool-card">
+          <div class="tool-card cwss-card">
             <div class="tool-row-grid pct-grid">
               <div>
-                <label for="cwss-name-{{ i }}">자리 후보 {{ i }}</label>
-                <input id="cwss-name-{{ i }}" type="text" maxlength="60" placeholder="예: 창가 2인석, 벽쪽 콘센트 자리" />
+                <label for="cwss-name-{{ i }}">{% if page.lang == 'en' %}Seat candidate {{ i }}{% elsif page.lang == 'ja' %}席候補 {{ i }}{% else %}자리 후보 {{ i }}{% endif %}</label>
+                <input id="cwss-name-{{ i }}" type="text" maxlength="60" aria-describedby="cwss-summary" placeholder="{% if page.lang == 'en' %}e.g. window table, wall outlet seat{% elsif page.lang == 'ja' %}例: 窓際2人席、壁側の電源席{% else %}예: 창가 2인석, 벽쪽 콘센트 자리{% endif %}" />
               </div>
               <div>
-                <label for="cwss-power-{{ i }}">콘센트 접근성</label>
-                <select id="cwss-power-{{ i }}">
-                  <option value="table">자리에서 바로 사용</option>
-                  <option value="near" selected>가까이에 있음</option>
-                  <option value="far">멀거나 애매함</option>
-                  <option value="none">없음</option>
+                <label for="cwss-power-{{ i }}">{% if page.lang == 'en' %}Outlet access{% elsif page.lang == 'ja' %}電源への近さ{% else %}콘센트 접근성{% endif %}</label>
+                <select id="cwss-power-{{ i }}" aria-describedby="cwss-summary">
+                  <option value="table">{% if page.lang == 'en' %}At the seat{% elsif page.lang == 'ja' %}席でそのまま使える{% else %}자리에서 바로 사용{% endif %}</option>
+                  <option value="near" selected>{% if page.lang == 'en' %}Nearby{% elsif page.lang == 'ja' %}近くにある{% else %}가까이에 있음{% endif %}</option>
+                  <option value="far">{% if page.lang == 'en' %}Far or uncertain{% elsif page.lang == 'ja' %}遠い・微妙{% else %}멀거나 애매함{% endif %}</option>
+                  <option value="none">{% if page.lang == 'en' %}None{% elsif page.lang == 'ja' %}なし{% else %}없음{% endif %}</option>
                 </select>
               </div>
             </div>
             <div class="tool-row-grid pct-grid">
               <div>
-                <label for="cwss-noise-{{ i }}">주변 소음</label>
-                <select id="cwss-noise-{{ i }}">
-                  <option value="quiet" selected>조용함</option>
-                  <option value="normal">보통</option>
-                  <option value="busy">대화·주문 소리 많음</option>
+                <label for="cwss-noise-{{ i }}">{% if page.lang == 'en' %}Noise nearby{% elsif page.lang == 'ja' %}周辺の騒音{% else %}주변 소음{% endif %}</label>
+                <select id="cwss-noise-{{ i }}" aria-describedby="cwss-summary">
+                  <option value="quiet" selected>{% if page.lang == 'en' %}Quiet{% elsif page.lang == 'ja' %}静か{% else %}조용함{% endif %}</option>
+                  <option value="normal">{% if page.lang == 'en' %}Normal{% elsif page.lang == 'ja' %}普通{% else %}보통{% endif %}</option>
+                  <option value="busy">{% if page.lang == 'en' %}Many voices/orders{% elsif page.lang == 'ja' %}会話・注文音が多い{% else %}대화·주문 소리 많음{% endif %}</option>
                 </select>
               </div>
               <div>
-                <label for="cwss-seat-{{ i }}">좌석 형태</label>
-                <select id="cwss-seat-{{ i }}">
-                  <option value="table" selected>일반 테이블</option>
-                  <option value="bar">바/높은 테이블</option>
-                  <option value="sofa">소파·낮은 테이블</option>
-                  <option value="window">창가 좌석</option>
+                <label for="cwss-seat-{{ i }}">{% if page.lang == 'en' %}Seat type{% elsif page.lang == 'ja' %}座席タイプ{% else %}좌석 형태{% endif %}</label>
+                <select id="cwss-seat-{{ i }}" aria-describedby="cwss-summary">
+                  <option value="table" selected>{% if page.lang == 'en' %}Regular table{% elsif page.lang == 'ja' %}通常テーブル{% else %}일반 테이블{% endif %}</option>
+                  <option value="bar">{% if page.lang == 'en' %}Bar/high table{% elsif page.lang == 'ja' %}カウンター・高いテーブル{% else %}바/높은 테이블{% endif %}</option>
+                  <option value="sofa">{% if page.lang == 'en' %}Sofa/low table{% elsif page.lang == 'ja' %}ソファ・低いテーブル{% else %}소파·낮은 테이블{% endif %}</option>
+                  <option value="window">{% if page.lang == 'en' %}Window seat{% elsif page.lang == 'ja' %}窓際席{% else %}창가 좌석{% endif %}</option>
                 </select>
               </div>
             </div>
             <div class="tool-row-grid pct-grid">
               <div>
-                <label for="cwss-light-{{ i }}">조명/눈부심</label>
-                <select id="cwss-light-{{ i }}">
-                  <option value="soft" selected>적당함</option>
-                  <option value="bright">밝고 선명함</option>
-                  <option value="glare">눈부심 있음</option>
-                  <option value="dark">어두운 편</option>
+                <label for="cwss-light-{{ i }}">{% if page.lang == 'en' %}Lighting/glare{% elsif page.lang == 'ja' %}照明・まぶしさ{% else %}조명/눈부심{% endif %}</label>
+                <select id="cwss-light-{{ i }}" aria-describedby="cwss-summary">
+                  <option value="soft" selected>{% if page.lang == 'en' %}Comfortable{% elsif page.lang == 'ja' %}ちょうどよい{% else %}적당함{% endif %}</option>
+                  <option value="bright">{% if page.lang == 'en' %}Bright and clear{% elsif page.lang == 'ja' %}明るく見やすい{% else %}밝고 선명함{% endif %}</option>
+                  <option value="glare">{% if page.lang == 'en' %}Glare present{% elsif page.lang == 'ja' %}まぶしさあり{% else %}눈부심 있음{% endif %}</option>
+                  <option value="dark">{% if page.lang == 'en' %}Somewhat dark{% elsif page.lang == 'ja' %}やや暗い{% else %}어두운 편{% endif %}</option>
                 </select>
               </div>
               <div>
-                <label for="cwss-traffic-{{ i }}">사람 동선</label>
-                <select id="cwss-traffic-{{ i }}">
-                  <option value="low" selected>적음</option>
-                  <option value="mid">보통</option>
-                  <option value="high">주문대·화장실 동선 가까움</option>
+                <label for="cwss-traffic-{{ i }}">{% if page.lang == 'en' %}Foot traffic{% elsif page.lang == 'ja' %}人の動線{% else %}사람 동선{% endif %}</label>
+                <select id="cwss-traffic-{{ i }}" aria-describedby="cwss-summary">
+                  <option value="low" selected>{% if page.lang == 'en' %}Low{% elsif page.lang == 'ja' %}少ない{% else %}적음{% endif %}</option>
+                  <option value="mid">{% if page.lang == 'en' %}Moderate{% elsif page.lang == 'ja' %}普通{% else %}보통{% endif %}</option>
+                  <option value="high">{% if page.lang == 'en' %}Near counter/restroom flow{% elsif page.lang == 'ja' %}注文カウンター・トイレ動線に近い{% else %}주문대·화장실 동선 가까움{% endif %}</option>
                 </select>
               </div>
             </div>
           </div>
           {% endfor %}
 
-          <div class="tool-row-grid pct-actions">
-            <button id="cwss-sample" type="button">예시 넣기</button>
-            <button id="cwss-copy" type="button">결과 복사</button>
+          <div class="tool-row-grid pct-actions cwss-actions">
+            <button id="cwss-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
+            <button id="cwss-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="cwss-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
-            <div><strong id="cwss-count">0</strong><span>비교한 자리</span></div>
-            <div><strong id="cwss-top">-</strong><span>추천 1순위</span></div>
-            <div><strong id="cwss-power-score">0</strong><span>충전 적합도</span></div>
-            <div><strong id="cwss-focus-score">0</strong><span>집중 적합도</span></div>
+          <div class="tool-stats cwss-stats" aria-label="{% if page.lang == 'en' %}Cafe seat comparison summary{% elsif page.lang == 'ja' %}カフェ席比較の概要{% else %}카페 자리 비교 요약{% endif %}">
+            <div><strong id="cwss-count">0</strong><span>{% if page.lang == 'en' %}Seats compared{% elsif page.lang == 'ja' %}比較した席{% else %}비교한 자리{% endif %}</span></div>
+            <div><strong id="cwss-top">-</strong><span>{% if page.lang == 'en' %}Top pick{% elsif page.lang == 'ja' %}おすすめ1位{% else %}추천 1순위{% endif %}</span></div>
+            <div><strong id="cwss-power-score">0</strong><span>{% if page.lang == 'en' %}Power fit{% elsif page.lang == 'ja' %}充電適性{% else %}충전 적합도{% endif %}</span></div>
+            <div><strong id="cwss-focus-score">0</strong><span>{% if page.lang == 'en' %}Focus fit{% elsif page.lang == 'ja' %}集中適性{% else %}집중 적합도{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="cwss-summary">후보 자리를 입력하면 추천 순위가 표시됩니다.</p>
-          <textarea id="cwss-output" rows="12" readonly placeholder="카페 자리 비교 결과가 여기에 표시됩니다."></textarea>
+          <p class="tool-result" id="cwss-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter at least one seat candidate to see a ranking.{% elsif page.lang == 'ja' %}席候補を1つ以上入力するとおすすめ順位が表示されます。{% else %}후보 자리를 1개 이상 입력하면 추천 순위가 표시됩니다.{% endif %}</p>
+          <p class="tool-result cwss-note" id="cwss-limits">{% if page.lang == 'en' %}Seat names are limited to 60 characters. Duplicate names are merged, and empty candidates are ignored.{% elsif page.lang == 'ja' %}席名は60文字までです。重複名はまとめ、空の候補は無視します。{% else %}자리 이름은 60자까지 입력할 수 있습니다. 중복 이름은 합치고 빈 후보는 제외합니다.{% endif %}</p>
+          <textarea id="cwss-output" rows="12" readonly aria-describedby="cwss-summary cwss-limits" aria-label="{% if page.lang == 'en' %}Cafe seat comparison result{% elsif page.lang == 'ja' %}カフェ席比較結果{% else %}카페 자리 비교 결과{% endif %}" placeholder="{% if page.lang == 'en' %}Your cafe seat comparison will appear here.{% elsif page.lang == 'ja' %}カフェ席の比較結果がここに表示されます。{% else %}카페 자리 비교 결과가 여기에 표시됩니다.{% endif %}"></textarea>
         </div>
 
       {% when 'movie-seat-choice-simulator' %}

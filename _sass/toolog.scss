@@ -1068,6 +1068,22 @@ textarea:focus-visible {
 .rsc-ui #rsc-help[data-state="success"] { color: #86efac; }
 .rsc-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .rsc-note { font-size: .82rem; }
+.cwss-ui textarea {
+  min-height: 190px;
+  font-size: 15px;
+}
+.cwss-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.cwss-ui #cwss-summary[data-state="success"] { color: #86efac; }
+.cwss-ui #cwss-summary[data-state="warning"] { color: #fbbf24; }
+.cwss-card {
+  padding: .85rem;
+  margin-top: .75rem;
+}
+.cwss-options,
+.cwss-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cwss-note { font-size: .82rem; }
+.tool-stats.cwss-stats strong,
+.tool-stats.cwss-stats span { overflow-wrap: anywhere; }
 .avg-ui textarea {
   min-height: 190px;
   font-size: 16px;
@@ -1675,6 +1691,8 @@ textarea:focus-visible {
   .gbc-grid,
   .gbc-actions { grid-template-columns: 1fr; }
   .gbc-stats { grid-template-columns: 1fr 1fr; }
+  .cwss-options,
+  .cwss-actions { grid-template-columns: 1fr; }
   .loan-grid,
   .loan-actions { grid-template-columns: 1fr; }
   .loan-stats { grid-template-columns: 1fr 1fr; }

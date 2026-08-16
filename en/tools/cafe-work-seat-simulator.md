@@ -34,6 +34,8 @@ Good seats disappear faster than expected when you walk into a cafe to work on a
 
 This tool lets you enter up to four seat candidates and compare them by **outlet access, noise, lighting, traffic flow, stay length, and work purpose**. It is not a precise spatial analysis tool; it is a lightweight simulator for quickly choosing where to sit after entering a cafe.
 
+I chose this existing tool for today’s quality pass because recent improvements focused on tools such as `blog-banned-word-checker`, `image-upscaler`, `case-converter`, `grocery-budget-checker`, and `hangul-keyboard-layout-converter`, while this simulator still had Korean-only controls on the English and Japanese pages. That made mobile and multilingual usability the highest-impact fix.
+
 ## How to use it
 1. Choose today’s purpose: laptop work, study, reading, or calls/meetings.
 2. Select your expected stay length and whether charging is required.
@@ -51,6 +53,9 @@ Noisy seats and seats with heavy foot traffic are penalized, while reasonably qu
 ### 3) You only need to check email briefly
 For a short stay, the simulator weighs quick seating, movement flow, and lighting more lightly than outlet access so you can choose faster.
 
+### 4) You enter similar seat names more than once
+Duplicate seat names are merged, empty candidates are ignored, and the result stays compact enough to scan on mobile.
+
 ## Related tools
 - Compare movie theater seats in a similar way: [Movie Seat Choice Simulator]({{ '/en/tools/movie-seat-choice-simulator/' | relative_url }})
 - Decide when to leave for an appointment: [Appointment Departure Buffer Simulator]({{ '/en/tools/appointment-departure-buffer-simulator/' | relative_url }})
@@ -67,5 +72,4 @@ You can enter only two candidates. During busy hours, try prioritizing seats tha
 No. The input and scoring run only in your current browser and are not sent to a server.
 
 ## Summary
-The Cafe Work Seat Simulator is a **simulator-style tool for comparing cafe seat candidates by outlet access, noise, lighting, traffic flow, and stay length**.
-Because the recent five releases were converter, generator, checker, learning, and utility tools, this adds a work/lifestyle simulation format rather than another calculator and keeps the interaction mix varied.
+The Cafe Work Seat Simulator is a **simulator-style tool for comparing cafe seat candidates by outlet access, noise, lighting, traffic flow, and stay length**. It now better matches search intents such as cafe seat recommendation, laptop cafe seat, cafe outlet seat, and cafe study seat.
