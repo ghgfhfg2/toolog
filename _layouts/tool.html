@@ -3797,34 +3797,35 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="gpa-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter course credits and grades to calculate weighted GPA instantly.{% elsif page.lang == 'ja' %}科目ごとの単位数と成績を入力すると、加重平均GPAをすぐ計算できます。{% else %}과목별 학점과 등급을 입력하면 가중 평균 GPA를 바로 계산합니다.{% endif %}</p>
         </div>
       {% when 'average-speed-calculator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui as-ui">
+          <div class="tool-row-grid as-grid">
             <div>
               <label for="as-distance">{% if page.lang == 'en' %}Distance (km){% elsif page.lang == 'ja' %}距離 (km){% else %}이동거리(km){% endif %}</label>
-              <input id="as-distance" type="number" min="0" step="0.01" inputmode="decimal" placeholder="10" />
+              <input id="as-distance" type="number" min="0" max="100000" step="0.01" inputmode="decimal" placeholder="10" aria-describedby="as-help as-note" />
             </div>
             <div>
               <label for="as-hours">{% if page.lang == 'en' %}Hours{% elsif page.lang == 'ja' %}時間{% else %}시간{% endif %}</label>
-              <input id="as-hours" type="number" min="0" step="1" inputmode="numeric" placeholder="1" />
+              <input id="as-hours" type="number" min="0" max="9999" step="1" inputmode="numeric" placeholder="1" aria-describedby="as-help as-note" />
             </div>
-          </div>
-          <div class="tool-row-grid pct-grid">
             <div>
               <label for="as-minutes">{% if page.lang == 'en' %}Minutes{% elsif page.lang == 'ja' %}分{% else %}분{% endif %}</label>
-              <input id="as-minutes" type="number" min="0" max="59" step="1" inputmode="numeric" placeholder="30" />
+              <input id="as-minutes" type="number" min="0" max="599999" step="1" inputmode="numeric" placeholder="30" aria-describedby="as-help as-note" />
             </div>
           </div>
-          <div class="tool-row-grid pct-actions">
-            <button id="as-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
-            <button id="as-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          <div class="tool-row-grid as-actions">
+            <button id="as-sample" type="button">{% if page.lang == 'en' %}Load running example{% elsif page.lang == 'ja' %}ランニング例を入力{% else %}러닝 예시 입력{% endif %}</button>
+            <button id="as-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="as-reset" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
-          <div class="tool-stats">
+          <div class="tool-stats as-stats" aria-label="{% if page.lang == 'en' %}Average speed calculation result{% elsif page.lang == 'ja' %}平均速度計算結果{% else %}평균 속도 계산 결과{% endif %}">
+            <div><strong id="as-time">-</strong><span>{% if page.lang == 'en' %}Total time{% elsif page.lang == 'ja' %}総時間{% else %}총 시간{% endif %}</span></div>
             <div><strong id="as-speed">-</strong><span>{% if page.lang == 'en' %}Average speed{% elsif page.lang == 'ja' %}平均速度{% else %}평균 속도{% endif %}</span></div>
             <div><strong id="as-pace">-</strong><span>{% if page.lang == 'en' %}Pace per km{% elsif page.lang == 'ja' %}1kmペース{% else %}1km 페이스{% endif %}</span></div>
             <div><strong id="as-5k">-</strong><span>{% if page.lang == 'en' %}Estimated 5K{% elsif page.lang == 'ja' %}予想5K{% else %}예상 5km 기록{% endif %}</span></div>
             <div><strong id="as-10k">-</strong><span>{% if page.lang == 'en' %}Estimated 10K{% elsif page.lang == 'ja' %}予想10K{% else %}예상 10km 기록{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="as-help">{% if page.lang == 'en' %}Enter distance and time to calculate speed and pace.{% elsif page.lang == 'ja' %}距離と時間を入力すると速度とペースを計算します。{% else %}거리와 시간을 입력하면 속도와 페이스를 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="as-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter distance and time to calculate speed and pace.{% elsif page.lang == 'ja' %}距離と時間を入力すると速度とペースを計算します。{% else %}거리와 시간을 입력하면 속도와 페이스를 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="as-note">{% if page.lang == 'en' %}Minutes can be greater than 59, so you can enter 90 minutes without filling hours. Distance supports decimals up to 100,000 km.{% elsif page.lang == 'ja' %}分は59を超えて入力できるため、90分だけでも計算できます。距離は小数で100,000kmまで入力できます。{% else %}분은 59를 넘어도 입력할 수 있어 90분만 넣어도 계산됩니다. 거리는 소수 포함 100,000km까지 지원합니다.{% endif %}</p>
         </div>
       {% when 'average-calculator' %}
         <div class="tool-ui avg-ui">

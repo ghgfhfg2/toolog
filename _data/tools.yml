@@ -2093,14 +2093,16 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 이동거리와 시간을 넣으면 평균 속도, 1km 페이스, 예상 5K·10K 기록을 한 번에 계산해요.
-  description_en: Enter distance and time to calculate average speed, pace per kilometer, and estimated 5K/10K times.
-  description_ja: 移動距離と時間から、平均速度・1kmペース・予想5K/10Kタイムをまとめて計算します。
+  description: 이동거리와 시간 또는 총 분을 넣으면 평균 속도, 1km 페이스, 총 시간, 예상 5K·10K 기록을 한 번에 계산하고 오류 입력을 안내해요.
+  description_en: Enter distance, hours, or total minutes to calculate average speed, pace per kilometer, total time, and estimated 5K/10K times with safer input checks.
+  description_ja: 移動距離、時間、総分数から、平均速度・1kmペース・総時間・予想5K/10Kタイムを計算し、入力エラーも案内します。
   url: /tools/average-speed-calculator/
   url_en: /en/tools/average-speed-calculator/
   url_ja: /ja/tools/average-speed-calculator/
   thumbnail: /assets/thumbs/average-speed-calculator.svg
   published_at: 2026-03-24
+  tool_type: calculator
+  topic_cluster: travel
 
 - id: electricity-cost-calculator
   title: 전기요금 계산기

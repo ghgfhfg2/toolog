@@ -707,6 +707,14 @@ textarea:focus-visible {
 .uc-stats strong { overflow-wrap: anywhere; }
 .pct-actions,
 .pct-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.as-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.as-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.as-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.as-ui #as-help[data-state="error"] { color: #fca5a5; }
+.as-ui #as-help[data-state="success"] { color: #86efac; }
+.tool-stats.as-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.tool-stats.as-stats strong,
+.tool-stats.as-stats span { overflow-wrap: anywhere; }
 .pt-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .pt-presets { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .pt-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -1688,6 +1696,9 @@ textarea:focus-visible {
   .bw-stats { grid-template-columns: 1fr 1fr; }
   .avg-actions { grid-template-columns: 1fr; }
   .avg-stats { grid-template-columns: 1fr 1fr; }
+  .as-grid,
+  .as-actions { grid-template-columns: 1fr; }
+  .tool-stats.as-stats { grid-template-columns: 1fr 1fr; }
   .gbc-grid,
   .gbc-actions { grid-template-columns: 1fr; }
   .gbc-stats { grid-template-columns: 1fr 1fr; }
