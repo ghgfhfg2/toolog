@@ -871,7 +871,7 @@ a:hover { color: #fff; text-decoration: none; }
 .pg-masked .pg-secret-text {
   -webkit-text-security: disc;
 }
-.llc-options { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; }
+.llc-options { grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: stretch; }
 .llc-options .tool-check {
   min-height: 44px;
   border: 1px solid var(--line);
@@ -880,7 +880,12 @@ a:hover { color: #fff; text-decoration: none; }
   background: #1f2937;
 }
 .llc-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.llc-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.llc-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.llc-stats strong,
+.llc-stats span,
+.llc-ui #llc-output {
+  overflow-wrap: anywhere;
+}
 .llc-ui #llc-summary[data-state="error"] { color: #fca5a5; }
 .llc-ui #llc-summary[data-state="warning"] { color: #fbbf24; }
 .llc-ui #llc-summary[data-state="success"] { color: #86efac; }

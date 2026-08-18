@@ -18199,6 +18199,7 @@
     const strip = document.getElementById('llc-strip');
     const sortDomain = document.getElementById('llc-sort-domain');
     const lowerHost = document.getElementById('llc-lower-host');
+    const stripFragment = document.getElementById('llc-strip-fragment');
     const format = document.getElementById('llc-format');
     const sampleBtn = document.getElementById('llc-sample');
     const copyBtn = document.getElementById('llc-copy');
@@ -18208,10 +18209,11 @@
     const uniqueOut = document.getElementById('llc-unique');
     const domainsOut = document.getElementById('llc-domains');
     const trackingOut = document.getElementById('llc-tracking');
+    const inputSizeOut = document.getElementById('llc-input-size');
     const summary = document.getElementById('llc-summary');
     const domainList = document.getElementById('llc-domain-list');
 
-    if (!input || !output || !foundOut || !uniqueOut || !domainsOut || !trackingOut || !summary || !domainList) return;
+    if (!input || !output || !foundOut || !uniqueOut || !domainsOut || !trackingOut || !inputSizeOut || !summary || !domainList) return;
 
     const llcText = {
       ko: {
@@ -18222,6 +18224,7 @@
           const extra = skipped ? ` 유효하지 않은 후보 ${formatNum(skipped)}개는 제외했습니다.` : '';
           return `링크 ${formatNum(found)}개를 읽어 ${formatNum(kept)}개로 정리했고, 추적 파라미터 ${formatNum(removed)}개와 중복 ${formatNum(duplicates)}개를 줄였어요.${extra}`;
         },
+        nearLimit: '입력이 45,000자를 넘었습니다. 더 긴 원문은 브라우저 성능을 위해 나눠서 정리하는 편이 안전합니다.',
         domainLinks: (count) => `${formatNum(count)}개 링크`,
         copied: '정리된 링크 목록을 복사했습니다.',
         copyEmpty: '복사할 정리 결과가 없습니다.',
@@ -18231,7 +18234,7 @@
           '기사 참고 https://Example.com/news?id=52&utm_source=telegram&utm_medium=chat',
           '문서 링크 [보고서](www.docs.example.org/report?fbclid=test123)',
           '같은 링크 다시 공유 https://example.com/news?id=52&utm_campaign=spring',
-          '영상 링크 https://video.example.net/watch?v=abc123&gclid=demo).'
+          '영상 링크 https://video.example.net/watch?v=abc123&gclid=demo#comments).'
         ]
       },
       en: {
@@ -18242,6 +18245,7 @@
           const extra = skipped ? ` ${formatNum(skipped)} invalid candidate(s) were skipped.` : '';
           return `Read ${formatNum(found)} link(s), cleaned them down to ${formatNum(kept)}, and reduced ${formatNum(removed)} tracking parameter(s) plus ${formatNum(duplicates)} duplicate(s).${extra}`;
         },
+        nearLimit: 'Input is over 45,000 characters. Split longer source text into smaller batches for steadier browser performance.',
         domainLinks: (count) => `${formatNum(count)} link(s)`,
         copied: 'Copied the cleaned link list.',
         copyEmpty: 'There is no cleaned result to copy.',
@@ -18251,7 +18255,7 @@
           'Article https://Example.com/news?id=52&utm_source=telegram&utm_medium=chat',
           'Docs [report](www.docs.example.org/report?fbclid=test123)',
           'Same link again https://example.com/news?id=52&utm_campaign=spring',
-          'Video https://video.example.net/watch?v=abc123&gclid=demo).'
+          'Video https://video.example.net/watch?v=abc123&gclid=demo#comments).'
         ]
       },
       ja: {
@@ -18262,6 +18266,7 @@
           const extra = skipped ? ` 無効な候補${formatNum(skipped)}件は除外しました。` : '';
           return `${formatNum(found)}件のリンクを読み取り、${formatNum(kept)}件に整理し、追跡パラメータ${formatNum(removed)}件と重複${formatNum(duplicates)}件を減らしました。${extra}`;
         },
+        nearLimit: '入力が45,000文字を超えています。長い原文はブラウザの安定性のため、分けて整理するのがおすすめです。',
         domainLinks: (count) => `${formatNum(count)}件のリンク`,
         copied: '整理されたリンク一覧をコピーしました。',
         copyEmpty: 'コピーできる整理結果がありません。',
@@ -18271,7 +18276,7 @@
           '記事 https://Example.com/news?id=52&utm_source=telegram&utm_medium=chat',
           '資料 [レポート](www.docs.example.org/report?fbclid=test123)',
           '同じリンク https://example.com/news?id=52&utm_campaign=spring',
-          '動画 https://video.example.net/watch?v=abc123&gclid=demo).'
+          '動画 https://video.example.net/watch?v=abc123&gclid=demo#comments).'
         ]
       }
     }[pageLang];
@@ -18339,7 +18344,13 @@
 
     const cleanToken = (token) => trimTrailingPunctuation(token.trim().replace(/^[([<{]+/g, ''));
 
-    const normalizeUrl = (raw) => {
+    const cleanTitle = (value) => String(value || '')
+      .replace(/\s+/g, ' ')
+      .replace(/[[\]<>]/g, '')
+      .trim()
+      .slice(0, 100);
+
+    const normalizeUrl = (raw, title = '') => {
       const cleaned = cleanToken(raw.trim());
       try {
         const url = new URL(/^www\./i.test(cleaned) ? `https://${cleaned}` : cleaned);
@@ -18347,21 +18358,39 @@
         let removed = 0;
         if (lowerHost.checked) url.hostname = url.hostname.toLowerCase();
         if (strip.checked) {
-          const keys = Array.from(url.searchParams.keys());
+          const keys = Array.from(new Set(url.searchParams.keys()));
           keys.forEach((key) => {
             if (TRACKING_KEYS.has(key.toLowerCase())) {
-              removed += url.searchParams.getAll(key).length || 1;
+              removed += url.searchParams.getAll(key).length;
               url.searchParams.delete(key);
             }
           });
         }
         if (!url.pathname) url.pathname = '/';
         if (!url.search) url.search = '';
-        url.hash = url.hash || '';
-        return { href: url.toString(), host: url.hostname || '-', removed };
+        if (stripFragment?.checked) url.hash = '';
+        return { href: url.toString(), host: url.hostname || '-', removed, title: cleanTitle(title) };
       } catch (_) {
         return null;
       }
+    };
+
+    const extractLinks = (rawText) => {
+      const items = [];
+      const consumed = [];
+      const markdownRe = /\[([^\]\n]{1,160})\]\(\s*((?:https?:\/\/|www\.)[^\s)<>]+)\s*(?:["'][^"']*["']\s*)?\)/gi;
+      let match;
+      while ((match = markdownRe.exec(rawText)) !== null) {
+        items.push({ raw: match[2], title: match[1], index: match.index });
+        consumed.push([match.index, markdownRe.lastIndex]);
+      }
+
+      const inConsumed = (index) => consumed.some(([start, end]) => index >= start && index < end);
+      const bareRe = /(?:https?:\/\/|www\.)[^\s"'<>]+/gi;
+      while ((match = bareRe.exec(rawText)) !== null) {
+        if (!inConsumed(match.index)) items.push({ raw: match[0], title: '', index: match.index });
+      }
+      return items.sort((a, b) => a.index - b.index);
     };
 
     const renderDomainCards = (items) => {
@@ -18382,22 +18411,33 @@
 
     const formatOutput = (items) => {
       const mode = format?.value || 'plain';
-      const hrefs = items.map((item) => item.href);
-      if (mode === 'markdown') return hrefs.map((href) => `- <${href}>`).join('\n');
-      if (mode === 'html') return hrefs.map((href) => `<a href="${escapeHtml(href)}">${escapeHtml(href)}</a>`).join('\n');
-      return hrefs.join('\n');
+      if (mode === 'markdown') {
+        return items.map((item) => item.title ? `- [${item.title}](${item.href})` : `- <${item.href}>`).join('\n');
+      }
+      if (mode === 'html') {
+        return items.map((item) => {
+          const label = item.title || item.href;
+          return `<a href="${escapeHtml(item.href)}" rel="noopener noreferrer">${escapeHtml(label)}</a>`;
+        }).join('\n');
+      }
+      if (mode === 'csv') {
+        const quote = (value) => `"${String(value || '').replace(/"/g, '""')}"`;
+        return ['title,url,domain'].concat(items.map((item) => [quote(item.title), quote(item.href), quote(item.host)].join(','))).join('\n');
+      }
+      return items.map((item) => item.href).join('\n');
     };
 
     const render = () => {
       const rawText = input.value || '';
-      const matches = (rawText.match(/(?:https?:\/\/|www\.)[^\s"'<>]+/gi) || []);
+      const matches = extractLinks(rawText);
+      inputSizeOut.textContent = formatNum([...rawText].length);
       foundOut.textContent = matches.length.toLocaleString(numberLocale);
 
       const normalized = [];
       let removedTotal = 0;
       let skipped = 0;
       matches.forEach((match) => {
-        const parsed = normalizeUrl(match);
+        const parsed = normalizeUrl(match.raw, match.title);
         if (!parsed) {
           skipped += 1;
           return;
@@ -18432,7 +18472,9 @@
       copyBtn.disabled = !output.value.trim();
       renderDomainCards(items);
 
-      if (!matches.length) {
+      if ([...rawText].length > 45000) {
+        setSummary(llcText.nearLimit, 'warning');
+      } else if (!matches.length) {
         setSummary(rawText.trim() ? llcText.noLinks : llcText.initial, rawText.trim() ? 'warning' : '');
       } else {
         setSummary(llcText.cleaned(matches.length, items.length, removedTotal, duplicates, skipped), skipped ? 'warning' : 'success');
@@ -18471,7 +18513,7 @@
       input.focus();
     });
 
-    [input, dedupe, strip, sortDomain, lowerHost, format].forEach((el) => {
+    [input, dedupe, strip, sortDomain, lowerHost, stripFragment, format].forEach((el) => {
       el?.addEventListener('input', render);
       el?.addEventListener('change', render);
     });

@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Link List Cleaner | Extract URLs, Strip UTM, Format Link Lists
-description: Extract http, https, www, and Markdown links from text in your browser, remove duplicates, strip UTM and click tracking parameters, sort by domain, and copy as plain, Markdown, or HTML.
+title: Link List Cleaner | Extract URLs, Strip UTM, Export CSV Link Lists
+description: Extract http, https, www, and Markdown links from text in your browser, remove duplicates, strip UTM and click tracking parameters, remove page anchors, sort by domain, and copy as plain, Markdown, HTML, or CSV.
 lang: en
 permalink: /en/tools/link-list-cleaner/
 canonical_url: /en/tools/link-list-cleaner/
@@ -18,17 +18,17 @@ image:
 tool_key: link-list-cleaner
 tool_type: utility
 topic_cluster: text
-keywords: [link extractor, URL cleaner, strip UTM parameters, dedupe links, organize links by domain, Markdown link list]
+keywords: [link extractor, URL cleaner, strip UTM parameters, dedupe links, organize links by domain, Markdown link list, CSV link list]
 related_tools: [privacy-exposure-checker, text-line-break-cleaner, filename-sanitizer]
 faq:
   - q: What links does it extract?
-    a: It extracts http:// and https:// URLs, www. links, and URLs inside Markdown links. Common trailing commas, periods, and extra closing brackets are trimmed automatically.
+    a: It extracts http:// and https:// URLs, www. links, and URLs inside Markdown links. Markdown link text is preserved as a result title, and common trailing commas, periods, and extra closing brackets are trimmed automatically.
   - q: Which tracking parameters can it remove?
     a: It removes common UTM and ad-click keys such as utm_source, utm_medium, utm_campaign, fbclid, gclid, msclkid, twclid, and yclid.
   - q: Can I keep the original order?
     a: Yes. Turn off domain sorting to keep the input order as much as possible while still cleaning and deduplicating links.
   - q: Can I paste the result directly into a document?
-    a: Yes. You can copy the result as a plain URL list, a Markdown bullet list, or an HTML anchor list.
+    a: Yes. You can copy the result as a plain URL list, a Markdown bullet list, an HTML anchor list, or CSV.
   - q: Is my pasted text sent to a server?
     a: No. The pasted text and cleaned result are processed only in your browser.
 ---
@@ -45,12 +45,16 @@ Common situations include:
 - links embedded inside Markdown like `[source](https://example.com)`
 - needing to group links by domain before pasting them into a document or note
 
-This tool extracts only the URLs from mixed text, reduces duplicates, removes common tracking parameters, and turns them into a cleaner list that is easier to share. You can copy the result as plain URLs, Markdown bullets, or HTML anchors, and the text stays in your browser.
+This tool extracts only the URLs from mixed text, reduces duplicates, removes common tracking parameters, and turns them into a cleaner list that is easier to share. You can copy the result as plain URLs, Markdown bullets, HTML anchors, or CSV, and the text stays in your browser.
+
+## Why this tool was improved today
+Recent 21:00 quality passes focused on `average-speed-calculator`, `cafe-work-seat-simulator`, `blog-banned-word-checker`, `image-upscaler`, and `case-converter`, so this pass avoids repeating the same tool.
+`link-list-cleaner` was selected because pasted notes often contain Markdown links, closing brackets, UTM/ad parameters, page anchors, and very long URLs. Those input edges make it a good utility-type candidate for parser, mobile review, and copy-output improvements.
 
 ## How to use it
 1. Paste the text that contains links.
-2. Turn on the options you want: deduplicate, remove tracking parameters, and sort by domain.
-3. Choose whether to copy plain URLs, Markdown bullets, or HTML anchors.
+2. Turn on the options you want: deduplicate, remove tracking parameters, sort by domain, and remove page anchors.
+3. Choose whether to copy plain URLs, Markdown bullets, HTML anchors, or CSV.
 4. Review the cleaned list and domain summary.
 5. Copy the result into Notion, docs, chat, or a reference section.
 
@@ -64,8 +68,8 @@ Even if the same link appears multiple times, you can deduplicate it into one ti
 ### 3) Removing tracking parameters before external sharing
 You can strip common tags like `utm_*`, `fbclid`, `gclid`, and `msclkid` to make URLs look cleaner.
 
-### 4) Creating Markdown or HTML reference lists
-You can copy cleaned links as `- <https://...>` Markdown bullets or `<a href="...">...</a>` HTML anchors.
+### 4) Creating Markdown, HTML, or CSV reference lists
+If a Markdown link has readable text, the result can preserve it as `- [Title](https://...)`. For spreadsheets or audits, CSV output gives you `title,url,domain` columns.
 
 ## Related tools
 - If you want to check whether sensitive information is mixed in first: [Privacy Exposure Checker]({{ '/en/tools/privacy-exposure-checker/' | relative_url }})
@@ -74,7 +78,7 @@ You can copy cleaned links as `- <https://...>` Markdown bullets or `<a href="..
 
 ## FAQ
 ### Can it handle multiple links on one line?
-Yes. It scans links in order even when several URLs appear in the same line. Links that start with `www.` are normalized to `https://`, and URLs inside Markdown links are included too.
+Yes. It scans links in order even when several URLs appear in the same line. Links that start with `www.` are normalized to `https://`, and URLs inside Markdown links keep both title and URL.
 
 ### Will removing tracking parameters break the original link?
 Usually not for normal sharing links. Still, some services may depend on certain parameters, so it is safest to test important links once after cleaning.
@@ -82,5 +86,8 @@ Usually not for normal sharing links. Still, some services may depend on certain
 ### Why would I group links by domain?
 It makes sources easier to scan and helps you see how many links came from the same site. That is especially useful for research and reference organization.
 
+### Should I remove page anchors?
+Remove anchors such as `#comments` or `#section-2` when you only need the main page URL. Keep the option off when the link must open a specific section, comment, or heading.
+
 ## Summary
-Link List Cleaner is a **utility-type tool** that extracts URLs, www links, and Markdown links from mixed text, then handles deduplication, tracking-parameter cleanup, domain organization, and document-ready output formats in one place.
+Link List Cleaner is a **utility-type tool** that extracts URLs, www links, and Markdown links from mixed text, then handles deduplication, tracking-parameter cleanup, page-anchor removal, domain organization, and document-ready output formats in one place.
