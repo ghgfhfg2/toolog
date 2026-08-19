@@ -644,6 +644,20 @@ a:hover { color: #fff; text-decoration: none; }
 .jm-ui #jm-manual-meter[data-state="error"] { color: #fca5a5; }
 .jm-ui #jm-help[data-state="warning"] { color: #fbbf24; }
 .jm-ui #jm-help[data-state="success"] { color: #86efac; }
+.jm-options-grid {
+  grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr);
+}
+.jm-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.tool-stats.jm-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.tool-stats.jm-stats strong,
+.tool-stats.jm-stats span { overflow-wrap: anywhere; }
+.jm-jsonl-check {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: .55rem .65rem;
+  background: #1f2937;
+}
 .jm-ui #jm-manual {
   min-height: 11rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
@@ -1767,6 +1781,9 @@ a:hover { color: #fff; text-decoration: none; }
   }
   .tool-stats { grid-template-columns: 1fr 1fr; }
   .tool-stats.dfn-stats { grid-template-columns: 1fr 1fr; }
+  .jm-options-grid,
+  .jm-actions { grid-template-columns: 1fr; }
+  .tool-stats.jm-stats { grid-template-columns: 1fr 1fr; }
   .pm-categories,
   .pm-actions { grid-template-columns: 1fr; }
   .pm-stats { grid-template-columns: 1fr 1fr; }

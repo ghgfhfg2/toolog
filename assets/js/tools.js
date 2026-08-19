@@ -11288,8 +11288,10 @@
     const filesInput = document.getElementById('jm-files');
     const manualInput = document.getElementById('jm-manual');
     const modeSel = document.getElementById('jm-mode');
+    const formatSel = document.getElementById('jm-format');
     const runBtn = document.getElementById('jm-run');
     const dedupeChk = document.getElementById('jm-dedupe');
+    const jsonlChk = document.getElementById('jm-jsonl');
     const copyBtn = document.getElementById('jm-copy');
     const output = document.getElementById('jm-output');
     const download = document.getElementById('jm-download');
@@ -11297,6 +11299,7 @@
     const fileCount = document.getElementById('jm-file-count');
     const itemCount = document.getElementById('jm-item-count');
     const conflictCount = document.getElementById('jm-conflict-count');
+    const dedupeCount = document.getElementById('jm-dedupe-count');
     const sizeOut = document.getElementById('jm-size');
     const filesSummary = document.getElementById('jm-files-summary');
     const fileList = document.getElementById('jm-file-list');
@@ -11304,7 +11307,7 @@
     const sampleBtn = document.getElementById('jm-sample');
     const clearBtn = document.getElementById('jm-clear');
 
-    if (!filesInput || !manualInput || !modeSel || !runBtn || !copyBtn || !output || !download || !help || !fileCount || !itemCount || !conflictCount || !sizeOut || !filesSummary || !fileList || !manualMeter || !sampleBtn || !clearBtn) return;
+    if (!filesInput || !manualInput || !modeSel || !formatSel || !runBtn || !dedupeChk || !jsonlChk || !copyBtn || !output || !download || !help || !fileCount || !itemCount || !conflictCount || !dedupeCount || !sizeOut || !filesSummary || !fileList || !manualMeter || !sampleBtn || !clearBtn) return;
 
     const jmI18n = {
       ko: {
@@ -11312,9 +11315,12 @@
         readFail: (name) => `파일 읽기 실패: ${name}`,
         parseFail: (name) => `JSON 파싱 실패: ${name}. 쉼표, 따옴표, 중괄호가 맞는지 확인하세요.`,
         needInput: '먼저 JSON 파일을 선택하거나 JSON 텍스트를 붙여넣으세요.',
+        jsonlLine: (line) => `붙여넣은 JSONL ${line}번째 줄`,
         manualReady: (count, size) => `붙여넣은 JSON ${count}개 감지 · ${size}MB · 파일과 함께 병합할 수 있습니다.`,
         manualEmpty: '아직 붙여넣은 JSON이 없습니다.',
+        jsonlReady: (count, size) => `JSONL ${count}줄 감지 · ${size}MB · 줄마다 JSON 값 1개로 병합합니다.`,
         manualMeter: (count, size) => `붙여넣은 JSON ${count}개 · ${size}MB`,
+        jsonlMeter: (count, size) => `JSONL ${count}줄 · ${size}MB`,
         tooManyFiles: (count) => `파일이 ${count}개 선택되었습니다. 한 번에 최대 50개까지 합칠 수 있습니다.`,
         tooLarge: (size) => `선택한 파일의 합계가 ${size}MB입니다. 브라우저 보호를 위해 20MB 이하로 줄여 주세요.`,
         manualTooLarge: (size) => `붙여넣은 JSON이 ${size}MB입니다. 브라우저 보호를 위해 파일 포함 20MB 이하로 줄여 주세요.`,
@@ -11328,6 +11334,7 @@
         optionChanged: '병합 옵션이 변경되었습니다. JSON 합치기를 다시 실행하세요.',
         working: (count) => `${count}개 JSON 파일을 읽고 병합하는 중입니다.`,
         mergeDone: (count, mode, size) => `${count}개 파일 병합 완료 (${mode}) · 결과 ${size}KB. 다운로드 버튼으로 저장하세요.`,
+        dedupeRemoved: (count) => `중복 ${formatNum(count)}개 제거`,
         mergeError: '병합 중 오류가 발생했습니다.',
         sampleLoaded: '예시 JSON 2개를 객체 내 공통 배열 병합 방식으로 합쳤습니다.',
         cleared: 'JSON 병합 입력과 결과를 초기화했습니다.',
@@ -11348,9 +11355,12 @@
         readFail: (name) => `Failed to read file: ${name}`,
         parseFail: (name) => `JSON parse failed: ${name}. Check commas, quotes, and braces.`,
         needInput: 'Select JSON files or paste JSON text first.',
+        jsonlLine: (line) => `pasted JSONL line ${line}`,
         manualReady: (count, size) => `${count} pasted JSON block(s) detected · ${size} MB · You can merge them with uploaded files.`,
         manualEmpty: 'No pasted JSON yet.',
+        jsonlReady: (count, size) => `${count} JSONL line(s) detected · ${size} MB · Each line will be merged as one JSON value.`,
         manualMeter: (count, size) => `${count} pasted JSON block(s) · ${size} MB`,
+        jsonlMeter: (count, size) => `${count} JSONL line(s) · ${size} MB`,
         tooManyFiles: (count) => `${count} files selected. You can merge up to 50 files at once.`,
         tooLarge: (size) => `Selected files total ${size} MB. Reduce the total to 20 MB or less to protect browser memory.`,
         manualTooLarge: (size) => `Pasted JSON totals ${size} MB. Keep files plus pasted text under 20 MB to protect browser memory.`,
@@ -11364,6 +11374,7 @@
         optionChanged: 'Merge options changed. Run JSON merge again.',
         working: (count) => `Reading and merging ${count} JSON file(s).`,
         mergeDone: (count, mode, size) => `Merged ${count} file(s) (${mode}) · ${size} KB output. Use the download button to save.`,
+        dedupeRemoved: (count) => `${formatNum(count)} duplicate(s) removed`,
         mergeError: 'An error occurred while merging.',
         sampleLoaded: 'Merged 2 sample JSON objects with the shared-array mode.',
         cleared: 'Cleared the JSON merge input and result.',
@@ -11384,9 +11395,12 @@
         readFail: (name) => `ファイルの読み込みに失敗しました: ${name}`,
         parseFail: (name) => `JSONの解析に失敗しました: ${name}。カンマ、引用符、中括弧を確認してください。`,
         needInput: '先にJSONファイルを選択するか、JSONテキストを貼り付けてください。',
+        jsonlLine: (line) => `貼り付けJSONL ${line}行目`,
         manualReady: (count, size) => `貼り付けJSON ${count}件を検出 · 合計${size}MB · ファイルと一緒に結合できます。`,
         manualEmpty: '貼り付けJSONはまだありません。',
+        jsonlReady: (count, size) => `JSONL ${count}行を検出 · 合計${size}MB · 1行1件のJSON値として結合します。`,
         manualMeter: (count, size) => `貼り付けJSON ${count}件 · ${size}MB`,
+        jsonlMeter: (count, size) => `JSONL ${count}行 · ${size}MB`,
         tooManyFiles: (count) => `${count}個のファイルが選択されています。一度に結合できるのは最大50個です。`,
         tooLarge: (size) => `選択ファイルの合計は${size}MBです。ブラウザ保護のため20MB以下に減らしてください。`,
         manualTooLarge: (size) => `貼り付けJSONは${size}MBです。ファイルを含め20MB以下に減らしてください。`,
@@ -11400,6 +11414,7 @@
         optionChanged: '結合オプションが変更されました。JSON結合をもう一度実行してください。',
         working: (count) => `${count}個のJSONファイルを読み込んで結合しています。`,
         mergeDone: (count, mode, size) => `${count}個のファイルをマージしました（${mode}）· 結果${size}KB。ダウンロードで保存してください。`,
+        dedupeRemoved: (count) => `重複${formatNum(count)}件を削除`,
         mergeError: 'マージ中にエラーが発生しました。',
         sampleLoaded: 'サンプルJSON 2件を共通配列マージで結合しました。',
         cleared: 'JSON結合の入力と結果をクリアしました。',
@@ -11444,6 +11459,7 @@
       copyBtn.disabled = true;
       itemCount.textContent = '-';
       conflictCount.textContent = '-';
+      dedupeCount.textContent = '-';
       sizeOut.textContent = '-';
     };
 
@@ -11471,10 +11487,26 @@
       reader.readAsText(file, 'utf-8');
     });
 
-    const splitManualBlocks = () => (manualInput.value || '')
-      .split(/\n\s*---\s*\n/g)
-      .map((block) => block.trim())
-      .filter(Boolean);
+    const getManualSources = () => {
+      const text = manualInput.value || '';
+      if (!text.trim()) return [];
+      if (jsonlChk.checked) {
+        return text
+          .split(/\r\n|\r|\n/g)
+          .map((line, index) => ({ text: line.trim(), line: index + 1 }))
+          .filter((entry) => entry.text && !entry.text.startsWith('//'))
+          .map((entry, index) => ({
+            name: jmText.jsonlLine(entry.line),
+            text: entry.text,
+            sortIndex: index
+          }));
+      }
+      return text
+        .split(/\n\s*---\s*\n/g)
+        .map((block) => block.trim())
+        .filter(Boolean)
+        .map((text, index) => ({ name: `pasted-json-${index + 1}`, text, sortIndex: index }));
+    };
 
     const detectMode = (roots) => {
       if (roots.every((v) => Array.isArray(v))) return 'array-concat';
@@ -11542,10 +11574,16 @@
       return out;
     };
 
-    const validateInputs = (files, manualBlocks) => {
-      if (!files.length && !manualBlocks.length) return jmText.needInput;
+    const dedupeWithCount = (arr) => {
+      const before = arr.length;
+      const next = dedupeArray(arr);
+      return { items: next, removed: before - next.length };
+    };
+
+    const validateInputs = (files, manualSources) => {
+      if (!files.length && !manualSources.length) return jmText.needInput;
       if (files.length > MAX_FILES) return jmText.tooManyFiles(files.length);
-      const manualBytes = byteLength(manualBlocks.join('\n---\n'));
+      const manualBytes = byteLength(manualSources.map((source) => source.text).join('\n---\n'));
       const totalBytes = files.reduce((sum, file) => sum + file.size, 0) + manualBytes;
       if (!files.length && manualBytes > MAX_TOTAL_BYTES) return jmText.manualTooLarge(formatMb(manualBytes));
       if (totalBytes > MAX_TOTAL_BYTES) return jmText.tooLarge(formatMb(totalBytes));
@@ -11554,22 +11592,22 @@
 
     const updateInputState = () => {
       const files = selectedFiles;
-      const manualBlocks = splitManualBlocks();
-      const manualBytes = byteLength(manualBlocks.join('\n---\n'));
-      const totalBytes = files.reduce((sum, file) => sum + file.size, 0) + byteLength(manualBlocks.join('\n---\n'));
-      const error = validateInputs(files, manualBlocks);
+      const manualSources = getManualSources();
+      const manualBytes = byteLength(manualSources.map((source) => source.text).join('\n---\n'));
+      const totalBytes = files.reduce((sum, file) => sum + file.size, 0) + manualBytes;
+      const error = validateInputs(files, manualSources);
       clearResult();
-      fileCount.textContent = fmt(files.length + manualBlocks.length);
+      fileCount.textContent = fmt(files.length + manualSources.length);
       runBtn.disabled = !!error;
       filesInput.setAttribute('aria-invalid', error && files.length ? 'true' : 'false');
-      manualInput.setAttribute('aria-invalid', error && manualBlocks.length ? 'true' : 'false');
+      manualInput.setAttribute('aria-invalid', error && manualSources.length ? 'true' : 'false');
       renderFileList(files);
-      manualMeter.textContent = manualBlocks.length ? jmText.manualMeter(manualBlocks.length, formatMb(manualBytes)) : jmText.manualEmpty;
-      manualMeter.dataset.state = error && manualBlocks.length ? 'error' : '';
+      manualMeter.textContent = manualSources.length ? (jsonlChk.checked ? jmText.jsonlMeter(manualSources.length, formatMb(manualBytes)) : jmText.manualMeter(manualSources.length, formatMb(manualBytes))) : jmText.manualEmpty;
+      manualMeter.dataset.state = error && manualSources.length ? 'error' : '';
       let readyText = error;
-      if (!readyText && files.length && manualBlocks.length) readyText = jmText.mixedReady(files.length, manualBlocks.length, formatMb(totalBytes));
+      if (!readyText && files.length && manualSources.length) readyText = jmText.mixedReady(files.length, manualSources.length, formatMb(totalBytes));
       else if (!readyText && files.length) readyText = jmText.filesReady(files.length, formatMb(totalBytes));
-      else if (!readyText) readyText = jmText.manualReady(manualBlocks.length, formatMb(totalBytes));
+      else if (!readyText) readyText = jsonlChk.checked ? jmText.jsonlReady(manualSources.length, formatMb(totalBytes)) : jmText.manualReady(manualSources.length, formatMb(totalBytes));
       filesSummary.textContent = readyText;
       filesSummary.dataset.state = error ? 'error' : '';
       setHelp(readyText, error ? 'error' : '');
@@ -11580,8 +11618,9 @@
       updateInputState();
     });
     manualInput.addEventListener('input', updateInputState);
+    jsonlChk.addEventListener('change', updateInputState);
 
-    [modeSel, dedupeChk].forEach((control) => control?.addEventListener('change', () => {
+    [modeSel, dedupeChk, formatSel].forEach((control) => control?.addEventListener('change', () => {
       if (!output.value) return;
       clearResult();
       setHelp(jmText.optionChanged, 'warning');
@@ -11589,8 +11628,8 @@
 
     runBtn.addEventListener('click', async () => {
       const files = selectedFiles;
-      const manualBlocks = splitManualBlocks();
-      const inputError = validateInputs(files, manualBlocks);
+      const manualSources = getManualSources();
+      const inputError = validateInputs(files, manualSources);
       if (inputError) {
         help.textContent = inputError;
         setHelp(inputError, 'error');
@@ -11601,10 +11640,9 @@
       runBtn.disabled = true;
       filesInput.setAttribute('aria-invalid', 'false');
       manualInput.setAttribute('aria-invalid', 'false');
-      setHelp(jmText.working(files.length + manualBlocks.length));
+      setHelp(jmText.working(files.length + manualSources.length));
       try {
         const fileSources = await Promise.all(files.map(async (file) => ({ name: file.name, text: await readText(file) })));
-        const manualSources = manualBlocks.map((text, idx) => ({ name: `pasted-json-${idx + 1}`, text }));
         const sources = [...fileSources, ...manualSources];
         const parsed = sources.map((source) => {
           const txt = source.text || '';
@@ -11624,10 +11662,17 @@
 
         let merged;
         let conflicts = 0;
+        let removedDuplicates = 0;
 
         if (mode === 'array-concat') {
           const arr = parsed.flatMap((v) => Array.isArray(v) ? v : [v]);
-          merged = dedupeEnabled ? dedupeArray(arr) : arr;
+          if (dedupeEnabled) {
+            const deduped = dedupeWithCount(arr);
+            merged = deduped.items;
+            removedDuplicates = deduped.removed;
+          } else {
+            merged = arr;
+          }
         } else if (mode === 'object-array-concat') {
           if (!allObjects) throw new Error(jmText.invalidObjectArrayMode);
           const keySets = parsed.map((obj) => Object.keys(obj));
@@ -11636,7 +11681,13 @@
           if (!arrayKey) throw new Error(jmText.invalidObjectArrayMode);
           merged = { ...(parsed[0] || {}) };
           const arr = parsed.flatMap((obj) => Array.isArray(obj[arrayKey]) ? obj[arrayKey] : []);
-          merged[arrayKey] = dedupeEnabled ? dedupeArray(arr) : arr;
+          if (dedupeEnabled) {
+            const deduped = dedupeWithCount(arr);
+            merged[arrayKey] = deduped.items;
+            removedDuplicates = deduped.removed;
+          } else {
+            merged[arrayKey] = arr;
+          }
           parsed.slice(1).forEach((obj) => {
             Object.keys(obj || {}).forEach((k) => {
               if (k === arrayKey) return;
@@ -11657,7 +11708,7 @@
           merged = parsed;
         }
 
-        const pretty = JSON.stringify(merged, null, 2);
+        const pretty = formatSel.value === 'minified' ? JSON.stringify(merged) : JSON.stringify(merged, null, 2);
         currentResult = pretty;
         output.value = pretty.length > MAX_PREVIEW_CHARS ? `${pretty.slice(0, MAX_PREVIEW_CHARS)}\n...` : pretty;
 
@@ -11670,14 +11721,16 @@
 
         itemCount.textContent = fmt(getCount(merged));
         conflictCount.textContent = fmt(conflicts);
+        dedupeCount.textContent = fmt(removedDuplicates);
         const outputBytes = new TextEncoder().encode(pretty).length;
         sizeOut.textContent = fmt(outputBytes);
-        const doneMessage = jmText.mergeDone(sources.length, jmText.modeLabelMap[mode] || mode, formatKb(outputBytes));
+        const doneMessage = `${jmText.mergeDone(sources.length, jmText.modeLabelMap[mode] || mode, formatKb(outputBytes))}${removedDuplicates ? ` · ${jmText.dedupeRemoved(removedDuplicates)}` : ''}`;
         setHelp(pretty.length > MAX_PREVIEW_CHARS ? `${doneMessage} ${jmText.outputTooLarge}` : doneMessage, 'success');
       } catch (err) {
         output.value = '';
         itemCount.textContent = '-';
         conflictCount.textContent = '-';
+        dedupeCount.textContent = '-';
         sizeOut.textContent = '-';
         setHelp(err?.message || jmText.mergeError, 'error');
       } finally {
@@ -11688,7 +11741,9 @@
     sampleBtn.addEventListener('click', () => {
       clearResult();
       modeSel.value = 'object-array-concat';
+      formatSel.value = 'pretty';
       dedupeChk.checked = true;
+      jsonlChk.checked = false;
       filesInput.value = '';
       selectedFiles = [];
       manualInput.value = [
@@ -11706,6 +11761,8 @@
       filesInput.value = '';
       selectedFiles = [];
       manualInput.value = '';
+      formatSel.value = 'pretty';
+      jsonlChk.checked = false;
       fileCount.textContent = '0';
       runBtn.disabled = true;
       filesInput.setAttribute('aria-invalid', 'false');

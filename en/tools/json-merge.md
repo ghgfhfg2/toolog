@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: JSON Merge | Combine Files, Pasted JSON, Arrays, Objects, and Remove Duplicates
-description: Merge JSON files or pasted API responses in your browser. Concatenate arrays, merge object keys and shared arrays, remove duplicates, remove selected files, check pasted size, review key conflicts, copy results, and download merged.json.
+title: JSON Merge | Combine Files, JSONL, Arrays, Objects, and Remove Duplicates
+description: Merge JSON files, pasted API responses, or JSONL logs in your browser. Concatenate arrays, merge object keys and shared arrays, count removed duplicates, review key conflicts, choose pretty or minified output, copy results, and download merged.json.
 lang: en
 permalink: /en/tools/json-merge/
 canonical_url: /en/tools/json-merge/
@@ -9,7 +9,7 @@ category: data
 category_label: Data/Utility
 thumbnail: /assets/thumbs/json-merge.svg
 tool_key: json-merge
-keywords: [json merge, combine json files, merge arrays, merge json objects, paste json, json array merge]
+keywords: [json merge, combine json files, merge arrays, merge json objects, paste json, json array merge, jsonl merge]
 related_tools: [link-list-cleaner, text-counter, case-converter]
 faq:
   - q: Are JSON files uploaded to a server before merging?
@@ -26,6 +26,10 @@ faq:
     a: Yes. Paste an API response or small JSON snippet directly. Separate multiple documents with a line containing only --- and merge them with files if needed.
   - q: Can I remove only one selected JSON file?
     a: Yes. After selecting files, remove individual files from the on-page file list before running the merge.
+  - q: Can it handle JSONL where each line is one JSON object?
+    a: Yes. Enable JSONL mode to parse each non-empty line as one JSON value, with // comment lines ignored.
+  - q: Can I save a minified JSON result?
+    a: Yes. Choose Pretty printed or Minified before merging; the preview, copy result, and downloaded file use that output style.
 alternate_urls:
   ko: /tools/json-merge/
   en: /en/tools/json-merge/
@@ -37,10 +41,10 @@ Use it when split JSON files with similar schema need to be combined quickly.
 
 Examples: paged API exports, chunked logs, and batch output files.
 
-It is useful when you saved API responses page by page or need to turn several batch outputs into one `merged.json` without uploading private data elsewhere. For smaller snippets, paste JSON directly instead of saving temporary files, then test the same array merge or object merge behavior.
+It is useful when you saved API responses page by page or need to turn several batch outputs into one `merged.json` without uploading private data elsewhere. For smaller snippets, paste JSON directly instead of saving temporary files, then test the same array merge or object merge behavior. JSONL logs can also be parsed line by line and merged locally.
 
 ## Why this tool was refreshed today
-Recent quality passes had already focused on tools such as unit conversion, privacy checks, action-item extraction, password strength checks, customer support message generation, scam-signal checks, and filename cleanup, so this update avoids repeating the same tool.
+Recent quality passes focused on `link-list-cleaner`, `average-speed-calculator`, `cafe-work-seat-simulator`, `blog-banned-word-checker`, `image-upscaler`, `case-converter`, and `grocery-budget-checker`, so this update avoids repeating the same tool.
 
 `json-merge` was selected because it has several failure-prone input paths: file upload, direct paste, JSON parsing, large-size limits, and object-key conflicts. It also matches a clear data-work search intent for people trying to combine JSON files, merge arrays, or test pasted API responses locally.
 
@@ -50,19 +54,22 @@ Recent quality passes had already focused on tools such as unit conversion, priv
 - Auto mode detects array/object structure
 - Manual modes: array concat, object key merge, wrap roots into array
 - Shared-array concatenation for objects such as `{ "items": [...] }`
+- JSONL paste mode for one JSON value per line
+- Pretty printed or minified output style
 - Preview + copy result + `merged.json` download
-- Optional array deduplication + object key conflict count
+- Optional array deduplication count + object key conflict count
 - Clear errors for invalid JSON, incompatible manual modes, and excessive file size
 - Individual selected-file removal and pasted JSON size guidance
 - Sample data to test the merge behavior before choosing files
 
 ## How to use
 1. Upload multiple JSON files.
-2. If you do not have files, paste JSON text directly. Use a line containing only `---` between multiple documents.
+2. If you do not have files, paste JSON text directly. Use a line containing only `---` between multiple documents, or enable JSONL mode and paste one JSON value per line.
 3. Remove any selected file you do not want to include, and check the pasted-size message if you added manual JSON.
 4. Pick a merge mode (default: Auto).
-5. Click **Merge JSON**.
-6. Review, copy, or download the result.
+5. Choose Pretty printed or Minified output.
+6. Click **Merge JSON**.
+7. Review, copy, or download the result.
 
 ## Notes
 - In object-merge mode, duplicate keys are overwritten by later files.
@@ -70,6 +77,7 @@ Recent quality passes had already focused on tools such as unit conversion, priv
 - Array deduplication compares objects with sorted keys, so `{ "a": 1, "b": 2 }` and `{ "b": 2, "a": 1 }` count as the same item.
 - To protect browser memory, each run accepts up to 50 files with a combined size of 20 MB.
 - Uploaded files and pasted JSON share the same 20 MB total limit.
+- JSONL mode skips empty lines and lines that start with `//`, but trailing comments are not valid JSON and will be reported as parse errors.
 - If no files or pasted JSON are present, the merge button stays disabled and the page shows an empty-input message.
 - Uploaded files and merged results stay in your current browser and are never sent to a server.
 

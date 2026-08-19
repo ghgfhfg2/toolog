@@ -2413,12 +2413,14 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
 
           <div class="tool-row">
             <label for="jm-manual">{% if page.lang == 'en' %}Paste JSON directly (optional){% elsif page.lang == 'ja' %}JSONを直接貼り付け（任意）{% else %}JSON 직접 붙여넣기 (선택){% endif %}</label>
-            <textarea id="jm-manual" rows="8" maxlength="2000000" aria-describedby="jm-manual-help jm-help" placeholder="{% if page.lang == 'en' %}Paste one JSON document, or separate multiple documents with a line containing only ---.{% elsif page.lang == 'ja' %}JSONを1件貼り付けるか、複数の場合は --- だけの行で区切ってください。{% else %}JSON 1개를 붙여넣거나, 여러 개는 --- 한 줄로 구분하세요.{% endif %}"></textarea>
+            <textarea id="jm-manual" rows="8" maxlength="2000000" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="jm-manual-help jm-help" placeholder="{% if page.lang == 'en' %}Paste one JSON document, separate multiple documents with ---, or enable JSONL for one object per line.{% elsif page.lang == 'ja' %}JSONを1件貼り付けるか、複数の場合は --- で区切ります。JSONLなら1行1件で貼り付けます。{% else %}JSON 1개를 붙여넣거나, 여러 개는 --- 한 줄로 구분하세요. JSONL은 한 줄에 1개씩 붙여넣습니다.{% endif %}"></textarea>
             <p id="jm-manual-meter" class="tool-result">{% if page.lang == 'en' %}No pasted JSON yet.{% elsif page.lang == 'ja' %}貼り付けJSONはまだありません。{% else %}아직 붙여넣은 JSON이 없습니다.{% endif %}</p>
-            <p id="jm-manual-help" class="tool-result">{% if page.lang == 'en' %}Use this for quick API snippets. File uploads and pasted JSON can be merged together.{% elsif page.lang == 'ja' %}APIレスポンスの一部をすぐ試せます。ファイルと貼り付けJSONを一緒に結合できます。{% else %}API 응답 조각을 빠르게 테스트할 때 쓰세요. 업로드 파일과 붙여넣은 JSON을 함께 병합할 수 있습니다.{% endif %}</p>
+            <p id="jm-manual-help" class="tool-result">{% if page.lang == 'en' %}Use this for quick API snippets, copied console logs, or JSONL exports. File uploads and pasted JSON can be merged together.{% elsif page.lang == 'ja' %}APIレスポンス、コピーしたログ、JSONLエクスポートをすぐ試せます。ファイルと貼り付けJSONを一緒に結合できます。{% else %}API 응답 조각, 복사한 로그, JSONL 내보내기를 빠르게 테스트할 때 쓰세요. 업로드 파일과 붙여넣은 JSON을 함께 병합할 수 있습니다.{% endif %}</p>
           </div>
 
-          <div class="tool-row">
+          <label class="tool-check jm-jsonl-check"><input id="jm-jsonl" type="checkbox" /> {% if page.lang == 'en' %}Treat pasted text as JSONL (one JSON value per line){% elsif page.lang == 'ja' %}貼り付けテキストをJSONLとして扱う（1行1件）{% else %}붙여넣은 텍스트를 JSONL로 처리(한 줄에 JSON 1개){% endif %}</label>
+
+          <div class="tool-row-grid jm-options-grid">
             <label for="jm-mode">{% if page.lang == 'en' %}Merge mode{% elsif page.lang == 'ja' %}マージ方式{% else %}병합 방식{% endif %}</label>
             <select id="jm-mode" aria-describedby="jm-help">
               <option value="auto">{% if page.lang == 'en' %}Auto (recommended){% elsif page.lang == 'ja' %}自動（推奨）{% else %}자동(권장){% endif %}</option>
@@ -2427,21 +2429,27 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
               <option value="object-array-concat">{% if page.lang == 'en' %}Auto-concatenate common array in objects{% elsif page.lang == 'ja' %}オブジェクト内の共通配列を自動連結{% else %}객체 내 공통 배열 자동 이어붙이기{% endif %}</option>
               <option value="wrap-array">{% if page.lang == 'en' %}Wrap file roots into array{% elsif page.lang == 'ja' %}各ファイルのルートを配列で包む{% else %}파일별 루트를 배열로 감싸기{% endif %}</option>
             </select>
+            <label for="jm-format">{% if page.lang == 'en' %}Output style{% elsif page.lang == 'ja' %}出力形式{% else %}출력 형식{% endif %}</label>
+            <select id="jm-format" aria-describedby="jm-help">
+              <option value="pretty">{% if page.lang == 'en' %}Pretty printed{% elsif page.lang == 'ja' %}整形表示{% else %}보기 좋게 정렬{% endif %}</option>
+              <option value="minified">{% if page.lang == 'en' %}Minified{% elsif page.lang == 'ja' %}圧縮表示{% else %}공백 제거 압축{% endif %}</option>
+            </select>
           </div>
 
           <label class="tool-check"><input id="jm-dedupe" type="checkbox" /> {% if page.lang == 'en' %}Remove duplicates when merging arrays{% elsif page.lang == 'ja' %}配列マージ時に重複を除去{% else %}배열 병합 시 중복 제거{% endif %}</label>
 
-          <div class="tool-row-grid pct-actions">
+          <div class="tool-row-grid pct-actions jm-actions">
             <button id="jm-run" type="button" disabled>{% if page.lang == 'en' %}Merge JSON{% elsif page.lang == 'ja' %}JSONをマージ{% else %}JSON 합치기{% endif %}</button>
             <button id="jm-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}サンプルを入力{% else %}예시 불러오기{% endif %}</button>
             <button id="jm-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
             <button id="jm-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
+          <div class="tool-stats jm-stats">
             <div><strong id="jm-file-count">0</strong><span>{% if page.lang == 'en' %}Input sources{% elsif page.lang == 'ja' %}入力ソース数{% else %}입력 소스 수{% endif %}</span></div>
             <div><strong id="jm-item-count">-</strong><span>{% if page.lang == 'en' %}Merged item count{% elsif page.lang == 'ja' %}マージ結果の項目数{% else %}병합 결과 항목 수{% endif %}</span></div>
             <div><strong id="jm-conflict-count">-</strong><span>{% if page.lang == 'en' %}Duplicate keys (object mode){% elsif page.lang == 'ja' %}重複キー（オブジェクトモード）{% else %}중복 키(객체 모드){% endif %}</span></div>
+            <div><strong id="jm-dedupe-count">-</strong><span>{% if page.lang == 'en' %}Duplicates removed{% elsif page.lang == 'ja' %}削除した重複{% else %}제거한 중복{% endif %}</span></div>
             <div><strong id="jm-size">-</strong><span>{% if page.lang == 'en' %}Output size (bytes){% elsif page.lang == 'ja' %}結果サイズ（bytes）{% else %}결과 용량(bytes){% endif %}</span></div>
           </div>
 
