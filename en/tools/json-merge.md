@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: JSON Merge | Combine Files, JSONL, Arrays, Objects, and Remove Duplicates
-description: Merge JSON files, pasted API responses, or JSONL logs in your browser. Concatenate arrays, merge object keys and shared arrays, count removed duplicates, review key conflicts, choose pretty or minified output, copy results, and download merged.json.
+title: JSON Merge | Combine Files, JSONL Logs, Arrays, Objects, and Remove Duplicates
+description: Merge multiple JSON files, pasted API responses, and JSONL logs in your browser. Concatenate arrays, merge object keys and shared arrays, count removed duplicates, review key conflicts, choose pretty or minified output, copy results, and download merged.json.
 lang: en
 permalink: /en/tools/json-merge/
 canonical_url: /en/tools/json-merge/
@@ -30,6 +30,8 @@ faq:
     a: Yes. Enable JSONL mode to parse each non-empty line as one JSON value, with // comment lines ignored.
   - q: Can I save a minified JSON result?
     a: Yes. Choose Pretty printed or Minified before merging; the preview, copy result, and downloaded file use that output style.
+  - q: Why is the merge button disabled?
+    a: It stays disabled until at least one JSON file or pasted JSON input is present, so an empty merge cannot run by mistake.
 alternate_urls:
   ko: /tools/json-merge/
   en: /en/tools/json-merge/
@@ -37,11 +39,11 @@ alternate_urls:
 ---
 
 ## When should you use JSON Merge?
-Use it when split JSON files with similar schema need to be combined quickly.
+Use **JSON Merge** when split JSON files with similar schema need to be combined quickly.
 
 Examples: paged API exports, chunked logs, and batch output files.
 
-It is useful when you saved API responses page by page or need to turn several batch outputs into one `merged.json` without uploading private data elsewhere. For smaller snippets, paste JSON directly instead of saving temporary files, then test the same array merge or object merge behavior. JSONL logs can also be parsed line by line and merged locally.
+It is useful when you saved API responses page by page or need to turn several batch outputs into one `merged.json` without uploading private data elsewhere. For smaller snippets, paste JSON directly instead of saving temporary files, then test the same array merge or object merge behavior. JSONL logs can also be parsed line by line and merged locally, with empty lines and full-line `//` comments skipped.
 
 ## Why this tool was refreshed today
 Recent quality passes focused on `link-list-cleaner`, `average-speed-calculator`, `cafe-work-seat-simulator`, `blog-banned-word-checker`, `image-upscaler`, `case-converter`, and `grocery-budget-checker`, so this update avoids repeating the same tool.
