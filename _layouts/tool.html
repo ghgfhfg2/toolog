@@ -277,6 +277,7 @@ layout: default
               <input id="pc-quality" type="range" min="0.4" max="1" step="0.05" value="0.8" aria-describedby="pc-quality-note" />
             </div>
             <button id="pc-run" type="button">{% if page.lang == 'en' %}Compress{% elsif page.lang == 'ja' %}圧縮実行{% else %}압축 실행{% endif %}</button>
+            <button id="pc-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
           <p class="tool-result pc-note" id="pc-quality-note">{% if page.lang == 'en' %}Quality affects WebP and JPEG output. PNG is lossless, so file size may not shrink much.{% elsif page.lang == 'ja' %}品質設定はWebP/JPEG出力に反映されます。PNGは可逆のため容量があまり減らない場合があります。{% else %}품질 설정은 WebP/JPEG 출력에 적용됩니다. PNG는 무손실이라 용량이 크게 줄지 않을 수 있습니다.{% endif %}</p>
           <p class="tool-result" id="pc-result" role="status" aria-live="polite">{% if page.lang == 'en' %}Choose a PNG, JPEG, or WebP image to compress it in your browser.{% elsif page.lang == 'ja' %}PNG、JPEG、WebP画像を選ぶとブラウザ内で圧縮できます。{% else %}PNG, JPEG, WebP 이미지를 선택하면 브라우저에서 바로 압축합니다.{% endif %}</p>
@@ -289,7 +290,7 @@ layout: default
             <div><strong id="pc-format-stat">-</strong><span>{% if page.lang == 'en' %}Output format{% elsif page.lang == 'ja' %}出力形式{% else %}출력 형식{% endif %}</span></div>
           </div>
           <p class="tool-result" id="pc-help">{% if page.lang == 'en' %}WebP is usually best for photos and blog images. PNG output is lossless, so it may not shrink as much.{% elsif page.lang == 'ja' %}写真や記事画像はWebPが軽くなりやすいです。PNG出力は可逆のため削減幅が小さい場合があります。{% else %}사진·블로그 이미지는 WebP가 대체로 작습니다. PNG 출력은 무손실이라 절감 폭이 작을 수 있습니다.{% endif %}</p>
-          <canvas id="pc-canvas" aria-label="{% if page.lang == 'en' %}Compressed image preview{% elsif page.lang == 'ja' %}圧縮画像プレビュー{% else %}압축 이미지 미리보기{% endif %}"></canvas>
+          <canvas id="pc-canvas" aria-label="{% if page.lang == 'en' %}Compressed image preview{% elsif page.lang == 'ja' %}圧縮画像プレビュー{% else %}압축 이미지 미리보기{% endif %}" hidden></canvas>
           <a id="pc-download" class="open-link" download="compressed.webp" aria-disabled="true">{% if page.lang == 'en' %}Download compressed image{% elsif page.lang == 'ja' %}圧縮画像をダウンロード{% else %}압축 이미지 다운로드{% endif %}</a>
         </div>
       {% when 'youtube-image-kit' %}

@@ -1294,7 +1294,8 @@ a:hover { color: #fff; text-decoration: none; }
   display: none;
 }
 .pc-controls {
-  grid-template-columns: minmax(0, 1fr) minmax(140px, .45fr);
+  grid-template-columns: minmax(0, 1fr) minmax(120px, .4fr) minmax(92px, .3fr);
+  align-items: end;
 }
 .pc-controls > div {
   display: grid;
