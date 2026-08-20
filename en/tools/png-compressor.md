@@ -27,6 +27,8 @@ faq:
     a: PNG is lossless, so browser quality settings have little effect. For photos, try WebP or JPEG first.
   - q: What happens to transparency when saving as JPEG?
     a: JPEG does not support transparency, so transparent pixels are flattened onto a white background. Choose PNG or WebP if transparency matters.
+  - q: Can I compress a very large photo directly?
+    a: Images over 25MB or 24MP can put too much pressure on browser memory. Resize the image first, then compress it for a more reliable result.
   - q: Are uploaded files stored on a server?
     a: No. Processing happens in your browser and only the result file is downloaded.
 ---
@@ -36,13 +38,19 @@ Large images slow down blogs, storefronts, and landing pages.
 This tool reduces image size directly in the browser to improve load speed and upload efficiency.
 You can load PNG, JPEG, or WebP files, choose the output format and quality, then check the preview, final size, and savings.
 
+## Why this tool was improved today
+Recent quality passes focused on tools such as `link-list-cleaner`, `average-speed-calculator`, `cafe-work-seat-simulator`, `blog-banned-word-checker`, `image-upscaler`, `case-converter`, and `grocery-budget-checker`, so this update avoids repeating the same tool.
+`png-compressor` also has several failure-prone flows: unsupported formats, oversized images, browser-specific WebP/JPEG export behavior, and JPEG conversion for transparent images.
+The update makes the mobile flow clearer by keeping result status, warnings, preview, and download state in one predictable sequence.
+
 ## How it works
 - Re-encodes your uploaded image in-browser
 - Output format options: **WebP / JPEG / PNG**
 - Quality slider to tune WebP/JPEG visual quality vs file size
 - Shows original size, compressed size, reduction rate, output format, and preview
-- Clear guidance for empty runs, unsupported files, oversized images, and larger-than-original output
+- Clear guidance for empty runs, unsupported files, images over 25MB or 24MP, and larger-than-original output
 - Warns before flattening transparent PNG pixels onto a white JPEG background
+- Saves the result with a safe download filename based on the original file name
 
 > Uploaded files are not sent to a server. The image is processed in your current browser session.
 
@@ -68,6 +76,7 @@ For very large photos, resize first with [Image Resizer]({{ '/en/tools/image-res
 - Keep transparent logos and icons as PNG or WebP rather than JPEG.
 - Resize images above 25MB or 24MP first to reduce browser memory risk.
 - If the result is larger than the original, the source may already be optimized. Try another format or keep the original.
+- On mobile, choose the file first, set the output format and quality, then press Compress. The result, warning, preview, and download link update in the same screen flow.
 
 ## SEO impact
 Image optimization improves page speed and user experience, which helps overall search performance.
@@ -92,6 +101,9 @@ JPEG does not support transparency, so transparent pixels are flattened onto a w
 
 ### Why did PNG output get larger?
 PNG is lossless and can be larger than the original if the source was already optimized. Try WebP or JPEG unless you need transparency or crisp UI edges.
+
+### Can I compress a very large photo directly?
+Images over 25MB or 24MP can put too much pressure on browser memory. Resize the image first, then compress it for a more reliable result.
 
 ### Are uploaded files stored on a server?
 No. The original file stays in your browser, and a separate compressed file is created for download.
