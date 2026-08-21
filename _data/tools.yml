@@ -888,9 +888,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 한글 이름, 상호명, 지명, 짧은 문장을 로마자 표기 초안으로 바꾸고 공백·하이픈·대소문자 스타일을 조정해요.
-  description_en: Convert Korean names, place names, brand names, and short Hangul text into Romanized drafts with spacing, hyphen, and case options.
-  description_ja: ハングルの名前、地名、ブランド名、短い文章をローマ字表記の下書きに変換し、空白・ハイフン・英字スタイルを調整できます。
+  description: 한글 이름, 상호명, 지명, 짧은 문장을 로마자 표기 초안으로 바꾸고 공백·하이픈·대소문자, 성씨 후보, 기존 영문명 비교까지 확인해요.
+  description_en: Convert Korean names, place names, brand names, and short Hangul text into Romanized drafts with spacing, hyphen, case, surname candidates, and registered-spelling comparison.
+  description_ja: ハングルの名前、地名、ブランド名、短い文章をローマ字表記の下書きに変換し、空白・ハイフン・英字スタイル・姓候補・登録表記比較を確認できます。
   url: /tools/korean-name-romanizer/
   url_en: /en/tools/korean-name-romanizer/
   url_ja: /ja/tools/korean-name-romanizer/

@@ -763,6 +763,39 @@ textarea:focus-visible {
 .knr-ui #knr-help[data-state="warning"] { color: #fbbf24; }
 .knr-ui #knr-help[data-state="success"] { color: #86efac; }
 .knr-ui textarea[aria-invalid="true"] { border-color: #ef4444; }
+.knr-candidates {
+  display: grid;
+  gap: .55rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: .75rem;
+  background: #172033;
+}
+.knr-candidates > strong {
+  font-size: .95rem;
+  color: var(--text);
+}
+.knr-candidate-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  color: var(--muted);
+}
+.knr-candidate-list button {
+  border: 1px solid #334155;
+  border-radius: 999px;
+  padding: .45rem .7rem;
+  min-height: 40px;
+  background: #0f172a;
+  color: var(--text);
+  cursor: pointer;
+}
+.knr-candidate-list button:hover,
+.knr-candidate-list button:focus-visible {
+  border-color: #38bdf8;
+}
+.knr-ui #knr-compare[data-state="warning"] { color: #fbbf24; }
+.knr-ui #knr-compare[data-state="success"] { color: #86efac; }
 .pm-options { grid-template-columns: minmax(0, 1fr); }
 .pm-options > div { display: grid; gap: .35rem; }
 .pm-categories { grid-template-columns: repeat(5, minmax(0, 1fr)); }

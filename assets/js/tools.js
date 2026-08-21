@@ -11152,17 +11152,20 @@
     const sepSel = document.getElementById('knr-separator');
     const capSyllable = document.getElementById('knr-cap-syllable');
     const trim = document.getElementById('knr-trim');
+    const known = document.getElementById('knr-known');
     const sampleBtn = document.getElementById('knr-sample');
     const copyBtn = document.getElementById('knr-copy');
     const clearBtn = document.getElementById('knr-clear');
     const output = document.getElementById('knr-output');
     const help = document.getElementById('knr-help');
+    const candidateList = document.getElementById('knr-candidate-list');
+    const compare = document.getElementById('knr-compare');
     const hangulCount = document.getElementById('knr-hangul-count');
     const wordCount = document.getElementById('knr-word-count');
     const charCount = document.getElementById('knr-char-count');
     const styleOut = document.getElementById('knr-style-out');
 
-    if (!input || !caseSel || !sepSel || !output || !help) return;
+    if (!input || !caseSel || !sepSel || !output || !help || !candidateList || !compare) return;
 
     const L = ['g','kk','n','d','tt','r','m','b','pp','s','ss','','j','jj','ch','k','t','p','h'];
     const V = ['a','ae','ya','yae','eo','e','yeo','ye','o','wa','wae','oe','yo','u','wo','we','wi','yu','eu','ui','i'];
@@ -11174,48 +11177,78 @@
         idle: '한글 입력을 로마자 표기 초안으로 빠르게 바꿉니다. 공식 서류 제출 전에는 기존 등록 영문명과 기관 기준을 꼭 다시 확인하세요.',
         noHangul: '한글 음절이 없어 변환할 내용이 없습니다. 영문·숫자·기호는 결과에 그대로 보존됩니다.',
         limit: '입력은 최대 12,000자까지 지원합니다. 긴 목록은 나눠서 변환해 주세요.',
+        compareIdle: '기존 영문명을 입력하면 변환 결과와 차이를 비교합니다.',
+        compareMatch: '기존 영문명과 현재 결과가 같습니다. 공식 제출 전에는 기관 등록 표기를 한 번 더 확인하세요.',
+        compareDifferent: '기존 영문명과 현재 결과가 다릅니다. 여권·항공권·계약서에는 이미 등록된 표기를 우선 사용하는 편이 안전합니다.',
+        noCandidates: '한글 이름을 입력하면 자주 쓰는 성씨 대체 표기 후보를 함께 보여줍니다.',
         cleared: '입력과 결과를 초기화했습니다.',
         copied: '복사됨',
+        copyFail: '자동 복사를 사용할 수 없습니다. 결과를 직접 선택해 복사해 주세요.',
         copyDefault: '결과 복사',
         styles: { title: '첫 글자 대문자', lower: '소문자', upper: '대문자', syllable: '음절 단위 대문자' },
         separators: { space: '공백 유지', hyphen: '하이픈', none: '붙여쓰기' },
-        sample: '김민준\n서울 책방\n한강 공원 야간 산책'
+        candidateLabel: '후보',
+        sample: '김민준\n박서연\n서울 책방'
       },
       en: {
         help: (count, style) => `Converted ${count} Hangul syllable(s) using ${style}. Double-check official registered spellings for passports or formal documents.`,
         idle: 'Convert Hangul input into quick Romanized drafts. For official documents, always verify your registered English spelling first.',
         noHangul: 'No Hangul syllables were found. English, numbers, and symbols are preserved in the result.',
         limit: 'Input is limited to 12,000 characters. Split very long lists before converting.',
+        compareIdle: 'Enter a registered spelling above to compare it with the generated draft.',
+        compareMatch: 'The registered spelling matches the current result. Still verify official records before submitting documents.',
+        compareDifferent: 'The registered spelling differs from the current result. For passports, tickets, and contracts, prefer the spelling already on record.',
+        noCandidates: 'Enter a Hangul name to see common surname spelling candidates.',
         cleared: 'Cleared the input and result.',
         copied: 'Copied',
+        copyFail: 'Automatic copy is unavailable. Select and copy the result manually.',
         copyDefault: 'Copy result',
         styles: { title: 'Title case', lower: 'Lowercase', upper: 'Uppercase', syllable: 'Syllable caps' },
         separators: { space: 'Keep spaces', hyphen: 'Hyphens', none: 'Join words' },
-        sample: '김민준\n서울 책방\n한강 공원 야간 산책'
+        candidateLabel: 'Candidate',
+        sample: '김민준\n박서연\n서울 책방'
       },
       ja: {
         help: (count, style) => `ハングル ${count}文字を ${style} 基準でローマ字化しました。公式書類では既存の登録英字名を優先して確認してください。`,
         idle: 'ハングル入力をローマ字表記の下書きに変換します。公式書類では既存の登録表記を必ず確認してください。',
         noHangul: 'ハングル音節が見つかりません。英字・数字・記号は結果にそのまま残ります。',
         limit: '入力は最大12,000文字まで対応します。長い一覧は分けて変換してください。',
+        compareIdle: '登録済み表記を入力すると生成結果と比較できます。',
+        compareMatch: '登録済み表記と現在の結果が一致しています。公式提出前には記録上の表記を再確認してください。',
+        compareDifferent: '登録済み表記と現在の結果が異なります。パスポート、航空券、契約書では既存登録表記を優先する方が安全です。',
+        noCandidates: 'ハングル名を入力すると、よく使われる姓の別表記候補も表示します。',
         cleared: '入力と結果をクリアしました。',
         copied: 'コピー完了',
+        copyFail: '自動コピーを利用できません。結果を手動で選択してコピーしてください。',
         copyDefault: '結果をコピー',
         styles: { title: '単語先頭大文字', lower: '小文字', upper: '大文字', syllable: '音節ごと大文字' },
         separators: { space: '空白維持', hyphen: 'ハイフン', none: 'つなげる' },
-        sample: '김민준\n서울 책방\n한강 공원 야간 산책'
+        candidateLabel: '候補',
+        sample: '김민준\n박서연\n서울 책방'
       }
     }[pageLang] || {
       help: (count, style) => `한글 ${count}자를 ${style} 기준 로마자 표기로 변환했습니다.`,
       idle: '한글 입력을 로마자 표기 초안으로 빠르게 바꿉니다.',
       noHangul: '한글 음절이 없어 변환할 내용이 없습니다.',
       limit: '입력은 최대 12,000자까지 지원합니다.',
+      compareIdle: '기존 영문명을 입력하면 변환 결과와 차이를 비교합니다.',
+      compareMatch: '기존 영문명과 현재 결과가 같습니다.',
+      compareDifferent: '기존 영문명과 현재 결과가 다릅니다.',
+      noCandidates: '한글 이름을 입력하면 후보 표기를 보여줍니다.',
       cleared: '입력과 결과를 초기화했습니다.',
       copied: '복사됨',
+      copyFail: '자동 복사를 사용할 수 없습니다.',
       copyDefault: '결과 복사',
       styles: { title: '첫 글자 대문자', lower: '소문자', upper: '대문자', syllable: '음절 단위 대문자' },
       separators: { space: '공백 유지', hyphen: '하이픈', none: '붙여쓰기' },
+      candidateLabel: '후보',
       sample: '김민준\n서울 책방\n한강 공원 야간 산책'
+    };
+
+    const SURNAME_ALIASES = {
+      김: ['Kim'], 이: ['Lee', 'Yi', 'Rhee'], 박: ['Park'], 최: ['Choi'], 정: ['Jung', 'Chung'],
+      조: ['Cho'], 장: ['Jang', 'Chang'], 윤: ['Yoon'], 임: ['Lim', 'Yim'], 신: ['Shin'],
+      유: ['Yoo', 'Yu'], 오: ['Oh'], 한: ['Han'], 강: ['Kang'], 송: ['Song'], 홍: ['Hong']
     };
 
     const romanizeSyllable = (char) => {
@@ -11230,9 +11263,10 @@
 
     const capitalizeToken = (token) => token.charAt(0).toUpperCase() + token.slice(1).toLowerCase();
 
-    const applyCase = (text, mode) => {
+    const applyCase = (text, mode, preserveInternalCaps = false) => {
       if (mode === 'upper') return text.toUpperCase();
       if (mode === 'lower') return text.toLowerCase();
+      if (preserveInternalCaps) return text.replace(/\b([A-Za-z])/g, (m, c) => c.toUpperCase());
       return text.replace(/\b([A-Za-z])/g, (m, c) => c.toUpperCase());
     };
 
@@ -11252,22 +11286,90 @@
       let joined = converted;
       if (separatorMode === 'hyphen') joined = joined.replace(/\s+/g, '-');
       if (separatorMode === 'none') joined = joined.replace(/\s+/g, '');
-      return applyCase(joined, caseSel.value || 'title');
+      return applyCase(joined, caseSel.value || 'title', syllableMode);
     };
 
     const copyText = async (text) => {
       try {
         await navigator.clipboard.writeText(text);
+        return true;
       } catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          const copied = document.execCommand('copy');
+          document.body.removeChild(ta);
+          return copied;
+        } catch (err) {
+          return false;
+        }
       }
+    };
+
+    const normalizeCompare = (value) => value.toLowerCase().replace(/[^a-z]/g, '');
+
+    const variantFromFirstSyllable = (line, baseLine) => {
+      const cleaned = (trim.checked ? line.trim() : line).replace(/\s+/g, ' ');
+      const firstHangul = cleaned.match(/[가-힣]/);
+      if (!firstHangul) return [];
+      const aliases = SURNAME_ALIASES[firstHangul[0]] || [];
+      if (!aliases.length) return [];
+      const base = baseLine.trim();
+      const baseFirst = romanizeSyllable(firstHangul[0]);
+      const restPattern = new RegExp(`^${baseFirst}`, 'i');
+      return aliases
+        .map((alias) => base.replace(restPattern, alias))
+        .filter((candidate) => candidate && normalizeCompare(candidate) !== normalizeCompare(base));
+    };
+
+    const updateCandidates = (rawLines, convertedLines) => {
+      const candidates = [];
+      rawLines.forEach((line, index) => {
+        if (!line.trim() || !/[가-힣]/.test(line)) return;
+        const base = convertedLines[index] || '';
+        candidates.push(base);
+        variantFromFirstSyllable(line, base).forEach((candidate) => candidates.push(candidate));
+      });
+      const unique = Array.from(new Map(candidates.filter(Boolean).map((candidate) => [normalizeCompare(candidate), candidate])).values()).slice(0, 8);
+      candidateList.innerHTML = '';
+      if (!unique.length) {
+        candidateList.textContent = knrText.noCandidates;
+        return unique;
+      }
+      unique.forEach((candidate, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = candidate;
+        button.setAttribute('aria-label', `${knrText.candidateLabel} ${index + 1}: ${candidate}`);
+        button.addEventListener('click', async () => {
+          output.value = candidate;
+          const copied = await copyText(candidate);
+          setHelp(copied ? knrText.copied : knrText.copyFail, copied ? 'success' : 'error');
+        });
+        candidateList.appendChild(button);
+      });
+      return unique;
+    };
+
+    const updateCompare = (result, candidates = []) => {
+      const knownValue = known?.value.trim() || '';
+      compare.dataset.state = '';
+      if (!knownValue) {
+        compare.textContent = knrText.compareIdle;
+        return;
+      }
+      if (!result.trim()) {
+        compare.textContent = knrText.compareIdle;
+        return;
+      }
+      const generated = [result.split(/\n/)[0] || result, ...candidates];
+      const matches = generated.some((candidate) => normalizeCompare(knownValue) === normalizeCompare(candidate));
+      compare.textContent = matches ? knrText.compareMatch : knrText.compareDifferent;
+      compare.dataset.state = matches ? 'success' : 'warning';
     };
 
     const render = () => {
@@ -11283,8 +11385,10 @@
       charCount.textContent = formatNum(result.length);
       const styleLabel = `${knrText.styles[caseSel.value || 'title']} · ${knrText.separators[sepSel.value || 'space']}${capSyllable.checked ? ' · ' + knrText.styles.syllable : ''}`;
       styleOut.textContent = styleLabel;
-      copyBtn.disabled = !result.trim();
+      copyBtn.disabled = !result.trim() || !hangulMatches.length;
       input.setAttribute('aria-invalid', 'false');
+      const candidates = updateCandidates(lines, convertedLines);
+      updateCompare(result, candidates);
       if (!raw.trim()) {
         setHelp(knrText.idle);
       } else if (raw.length >= 12000) {
@@ -11296,7 +11400,7 @@
       }
     };
 
-    [input, caseSel, sepSel, capSyllable, trim].forEach((el) => {
+    [input, caseSel, sepSel, capSyllable, trim, known].forEach((el) => {
       el?.addEventListener('input', render);
       el?.addEventListener('change', render);
     });
@@ -11307,15 +11411,17 @@
     });
     clearBtn?.addEventListener('click', () => {
       input.value = '';
+      if (known) known.value = '';
       render();
       setHelp(knrText.cleared);
       input.focus();
     });
     copyBtn?.addEventListener('click', async () => {
       if (!output.value.trim()) return;
-      await copyText(output.value.trim());
+      const copied = await copyText(output.value.trim());
       const old = copyBtn.textContent;
-      copyBtn.textContent = knrText.copied;
+      copyBtn.textContent = copied ? knrText.copied : knrText.copyDefault;
+      setHelp(copied ? knrText.copied : knrText.copyFail, copied ? 'success' : 'error');
       setTimeout(() => { copyBtn.textContent = old || knrText.copyDefault; }, 900);
     });
     render();

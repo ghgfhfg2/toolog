@@ -2277,6 +2277,11 @@ layout: default
             <label class="tool-check"><input id="knr-trim" type="checkbox" checked /> {% if page.lang == 'en' %}Clean extra spaces{% elsif page.lang == 'ja' %}余分な空白を整理{% else %}불필요한 공백 정리{% endif %}</label>
           </div>
 
+          <div class="tool-row">
+            <label for="knr-known">{% if page.lang == 'en' %}Registered spelling to compare (optional){% elsif page.lang == 'ja' %}比較する登録済み英字表記（任意）{% else %}비교할 기존 영문명 (선택){% endif %}</label>
+            <input id="knr-known" type="text" maxlength="120" autocomplete="off" aria-describedby="knr-help knr-limit" placeholder="{% if page.lang == 'en' %}e.g. Kim Min Jun{% elsif page.lang == 'ja' %}例: Kim Min Jun{% else %}예: Kim Min Jun{% endif %}" />
+          </div>
+
           <div class="tool-row-grid pct-actions knr-actions">
             <button id="knr-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
             <button id="knr-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
@@ -2292,6 +2297,11 @@ layout: default
 
           <p class="tool-result" id="knr-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Convert Hangul input into quick Romanized drafts. For official documents, always verify your registered English spelling first.{% elsif page.lang == 'ja' %}ハングル入力をローマ字表記の下書きに変換します。公式書類では既存の登録表記を必ず確認してください。{% else %}한글 입력을 로마자 표기 초안으로 빠르게 바꿉니다. 공식 서류 제출 전에는 기존 등록 영문명과 기관 기준을 꼭 다시 확인하세요.{% endif %}</p>
           <p class="tool-result" id="knr-limit">{% if page.lang == 'en' %}Input stays in your browser. Up to 12,000 characters are supported, and non-Hangul text is preserved in the result.{% elsif page.lang == 'ja' %}入力内容はブラウザ内だけで処理されます。最大12,000文字まで対応し、ハングル以外の文字は結果に残ります。{% else %}입력 내용은 브라우저 안에서만 처리됩니다. 최대 12,000자까지 지원하며 비한글 문자는 결과에 그대로 남습니다.{% endif %}</p>
+          <div class="knr-candidates" aria-label="{% if page.lang == 'en' %}Romanized spelling candidates{% elsif page.lang == 'ja' %}ローマ字表記候補{% else %}로마자 표기 후보{% endif %}">
+            <strong>{% if page.lang == 'en' %}Candidate spellings{% elsif page.lang == 'ja' %}候補表記{% else %}후보 표기{% endif %}</strong>
+            <div id="knr-candidate-list" class="knr-candidate-list" aria-live="polite"></div>
+            <p id="knr-compare" class="tool-result">{% if page.lang == 'en' %}Enter a registered spelling above to compare it with the generated draft.{% elsif page.lang == 'ja' %}登録済み表記を入力すると生成結果と比較できます。{% else %}기존 영문명을 입력하면 변환 결과와 차이를 비교합니다.{% endif %}</p>
+          </div>
           <div class="tool-row">
             <label for="knr-output">{% if page.lang == 'en' %}Romanized result{% elsif page.lang == 'ja' %}ローマ字化結果{% else %}로마자 변환 결과{% endif %}</label>
             <textarea id="knr-output" rows="8" readonly placeholder="{% if page.lang == 'en' %}The Romanized result appears here.{% elsif page.lang == 'ja' %}ローマ字化結果がここに表示されます。{% else %}변환 결과가 여기에 표시됩니다.{% endif %}"></textarea>

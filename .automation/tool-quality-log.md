@@ -1,5 +1,10 @@
 # Tool Quality Log
 
+## 2026-08-21 21:00 KST
+- Tool: `korean-name-romanizer`
+- Selection reason: recent quality commits improved png-compressor, json-merge, link-list-cleaner, average-speed-calculator, cafe-work-seat-simulator, blog-banned-word-checker, image-upscaler, and case-converter; this older language converter still had official-spelling confusion risk, single-result UX, weak registered-name comparison, and mobile candidate readability gaps.
+- Scope: improved existing page copy, home metadata, candidate spelling UI, registered spelling comparison, copy/error states, surname-variant suggestions, mobile candidate chips, and multilingual FAQ/search-intent coverage. No new tool was added.
+
 ## 2026-07-21 21:00 KST
 - Tool: `parking-fee-calculator`
 - Selection reason: recent quality commits improved split-bill-calculator, loan-calculator, appointment-departure-buffer-simulator, and lunch-menu-picker; this older fee calculator still had high-risk numeric edge cases, auto-filled input that hid the empty state, weak long-stay daily-cap handling, and limited SEO around discounts/overnight parking.
