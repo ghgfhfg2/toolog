@@ -27,7 +27,7 @@ canonical_url: /en/tools/time-difference-calculator/
 
 ## When is a time difference calculator useful?
 You often need to know **exactly how many hours and minutes** lie between two times.
-That comes up in work logs, study tracking, meeting duration checks, and schedule planning.
+That comes up in work logs, shift checks, study tracking, meeting duration reviews, and schedule planning.
 
 This tool lets you enter **start time + end time** and instantly shows:
 - elapsed time
@@ -35,6 +35,8 @@ This tool lets you enter **start time + end time** and instantly shows:
 - decimal hours
 - net time after breaks
 - same-day or next-day handling
+
+It is designed for quick browser-side checks: leave the fields empty and it simply waits for input, enter an end time earlier than the start and it explains when to use next-day mode, and enter too much break time and it caps net time at 0 instead of showing a negative work duration.
 
 ## Key features
 - Start time / end time input
@@ -54,6 +56,13 @@ For 23:30 to 01:00, turn on next-day mode so the result becomes 1 hour 30 minute
 
 ### Meeting and study tracking
 The total minutes and decimal hours are useful when pasting results into a spreadsheet, timesheet, or study log.
+
+## How to use it
+1. Enter the start time and end time.
+2. Add break minutes if you want net time after breaks.
+3. Turn on next-day mode only when the time range crosses midnight.
+4. Review elapsed time, net time, total minutes, decimal hours, and date handling.
+5. Copy the result when you need to paste it into a timesheet, note, or spreadsheet.
 
 ## Example
 - Start: 09:00
@@ -79,13 +88,22 @@ Overnight example:
 - If break time is longer than elapsed time, net time is capped at 0 minutes
 
 ## Related tools
-- [Work End Time Calculator]({{ '/tools/work-end-time-calculator/' | relative_url }})
-- [D-Day Calculator]({{ '/tools/d-day-calculator/' | relative_url }})
-- [Pomodoro Timer]({{ '/tools/pomodoro-timer/' | relative_url }})
+- Estimate when work ends: [Work End Time Calculator]({{ '/en/tools/work-end-time-calculator/' | relative_url }})
+- Count days between dates: [D-Day Calculator]({{ '/en/tools/d-day-calculator/' | relative_url }})
+- Run focused work blocks: [Pomodoro Timer]({{ '/en/tools/pomodoro-timer/' | relative_url }})
 
 ## FAQ
+### What happens when start and end time are the same?
+With next-day mode off, the result is 0 hours 0 minutes. With next-day mode on, the result is calculated as 24 hours.
+
+### What if break time is longer than elapsed time?
+Net time is capped at 0 minutes. The tool does not display negative working time.
+
 ### Does it automatically assume next day when the end time is earlier?
 No. The earlier end time might be a typo, so the tool shows an error first. Turn on next-day mode when the range really crosses midnight.
 
 ### What does the copied result include?
 It includes elapsed time, net time, total minutes, decimal hours, deducted break time, and date handling.
+
+### Can I use it on mobile?
+Yes. It runs directly in the browser and does not require installation.
