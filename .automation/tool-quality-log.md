@@ -1,5 +1,10 @@
 # Tool Quality Log
 
+## 2026-08-22 21:00 KST
+- Tool: `time-difference-calculator`
+- Selection reason: recent quality commits improved korean-name-romanizer, png-compressor, json-merge, and link-list-cleaner; this older time calculator still had high-risk edge cases around earlier end times, midnight crossing, same-time input, excessive break minutes, weak empty state, and mobile preset/result clarity.
+- Scope: improved existing page copy, home metadata, localized pages, accessible labels/status, preset buttons, copy state, break/date summary stats, validation guardrails, and mobile layout. No new tool was added.
+
 ## 2026-08-21 21:00 KST
 - Tool: `korean-name-romanizer`
 - Selection reason: recent quality commits improved png-compressor, json-merge, link-list-cleaner, average-speed-calculator, cafe-work-seat-simulator, blog-banned-word-checker, image-upscaler, and case-converter; this older language converter still had official-spelling confusion risk, single-result UX, weak registered-name comparison, and mobile candidate readability gaps.

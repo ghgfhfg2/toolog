@@ -3877,37 +3877,45 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="avg-detail">{% if page.lang == 'en' %}Commas, spaces, tabs, line breaks, currency symbols, and thousands separators are supported. Up to 5,000 finite numbers are calculated in your browser.{% elsif page.lang == 'ja' %}カンマ、空白、タブ、改行、通貨記号、桁区切りに対応します。最大5,000個の有限な数値をブラウザ内で計算します。{% else %}쉼표, 공백, 탭, 줄바꿈, 통화기호, 천 단위 구분자를 지원합니다. 최대 5,000개의 유한한 숫자를 브라우저에서 계산합니다.{% endif %}</p>
         </div>
       {% when 'time-difference-calculator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui td-ui">
+          <div class="tool-row-grid td-grid">
             <div>
               <label for="td-start">{% if page.lang == 'en' %}Start time{% elsif page.lang == 'ja' %}開始時刻{% else %}시작 시각{% endif %}</label>
-              <input id="td-start" type="time" />
+              <input id="td-start" type="time" aria-describedby="td-help td-detail" />
             </div>
             <div>
               <label for="td-end">{% if page.lang == 'en' %}End time{% elsif page.lang == 'ja' %}終了時刻{% else %}종료 시각{% endif %}</label>
-              <input id="td-end" type="time" />
+              <input id="td-end" type="time" aria-describedby="td-help td-detail" />
             </div>
           </div>
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid td-grid">
             <div>
               <label for="td-break">{% if page.lang == 'en' %}Break minutes{% elsif page.lang == 'ja' %}休憩時間(分){% else %}휴게시간(분){% endif %}</label>
-              <input id="td-break" type="number" min="0" max="1440" step="1" inputmode="numeric" />
+              <input id="td-break" type="number" min="0" max="1440" step="1" inputmode="numeric" placeholder="60" aria-describedby="td-help td-detail" />
             </div>
             <div>
-              <label class="tool-check"><input id="td-next-day" type="checkbox" /> {% if page.lang == 'en' %}End time is on the next day{% elsif page.lang == 'ja' %}終了時刻は翌日{% else %}종료 시각이 다음 날{% endif %}</label>
+              <label class="tool-check td-next-day"><input id="td-next-day" type="checkbox" /> {% if page.lang == 'en' %}End time is on the next day{% elsif page.lang == 'ja' %}終了時刻は翌日{% else %}종료 시각이 다음 날{% endif %}</label>
             </div>
           </div>
-          <div class="tool-row-grid pct-actions">
-            <button id="td-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+          <div class="tool-row-grid td-presets" aria-label="{% if page.lang == 'en' %}Common time examples{% elsif page.lang == 'ja' %}よく使う時間例{% else %}자주 쓰는 시간 예시{% endif %}">
+            <button type="button" data-td-start="09:00" data-td-end="18:00" data-td-break="60" data-td-next="false">{% if page.lang == 'en' %}Workday{% elsif page.lang == 'ja' %}勤務日{% else %}근무일{% endif %}</button>
+            <button type="button" data-td-start="23:30" data-td-end="01:00" data-td-break="0" data-td-next="true">{% if page.lang == 'en' %}Past midnight{% elsif page.lang == 'ja' %}日付またぎ{% else %}자정 넘김{% endif %}</button>
+            <button type="button" data-td-start="14:10" data-td-end="15:25" data-td-break="0" data-td-next="false">{% if page.lang == 'en' %}Meeting{% elsif page.lang == 'ja' %}会議{% else %}회의{% endif %}</button>
+          </div>
+          <div class="tool-row-grid td-actions">
+            <button id="td-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
             <button id="td-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
-          <div class="tool-stats">
+          <div class="tool-stats td-stats" aria-label="{% if page.lang == 'en' %}Time difference result{% elsif page.lang == 'ja' %}時間差計算結果{% else %}시간 차이 계산 결과{% endif %}">
             <div><strong id="td-elapsed">-</strong><span>{% if page.lang == 'en' %}Elapsed time{% elsif page.lang == 'ja' %}経過時間{% else %}총 경과시간{% endif %}</span></div>
             <div><strong id="td-net">-</strong><span>{% if page.lang == 'en' %}Net time{% elsif page.lang == 'ja' %}実作業時間{% else %}순수 시간{% endif %}</span></div>
             <div><strong id="td-total-min">-</strong><span>{% if page.lang == 'en' %}Total minutes{% elsif page.lang == 'ja' %}総分数{% else %}총 분{% endif %}</span></div>
             <div><strong id="td-decimal">-</strong><span>{% if page.lang == 'en' %}Decimal hours{% elsif page.lang == 'ja' %}小数時間{% else %}소수 시간{% endif %}</span></div>
+            <div><strong id="td-break-used">-</strong><span>{% if page.lang == 'en' %}Break deducted{% elsif page.lang == 'ja' %}差引休憩{% else %}차감 휴게{% endif %}</span></div>
+            <div><strong id="td-day-shift">-</strong><span>{% if page.lang == 'en' %}Date handling{% elsif page.lang == 'ja' %}日付処理{% else %}날짜 처리{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="td-help">{% if page.lang == 'en' %}Enter start and end times to calculate the difference instantly.{% elsif page.lang == 'ja' %}開始時刻と終了時刻を入力すると差を即時計算します。{% else %}시작 시각과 종료 시각을 입력하면 시간 차이를 즉시 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="td-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter start and end times to calculate the difference instantly.{% elsif page.lang == 'ja' %}開始時刻と終了時刻を入力すると差を即時計算します。{% else %}시작 시각과 종료 시각을 입력하면 시간 차이를 즉시 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="td-detail">{% if page.lang == 'en' %}For an end time earlier than the start time, turn on next-day mode. Break time must be 0-1,440 minutes and is never allowed to make net time negative.{% elsif page.lang == 'ja' %}終了時刻が開始時刻より早い場合は翌日モードを使います。休憩時間は0〜1,440分で、実作業時間がマイナスにならないよう補正します。{% else %}종료 시각이 시작 시각보다 빠르면 다음 날 옵션을 켜세요. 휴게시간은 0~1,440분까지만 입력할 수 있고 순수 시간이 음수가 되지 않도록 보정합니다.{% endif %}</p>
         </div>
       {% when 'fraction-calculator' %}
         <div class="tool-ui frac-ui">

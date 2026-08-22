@@ -1214,14 +1214,16 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 시작·종료 시각과 휴게시간을 넣으면 경과시간, 총 분, 소수 시간, 순수 시간을 바로 계산해요.
-  description_en: Enter start/end times and break minutes to calculate elapsed time, total minutes, decimal hours, and net time instantly.
-  description_ja: 開始・終了時刻と休憩時間を入力すると、経過時間・総分数・小数時間・実作業時間をすぐ計算します。
+  description: 시작·종료 시각, 휴게시간, 자정 넘김 여부를 넣으면 경과시간, 총 분, 소수 시간, 순수 시간과 날짜 처리까지 바로 계산해요.
+  description_en: Enter start/end times, break minutes, and next-day mode to calculate elapsed time, total minutes, decimal hours, net time, and date handling instantly.
+  description_ja: 開始・終了時刻、休憩時間、翌日モードを入力すると、経過時間・総分数・小数時間・実作業時間・日付処理をすぐ計算します。
   url: /tools/time-difference-calculator/
   url_en: /en/tools/time-difference-calculator/
   url_ja: /ja/tools/time-difference-calculator/
   thumbnail: /assets/thumbs/time-difference-calculator.svg
   published_at: 2026-03-25
+  tool_type: calculator
+  topic_cluster: time
 
 - id: average-calculator
   title: 평균 계산기

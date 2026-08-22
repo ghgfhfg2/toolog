@@ -14672,61 +14672,101 @@
     const netEl = document.getElementById('td-net');
     const totalMinEl = document.getElementById('td-total-min');
     const decimalEl = document.getElementById('td-decimal');
+    const breakUsedEl = document.getElementById('td-break-used');
+    const dayShiftEl = document.getElementById('td-day-shift');
     const help = document.getElementById('td-help');
     const copyBtn = document.getElementById('td-copy');
     const resetBtn = document.getElementById('td-reset');
+    const presets = document.querySelectorAll('[data-td-start]');
 
-    if (!start || !end || !breakEl || !nextDay || !elapsedEl || !netEl || !totalMinEl || !decimalEl || !help) return;
+    if (!start || !end || !breakEl || !nextDay || !elapsedEl || !netEl || !totalMinEl || !decimalEl || !breakUsedEl || !dayShiftEl || !help) return;
 
     const text = {
       ko: {
         idle: '시작 시각과 종료 시각을 입력하면 시간 차이를 즉시 계산합니다.',
         needInput: '시작 시각과 종료 시각을 모두 입력하세요.',
-        summary: (elapsed, net, minutes, decimal) => `총 ${elapsed} · 순수 ${net} · ${minutes} · ${decimal}`,
+        invalidBreak: '휴게시간은 0분 이상 1,440분 이하의 정수로 입력해 주세요.',
+        breakTooLong: '휴게시간이 총 경과시간보다 길어 순수 시간을 0분으로 보정했습니다.',
+        needsNextDay: '종료 시각이 시작 시각보다 빠릅니다. 자정 넘김이면 다음 날 옵션을 켜세요.',
+        sameTime: '시작과 종료가 같습니다. 다음 날 옵션을 켜면 24시간으로 계산합니다.',
+        summary: (elapsed, net, minutes, decimal, shift) => `총 ${elapsed} · 순수 ${net} · ${minutes} · ${decimal} · ${shift}`,
         totalMin: '분',
         decimal: '시간',
         hour: '시간',
         minute: '분',
-        copy: (elapsed, net, minutes, decimal) => `시간 차이 계산 결과 | 총 경과시간 ${elapsed} | 순수 시간 ${net} | 총 분 ${minutes} | 소수 시간 ${decimal}`,
+        sameDay: '당일',
+        nextDay: '다음 날',
+        none: '없음',
+        copy: (elapsed, net, minutes, decimal, breakUsed, shift) => `시간 차이 계산 결과 | 총 경과시간 ${elapsed} | 순수 시간 ${net} | 총 분 ${minutes} | 소수 시간 ${decimal} | 휴게 ${breakUsed} | 날짜 ${shift}`,
         copied: '복사됨',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        reset: '예시 근무 시간으로 초기화했습니다.',
         copyDefault: '결과 복사'
       },
       en: {
         idle: 'Enter start and end times to calculate the difference instantly.',
         needInput: 'Enter both start time and end time.',
-        summary: (elapsed, net, minutes, decimal) => `Elapsed ${elapsed} · Net ${net} · ${minutes} · ${decimal}`,
+        invalidBreak: 'Enter break time as a whole number from 0 to 1,440 minutes.',
+        breakTooLong: 'Break time is longer than elapsed time, so net time was capped at 0 minutes.',
+        needsNextDay: 'End time is earlier than start time. Turn on next-day mode if it passes midnight.',
+        sameTime: 'Start and end are the same. Turn on next-day mode to calculate 24 hours.',
+        summary: (elapsed, net, minutes, decimal, shift) => `Elapsed ${elapsed} · Net ${net} · ${minutes} · ${decimal} · ${shift}`,
         totalMin: 'min',
         decimal: 'hours',
         hour: 'h',
         minute: 'm',
-        copy: (elapsed, net, minutes, decimal) => `Time difference result | Elapsed ${elapsed} | Net ${net} | Total minutes ${minutes} | Decimal hours ${decimal}`,
+        sameDay: 'Same day',
+        nextDay: 'Next day',
+        none: 'None',
+        copy: (elapsed, net, minutes, decimal, breakUsed, shift) => `Time difference result | Elapsed ${elapsed} | Net ${net} | Total minutes ${minutes} | Decimal hours ${decimal} | Break ${breakUsed} | Date handling ${shift}`,
         copied: 'Copied',
+        copyFail: 'Automatic copy is unavailable.',
+        reset: 'Reset to a sample workday.',
         copyDefault: 'Copy result'
       },
       ja: {
         idle: '開始時刻と終了時刻を入力すると差を即時計算します。',
         needInput: '開始時刻と終了時刻をどちらも入力してください。',
-        summary: (elapsed, net, minutes, decimal) => `経過 ${elapsed} · 実作業 ${net} · ${minutes} · ${decimal}`,
+        invalidBreak: '休憩時間は0〜1,440分の整数で入力してください。',
+        breakTooLong: '休憩時間が経過時間より長いため、実作業時間を0分に補正しました。',
+        needsNextDay: '終了時刻が開始時刻より早いです。日付をまたぐ場合は翌日オプションをオンにしてください。',
+        sameTime: '開始と終了が同じです。翌日オプションをオンにすると24時間として計算します。',
+        summary: (elapsed, net, minutes, decimal, shift) => `経過 ${elapsed} · 実作業 ${net} · ${minutes} · ${decimal} · ${shift}`,
         totalMin: '分',
         decimal: '時間',
         hour: '時間',
         minute: '分',
-        copy: (elapsed, net, minutes, decimal) => `時間差計算結果 | 経過時間 ${elapsed} | 実作業時間 ${net} | 総分数 ${minutes} | 小数時間 ${decimal}`,
+        sameDay: '当日',
+        nextDay: '翌日',
+        none: 'なし',
+        copy: (elapsed, net, minutes, decimal, breakUsed, shift) => `時間差計算結果 | 経過時間 ${elapsed} | 実作業時間 ${net} | 総分数 ${minutes} | 小数時間 ${decimal} | 休憩 ${breakUsed} | 日付処理 ${shift}`,
         copied: 'コピー完了',
+        copyFail: '自動コピーを利用できません。',
+        reset: '勤務日の例にリセットしました。',
         copyDefault: '結果をコピー'
       }
     }[pageLang] || {
       idle: '시작 시각과 종료 시각을 입력하면 시간 차이를 즉시 계산합니다.',
       needInput: '시작 시각과 종료 시각을 모두 입력하세요.',
-      summary: (elapsed, net, minutes, decimal) => `총 ${elapsed} · 순수 ${net} · ${minutes} · ${decimal}`,
+      invalidBreak: '휴게시간은 0분 이상 1,440분 이하의 정수로 입력해 주세요.',
+      breakTooLong: '휴게시간이 총 경과시간보다 길어 순수 시간을 0분으로 보정했습니다.',
+      needsNextDay: '종료 시각이 시작 시각보다 빠릅니다. 자정 넘김이면 다음 날 옵션을 켜세요.',
+      sameTime: '시작과 종료가 같습니다. 다음 날 옵션을 켜면 24시간으로 계산합니다.',
+      summary: (elapsed, net, minutes, decimal, shift) => `총 ${elapsed} · 순수 ${net} · ${minutes} · ${decimal} · ${shift}`,
       totalMin: '분',
       decimal: '시간',
       hour: '시간',
       minute: '분',
-      copy: (elapsed, net, minutes, decimal) => `시간 차이 계산 결과 | 총 경과시간 ${elapsed} | 순수 시간 ${net} | 총 분 ${minutes} | 소수 시간 ${decimal}`,
+      sameDay: '당일',
+      nextDay: '다음 날',
+      none: '없음',
+      copy: (elapsed, net, minutes, decimal, breakUsed, shift) => `시간 차이 계산 결과 | 총 경과시간 ${elapsed} | 순수 시간 ${net} | 총 분 ${minutes} | 소수 시간 ${decimal} | 휴게 ${breakUsed} | 날짜 ${shift}`,
       copied: '복사됨',
+      copyFail: '자동 복사를 사용할 수 없습니다.',
+      reset: '예시 근무 시간으로 초기화했습니다.',
       copyDefault: '결과 복사'
     };
+    let current = null;
 
     const toMinutes = (value) => {
       if (!value || !value.includes(':')) return null;
@@ -14756,58 +14796,106 @@
       }
     };
 
-    const setIdle = (msg) => {
-      elapsedEl.textContent = '-';
-      netEl.textContent = '-';
-      totalMinEl.textContent = '-';
-      decimalEl.textContent = '-';
+    const setHelp = (msg, state = '') => {
       help.textContent = msg;
+      help.dataset.state = state;
+    };
+
+    const setIdle = (msg, state = '') => {
+      [elapsedEl, netEl, totalMinEl, decimalEl, breakUsedEl, dayShiftEl].forEach((el) => { el.textContent = '-'; });
+      current = null;
+      if (copyBtn) copyBtn.disabled = true;
+      setHelp(msg, state);
     };
 
     const render = () => {
       const s = toMinutes(start.value);
       const e = toMinutes(end.value);
-      const breakMinutes = Math.max(0, Math.min(1440, Number(breakEl.value || 0)));
-      if (Number(breakEl.value || 0) !== breakMinutes) breakEl.value = breakMinutes;
+      const rawBreak = breakEl.value.trim();
+      const breakMinutes = rawBreak === '' ? 0 : Number(rawBreak);
+      const hasInvalidBreak = rawBreak !== '' && (!Number.isInteger(breakMinutes) || breakMinutes < 0 || breakMinutes > 1440);
+      breakEl.setAttribute('aria-invalid', hasInvalidBreak ? 'true' : 'false');
+      start.setAttribute('aria-invalid', 'false');
+      end.setAttribute('aria-invalid', 'false');
 
       if (s === null || e === null) {
-        setIdle(text.needInput);
+        setIdle((start.value || end.value) ? text.needInput : text.idle);
+        return;
+      }
+      if (hasInvalidBreak) {
+        setIdle(text.invalidBreak, 'error');
+        return;
+      }
+      if (!nextDay.checked && e < s) {
+        end.setAttribute('aria-invalid', 'true');
+        setIdle(text.needsNextDay, 'error');
         return;
       }
 
       let diff = e - s;
       if (nextDay.checked && diff <= 0) diff += 1440;
-      else if (!nextDay.checked && diff < 0) diff = 0;
 
       const net = Math.max(0, diff - breakMinutes);
+      const dateLabel = nextDay.checked ? text.nextDay : text.sameDay;
       elapsedEl.textContent = formatDuration(diff);
       netEl.textContent = formatDuration(net);
       totalMinEl.textContent = `${diff.toLocaleString(numberLocale)} ${text.totalMin}`;
       decimalEl.textContent = `${(diff / 60).toLocaleString(numberLocale, { maximumFractionDigits: 2 })} ${text.decimal}`;
-      help.textContent = text.summary(elapsedEl.textContent, netEl.textContent, totalMinEl.textContent, decimalEl.textContent);
+      breakUsedEl.textContent = breakMinutes ? formatDuration(breakMinutes) : text.none;
+      dayShiftEl.textContent = dateLabel;
+      current = {
+        elapsed: elapsedEl.textContent,
+        net: netEl.textContent,
+        minutes: totalMinEl.textContent,
+        decimal: decimalEl.textContent,
+        breakUsed: breakUsedEl.textContent,
+        shift: dayShiftEl.textContent
+      };
+      if (copyBtn) copyBtn.disabled = false;
+      if (breakMinutes > diff) setHelp(text.breakTooLong, 'warn');
+      else if (!nextDay.checked && e === s) setHelp(text.sameTime, 'warn');
+      else setHelp(text.summary(current.elapsed, current.net, current.minutes, current.decimal, current.shift), 'success');
     };
 
-    [start, end, breakEl, nextDay].forEach((el) => el?.addEventListener('input', render));
+    [start, end, breakEl, nextDay].forEach((el) => {
+      el?.addEventListener('input', render);
+      el?.addEventListener('change', render);
+    });
+
+    presets.forEach((button) => {
+      button.addEventListener('click', () => {
+        start.value = button.dataset.tdStart || '';
+        end.value = button.dataset.tdEnd || '';
+        breakEl.value = button.dataset.tdBreak || '0';
+        nextDay.checked = button.dataset.tdNext === 'true';
+        render();
+        start.focus();
+      });
+    });
 
     resetBtn?.addEventListener('click', () => {
       start.value = '09:00';
-      end.value = '18:30';
+      end.value = '18:00';
       breakEl.value = 60;
       nextDay.checked = false;
       render();
+      setHelp(text.reset, 'success');
+      start.focus();
     });
 
     copyBtn?.addEventListener('click', async () => {
-      if (elapsedEl.textContent === '-') return;
-      await copyText(text.copy(elapsedEl.textContent, netEl.textContent, totalMinEl.textContent, decimalEl.textContent));
-      const old = copyBtn.textContent;
-      copyBtn.textContent = text.copied;
-      setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+      if (!current) return;
+      try {
+        await copyText(text.copy(current.elapsed, current.net, current.minutes, current.decimal, current.breakUsed, current.shift));
+        const old = copyBtn.textContent;
+        copyBtn.textContent = text.copied;
+        setHelp(text.copied, 'success');
+        setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+      } catch (_) {
+        setHelp(text.copyFail, 'error');
+      }
     });
 
-    if (!start.value) start.value = '09:00';
-    if (!end.value) end.value = '18:30';
-    if (!breakEl.value) breakEl.value = 0;
     render();
   }
 
