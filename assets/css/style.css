@@ -955,6 +955,26 @@ a:hover { color: #fff; text-decoration: none; }
   min-height: 180px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
+.rc-ui textarea[aria-invalid="true"],
+.rc-ui input[aria-invalid="true"] {
+  border-color: #ef4444;
+}
+.rc-ui #rc-summary[data-state="error"] {
+  color: #fca5a5;
+}
+.rc-ui #rc-summary[data-state="warning"] {
+  color: #fbbf24;
+}
+.rc-ui #rc-summary[data-state="success"] {
+  color: #86efac;
+}
+.tool-stats.rc-stats {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+.tool-stats.rc-stats strong,
+.tool-stats.rc-stats span {
+  overflow-wrap: anywhere;
+}
 .dfn-change-list {
   border: 1px solid rgba(148, 163, 184, .24);
   background: rgba(15, 23, 42, .42);
@@ -1828,6 +1848,7 @@ a:hover { color: #fff; text-decoration: none; }
   .tool-stats.mtc-stats { grid-template-columns: 1fr 1fr; }
   .psc-ui .pct-actions { grid-template-columns: 1fr; }
   .tool-stats.psc-stats { grid-template-columns: 1fr 1fr; }
+  .tool-stats.rc-stats { grid-template-columns: 1fr 1fr; }
   .pec-ui .pct-actions,
   .pec-ui .pct-grid { grid-template-columns: 1fr; }
   .fc-filter-grid { grid-template-columns: 1fr; }

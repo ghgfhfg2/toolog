@@ -9774,6 +9774,7 @@
     const paragraphLimitEl = document.getElementById('rc-paragraph-limit');
     const copyBtn = document.getElementById('rc-copy');
     const sampleBtn = document.getElementById('rc-sample');
+    const clearBtn = document.getElementById('rc-clear');
     const charsEl = document.getElementById('rc-chars');
     const sentencesEl = document.getElementById('rc-sentences');
     const avgEl = document.getElementById('rc-avg');
@@ -9782,46 +9783,163 @@
     const scoreEl = document.getElementById('rc-score');
     const summaryEl = document.getElementById('rc-summary');
     const listEl = document.getElementById('rc-list');
-    if (!input || !sentenceLimitEl || !paragraphLimitEl || !copyBtn || !sampleBtn || !charsEl || !sentencesEl || !avgEl || !longSentencesEl || !longParagraphsEl || !scoreEl || !summaryEl || !listEl) return;
+    if (!input || !sentenceLimitEl || !paragraphLimitEl || !copyBtn || !sampleBtn || !clearBtn || !charsEl || !sentencesEl || !avgEl || !longSentencesEl || !longParagraphsEl || !scoreEl || !summaryEl || !listEl) return;
 
-    const t = {
-      sample: '이번 안내는 신청자가 많을 경우 처리 시간이 조금 더 길어질 수 있으며, 제출 서류가 누락되면 접수가 자동으로 보류될 수 있으니 반드시 체크리스트를 먼저 확인한 뒤 제출해 주세요.\n\n또한 결과 안내 메일은 순차 발송되기 때문에 같은 날 신청했더라도 수신 시점이 다를 수 있습니다. 급한 문의는 담당 부서 운영시간을 확인한 후 연락해 주세요.',
-      empty: '텍스트를 입력하면 문장 길이와 문단 밀도를 바로 점검합니다.',
-      readability: ['매우 읽기 쉬움', '읽기 쉬움', '보통', '다소 빽빽함', '손보기 필요'],
-      summary: (score, avg, longS, longP) => `가독성 ${score} · 평균 문장 길이 ${avg}자 · 긴 문장 ${longS}개 · 긴 문단 ${longP}개`,
-      noIssues: '지금 기준에서는 크게 거슬리는 길이 문제나 반복 표현이 보이지 않습니다.',
-      copied: '복사됨',
-      copyDefault: '결과 복사'
+    const copyByLang = {
+      ko: {
+        sample: '이번 안내는 신청자가 많을 경우 처리 시간이 조금 더 길어질 수 있으며, 제출 서류가 누락되면 접수가 자동으로 보류될 수 있으니 반드시 체크리스트를 먼저 확인한 뒤 제출해 주세요.\n\n또한 결과 안내 메일은 순차 발송되기 때문에 같은 날 신청했더라도 수신 시점이 다를 수 있습니다. 급한 문의는 담당 부서 운영시간을 확인한 후 연락해 주세요.',
+        empty: '텍스트를 입력하면 문장 길이와 문단 밀도를 바로 점검합니다.',
+        readability: ['매우 읽기 쉬움', '읽기 쉬움', '보통', '다소 빽빽함', '손보기 필요'],
+        summary: (score, avg, longS, longP, repeated) => `가독성 ${score} · 평균 문장 길이 ${avg}자 · 긴 문장 ${longS}개 · 긴 문단 ${longP}개 · 반복 표현 ${repeated}개`,
+        invalid: '기준값은 긴 문장 20~120자, 긴 문단 2~12줄 범위로 입력해 주세요.',
+        noIssues: '지금 기준에서는 크게 거슬리는 길이 문제나 반복 표현이 보이지 않습니다.',
+        tooShort: '아주 짧은 글은 통계가 흔들릴 수 있습니다. 한 문단 이상 붙여넣으면 더 정확합니다.',
+        copied: '복사됨',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        copyEmpty: '복사할 점검 결과가 없습니다.',
+        cleared: '입력과 결과를 초기화했습니다.',
+        copyDefault: '결과 복사',
+        title: '문장 가독성 점검기',
+        stats: { chars: '글자 수', sentences: '문장 수', avg: '평균 문장 길이', longS: '긴 문장', longP: '긴 문단', score: '가독성' },
+        itemLongSentence: '긴 문장',
+        itemLongSentenceDetail: (limit) => `${limit}자 이상 문장이 있습니다. 쉼표 뒤나 접속사 앞에서 둘로 나눌 수 있는지 확인해 보세요.`,
+        itemLongParagraph: '긴 문단',
+        itemLongParagraphDetail: (limit) => `${limit}줄 이상 문단이 있습니다. 핵심 한 가지씩 묶어 문단을 쪼개면 읽기 호흡이 좋아집니다.`,
+        itemRepeated: '반복 표현',
+        itemDensity: '줄바꿈 밀도',
+        itemDensityDetail: '긴 글인데 문단 분리가 거의 없습니다. 2~4문장마다 한 번씩 끊어 읽기 흐름을 만들어 보세요.',
+        count: (n) => `${formatNum(n)}개`,
+        low: '낮음',
+        times: (n) => `${formatNum(n)}회`
+      },
+      en: {
+        sample: 'This announcement may take longer to process when many people apply, and missing documents can place the request on hold automatically, so please review the checklist before submitting.\n\nResult emails are sent in order, which means people who applied on the same day may receive updates at different times. For urgent questions, check the department hours before contacting the team.',
+        empty: 'Enter text to check sentence length, paragraph density, and repeated wording.',
+        readability: ['Very easy', 'Easy', 'Moderate', 'Dense', 'Needs revision'],
+        summary: (score, avg, longS, longP, repeated) => `Readability ${score} · average sentence ${avg} chars · long sentences ${longS} · dense paragraphs ${longP} · repeated terms ${repeated}`,
+        invalid: 'Use thresholds from 20-120 characters and 2-12 lines.',
+        noIssues: 'No major length, density, or repetition issues stand out with the current thresholds.',
+        tooShort: 'Very short text can produce noisy signals. Paste at least one paragraph for a better check.',
+        copied: 'Copied',
+        copyFail: 'Automatic copy is unavailable.',
+        copyEmpty: 'There is no readability result to copy yet.',
+        cleared: 'Cleared the text and results.',
+        copyDefault: 'Copy result',
+        title: 'Readability Checker',
+        stats: { chars: 'Characters', sentences: 'Sentences', avg: 'Average sentence length', longS: 'Long sentences', longP: 'Dense paragraphs', score: 'Readability' },
+        itemLongSentence: 'Long sentences',
+        itemLongSentenceDetail: (limit) => `Some sentences are ${limit}+ characters. Check whether a comma, conjunction, or transition can become a split point.`,
+        itemLongParagraph: 'Dense paragraphs',
+        itemLongParagraphDetail: (limit) => `Some paragraphs are ${limit}+ lines. Group one main idea per paragraph to make scanning easier.`,
+        itemRepeated: 'Repeated wording',
+        itemDensity: 'Line-break density',
+        itemDensityDetail: 'This is a long block with almost no paragraph breaks. Try adding a break every 2-4 sentences.',
+        count: (n) => `${formatNum(n)}`,
+        low: 'Low',
+        times: (n) => `${formatNum(n)}x`
+      },
+      ja: {
+        sample: 'この案内は申請が多い場合に処理時間が長くなることがあり、提出書類に不足があると受付が自動的に保留されるため、送信前にチェックリストを確認してください。\n\n結果メールは順番に送信されるため、同じ日に申請しても受信時刻が異なる場合があります。急ぎの問い合わせは、担当部署の対応時間を確認してから連絡してください。',
+        empty: '文章を入力すると、文の長さ、段落の密度、繰り返し表現を点検します。',
+        readability: ['とても読みやすい', '読みやすい', '普通', 'やや詰まり気味', '見直し推奨'],
+        summary: (score, avg, longS, longP, repeated) => `読みやすさ ${score} · 平均文長 ${avg}文字 · 長い文 ${longS}件 · 詰まった段落 ${longP}件 · 繰り返し ${repeated}件`,
+        invalid: '基準値は20〜120文字、2〜12行の範囲で入力してください。',
+        noIssues: '現在の基準では、長さ・密度・繰り返しの大きな問題は目立ちません。',
+        tooShort: '短すぎる文章では判定がぶれやすいです。1段落以上を入れると確認しやすくなります。',
+        copied: 'コピーしました',
+        copyFail: '自動コピーを利用できません。',
+        copyEmpty: 'コピーできる点検結果がまだありません。',
+        cleared: '入力と結果をクリアしました。',
+        copyDefault: '結果をコピー',
+        title: '文章の読みやすさチェッカー',
+        stats: { chars: '文字数', sentences: '文の数', avg: '平均文長', longS: '長い文', longP: '詰まった段落', score: '読みやすさ' },
+        itemLongSentence: '長い文',
+        itemLongSentenceDetail: (limit) => `${limit}文字以上の文があります。読点や接続表現の前後で分けられるか確認してください。`,
+        itemLongParagraph: '詰まった段落',
+        itemLongParagraphDetail: (limit) => `${limit}行以上の段落があります。1段落1テーマに分けると読みやすくなります。`,
+        itemRepeated: '繰り返し表現',
+        itemDensity: '改行密度',
+        itemDensityDetail: '長い文章ですが段落区切りがほとんどありません。2〜4文ごとに区切ると読みやすくなります。',
+        count: (n) => `${formatNum(n)}件`,
+        low: '低い',
+        times: (n) => `${formatNum(n)}回`
+      }
     };
+    const t = copyByLang[pageLang] || copyByLang.ko;
+    let latestSummary = '';
+
+    const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (ch) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[ch]));
 
     const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
       catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+          return true;
+        } catch (_) {
+          return false;
+        }
       }
     };
 
     const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
 
+    const setSummary = (message, state = '') => {
+      summaryEl.textContent = message;
+      summaryEl.dataset.state = state;
+    };
+
     const renderList = (items) => {
       if (!items.length) {
-        listEl.innerHTML = `<div class="empty-state">${t.noIssues}</div>`;
+        listEl.innerHTML = `<div class="empty-state">${escapeHtml(t.noIssues)}</div>`;
         return;
       }
-      listEl.innerHTML = items.map((item) => `<div class="bw-item"><strong>${item.title}<span class="bw-tag">${item.count}</span></strong><p>${item.detail}</p></div>`).join('');
+      listEl.innerHTML = items.map((item) => `<div class="bw-item"><strong>${escapeHtml(item.title)}<span class="bw-tag">${escapeHtml(item.count)}</span></strong><p>${escapeHtml(item.detail)}</p></div>`).join('');
+    };
+
+    const resetStats = () => {
+      charsEl.textContent = '0';
+      sentencesEl.textContent = '0';
+      avgEl.textContent = '0';
+      longSentencesEl.textContent = '0';
+      longParagraphsEl.textContent = '0';
+      scoreEl.textContent = '-';
+      latestSummary = '';
+      copyBtn.disabled = true;
     };
 
     const analyze = () => {
       const text = input.value || '';
-      const sentenceLimit = clamp(Number(sentenceLimitEl.value || 45), 20, 120);
-      const paragraphLimit = clamp(Number(paragraphLimitEl.value || 4), 2, 12);
+      const rawSentenceLimit = Number(sentenceLimitEl.value || 45);
+      const rawParagraphLimit = Number(paragraphLimitEl.value || 4);
+      const sentenceLimit = clamp(Number.isFinite(rawSentenceLimit) ? Math.round(rawSentenceLimit) : 45, 20, 120);
+      const paragraphLimit = clamp(Number.isFinite(rawParagraphLimit) ? Math.round(rawParagraphLimit) : 4, 2, 12);
       sentenceLimitEl.value = sentenceLimit;
       paragraphLimitEl.value = paragraphLimit;
+      sentenceLimitEl.setAttribute('aria-invalid', rawSentenceLimit !== sentenceLimit ? 'true' : 'false');
+      paragraphLimitEl.setAttribute('aria-invalid', rawParagraphLimit !== paragraphLimit ? 'true' : 'false');
 
-      const chars = text.length;
-      const sentences = text.split(/(?<=[.!?。！？])\s+|\n+/).map(v => v.trim()).filter(Boolean);
+      const chars = [...text].length;
+      if (!text.trim()) {
+        input.setAttribute('aria-invalid', 'false');
+        resetStats();
+        setSummary(t.empty);
+        renderList([]);
+        return;
+      }
+
+      const sentences = text
+        .replace(/([.!?。！？…]+)(?=\S)/g, '$1\n')
+        .split(/\n+|(?<=[.!?。！？…])\s+/u)
+        .map(v => v.trim())
+        .filter(Boolean);
       const paragraphs = text.split(/\n{2,}/).map(v => v.trim()).filter(Boolean);
       const words = (text.match(/[가-힣A-Za-z0-9]{2,}/g) || []).map(v => v.toLowerCase());
       const freq = {};
@@ -9848,32 +9966,52 @@
       longSentencesEl.textContent = longSentences.length.toLocaleString(numberLocale);
       longParagraphsEl.textContent = longParagraphs.length.toLocaleString(numberLocale);
       scoreEl.textContent = label;
-      summaryEl.textContent = chars ? t.summary(label, avg.toLocaleString(numberLocale, { maximumFractionDigits: 1 }), longSentences.length, longParagraphs.length) : t.empty;
+      latestSummary = t.summary(label, avg.toLocaleString(numberLocale, { maximumFractionDigits: 1 }), formatNum(longSentences.length), formatNum(longParagraphs.length), formatNum(repeated.length));
+      setSummary(chars < 40 ? `${latestSummary} · ${t.tooShort}` : latestSummary, chars < 40 ? 'warning' : 'success');
+      input.setAttribute('aria-invalid', 'false');
+      copyBtn.disabled = false;
 
       const items = [];
-      if (longSentences.length) items.push({ title: '긴 문장', count: `${longSentences.length}개`, detail: `${sentenceLimit}자 이상 문장이 있습니다. 쉼표 뒤나 접속사 앞에서 둘로 나눌 수 있는지 확인해 보세요.` });
-      if (longParagraphs.length) items.push({ title: '긴 문단', count: `${longParagraphs.length}개`, detail: `${paragraphLimit}줄 이상 문단이 있습니다. 핵심 한 가지씩 묶어 문단을 쪼개면 읽기 호흡이 좋아집니다.` });
-      if (repeated.length) items.push({ title: '반복 표현', count: `${repeated.length}개`, detail: repeated.map(([w, n]) => `${w}(${n}회)`).join(', ') });
-      if (paragraphs.length && paragraphs.length <= 1 && chars >= 300) items.push({ title: '줄바꿈 밀도', count: '낮음', detail: '긴 글인데 문단 분리가 거의 없습니다. 2~4문장마다 한 번씩 끊어 읽기 흐름을 만들어 보세요.' });
+      if (longSentences.length) items.push({ title: t.itemLongSentence, count: t.count(longSentences.length), detail: t.itemLongSentenceDetail(sentenceLimit) });
+      if (longParagraphs.length) items.push({ title: t.itemLongParagraph, count: t.count(longParagraphs.length), detail: t.itemLongParagraphDetail(paragraphLimit) });
+      if (repeated.length) items.push({ title: t.itemRepeated, count: t.count(repeated.length), detail: repeated.map(([w, n]) => `${w}(${t.times(n)})`).join(', ') });
+      if (paragraphs.length && paragraphs.length <= 1 && chars >= 300) items.push({ title: t.itemDensity, count: t.low, detail: t.itemDensityDetail });
       renderList(items);
     };
 
     input.addEventListener('input', analyze);
     sentenceLimitEl.addEventListener('input', analyze);
     paragraphLimitEl.addEventListener('input', analyze);
-    sampleBtn.addEventListener('click', () => { input.value = t.sample; analyze(); });
+    sampleBtn.addEventListener('click', () => { input.value = t.sample; analyze(); input.focus(); });
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      sentenceLimitEl.value = '45';
+      paragraphLimitEl.value = '4';
+      analyze();
+      setSummary(t.cleared);
+      input.focus();
+    });
     copyBtn.addEventListener('click', async () => {
+      if (!latestSummary) {
+        setSummary(t.copyEmpty, 'error');
+        input.focus();
+        return;
+      }
       const text = [
-        `문장 가독성 점검기`,
-        `글자 수: ${charsEl.textContent}`,
-        `문장 수: ${sentencesEl.textContent}`,
-        `평균 문장 길이: ${avgEl.textContent}`,
-        `긴 문장: ${longSentencesEl.textContent}`,
-        `긴 문단: ${longParagraphsEl.textContent}`,
-        `가독성: ${scoreEl.textContent}`,
-        `요약: ${summaryEl.textContent}`
+        t.title,
+        `${t.stats.chars}: ${charsEl.textContent}`,
+        `${t.stats.sentences}: ${sentencesEl.textContent}`,
+        `${t.stats.avg}: ${avgEl.textContent}`,
+        `${t.stats.longS}: ${longSentencesEl.textContent}`,
+        `${t.stats.longP}: ${longParagraphsEl.textContent}`,
+        `${t.stats.score}: ${scoreEl.textContent}`,
+        latestSummary
       ].join(' | ');
-      await copyText(text);
+      const ok = await copyText(text);
+      if (!ok) {
+        setSummary(t.copyFail, 'error');
+        return;
+      }
       const old = copyBtn.textContent;
       copyBtn.textContent = t.copied;
       setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);

@@ -1068,9 +1068,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 긴 문장, 긴 문단, 반복 표현, 줄바꿈 밀도를 점검해 더 읽기 쉬운 한국어 글쓰기를 도와줘요.
-  description_en: Check long sentences, dense paragraphs, repeated expressions, and line-break density to make text easier to read.
-  description_ja: 長い文・長い段落・表現の繰り返し・改行密度を点検して、読みやすい文章に整えます。
+  description: 긴 문장, 긴 문단, 반복 표현, 줄바꿈 밀도, 모바일에서 읽기 어려운 문단을 점검해 더 읽기 쉬운 글쓰기를 도와줘요.
+  description_en: Check long sentences, dense paragraphs, repeated wording, line-break density, and mobile readability signals to make text easier to scan.
+  description_ja: 長い文・長い段落・表現の繰り返し・改行密度・スマホで読みづらい塊を点検して、読みやすい文章に整えます。
   url: /tools/readability-checker/
   url_en: /en/tools/readability-checker/
   url_ja: /ja/tools/readability-checker/

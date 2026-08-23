@@ -1,5 +1,10 @@
 # Tool Quality Log
 
+## 2026-08-23 21:00 KST
+- Tool: `readability-checker`
+- Selection reason: recent quality commits improved `time-difference-calculator`, `korean-name-romanizer`, `png-compressor`, `json-merge`, and `link-list-cleaner`; `readability-checker` still had higher-risk text handling around long input, sentence splitting, repeated terms, mobile paragraph density, and Korean-only UI labels on localized pages.
+- Scope: improved existing page copy, home metadata, localized UI labels, threshold validation, empty/short-text/copy states, HTML-safe result rendering, clear flow, mobile stats layout, and multilingual SEO coverage. No new tool was added.
+
 ## 2026-08-22 21:00 KST
 - Tool: `time-difference-calculator`
 - Selection reason: recent quality commits improved korean-name-romanizer, png-compressor, json-merge, and link-list-cleaner; this older time calculator still had high-risk edge cases around earlier end times, midnight crossing, same-time input, excessive break minutes, weak empty state, and mobile preset/result clarity.

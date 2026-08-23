@@ -621,36 +621,41 @@ layout: default
           <textarea id="gip-output" rows="12" readonly placeholder="{% if page.lang == 'en' %}Gift ideas will appear here.{% elsif page.lang == 'ja' %}候補がここに表示されます。{% else %}추천 결과가 여기에 표시됩니다.{% endif %}"></textarea>
         </div>
       {% when 'readability-checker' %}
-        <div class="tool-ui">
-          <textarea id="rc-input" rows="10" maxlength="12000" placeholder="문장 가독성을 점검할 글을 붙여넣으세요."></textarea>
+        <div class="tool-ui rc-ui">
+          <div class="tool-row">
+            <label for="rc-input">{% if page.lang == 'en' %}Draft text{% elsif page.lang == 'ja' %}点検する文章{% else %}점검할 글{% endif %}</label>
+            <textarea id="rc-input" rows="10" maxlength="12000" aria-describedby="rc-summary rc-help" placeholder="{% if page.lang == 'en' %}Paste a notice, email, blog draft, or application paragraph to check readability.{% elsif page.lang == 'ja' %}お知らせ、メール、ブログ下書き、応募文などを貼り付けて読みやすさを確認してください。{% else %}공지문, 메일, 블로그 초안, 자기소개서 문단 등을 붙여넣어 가독성을 점검하세요.{% endif %}"></textarea>
+          </div>
 
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid pct-grid" aria-label="{% if page.lang == 'en' %}Readability thresholds{% elsif page.lang == 'ja' %}読みやすさ判定基準{% else %}가독성 점검 기준{% endif %}">
             <div>
-              <label for="rc-sentence-limit">긴 문장 기준(자)</label>
-              <input id="rc-sentence-limit" type="number" min="20" max="120" step="1" value="45" inputmode="numeric" />
+              <label for="rc-sentence-limit">{% if page.lang == 'en' %}Long sentence threshold{% elsif page.lang == 'ja' %}長い文の基準（文字）{% else %}긴 문장 기준(자){% endif %}</label>
+              <input id="rc-sentence-limit" type="number" min="20" max="120" step="1" value="45" inputmode="numeric" aria-describedby="rc-summary rc-help" />
             </div>
             <div>
-              <label for="rc-paragraph-limit">긴 문단 기준(줄)</label>
-              <input id="rc-paragraph-limit" type="number" min="2" max="12" step="1" value="4" inputmode="numeric" />
+              <label for="rc-paragraph-limit">{% if page.lang == 'en' %}Dense paragraph threshold{% elsif page.lang == 'ja' %}詰まった段落の基準（行）{% else %}긴 문단 기준(줄){% endif %}</label>
+              <input id="rc-paragraph-limit" type="number" min="2" max="12" step="1" value="4" inputmode="numeric" aria-describedby="rc-summary rc-help" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="rc-copy" type="button">결과 복사</button>
-            <button id="rc-sample" type="button">예시 넣기</button>
+            <button id="rc-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="rc-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 넣기{% endif %}</button>
+            <button id="rc-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
-            <div><strong id="rc-chars">0</strong><span>글자 수</span></div>
-            <div><strong id="rc-sentences">0</strong><span>문장 수</span></div>
-            <div><strong id="rc-avg">0</strong><span>평균 문장 길이</span></div>
-            <div><strong id="rc-long-sentences">0</strong><span>긴 문장</span></div>
-            <div><strong id="rc-long-paragraphs">0</strong><span>긴 문단</span></div>
-            <div><strong id="rc-score">-</strong><span>가독성</span></div>
+          <div class="tool-stats rc-stats" aria-label="{% if page.lang == 'en' %}Readability check summary{% elsif page.lang == 'ja' %}読みやすさ点検サマリー{% else %}문장 가독성 점검 요약{% endif %}">
+            <div><strong id="rc-chars">0</strong><span>{% if page.lang == 'en' %}Characters{% elsif page.lang == 'ja' %}文字数{% else %}글자 수{% endif %}</span></div>
+            <div><strong id="rc-sentences">0</strong><span>{% if page.lang == 'en' %}Sentences{% elsif page.lang == 'ja' %}文の数{% else %}문장 수{% endif %}</span></div>
+            <div><strong id="rc-avg">0</strong><span>{% if page.lang == 'en' %}Avg. sentence length{% elsif page.lang == 'ja' %}平均文長{% else %}평균 문장 길이{% endif %}</span></div>
+            <div><strong id="rc-long-sentences">0</strong><span>{% if page.lang == 'en' %}Long sentences{% elsif page.lang == 'ja' %}長い文{% else %}긴 문장{% endif %}</span></div>
+            <div><strong id="rc-long-paragraphs">0</strong><span>{% if page.lang == 'en' %}Dense paragraphs{% elsif page.lang == 'ja' %}詰まった段落{% else %}긴 문단{% endif %}</span></div>
+            <div><strong id="rc-score">-</strong><span>{% if page.lang == 'en' %}Readability{% elsif page.lang == 'ja' %}読みやすさ{% else %}가독성{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="rc-summary">텍스트를 입력하면 문장 길이와 문단 밀도를 바로 점검합니다.</p>
-          <div id="rc-list" class="bw-list"></div>
+          <p class="tool-result" id="rc-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter text to check sentence length, paragraph density, and repeated wording.{% elsif page.lang == 'ja' %}文章を入力すると、文の長さ、段落の密度、繰り返し表現を点検します。{% else %}텍스트를 입력하면 문장 길이와 문단 밀도를 바로 점검합니다.{% endif %}</p>
+          <p class="tool-result" id="rc-help">{% if page.lang == 'en' %}Input stays in your browser and is limited to 12,000 characters. Thresholds are clamped to 20-120 characters and 2-12 lines.{% elsif page.lang == 'ja' %}入力内容はブラウザ内だけで処理され、最大12,000文字です。基準値は20〜120文字、2〜12行の範囲に収めます。{% else %}입력 내용은 브라우저 안에서만 처리되며 최대 12,000자입니다. 기준값은 20~120자, 2~12줄 범위로 보정합니다.{% endif %}</p>
+          <div id="rc-list" class="bw-list" aria-live="polite"></div>
         </div>
       {% when 'deadline-backward-planner' %}
         <div class="tool-ui">
