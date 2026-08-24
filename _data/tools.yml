@@ -1370,9 +1370,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 25/5, 50/10 프리셋과 직접 설정으로 집중·짧은 휴식·긴 휴식을 자동 전환하는 공부·업무용 뽀모도로 타이머예요.
-  description_en: Start 25/5, 50/10, or custom focus, short-break, and long-break cycles with a browser Pomodoro timer for work and study.
-  description_ja: 25/5、50/10、カスタム設定で集中・短い休憩・長い休憩を自動切替する勉強・仕事向けポモドーロタイマーです。
+  description: 25/5, 50/10 프리셋과 작업 이름, 알림음, 직접 설정으로 집중·짧은 휴식·긴 휴식을 자동 전환하는 공부·업무용 뽀모도로 타이머예요.
+  description_en: Start 25/5, 50/10, or custom focus, short-break, and long-break cycles with a task label and optional alert sound.
+  description_ja: 25/5、50/10、カスタム設定、作業ラベル、通知音で集中・短い休憩・長い休憩を自動切替するポモドーロタイマーです。
   url: /tools/pomodoro-timer/
   url_en: /en/tools/pomodoro-timer/
   url_ja: /ja/tools/pomodoro-timer/

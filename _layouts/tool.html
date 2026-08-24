@@ -3440,6 +3440,17 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <button type="button" data-focus="15" data-short="3" data-long="12" data-cycle="4">{% if page.lang == 'en' %}Light sprint{% elsif page.lang == 'ja' %}短め集中{% else %}짧은 집중{% endif %}</button>
           </div>
 
+          <div class="tool-row-grid pt-context-grid">
+            <div>
+              <label for="pomo-task">{% if page.lang == 'en' %}Focus label (optional){% elsif page.lang == 'ja' %}集中ラベル（任意）{% else %}집중 작업 이름(선택){% endif %}</label>
+              <input id="pomo-task" type="text" maxlength="60" autocomplete="off" placeholder="{% if page.lang == 'en' %}e.g. draft report{% elsif page.lang == 'ja' %}例: レポート下書き{% else %}예: 보고서 초안 작성{% endif %}" aria-describedby="pomo-help pomo-error" />
+            </div>
+            <label class="tool-check pt-alert-check">
+              <input id="pomo-sound" type="checkbox" />
+              {% if page.lang == 'en' %}Play a short alert when a phase ends{% elsif page.lang == 'ja' %}フェーズ終了時に短い通知音を鳴らす{% else %}구간이 끝나면 짧은 알림음 재생{% endif %}
+            </label>
+          </div>
+
           <div class="tool-row-grid pt-grid">
             <div>
               <label for="pomo-focus">{% if page.lang == 'en' %}Focus (min){% elsif page.lang == 'ja' %}集中（分）{% else %}집중 시간(분){% endif %}</label>
@@ -3461,7 +3472,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
 
           <div class="tool-row-grid pt-actions">
             <button id="pomo-start" type="button" aria-describedby="pomo-help">{% if page.lang == 'en' %}Start{% elsif page.lang == 'ja' %}開始{% else %}시작{% endif %}</button>
-            <button id="pomo-skip" type="button">{% if page.lang == 'en' %}Skip phase{% elsif page.lang == 'ja' %}フェーズスキップ{% else %}구간 건너뛰기{% endif %}</button>
+            <button id="pomo-skip" type="button" disabled>{% if page.lang == 'en' %}Skip phase{% elsif page.lang == 'ja' %}フェーズスキップ{% else %}구간 건너뛰기{% endif %}</button>
             <button id="pomo-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
             <button id="pomo-copy" type="button">{% if page.lang == 'en' %}Copy plan{% elsif page.lang == 'ja' %}設定をコピー{% else %}설정 복사{% endif %}</button>
           </div>
@@ -3472,10 +3483,11 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <div><strong id="pomo-phase">-</strong><span>{% if page.lang == 'en' %}Current phase{% elsif page.lang == 'ja' %}現在フェーズ{% else %}현재 구간{% endif %}</span></div>
             <div><strong id="pomo-remaining">25:00</strong><span>{% if page.lang == 'en' %}Time remaining{% elsif page.lang == 'ja' %}残り時間{% else %}남은 시간{% endif %}</span></div>
             <div><strong id="pomo-progress">0 / 4</strong><span>{% if page.lang == 'en' %}Focus progress{% elsif page.lang == 'ja' %}集中 진행도{% else %}집중 진행도{% endif %}</span></div>
+            <div><strong id="pomo-next">Short break</strong><span>{% if page.lang == 'en' %}Next phase{% elsif page.lang == 'ja' %}次のフェーズ{% else %}다음 구간{% endif %}</span></div>
             <div><strong id="pomo-status">{% if page.lang == 'en' %}Ready{% elsif page.lang == 'ja' %}準備完了{% else %}준비됨{% endif %}</strong><span>{% if page.lang == 'en' %}Status{% elsif page.lang == 'ja' %}状態{% else %}상태{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="pomo-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Set minutes and press Start. Timer continues in this tab while open.{% elsif page.lang == 'ja' %}分を設定して開始を押してください。このタブを開いている間タイマーが動作します。{% else %}분 단위를 설정하고 시작을 누르세요. 탭이 열려 있는 동안 타이머가 동작합니다.{% endif %}</p>
+          <p class="tool-result" id="pomo-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Set minutes, add a task label if helpful, then press Start. Timer continues in this tab while open.{% elsif page.lang == 'ja' %}分を設定し、必要なら作業ラベルを入れて開始を押してください。このタブを開いている間タイマーが動作します。{% else %}분 단위를 설정하고 필요하면 작업 이름을 넣은 뒤 시작을 누르세요. 탭이 열려 있는 동안 타이머가 동작합니다.{% endif %}</p>
           <p class="tool-result" id="pomo-error" aria-live="polite">{% if page.lang == 'en' %}Allowed ranges: focus 1-120, short break 1-60, long break 1-90, long-break cycle 2-12.{% elsif page.lang == 'ja' %}入力範囲: 集中1〜120分、短い休憩1〜60分、長い休憩1〜90分、周期2〜12回。{% else %}입력 범위: 집중 1~120분, 짧은 휴식 1~60분, 긴 휴식 1~90분, 긴 휴식 주기 2~12회입니다.{% endif %}</p>
         </div>
       {% when 'parking-fee-calculator' %}

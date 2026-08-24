@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Pomodoro Timer | Focus and Break Cycle Timer for Work and Study
-description: Start a browser Pomodoro timer with customizable focus, short break, long break, and 25/5 or 50/10 presets for work, study, and deep-focus sessions.
+description: Start a browser Pomodoro timer with an optional task label, focus, short break, long break, alert sound, and 25/5 or 50/10 presets for work and study.
 lang: en
 permalink: /en/tools/pomodoro-timer/
 canonical_url: /en/tools/pomodoro-timer/
@@ -19,8 +19,10 @@ faq:
     a: The most common setup is 25 minutes focus + 5 minutes short break, with a longer break after 4 focus sessions.
   - q: Do I have to use a 4-session long-break cycle?
     a: No. You can set the long-break cycle based on your work style.
-  - q: Is this timer perfectly accurate in every browser state?
-    a: Browser throttling may affect update intervals in inactive tabs, so use it mainly for workflow rhythm, not official timing measurements.
+  - q: Does the timer correct itself after I return to the tab?
+    a: Browser throttling may pause visual updates in inactive tabs, but the remaining time is recalculated from the actual clock when the tab updates again.
+  - q: Does the alert sound always play?
+    a: It plays only when you turn on the alert option. Device volume and browser audio policies can still affect whether you hear it.
   - q: Which preset should I start with?
     a: Use 25/5 for everyday work or study, 50/10 for deeper focus blocks, and the light sprint preset when you want a smaller starting step.
 alternate_urls:
@@ -33,13 +35,15 @@ alternate_urls:
 Starting a task is easier when the next break is already planned.
 This Pomodoro timer alternates **focus and recovery phases automatically** so you can keep a steady rhythm without watching the clock.
 It works well as a study timer, work sprint timer, coding sprint timer, writing timer, or deep-focus browser timer.
+Add a task label when you want the browser title and copied plan to show what this focus block is for.
 
 ## What you can do
 - Set focus / short break / long break minutes
 - Apply 25/5, 50/10, or light sprint presets
 - Trigger long break every N focus sessions
 - Start, pause, skip current phase, reset, and copy your current plan
-- Track current phase, remaining time, focus progress, and live input errors
+- Track current phase, next phase, remaining time, focus progress, and live input errors
+- Add an optional task label and short phase-end alert sound
 - See clear empty-state and range-error guidance before starting
 
 ## Recommended workflow
@@ -69,3 +73,6 @@ Yes. It is often better to use shorter cycles for admin tasks and longer cycles 
 
 ### Does the timer move to the next phase automatically?
 Yes. When focus time ends, it switches to a short or long break. When the break ends, it returns to focus.
+
+### Is it usable on a phone?
+Yes. On narrow screens the controls stack into a single column, and the phase, next phase, remaining time, and progress stay visible as compact status cards.

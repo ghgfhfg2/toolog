@@ -512,6 +512,11 @@ a:hover { color: #fff; text-decoration: none; }
 .uc-stats strong { overflow-wrap: anywhere; }
 .pct-grid { grid-template-columns: 1fr 1fr; }
 .pct-actions { grid-template-columns: 1fr 1fr; }
+.pt-context-grid { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: end; }
+.pt-alert-check {
+  min-height: 44px;
+  align-items: center;
+}
 .pt-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .pt-presets { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .pt-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -540,6 +545,7 @@ a:hover { color: #fff; text-decoration: none; }
   transition: width .18s ease;
 }
 .pt-stats strong { overflow-wrap: anywhere; }
+.tool-stats.pt-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .pf-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .pf-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .pf-ui input[aria-invalid="true"] { border-color: #ef4444; }
@@ -1836,9 +1842,11 @@ a:hover { color: #fff; text-decoration: none; }
   .pf-grid,
   .pf-actions { grid-template-columns: 1fr; }
   .tool-stats.pf-stats { grid-template-columns: 1fr 1fr; }
+  .pt-context-grid,
   .pt-grid,
   .pt-presets,
   .pt-actions { grid-template-columns: 1fr; }
+  .tool-stats.pt-stats { grid-template-columns: 1fr 1fr; }
   .td-grid,
   .td-presets,
   .td-actions,

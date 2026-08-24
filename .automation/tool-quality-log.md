@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-08-24 21:00 KST
+- Tool: `pomodoro-timer`
+- Selection reason: recent quality commits improved `readability-checker`, `time-difference-calculator`, `korean-name-romanizer`, `png-compressor`, `json-merge`, and `link-list-cleaner`; `pomodoro-timer` was an older productivity planner with UX risk around skipping before start, mobile status density, hidden-tab timing clarity, and limited SEO copy for task labels/alerts.
+- Scope: improved existing layout, script, CSS, page metadata, localized pages, home data, task-label flow, optional phase-end alert, next-phase status, copy summary, visibility-time recalculation, mobile stats layout, FAQ/search-intent copy, and selection log. No new tool was added.
+- Validation: `YAML.load_file('_data/tools.yml')`, targeted front matter YAML parse, `node --check assets/js/tools.js`, and `git diff --check` passed. `bundle exec jekyll build` could not run locally because Jekyll was not installed, and `bundle install` failed under Ruby 2.6.10 due current dependency Ruby >= 3.0/3.1 constraints.
+
 ## 2026-08-23 21:00 KST
 - Tool: `readability-checker`
 - Selection reason: recent quality commits improved `time-difference-calculator`, `korean-name-romanizer`, `png-compressor`, `json-merge`, and `link-list-cleaner`; `readability-checker` still had higher-risk text handling around long input, sentence splitting, repeated terms, mobile paragraph density, and Korean-only UI labels on localized pages.

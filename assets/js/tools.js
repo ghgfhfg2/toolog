@@ -7140,10 +7140,12 @@
   }
 
   if (slug === 'pomodoro-timer') {
+    const taskEl = document.getElementById('pomo-task');
     const focusEl = document.getElementById('pomo-focus');
     const shortEl = document.getElementById('pomo-short');
     const longEl = document.getElementById('pomo-long');
     const cycleEl = document.getElementById('pomo-cycle');
+    const soundEl = document.getElementById('pomo-sound');
     const startBtn = document.getElementById('pomo-start');
     const skipBtn = document.getElementById('pomo-skip');
     const resetBtn = document.getElementById('pomo-reset');
@@ -7153,21 +7155,23 @@
     const outPhase = document.getElementById('pomo-phase');
     const outRemaining = document.getElementById('pomo-remaining');
     const outProgress = document.getElementById('pomo-progress');
+    const outNext = document.getElementById('pomo-next');
     const outStatus = document.getElementById('pomo-status');
     const help = document.getElementById('pomo-help');
     const error = document.getElementById('pomo-error');
     const meter = document.querySelector('.pt-meter');
     const meterBar = document.getElementById('pomo-meter-bar');
 
-    if (!focusEl || !shortEl || !longEl || !cycleEl || !startBtn || !skipBtn || !resetBtn || !copyBtn || !outPhase || !outRemaining || !outProgress || !outStatus || !help || !error || !meter || !meterBar) return;
+    if (!taskEl || !focusEl || !shortEl || !longEl || !cycleEl || !soundEl || !startBtn || !skipBtn || !resetBtn || !copyBtn || !outPhase || !outRemaining || !outProgress || !outNext || !outStatus || !help || !error || !meter || !meterBar) return;
 
     const t = {
       ko: {
         phase: { focus: '집중', short: '짧은 휴식', long: '긴 휴식' },
         ready: '준비됨', running: '진행 중', paused: '일시정지', done: '전환됨',
         start: '시작', pause: '일시정지',
+        taskLabel: '작업',
         helpReady: '시작을 누르면 포모도로 타이머가 시작됩니다.',
-        helpRunning: (phase) => `${phase} 구간이 진행 중입니다.`,
+        helpRunning: (phase, task) => task ? `${task} - ${phase} 구간이 진행 중입니다.` : `${phase} 구간이 진행 중입니다.`,
         helpPaused: '타이머를 일시정지했습니다. 다시 시작하면 이어서 진행됩니다.',
         helpPhaseDone: (prev, next) => `${prev} 시간이 끝나 ${next} 구간으로 전환했습니다.`,
         helpSkipped: (next) => `${next} 구간으로 건너뛰었습니다.`,
@@ -7175,14 +7179,15 @@
         helpCopied: '현재 뽀모도로 설정을 복사했습니다.',
         copyFail: '자동 복사를 사용할 수 없습니다.',
         invalid: '입력값을 범위 안의 정수로 고쳐 주세요.',
-        summary: (s) => `뽀모도로 설정: 집중 ${s.focus}분 / 짧은 휴식 ${s.short}분 / 긴 휴식 ${s.long}분 / ${s.cycle}회마다 긴 휴식`
+        summary: (s, task) => `뽀모도로 설정${task ? ` (${t.taskLabel}: ${task})` : ''}: 집중 ${s.focus}분 / 짧은 휴식 ${s.short}분 / 긴 휴식 ${s.long}분 / ${s.cycle}회마다 긴 휴식`
       },
       en: {
         phase: { focus: 'Focus', short: 'Short break', long: 'Long break' },
         ready: 'Ready', running: 'Running', paused: 'Paused', done: 'Switched',
         start: 'Start', pause: 'Pause',
+        taskLabel: 'Task',
         helpReady: 'Press Start to begin the Pomodoro timer.',
-        helpRunning: (phase) => `${phase} phase is running.`,
+        helpRunning: (phase, task) => task ? `${task} - ${phase} phase is running.` : `${phase} phase is running.`,
         helpPaused: 'Timer paused. Press Start to continue.',
         helpPhaseDone: (prev, next) => `${prev} completed. Switched to ${next}.`,
         helpSkipped: (next) => `Skipped to ${next}.`,
@@ -7190,14 +7195,15 @@
         helpCopied: 'Copied the current Pomodoro plan.',
         copyFail: 'Automatic copy is unavailable.',
         invalid: 'Fix the settings with whole numbers inside the allowed ranges.',
-        summary: (s) => `Pomodoro plan: focus ${s.focus} min / short break ${s.short} min / long break ${s.long} min / long break every ${s.cycle} focus sessions`
+        summary: (s, task) => `Pomodoro plan${task ? ` (${t.taskLabel}: ${task})` : ''}: focus ${s.focus} min / short break ${s.short} min / long break ${s.long} min / long break every ${s.cycle} focus sessions`
       },
       ja: {
         phase: { focus: '集中', short: '短い休憩', long: '長い休憩' },
         ready: '準備完了', running: '進行中', paused: '一時停止', done: '切替済み',
         start: '開始', pause: '一時停止',
+        taskLabel: '作業',
         helpReady: '開始を押すとポモドーロタイマーが始まります。',
-        helpRunning: (phase) => `${phase}フェーズが進行中です。`,
+        helpRunning: (phase, task) => task ? `${task} - ${phase}フェーズが進行中です。` : `${phase}フェーズが進行中です。`,
         helpPaused: 'タイマーを一時停止しました。再開すると続きから進みます。',
         helpPhaseDone: (prev, next) => `${prev}が終了し、${next}へ切り替わりました。`,
         helpSkipped: (next) => `${next}へスキップしました。`,
@@ -7205,14 +7211,15 @@
         helpCopied: '現在のポモドーロ設定をコピーしました。',
         copyFail: '自動コピーを利用できません。',
         invalid: '入力範囲内の整数に修正してください。',
-        summary: (s) => `ポモドーロ設定: 集中${s.focus}分 / 短い休憩${s.short}分 / 長い休憩${s.long}分 / ${s.cycle}回ごとに長い休憩`
+        summary: (s, task) => `ポモドーロ設定${task ? ` (${t.taskLabel}: ${task})` : ''}: 集中${s.focus}分 / 短い休憩${s.short}分 / 長い休憩${s.long}分 / ${s.cycle}回ごとに長い休憩`
       }
     }[pageLang] || {
       phase: { focus: '집중', short: '짧은 휴식', long: '긴 휴식' },
       ready: '준비됨', running: '진행 중', paused: '일시정지', done: '전환됨',
       start: '시작', pause: '일시정지',
+      taskLabel: '작업',
       helpReady: '시작을 누르면 포모도로 타이머가 시작됩니다.',
-      helpRunning: (phase) => `${phase} 구간이 진행 중입니다.`,
+      helpRunning: (phase, task) => task ? `${task} - ${phase} 구간이 진행 중입니다.` : `${phase} 구간이 진행 중입니다.`,
       helpPaused: '타이머를 일시정지했습니다. 다시 시작하면 이어서 진행됩니다.',
       helpPhaseDone: (prev, next) => `${prev} 시간이 끝나 ${next} 구간으로 전환했습니다.`,
       helpSkipped: (next) => `${next} 구간으로 건너뛰었습니다.`,
@@ -7220,7 +7227,7 @@
       helpCopied: '현재 뽀모도로 설정을 복사했습니다.',
       copyFail: '자동 복사를 사용할 수 없습니다.',
       invalid: '입력값을 범위 안의 정수로 고쳐 주세요.',
-      summary: (s) => `뽀모도로 설정: 집중 ${s.focus}분 / 짧은 휴식 ${s.short}분 / 긴 휴식 ${s.long}분 / ${s.cycle}회마다 긴 휴식`
+      summary: (s, task) => `뽀모도로 설정${task ? ` (${t.taskLabel}: ${task})` : ''}: 집중 ${s.focus}분 / 짧은 휴식 ${s.short}분 / 긴 휴식 ${s.long}분 / ${s.cycle}회마다 긴 휴식`
     };
 
     let timer = null;
@@ -7232,6 +7239,7 @@
     let running = false;
     let startedOnce = false;
     let lastTitle = document.title;
+    let audioContext = null;
 
     const setMessage = (message, state = '') => {
       help.textContent = message;
@@ -7256,7 +7264,7 @@
       const valid = Object.values(result).every((value) => value !== null);
       error.dataset.state = valid ? '' : 'error';
       startBtn.disabled = !valid;
-      skipBtn.disabled = !valid;
+      skipBtn.disabled = !valid || !startedOnce;
       copyBtn.disabled = !valid;
       return valid ? result : null;
     };
@@ -7265,6 +7273,35 @@
       if (phaseKey === 'short') return s.short * 60;
       if (phaseKey === 'long') return s.long * 60;
       return s.focus * 60;
+    };
+
+    const getTask = () => (taskEl.value || '').trim().replace(/\s+/g, ' ').slice(0, 60);
+
+    const nextPhaseName = (s) => {
+      if (phase !== 'focus') return t.phase.focus;
+      const nextFocusCount = focusDone + 1;
+      return nextFocusCount > 0 && nextFocusCount % s.cycle === 0 ? t.phase.long : t.phase.short;
+    };
+
+    const playAlert = () => {
+      const AudioCtor = window.AudioContext || window.webkitAudioContext;
+      if (!soundEl.checked || typeof AudioCtor === 'undefined') return;
+      try {
+        audioContext = audioContext || new AudioCtor();
+        if (audioContext.state === 'suspended') audioContext.resume();
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, audioContext.currentTime);
+        gain.gain.setValueAtTime(0.0001, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.08, audioContext.currentTime + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.35);
+        osc.connect(gain).connect(audioContext.destination);
+        osc.start();
+        osc.stop(audioContext.currentTime + 0.38);
+      } catch (_) {
+        soundEl.checked = false;
+      }
     };
 
     const formatSec = (sec) => {
@@ -7293,6 +7330,7 @@
       phaseTotalSec = durationForPhase(phase, s);
       remainingSec = phaseTotalSec;
       if (running) targetTime = Date.now() + (remainingSec * 1000);
+      if (!fromSkip) playAlert();
       setMessage(fromSkip ? t.helpSkipped(t.phase[phase]) : t.helpPhaseDone(t.phase[previous], t.phase[phase]), fromSkip ? 'warning' : 'success');
     };
 
@@ -7308,11 +7346,15 @@
       outPhase.textContent = t.phase[phase] || phase;
       outRemaining.textContent = formatSec(remainingSec);
       outProgress.textContent = `${focusDone % s.cycle} / ${s.cycle}`;
+      outNext.textContent = nextPhaseName(s);
       outStatus.textContent = running ? t.running : (!startedOnce && focusDone === 0 && phase === 'focus' && remainingSec === s.focus * 60 ? t.ready : t.paused);
       startBtn.textContent = running ? t.pause : t.start;
+      skipBtn.disabled = !startedOnce;
       meter.setAttribute('aria-valuenow', String(progress));
+      meter.setAttribute('aria-valuetext', `${formatSec(remainingSec)} ${t.phase[phase]}`);
       meterBar.style.width = `${progress}%`;
-      document.title = running ? `${formatSec(remainingSec)} ${t.phase[phase]} | Toolog` : lastTitle;
+      const task = getTask();
+      document.title = running ? `${formatSec(remainingSec)} ${task ? `${task} ` : ''}${t.phase[phase]} | Toolog` : lastTitle;
     };
 
     const clearTimer = () => {
@@ -7361,7 +7403,7 @@
         startedOnce = true;
         targetTime = Date.now() + (remainingSec * 1000);
         if (!timer) timer = setInterval(tick, 250);
-        setMessage(t.helpRunning(t.phase[phase]), 'success');
+        setMessage(t.helpRunning(t.phase[phase], getTask()), 'success');
       } else {
         remainingSec = Math.max(0, Math.ceil((targetTime - Date.now()) / 1000));
         clearTimer();
@@ -7376,6 +7418,7 @@
     });
 
     resetBtn.addEventListener('click', resetAll);
+    taskEl.addEventListener('input', render);
     [focusEl, shortEl, longEl, cycleEl].forEach((el) => el.addEventListener('input', () => {
       if (running) {
         settings();
@@ -7403,11 +7446,14 @@
         return;
       }
       try {
-        await navigator.clipboard.writeText(t.summary(s));
+        await navigator.clipboard.writeText(t.summary(s, getTask()));
         setMessage(t.helpCopied, 'success');
       } catch (_) {
         setMessage(t.copyFail, 'error');
       }
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (running) tick();
     });
     window.addEventListener('beforeunload', () => { document.title = lastTitle; });
 
