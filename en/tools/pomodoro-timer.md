@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Pomodoro Timer | Focus and Break Cycle Timer for Work and Study
-description: Start a browser Pomodoro timer with an optional task label, focus, short break, long break, alert sound, and 25/5 or 50/10 presets for work and study.
+title: Pomodoro Timer | Focus, Break, Task Label, and Alert Timer
+description: Run a browser Pomodoro timer with a task label, focus time, short breaks, long breaks, 25/5 and 50/10 presets, optional alert sound, and automatic phase switching.
 lang: en
 permalink: /en/tools/pomodoro-timer/
 canonical_url: /en/tools/pomodoro-timer/
@@ -33,16 +33,16 @@ alternate_urls:
 
 ## Build a sustainable focus rhythm
 Starting a task is easier when the next break is already planned.
-This Pomodoro timer alternates **focus and recovery phases automatically** so you can keep a steady rhythm without watching the clock.
-It works well as a study timer, work sprint timer, coding sprint timer, writing timer, or deep-focus browser timer.
-Add a task label when you want the browser title and copied plan to show what this focus block is for.
+This Pomodoro timer alternates **focus and break phases automatically** so you can keep a steady rhythm without watching the clock.
+It works well as a study timer, work sprint timer, coding sprint timer, writing timer, household reset timer, or deep-focus browser timer.
+Add a task label when you want the browser title and copied plan to show what this focus block is for, especially on mobile or when several timers are open.
 
 ## What you can do
 - Set focus / short break / long break minutes
 - Apply 25/5, 50/10, or light sprint presets
 - Trigger long break every N focus sessions
 - Start, pause, skip current phase, reset, and copy your current plan
-- Track current phase, next phase, remaining time, focus progress, and live input errors
+- Track current phase, next phase, remaining time, focus progress, and live input errors in real time
 - Add an optional task label and short phase-end alert sound
 - See clear empty-state and range-error guidance before starting
 
@@ -75,4 +75,4 @@ Yes. It is often better to use shorter cycles for admin tasks and longer cycles 
 Yes. When focus time ends, it switches to a short or long break. When the break ends, it returns to focus.
 
 ### Is it usable on a phone?
-Yes. On narrow screens the controls stack into a single column, and the phase, next phase, remaining time, and progress stay visible as compact status cards.
+Yes. On narrow screens the inputs and buttons stack into a single column, and the phase, next phase, remaining time, and progress stay visible as compact status cards.
