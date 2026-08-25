@@ -13247,71 +13247,156 @@
     const input = document.getElementById('ldp-input');
     const count = document.getElementById('ldp-count');
     const runBtn = document.getElementById('ldp-run');
+    const sampleBtn = document.getElementById('ldp-sample');
     const copyBtn = document.getElementById('ldp-copy');
+    const clearBtn = document.getElementById('ldp-clear');
     const output = document.getElementById('ldp-output');
     const totalEl = document.getElementById('ldp-total');
+    const duplicateEl = document.getElementById('ldp-duplicates');
     const pickedEl = document.getElementById('ldp-picked');
     const help = document.getElementById('ldp-help');
-    if (!input || !count || !runBtn || !copyBtn || !output || !totalEl || !pickedEl || !help) return;
+    if (!input || !count || !runBtn || !sampleBtn || !copyBtn || !clearBtn || !output || !totalEl || !duplicateEl || !pickedEl || !help) return;
 
     const t = {
       ko: {
         needInput: '참여자를 1명 이상 입력하세요.',
+        invalidCount: '당첨 인원은 1명 이상 1,000명 이하의 정수로 입력해 주세요.',
+        adjusted: (p) => `당첨 인원이 참여자 수보다 커서 ${p}명으로 조정했습니다.`,
         done: (p, w) => `${p}명 중 ${w}명 추첨 완료`,
-        copied: '복사됨',
-        copyDefault: '결과 복사'
+        emptyCopy: '복사할 추첨 결과가 없습니다.',
+        copied: '결과를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력과 결과를 초기화했습니다.',
+        sample: '김민준\n이서연\n박지훈\n최유진\n정하늘\n이서연\n오지민',
+        copyDefault: '결과 복사',
+        summary: (w, p, d) => `랜덤 추첨 결과\n참여자 ${p}명 / 중복 제외 ${d}건 / 당첨 ${w.length}명\n${w.map((name, idx) => `${idx + 1}. ${name}`).join('\n')}`
       },
       en: {
         needInput: 'Enter at least one participant.',
+        invalidCount: 'Enter a whole-number winner count from 1 to 1,000.',
+        adjusted: (p) => `Winner count was capped at ${p}, the number of unique participants.`,
         done: (p, w) => `Picked ${w} winner(s) from ${p} participant(s).`,
-        copied: 'Copied',
-        copyDefault: 'Copy result'
+        emptyCopy: 'There is no draw result to copy yet.',
+        copied: 'Copied the draw result.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared the list and result.',
+        sample: 'Alex Kim\nJordan Lee\nSam Park\nMina Choi\nTaylor Han\nJordan Lee\nRobin Oh',
+        copyDefault: 'Copy result',
+        summary: (w, p, d) => `Lucky draw result\n${p} participants / ${d} duplicate(s) removed / ${w.length} winner(s)\n${w.map((name, idx) => `${idx + 1}. ${name}`).join('\n')}`
       },
       ja: {
         needInput: '参加者を1名以上入力してください。',
+        invalidCount: '当選人数は1〜1,000の整数で入力してください。',
+        adjusted: (p) => `当選人数が参加者数を超えたため、${p}名に調整しました。`,
         done: (p, w) => `${p}名中 ${w}名の抽選が完了しました。`,
-        copied: 'コピー完了',
-        copyDefault: '結果をコピー'
+        emptyCopy: 'コピーできる抽選結果がまだありません。',
+        copied: '抽選結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力と結果をクリアしました。',
+        sample: '佐藤\n鈴木\n田中\n高橋\n伊藤\n鈴木\n山本',
+        copyDefault: '結果をコピー',
+        summary: (w, p, d) => `抽選結果\n参加者 ${p}名 / 重複除外 ${d}件 / 当選 ${w.length}名\n${w.map((name, idx) => `${idx + 1}. ${name}`).join('\n')}`
       }
     }[pageLang] || {
       needInput: '참여자를 1명 이상 입력하세요.',
+      invalidCount: '당첨 인원은 1명 이상 1,000명 이하의 정수로 입력해 주세요.',
+      adjusted: (p) => `당첨 인원이 참여자 수보다 커서 ${p}명으로 조정했습니다.`,
       done: (p, w) => `${p}명 중 ${w}명 추첨 완료`,
-      copied: '복사됨',
-      copyDefault: '결과 복사'
+      emptyCopy: '복사할 추첨 결과가 없습니다.',
+      copied: '결과를 복사했습니다.',
+      copyFail: '자동 복사를 사용할 수 없습니다.',
+      cleared: '입력과 결과를 초기화했습니다.',
+      sample: '김민준\n이서연\n박지훈\n최유진\n정하늘\n이서연\n오지민',
+      copyDefault: '결과 복사',
+      summary: (w, p, d) => `랜덤 추첨 결과\n참여자 ${p}명 / 중복 제외 ${d}건 / 당첨 ${w.length}명\n${w.map((name, idx) => `${idx + 1}. ${name}`).join('\n')}`
     };
 
-    const uniqueNames = () => {
-      const lines = (input.value || '').split('\n').map(v => v.trim()).filter(Boolean);
-      return Array.from(new Set(lines));
+    let currentWinners = [];
+    let currentDuplicateCount = 0;
+
+    const setStatus = (message, state = '') => {
+      help.textContent = message;
+      help.dataset.state = state;
+    };
+
+    const parseNames = () => {
+      const raw = (input.value || '').split(/[\n,]/u).map(v => v.trim()).filter(Boolean);
+      const seen = new Set();
+      const names = [];
+      raw.forEach((name) => {
+        const key = name.replace(/\s+/gu, ' ').toLocaleLowerCase(pageLang === 'ja' ? 'ja' : (pageLang === 'en' ? 'en' : 'ko'));
+        if (seen.has(key)) return;
+        seen.add(key);
+        names.push(name.replace(/\s+/gu, ' '));
+      });
+      return { rawCount: raw.length, names, duplicates: Math.max(0, raw.length - names.length) };
+    };
+
+    const randomInt = (max) => {
+      if (!Number.isInteger(max) || max <= 0) return 0;
+      if (!window.crypto?.getRandomValues) return Math.floor(Math.random() * max);
+      const limit = Math.floor(0x100000000 / max) * max;
+      const rand = new Uint32Array(1);
+      do {
+        window.crypto.getRandomValues(rand);
+      } while (rand[0] >= limit);
+      return rand[0] % max;
     };
 
     const shuffle = (arr) => {
       const out = [...arr];
       for (let i = out.length - 1; i > 0; i--) {
-        const rand = new Uint32Array(1);
-        crypto.getRandomValues(rand);
-        const j = rand[0] % (i + 1);
+        const j = randomInt(i + 1);
         [out[i], out[j]] = [out[j], out[i]];
       }
       return out;
     };
 
+    const updateCounts = () => {
+      const parsed = parseNames();
+      totalEl.textContent = parsed.names.length.toLocaleString(numberLocale);
+      duplicateEl.textContent = parsed.duplicates.toLocaleString(numberLocale);
+      return parsed;
+    };
+
+    const resetResult = () => {
+      currentWinners = [];
+      currentDuplicateCount = 0;
+      output.value = '';
+      pickedEl.textContent = '0';
+      copyBtn.disabled = true;
+    };
+
     const run = () => {
-      const users = uniqueNames();
-      totalEl.textContent = users.length.toLocaleString(numberLocale);
+      const { names: users, duplicates } = updateCounts();
+      currentDuplicateCount = duplicates;
       if (!users.length) {
-        output.value = '';
-        pickedEl.textContent = '0';
-        help.textContent = t.needInput;
+        input.setAttribute('aria-invalid', 'true');
+        count.setAttribute('aria-invalid', 'false');
+        resetResult();
+        setStatus(t.needInput, 'error');
         return;
       }
       const wantedRaw = Number(count.value || 1);
-      const wanted = Math.min(users.length, Math.max(1, Math.floor(wantedRaw)));
+      if (!Number.isFinite(wantedRaw) || !Number.isInteger(wantedRaw) || wantedRaw < 1 || wantedRaw > 1000) {
+        input.setAttribute('aria-invalid', 'false');
+        count.setAttribute('aria-invalid', 'true');
+        resetResult();
+        setStatus(t.invalidCount, 'error');
+        return;
+      }
+      const wanted = Math.min(users.length, wantedRaw);
+      input.setAttribute('aria-invalid', 'false');
+      count.setAttribute('aria-invalid', 'false');
       count.value = wanted;
       const winners = shuffle(users).slice(0, wanted);
+      currentWinners = winners;
       output.value = winners.map((name, idx) => `${idx + 1}. ${name}`).join('\n');
       pickedEl.textContent = wanted.toLocaleString(numberLocale);
-      help.textContent = t.done(users.length.toLocaleString(numberLocale), wanted.toLocaleString(numberLocale));
+      copyBtn.disabled = false;
+      const participantCount = users.length.toLocaleString(numberLocale);
+      const winnerCount = wanted.toLocaleString(numberLocale);
+      setStatus(wantedRaw > users.length ? t.adjusted(participantCount) : t.done(participantCount, winnerCount), 'success');
     };
 
     const copyText = async (text) => {
@@ -13329,19 +13414,51 @@
     };
 
     runBtn.addEventListener('click', run);
+    sampleBtn.addEventListener('click', () => {
+      input.value = t.sample;
+      count.value = '2';
+      resetResult();
+      updateCounts();
+      setStatus(t.needInput);
+      input.focus();
+    });
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      count.value = '1';
+      input.setAttribute('aria-invalid', 'false');
+      count.setAttribute('aria-invalid', 'false');
+      resetResult();
+      updateCounts();
+      setStatus(t.cleared);
+      input.focus();
+    });
     input.addEventListener('input', () => {
-      const users = uniqueNames();
-      totalEl.textContent = users.length.toLocaleString(numberLocale);
-      if (users.length && Number(count.value || 1) > users.length) count.value = users.length;
+      const parsed = updateCounts();
+      if (parsed.names.length && Number(count.value || 1) > parsed.names.length) count.value = parsed.names.length;
+      resetResult();
+    });
+    count.addEventListener('input', () => {
+      count.setAttribute('aria-invalid', 'false');
+      resetResult();
     });
 
     copyBtn.addEventListener('click', async () => {
-      if (!output.value.trim()) return;
-      await copyText(output.value);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = t.copied;
-      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+      if (!output.value.trim()) {
+        setStatus(t.emptyCopy, 'error');
+        return;
+      }
+      try {
+        const parsed = parseNames();
+        await copyText(t.summary(currentWinners, parsed.names.length.toLocaleString(numberLocale), currentDuplicateCount.toLocaleString(numberLocale)));
+        const old = copyBtn.textContent;
+        copyBtn.textContent = t.copied;
+        setStatus(t.copied, 'success');
+        setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 1200);
+      } catch (_) {
+        setStatus(t.copyFail, 'error');
+      }
     });
+    updateCounts();
   }
 
   if (slug === 'gift-idea-picker') {

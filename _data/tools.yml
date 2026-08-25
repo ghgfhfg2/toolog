@@ -1275,13 +1275,15 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 참여자 목록과 당첨 인원을 입력하면 중복 없이 랜덤 당첨자를 빠르게 뽑아요.
-  description_en: Pick random winners without duplicates from a participant list and winner count.
-  description_ja: 参加者リストと当選人数を入力すると、重複なしでランダム当選者を抽選できます。
+  description: 참여자 목록과 당첨 인원을 입력하면 빈 항목과 중복 이름을 정리한 뒤 브라우저에서 공정하게 랜덤 당첨자를 뽑고 결과를 복사해요.
+  description_en: Paste participants, remove blank and duplicate entries, draw random winners in your browser, and copy the numbered result.
+  description_ja: 参加者リストの空欄と重複名を整理し、ブラウザ内でランダム当選者を抽選して番号付き結果をコピーできます。
   url: /tools/lucky-draw-picker/
   url_en: /en/tools/lucky-draw-picker/
   url_ja: /ja/tools/lucky-draw-picker/
   thumbnail: /assets/thumbs/lucky-draw-picker.svg
+  tool_type: picker
+  topic_cluster: event
 
 - id: parking-fee-calculator
   title: 주차 요금 계산기

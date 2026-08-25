@@ -750,6 +750,14 @@ textarea:focus-visible {
 .pf-ui #pf-help[data-state="success"] { color: #86efac; }
 .tool-stats.pf-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .tool-stats.pf-stats strong { overflow-wrap: anywhere; }
+.ldp-ui textarea[aria-invalid="true"],
+.ldp-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.ldp-ui #ldp-help[data-state="error"] { color: #fca5a5; }
+.ldp-ui #ldp-help[data-state="success"] { color: #86efac; }
+.ldp-ui .ldp-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.tool-stats.ldp-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.tool-stats.ldp-stats strong,
+.tool-stats.ldp-stats span { overflow-wrap: anywhere; }
 .knr-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .knr-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .knr-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -1804,6 +1812,9 @@ textarea:focus-visible {
   .pf-grid,
   .pf-actions { grid-template-columns: 1fr; }
   .tool-stats.pf-stats { grid-template-columns: 1fr 1fr; }
+  .ldp-ui .ldp-grid,
+  .ldp-ui .ldp-actions { grid-template-columns: 1fr; }
+  .tool-stats.ldp-stats { grid-template-columns: 1fr; }
   .pt-grid,
   .pt-presets,
   .pt-actions { grid-template-columns: 1fr; }

@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-08-25 21:00 KST
+- Tool: `lucky-draw-picker`
+- Selection reason: recent quality commits improved `pomodoro-timer`, `readability-checker`, `time-difference-calculator`, `korean-name-romanizer`, `png-compressor`, `json-merge`, and `link-list-cleaner`; `lucky-draw-picker` had higher live-use risk around empty participant lists, duplicate names, too-large winner counts, mobile copy flow, and clear fairness guidance.
+- Scope: improved existing layout, script, Sass/CSS, page metadata, localized pages, home data, participant parsing, duplicate stats, example/clear buttons, copy summary, invalid-state messaging, unbiased crypto draw indexing, mobile layout, FAQ/search-intent copy, and selection log. No new tool was added.
+- Validation: `YAML.load_file('_data/tools.yml')`, targeted front matter YAML parse, `node --check assets/js/tools.js`, `git diff --check`, and a targeted Node parser edge-case check passed. `bundle exec jekyll build` could not run because Jekyll is not installed locally; `bundle install` failed under Ruby 2.6.10 because current nokogiri constraints require Ruby >= 3.0/3.1.
+
 ## 2026-08-24 21:00 KST
 - Tool: `pomodoro-timer`
 - Selection reason: recent quality commits improved `readability-checker`, `time-difference-calculator`, `korean-name-romanizer`, `png-compressor`, `json-merge`, and `link-list-cleaner`; `pomodoro-timer` was an older productivity planner with UX risk around skipping before start, mobile status density, hidden-tab timing clarity, and limited SEO copy for task labels/alerts.
