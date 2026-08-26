@@ -1343,7 +1343,8 @@ a:hover { color: #fff; text-decoration: none; }
 .tool-stats strong { display:block; font-size: 1.05rem; }
 .tool-stats span { font-size: .78rem; color: var(--muted); }
 .ir-size-grid {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(140px, .55fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(110px, .45fr) minmax(96px, .35fr);
+  align-items: end;
 }
 .ir-size-grid > div {
   display: grid;
@@ -1375,11 +1376,12 @@ a:hover { color: #fff; text-decoration: none; }
 .ir-ui input[aria-invalid="true"] { border-color: #ef4444; }
 .ir-ui #ir-result[data-state="error"] { color: #fca5a5; }
 .ir-ui #ir-result[data-state="success"] { color: #86efac; }
+.ir-ui button:disabled,
 .ir-ui #ir-download[aria-disabled="true"] {
   opacity: .55;
-  pointer-events: none;
+  cursor: not-allowed;
 }
-.ir-ui canvas[hidden] {
+.ir-ui #ir-canvas[hidden] {
   display: none;
 }
 .pc-controls {

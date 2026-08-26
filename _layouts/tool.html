@@ -211,13 +211,14 @@ layout: default
           <div class="tool-row-grid ir-size-grid">
             <div>
               <label for="ir-width">{% if page.lang == 'en' %}Width (px){% elsif page.lang == 'ja' %}幅 (px){% else %}너비(px){% endif %}</label>
-              <input id="ir-width" type="number" min="1" max="4096" inputmode="numeric" placeholder="1200" />
+              <input id="ir-width" type="number" min="1" max="4096" inputmode="numeric" aria-describedby="ir-result ir-help" placeholder="1200" />
             </div>
             <div>
               <label for="ir-height">{% if page.lang == 'en' %}Height (px){% elsif page.lang == 'ja' %}高さ (px){% else %}높이(px){% endif %}</label>
-              <input id="ir-height" type="number" min="1" max="4096" inputmode="numeric" placeholder="630" />
+              <input id="ir-height" type="number" min="1" max="4096" inputmode="numeric" aria-describedby="ir-result ir-help" placeholder="630" />
             </div>
-            <button id="ir-run" type="button">{% if page.lang == 'en' %}Resize{% elsif page.lang == 'ja' %}リサイズ{% else %}리사이즈{% endif %}</button>
+            <button id="ir-run" type="button" aria-describedby="ir-result">{% if page.lang == 'en' %}Resize{% elsif page.lang == 'ja' %}リサイズ{% else %}리사이즈{% endif %}</button>
+            <button id="ir-clear" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
           <div class="tool-row">
             <label for="ir-fit">{% if page.lang == 'en' %}Fit mode{% elsif page.lang == 'ja' %}フィット方式{% else %}맞춤 방식{% endif %}</label>
