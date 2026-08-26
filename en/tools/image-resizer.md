@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Image Resizer | Resize, Crop, WebP
-description: Resize images to exact pixels in your browser with WebP/PNG/JPEG output, quality control, crop or padding modes, Instagram, blog, and OG presets.
+title: Image Resizer | Resize, Crop, WebP Converter
+description: Resize photos to exact pixels in your browser with WebP/PNG/JPEG output, quality control, crop or padding modes, Instagram, blog, OG presets, mobile-safe limits, and clear download states.
 lang: en
 permalink: /en/tools/image-resizer/
 canonical_url: /en/tools/image-resizer/
@@ -42,6 +42,10 @@ Processing happens in your browser, so it is useful for thumbnails, social share
 You can enter exact width and height, pick a preset, and choose whether to keep the whole image or crop into the target frame.
 It is a practical first step for product images, blog thumbnails, Instagram square posts, Open Graph share cards, and other uploads that require exact image dimensions.
 
+## Why this tool was improved today
+Recent automated quality work had already covered `lucky-draw-picker`, `pomodoro-timer`, `readability-checker`, `time-difference-calculator`, `korean-name-romanizer`, `png-compressor`, and `json-merge`, so this round avoided repeating the same tool.
+`image-resizer` handles image files, canvas rendering, and download links together, which makes empty files, unsupported formats, oversized pixels, and mobile browser memory issues more likely. The update therefore clarifies pre-download and post-download states, mobile-safe limits, and search intent around image resizing, photo size changes, and WebP conversion.
+
 ## Key features
 - Presets: Instagram square (1080×1080), OG (1200×630), blog thumbnail, and more
 - Manual mode for custom width and height
@@ -50,7 +54,8 @@ It is a practical first step for product images, blog thumbnails, Instagram squa
 - Output formats: save as PNG, WebP, or JPEG with quality control
 - Padding color for fit mode and transparent pixels in JPEG output
 - Error guidance for empty files, non-image files, invalid dimensions, and oversized output
-- Shows original, target, output size, and fit mode
+- Shows original, target, output size, file size, format, and fit mode
+- Download-state guidance when no result exists yet or settings changed after export
 - Mobile-safe limits to reduce browser freezes with very large images
 
 ## How to use
@@ -70,7 +75,8 @@ JPEG cannot preserve transparent pixels, so check the padding color before expor
 Choose WebP first when smaller file size matters, or JPEG when broad compatibility matters more.
 
 ### 5) Resize and download
-Check the canvas preview and output details, then download the resized image.
+Check the canvas preview, output format, file size, and dimensions, then download the resized image.
+If you change the target size, fit mode, output format, background color, or quality after exporting, run resize again before downloading so the file matches the latest settings.
 
 ## Practical tips
 - Blog cover images are easy to manage at 16:9 (e.g., 800×450).
