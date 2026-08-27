@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Fuel Economy Calculator | km/L, L/100km, and fuel cost at once
-description: Calculate fuel economy in km/L from distance and fuel used, then check L/100km, total fuel cost, and cost per km in one place.
+title: Fuel Economy Calculator | km/L, L/100km, fuel cost, and cost per km
+description: Enter distance, fuel used, and optional price per liter to calculate km/L fuel economy, L/100km, total fuel cost, and cost per km.
 lang: en
 permalink: /en/tools/fuel-economy-calculator/
 canonical_url: /en/tools/fuel-economy-calculator/
@@ -14,7 +14,7 @@ image:
 tool_key: fuel-economy-calculator
 tool_type: calculator
 topic_cluster: auto
-keywords: [fuel economy calculator, km per liter calculator, fuel cost per km, gas mileage calculator, liters per 100km]
+keywords: [fuel economy calculator, km per liter calculator, fuel cost calculator, fuel cost per km, gas mileage calculator, liters per 100km]
 related_tools: [average-speed-calculator, unit-converter, unit-price-calculator, percent-calculator]
 faq:
   - q: What is the difference between km/L and L/100km?
@@ -27,7 +27,7 @@ faq:
     a: First confirm that distance is entered in km and fuel is entered in liters. The tool shows a warning for unusual results such as under 3km/L or over 40km/L.
 ---
 
-## When this fuel economy calculator is useful
+## Use this fuel economy calculator after a drive or refill
 After a trip or a refill, you may want to know **your real fuel economy** and **how much that drive actually cost**.
 
 This tool lets you enter:
@@ -35,12 +35,12 @@ This tool lets you enter:
 - Fuel used (L)
 - Fuel price per liter (optional)
 
-Then it instantly shows **km/L**, **L/100km**, **total fuel cost**, and **fuel cost per km**.
-It is useful both for logging real refuel records and for estimating fuel cost before a longer drive.
+Then it instantly shows **fuel economy in km/L**, **fuel used per 100km (L/100km)**, **total fuel cost**, and **fuel cost per km** on one screen.
+Use it to keep a real-world mileage log after refueling, or to estimate fuel cost before a longer drive.
 
 ## Why this tool was selected today
 Recent quality work focused on tools such as `image-resizer`, `lucky-draw-picker`, `pomodoro-timer`, `readability-checker`, `time-difference-calculator`, `korean-name-romanizer`, `png-compressor`, `json-merge`, `link-list-cleaner`, and `average-speed-calculator`, so this pass avoids repeating the same tools.
-`fuel-economy-calculator` had little major work since its March 2026 launch, and fuel-cost calculations need clearer handling for empty values, zero values, negative price input, extreme values, and missing optional price.
+`fuel-economy-calculator` had little major work since its March 2026 launch, and auto cost calculators are especially sensitive to empty fields, zero or negative inputs, extreme values, and optional price handling.
 
 ## How it works
 1. `Distance ÷ Fuel used = km/L`
@@ -50,7 +50,8 @@ Recent quality work focused on tools such as `image-resizer`, `lucky-draw-picker
 
 All calculations run in your browser. If fuel price is blank, the calculator still shows km/L and L/100km first.
 
-## Example
+## Examples
+### Example 1) Check trip fuel economy
 - Distance: 420km
 - Fuel used: 28L
 - Price per liter: 1,720 KRW
@@ -59,6 +60,20 @@ All calculations run in your browser. If fuel price is blank, the calculator sti
 → Fuel use per 100km: **6.67 L**  
 → Total fuel cost: **48,160 KRW**  
 → Fuel cost per km: **about 115 KRW**
+
+### Example 2) Compare vehicle running cost
+For the same 100km drive:
+- Vehicle A: 12km/L
+- Vehicle B: 16km/L
+
+Vehicle B uses less fuel for the same distance, so the fuel-cost gap becomes more noticeable if you often take long trips.
+
+## Especially useful for
+- Checking how your real-world fuel economy compares with official mileage
+- Estimating fuel cost before a long drive
+- Logging cost per trip in a car expense tracker
+- Comparing running costs between two vehicles
+- Rechecking whether fuel receipt liters and price per liter match the total paid
 
 ## Good companion tools
 - Compare travel pace: [Average Speed Calculator]({{ '/en/tools/average-speed-calculator/' | relative_url }})
@@ -77,4 +92,8 @@ Yes. A lower L/100km means less fuel is needed to travel the same distance.
 Adding fuel price helps you translate efficiency into real driving cost, including total fill cost and cost per km.
 
 ### What should I check when the result looks odd?
-If fuel economy looks too low or too high, check whether distance and fuel were swapped, and confirm that the distance is in km rather than meters or miles.
+If fuel economy looks too low or too high, check whether distance and fuel were swapped, and confirm that the distance is in km rather than meters or miles. The calculator also warns when the result is unusual for a typical passenger car.
+
+## Summary
+This fuel economy calculator quickly turns distance and fuel volume into a realistic driving-cost view.
+Enter the numbers from your latest refill to check both mileage and fuel cost in one place.
