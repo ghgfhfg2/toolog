@@ -8,8 +8,10 @@ image:
   path: /assets/thumbs/fuel-economy-calculator.svg
   alt: 연비 계산기 썸네일
 tool_key: fuel-economy-calculator
+tool_type: calculator
+topic_cluster: auto
 keywords: [연비 계산기, km/L 계산기, 기름값 계산기, 자동차 연료비 계산기, 1km당 연료비]
-related_tools: [average-speed-calculator, unit-converter, percent-calculator]
+related_tools: [average-speed-calculator, unit-converter, unit-price-calculator, percent-calculator]
 faq:
   - q: km/L와 L/100km는 어떻게 다른가요?
     a: km/L는 연료 1L로 몇 km를 가는지, L/100km는 100km를 갈 때 연료를 몇 L 쓰는지 보여주는 방식이에요. 둘은 같은 정보를 서로 다른 기준으로 표현한 값입니다.
@@ -17,6 +19,8 @@ faq:
     a: 네. 단가 없이도 연비 자체는 계산됩니다. 단가를 입력하면 총 주유비와 1km당 연료비까지 함께 볼 수 있어요.
   - q: 전기차에도 쓸 수 있나요?
     a: 이 도구는 리터(L) 기준 연료 소비 계산용입니다. 전기차의 kWh 기준 효율 계산에는 바로 맞지 않아요.
+  - q: 값이 너무 낮거나 높게 나오면 어떻게 확인하나요?
+    a: 주행거리 단위가 km인지, 주유량 단위가 L인지 먼저 확인하세요. 도구는 3km/L 미만 또는 40km/L 초과처럼 일반 승용차 기준으로 이례적인 결과일 때 확인 안내를 보여줍니다.
 ---
 
 ## 연비 계산기, 이런 때 바로 써요
@@ -28,6 +32,11 @@ faq:
 - 리터당 단가(선택)
 
 입력하면 **km/L 연비**, **100km당 연료소비량(L/100km)**, **총 주유비**, **1km당 연료비**를 한 화면에서 확인할 수 있습니다.
+주행 후 실제 연비를 기록할 때뿐 아니라, 장거리 운전 전 예상 기름값을 빠르게 가늠할 때도 활용할 수 있습니다.
+
+## 오늘 개선 대상으로 고른 이유
+최근 30일 품질 개선 이력이 `image-resizer`, `lucky-draw-picker`, `pomodoro-timer`, `readability-checker`, `time-difference-calculator`, `korean-name-romanizer`, `png-compressor`, `json-merge`, `link-list-cleaner`, `average-speed-calculator` 등에 집중되어 있어 같은 툴 반복을 피했습니다.
+`fuel-economy-calculator`는 2026년 3월 신규 추가 이후 큰 개선 이력이 적고, 자동차 비용 계산에서 0값·음수·과도한 입력·단가 누락 같은 오류 상태가 실제 사용 만족도에 바로 영향을 주기 때문에 오늘 개선 대상으로 골랐습니다.
 
 ## 계산 방식
 연비 계산기의 핵심 공식은 단순합니다.
@@ -39,6 +48,7 @@ faq:
 
 주유 후 영수증의 리터 수와 단가만 있으면 바로 계산할 수 있어,
 **내 차 연비 기록용**이나 **차량별 유지비 비교용**으로도 유용합니다.
+입력값은 브라우저 안에서만 계산되며, 단가를 비워두면 연비와 100km당 소비량만 먼저 확인할 수 있습니다.
 
 ## 사용 예시
 ### 예시 1) 주행 연비 확인
@@ -64,10 +74,12 @@ faq:
 - 장거리 운전 전 예상 연료비를 계산할 때
 - 차계부 기록용으로 주행당 비용을 남길 때
 - 차량 두 대의 유지비를 비교할 때
+- 주유 영수증의 리터 수와 결제 단가가 맞는지 빠르게 다시 계산할 때
 
 ## 함께 쓰면 좋은 도구
 - 이동 속도까지 같이 보고 싶다면: [평균 속도 계산기]({{ '/tools/average-speed-calculator/' | relative_url }})
 - 거리·부피 단위 변환이 필요할 때: [단위 변환기]({{ '/tools/unit-converter/' | relative_url }})
+- 리터당 가격처럼 단위당 비용을 비교하려면: [단가 계산기]({{ '/tools/unit-price-calculator/' | relative_url }})
 - 비용 차이 비율을 계산하고 싶다면: [퍼센트 계산기]({{ '/tools/percent-calculator/' | relative_url }})
 
 ## FAQ
@@ -79,6 +91,9 @@ faq:
 
 ### 단가를 바꾸면 어떤 값을 확인할 수 있나요?
 리터당 단가를 넣으면 총 주유비와 1km당 연료비가 자동으로 계산되어 운행비를 더 현실적으로 볼 수 있습니다.
+
+### 값이 이상하게 보일 때는 무엇을 먼저 봐야 하나요?
+연비가 지나치게 낮거나 높다면 주행거리와 주유량을 바꿔 입력하지 않았는지, 주행거리를 m나 mile이 아니라 km로 넣었는지 확인하세요. 계산기는 비정상적으로 보이는 결과에 확인 안내를 표시합니다.
 
 ## 요약
 연비 계산기는 **주행거리와 주유량을 실제 비용 감각으로 바꿔주는 가장 빠른 도구**입니다.

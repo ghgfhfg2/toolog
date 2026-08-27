@@ -1182,6 +1182,8 @@
   url_ja: /ja/tools/fuel-economy-calculator/
   thumbnail: /assets/thumbs/fuel-economy-calculator.svg
   published_at: 2026-03-28
+  tool_type: calculator
+  topic_cluster: auto
 
 - id: unit-price-calculator
   title: 단가 계산기

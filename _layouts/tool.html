@@ -4036,34 +4036,34 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
         </div>
 
       {% when 'fuel-economy-calculator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui fe-ui">
+          <div class="tool-row-grid pct-grid fe-grid">
             <div>
               <label for="fe-distance">{% if page.lang == 'en' %}Distance (km){% elsif page.lang == 'ja' %}走行距離 (km){% else %}주행거리(km){% endif %}</label>
-              <input id="fe-distance" type="number" min="0" step="0.1" inputmode="decimal" placeholder="420" />
+              <input id="fe-distance" type="number" min="0" max="1000000" step="0.1" inputmode="decimal" autocomplete="off" aria-describedby="fe-help fe-limits" placeholder="420" />
             </div>
             <div>
               <label for="fe-fuel">{% if page.lang == 'en' %}Fuel used (L){% elsif page.lang == 'ja' %}給油量 (L){% else %}주유량(L){% endif %}</label>
-              <input id="fe-fuel" type="number" min="0" step="0.01" inputmode="decimal" placeholder="28" />
+              <input id="fe-fuel" type="number" min="0" max="1000000" step="0.01" inputmode="decimal" autocomplete="off" aria-describedby="fe-help fe-limits" placeholder="28" />
             </div>
-          </div>
-          <div class="tool-row-grid pct-grid">
             <div>
               <label for="fe-price">{% if page.lang == 'en' %}Fuel price per liter (optional){% elsif page.lang == 'ja' %}リッター単価（任意）{% else %}리터당 단가(선택){% endif %}</label>
-              <input id="fe-price" type="number" min="0" step="1" inputmode="numeric" placeholder="1720" />
+              <input id="fe-price" type="number" min="0" max="10000000" step="1" inputmode="numeric" autocomplete="off" aria-describedby="fe-help fe-limits" placeholder="1720" />
             </div>
           </div>
-          <div class="tool-row-grid pct-actions">
-            <button id="fe-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+          <div class="tool-row-grid pct-actions fe-actions">
+            <button id="fe-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
             <button id="fe-reset" type="button">{% if page.lang == 'en' %}Fill sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시값 채우기{% endif %}</button>
+            <button id="fe-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
-          <div class="tool-stats">
+          <div class="tool-stats fe-stats" aria-label="{% if page.lang == 'en' %}Fuel economy calculation results{% elsif page.lang == 'ja' %}燃費計算結果{% else %}연비 계산 결과{% endif %}">
             <div><strong id="fe-kml">-</strong><span>{% if page.lang == 'en' %}Fuel economy (km/L){% elsif page.lang == 'ja' %}燃費 (km/L){% else %}연비(km/L){% endif %}</span></div>
             <div><strong id="fe-l100">-</strong><span>{% if page.lang == 'en' %}Fuel use per 100km{% elsif page.lang == 'ja' %}100kmあたり消費量{% else %}100km당 소비량{% endif %}</span></div>
             <div><strong id="fe-total-cost">-</strong><span>{% if page.lang == 'en' %}Total fuel cost{% elsif page.lang == 'ja' %}総燃料費{% else %}총 주유비{% endif %}</span></div>
             <div><strong id="fe-cost-per-km">-</strong><span>{% if page.lang == 'en' %}Fuel cost per km{% elsif page.lang == 'ja' %}1kmあたり燃料費{% else %}1km당 연료비{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="fe-help">{% if page.lang == 'en' %}Enter distance and fuel used to calculate fuel economy instantly.{% elsif page.lang == 'ja' %}走行距離と給油量を入力すると燃費をすぐ計算します。{% else %}주행거리와 주유량을 입력하면 연비를 즉시 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="fe-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter distance and fuel used to calculate fuel economy instantly.{% elsif page.lang == 'ja' %}走行距離と給油量を入力すると燃費をすぐ計算します。{% else %}주행거리와 주유량을 입력하면 연비를 즉시 계산합니다.{% endif %}</p>
+          <p class="tool-result fe-limits" id="fe-limits">{% if page.lang == 'en' %}Use positive numbers only. Distance and fuel are capped at 1,000,000, and fuel price is capped at 10,000,000 per liter.{% elsif page.lang == 'ja' %}正の数だけ入力できます。走行距離と給油量は1,000,000まで、単価は1Lあたり10,000,000までです。{% else %}0보다 큰 숫자만 계산합니다. 주행거리와 주유량은 1,000,000까지, 리터당 단가는 10,000,000까지 입력할 수 있습니다.{% endif %}</p>
         </div>
 
       {% when 'goal-savings-calculator' %}
