@@ -18094,6 +18094,7 @@
 
   if (slug === 'movie-seat-choice-simulator') {
     const preferenceEl = document.getElementById('mscs-preference');
+    const screenEl = document.getElementById('mscs-screen');
     const groupEl = document.getElementById('mscs-group');
     const rows = Array.from({ length: 4 }, (_, idx) => {
       const n = idx + 1;
@@ -18115,7 +18116,7 @@
     const summaryEl = document.getElementById('mscs-summary');
     const outputEl = document.getElementById('mscs-output');
 
-    if (!preferenceEl || !rows[0].name || !summaryEl || !outputEl) return;
+    if (!preferenceEl || !screenEl || !rows[0].name || !summaryEl || !outputEl) return;
 
     const mscsText = {
       ko: {
@@ -18131,7 +18132,9 @@
         condition: '조건',
         reason: '이유',
         note: '메모',
+        screen: '상영관',
         labels: {
+          screen: { standard: '일반 상영관', large: '대형관·특별관', small: '작은 상영관' },
           distance: { front: '앞쪽', mid: '중간', back: '뒤쪽', far: '맨 뒤쪽' },
           center: { center: '거의 중앙', near: '중앙에서 조금 벗어남', side: '사이드' },
           aisle: { aisle: '통로 바로 옆', near: '통로와 가까움', middle: '줄 가운데' },
@@ -18145,6 +18148,8 @@
           far: '화면은 멀지만 전체 시야가 편함',
           frontImmersion: '앞쪽 몰입감이 강함',
           frontComfort: '앞쪽이라 목 피로를 확인해야 함',
+          frontLarge: '대형 화면에서는 앞쪽 피로가 커질 수 있음',
+          backSmall: '작은 상영관에서는 뒤쪽도 화면이 작게 느껴질 수 있음',
           aisle: '출입이 편함',
           middleImmersion: '줄 가운데라 시야 방해가 적음',
           groupMiddle: '여러 명이면 이동이 불편할 수 있음',
@@ -18171,7 +18176,9 @@
         condition: 'Conditions',
         reason: 'Reason',
         note: 'Note',
+        screen: 'Screen',
         labels: {
+          screen: { standard: 'Standard theater', large: 'Large / premium screen', small: 'Small theater' },
           distance: { front: 'Front', mid: 'Middle', back: 'Back', far: 'Very back' },
           center: { center: 'Almost centered', near: 'Slightly off-center', side: 'Side' },
           aisle: { aisle: 'Right by aisle', near: 'Near aisle', middle: 'Middle of row' },
@@ -18185,6 +18192,8 @@
           far: 'farther from the screen but comfortable for full view',
           frontImmersion: 'strong front-row immersion',
           frontComfort: 'front position may strain the neck',
+          frontLarge: 'large screens can make front seats more tiring',
+          backSmall: 'back rows in small theaters can feel less immersive',
           aisle: 'easy to enter and leave',
           middleImmersion: 'middle of the row can reduce side distractions',
           groupMiddle: 'middle-row access can be inconvenient for a group',
@@ -18211,7 +18220,9 @@
         condition: '条件',
         reason: '理由',
         note: 'メモ',
+        screen: 'スクリーン',
         labels: {
+          screen: { standard: '一般館', large: '大型・プレミアム館', small: '小さめの劇場' },
           distance: { front: '前方', mid: '中ほど', back: '後方', far: '最後方' },
           center: { center: 'ほぼ中央', near: '中央から少し外れる', side: '端寄り' },
           aisle: { aisle: '通路すぐ横', near: '通路に近い', middle: '列の中央側' },
@@ -18225,6 +18236,8 @@
           far: '画面は遠いが全体視野は楽',
           frontImmersion: '前方ならではの没入感が強い',
           frontComfort: '前方なので首の疲れを確認したい',
+          frontLarge: '大型スクリーンでは前方の疲れが出やすい',
+          backSmall: '小さめの劇場では後方席の没入感が弱く感じられることがある',
           aisle: '出入りしやすい',
           middleImmersion: '列の中央側で横の視界の乱れが少ない',
           groupMiddle: '複数人では移動しにくい場合がある',
@@ -18266,12 +18279,16 @@
       return 'balanced';
     };
 
-    const scoreItem = (item, preference, group) => {
+    const scoreItem = (item, preference, group, screenSize) => {
       let score = 60;
       if (item.distance === 'mid') score += 18;
       if (item.distance === 'back') score += 12;
       if (item.distance === 'front') score += preference === 'immersion' ? 12 : -8;
       if (item.distance === 'far') score += preference === 'comfort' ? 6 : -6;
+      if (screenSize === 'large' && item.distance === 'front') score -= preference === 'immersion' ? 4 : 12;
+      if (screenSize === 'large' && (item.distance === 'mid' || item.distance === 'back')) score += 6;
+      if (screenSize === 'small' && item.distance === 'front') score += preference === 'comfort' ? -2 : 6;
+      if (screenSize === 'small' && (item.distance === 'back' || item.distance === 'far')) score -= 6;
 
       if (item.center === 'center') score += 20;
       if (item.center === 'near') score += 8;
@@ -18284,10 +18301,10 @@
       if (preference === 'comfort' && item.distance === 'front') score -= 14;
       if (preference === 'immersion' && item.center === 'center') score += 8;
       if (group === 'group' && item.aisle === 'middle') score -= 8;
-      return Math.max(0, Math.min(100, score));
+      return Math.max(0, Math.min(100, Math.round(score)));
     };
 
-    const reasonFor = (item, preference, group) => {
+    const reasonFor = (item, preference, group, screenSize) => {
       const reasons = [];
       const rt = mscsText.reasons;
       if (item.center === 'center') reasons.push(rt.centered);
@@ -18296,6 +18313,8 @@
       if (item.distance === 'back') reasons.push(rt.back);
       if (item.distance === 'far') reasons.push(rt.far);
       if (item.distance === 'front') reasons.push(preference === 'immersion' ? rt.frontImmersion : rt.frontComfort);
+      if (screenSize === 'large' && item.distance === 'front') reasons.push(rt.frontLarge);
+      if (screenSize === 'small' && (item.distance === 'back' || item.distance === 'far')) reasons.push(rt.backSmall);
       if (item.aisle === 'aisle') reasons.push(rt.aisle);
       if (preference === 'immersion' && item.aisle === 'middle') reasons.push(rt.middleImmersion);
       if (group === 'group' && item.aisle === 'middle') reasons.push(rt.groupMiddle);
@@ -18305,15 +18324,16 @@
 
     const build = () => {
       const preference = preferenceEl.value || 'balanced';
+      const screenSize = screenEl.value || 'standard';
       const group = groupEl.value || 'pair';
       rows.forEach((row) => row.name.setAttribute('aria-invalid', 'false'));
       const items = rows.map((row, idx) => {
         const name = (row.name.value || '').replace(/\s+/g, ' ').trim();
         if (!name) return null;
         const item = { idx, name, distance: row.distance.value, center: row.center.value, aisle: row.aisle.value, note: (row.note.value || '').trim() };
-        item.score = scoreItem(item, preference, group);
+        item.score = scoreItem(item, preference, group, screenSize);
         item.kind = classify(item);
-        item.reason = reasonFor(item, preference, group);
+        item.reason = reasonFor(item, preference, group, screenSize);
         return item;
       }).filter(Boolean).sort((a, b) => b.score - a.score || a.idx - b.idx);
       const duplicatedNames = items.reduce((acc, item) => {
@@ -18327,7 +18347,9 @@
       });
 
       countEl.textContent = String(items.length);
-      topEl.textContent = items[0]?.name || '-';
+      const topName = items[0]?.name || '-';
+      topEl.textContent = topName.length > 14 ? `${topName.slice(0, 14)}...` : topName;
+      topEl.title = topName;
       immersionEl.textContent = String(items.filter((item) => item.kind === 'immersion').length);
       comfortEl.textContent = String(items.filter((item) => item.kind === 'comfort').length);
       copyBtn.disabled = !items.length;
@@ -18343,7 +18365,7 @@
       const labels = mscsText.labels;
       outputEl.value = [
         mscsText.resultTitle,
-        `${mscsText.criteria}: ${preferenceEl.options[preferenceEl.selectedIndex].text} / ${mscsText.viewers}: ${groupEl.options[groupEl.selectedIndex].text}`,
+        `${mscsText.criteria}: ${preferenceEl.options[preferenceEl.selectedIndex].text} / ${mscsText.screen}: ${labels.screen[screenSize]} / ${mscsText.viewers}: ${groupEl.options[groupEl.selectedIndex].text}`,
         ...items.map((item, index) => `${index + 1}. ${item.name} | ${labels.kinds[item.kind]} | ${Math.round(item.score)}
 - ${mscsText.condition}: ${labels.distance[item.distance]} / ${labels.center[item.center]} / ${labels.aisle[item.aisle]}
 - ${mscsText.reason}: ${item.reason}${item.note ? `
@@ -18362,6 +18384,7 @@
         row.note.value = sample[4];
       });
       preferenceEl.value = 'balanced';
+      screenEl.value = 'standard';
       groupEl.value = 'pair';
       build();
     });
@@ -18389,13 +18412,14 @@
         row.name.setAttribute('aria-invalid', 'false');
       });
       preferenceEl.value = 'balanced';
+      screenEl.value = 'standard';
       groupEl.value = 'pair';
       build();
       setSummary(mscsText.cleared);
       rows[0].name.focus();
     });
 
-    [preferenceEl, groupEl, ...rows.flatMap((row) => Object.values(row))].forEach((el) => {
+    [preferenceEl, screenEl, groupEl, ...rows.flatMap((row) => Object.values(row))].forEach((el) => {
       el?.addEventListener('input', build);
       el?.addEventListener('change', build);
     });

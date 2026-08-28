@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Movie Theater Seat Choice Simulator | Compare center, aisle, and front/back seats
-description: Compare movie seat candidates before booking by screen distance, center position, aisle access, group size, and viewing preference to get a ranked recommendation with reasons.
+description: Compare movie seat candidates before booking by screen distance, center position, aisle access, screen size, group size, and viewing preference to get a ranked recommendation with reasons.
 lang: en
 permalink: /en/tools/movie-seat-choice-simulator/
 canonical_url: /en/tools/movie-seat-choice-simulator/
@@ -39,17 +39,21 @@ It is useful for quick choices such as “Should I take the center of row G or t
 
 ## How to use it
 1. Enter the seat candidates you are considering, such as G8, center of row H, or an aisle seat in row J.
-2. Choose each candidate's screen distance, center position, and aisle access.
+2. Choose each candidate's screen distance, center position, aisle access, and theater screen size.
 3. Select whether you are watching alone or with two or more people.
 4. Pick what matters most: immersion, neck comfort, or easy exit.
 5. Review the recommended order and reasons, then make the final choice on the booking page.
+
+## Why this tool was improved today
+Recent 21:00 quality passes focused on `fuel-economy-calculator`, `image-resizer`, `grocery-budget-checker`, `json-merge`, `link-list-cleaner`, and `blog-banned-word-checker`, so this pass avoids repeating the same tool.
+`movie-seat-choice-simulator` was selected because people often use it quickly on mobile while booking, and empty names, duplicate candidates, front seats in large premium theaters, and back seats in smaller rooms can easily lead to confusing results.
 
 ## Especially useful when
 ### 1) Choosing between a center seat and an aisle seat
 Because it separates center immersion from aisle convenience in the score, it is easier to decide whether a slightly off-center but more comfortable seat is worth choosing.
 
 ### 2) Making a quick decision for large or premium theaters
-The recommendation changes depending on whether you prefer front-row immersion or a mid-to-back row that is easier on your neck.
+The recommendation changes depending on whether you prefer front-row immersion or a mid-to-back row that is easier on your neck. For large or premium screens, the tool now treats front-row neck fatigue more cautiously.
 
 ### 3) Picking seats with companions
 For two or more viewers, the simulator reflects larger penalties for seats that are too far to the side or inconvenient for entering and leaving together.
@@ -65,6 +69,9 @@ No. If you prioritize immersion, front seats can receive a bonus. If you priorit
 
 ### Does it calculate an exact viewing angle?
 No. It is a lightweight simulator based on common viewing experience, not a precise calculation from a theater blueprint.
+
+### How does screen size affect the result?
+Large or premium screens make very front seats slightly riskier for comfort, while small theaters can make very back seats feel less immersive.
 
 ### Can I compare couple seats or accessible seats?
 You can write those details in the seat name as a note, but actual availability and booking rules should always follow the theater's guidance.

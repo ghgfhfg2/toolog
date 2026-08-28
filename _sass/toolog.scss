@@ -1172,6 +1172,31 @@ textarea:focus-visible {
 .cwss-note { font-size: .82rem; }
 .tool-stats.cwss-stats strong,
 .tool-stats.cwss-stats span { overflow-wrap: anywhere; }
+.mscs-ui .mscs-card {
+  display: grid;
+  gap: .65rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: .85rem;
+  background: #172033;
+}
+.mscs-ui textarea {
+  min-height: 220px;
+  font-size: 15px;
+  line-height: 1.55;
+}
+.mscs-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.mscs-ui #mscs-summary[data-state="error"] { color: #fca5a5; }
+.mscs-ui #mscs-summary[data-state="warning"] { color: #fbbf24; }
+.mscs-ui #mscs-summary[data-state="success"] { color: #86efac; }
+.mscs-ui #mscs-copy:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+.mscs-ui .pct-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.mscs-note { font-size: .82rem; }
+.tool-stats.mscs-stats strong,
+.tool-stats.mscs-stats span { overflow-wrap: anywhere; }
 .avg-ui textarea {
   min-height: 190px;
   font-size: 16px;

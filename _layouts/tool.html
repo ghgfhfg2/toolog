@@ -4794,6 +4794,14 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
               </select>
             </div>
             <div>
+              <label for="mscs-screen">{% if page.lang == 'en' %}Screen size{% elsif page.lang == 'ja' %}スクリーン規模{% else %}상영관 규모{% endif %}</label>
+              <select id="mscs-screen" aria-describedby="mscs-summary mscs-intro">
+                <option value="standard" selected>{% if page.lang == 'en' %}Standard theater{% elsif page.lang == 'ja' %}一般館{% else %}일반 상영관{% endif %}</option>
+                <option value="large">{% if page.lang == 'en' %}Large / premium screen{% elsif page.lang == 'ja' %}大型・プレミアム館{% else %}대형관·특별관{% endif %}</option>
+                <option value="small">{% if page.lang == 'en' %}Small theater{% elsif page.lang == 'ja' %}小さめの劇場{% else %}작은 상영관{% endif %}</option>
+              </select>
+            </div>
+            <div>
               <label for="mscs-group">{% if page.lang == 'en' %}Viewers{% elsif page.lang == 'ja' %}鑑賞人数{% else %}관람 인원{% endif %}</label>
               <select id="mscs-group" aria-describedby="mscs-summary mscs-intro">
                 <option value="solo">{% if page.lang == 'en' %}Solo{% elsif page.lang == 'ja' %}1人{% else %}혼자{% endif %}</option>
@@ -4851,7 +4859,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <button id="mscs-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats" aria-label="{% if page.lang == 'en' %}Seat comparison summary{% elsif page.lang == 'ja' %}座席比較サマリー{% else %}좌석 비교 요약{% endif %}">
+          <div class="tool-stats mscs-stats" aria-label="{% if page.lang == 'en' %}Seat comparison summary{% elsif page.lang == 'ja' %}座席比較サマリー{% else %}좌석 비교 요약{% endif %}">
             <div><strong id="mscs-count">0</strong><span>{% if page.lang == 'en' %}Seats{% elsif page.lang == 'ja' %}比較座席{% else %}비교 좌석{% endif %}</span></div>
             <div><strong id="mscs-top">-</strong><span>{% if page.lang == 'en' %}Top pick{% elsif page.lang == 'ja' %}おすすめ1位{% else %}추천 1순위{% endif %}</span></div>
             <div><strong id="mscs-immersion">0</strong><span>{% if page.lang == 'en' %}Immersive{% elsif page.lang == 'ja' %}没入型{% else %}몰입형 후보{% endif %}</span></div>
@@ -4859,7 +4867,8 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           </div>
 
           <p class="tool-result" id="mscs-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter at least one seat candidate to see the recommended order and reasons.{% elsif page.lang == 'ja' %}座席候補を1つ以上入力すると、おすすめ順と理由を表示します。{% else %}좌석 후보를 입력하면 추천 순서와 이유가 여기에 표시됩니다.{% endif %}</p>
-          <textarea id="mscs-output" rows="14" readonly aria-describedby="mscs-summary mscs-intro" aria-label="{% if page.lang == 'en' %}Movie seat comparison result{% elsif page.lang == 'ja' %}映画館座席比較結果{% else %}영화관 좌석 비교 결과{% endif %}" placeholder="{% if page.lang == 'en' %}Seat comparison results will appear here.{% elsif page.lang == 'ja' %}座席比較結果がここに表示されます。{% else %}좌석 비교 결과가 여기에 표시됩니다.{% endif %}"></textarea>
+          <p class="tool-result mscs-note" id="mscs-limits">{% if page.lang == 'en' %}Empty candidates are ignored. Duplicate names are flagged, and long seat names are shortened only in the summary card, not in copied results.{% elsif page.lang == 'ja' %}空の候補は無視します。同じ座席名は警告し、長い座席名は概要カードだけ短く表示します。コピー結果では省略しません。{% else %}빈 후보는 제외합니다. 같은 좌석명은 경고하고, 긴 좌석명은 요약 카드에서만 줄여 표시하며 복사 결과에는 전체 이름을 남깁니다.{% endif %}</p>
+          <textarea id="mscs-output" rows="14" readonly aria-describedby="mscs-summary mscs-intro mscs-limits" aria-label="{% if page.lang == 'en' %}Movie seat comparison result{% elsif page.lang == 'ja' %}映画館座席比較結果{% else %}영화관 좌석 비교 결과{% endif %}" placeholder="{% if page.lang == 'en' %}Seat comparison results will appear here.{% elsif page.lang == 'ja' %}座席比較結果がここに表示されます。{% else %}좌석 비교 결과가 여기에 표시됩니다.{% endif %}"></textarea>
         </div>
 
       {% when 'ingredient-expiry-priority-checker' %}
