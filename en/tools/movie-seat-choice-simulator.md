@@ -18,13 +18,13 @@ image:
 tool_key: movie-seat-choice-simulator
 tool_type: simulator
 topic_cluster: entertainment
-keywords: [movie theater seat recommendation, movie seat choice, IMAX seat, aisle seat, movie ticket seat]
+keywords: [movie theater seat recommendation, movie seat choice, IMAX seat, premium screen seat, aisle seat, movie ticket seat]
 related_tools: [appointment-departure-buffer-simulator, priority-decision-matrix-planner, gift-idea-picker]
 faq:
   - q: Does it automatically read a real theater seat map?
     a: No. It is a comparison tool where you manually enter the seat candidates you are considering on the booking screen.
   - q: Can I use it for IMAX or large premium screens?
-    a: Yes. Adjust your immersion preference and front/back distance criteria to use it as a reference for larger theaters too.
+    a: Yes. Select the large or premium screen option so the result treats very front seats more cautiously while still considering immersion.
   - q: Is the highest-scoring seat always the right answer?
     a: No. Treat it as a comparison based on personal preferences such as neck comfort, companion seating, and easy exit.
   - q: How many seat candidates can I compare?
@@ -34,7 +34,7 @@ faq:
 ## Why use the Movie Theater Seat Choice Simulator?
 When several seats are still available on a movie booking page, it is not always easy to decide **whether the center, an aisle seat, or a more immersive front seat** is the better choice. For popular movies, a good seat can disappear while you are still comparing options.
 
-This tool lets you enter up to four seat candidates and compare screen distance, center position, aisle access, group size, and viewing preference to produce a **practical seat order for the booking moment**.
+This tool lets you enter up to four seat candidates and compare screen distance, center position, aisle access, screen size, group size, and viewing preference to produce a **practical seat order for the booking moment**.
 It is useful for quick choices such as “Should I take the center of row G or the aisle seat in row H?” before the seats disappear.
 
 ## How to use it
@@ -80,4 +80,4 @@ You can write those details in the seat name as a note, but actual availability 
 You can, but the tool will warn you because duplicate names make the result harder to read. Add a row, seat number, or short note to tell candidates apart.
 
 ## Summary
-Movie Theater Seat Choice Simulator is a **web tool for comparing candidate seats by distance, centeredness, aisle access, and companion conditions before booking**. It does not automatically analyze a theater seat map, but it helps you quickly decide which remaining seat best matches your viewing preference.
+Movie Theater Seat Choice Simulator is a **web tool for comparing candidate seats by distance, centeredness, aisle access, screen size, and companion conditions before booking**. It does not automatically analyze a theater seat map, but it helps you quickly decide which remaining seat best matches your viewing preference.
