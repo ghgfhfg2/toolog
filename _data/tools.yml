@@ -1,7 +1,7 @@
 - id: recycling-sorting-checker
   title: 재활용 분리배출 체크기
-  title_en: Recycling Sorting Checker
-  title_ja: リサイクル分別チェックツール
+  title_en: Waste Sorting & Recycling Checker
+  title_ja: 資源ごみ・リサイクル分別チェック
   category: lifestyle
   category_label: 생활/분리배출 점검
   category_label_en: Lifestyle/Recycling Sorting
@@ -10,8 +10,8 @@
   badge_en: New
   badge_ja: 新着
   description: 버릴 물건, 재질, 오염 상태, 라벨·뚜껑·배터리·깨진 유리 같은 특수 상태를 넣으면 재활용 가능성, 세척·분리·일반쓰레기 전환 체크리스트와 품목별 주의 신호를 정리해요.
-  description_en: Check items, materials, contamination, labels, caps, batteries, broken glass, and other special conditions to organize recycling, rinsing, separation, trash-disposal steps, and item-specific review flags.
-  description_ja: 捨てる物、素材、汚れ、ラベル・フタ、電池、割れたガラスなどの特別な状態から、リサイクル可否、洗浄・分別・一般ごみ切替、品目別の注意点を整理します。
+  description_en: Enter items, material, residue, labels, caps, batteries, broken glass, and other special conditions to create a trash-or-recycle checklist with rinsing, separation, and safety review flags.
+  description_ja: 捨てる物、素材、汚れ、ラベル・フタ、電池、割れたガラスなどの状態から、資源ごみか一般ごみか、すすぎ・分離・安全確認のチェックリストを整理します。
   url: /tools/recycling-sorting-checker/
   url_en: /en/tools/recycling-sorting-checker/
   url_ja: /ja/tools/recycling-sorting-checker/

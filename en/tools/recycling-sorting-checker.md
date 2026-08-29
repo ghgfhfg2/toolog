@@ -1,8 +1,8 @@
 ---
 layout: tool
 lang: en
-title: Recycling Sorting Checker | Plastic, cartons, cans, glass, and battery disposal checklist
-description: Check items, materials, contamination, labels, caps, batteries, broken glass, and other special conditions to organize recycling, rinsing, separation, trash-disposal steps, and item-specific review flags.
+title: Waste Sorting & Recycling Checker | Plastic, cartons, cans, glass, and battery disposal checklist
+description: Enter items, material, residue, labels, caps, batteries, broken glass, and other special conditions to create a trash-or-recycle checklist with rinsing, separation, and safety review flags.
 category: lifestyle
 category_label: Lifestyle/Recycling Sorting
 thumbnail: /assets/thumbs/en/recycling-sorting-checker.svg
@@ -18,7 +18,7 @@ alternate_urls:
   ko: /tools/recycling-sorting-checker/
   en: /en/tools/recycling-sorting-checker/
   ja: /ja/tools/recycling-sorting-checker/
-keywords: [recycling sorting, recycling checklist, plastic recycling, carton sorting, battery recycling, trash or recycle, recyclable or not]
+keywords: [waste sorting checker, recycling sorting, recycling checklist, plastic recycling, carton sorting, battery recycling, trash or recycle, recyclable or not]
 related_tools: [online-return-package-checker, recycling-sorting-practice, list-format-converter, privacy-exposure-checker]
 faq:
   - q: Does this know my local recycling rules exactly?
@@ -31,20 +31,20 @@ faq:
     a: No. Items with safety risks or separate collection rules should use the special-condition option and be checked against dedicated local disposal guidance first.
 ---
 
-## Why use the Recycling Sorting Checker?
-Recycling looks simple when labels say plastic, paper, or can, but real disposal gets confusing because of residue, labels, caps, coating, and mixed materials. Incorrectly mixed items can be rejected during sorting or contaminate otherwise clean recyclables.
+## Why use the Waste Sorting & Recycling Checker?
+Recycling looks simple when labels say plastic, paper, or can, but real disposal gets confusing because of food residue, oil, labels, caps, coating, and mixed materials. Incorrectly mixed items can be rejected during sorting or contaminate otherwise clean recyclables.
 
-This checker-type tool uses your item list, material, contamination level, label/cap separation state, and special conditions such as broken items, batteries, or bulky waste to organize **emptying, rinsing, separating, recycling-bin, or trash-conversion checks**. When item names include review signals such as batteries, power banks, receipts, aerosol cans, broken glass, or food-stained packaging, it adds extra warnings to the result. It does not replace local rules, but it gives you a quick home checklist before disposal.
+This checker-type tool uses your item list, material, contamination level, label/cap separation state, and special conditions such as broken items, batteries, electronics, or bulky waste to organize **emptying, rinsing, separating, recycling-bin, trash, or special-disposal checks**. When item names include review signals such as batteries, power banks, receipts, thermal paper, aerosol cans, lighters, broken glass, or pizza boxes, it adds extra warnings to the result. It does not replace local rules, but it gives you a quick home checklist before disposal.
 
 ## How to use it
 1. Enter items to throw away, one per line.
 2. Choose the main material and contamination state.
 3. Select whether labels, caps, or attached parts can be separated.
-4. Select any special condition, such as broken, battery/electronics, or bulky waste.
+4. Select any special condition, such as broken or sharp items, batteries/electronics, or bulky waste.
 5. Choose the disposal setting and add an optional local/building note.
 6. Press `Check sorting`, review the recycling, rinsing, special-disposal notes, and copy the result.
 
-## Before you enter items
+## Before checking a trash-or-recycle item
 - Check very different materials separately, such as plastic, cartons, cans, and glass bottles.
 - For food or oil residue, decide whether the item can realistically be emptied and rinsed.
 - For batteries, power banks, aerosol cans, lighters, or broken glass, check dedicated collection guidance before using regular recycling bins.
@@ -61,10 +61,10 @@ It reminds you to separate PET bottle labels, metal caps, plastic pumps, and oth
 Receipts, coated paper, or food-stained paper are flagged for extra review before going into paper recycling.
 
 ### 4) Safety or special-collection items are mixed in
-Broken glass, sharp metal, batteries, electronics, and bulky waste are flagged so you can check special disposal guidance before using regular recycling bins.
+Broken glass, sharp metal, batteries, damaged power banks, electronics, gas containers, and bulky waste are flagged so you can check special disposal guidance before using regular recycling bins.
 
 ### 5) Item names include common review signals
-Words such as battery, power bank, receipt, thermal paper, aerosol can, lighter, or pizza box add an extra review note. Duplicate item lines are collapsed in the displayed result so long pasted lists stay readable.
+Words such as battery, power bank, receipt, thermal paper, aerosol can, lighter, oily container, or pizza box add an extra review note. Duplicate item lines are collapsed in the displayed result so long pasted lists stay readable.
 
 ## Related tools
 - To check packaging before a return: [Online Return Package Checker]({{ '/en/tools/online-return-package-checker/' | relative_url }})
@@ -86,4 +86,4 @@ For safety-risk items, wrap them, mark them as broken or sharp, and follow local
 Yes. The selected material, contamination, and part-separation conditions apply to the full list, so split very different materials into separate checks for better results.
 
 ## Summary
-Recycling Sorting Checker is a **checker-type tool that turns material, contamination, label, cap, and special-condition inputs into rinsing, separation, and disposal checks**. It helps pre-check plastic, cartons, cans, glass bottles, and mixed materials before disposal.
+Waste Sorting & Recycling Checker is a **checker-type tool that turns material, residue, label, cap, and special-condition inputs into rinsing, separation, trash-or-recycle, and special-disposal checks**. It helps pre-check plastic, cartons, cans, glass bottles, batteries, broken items, and mixed materials before disposal.
