@@ -1,8 +1,8 @@
 ---
 layout: tool
 lang: en
-title: Recycling Sorting Checker | Plastic, paper, cans, glass, and battery disposal checklist
-description: Check items, materials, contamination, labels, caps, and special conditions to organize recycling, rinsing, separation, trash-disposal steps, and item-specific review flags.
+title: Recycling Sorting Checker | Plastic, cartons, cans, glass, and battery disposal checklist
+description: Check items, materials, contamination, labels, caps, batteries, broken glass, and other special conditions to organize recycling, rinsing, separation, trash-disposal steps, and item-specific review flags.
 category: lifestyle
 category_label: Lifestyle/Recycling Sorting
 thumbnail: /assets/thumbs/en/recycling-sorting-checker.svg
@@ -34,7 +34,7 @@ faq:
 ## Why use the Recycling Sorting Checker?
 Recycling looks simple when labels say plastic, paper, or can, but real disposal gets confusing because of residue, labels, caps, coating, and mixed materials. Incorrectly mixed items can be rejected during sorting or contaminate otherwise clean recyclables.
 
-This checker-type tool uses your item list, material, contamination level, label/cap separation state, and special conditions such as broken items, batteries, or bulky waste to organize **emptying, rinsing, separating, recycling-bin, or trash-conversion checks**. When item names include review signals such as batteries, receipts, aerosol cans, broken glass, or food-stained packaging, it adds extra warnings to the result. It does not replace local rules, but it gives you a quick home checklist before disposal.
+This checker-type tool uses your item list, material, contamination level, label/cap separation state, and special conditions such as broken items, batteries, or bulky waste to organize **emptying, rinsing, separating, recycling-bin, or trash-conversion checks**. When item names include review signals such as batteries, power banks, receipts, aerosol cans, broken glass, or food-stained packaging, it adds extra warnings to the result. It does not replace local rules, but it gives you a quick home checklist before disposal.
 
 ## How to use it
 1. Enter items to throw away, one per line.
@@ -42,7 +42,13 @@ This checker-type tool uses your item list, material, contamination level, label
 3. Select whether labels, caps, or attached parts can be separated.
 4. Select any special condition, such as broken, battery/electronics, or bulky waste.
 5. Choose the disposal setting and add an optional local/building note.
-6. Press `Check sorting` and copy the result.
+6. Press `Check sorting`, review the recycling, rinsing, special-disposal notes, and copy the result.
+
+## Before you enter items
+- Check very different materials separately, such as plastic, cartons, cans, and glass bottles.
+- For food or oil residue, decide whether the item can realistically be emptied and rinsed.
+- For batteries, power banks, aerosol cans, lighters, or broken glass, check dedicated collection guidance before using regular recycling bins.
+- If your building has clear-PET bins, carton bins, or special collection days, add that rule in the local note so it appears in the checklist.
 
 ## Especially useful when
 ### 1) Cleaning up delivery or takeout containers

@@ -19666,11 +19666,13 @@
     const sampleBtn = document.getElementById('rsc-sample');
     const copyBtn = document.getElementById('rsc-copy');
     const clearBtn = document.getElementById('rsc-clear');
+    const quickBtns = document.querySelectorAll('[data-rsc-example]');
     const countOut = document.getElementById('rsc-count');
     const rinseOut = document.getElementById('rsc-rinse');
     const reviewOut = document.getElementById('rsc-review');
     const stepsOut = document.getElementById('rsc-steps');
     const help = document.getElementById('rsc-help');
+    const detectionsEl = document.getElementById('rsc-detections');
     const output = document.getElementById('rsc-output');
     if (!itemsEl || !output) return;
 
@@ -19682,9 +19684,16 @@
         noCopy: '먼저 품목을 입력해 체크리스트를 만들어 주세요.',
         duplicate: (count) => `중복 품목 ${count}개를 한 번만 표시했습니다.`,
         tooMany: (shown, total) => `품목이 ${total}개라 결과에는 먼저 ${shown}개만 표시했습니다. 나머지는 같은 기준으로 나누어 확인하세요.`,
+        longLine: (count) => `너무 긴 품목명 ${count}개는 앞부분만 결과에 표시했습니다.`,
         localNote: (note) => `지역/건물 메모: ${note}`,
         summary: (decision) => `현재 조건의 권장 방향은 “${decision}”입니다. 지자체·건물 규칙은 마지막에 다시 확인하세요.`,
         itemHintsTitle: '품목명에서 감지한 재확인',
+        noHints: '감지된 위험 단서는 아직 없습니다.',
+        quick: {
+          food: { items: '배달 플라스틱 용기\n피자박스\n일회용 소스컵', material: 'plastic', contam: 'heavy', parts: 'possible', special: 'none' },
+          paper: { items: '종이팩\n택배 상자\n영수증', material: 'paper', contam: 'clean', parts: 'possible', special: 'none' },
+          hazard: { items: '건전지\n스프레이캔\n깨진 유리컵', material: 'mixed', contam: 'clean', parts: 'stuck', special: 'battery' }
+        },
         itemHints: [
           { re: /(건전지|배터리|보조배터리|전자담배)/i, text: '배터리류는 일반 재활용품과 섞지 말고 전용 수거함을 확인' },
           { re: /(깨진|파손|유리조각|칼|날카)/i, text: '깨지거나 날카로운 품목은 안전 포장 후 지역 배출 안내 확인' },
@@ -19706,9 +19715,16 @@
         noCopy: 'Enter items and generate a checklist first.',
         duplicate: (count) => `Removed ${count} duplicate item(s) from the displayed list.`,
         tooMany: (shown, total) => `You entered ${total} items, so the result shows the first ${shown}. Apply the same checks to the rest.`,
+        longLine: (count) => `${count} very long item name(s) were shortened in the result.`,
         localNote: (note) => `Local/building note: ${note}`,
         summary: (decision) => `Recommended direction: “${decision}”. Confirm local and building rules before disposal.`,
         itemHintsTitle: 'Item-name review flags',
+        noHints: 'No item-name risk flags detected yet.',
+        quick: {
+          food: { items: 'Takeout plastic container\nPizza box\nDisposable sauce cup', material: 'plastic', contam: 'heavy', parts: 'possible', special: 'none' },
+          paper: { items: 'Carton\nShipping box\nReceipt', material: 'paper', contam: 'clean', parts: 'possible', special: 'none' },
+          hazard: { items: 'AA battery\nAerosol can\nBroken glass cup', material: 'mixed', contam: 'clean', parts: 'stuck', special: 'battery' }
+        },
         itemHints: [
           { re: /(battery|power bank|e-cig|vape)/i, text: 'Keep batteries out of regular recycling and check a dedicated collection point' },
           { re: /(broken|shard|glass shard|knife|sharp)/i, text: 'Wrap broken or sharp items safely and check local disposal guidance' },
@@ -19730,9 +19746,16 @@
         noCopy: '先に品目を入力してチェックリストを作成してください。',
         duplicate: (count) => `重複した品目${count}件は1回だけ表示しました。`,
         tooMany: (shown, total) => `${total}件入力されたため、結果には先頭${shown}件を表示しました。残りも同じ基準で確認してください。`,
+        longLine: (count) => `長すぎる品目名${count}件は結果で短縮表示しました。`,
         localNote: (note) => `地域・建物メモ: ${note}`,
         summary: (decision) => `現在条件のおすすめは「${decision}」です。出す前に地域・建物ルールを確認してください。`,
         itemHintsTitle: '品目名から検出した再確認',
+        noHints: '品目名からの注意点はまだ検出されていません。',
+        quick: {
+          food: { items: 'テイクアウト容器\nピザ箱\n使い捨てソースカップ', material: 'plastic', contam: 'heavy', parts: 'possible', special: 'none' },
+          paper: { items: '紙パック\n配送箱\nレシート', material: 'paper', contam: 'clean', parts: 'possible', special: 'none' },
+          hazard: { items: '乾電池\nスプレー缶\n割れたグラス', material: 'mixed', contam: 'clean', parts: 'stuck', special: 'battery' }
+        },
         itemHints: [
           { re: /(電池|バッテリー|モバイルバッテリー|電子タバコ)/i, text: '電池類は通常資源と混ぜず専用回収を確認' },
           { re: /(割れ|破損|ガラス片|包丁|鋭利)/i, text: '割れ物や鋭利な品目は安全に包み、地域の案内を確認' },
@@ -19749,6 +19772,8 @@
       }
     };
     const t = i18n[pageLang] || i18n.ko;
+    const MAX_ITEMS_FOR_OUTPUT = 20;
+    const MAX_ITEM_NAME = 80;
     const lines = (v) => (v || '').split(/\n+/).map((s) => s.trim().replace(/\s+/g, ' ')).filter(Boolean);
     const copyText = async (val) => { try { await navigator.clipboard.writeText(val); } catch (_) { const ta=document.createElement('textarea'); ta.value=val; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } };
     const setHelp = (message, state = '') => {
@@ -19758,15 +19783,28 @@
     const setCopyEnabled = (enabled) => {
       if (copyBtn) copyBtn.disabled = !enabled;
     };
+    const renderDetections = (detectedHints) => {
+      if (!detectionsEl) return;
+      if (!detectedHints.length) {
+        detectionsEl.innerHTML = '';
+        return;
+      }
+      detectionsEl.innerHTML = detectedHints.map((hint) => `<div class="bw-item" data-state="warning"><span class="bw-tag">${t.review}</span><p>${hint}</p></div>`).join('');
+    };
 
     const render = () => {
       const rawItems = lines(itemsEl.value);
       const seen = new Set();
+      let longLineCount = 0;
       const items = rawItems.filter((item) => {
         const key = item.toLocaleLowerCase();
         if (seen.has(key)) return false;
         seen.add(key);
         return true;
+      }).map((item) => {
+        if ([...item].length <= MAX_ITEM_NAME) return item;
+        longLineCount += 1;
+        return `${[...item].slice(0, MAX_ITEM_NAME).join('')}...`;
       });
       const duplicateCount = rawItems.length - items.length;
       const material = materialEl.value;
@@ -19782,7 +19820,7 @@
       if (special !== 'none') decisionKey = 'trash';
       const checks = [...t.material[material], ...t.contam[contam], ...t.parts[parts], ...t.place[place], ...t.special[special]];
       const itemText = items.join('\n');
-      const detectedHints = (t.itemHints || []).filter((hint) => hint.re.test(itemText)).map((hint) => hint.text);
+      const detectedHints = [...new Set((t.itemHints || []).filter((hint) => hint.re.test(itemText)).map((hint) => hint.text))];
       detectedHints.forEach((hint) => {
         if (!checks.includes(hint)) checks.push(hint);
       });
@@ -19799,6 +19837,7 @@
         output.value = '';
         itemsEl.setAttribute('aria-invalid', 'false');
         setCopyEnabled(false);
+        renderDetections([]);
         setHelp(t.empty);
         return;
       }
@@ -19806,19 +19845,37 @@
       const decision = t.decision[decisionKey];
       const result = [`# ${t.title}`, '', t.summary(decision), '', `${t.checklist}:`, ...checks.map((x) => `- [ ] ${x}`)];
       if (detectedHints.length) result.push('', `${t.itemHintsTitle}:`, ...detectedHints.map((x) => `- ${x}`));
-      const shownItems = items.slice(0, 20);
+      const shownItems = items.slice(0, MAX_ITEMS_FOR_OUTPUT);
       result.push('', `${t.items}:`, ...shownItems.map((x) => `- [ ] ${x}`));
       if (items.length > shownItems.length) result.push('', t.tooMany(shownItems.length, items.length));
       if (duplicateCount) result.push('', t.duplicate(duplicateCount));
+      if (longLineCount) result.push('', t.longLine(longLineCount));
       if (decisionKey === 'trash' || decisionKey === 'review') result.push('', `${t.review}: ${decision}`);
       output.value = result.join('\n');
       setCopyEnabled(true);
+      renderDetections(detectedHints);
       setHelp(t.summary(decision), decisionKey === 'trash' || decisionKey === 'review' ? 'warning' : 'success');
     };
     sampleBtn?.addEventListener('click', () => { itemsEl.value = t.sample; materialEl.value='plastic'; contamEl.value='rinse'; partsEl.value='possible'; placeEl.value='apartment'; if (specialEl) specialEl.value='none'; if (localNoteEl) localNoteEl.value=''; localEl.checked=true; render(); itemsEl.focus(); });
+    quickBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const preset = t.quick?.[btn.dataset.rscExample];
+        if (!preset) return;
+        itemsEl.value = preset.items;
+        materialEl.value = preset.material;
+        contamEl.value = preset.contam;
+        partsEl.value = preset.parts;
+        placeEl.value = 'apartment';
+        if (specialEl) specialEl.value = preset.special;
+        if (localNoteEl) localNoteEl.value = '';
+        if (localEl) localEl.checked = true;
+        render();
+        itemsEl.focus();
+      });
+    });
     runBtn?.addEventListener('click', render);
     copyBtn?.addEventListener('click', async () => { if (!output.value.trim()) { itemsEl.setAttribute('aria-invalid', 'true'); setHelp(t.noCopy, 'error'); itemsEl.focus(); return; } await copyText(output.value.trim()); const old=copyBtn.textContent; copyBtn.textContent=t.copied; setTimeout(()=>{ copyBtn.textContent=old||t.copyDefault; },900); });
-    clearBtn?.addEventListener('click', () => { itemsEl.value=''; if (localNoteEl) localNoteEl.value=''; materialEl.value='plastic'; contamEl.value='rinse'; partsEl.value='possible'; placeEl.value='apartment'; if (specialEl) specialEl.value='none'; localEl.checked=true; output.value=''; [countOut, rinseOut, reviewOut, stepsOut].forEach((el) => { el.textContent='0'; }); itemsEl.setAttribute('aria-invalid', 'false'); setCopyEnabled(false); setHelp(t.cleared); itemsEl.focus(); });
+    clearBtn?.addEventListener('click', () => { itemsEl.value=''; if (localNoteEl) localNoteEl.value=''; materialEl.value='plastic'; contamEl.value='rinse'; partsEl.value='possible'; placeEl.value='apartment'; if (specialEl) specialEl.value='none'; localEl.checked=true; output.value=''; [countOut, rinseOut, reviewOut, stepsOut].forEach((el) => { el.textContent='0'; }); itemsEl.setAttribute('aria-invalid', 'false'); setCopyEnabled(false); renderDetections([]); setHelp(t.cleared); itemsEl.focus(); });
     [itemsEl, materialEl, contamEl, partsEl, placeEl, specialEl, localNoteEl, localEl].forEach((el) => { el?.addEventListener('input', render); el?.addEventListener('change', render); });
     render();
   }
