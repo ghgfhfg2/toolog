@@ -20417,6 +20417,7 @@
   if (slug === 'list-format-converter') {
     const input = document.getElementById('lfc-input');
     const format = document.getElementById('lfc-format');
+    const split = document.getElementById('lfc-split');
     const header = document.getElementById('lfc-header');
     const trim = document.getElementById('lfc-trim');
     const blank = document.getElementById('lfc-blank');
@@ -20424,6 +20425,7 @@
     const runBtn = document.getElementById('lfc-run');
     const sampleBtn = document.getElementById('lfc-sample');
     const copyBtn = document.getElementById('lfc-copy');
+    const clearBtn = document.getElementById('lfc-clear');
     const output = document.getElementById('lfc-output');
     const summary = document.getElementById('lfc-summary');
     const countEl = document.getElementById('lfc-count');
@@ -20437,6 +20439,9 @@
         copied: '변환 결과를 클립보드에 복사했어요.',
         fallback: '복사가 지원되지 않으면 결과 영역을 직접 선택해 복사하세요.',
         empty: '변환할 목록을 입력하세요.',
+        tooMany: (extra) => `항목이 너무 많아 처음 1,000개만 변환했습니다. 제외된 초과 항목: ${formatNum(extra)}개`,
+        copyEmpty: '복사할 변환 결과가 없습니다.',
+        cleared: '입력과 결과를 초기화했습니다.',
         done: (count, removed, label) => `${count}개 항목을 ${label} 형식으로 변환했습니다. 제외된 줄: ${removed}개`,
         labels: { csv: 'CSV', markdown: '마크다운 표', json: 'JSON 배열', numbered: '번호 목록' }
       },
@@ -20445,6 +20450,9 @@
         copied: 'Converted result copied to the clipboard.',
         fallback: 'If copying is not supported, select the result and copy it manually.',
         empty: 'Enter a list to convert.',
+        tooMany: (extra) => `Too many items. Converted the first 1,000 and skipped ${formatNum(extra)} extra item(s).`,
+        copyEmpty: 'There is no converted result to copy yet.',
+        cleared: 'Cleared the input and result.',
         done: (count, removed, label) => `Converted ${count} items to ${label}. Removed lines: ${removed}`,
         labels: { csv: 'CSV', markdown: 'Markdown table', json: 'JSON array', numbered: 'numbered list' }
       },
@@ -20453,21 +20461,37 @@
         copied: '変換結果をクリップボードにコピーしました。',
         fallback: 'コピーできない場合は結果欄を選択して手動でコピーしてください。',
         empty: '変換するリストを入力してください。',
+        tooMany: (extra) => `項目が多すぎるため、最初の1,000件だけ変換しました。除外した超過項目: ${formatNum(extra)}件`,
+        copyEmpty: 'コピーできる変換結果がまだありません。',
+        cleared: '入力と結果をクリアしました。',
         done: (count, removed, label) => `${count}件を${label}形式に変換しました。除外行: ${removed}件`,
         labels: { csv: 'CSV', markdown: 'Markdown表', json: 'JSON配列', numbered: '番号付きリスト' }
       }
     }[pageLang] || null;
+
+    const setSummary = (message, state = '') => {
+      summary.textContent = message;
+      summary.dataset.state = state;
+    };
 
     const csvEscape = (value) => {
       const text = String(value ?? '');
       return /[",\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
     };
 
+    const markdownEscape = (value) => String(value ?? '').replace(/\\/g, '\\\\').replace(/\|/g, '\\|').replace(/\r?\n/g, '<br>');
+
     const normalizeHeader = () => (header?.value || (pageLang === 'ja' ? '項目' : pageLang === 'en' ? 'item' : '항목')).trim() || 'item';
 
     const getItems = () => {
-      const raw = (input.value || '').split(/\r?\n/);
-      let items = raw.map(line => trim?.checked ? line.trim() : line);
+      const delimiter = split?.value || 'line';
+      const rawText = input.value || '';
+      const raw = delimiter === 'comma'
+        ? rawText.split(',')
+        : delimiter === 'tab'
+          ? rawText.split(/\t/)
+          : rawText.split(/\r?\n/);
+      let items = raw.map(item => trim?.checked ? item.trim() : item);
       if (blank?.checked) items = items.filter(line => line.length > 0);
       const beforeDedupe = items.length;
       if (dedupe?.checked) {
@@ -20481,19 +20505,23 @@
       }
       const blankRemoved = blank?.checked ? raw.length - raw.map(line => trim?.checked ? line.trim() : line).filter(line => line.length > 0).length : 0;
       const duplicateRemoved = beforeDedupe - items.length;
-      return { items, removed: Math.max(0, blankRemoved + duplicateRemoved) };
+      const extra = Math.max(0, items.length - 1000);
+      if (extra) items = items.slice(0, 1000);
+      return { items, removed: Math.max(0, blankRemoved + duplicateRemoved), extra };
     };
 
     const convert = () => {
-      const { items, removed } = getItems();
+      const { items, removed, extra } = getItems();
       const h = normalizeHeader();
       let result = '';
+      header?.setAttribute('aria-invalid', h.length > 40 ? 'true' : 'false');
       if (!items.length) {
-        summary.textContent = lfcText.empty;
+        input.setAttribute('aria-invalid', 'false');
+        setSummary(lfcText.empty);
       } else if (format.value === 'csv') {
         result = [csvEscape(h), ...items.map(csvEscape)].join('\n');
       } else if (format.value === 'markdown') {
-        result = [`| ${h} |`, '| --- |', ...items.map(item => `| ${item.replace(/\|/g, '\\|')} |`)].join('\n');
+        result = [`| ${markdownEscape(h)} |`, '| --- |', ...items.map(item => `| ${markdownEscape(item)} |`)].join('\n');
       } else if (format.value === 'json') {
         result = JSON.stringify(items, null, 2);
       } else {
@@ -20503,20 +20531,41 @@
       countEl.textContent = formatNum(items.length);
       removedEl.textContent = formatNum(removed);
       charsEl.textContent = formatNum(result.length);
-      if (items.length) summary.textContent = lfcText.done(items.length, removed, lfcText.labels[format.value] || format.value);
+      copyBtn.disabled = !result;
+      input.setAttribute('aria-invalid', 'false');
+      if (items.length) {
+        setSummary(extra ? lfcText.tooMany(extra) : lfcText.done(items.length, removed, lfcText.labels[format.value] || format.value), extra ? 'warning' : 'success');
+      }
     };
 
     runBtn?.addEventListener('click', convert);
-    [format, header, trim, blank, dedupe].forEach(el => el?.addEventListener('input', convert));
+    [format, split, header, trim, blank, dedupe].forEach(el => el?.addEventListener('input', convert));
+    [format, split, trim, blank, dedupe].forEach(el => el?.addEventListener('change', convert));
     input.addEventListener('input', convert);
     sampleBtn?.addEventListener('click', () => { input.value = lfcText.sample; convert(); });
+    clearBtn?.addEventListener('click', () => {
+      input.value = '';
+      output.value = '';
+      countEl.textContent = '0';
+      removedEl.textContent = '0';
+      charsEl.textContent = '0';
+      copyBtn.disabled = true;
+      input.setAttribute('aria-invalid', 'false');
+      setSummary(lfcText.cleared);
+      input.focus();
+    });
     copyBtn?.addEventListener('click', async () => {
       if (!output.value) convert();
+      if (!output.value) {
+        setSummary(lfcText.copyEmpty, 'error');
+        input.focus();
+        return;
+      }
       try {
         await navigator.clipboard.writeText(output.value || '');
-        summary.textContent = lfcText.copied;
+        setSummary(lfcText.copied, 'success');
       } catch (_) {
-        output.focus(); output.select(); summary.textContent = lfcText.fallback;
+        output.focus(); output.select(); setSummary(lfcText.fallback, 'warning');
       }
     });
     convert();

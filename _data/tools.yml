@@ -202,9 +202,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 줄글 목록을 붙여넣으면 CSV, 마크다운 표, JSON 배열, 번호 목록으로 바로 바꿔 복사할 수 있어요.
-  description_en: Paste a plain line list and convert it into CSV, a Markdown table, a JSON array, or a numbered list for quick copying.
-  description_ja: 行ごとのリストを貼り付けて、CSV、Markdown表、JSON配列、番号付きリストへすばやく変換できます。
+  description: 줄글 목록이나 쉼표·탭으로 나뉜 항목을 CSV, 마크다운 표, JSON 배열, 번호 목록으로 바로 바꾸고 중복·빈값·공백을 정리해 복사할 수 있어요.
+  description_en: Paste line, comma, or tab-separated items and convert them into CSV, a Markdown table, a JSON array, or a numbered list with cleanup options.
+  description_ja: 行ごとのリストやカンマ・タブ区切りの項目を、CSV、Markdown表、JSON配列、番号付きリストへ変換し、空行・空白・重複も整理できます。
   url: /tools/list-format-converter/
   url_en: /en/tools/list-format-converter/
   url_ja: /ja/tools/list-format-converter/
