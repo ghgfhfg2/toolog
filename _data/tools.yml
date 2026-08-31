@@ -1993,14 +1993,16 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 가로·세로·높이와 실제 무게로 부피무게와 적용무게를 빠르게 계산해요.
-  description_en: Calculate volumetric weight and chargeable weight from box dimensions and actual weight.
-  description_ja: 箱サイズと実重量から容積重量と適用重量をすばやく計算します。
+  description: 가로·세로·높이, 실제 무게, 부피배수, 0.5kg/1kg 운임 올림 기준으로 부피무게·적용무게·청구무게를 빠르게 계산해요.
+  description_en: Calculate volumetric, chargeable, and rounded billing weight from box dimensions, actual weight, divisor, and 0.5kg/1kg rounding.
+  description_ja: 箱サイズ・実重量・容積係数・0.5kg/1kg切り上げ条件から、容積重量・適用重量・請求重量を計算します。
   url: /tools/volumetric-weight-calculator/
   url_en: /en/tools/volumetric-weight-calculator/
   url_ja: /ja/tools/volumetric-weight-calculator/
   thumbnail: /assets/thumbs/volumetric-weight-calculator.svg
   published_at: 2026-03-19
+  tool_type: calculator
+  topic_cluster: logistics
 
 - id: fraction-calculator
   title: 분수 계산기

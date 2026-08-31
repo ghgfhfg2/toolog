@@ -13723,51 +13723,70 @@
     const heightEl = document.getElementById('vw-height');
     const actualEl = document.getElementById('vw-actual');
     const divisorEl = document.getElementById('vw-divisor');
+    const roundingEl = document.getElementById('vw-rounding');
     const volumeEl = document.getElementById('vw-volume');
     const volumetricEl = document.getElementById('vw-volumetric');
     const chargeableEl = document.getElementById('vw-chargeable');
+    const billedEl = document.getElementById('vw-billed');
     const basisEl = document.getElementById('vw-basis');
     const help = document.getElementById('vw-help');
+    const exampleBtn = document.getElementById('vw-example');
     const copyBtn = document.getElementById('vw-copy');
     const resetBtn = document.getElementById('vw-reset');
 
-    if (!lengthEl || !widthEl || !heightEl || !actualEl || !divisorEl || !volumeEl || !volumetricEl || !chargeableEl || !basisEl || !help) return;
+    if (!lengthEl || !widthEl || !heightEl || !actualEl || !divisorEl || !roundingEl || !volumeEl || !volumetricEl || !chargeableEl || !billedEl || !basisEl || !help || !exampleBtn || !copyBtn || !resetBtn) return;
 
     const text = {
       ko: {
         needInput: '가로·세로·높이와 실제 무게를 입력하세요.',
+        invalid: '각 변은 0.1~1000cm, 실제 무게는 0~10,000kg 범위의 숫자로 입력해 주세요.',
         basisActual: '실제 무게 기준',
         basisVolumetric: '부피무게 기준',
-        summary: (vw, cw) => `부피무게 ${vw}, 적용무게 ${cw} 기준으로 운임을 비교해 보세요.`,
-        copy: (v, vw, cw, b) => `부피무게 계산 결과 | 박스 부피 ${v} | 부피무게 ${vw} | 적용무게 ${cw} | 청구 기준 ${b}`,
+        roundingNone: '반올림 없음',
+        summary: (vw, cw, billed) => `부피무게 ${vw}, 적용무게 ${cw}, 운임무게 ${billed} 기준으로 배송비를 비교해 보세요.`,
+        copy: (v, vw, cw, billed, b) => `부피무게 계산 결과 | 박스 부피 ${v} | 부피무게 ${vw} | 적용무게 ${cw} | 운임무게 ${billed} | 청구 기준 ${b}`,
         copied: '복사됨',
+        cleared: '입력값을 초기화했습니다.',
+        sample: '예시 박스 값을 입력했습니다.',
         copyDefault: '결과 복사'
       },
       en: {
         needInput: 'Enter length, width, height, and actual weight.',
+        invalid: 'Enter numeric dimensions from 0.1 to 1000 cm per side and actual weight from 0 to 10,000 kg.',
         basisActual: 'Actual weight basis',
         basisVolumetric: 'Volumetric weight basis',
-        summary: (vw, cw) => `Compare shipping cost using volumetric weight ${vw} and chargeable weight ${cw}.`,
-        copy: (v, vw, cw, b) => `Volumetric weight result | Box volume ${v} | Volumetric weight ${vw} | Chargeable weight ${cw} | Billing basis ${b}`,
+        roundingNone: 'No rounding',
+        summary: (vw, cw, billed) => `Compare shipping cost using volumetric weight ${vw}, chargeable weight ${cw}, and billing weight ${billed}.`,
+        copy: (v, vw, cw, billed, b) => `Volumetric weight result | Box volume ${v} | Volumetric weight ${vw} | Chargeable weight ${cw} | Billing weight ${billed} | Billing basis ${b}`,
         copied: 'Copied',
+        cleared: 'Cleared the inputs.',
+        sample: 'Loaded an example box.',
         copyDefault: 'Copy result'
       },
       ja: {
         needInput: '縦・横・高さと実重量を入力してください。',
+        invalid: '各辺0.1〜1000cm、実重量0〜10,000kgの範囲で数値を入力してください。',
         basisActual: '実重量基準',
         basisVolumetric: '容積重量基準',
-        summary: (vw, cw) => `容積重量 ${vw} と適用重量 ${cw} を基準に送料を比較してください。`,
-        copy: (v, vw, cw, b) => `容積重量計算結果 | 箱の容積 ${v} | 容積重量 ${vw} | 適用重量 ${cw} | 請求基準 ${b}`,
+        roundingNone: '丸めなし',
+        summary: (vw, cw, billed) => `容積重量 ${vw}、適用重量 ${cw}、請求重量 ${billed} を基準に送料を比較してください。`,
+        copy: (v, vw, cw, billed, b) => `容積重量計算結果 | 箱の容積 ${v} | 容積重量 ${vw} | 適用重量 ${cw} | 請求重量 ${billed} | 請求基準 ${b}`,
         copied: 'コピー完了',
+        cleared: '入力値をクリアしました。',
+        sample: '例の箱サイズを入力しました。',
         copyDefault: '結果をコピー'
       }
     }[pageLang] || {
       needInput: '가로·세로·높이와 실제 무게를 입력하세요.',
+      invalid: '각 변은 0.1~1000cm, 실제 무게는 0~10,000kg 범위의 숫자로 입력해 주세요.',
       basisActual: '실제 무게 기준',
       basisVolumetric: '부피무게 기준',
-      summary: (vw, cw) => `부피무게 ${vw}, 적용무게 ${cw} 기준으로 운임을 비교해 보세요.`,
-      copy: (v, vw, cw, b) => `부피무게 계산 결과 | 박스 부피 ${v} | 부피무게 ${vw} | 적용무게 ${cw} | 청구 기준 ${b}`,
+      roundingNone: '반올림 없음',
+      summary: (vw, cw, billed) => `부피무게 ${vw}, 적용무게 ${cw}, 운임무게 ${billed} 기준으로 배송비를 비교해 보세요.`,
+      copy: (v, vw, cw, billed, b) => `부피무게 계산 결과 | 박스 부피 ${v} | 부피무게 ${vw} | 적용무게 ${cw} | 운임무게 ${billed} | 청구 기준 ${b}`,
       copied: '복사됨',
+      cleared: '입력값을 초기화했습니다.',
+      sample: '예시 박스 값을 입력했습니다.',
       copyDefault: '결과 복사'
     };
 
@@ -13783,57 +13802,96 @@
       }
     };
 
-    const render = () => {
-      const l = Math.max(0, Number(lengthEl.value || 0));
-      const w = Math.max(0, Number(widthEl.value || 0));
-      const h = Math.max(0, Number(heightEl.value || 0));
-      const actual = Math.max(0, Number(actualEl.value || 0));
-      const divisor = Math.max(1, Number(divisorEl.value || 6000));
+    const fields = [lengthEl, widthEl, heightEl, actualEl];
+    const resetOutput = (message, state = '') => {
+      [volumeEl, volumetricEl, chargeableEl, billedEl, basisEl].forEach((el) => { el.textContent = '-'; });
+      help.textContent = message;
+      help.dataset.state = state;
+      copyBtn.disabled = true;
+    };
 
-      if (!(l > 0) || !(w > 0) || !(h > 0) || !(actual > 0)) {
-        volumeEl.textContent = '-';
-        volumetricEl.textContent = '-';
-        chargeableEl.textContent = '-';
-        basisEl.textContent = '-';
-        help.textContent = text.needInput;
+    const parseField = (el, min, max) => {
+      const raw = el.value.trim();
+      if (!raw) {
+        el.setAttribute('aria-invalid', 'false');
+        return null;
+      }
+      const n = Number(raw);
+      const ok = Number.isFinite(n) && n >= min && n <= max;
+      el.setAttribute('aria-invalid', ok ? 'false' : 'true');
+      return ok ? n : NaN;
+    };
+
+    const roundBillingWeight = (value) => {
+      const unit = Number(roundingEl.value || 0);
+      if (!Number.isFinite(unit) || unit <= 0) return value;
+      return Math.ceil(value / unit) * unit;
+    };
+
+    const render = () => {
+      const l = parseField(lengthEl, 0.1, 1000);
+      const w = parseField(widthEl, 0.1, 1000);
+      const h = parseField(heightEl, 0.1, 1000);
+      const actual = parseField(actualEl, 0, 10000);
+      const divisor = Number(divisorEl.value || 6000);
+
+      if ([l, w, h, actual].some((value) => Number.isNaN(value))) {
+        resetOutput(text.invalid, 'error');
         return;
       }
+      if ([l, w, h, actual].some((value) => value === null)) return resetOutput(text.needInput);
 
       const volumeLiter = (l * w * h) / 1000;
       const volumetric = (l * w * h) / divisor;
       const chargeable = Math.max(actual, volumetric);
+      const billed = roundBillingWeight(chargeable);
       const basis = actual >= volumetric ? text.basisActual : text.basisVolumetric;
 
       volumeEl.textContent = fmtL(volumeLiter);
       volumetricEl.textContent = fmtKg(volumetric);
       chargeableEl.textContent = fmtKg(chargeable);
+      billedEl.textContent = fmtKg(billed);
       basisEl.textContent = basis;
-      help.textContent = text.summary(fmtKg(volumetric), fmtKg(chargeable));
+      copyBtn.disabled = false;
+      help.dataset.state = 'success';
+      help.textContent = text.summary(fmtKg(volumetric), fmtKg(chargeable), fmtKg(billed));
     };
 
-    [lengthEl, widthEl, heightEl, actualEl, divisorEl].forEach((el) => el.addEventListener('input', render));
+    [...fields, divisorEl, roundingEl].forEach((el) => el.addEventListener('input', render));
+    [divisorEl, roundingEl].forEach((el) => el.addEventListener('change', render));
 
-    copyBtn?.addEventListener('click', async () => {
+    copyBtn.addEventListener('click', async () => {
       if (chargeableEl.textContent === '-') return;
-      await copyText(text.copy(volumeEl.textContent, volumetricEl.textContent, chargeableEl.textContent, basisEl.textContent));
+      await copyText(text.copy(volumeEl.textContent, volumetricEl.textContent, chargeableEl.textContent, billedEl.textContent, basisEl.textContent));
       const old = copyBtn.textContent;
       copyBtn.textContent = text.copied;
       setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
     });
 
-    resetBtn?.addEventListener('click', () => {
+    exampleBtn.addEventListener('click', () => {
       lengthEl.value = 40;
       widthEl.value = 30;
       heightEl.value = 20;
       actualEl.value = 2.8;
       divisorEl.value = 6000;
+      roundingEl.value = 0.5;
       render();
+      help.textContent = text.sample;
+      help.dataset.state = 'success';
+      lengthEl.focus();
     });
 
-    if (!lengthEl.value) lengthEl.value = 40;
-    if (!widthEl.value) widthEl.value = 30;
-    if (!heightEl.value) heightEl.value = 20;
-    if (!actualEl.value) actualEl.value = 2.8;
+    resetBtn.addEventListener('click', () => {
+      fields.forEach((el) => {
+        el.value = '';
+        el.setAttribute('aria-invalid', 'false');
+      });
+      divisorEl.value = 6000;
+      roundingEl.value = 0;
+      resetOutput(text.cleared);
+      lengthEl.focus();
+    });
+
     render();
   }
 

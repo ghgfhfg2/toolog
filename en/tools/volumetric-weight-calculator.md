@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Volumetric Weight Calculator | Box Volume & Chargeable Weight
-description: Enter box dimensions and actual weight to calculate volumetric weight, chargeable weight, and volume in liters.
+title: Volumetric Weight Calculator | Dimensional & Billing Weight
+description: Enter box dimensions, actual weight, divisor, and optional 0.5kg or 1kg rounding to calculate volumetric weight, chargeable weight, billing weight, and box volume.
 category: calculator
 category_label: Logistics/Business
 thumbnail: /assets/thumbs/en/volumetric-weight-calculator.svg
@@ -9,10 +9,12 @@ image:
   path: /assets/thumbs/en/volumetric-weight-calculator.svg
   alt: Volumetric Weight Calculator thumbnail
 tool_key: volumetric-weight-calculator
+tool_type: calculator
+topic_cluster: logistics
 lang: en
 permalink: /en/tools/volumetric-weight-calculator/
 canonical_url: /en/tools/volumetric-weight-calculator/
-keywords: [volumetric weight calculator, dimensional weight, chargeable weight, shipping calculator, box volume]
+keywords: [volumetric weight calculator, dimensional weight, chargeable weight, billing weight calculator, shipping calculator, box volume]
 related_tools: [unit-converter, discount-calculator, percent-calculator]
 faq:
   - q: When is volumetric weight used?
@@ -21,6 +23,10 @@ faq:
     a: The divisor depends on the carrier or forwarder policy. 6000, 5000, and 4000 are all used in practice.
   - q: How is chargeable weight decided?
     a: In many cases, the larger value between actual weight and volumetric weight is used as the billable weight.
+  - q: Why does the tool include 0.5kg or 1kg rounding?
+    a: Some carriers round chargeable weight up before billing. Choose the rounding unit that matches the quote table you are using.
+  - q: Can I use 0kg when I do not know the actual weight yet?
+    a: Yes for an early size-only estimate, but weigh the parcel and recalculate before shipping.
 ---
 
 ## Why use a volumetric weight calculator?
@@ -30,7 +36,12 @@ Many courier and air-shipping services compare **actual weight** with **volumetr
 This tool helps you quickly check:
 - box volume in liters,
 - volumetric weight,
-- chargeable (billable) weight.
+- chargeable weight,
+- rounded billing weight for 0.5kg or 1kg carrier rules.
+
+## Why this tool was improved today
+Recent quality passes focused on other tools such as the list format converter, recycling sorting checker, movie seat choice simulator, fuel economy calculator, and image resizer.
+`volumetric-weight-calculator` was selected because shipping estimates are sensitive to decimal dimensions, zero actual weight, unrealistic values, carrier divisors, rounding rules, and mobile input guidance.
 
 ## Formula
 `Length(cm) × Width(cm) × Height(cm) ÷ divisor`
@@ -41,8 +52,32 @@ Example with **40 × 30 × 20 cm** and divisor **6000**:
 If the actual weight is **2.8 kg**, chargeable weight becomes **4.0 kg**.
 If the actual weight is **5.1 kg**, chargeable weight becomes **5.1 kg**.
 
+If a carrier rounds billing weight up to 0.5kg, **4.01 kg** may be billed as **4.5 kg**.
+With 1kg rounding, the same value may be billed as **5 kg**.
+
 ## Good use cases
 - Estimating shipping cost before dispatch
 - Comparing courier or forwarder pricing
 - Reviewing packaging size options
 - Checking air cargo quote assumptions
+
+## Input checks that reduce mistakes
+- Measure the outside of the box when matching a real carrier quote.
+- Dimensions are limited to 0.1-1000cm per side, and actual weight is limited to 0-10,000kg.
+- Use 0kg only for early estimates when you do not know the actual weight yet.
+- Check whether the rate sheet says divisor, dimensional weight, chargeable weight, or rounded billing weight.
+
+## Related tools
+- Convert inches, cm, lb, or kg first: [Unit Converter]({{ '/en/tools/unit-converter/' | relative_url }})
+- Estimate final payment changes: [Discount Calculator]({{ '/en/tools/discount-calculator/' | relative_url }})
+- Compare percentage differences: [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
+
+## FAQ
+### Is the divisor always 6000?
+No. 6000 is common, but express and air cargo estimates may use 5000, 4000, or another carrier-specific divisor.
+
+### Are chargeable weight and billing weight the same?
+They are often used loosely, but this tool separates them: chargeable weight is the larger of actual and volumetric weight, while billing weight includes the optional carrier rounding unit.
+
+### Why is my result much higher than expected?
+Check that you entered centimeters rather than millimeters and selected the correct divisor. A 4000 divisor produces a higher volumetric weight than 6000 for the same box.

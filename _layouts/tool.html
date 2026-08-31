@@ -3632,48 +3632,59 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="hms-help">{% if page.lang == 'en' %}Enter hourly wage and hours to estimate monthly and annual gross salary.{% elsif page.lang == 'ja' %}時給と勤務時間を入力すると月給・年収の目安を計算します。{% else %}시급과 근무시간을 입력하면 월급·연봉(세전) 예상값을 계산합니다.{% endif %}</p>
         </div>
       {% when 'volumetric-weight-calculator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui vw-ui">
+          <div class="tool-row-grid vw-grid">
             <div>
               <label for="vw-length">{% if page.lang == 'en' %}Length (cm){% elsif page.lang == 'ja' %}縦（cm）{% else %}가로/길이(cm){% endif %}</label>
-              <input id="vw-length" type="number" min="0" step="0.1" inputmode="decimal" />
+              <input id="vw-length" type="number" min="0.1" max="1000" step="0.1" inputmode="decimal" placeholder="40" aria-describedby="vw-help vw-rules" />
             </div>
             <div>
               <label for="vw-width">{% if page.lang == 'en' %}Width (cm){% elsif page.lang == 'ja' %}横（cm）{% else %}세로/너비(cm){% endif %}</label>
-              <input id="vw-width" type="number" min="0" step="0.1" inputmode="decimal" />
+              <input id="vw-width" type="number" min="0.1" max="1000" step="0.1" inputmode="decimal" placeholder="30" aria-describedby="vw-help vw-rules" />
             </div>
           </div>
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid vw-grid">
             <div>
               <label for="vw-height">{% if page.lang == 'en' %}Height (cm){% elsif page.lang == 'ja' %}高さ（cm）{% else %}높이(cm){% endif %}</label>
-              <input id="vw-height" type="number" min="0" step="0.1" inputmode="decimal" />
+              <input id="vw-height" type="number" min="0.1" max="1000" step="0.1" inputmode="decimal" placeholder="20" aria-describedby="vw-help vw-rules" />
             </div>
             <div>
               <label for="vw-actual">{% if page.lang == 'en' %}Actual weight (kg){% elsif page.lang == 'ja' %}実重量（kg）{% else %}실제 무게(kg){% endif %}</label>
-              <input id="vw-actual" type="number" min="0" step="0.01" inputmode="decimal" />
+              <input id="vw-actual" type="number" min="0" max="10000" step="0.01" inputmode="decimal" placeholder="2.8" aria-describedby="vw-help vw-rules" />
             </div>
           </div>
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid vw-grid">
             <div>
               <label for="vw-divisor">{% if page.lang == 'en' %}Volumetric divisor{% elsif page.lang == 'ja' %}容積係数{% else %}부피배수{% endif %}</label>
-              <select id="vw-divisor">
-                <option value="6000">6000</option>
-                <option value="5000">5000</option>
-                <option value="4000">4000</option>
+              <select id="vw-divisor" aria-describedby="vw-help vw-rules">
+                <option value="6000">6000 - {% if page.lang == 'en' %}general courier{% elsif page.lang == 'ja' %}一般配送{% else %}일반 택배{% endif %}</option>
+                <option value="5000">5000 - {% if page.lang == 'en' %}express / air{% elsif page.lang == 'ja' %}特送・航空{% else %}특송·항공{% endif %}</option>
+                <option value="4000">4000 - {% if page.lang == 'en' %}stricter carrier{% elsif page.lang == 'ja' %}厳しめの基準{% else %}엄격 기준{% endif %}</option>
+              </select>
+            </div>
+            <div>
+              <label for="vw-rounding">{% if page.lang == 'en' %}Billing rounding{% elsif page.lang == 'ja' %}請求重量の丸め{% else %}운임 무게 반올림{% endif %}</label>
+              <select id="vw-rounding" aria-describedby="vw-help vw-rules">
+                <option value="0">{% if page.lang == 'en' %}No rounding{% elsif page.lang == 'ja' %}丸めなし{% else %}반올림 없음{% endif %}</option>
+                <option value="0.5">0.5kg {% if page.lang == 'en' %}up{% elsif page.lang == 'ja' %}単位切り上げ{% else %}단위 올림{% endif %}</option>
+                <option value="1">1kg {% if page.lang == 'en' %}up{% elsif page.lang == 'ja' %}単位切り上げ{% else %}단위 올림{% endif %}</option>
               </select>
             </div>
           </div>
-          <div class="tool-row-grid pct-actions">
-            <button id="vw-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+          <div class="tool-row-grid vw-actions">
+            <button id="vw-example" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
+            <button id="vw-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
             <button id="vw-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
-          <div class="tool-stats">
+          <div class="tool-stats vw-stats" aria-label="{% if page.lang == 'en' %}Volumetric weight calculation summary{% elsif page.lang == 'ja' %}容積重量計算サマリー{% else %}부피무게 계산 요약{% endif %}">
             <div><strong id="vw-volume">-</strong><span>{% if page.lang == 'en' %}Box volume (L){% elsif page.lang == 'ja' %}箱の容積（L）{% else %}박스 부피(L){% endif %}</span></div>
             <div><strong id="vw-volumetric">-</strong><span>{% if page.lang == 'en' %}Volumetric weight{% elsif page.lang == 'ja' %}容積重量{% else %}부피무게{% endif %}</span></div>
             <div><strong id="vw-chargeable">-</strong><span>{% if page.lang == 'en' %}Chargeable weight{% elsif page.lang == 'ja' %}適用重量{% else %}적용무게{% endif %}</span></div>
+            <div><strong id="vw-billed">-</strong><span>{% if page.lang == 'en' %}Rounded billing weight{% elsif page.lang == 'ja' %}丸め後の請求重量{% else %}반올림 운임무게{% endif %}</span></div>
             <div><strong id="vw-basis">-</strong><span>{% if page.lang == 'en' %}Billing basis{% elsif page.lang == 'ja' %}請求基準{% else %}청구 기준{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="vw-help">{% if page.lang == 'en' %}Enter dimensions and weight to calculate volumetric and chargeable weight.{% elsif page.lang == 'ja' %}サイズと重量を入力すると、容積重量と適用重量を計算します。{% else %}박스 규격과 실제 무게를 입력하면 부피무게와 적용무게를 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="vw-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter dimensions and weight to calculate volumetric, chargeable, and rounded billing weight.{% elsif page.lang == 'ja' %}サイズと重量を入力すると、容積重量・適用重量・丸め後の請求重量を計算します。{% else %}박스 규격과 실제 무게를 입력하면 부피무게, 적용무게, 반올림 운임무게를 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="vw-rules">{% if page.lang == 'en' %}Formula: length × width × height ÷ divisor. Dimensions support 0.1-1000cm per side, actual weight supports 0-10,000kg, and all input stays in your browser.{% elsif page.lang == 'ja' %}計算式: 縦×横×高さ÷容積係数。サイズは各辺0.1〜1000cm、実重量は0〜10,000kgまで対応し、入力はブラウザ内だけで処理されます。{% else %}계산식: 가로×세로×높이÷부피배수. 각 변은 0.1~1000cm, 실제 무게는 0~10,000kg까지 지원하며 입력값은 브라우저 안에서만 처리됩니다.{% endif %}</p>
         </div>
       {% when 'split-bill-calculator' %}
         <div class="tool-ui sb-ui">
