@@ -20494,36 +20494,51 @@
     const lfcText = {
       ko: {
         sample: '회의 안건 정리\n신규 기능 QA\n고객 피드백 검토\n배포 체크리스트 확인\n회의 안건 정리',
+        idle: '목록을 붙여넣으면 원하는 형식으로 바꿔줍니다.',
         copied: '변환 결과를 클립보드에 복사했어요.',
         fallback: '복사가 지원되지 않으면 결과 영역을 직접 선택해 복사하세요.',
         empty: '변환할 목록을 입력하세요.',
         tooMany: (extra) => `항목이 너무 많아 처음 1,000개만 변환했습니다. 제외된 초과 항목: ${formatNum(extra)}개`,
         copyEmpty: '복사할 변환 결과가 없습니다.',
         cleared: '입력과 결과를 초기화했습니다.',
-        done: (count, removed, label) => `${count}개 항목을 ${label} 형식으로 변환했습니다. 제외된 줄: ${removed}개`,
-        labels: { csv: 'CSV', markdown: '마크다운 표', json: 'JSON 배열', numbered: '번호 목록' }
+        done: (count, removed, label, splitLabel) => `${count}개 항목을 ${label} 형식으로 변환했습니다. 구분 기준: ${splitLabel}. 제외된 항목: ${removed}개`,
+        defaultHeader: '항목',
+        headerCleaned: '헤더의 줄바꿈과 과한 공백을 한 줄로 정리했습니다.',
+        quoteWarning: '따옴표가 닫히지 않은 항목이 있어 보이는 그대로 변환했습니다.',
+        labels: { csv: 'CSV', markdown: '마크다운 표', json: 'JSON 배열', numbered: '번호 목록' },
+        splitLabels: { auto: '자동', line: '줄바꿈', comma: '쉼표', tab: '탭' }
       },
       en: {
         sample: 'Meeting agenda cleanup\nNew feature QA\nCustomer feedback review\nRelease checklist\nMeeting agenda cleanup',
+        idle: 'Paste a list and convert it to a structured format.',
         copied: 'Converted result copied to the clipboard.',
         fallback: 'If copying is not supported, select the result and copy it manually.',
         empty: 'Enter a list to convert.',
         tooMany: (extra) => `Too many items. Converted the first 1,000 and skipped ${formatNum(extra)} extra item(s).`,
         copyEmpty: 'There is no converted result to copy yet.',
         cleared: 'Cleared the input and result.',
-        done: (count, removed, label) => `Converted ${count} items to ${label}. Removed lines: ${removed}`,
-        labels: { csv: 'CSV', markdown: 'Markdown table', json: 'JSON array', numbered: 'numbered list' }
+        done: (count, removed, label, splitLabel) => `Converted ${count} items to ${label}. Separator: ${splitLabel}. Removed items: ${removed}`,
+        defaultHeader: 'item',
+        headerCleaned: 'Cleaned line breaks and extra spaces from the header.',
+        quoteWarning: 'An unclosed quote was detected, so the visible text was converted as-is.',
+        labels: { csv: 'CSV', markdown: 'Markdown table', json: 'JSON array', numbered: 'numbered list' },
+        splitLabels: { auto: 'auto', line: 'line break', comma: 'comma', tab: 'tab' }
       },
       ja: {
         sample: '会議アジェンダ整理\n新機能QA\n顧客フィードバック確認\nリリースチェックリスト\n会議アジェンダ整理',
+        idle: 'リストを貼り付けると構造化形式に変換します。',
         copied: '変換結果をクリップボードにコピーしました。',
         fallback: 'コピーできない場合は結果欄を選択して手動でコピーしてください。',
         empty: '変換するリストを入力してください。',
         tooMany: (extra) => `項目が多すぎるため、最初の1,000件だけ変換しました。除外した超過項目: ${formatNum(extra)}件`,
         copyEmpty: 'コピーできる変換結果がまだありません。',
         cleared: '入力と結果をクリアしました。',
-        done: (count, removed, label) => `${count}件を${label}形式に変換しました。除外行: ${removed}件`,
-        labels: { csv: 'CSV', markdown: 'Markdown表', json: 'JSON配列', numbered: '番号付きリスト' }
+        done: (count, removed, label, splitLabel) => `${count}件を${label}形式に変換しました。区切り: ${splitLabel}。除外項目: ${removed}件`,
+        defaultHeader: '項目',
+        headerCleaned: 'ヘッダーの改行と余分な空白を1行に整理しました。',
+        quoteWarning: '閉じていない引用符があるため、見えている文字列のまま変換しました。',
+        labels: { csv: 'CSV', markdown: 'Markdown表', json: 'JSON配列', numbered: '番号付きリスト' },
+        splitLabels: { auto: '自動', line: '改行', comma: 'カンマ', tab: 'タブ' }
       }
     }[pageLang] || null;
 
@@ -20539,16 +20554,58 @@
 
     const markdownEscape = (value) => String(value ?? '').replace(/\\/g, '\\\\').replace(/\|/g, '\\|').replace(/\r?\n/g, '<br>');
 
-    const normalizeHeader = () => (header?.value || (pageLang === 'ja' ? '項目' : pageLang === 'en' ? 'item' : '항목')).trim() || 'item';
+    const normalizeHeader = () => {
+      const fallback = lfcText.defaultHeader || 'item';
+      const raw = header?.value || fallback;
+      const normalized = raw.replace(/\s+/g, ' ').trim();
+      return (normalized || fallback).slice(0, 40);
+    };
+
+    const detectDelimiter = (rawText) => {
+      const tabCount = (rawText.match(/\t/g) || []).length;
+      const lineCount = (rawText.match(/\r\n|\r|\n/g) || []).length;
+      const commaCount = (rawText.match(/,/g) || []).length;
+      if (tabCount > 0) return 'tab';
+      if (lineCount > 0) return 'line';
+      if (commaCount > 0) return 'comma';
+      return 'line';
+    };
+
+    const splitDelimited = (rawText, delimiter) => {
+      if (delimiter === 'line') return { parts: rawText.split(/\r\n|\r|\n/), unclosedQuote: false };
+      const sep = delimiter === 'tab' ? '\t' : ',';
+      const parts = [];
+      let current = '';
+      let quoted = false;
+      let unclosedQuote = false;
+
+      for (let i = 0; i < rawText.length; i += 1) {
+        const ch = rawText[i];
+        const next = rawText[i + 1];
+        if (ch === '"') {
+          if (quoted && next === '"') {
+            current += '"';
+            i += 1;
+          } else {
+            quoted = !quoted;
+          }
+        } else if (ch === sep && !quoted) {
+          parts.push(current);
+          current = '';
+        } else {
+          current += ch;
+        }
+      }
+      if (quoted) unclosedQuote = true;
+      parts.push(current);
+      return { parts, unclosedQuote };
+    };
 
     const getItems = () => {
-      const delimiter = split?.value || 'line';
+      const selectedDelimiter = split?.value || 'line';
       const rawText = input.value || '';
-      const raw = delimiter === 'comma'
-        ? rawText.split(',')
-        : delimiter === 'tab'
-          ? rawText.split(/\t/)
-          : rawText.split(/\r?\n/);
+      const delimiter = selectedDelimiter === 'auto' ? detectDelimiter(rawText) : selectedDelimiter;
+      const { parts: raw, unclosedQuote } = splitDelimited(rawText, delimiter);
       let items = raw.map(item => trim?.checked ? item.trim() : item);
       if (blank?.checked) items = items.filter(line => line.length > 0);
       const beforeDedupe = items.length;
@@ -20565,17 +20622,19 @@
       const duplicateRemoved = beforeDedupe - items.length;
       const extra = Math.max(0, items.length - 1000);
       if (extra) items = items.slice(0, 1000);
-      return { items, removed: Math.max(0, blankRemoved + duplicateRemoved), extra };
+      return { items, removed: Math.max(0, blankRemoved + duplicateRemoved), extra, delimiter, unclosedQuote };
     };
 
     const convert = () => {
-      const { items, removed, extra } = getItems();
+      const { items, removed, extra, delimiter, unclosedQuote } = getItems();
       const h = normalizeHeader();
       let result = '';
-      header?.setAttribute('aria-invalid', h.length > 40 ? 'true' : 'false');
+      const rawHeader = header?.value || '';
+      const headerCleaned = rawHeader && rawHeader.replace(/\s+/g, ' ').trim() !== rawHeader.trim();
+      header?.setAttribute('aria-invalid', 'false');
       if (!items.length) {
         input.setAttribute('aria-invalid', 'false');
-        setSummary(lfcText.empty);
+        setSummary(input.value ? lfcText.empty : lfcText.idle);
       } else if (format.value === 'csv') {
         result = [csvEscape(h), ...items.map(csvEscape)].join('\n');
       } else if (format.value === 'markdown') {
@@ -20592,7 +20651,16 @@
       copyBtn.disabled = !result;
       input.setAttribute('aria-invalid', 'false');
       if (items.length) {
-        setSummary(extra ? lfcText.tooMany(extra) : lfcText.done(items.length, removed, lfcText.labels[format.value] || format.value), extra ? 'warning' : 'success');
+        let message = extra ? lfcText.tooMany(extra) : lfcText.done(items.length, removed, lfcText.labels[format.value] || format.value, lfcText.splitLabels[delimiter] || delimiter);
+        let state = extra ? 'warning' : 'success';
+        if (unclosedQuote) {
+          message = `${message} ${lfcText.quoteWarning}`;
+          state = 'warning';
+        } else if (headerCleaned) {
+          message = `${message} ${lfcText.headerCleaned}`;
+          state = 'warning';
+        }
+        setSummary(message, state);
       }
     };
 

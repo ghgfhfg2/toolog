@@ -1099,11 +1099,19 @@ a:hover { color: #fff; text-decoration: none; }
 .lfc-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
+.lfc-grid select,
+.lfc-grid input {
+  min-width: 0;
+}
 .lfc-options {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 .lfc-actions {
   grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.lfc-stats strong,
+.lfc-stats span {
+  overflow-wrap: anywhere;
 }
 .lfc-ui textarea[aria-invalid="true"],
 .lfc-ui input[aria-invalid="true"] {

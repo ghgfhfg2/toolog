@@ -4334,7 +4334,8 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             </div>
             <div>
               <label for="lfc-split">{% if page.lang == 'en' %}Input separator{% elsif page.lang == 'ja' %}入力の区切り{% else %}입력 구분 기준{% endif %}</label>
-              <select id="lfc-split" aria-describedby="lfc-help">
+              <select id="lfc-split" aria-describedby="lfc-summary lfc-help">
+                <option value="auto">{% if page.lang == 'en' %}Auto-detect separator{% elsif page.lang == 'ja' %}区切りを自動判定{% else %}구분 기준 자동 감지{% endif %}</option>
                 <option value="line">{% if page.lang == 'en' %}One item per line{% elsif page.lang == 'ja' %}1行に1項目{% else %}한 줄에 하나{% endif %}</option>
                 <option value="comma">{% if page.lang == 'en' %}Split by comma{% elsif page.lang == 'ja' %}カンマで分割{% else %}쉼표로 나누기{% endif %}</option>
                 <option value="tab">{% if page.lang == 'en' %}Split by tab{% elsif page.lang == 'ja' %}タブで分割{% else %}탭으로 나누기{% endif %}</option>
@@ -4361,11 +4362,11 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <div><strong id="lfc-removed">0</strong><span>{% if page.lang == 'en' %}Removed{% elsif page.lang == 'ja' %}除外{% else %}제외 항목{% endif %}</span></div>
             <div><strong id="lfc-chars">0</strong><span>{% if page.lang == 'en' %}Result chars{% elsif page.lang == 'ja' %}結果文字数{% else %}결과 글자 수{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="lfc-summary">{% if page.lang == 'en' %}Paste a line list and convert it to a structured format.{% elsif page.lang == 'ja' %}行リストを貼り付けると構造化形式に変換します。{% else %}줄글 목록을 붙여넣으면 원하는 형식으로 바꿔줍니다.{% endif %}</p>
-          <p class="tool-result" id="lfc-help">{% if page.lang == 'en' %}CSV quotes commas and line breaks correctly. Markdown escapes pipe characters. Up to 1,000 items are converted at once in your browser.{% elsif page.lang == 'ja' %}CSVではカンマや改行を適切に引用し、Markdownでは縦線をエスケープします。最大1,000項目までブラウザ内で変換します。{% else %}CSV는 쉼표와 줄바꿈을 규칙대로 따옴표 처리하고, 마크다운 표는 세로줄 문자를 이스케이프합니다. 한 번에 최대 1,000개 항목까지 브라우저에서 변환합니다.{% endif %}</p>
+          <p class="tool-result" id="lfc-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Paste a list and convert it to a structured format.{% elsif page.lang == 'ja' %}リストを貼り付けると構造化形式に変換します。{% else %}목록을 붙여넣으면 원하는 형식으로 바꿔줍니다.{% endif %}</p>
+          <p class="tool-result" id="lfc-help">{% if page.lang == 'en' %}Auto-detect checks tabs, line breaks, then commas. Quoted comma lists are parsed safely. Up to 1,000 items are converted at once in your browser.{% elsif page.lang == 'ja' %}自動判定はタブ、改行、カンマの順に確認します。引用符付きカンマリストも安全に解析します。最大1,000項目までブラウザ内で変換します。{% else %}자동 감지는 탭, 줄바꿈, 쉼표 순서로 확인합니다. 따옴표로 감싼 쉼표 목록도 안전하게 나눕니다. 한 번에 최대 1,000개 항목까지 브라우저에서 변환합니다.{% endif %}</p>
           <div class="tool-row">
             <label for="lfc-output">{% if page.lang == 'en' %}Converted result{% elsif page.lang == 'ja' %}変換結果{% else %}변환 결과{% endif %}</label>
-            <textarea id="lfc-output" rows="12" readonly aria-describedby="lfc-summary" placeholder="{% if page.lang == 'en' %}Converted result appears here.{% elsif page.lang == 'ja' %}変換結果がここに表示されます。{% else %}변환 결과가 여기에 표시됩니다.{% endif %}"></textarea>
+            <textarea id="lfc-output" rows="12" readonly aria-describedby="lfc-summary lfc-help" placeholder="{% if page.lang == 'en' %}Converted result appears here.{% elsif page.lang == 'ja' %}変換結果がここに表示されます。{% else %}변환 결과가 여기에 표시됩니다.{% endif %}"></textarea>
           </div>
         </div>
       {% when 'group-announcement-generator' %}

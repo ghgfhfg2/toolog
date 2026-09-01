@@ -1142,6 +1142,37 @@ textarea:focus-visible {
   background: var(--hover);
   color: #fff;
 }
+.lfc-ui textarea {
+  min-height: 190px;
+  font-size: 16px;
+}
+.lfc-ui #lfc-output {
+  min-height: 240px;
+}
+.lfc-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.lfc-grid select,
+.lfc-grid input {
+  min-width: 0;
+}
+.lfc-options {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.lfc-actions {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.lfc-stats strong,
+.lfc-stats span {
+  overflow-wrap: anywhere;
+}
+.lfc-ui textarea[aria-invalid="true"],
+.lfc-ui input[aria-invalid="true"] {
+  border-color: #ef4444;
+}
+.lfc-ui .tool-result[data-state="error"] { color: #fca5a5; }
+.lfc-ui .tool-result[data-state="success"] { color: #86efac; }
+.lfc-ui .tool-result[data-state="warning"] { color: #fbbf24; }
 .tool-check {
   display: inline-flex;
   align-items: center;
@@ -1828,6 +1859,10 @@ textarea:focus-visible {
   .frac-actions { grid-template-columns: 1fr; }
   .cc-grid { grid-template-columns: 1fr 1fr; }
   .cc-actions { grid-template-columns: 1fr; }
+  .lfc-grid,
+  .lfc-options,
+  .lfc-actions { grid-template-columns: 1fr; }
+  .tool-stats.lfc-stats { grid-template-columns: 1fr 1fr; }
   .tc-limit-grid,.tc-actions { grid-template-columns: 1fr; }
   .tc-stats { grid-template-columns: 1fr 1fr; }
   .llc-options,.llc-actions { grid-template-columns: 1fr; }
