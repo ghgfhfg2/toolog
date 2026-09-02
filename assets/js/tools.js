@@ -11300,8 +11300,9 @@
         await navigator.clipboard.writeText(text);
         return true;
       } catch (_) {
+        let ta;
         try {
-          const ta = document.createElement('textarea');
+          ta = document.createElement('textarea');
           ta.value = text;
           ta.style.position = 'fixed';
           ta.style.opacity = '0';
@@ -12950,76 +12951,120 @@
     const help = document.getElementById('si-help');
     const copyBtn = document.getElementById('si-copy');
     const resetBtn = document.getElementById('si-reset');
+    const exampleBtn = document.getElementById('si-example');
+    const presetBtns = [...document.querySelectorAll('[data-si-months]')];
 
     if (!principal || !rate || !months || !method || !tax || !grossInterestEl || !taxAmountEl || !netInterestEl || !maturityEl || !help) return;
 
     const t = {
       ko: {
-        needInput: '예치금·금리·기간을 입력하세요.',
-        summary: (gross, net) => `세전 이자 ${gross}, 세후 이자 ${net} 기준 결과입니다.`,
-        copy: (g, t, n, m) => `예금 이자 계산 결과 | 세전 이자 ${g} | 세금 ${t} | 세후 이자 ${n} | 만기금액 ${m}`,
-        copied: '복사됨',
+        needInput: '예치금·연이율·예치기간을 모두 입력해 주세요.',
+        invalidPrincipal: '예치금은 1원 이상 1,000조 원 이하의 정수로 입력해 주세요.',
+        invalidRate: '연이율은 0% 이상 50% 이하로 입력해 주세요.',
+        invalidMonths: '예치기간은 1개월 이상 120개월 이하의 정수로 입력해 주세요.',
+        summary: (methodLabel, gross, net) => `${methodLabel} 기준 세전 이자 ${gross}, 세후 이자 ${net}의 예상 결과입니다.`,
+        simple: '단리',
+        compound: '월복리',
+        copy: (methodLabel, g, tx, n, m) => `예금 이자 계산 결과 | ${methodLabel} | 세전 이자 ${g} | 세금 ${tx} | 세후 이자 ${n} | 만기금액 ${m}`,
+        copied: '결과를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력값을 지웠습니다.',
         copyDefault: '결과 복사'
       },
       en: {
-        needInput: 'Enter deposit, rate, and term.',
-        summary: (gross, net) => `Estimated result based on pre-tax interest ${gross} and after-tax interest ${net}.`,
-        copy: (g, t, n, m) => `Savings interest result | Pre-tax interest ${g} | Tax ${t} | After-tax interest ${n} | Maturity amount ${m}`,
-        copied: 'Copied',
+        needInput: 'Enter deposit amount, annual rate, and term.',
+        invalidPrincipal: 'Enter a whole-unit deposit from 1 to 1 quadrillion KRW.',
+        invalidRate: 'Enter an annual rate from 0% to 50%.',
+        invalidMonths: 'Enter a whole-number term from 1 to 120 months.',
+        summary: (methodLabel, gross, net) => `${methodLabel} estimate: ${gross} pre-tax interest and ${net} after-tax interest.`,
+        simple: 'Simple interest',
+        compound: 'Monthly compound interest',
+        copy: (methodLabel, g, tx, n, m) => `Savings interest result | ${methodLabel} | Pre-tax interest ${g} | Tax ${tx} | After-tax interest ${n} | Maturity amount ${m}`,
+        copied: 'Copied the result.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared all inputs.',
         copyDefault: 'Copy result'
       },
       ja: {
-        needInput: '預入額・金利・期間を入力してください。',
-        summary: (gross, net) => `税引前利息 ${gross}、税引後利息 ${net} の試算結果です。`,
-        copy: (g, t, n, m) => `預金利息計算結果 | 税引前利息 ${g} | 税額 ${t} | 税引後利息 ${n} | 満期金額 ${m}`,
-        copied: 'コピー完了',
+        needInput: '預入額・年利・期間をすべて入力してください。',
+        invalidPrincipal: '預入額は1ウォン以上1,000兆ウォン以下の整数で入力してください。',
+        invalidRate: '年利は0%以上50%以下で入力してください。',
+        invalidMonths: '期間は1〜120か月の整数で入力してください。',
+        summary: (methodLabel, gross, net) => `${methodLabel}で税引前利息${gross}、税引後利息${net}の概算です。`,
+        simple: '単利',
+        compound: '毎月複利',
+        copy: (methodLabel, g, tx, n, m) => `預金利息計算結果 | ${methodLabel} | 税引前利息 ${g} | 税額 ${tx} | 税引後利息 ${n} | 満期金額 ${m}`,
+        copied: '結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力をクリアしました。',
         copyDefault: '結果をコピー'
       }
-    }[pageLang] || {
-      needInput: '예치금·금리·기간을 입력하세요.',
-      summary: (gross, net) => `세전 이자 ${gross}, 세후 이자 ${net} 기준 결과입니다.`,
-      copy: (g, t, n, m) => `예금 이자 계산 결과 | 세전 이자 ${g} | 세금 ${t} | 세후 이자 ${n} | 만기금액 ${m}`,
-      copied: '복사됨',
-      copyDefault: '결과 복사'
-    };
+    }[pageLang];
 
     const fmtMoney = (v) => `${Math.round(v || 0).toLocaleString(numberLocale)}${pageLang === 'en' ? ' KRW' : (pageLang === 'ja' ? 'ウォン' : '원')}`;
 
     const copyText = async (text) => {
       try {
         await navigator.clipboard.writeText(text);
+        return true;
       } catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          const copied = document.execCommand('copy');
+          return copied;
+        } catch (_) {
+          return false;
+        } finally {
+          ta?.remove();
+        }
       }
     };
 
-    const setIdle = (msg) => {
+    const setIdle = (msg, state = '') => {
       grossInterestEl.textContent = '-';
       taxAmountEl.textContent = '-';
       netInterestEl.textContent = '-';
       maturityEl.textContent = '-';
       help.textContent = msg;
+      help.dataset.state = state;
+      copyBtn.disabled = true;
     };
 
     const render = () => {
-      const p = Math.max(0, Number(principal.value || 0));
-      const r = Math.max(0, Number(rate.value || 0));
-      const m = Math.max(1, Math.floor(Number(months.value || 0)));
-      const taxRate = Math.max(0, Number(tax.value || 0)) / 100;
+      const rawPrincipal = principal.value.trim();
+      const rawRate = rate.value.trim();
+      const rawMonths = months.value.trim();
+      [principal, rate, months].forEach((el) => el.setAttribute('aria-invalid', 'false'));
+      presetBtns.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.siMonths === rawMonths)));
 
-      if (!(p > 0) || !(r >= 0) || !(m > 0)) {
+      if (!rawPrincipal || !rawRate || !rawMonths) {
         setIdle(t.needInput);
         return;
       }
-
-      if (Number(months.value || 0) !== m) months.value = m;
+      const p = Number(rawPrincipal);
+      const r = Number(rawRate);
+      const m = Number(rawMonths);
+      if (!Number.isSafeInteger(p) || p < 1 || p > 1000000000000000) {
+        principal.setAttribute('aria-invalid', 'true');
+        setIdle(t.invalidPrincipal, 'error');
+        return;
+      }
+      if (!Number.isFinite(r) || r < 0 || r > 50) {
+        rate.setAttribute('aria-invalid', 'true');
+        setIdle(t.invalidRate, 'error');
+        return;
+      }
+      if (!Number.isInteger(m) || m < 1 || m > 120) {
+        months.setAttribute('aria-invalid', 'true');
+        setIdle(t.invalidMonths, 'error');
+        return;
+      }
+      const taxRate = Number(tax.value) / 100;
 
       const annualRate = r / 100;
       let grossInterest = 0;
@@ -13030,7 +13075,8 @@
         grossInterest = p * annualRate * (m / 12);
       }
 
-      const taxAmount = grossInterest * taxRate;
+      grossInterest = Math.round(grossInterest);
+      const taxAmount = Math.round(grossInterest * taxRate);
       const netInterest = grossInterest - taxAmount;
       const maturity = p + netInterest;
 
@@ -13038,32 +13084,54 @@
       taxAmountEl.textContent = fmtMoney(taxAmount);
       netInterestEl.textContent = fmtMoney(netInterest);
       maturityEl.textContent = fmtMoney(maturity);
-      help.textContent = t.summary(fmtMoney(grossInterest), fmtMoney(netInterest));
+      const methodLabel = method.value === 'monthly-compound' ? t.compound : t.simple;
+      help.textContent = t.summary(methodLabel, fmtMoney(grossInterest), fmtMoney(netInterest));
+      help.dataset.state = 'success';
+      copyBtn.disabled = false;
     };
 
     [principal, rate, months, method, tax].forEach((el) => el?.addEventListener('input', render));
 
     copyBtn?.addEventListener('click', async () => {
       if (maturityEl.textContent === '-') return;
-      const text = t.copy(grossInterestEl.textContent, taxAmountEl.textContent, netInterestEl.textContent, maturityEl.textContent);
-      await copyText(text);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = t.copied;
-      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+      const methodLabel = method.value === 'monthly-compound' ? t.compound : t.simple;
+      const text = t.copy(methodLabel, grossInterestEl.textContent, taxAmountEl.textContent, netInterestEl.textContent, maturityEl.textContent);
+      if (await copyText(text)) {
+        help.textContent = t.copied;
+        help.dataset.state = 'success';
+      } else {
+        help.textContent = t.copyFail;
+        help.dataset.state = 'error';
+      }
     });
 
     resetBtn?.addEventListener('click', () => {
+      principal.value = '';
+      rate.value = '';
+      months.value = '';
+      method.value = 'simple';
+      tax.value = '15.4';
+      presetBtns.forEach((button) => button.setAttribute('aria-pressed', 'false'));
+      setIdle(t.cleared);
+      principal.focus();
+    });
+
+    exampleBtn?.addEventListener('click', () => {
       principal.value = 10000000;
       rate.value = 3.5;
       months.value = 12;
       method.value = 'simple';
       tax.value = '15.4';
       render();
+      principal.focus();
     });
 
-    if (!principal.value) principal.value = 10000000;
-    if (!rate.value) rate.value = 3.5;
-    if (!months.value) months.value = 12;
+    presetBtns.forEach((button) => button.addEventListener('click', () => {
+      months.value = button.dataset.siMonths || '';
+      render();
+      months.focus();
+    }));
+
     render();
   }
 

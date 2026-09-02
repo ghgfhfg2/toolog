@@ -1307,19 +1307,19 @@
   thumbnail: /assets/thumbs/parking-fee-calculator.svg
 
 - id: savings-interest-calculator
-  title: 예금 이자 계산기
+  title: 예금 이자 계산기 (세전·세후)
   title_en: Savings Interest Calculator
   title_ja: 預金利息計算機
   category: calculator
   category_label: 금융/비즈니스
   category_label_en: Finance/Business
   category_label_ja: 金融/ビジネス
-  badge: New
-  badge_en: New
-  badge_ja: 新着
-  description: 예금 이자와 만기금액을 단리/월복리, 세전/세후 기준으로 계산해요.
-  description_en: Calculate pre-tax/after-tax interest and maturity amount from deposit, rate, term, and tax mode (simple or monthly compound).
-  description_ja: 預入額・金利・期間・課税条件から、単利/毎月複利ベースで税引前・税引後利息と満期金額を計算します。
+  badge: Improved
+  badge_en: Improved
+  badge_ja: 改善
+  description: 예치금·연이율·기간을 입력해 단리 또는 월복리 기준 세전 이자, 세금, 세후 이자와 예상 만기금액을 계산해요.
+  description_en: Estimate pre-tax interest, tax, after-tax interest, and maturity amount from deposit, annual rate, and term with simple or monthly compounding.
+  description_ja: 預入額・年利・期間から、単利または毎月複利の税引前利息・税額・税引後利息・満期見込額を計算します。
   url: /tools/savings-interest-calculator/
   url_en: /en/tools/savings-interest-calculator/
   url_ja: /ja/tools/savings-interest-calculator/

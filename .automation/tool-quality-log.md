@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-02 21:00 KST
+- Tool: `savings-interest-calculator`
+- Selection reason: recent quality work covered `list-format-converter`, `volumetric-weight-calculator`, `recycling-sorting-checker`, `movie-seat-choice-simulator`, `fuel-economy-calculator`, and `image-resizer`; this older finance calculator had higher error risk because out-of-range and fractional values were silently clamped, copy state lacked failure feedback, and auto-filled values hid the empty state.
+- Scope: improved the existing multilingual page, home metadata, accessible labels/status, mobile layout, blank/error/success states, strict range validation, term presets, example/clear/copy flow, integer-consistent result rounding, calculation assumptions, FAQ, and search-intent copy. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, and targeted normal/boundary calculation cases passed. Local `bundle exec jekyll build` could not run because the Ruby 2.6 environment has no Jekyll executable installed.
+
 ## 2026-08-25 21:00 KST
 - Tool: `lucky-draw-picker`
 - Selection reason: recent quality commits improved `pomodoro-timer`, `readability-checker`, `time-difference-calculator`, `korean-name-romanizer`, `png-compressor`, `json-merge`, and `link-list-cleaner`; `lucky-draw-picker` had higher live-use risk around empty participant lists, duplicate names, too-large winner counts, mobile copy flow, and clear fairness guidance.

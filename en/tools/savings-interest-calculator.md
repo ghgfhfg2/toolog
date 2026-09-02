@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Savings Interest Calculator | Pre-tax & After-tax Maturity Amount
-description: Enter deposit amount, annual rate, term, and tax mode to calculate pre-tax/after-tax interest and maturity amount with simple or monthly-compound options.
+title: Savings Interest Calculator | Simple or Monthly Compound Returns
+description: Enter a deposit, annual rate, term, and tax mode to estimate pre-tax interest, tax, after-tax interest, and maturity amount with simple or monthly compounding.
 lang: en
 permalink: /en/tools/savings-interest-calculator/
 canonical_url: /en/tools/savings-interest-calculator/
@@ -21,6 +21,8 @@ faq:
     a: It represents Korea's common interest-income tax rate (14% income tax + 1.4% local tax).
   - q: Can I simulate tax-exempt products?
     a: Yes. Select tax-exempt mode (0%) to compare after-tax outcomes.
+  - q: Will the result exactly match my bank's maturity amount?
+    a: This is an estimate assuming a fixed displayed annual rate and interest paid at maturity. Day-count rules, payment frequency, rounding, promotional-rate requirements, and product-specific tax rules can change the actual amount.
 alternate_urls:
   ko: /tools/savings-interest-calculator/
   en: /en/tools/savings-interest-calculator/
@@ -28,13 +30,19 @@ alternate_urls:
 ---
 
 ## Compare savings returns with tax impact
-Use this calculator to estimate maturity amount from deposit products with either simple interest or monthly compounding.
+Use this calculator to compare a fixed deposit or savings product by simple interest or monthly compounding, including the estimated impact of tax. Quick 6-, 12-, and 24-month presets help compare common terms.
 
 ## What it calculates
 - Pre-tax interest
 - Tax amount
 - After-tax interest
 - Final maturity amount
+
+## Calculation assumptions
+- Simple interest uses deposit × annual rate × months ÷ 12.
+- Monthly compound mode assumes the annual rate divided by 12 is credited to principal every month.
+- Tax is applied once to the estimated total interest.
+- Bank day-count, rounding, payout, promotional-rate, and product-tax rules may produce a different final amount.
 
 ## Related tools
 - [Compound Interest Calculator]({{ '/en/tools/compound-interest-calculator/' | relative_url }})
