@@ -29,20 +29,27 @@ alternate_urls:
   ja: /ja/tools/savings-interest-calculator/
 ---
 
-## Compare savings returns with tax impact
-Use this calculator to compare a fixed deposit or savings product by simple interest or monthly compounding, including the estimated impact of tax. Quick 6-, 12-, and 24-month presets help compare common terms.
+## When is this savings interest calculator useful?
+When comparing fixed deposits, savings accounts, parking accounts, or short-term deposits, the headline rate alone does not show how much interest you will actually keep after tax. Enter the deposit amount, annual interest rate, term, and tax treatment to estimate both pre-tax interest and the after-tax maturity amount.
 
-## What it calculates
-- Pre-tax interest
-- Tax amount
-- After-tax interest
-- Final maturity amount
+## Key features
+- Choose **simple interest or monthly compound interest**
+- Compare **15.4% Korean interest-income tax or 0% tax-exempt treatment**
+- See **pre-tax interest, tax, after-tax interest, and maturity amount** together
+- Use quick **6-, 12-, or 24-month term presets** and a sample input
+- Copy the result for a deposit comparison sheet
+
+## How to use it
+1. Enter the deposit amount, annual interest rate, and deposit term in months.
+2. Select simple interest or monthly compounding.
+3. Choose the tax mode: 15.4% taxable or 0% tax-exempt.
+4. Review the pre-tax and after-tax results, then copy them if needed for comparing products.
 
 ## Calculation assumptions
 - Simple interest uses deposit × annual rate × months ÷ 12.
 - Monthly compound mode assumes the annual rate divided by 12 is credited to principal every month.
 - Tax is applied once to the estimated total interest.
-- Bank day-count, rounding, payout, promotional-rate, and product-tax rules may produce a different final amount.
+- Actual bank results may differ because of day-count conventions, interest payment schedules, promotional-rate requirements, rounding, and product-specific tax rules. Confirm the final amount in the product disclosure.
 
 ## Related tools
 - [Compound Interest Calculator]({{ '/en/tools/compound-interest-calculator/' | relative_url }})
