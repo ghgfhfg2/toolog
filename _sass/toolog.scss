@@ -2419,6 +2419,86 @@ a:hover { color: var(--primary-strong); }
 .tool-ui textarea[aria-invalid="true"],
 .tool-ui select[aria-invalid="true"] { border-color: #e58a94; box-shadow: 0 0 0 3px rgba(193,57,69,.08); }
 
+/* Selection controls */
+.tool-ui .tool-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 11px 13px;
+  border: 1px solid #dfe5ee;
+  border-radius: 11px;
+  background: #f8fafc;
+  color: #465267;
+  font-size: .82rem;
+  font-weight: 650;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: border-color .16s ease, background .16s ease, color .16s ease, box-shadow .16s ease;
+}
+.tool-ui .tool-check:hover {
+  border-color: #b8c9ee;
+  background: #f2f6ff;
+  color: #273653;
+}
+.tool-ui .tool-check:focus-within {
+  border-color: #7c9ef5;
+  box-shadow: 0 0 0 4px rgba(36,87,230,.09);
+}
+.tool-ui .tool-check:has(input:checked) {
+  border-color: #b6c8f5;
+  background: #f3f7ff;
+  color: #263a68;
+}
+.tool-ui .tool-check input[type="checkbox"],
+.tool-ui .tool-check input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  display: grid;
+  place-content: center;
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 1.5px solid #aeb8c7;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(24,35,52,.06);
+  cursor: pointer;
+}
+.tool-ui .tool-check input[type="checkbox"] { border-radius: 5px; }
+.tool-ui .tool-check input[type="radio"] { border-radius: 50%; }
+.tool-ui .tool-check input[type="checkbox"]::before {
+  content: "";
+  width: 8px;
+  height: 4px;
+  margin-top: -2px;
+  border-bottom: 2px solid #fff;
+  border-left: 2px solid #fff;
+  transform: rotate(-45deg) scale(0);
+  transition: transform .12s ease;
+}
+.tool-ui .tool-check input[type="radio"]::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  transform: scale(0);
+  transition: transform .12s ease;
+}
+.tool-ui .tool-check input[type="checkbox"]:checked,
+.tool-ui .tool-check input[type="radio"]:checked {
+  border-color: var(--primary);
+  background: var(--primary);
+}
+.tool-ui .tool-check input[type="checkbox"]:checked::before,
+.tool-ui .tool-check input[type="radio"]:checked::before { transform: rotate(-45deg) scale(1); }
+.tool-ui .tool-check input[type="radio"]:checked::before { transform: scale(1); }
+.tool-ui .tool-check input:disabled { cursor: not-allowed; }
+.tool-ui .tool-check:has(input:disabled) { opacity: .55; cursor: not-allowed; }
+
 .tool-result {
   padding: 12px 14px;
   border: 1px solid #e3e8f0;
