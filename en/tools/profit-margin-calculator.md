@@ -32,12 +32,11 @@ alternate_urls:
 ## Profit margin and cost ratio calculator
 Use this calculator when setting a product, menu, or service price or reviewing a sale. Enter sales and cost to see **profit, cost ratio, profit margin, and markup on cost**. Add an optional target margin to calculate the minimum selling price, and get a clear warning when the current price produces a loss.
 
-## What it calculates
-- Cost ratio (%)
-- Margin ratio (%)
-- Profit amount
-- Markup on cost (%)
-- Minimum selling price from a 0% to 99.9% target margin
+## Key features
+- Real-time **profit, cost ratio, profit margin, and markup** calculations
+- A whole-currency minimum selling price for a 0% to 99.9% target margin
+- Clear guidance for missing values, negative values, out-of-range targets, and excessively large amounts
+- Retail and loss examples, clear-all action, and a copyable result summary
 
 ## Formulas and input assumptions
 - **Profit** = sales - cost
@@ -61,6 +60,9 @@ Include any variable costs that matter to your pricing decision, such as packagi
 ## Frequently asked questions
 ### What's the difference between cost ratio and margin ratio?
 Cost ratio divides cost by sales; margin divides profit by sales. When cost is the only deduction, the two percentages add up to 100%.
+
+### How do I calculate a selling price for a 30% target margin?
+Use `selling price = cost ÷ (1 - 0.30)`. For example, a cost of 70 requires a minimum selling price of 100.
 
 ### Why are profit margin and markup different?
 Their denominators differ. With sales of 100 and cost of 70, profit is 30, margin is 30%, and markup is about 42.86%.

@@ -1357,7 +1357,7 @@
   badge_ja: 新着
   description: 매출·원가로 원가율·마진율·마크업·이익을 계산하고 목표 마진율을 만족하는 최소 판매가와 적자 여부를 확인해요.
   description_en: Calculate cost ratio, profit margin, markup, profit or loss, and the minimum selling price for a target margin.
-  description_ja: 売上・原価から原価率・利益率・値入率・損益と、目標利益率を満たす最低販売価格を計算します。
+  description_ja: 売上・原価から原価率・利益率・マークアップ率・損益と、目標利益率を満たす最低販売価格を計算します。
   url: /tools/profit-margin-calculator/
   url_en: /en/tools/profit-margin-calculator/
   url_ja: /ja/tools/profit-margin-calculator/

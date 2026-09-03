@@ -7128,7 +7128,7 @@
         copyFail: '自動コピーを利用できません。',
         cleared: '入力値をすべてクリアしました。',
         exampleLoaded: '例の値を入力しました。',
-        copy: (p, cr, mr, markup, tp) => `原価率計算結果 | 利益 ${p} | 原価率 ${cr} | 利益率 ${mr} | 原価基準の値入率 ${markup} | 目標販売価格 ${tp}`
+        copy: (p, cr, mr, markup, tp) => `原価率計算結果 | 利益 ${p} | 原価率 ${cr} | 利益率 ${mr} | マークアップ率 ${markup} | 目標販売価格 ${tp}`
       }
     };
     const t = i18n[pageLang] || i18n.ko;

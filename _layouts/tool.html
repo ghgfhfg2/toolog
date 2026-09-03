@@ -3401,11 +3401,11 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <div><strong id="pm-profit">-</strong><span>{% if page.lang == 'en' %}Profit{% elsif page.lang == 'ja' %}利益{% else %}이익{% endif %}</span></div>
             <div><strong id="pm-cost-rate">-</strong><span>{% if page.lang == 'en' %}Cost ratio{% elsif page.lang == 'ja' %}原価率{% else %}원가율{% endif %}</span></div>
             <div><strong id="pm-margin-rate">-</strong><span>{% if page.lang == 'en' %}Margin ratio{% elsif page.lang == 'ja' %}利益率{% else %}마진율{% endif %}</span></div>
-            <div><strong id="pm-markup-rate">-</strong><span>{% if page.lang == 'en' %}Markup on cost{% elsif page.lang == 'ja' %}原価基準の値入率{% else %}원가 대비 마크업{% endif %}</span></div>
+            <div><strong id="pm-markup-rate">-</strong><span>{% if page.lang == 'en' %}Markup on cost{% elsif page.lang == 'ja' %}マークアップ率{% else %}원가 대비 마크업{% endif %}</span></div>
             <div><strong id="pm-target-price">-</strong><span>{% if page.lang == 'en' %}Suggested price (target margin){% elsif page.lang == 'ja' %}推奨販売価格（目標利益率）{% else %}목표 마진 기준 권장 판매가{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="pm-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter sales and cost to calculate cost ratio, margin, profit, and markup.{% elsif page.lang == 'ja' %}売上と原価を入力すると、原価率・利益率・利益・値入率を計算します。{% else %}매출과 원가를 입력하면 원가율·마진율·이익·마크업을 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="pm-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter sales and cost to calculate cost ratio, margin, profit, and markup.{% elsif page.lang == 'ja' %}売上と原価を入力すると、原価率・利益率・利益・マークアップ率を計算します。{% else %}매출과 원가를 입력하면 원가율·마진율·이익·마크업을 계산합니다.{% endif %}</p>
         </div>
       {% when 'savings-interest-calculator' %}
         <div class="tool-ui si-ui">
