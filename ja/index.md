@@ -2,25 +2,27 @@
 layout: default
 title: Toolog（日本語）
 permalink: /ja/
+lang: ja
 ---
 
 <section class="discover">
   <header class="discover__head">
-    <div>
-      <h1>Toolog | 実用Webツール集</h1>
-      <p>画像・テキスト・計算ツールをすぐに見つけて使えます。</p>
-      <p style="margin-top:8px;font-size:14px;">
-        言語:
-        <a href="{{ '/' | relative_url }}">韓国語</a> ·
-        <a href="{{ '/en/' | relative_url }}">English</a> ·
-        <a href="{{ '/ja/' | relative_url }}">日本語</a>
-      </p>
+    <div class="discover__copy">
+      <p class="eyebrow"><span></span> Everyday utilities, thoughtfully made</p>
+      <h1>必要なツールを、<br><strong>すぐに。</strong></h1>
+      <p class="discover__lead">インストールも登録も不要。画像・テキスト・計算作業をブラウザですばやく安全に。</p>
+      <div class="discover__proof"><span>✓ 無料</span><span>✓ ブラウザ内処理</span><span>✓ {{ site.data.tools | size }}ツール</span></div>
     </div>
-    <div class="discover__count">{{ site.data.tools | size }} tools</div>
+    <div class="discover__visual" aria-hidden="true">
+      <div class="visual-card visual-card--main"><span>今日必要な作業</span><strong>もっとすばやく</strong><i>⌘ K</i></div>
+      <div class="visual-card visual-card--float visual-card--one">Aa <small>テキスト</small></div>
+      <div class="visual-card visual-card--float visual-card--two">42 <small>計算</small></div>
+      <div class="visual-card visual-card--float visual-card--three">◫ <small>画像</small></div>
+    </div>
   </header>
 
   <section class="discover__controls">
-    <input id="toolSearch" type="search" placeholder="ツール検索 (例: PNG 圧縮, 文字数カウンター)" autocomplete="off" />
+    <label class="search-box" for="toolSearch"><span aria-hidden="true">⌕</span><input id="toolSearch" type="search" placeholder="必要なツールを検索（例：画像圧縮、文字数、割引計算）" autocomplete="off" /><kbd>/</kbd></label>
     <div class="chip-row" id="chipBar">
       <button type="button" class="chip is-active" data-filter="all">すべて</button>
       {% assign ja_labels = site.data.tools | map: 'category_label_ja' | uniq | sort %}
@@ -32,6 +34,7 @@ permalink: /ja/
     </div>
   </section>
 
+  <div class="section-heading section-heading--catalog"><div><p class="section-kicker">ALL TOOLS</p><h2>すべてのツール</h2></div><p>検索またはカテゴリから選べます。</p></div>
   <section class="tool-grid" id="toolGrid">
     {% for tool in site.data.tools %}
     {% assign localized_title = tool.title_ja | default: tool.title %}
@@ -47,6 +50,7 @@ permalink: /ja/
       <div class="tool-meta">
         <a class="tool-title" href="{{ localized_url | relative_url }}">{{ localized_title }}</a>
         <p class="tool-desc">{{ localized_description }}</p>
+        <span class="tool-card__action">ツールを開く <i aria-hidden="true">→</i></span>
       </div>
     </article>
     {% endfor %}
@@ -61,7 +65,7 @@ permalink: /ja/
   <p id="emptyState" class="empty-state" hidden>条件に一致するツールがありません。</p>
 
   <section class="published-posts">
-    <h2>最新記事（JA）</h2>
+    <div class="section-heading"><div><p class="section-kicker">JOURNAL</p><h2>ツール活用ガイド</h2></div><p>機能の仕組みと実践的な使い方。</p></div>
     {% assign ja_posts = site.posts | where: "lang", "ja" %}
     {% if ja_posts.size > 0 %}
     <ul id="publishedPostsList">

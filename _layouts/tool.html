@@ -2,16 +2,28 @@
 layout: default
 ---
 <article class="tool-page">
+  <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+    <a href="{% if page.lang == 'en' %}{{ '/en/' | relative_url }}{% elsif page.lang == 'ja' %}{{ '/ja/' | relative_url }}{% else %}{{ '/' | relative_url }}{% endif %}">Toolog</a>
+    <span aria-hidden="true">/</span>
+    <span>{{ page.category_label }}</span>
+  </nav>
   <header class="tool-page__head">
-    <p class="tool-page__kicker">TOOLOG TOOL</p>
-    <h1>{{ page.title }}</h1>
-    <p>{{ page.description }}</p>
+    <div class="tool-page__title-wrap">
+      <p class="tool-page__kicker">TOOLOG / WEB UTILITY</p>
+      <h1>{{ page.title }}</h1>
+      <p>{{ page.description }}</p>
+    </div>
     <div class="tool-page__meta">
-      <span>{{ page.category_label }}</span>
+      <span class="tool-page__category">{{ page.category_label }}</span>
+      <span class="tool-page__privacy"><i aria-hidden="true">✓</i> {% if page.lang == 'en' %}Runs in your browser{% elsif page.lang == 'ja' %}ブラウザ内で処理{% else %}브라우저에서 바로 처리{% endif %}</span>
     </div>
   </header>
 
   <section class="tool-page__run">
+    <div class="tool-panel__heading">
+      <div><span aria-hidden="true">01</span><h2>{% if page.lang == 'en' %}Try the tool{% elsif page.lang == 'ja' %}ツールを使う{% else %}도구 사용하기{% endif %}</h2></div>
+      <p>{% if page.lang == 'en' %}Enter your details below. Results update instantly.{% elsif page.lang == 'ja' %}下の項目を入力すると、すぐに結果を確認できます。{% else %}아래 항목을 입력하면 결과를 바로 확인할 수 있어요.{% endif %}</p>
+    </div>
     {% case page.tool_key %}
       {% when 'text-counter' %}
         <div class="tool-ui tc-ui">

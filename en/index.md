@@ -2,25 +2,27 @@
 layout: default
 title: Toolog (English)
 permalink: /en/
+lang: en
 ---
 
 <section class="discover">
   <header class="discover__head">
-    <div>
-      <h1>Toolog | Practical Web Tools</h1>
-      <p>Find useful image, text, and calculator tools and run them instantly.</p>
-      <p style="margin-top:8px;font-size:14px;">
-        Language:
-        <a href="{{ '/' | relative_url }}">Korean</a> ·
-        <a href="{{ '/en/' | relative_url }}">English</a> ·
-        <a href="{{ '/ja/' | relative_url }}">日本語</a>
-      </p>
+    <div class="discover__copy">
+      <p class="eyebrow"><span></span> Everyday utilities, thoughtfully made</p>
+      <h1>The tool you need,<br><strong>right now.</strong></h1>
+      <p class="discover__lead">Finish image, text, and calculation tasks quickly in your browser—no install or sign-up required.</p>
+      <div class="discover__proof"><span>✓ Free to use</span><span>✓ Browser-based</span><span>✓ {{ site.data.tools | size }} tools</span></div>
     </div>
-    <div class="discover__count">{{ site.data.tools | size }} tools</div>
+    <div class="discover__visual" aria-hidden="true">
+      <div class="visual-card visual-card--main"><span>What do you need?</span><strong>Get it done faster</strong><i>⌘ K</i></div>
+      <div class="visual-card visual-card--float visual-card--one">Aa <small>Text</small></div>
+      <div class="visual-card visual-card--float visual-card--two">42 <small>Calculate</small></div>
+      <div class="visual-card visual-card--float visual-card--three">◫ <small>Image</small></div>
+    </div>
   </header>
 
   <section class="discover__controls">
-    <input id="toolSearch" type="search" placeholder="Search tools (e.g., PNG compressor, text counter)" autocomplete="off" />
+    <label class="search-box" for="toolSearch"><span aria-hidden="true">⌕</span><input id="toolSearch" type="search" placeholder="What do you need? Try image compressor or text counter" autocomplete="off" /><kbd>/</kbd></label>
     <div class="chip-row" id="chipBar">
       <button type="button" class="chip is-active" data-filter="all">All</button>
       {% assign en_labels = site.data.tools | map: 'category_label_en' | uniq | sort %}
@@ -32,6 +34,7 @@ permalink: /en/
     </div>
   </section>
 
+  <div class="section-heading section-heading--catalog"><div><p class="section-kicker">ALL TOOLS</p><h2>Explore every tool</h2></div><p>Search or browse by category.</p></div>
   <section class="tool-grid" id="toolGrid">
     {% for tool in site.data.tools %}
     {% assign localized_title = tool.title_en | default: tool.title %}
@@ -47,6 +50,7 @@ permalink: /en/
       <div class="tool-meta">
         <a class="tool-title" href="{{ localized_url | relative_url }}">{{ localized_title }}</a>
         <p class="tool-desc">{{ localized_description }}</p>
+        <span class="tool-card__action">Open tool <i aria-hidden="true">→</i></span>
       </div>
     </article>
     {% endfor %}
@@ -61,7 +65,7 @@ permalink: /en/
   <p id="emptyState" class="empty-state" hidden>No tools match your filter.</p>
 
   <section class="published-posts">
-    <h2>Recent Posts (EN)</h2>
+    <div class="section-heading"><div><p class="section-kicker">JOURNAL</p><h2>Use tools better</h2></div><p>Practical guides and implementation notes.</p></div>
     {% assign en_posts = site.posts | where: "lang", "en" %}
     {% if en_posts.size > 0 %}
     <ul id="publishedPostsList">

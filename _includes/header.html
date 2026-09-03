@@ -1,31 +1,20 @@
+{%- assign header_lang = page.lang | default: 'ko' -%}
 <header class="site-header" role="banner">
-  <div class="wrapper">
-    <a class="site-title" rel="author" href="{{ '/' | relative_url }}" aria-label="{{ site.title }}">
-      <img class="brand-logo-img" src="{{ '/assets/logo/toolog-logo-header.png' | relative_url }}" alt="{{ site.title }}" width="230" height="52" />
+  <div class="wrapper site-header__inner">
+    <a class="site-title" rel="author" href="{% if header_lang == 'en' %}{{ '/en/' | relative_url }}{% elsif header_lang == 'ja' %}{{ '/ja/' | relative_url }}{% else %}{{ '/' | relative_url }}{% endif %}" aria-label="Toolog home">
+      <span class="brand-mark" aria-hidden="true">T</span>
+      <span class="brand-word">Toolog</span>
     </a>
-
-    {%- assign default_paths = site.pages | map: "path" -%}
-    {%- assign page_paths = site.header_pages | default: default_paths -%}
-    {%- if page_paths -%}
-      <nav class="site-nav">
-        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
-        <label for="nav-trigger">
-          <span class="menu-icon">
-            <svg viewBox="0 0 18 15" width="18px" height="15px" aria-hidden="true">
-              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
-            </svg>
-          </span>
-        </label>
-
-        <div class="trigger">
-          {%- for path in page_paths -%}
-            {%- assign my_page = site.pages | where: "path", path | first -%}
-            {%- if my_page.title -%}
-              <a class="page-link" href="{{ my_page.url | relative_url }}">{{ my_page.title | escape }}</a>
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
-      </nav>
-    {%- endif -%}
+    <nav class="site-nav" aria-label="{% if header_lang == 'en' %}Primary navigation{% elsif header_lang == 'ja' %}メインナビゲーション{% else %}주요 메뉴{% endif %}">
+      <div class="site-nav__links">
+        <a class="page-link" href="{% if header_lang == 'en' %}{{ '/en/' | relative_url }}{% elsif header_lang == 'ja' %}{{ '/ja/' | relative_url }}{% else %}{{ '/' | relative_url }}{% endif %}">{% if header_lang == 'en' %}Tools{% elsif header_lang == 'ja' %}ツール{% else %}도구 찾기{% endif %}</a>
+        <a class="page-link page-link--about" href="{{ '/about/' | relative_url }}">{% if header_lang == 'en' %}About{% elsif header_lang == 'ja' %}紹介{% else %}소개{% endif %}</a>
+      </div>
+      <div class="language-nav" aria-label="Language">
+        <a href="{{ '/' | relative_url }}"{% if header_lang == 'ko' %} aria-current="page"{% endif %}>KO</a>
+        <a href="{{ '/en/' | relative_url }}"{% if header_lang == 'en' %} aria-current="page"{% endif %}>EN</a>
+        <a href="{{ '/ja/' | relative_url }}"{% if header_lang == 'ja' %} aria-current="page"{% endif %}>JA</a>
+      </div>
+    </nav>
   </div>
 </header>

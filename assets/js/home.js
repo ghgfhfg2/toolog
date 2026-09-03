@@ -114,6 +114,15 @@
     render();
   });
 
+  document.addEventListener('keydown', (event) => {
+    const target = event.target;
+    const isTyping = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement || target?.isContentEditable;
+    if (event.key === '/' && !isTyping && search) {
+      event.preventDefault();
+      search.focus();
+    }
+  });
+
   prevBtn?.addEventListener('click', () => {
     if (currentPage > 1) {
       currentPage -= 1;

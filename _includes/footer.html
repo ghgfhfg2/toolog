@@ -1,25 +1,15 @@
+{%- assign footer_lang = page.lang | default: 'ko' -%}
 <footer class="site-footer h-card">
   <data class="u-url" href="{{ '/' | relative_url }}"></data>
-
-  <div class="wrapper">
-    <h2 class="footer-heading" aria-label="{{ site.title }}">
-      <img class="brand-logo-img brand-logo-img--footer" src="{{ '/assets/logo/toolog-logo-header.png' | relative_url }}" alt="{{ site.title }}" width="220" height="48" />
-    </h2>
-
-    <div class="footer-col-wrapper">
-      <div class="footer-col footer-col-1">
-        <ul class="contact-list">
-          <li class="p-name">{{ site.title }}</li>
-        </ul>
-      </div>
-
-      <div class="footer-col footer-col-2">
-        {%- include social.html -%}
-      </div>
-
-      <div class="footer-col footer-col-3">
-        <p>{{ site.description | escape }}</p>
-      </div>
+  <div class="wrapper site-footer__inner">
+    <div class="footer-brand">
+      <a class="footer-wordmark" href="{{ '/' | relative_url }}"><span class="brand-mark" aria-hidden="true">T</span><span>Toolog</span></a>
+      <p>{% if footer_lang == 'en' %}Practical browser tools for everyday work.{% elsif footer_lang == 'ja' %}毎日の作業をすばやく終わらせる実用Webツール。{% else %}일상의 번거로운 작업을 빠르게 끝내는 실용 웹툴.{% endif %}</p>
     </div>
+    <nav class="footer-nav" aria-label="Footer">
+      <a href="{% if footer_lang == 'en' %}{{ '/en/' | relative_url }}{% elsif footer_lang == 'ja' %}{{ '/ja/' | relative_url }}{% else %}{{ '/' | relative_url }}{% endif %}">{% if footer_lang == 'en' %}All tools{% elsif footer_lang == 'ja' %}すべてのツール{% else %}전체 도구{% endif %}</a>
+      <a href="{{ '/about/' | relative_url }}">{% if footer_lang == 'en' %}About{% elsif footer_lang == 'ja' %}紹介{% else %}소개{% endif %}</a>
+      <span>© {{ 'now' | date: '%Y' }} Toolog</span>
+    </nav>
   </div>
 </footer>

@@ -3,21 +3,22 @@ layout: default
 ---
 <section class="discover">
   <header class="discover__head">
-    <div>
-      <h1>Toolog | 이미지 용량 줄이기·글자수·계산기 웹툴</h1>
-      <p>PNG 압축, 이미지 크기 조절, 글자수 계산, 할인·대출·복리 계산처럼 자주 찾는 작업을 바로 실행하세요.</p>
-      <p style="margin-top:8px;font-size:14px;">
-        언어 선택:
-        <a href="{{ '/' | relative_url }}">한국어</a> ·
-        <a href="{{ '/en/' | relative_url }}">English</a> ·
-        <a href="{{ '/ja/' | relative_url }}">日本語</a>
-      </p>
+    <div class="discover__copy">
+      <p class="eyebrow"><span></span> Everyday utilities, thoughtfully made</p>
+      <h1>필요한 도구를,<br><strong>바로.</strong></h1>
+      <p class="discover__lead">설치도 가입도 없이, 이미지·텍스트·계산 작업을 브라우저에서 안전하고 빠르게 해결하세요.</p>
+      <div class="discover__proof" aria-label="서비스 특징"><span>✓ 무료 사용</span><span>✓ 브라우저 내 처리</span><span>✓ {{ site.data.tools | size }}개 도구</span></div>
     </div>
-    <div class="discover__count">{{ site.data.tools | size }} tools</div>
+    <div class="discover__visual" aria-hidden="true">
+      <div class="visual-card visual-card--main"><span>오늘 필요한 작업</span><strong>무엇이든 빠르게</strong><i>⌘ K</i></div>
+      <div class="visual-card visual-card--float visual-card--one">Aa <small>텍스트</small></div>
+      <div class="visual-card visual-card--float visual-card--two">42 <small>계산</small></div>
+      <div class="visual-card visual-card--float visual-card--three">◫ <small>이미지</small></div>
+    </div>
   </header>
 
-  <section class="discover__controls">
-    <input id="toolSearch" type="search" placeholder="툴 검색 (예: 이미지 용량 줄이기, 글자수 계산기, 할인 계산기)" autocomplete="off" />
+  <section class="discover__controls" aria-label="도구 검색과 카테고리">
+    <label class="search-box" for="toolSearch"><span aria-hidden="true">⌕</span><input id="toolSearch" type="search" placeholder="어떤 도구가 필요한가요? 예: 이미지 압축, 글자수, 할인 계산" autocomplete="off" /><kbd>/</kbd></label>
     <div class="chip-row" id="chipBar">
       <button type="button" class="chip is-active" data-filter="all">전체</button>
       {% assign ko_labels = site.data.tools | map: 'category_label' | uniq | sort %}
@@ -29,6 +30,10 @@ layout: default
     </div>
   </section>
 
+  <div class="section-heading">
+    <div><p class="section-kicker">QUICK START</p><h2>자주 찾는 작업</h2></div>
+    <p>대표 도구를 목적별로 모았습니다.</p>
+  </div>
   <section class="search-clusters" aria-label="자주 찾는 웹툴 묶음">
     <div class="search-cluster">
       <h2>이미지 용량·크기 줄이기</h2>
@@ -63,11 +68,15 @@ layout: default
   </section>
 
   <section class="latest-strip" id="latestStrip" aria-label="최신 업데이트" hidden>
-    <h2>최신 업데이트</h2>
+    <h2><span>NEW</span> 최근 업데이트</h2>
     <div class="latest-strip__list" id="latestStripList"></div>
   </section>
 
-  <section class="tool-grid" id="toolGrid">
+  <div class="section-heading section-heading--catalog">
+    <div><p class="section-kicker">ALL TOOLS</p><h2>전체 도구</h2></div>
+    <p>카테고리나 검색으로 원하는 도구를 빠르게 찾으세요.</p>
+  </div>
+  <section class="tool-grid" id="toolGrid" aria-label="전체 도구 목록">
     {% for tool in site.data.tools %}
     <article class="tool-card" data-category="{{ tool.category_label }}" data-title="{{ tool.title | downcase }}" data-description="{{ tool.description | downcase }}" data-published-at="{{ tool.published_at | default: '' }}">
       <a class="tool-thumb-wrap" href="{{ tool.url | relative_url }}" aria-label="{{ tool.title }}">
@@ -82,6 +91,7 @@ layout: default
       <div class="tool-meta">
         <a class="tool-title" href="{{ tool.url | relative_url }}">{{ tool.title }}</a>
         <p class="tool-desc">{{ tool.description }}</p>
+        <span class="tool-card__action">도구 열기 <i aria-hidden="true">→</i></span>
       </div>
     </article>
     {% endfor %}
@@ -96,7 +106,7 @@ layout: default
   <p id="emptyState" class="empty-state" hidden>조건에 맞는 툴이 없습니다.</p>
 
   <section class="published-posts">
-    <h2>최근 발행 글</h2>
+    <div class="section-heading"><div><p class="section-kicker">JOURNAL</p><h2>도구를 더 잘 쓰는 법</h2></div><p>기능의 원리와 실전 활용법을 정리했습니다.</p></div>
     {% if site.posts.size > 0 %}
     <ul id="publishedPostsList">
       {% for post in site.posts %}
