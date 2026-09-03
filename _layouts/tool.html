@@ -3367,38 +3367,45 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="we-help">{% if page.lang == 'en' %}Enter start time, work hours, and break minutes to calculate clock-out time.{% elsif page.lang == 'ja' %}出勤時刻・勤務時間・休憩時間を入力すると、退勤時刻を計算します。{% else %}출근 시각·근무시간·휴게시간을 입력하면 퇴근 시각을 계산합니다.{% endif %}</p>
         </div>
       {% when 'profit-margin-calculator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui prmc-ui">
+          <div class="tool-row-grid prmc-presets" role="group" aria-label="{% if page.lang == 'en' %}Quick calculation examples{% elsif page.lang == 'ja' %}計算例のクイック入力{% else %}계산 예시 빠른 입력{% endif %}">
+            <button type="button" data-prmc-sales="10000" data-prmc-cost="6000" data-prmc-margin="30">{% if page.lang == 'en' %}40% margin example{% elsif page.lang == 'ja' %}利益率40%の例{% else %}마진율 40% 예시{% endif %}</button>
+            <button type="button" data-prmc-sales="50000" data-prmc-cost="35000" data-prmc-margin="35">{% if page.lang == 'en' %}Retail example{% elsif page.lang == 'ja' %}小売の例{% else %}소매 예시{% endif %}</button>
+            <button type="button" data-prmc-sales="10000" data-prmc-cost="12000" data-prmc-margin="20">{% if page.lang == 'en' %}Loss example{% elsif page.lang == 'ja' %}赤字の例{% else %}적자 예시{% endif %}</button>
+          </div>
+
+          <div class="tool-row-grid prmc-grid">
             <div>
               <label for="pm-sales">{% if page.lang == 'en' %}Sales amount{% elsif page.lang == 'ja' %}売上金額{% else %}매출 금액{% endif %}</label>
-              <input id="pm-sales" type="number" min="0" step="100" inputmode="numeric" />
+              <input id="pm-sales" type="number" min="0.01" max="1000000000000000" step="any" inputmode="decimal" placeholder="10000" aria-describedby="pm-help pm-assumption" />
             </div>
             <div>
               <label for="pm-cost">{% if page.lang == 'en' %}Cost amount{% elsif page.lang == 'ja' %}原価{% else %}원가{% endif %}</label>
-              <input id="pm-cost" type="number" min="0" step="100" inputmode="numeric" />
+              <input id="pm-cost" type="number" min="0" max="1000000000000000" step="any" inputmode="decimal" placeholder="7000" aria-describedby="pm-help pm-assumption" />
             </div>
-          </div>
-
-          <div class="tool-row-grid pct-grid">
             <div>
               <label for="pm-target-margin">{% if page.lang == 'en' %}Target margin (%) (optional){% elsif page.lang == 'ja' %}目標利益率(%)（任意）{% else %}목표 마진율(%) (선택){% endif %}</label>
-              <input id="pm-target-margin" type="number" min="0" max="99.9" step="0.1" inputmode="decimal" />
+              <input id="pm-target-margin" type="number" min="0" max="99.9" step="0.1" inputmode="decimal" placeholder="30" aria-describedby="pm-help pm-assumption" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-actions">
-            <button id="pm-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
-            <button id="pm-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          <p class="tool-result" id="pm-assumption">{% if page.lang == 'en' %}Use the same tax basis for sales and cost. Target price is rounded up to the next whole currency unit so it does not fall below the selected margin.{% elsif page.lang == 'ja' %}売上と原価は税込・税抜の基準をそろえてください。目標販売価格は設定利益率を下回らないよう通貨の整数単位で切り上げます。{% else %}매출과 원가는 부가세 포함·제외 기준을 같게 입력하세요. 목표 판매가는 설정 마진율보다 낮아지지 않도록 통화의 1단위로 올림합니다.{% endif %}</p>
+
+          <div class="tool-row-grid prmc-actions">
+            <button id="pm-example" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
+            <button id="pm-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="pm-reset" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}지우기{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
+          <div class="tool-stats prmc-stats" aria-label="{% if page.lang == 'en' %}Profitability calculation result{% elsif page.lang == 'ja' %}収益性の計算結果{% else %}수익성 계산 결과{% endif %}">
             <div><strong id="pm-profit">-</strong><span>{% if page.lang == 'en' %}Profit{% elsif page.lang == 'ja' %}利益{% else %}이익{% endif %}</span></div>
             <div><strong id="pm-cost-rate">-</strong><span>{% if page.lang == 'en' %}Cost ratio{% elsif page.lang == 'ja' %}原価率{% else %}원가율{% endif %}</span></div>
             <div><strong id="pm-margin-rate">-</strong><span>{% if page.lang == 'en' %}Margin ratio{% elsif page.lang == 'ja' %}利益率{% else %}마진율{% endif %}</span></div>
+            <div><strong id="pm-markup-rate">-</strong><span>{% if page.lang == 'en' %}Markup on cost{% elsif page.lang == 'ja' %}原価基準の値入率{% else %}원가 대비 마크업{% endif %}</span></div>
             <div><strong id="pm-target-price">-</strong><span>{% if page.lang == 'en' %}Suggested price (target margin){% elsif page.lang == 'ja' %}推奨販売価格（目標利益率）{% else %}목표 마진 기준 권장 판매가{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="pm-help">{% if page.lang == 'en' %}Enter sales and cost to calculate cost and margin ratios.{% elsif page.lang == 'ja' %}売上と原価を入力すると、原価率と利益率を計算します。{% else %}매출과 원가를 입력하면 원가율과 마진율을 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="pm-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter sales and cost to calculate cost ratio, margin, profit, and markup.{% elsif page.lang == 'ja' %}売上と原価を入力すると、原価率・利益率・利益・値入率を計算します。{% else %}매출과 원가를 입력하면 원가율·마진율·이익·마크업을 계산합니다.{% endif %}</p>
         </div>
       {% when 'savings-interest-calculator' %}
         <div class="tool-ui si-ui">

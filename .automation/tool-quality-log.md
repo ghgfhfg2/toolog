@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-03 21:00 KST
+- Tool: `profit-margin-calculator`
+- Selection reason: recent quality work covered `savings-interest-calculator`, `list-format-converter`, `volumetric-weight-calculator`, `recycling-sorting-checker`, and `movie-seat-choice-simulator`; this older calculator still auto-filled inputs instead of showing an empty state, accepted negative/out-of-range target margins through script paths, lacked robust large-number and copy-error handling, and did not distinguish margin from markup.
+- Scope: improved the existing multilingual page, home metadata, accessible labels/status, mobile layout, blank/error/profit/loss states, strict amount and target-margin validation, safe target-price rounding, overflow protection, presets, example/clear/copy flow, markup calculation, formulas, FAQ, related links, and search-intent copy. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, mobile CSS rules, and targeted blank/normal/loss/zero-cost/99.9%/invalid/overflow/clear cases passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-02 21:00 KST
 - Tool: `savings-interest-calculator`
 - Selection reason: recent quality work covered `list-format-converter`, `volumetric-weight-calculator`, `recycling-sorting-checker`, `movie-seat-choice-simulator`, `fuel-economy-calculator`, and `image-resizer`; this older finance calculator had higher error risk because out-of-range and fractional values were silently clamped, copy state lacked failure feedback, and auto-filled values hid the empty state.

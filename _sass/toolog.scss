@@ -758,6 +758,21 @@ textarea:focus-visible {
 .si-ui #si-help[data-state="success"] { color: #86efac; }
 .si-stats strong,
 .si-stats span { overflow-wrap: anywhere; }
+.prmc-grid,
+.prmc-presets,
+.prmc-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.prmc-grid > div { display: grid; gap: .4rem; min-width: 0; }
+.prmc-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.prmc-ui button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+.prmc-ui #pm-help[data-state="error"] { color: #fca5a5; }
+.prmc-ui #pm-help[data-state="warning"] { color: #fbbf24; }
+.prmc-ui #pm-help[data-state="success"] { color: #86efac; }
+.tool-stats.prmc-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.prmc-stats strong,
+.prmc-stats span { overflow-wrap: anywhere; }
 .vw-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .vw-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .vw-ui input[aria-invalid="true"] { border-color: #ef4444; }
@@ -1901,6 +1916,10 @@ textarea:focus-visible {
   .si-presets,
   .si-actions { grid-template-columns: 1fr; }
   .tool-stats.si-stats { grid-template-columns: 1fr 1fr; }
+  .prmc-grid,
+  .prmc-presets,
+  .prmc-actions { grid-template-columns: 1fr; }
+  .tool-stats.prmc-stats { grid-template-columns: 1fr 1fr; }
   .vw-grid,
   .vw-actions { grid-template-columns: 1fr; }
   .tool-stats.vw-stats { grid-template-columns: 1fr 1fr; }
