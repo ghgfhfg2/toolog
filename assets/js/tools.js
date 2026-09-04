@@ -4034,6 +4034,8 @@
     const inclusive = document.getElementById('dday-inclusive');
     const business = document.getElementById('dday-business');
     const help = document.getElementById('dday-help');
+    const todayBtn = document.getElementById('dday-today');
+    const monthBtn = document.getElementById('dday-month');
     const swapBtn = document.getElementById('dday-swap');
     const copyBtn = document.getElementById('dday-copy');
 
@@ -4043,7 +4045,8 @@
       ko: {
         calendarDiff: '달력일 차이',
         businessDiff: '업무일 차이',
-        needDates: '기준일과 목표일을 선택하면 결과가 계산됩니다.',
+        needDates: '기준일과 목표일을 모두 선택해 주세요.',
+        invalidDate: '유효한 기준일과 목표일을 입력해 주세요.',
         left: (n, useBusiness) => `목표일까지 ${n}${useBusiness ? '업무일' : '일'} 남았습니다.`,
         passed: (n, useBusiness) => `목표일이 ${n}${useBusiness ? '업무일' : '일'} 지났습니다.`,
         today: '오늘이 목표일입니다.',
@@ -4052,12 +4055,14 @@
         copyMetric: '달력일 차이',
         copyText: (label, metricLabel, daysText, inclusive, business) => `D-day ${label} | ${metricLabel} ${daysText} | 포함 일수 ${inclusive} | 업무일 ${business}`,
         copied: '복사됨',
+        copyFailed: '자동 복사를 사용할 수 없습니다. 브라우저 권한을 확인해 주세요.',
         copyDefault: '결과 복사'
       },
       en: {
         calendarDiff: 'Calendar-day difference',
         businessDiff: 'Business-day difference',
-        needDates: 'Select start and target dates to calculate.',
+        needDates: 'Select both a start date and a target date.',
+        invalidDate: 'Enter valid start and target dates.',
         left: (n, useBusiness) => `${n} ${useBusiness ? 'business day(s)' : 'day(s)'} left until target date.`,
         passed: (n, useBusiness) => `${n} ${useBusiness ? 'business day(s)' : 'day(s)'} passed since target date.`,
         today: 'Today is the target date.',
@@ -4066,12 +4071,14 @@
         copyMetric: 'Calendar-day difference',
         copyText: (label, metricLabel, daysText, inclusive, business) => `D-day ${label} | ${metricLabel} ${daysText} | Inclusive days ${inclusive} | Business days ${business}`,
         copied: 'Copied',
+        copyFailed: 'Automatic copy is unavailable. Check your browser permission.',
         copyDefault: 'Copy result'
       },
       ja: {
         calendarDiff: '暦日差',
         businessDiff: '営業日差',
-        needDates: '基準日と目標日を選ぶと計算します。',
+        needDates: '基準日と目標日を両方選択してください。',
+        invalidDate: '有効な基準日と目標日を入力してください。',
         left: (n, useBusiness) => `目標日まであと${n}${useBusiness ? '営業日' : '日'}です。`,
         passed: (n, useBusiness) => `目標日を${n}${useBusiness ? '営業日' : '日'}過ぎています。`,
         today: '今日は目標日です。',
@@ -4080,6 +4087,7 @@
         copyMetric: '暦日差',
         copyText: (label, metricLabel, daysText, inclusive, business) => `D-day ${label} | ${metricLabel} ${daysText} | 両端含む日数 ${inclusive} | 営業日 ${business}`,
         copied: 'コピー完了',
+        copyFailed: '自動コピーを利用できません。ブラウザの権限を確認してください。',
         copyDefault: '結果をコピー'
       }
     };
@@ -4087,12 +4095,23 @@
 
     const toLocalDateOnly = (v) => {
       if (!v) return null;
-      const [y, m, d] = v.split('-').map(Number);
-      if (!y || !m || !d) return null;
-      return new Date(y, m - 1, d);
+      const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+      if (!match) return null;
+      const [, year, month, day] = match.map(Number);
+      const date = new Date(0);
+      date.setHours(12, 0, 0, 0);
+      date.setFullYear(year, month - 1, day);
+      return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day ? date : null;
     };
 
-    const dayDiff = (a, b) => Math.round((b.getTime() - a.getTime()) / 86400000);
+    const dayNumber = (date) => {
+      const utcDate = new Date(0);
+      utcDate.setUTCHours(0, 0, 0, 0);
+      utcDate.setUTCFullYear(date.getFullYear(), date.getMonth(), date.getDate());
+      return utcDate.getTime() / 86400000;
+    };
+    const dayDiff = (a, b) => dayNumber(b) - dayNumber(a);
+    const isWeekday = (date) => date.getDay() !== 0 && date.getDay() !== 6;
 
     const countBusinessDaysInclusive = (a, b) => {
       const startDate = a <= b ? a : b;
@@ -4110,6 +4129,11 @@
       return count;
     };
 
+    const countBusinessDaysBetween = (a, b) => {
+      const earlier = a <= b ? a : b;
+      return Math.max(0, countBusinessDaysInclusive(a, b) - (isWeekday(earlier) ? 1 : 0));
+    };
+
     const copyText = async (text) => {
       try {
         await navigator.clipboard.writeText(text);
@@ -4120,14 +4144,17 @@
         ta.style.opacity = '0';
         document.body.appendChild(ta);
         ta.select();
-        document.execCommand('copy');
+        const copied = document.execCommand('copy');
         document.body.removeChild(ta);
+        if (!copied) throw new Error('copy failed');
       }
     };
 
     const render = () => {
-      const s = toLocalDateOnly(start.value);
-      const e = toLocalDateOnly(end.value);
+      const startRaw = start.value;
+      const endRaw = end.value;
+      const s = toLocalDateOnly(startRaw);
+      const e = toLocalDateOnly(endRaw);
 
       if (!s || !e) {
         label.textContent = '-';
@@ -4135,15 +4162,25 @@
         if (daysLabel) daysLabel.textContent = ddayText.calendarDiff;
         inclusive.textContent = '-';
         business.textContent = '-';
-        help.textContent = ddayText.needDates;
+        const invalid = (!!startRaw && !s) || (!!endRaw && !e);
+        start.setAttribute('aria-invalid', startRaw && !s ? 'true' : 'false');
+        end.setAttribute('aria-invalid', endRaw && !e ? 'true' : 'false');
+        help.textContent = invalid ? ddayText.invalidDate : ddayText.needDates;
+        help.dataset.state = invalid ? 'error' : '';
+        if (copyBtn) copyBtn.disabled = true;
         return;
       }
+
+      start.setAttribute('aria-invalid', 'false');
+      end.setAttribute('aria-invalid', 'false');
+      help.dataset.state = 'success';
+      if (copyBtn) copyBtn.disabled = false;
 
       const diff = dayDiff(s, e);
       const absDiff = Math.abs(diff);
       const inclusiveDays = absDiff + 1;
       const weekdayCount = countBusinessDaysInclusive(s, e);
-      const businessDiff = Math.max(weekdayCount - 1, 0);
+      const businessDiff = countBusinessDaysBetween(s, e);
       const useBusiness = !!businessOnly?.checked;
 
       const shownDiff = useBusiness ? businessDiff : absDiff;
@@ -4171,14 +4208,20 @@
       help.textContent = `${start.value}(${startWeek}) ${ddayText.toTarget} ${end.value}(${endWeek}) · ${diffText}`;
     };
 
-    const today = new Date();
-    const nextWeek = new Date(today);
-    nextWeek.setDate(today.getDate() + 7);
     const toISO = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
-    if (!start.value) start.value = toISO(today);
-    if (!end.value) end.value = toISO(nextWeek);
+    const setTodayRange = (offset) => {
+      const base = new Date();
+      const target = new Date(base);
+      target.setDate(base.getDate() + offset);
+      start.value = toISO(base);
+      end.value = toISO(target);
+      render();
+    };
+    if (!start.value || !end.value) setTodayRange(7);
 
     [start, end, businessOnly].forEach((el) => el?.addEventListener('input', render));
+    todayBtn?.addEventListener('click', () => setTodayRange(7));
+    monthBtn?.addEventListener('click', () => setTodayRange(30));
 
     swapBtn?.addEventListener('click', () => {
       const temp = start.value;
@@ -4188,12 +4231,18 @@
     });
 
     copyBtn?.addEventListener('click', async () => {
+      if (copyBtn.disabled) return;
       const metricLabel = daysLabel?.textContent || ddayText.copyMetric;
       const text = ddayText.copyText(label.textContent, metricLabel, days.textContent, inclusive.textContent, business.textContent);
-      await copyText(text);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = ddayText.copied;
-      setTimeout(() => { copyBtn.textContent = old || ddayText.copyDefault; }, 900);
+      try {
+        await copyText(text);
+        const old = copyBtn.textContent;
+        copyBtn.textContent = ddayText.copied;
+        setTimeout(() => { copyBtn.textContent = old || ddayText.copyDefault; }, 900);
+      } catch (_) {
+        help.textContent = ddayText.copyFailed;
+        help.dataset.state = 'error';
+      }
     });
 
     render();

@@ -2671,15 +2671,15 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="py-help">{% if page.lang == 'en' %}Enter either m² or pyeong to convert automatically.{% elsif page.lang == 'ja' %}㎡または坪のどちらかを入力すると自動変換されます。{% else %}㎡ 또는 평 중 하나를 입력하면 자동으로 변환됩니다.{% endif %}</p>
         </div>
       {% when 'd-day-calculator' %}
-        <div class="tool-ui">
+        <div class="tool-ui dday-ui">
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="dday-start">{% if page.lang == 'en' %}Start date{% elsif page.lang == 'ja' %}基準日{% else %}기준일{% endif %}</label>
-              <input id="dday-start" type="date" />
+              <input id="dday-start" type="date" min="0001-01-01" max="9999-12-31" aria-describedby="dday-help dday-rule" />
             </div>
             <div>
               <label for="dday-end">{% if page.lang == 'en' %}Target date{% elsif page.lang == 'ja' %}目標日{% else %}목표일{% endif %}</label>
-              <input id="dday-end" type="date" />
+              <input id="dday-end" type="date" min="0001-01-01" max="9999-12-31" aria-describedby="dday-help dday-rule" />
             </div>
           </div>
 
@@ -2692,12 +2692,15 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <div><strong id="dday-business">-</strong><span>{% if page.lang == 'en' %}Business days (weekdays){% elsif page.lang == 'ja' %}営業日（平日）{% else %}업무일(평일){% endif %}</span></div>
           </div>
 
-          <div class="tool-row-grid pct-actions">
+          <div class="tool-row-grid pct-actions dday-actions" aria-label="{% if page.lang == 'en' %}Date shortcuts and result actions{% elsif page.lang == 'ja' %}日付ショートカットと結果操作{% else %}날짜 빠른 설정 및 결과 작업{% endif %}">
+            <button id="dday-today" type="button">{% if page.lang == 'en' %}Today + 7 days{% elsif page.lang == 'ja' %}今日 + 7日{% else %}오늘 + 7일{% endif %}</button>
+            <button id="dday-month" type="button">{% if page.lang == 'en' %}Today + 30 days{% elsif page.lang == 'ja' %}今日 + 30日{% else %}오늘 + 30일{% endif %}</button>
             <button id="dday-swap" type="button">{% if page.lang == 'en' %}Swap dates{% elsif page.lang == 'ja' %}日付を入れ替え{% else %}날짜 바꾸기{% endif %}</button>
             <button id="dday-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
           </div>
 
-          <p class="tool-result" id="dday-help">{% if page.lang == 'en' %}Select start and target dates to calculate the result.{% elsif page.lang == 'ja' %}基準日と目標日を選ぶと結果を計算します。{% else %}기준일과 목표일을 선택하면 결과가 계산됩니다.{% endif %}</p>
+          <p class="tool-result" id="dday-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Select start and target dates to calculate the result.{% elsif page.lang == 'ja' %}基準日と目標日を選ぶと結果を計算します。{% else %}기준일과 목표일을 선택하면 결과가 계산됩니다.{% endif %}</p>
+          <p class="tool-hint" id="dday-rule">{% if page.lang == 'en' %}Business-day mode excludes Saturdays and Sundays only; public holidays are not excluded. The difference excludes the start date and includes the target date.{% elsif page.lang == 'ja' %}営業日モードで除外するのは土・日だけで、祝日は除外しません。差分は基準日を含めず、目標日を含めて数えます。{% else %}업무일 모드는 토·일만 제외하며 공휴일은 제외하지 않습니다. 차이는 기준일을 빼고 목표일을 포함해 셉니다.{% endif %}</p>
         </div>
       {% when 'bmi-calculator' %}
         <div class="tool-ui">

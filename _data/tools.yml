@@ -1824,13 +1824,15 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 목표일까지 남은 일수·경과일·업무일을 한 번에 계산해요.
-  description_en: Calculate remaining days, elapsed days, and optional business-day difference to a target date in one view.
-  description_ja: 目標日までの残日数・経過日数・営業日差分を1画面でまとめて計算できます。
+  description: 두 날짜의 남은 일수·경과일·포함 일수와 주말을 뺀 업무일 차이를 계산하고 결과를 복사해요.
+  description_en: Calculate elapsed, remaining, inclusive, and weekend-excluded business days between two dates, then copy the result.
+  description_ja: 2つの日付の残日数・経過日数・両端を含む日数・週末を除く営業日差を計算し、結果をコピーできます。
   url: /tools/d-day-calculator/
   url_en: /en/tools/d-day-calculator/
   url_ja: /ja/tools/d-day-calculator/
   thumbnail: /assets/thumbs/d-day-calculator.svg
+  tool_type: calculator
+  topic_cluster: time
 
 - id: bmi-calculator
   title: BMI 계산기
