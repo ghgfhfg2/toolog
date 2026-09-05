@@ -3271,30 +3271,37 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="whp-help">{% if page.lang == 'en' %}Enter wage, weekly hours, and workdays to estimate eligibility and paid holiday allowance.{% elsif page.lang == 'ja' %}時給・週労働時間・勤務日数を入力すると、対象可否と支給見込み額を計算します。{% else %}시급/주근로시간/근무일수를 입력하면 주휴수당 대상 여부와 예상 금액을 계산합니다.{% endif %}</p>
         </div>
       {% when 'tip-calculator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui tip-ui">
+          <div class="tool-row-grid tip-presets" role="group" aria-label="{% if page.lang == 'en' %}Quick tip-rate presets{% elsif page.lang == 'ja' %}チップ率のクイック選択{% else %}팁 비율 빠른 선택{% endif %}">
+            <button type="button" data-tip-rate="10">10%</button>
+            <button type="button" data-tip-rate="15">15%</button>
+            <button type="button" data-tip-rate="18">18%</button>
+            <button type="button" data-tip-rate="20">20%</button>
+          </div>
+
+          <div class="tool-row-grid tip-grid">
             <div>
               <label for="tip-subtotal">{% if page.lang == 'en' %}Base amount{% elsif page.lang == 'ja' %}基本金額{% else %}기본 금액{% endif %}</label>
-              <input id="tip-subtotal" type="number" min="0" step="0.01" inputmode="decimal" />
+              <input id="tip-subtotal" type="number" min="0" max="1000000000000" step="any" inputmode="decimal" placeholder="100" aria-describedby="tip-help tip-assumption" />
             </div>
             <div>
               <label for="tip-tax">{% if page.lang == 'en' %}Tax{% elsif page.lang == 'ja' %}税金{% else %}세금{% endif %}</label>
-              <input id="tip-tax" type="number" min="0" step="0.01" inputmode="decimal" />
+              <input id="tip-tax" type="number" min="0" max="1000000000000" step="any" inputmode="decimal" placeholder="0" aria-describedby="tip-help tip-assumption" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid tip-grid">
             <div>
               <label for="tip-service">{% if page.lang == 'en' %}Service fee{% elsif page.lang == 'ja' %}サービス料{% else %}서비스 요금{% endif %}</label>
-              <input id="tip-service" type="number" min="0" step="0.01" inputmode="decimal" />
+              <input id="tip-service" type="number" min="0" max="1000000000000" step="any" inputmode="decimal" placeholder="0" aria-describedby="tip-help tip-assumption" />
             </div>
             <div>
               <label for="tip-people">{% if page.lang == 'en' %}People{% elsif page.lang == 'ja' %}人数{% else %}인원수{% endif %}</label>
-              <input id="tip-people" type="number" min="1" step="1" inputmode="numeric" />
+              <input id="tip-people" type="number" min="1" max="1000" step="1" inputmode="numeric" placeholder="1" aria-describedby="tip-help tip-assumption" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid tip-grid">
             <div>
               <label for="tip-base-mode">{% if page.lang == 'en' %}Tip base{% elsif page.lang == 'ja' %}チップ計算基準{% else %}팁 계산 기준{% endif %}</label>
               <select id="tip-base-mode">
@@ -3311,30 +3318,33 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             </div>
           </div>
 
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid tip-grid">
             <div id="tip-rate-wrap">
               <label for="tip-rate">{% if page.lang == 'en' %}Tip rate (%) {% elsif page.lang == 'ja' %}チップ率(%) {% else %}팁 비율(%) {% endif %}</label>
-              <input id="tip-rate" type="number" min="0" step="0.1" inputmode="decimal" />
+              <input id="tip-rate" type="number" min="0" max="100" step="any" inputmode="decimal" placeholder="15" aria-describedby="tip-help tip-assumption" />
             </div>
             <div id="tip-fixed-wrap" hidden>
               <label for="tip-fixed">{% if page.lang == 'en' %}Tip amount{% elsif page.lang == 'ja' %}チップ額{% else %}팁 금액{% endif %}</label>
-              <input id="tip-fixed" type="number" min="0" step="0.01" inputmode="decimal" />
+              <input id="tip-fixed" type="number" min="0" max="1000000000000" step="any" inputmode="decimal" placeholder="15" aria-describedby="tip-help tip-assumption" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-actions">
-            <button id="tip-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
-            <button id="tip-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          <p id="tip-assumption" class="tool-hint">{% if page.lang == 'en' %}Use one currency consistently. Blank tax and service-fee fields are treated as 0.{% elsif page.lang == 'ja' %}すべて同じ通貨で入力してください。税金・サービス料の空欄は0として扱います。{% else %}모든 금액은 같은 통화로 입력하세요. 세금·서비스 요금 빈칸은 0으로 계산합니다.{% endif %}</p>
+
+          <div class="tool-row-grid tip-actions">
+            <button id="tip-example" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
+            <button id="tip-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="tip-reset" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}전체 지우기{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
+          <div class="tool-stats tip-stats" aria-live="polite" aria-atomic="true">
             <div><strong id="tip-tip-amount">-</strong><span>{% if page.lang == 'en' %}Tip amount{% elsif page.lang == 'ja' %}チップ額{% else %}팁 금액{% endif %}</span></div>
             <div><strong id="tip-total">-</strong><span>{% if page.lang == 'en' %}Total to pay{% elsif page.lang == 'ja' %}合計支払額{% else %}총 결제금액{% endif %}</span></div>
             <div><strong id="tip-per-person">-</strong><span>{% if page.lang == 'en' %}Per person{% elsif page.lang == 'ja' %}1人あたり{% else %}1인당 금액{% endif %}</span></div>
             <div><strong id="tip-base-amount">-</strong><span>{% if page.lang == 'en' %}Tip base amount{% elsif page.lang == 'ja' %}チップ計算基準額{% else %}팁 기준 금액{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="tip-help">{% if page.lang == 'en' %}Enter bill values to calculate tip, total, and split instantly.{% elsif page.lang == 'ja' %}金額を入力すると、チップ・合計・1人あたりをすぐ計算します。{% else %}금액을 입력하면 팁·총액·1인당 금액을 바로 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="tip-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter a base amount to calculate tip, total, and split.{% elsif page.lang == 'ja' %}基本金額を入力すると、チップ・合計・1人あたりを計算します。{% else %}기본 금액을 입력하면 팁·총액·1인당 금액을 계산합니다.{% endif %}</p>
         </div>
       {% when 'work-end-time-calculator' %}
         <div class="tool-ui">

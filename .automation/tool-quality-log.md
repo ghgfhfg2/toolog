@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-05 21:00 KST
+- Tool: `tip-calculator`
+- Selection reason: recent quality work covered `d-day-calculator`, `profit-margin-calculator`, `savings-interest-calculator`, `list-format-converter`, and `volumetric-weight-calculator`; this older payment calculator silently clamped negative/out-of-range values and fractional/zero people, auto-filled a result instead of showing an empty state, and had weak copy-error and mobile action feedback.
+- Scope: improved the existing multilingual page, home metadata, accessible labels/status, mobile input and result layout, true blank/error/success states, strict amount/rate/people validation, overflow protection, rate presets, example/clear/copy flow, calculation assumptions, FAQ, related links, and search-intent copy. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, and targeted blank/normal/zero/negative/fractional-people/rate/fixed-tip/overflow cases passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-03 21:00 KST
 - Tool: `profit-margin-calculator`
 - Selection reason: recent quality work covered `savings-interest-calculator`, `list-format-converter`, `volumetric-weight-calculator`, `recycling-sorting-checker`, and `movie-seat-choice-simulator`; this older calculator still auto-filled inputs instead of showing an empty state, accepted negative/out-of-range target margins through script paths, lacked robust large-number and copy-error handling, and did not distinguish margin from markup.

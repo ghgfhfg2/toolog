@@ -6956,14 +6956,22 @@
     const outPer = document.getElementById('tip-per-person');
     const outBase = document.getElementById('tip-base-amount');
     const help = document.getElementById('tip-help');
+    const exampleBtn = document.getElementById('tip-example');
     const copyBtn = document.getElementById('tip-copy');
     const resetBtn = document.getElementById('tip-reset');
+    const presetBtns = Array.from(document.querySelectorAll('[data-tip-rate]'));
 
-    if (!subtotalEl || !taxEl || !serviceEl || !peopleEl || !baseModeEl || !tipModeEl || !tipRateEl || !tipFixedEl || !outTip || !outTotal || !outPer || !outBase || !help) return;
+    if (!subtotalEl || !taxEl || !serviceEl || !peopleEl || !baseModeEl || !tipModeEl || !tipRateEl || !tipFixedEl || !outTip || !outTotal || !outPer || !outBase || !help || !exampleBtn || !copyBtn || !resetBtn) return;
 
     const text = {
       ko: {
         noInput: '결제 금액을 입력하면 결과가 계산됩니다.',
+        invalidSubtotal: '기본 금액은 0 이상 1조 이하의 숫자로 입력해 주세요.',
+        invalidExtra: '세금과 서비스 요금은 0 이상 1조 이하로 입력해 주세요.',
+        invalidPeople: '인원수는 1명 이상 1,000명 이하의 정수로 입력해 주세요.',
+        invalidRate: '팁 비율은 0% 이상 100% 이하로 입력해 주세요.',
+        invalidFixed: '팁 금액은 0 이상 1조 이하로 입력해 주세요.',
+        tooLarge: '합계가 너무 큽니다. 입력 금액을 줄여 주세요.',
         summary: (tip, total, per, people) => `팁 ${tip}, 총 ${total}, ${people}인 기준 1인당 ${per}`,
         copy: '팁 계산 결과',
         copyTip: '팁',
@@ -6971,10 +6979,19 @@
         copyPerPerson: '1인당',
         copyBase: '팁 기준 금액',
         copied: '복사됨',
-        copyDefault: '결과 복사'
+        copyDefault: '결과 복사',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력값을 모두 지웠습니다.',
+        exampleLoaded: '예시 값을 입력했습니다.'
       },
       en: {
         noInput: 'Enter bill values to calculate results.',
+        invalidSubtotal: 'Enter a base amount from 0 to 1 trillion.',
+        invalidExtra: 'Enter tax and service fees from 0 to 1 trillion.',
+        invalidPeople: 'Enter a whole number from 1 to 1,000 for people.',
+        invalidRate: 'Enter a tip rate from 0% to 100%.',
+        invalidFixed: 'Enter a fixed tip from 0 to 1 trillion.',
+        tooLarge: 'The total is too large. Reduce the entered amounts.',
         summary: (tip, total, per, people) => `Tip ${tip}, total ${total}, ${per} per person (${people} people)`,
         copy: 'Tip calculation',
         copyTip: 'Tip',
@@ -6982,10 +6999,19 @@
         copyPerPerson: 'Per person',
         copyBase: 'Tip base',
         copied: 'Copied',
-        copyDefault: 'Copy result'
+        copyDefault: 'Copy result',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared all inputs.',
+        exampleLoaded: 'Loaded example values.'
       },
       ja: {
         noInput: '金額を入力すると結果を計算します。',
+        invalidSubtotal: '基本金額は0以上1兆以下の数値で入力してください。',
+        invalidExtra: '税金とサービス料は0以上1兆以下で入力してください。',
+        invalidPeople: '人数は1〜1,000の整数で入力してください。',
+        invalidRate: 'チップ率は0%〜100%で入力してください。',
+        invalidFixed: 'チップ額は0以上1兆以下で入力してください。',
+        tooLarge: '合計が大きすぎます。入力金額を減らしてください。',
         summary: (tip, total, per, people) => `チップ ${tip}、合計 ${total}、${people}人で1人あたり ${per}`,
         copy: 'チップ計算結果',
         copyTip: 'チップ',
@@ -6993,7 +7019,10 @@
         copyPerPerson: '1人あたり',
         copyBase: 'チップ基準額',
         copied: 'コピー完了',
-        copyDefault: '結果をコピー'
+        copyDefault: '結果をコピー',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力をすべてクリアしました。',
+        exampleLoaded: '例の値を入力しました。'
       }
     }[pageLang] || {
       noInput: '결제 금액을 입력하면 결과가 계산됩니다.',
@@ -7007,24 +7036,41 @@
       copyDefault: '결과 복사'
     };
 
-    const fmtMoney = (v) => {
-      const n = Number(v || 0);
-      return n.toLocaleString(numberLocale, { maximumFractionDigits: 2 });
+    const MAX_AMOUNT = 1000000000000;
+    const moneyFormatter = new Intl.NumberFormat(numberLocale, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+    const fmtMoney = (v) => moneyFormatter.format(v);
+
+    const setStatus = (message, state = '') => {
+      help.textContent = message;
+      help.dataset.state = state;
     };
 
-    const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
-    const parseNonNegative = (el, max = 1000000000000) => {
-      const raw = Number(el?.value || 0);
-      if (!Number.isFinite(raw)) return 0;
-      return clamp(raw, 0, max);
+    const resetResult = () => {
+      [outTip, outTotal, outPer, outBase].forEach((el) => { el.textContent = '-'; });
+      copyBtn.disabled = true;
+    };
+
+    const parseAmount = (el, optional = false) => {
+      const raw = el.value.trim();
+      if (optional && raw === '') return { valid: true, value: 0 };
+      const value = Number(raw);
+      return { valid: raw !== '' && Number.isFinite(value) && value >= 0 && value <= MAX_AMOUNT, value };
     };
 
     const copyText = async (v) => {
-      try { await navigator.clipboard.writeText(v); }
+      try {
+        await navigator.clipboard.writeText(v);
+        return true;
+      }
       catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = v; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = v; ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select();
+          const copied = document.execCommand('copy');
+          document.body.removeChild(ta);
+          return copied;
+        } catch (_) { return false; }
       }
     };
 
@@ -7032,78 +7078,140 @@
       const fixed = (tipModeEl.value || 'percent') === 'fixed';
       if (tipRateWrap) tipRateWrap.hidden = fixed;
       if (tipFixedWrap) tipFixedWrap.hidden = !fixed;
+      tipRateEl.disabled = fixed;
+      tipFixedEl.disabled = !fixed;
     };
 
     const render = () => {
       syncMode();
-      const subtotal = parseNonNegative(subtotalEl);
-      const tax = parseNonNegative(taxEl);
-      const service = parseNonNegative(serviceEl);
-
-      const peopleRaw = Number(peopleEl.value || 1);
-      const people = Number.isFinite(peopleRaw) ? clamp(Math.floor(peopleRaw), 1, 1000) : 1;
-      if (peopleRaw !== people) peopleEl.value = people;
-
-      if (subtotal <= 0 && tax <= 0 && service <= 0) {
-        outTip.textContent = '-';
-        outTotal.textContent = '-';
-        outPer.textContent = '-';
-        outBase.textContent = '-';
-        help.textContent = text.noInput;
+      [subtotalEl, taxEl, serviceEl, peopleEl, tipRateEl, tipFixedEl].forEach((el) => el.setAttribute('aria-invalid', 'false'));
+      const subtotalResult = parseAmount(subtotalEl);
+      if (subtotalEl.value.trim() === '') {
+        resetResult();
+        setStatus(text.noInput);
+        return;
+      }
+      if (!subtotalResult.valid) {
+        subtotalEl.setAttribute('aria-invalid', 'true');
+        resetResult();
+        setStatus(text.invalidSubtotal, 'error');
+        return;
+      }
+      const taxResult = parseAmount(taxEl, true);
+      const serviceResult = parseAmount(serviceEl, true);
+      if (!taxResult.valid || !serviceResult.valid) {
+        if (!taxResult.valid) taxEl.setAttribute('aria-invalid', 'true');
+        if (!serviceResult.valid) serviceEl.setAttribute('aria-invalid', 'true');
+        resetResult();
+        setStatus(text.invalidExtra, 'error');
+        return;
+      }
+      const peopleRaw = peopleEl.value.trim();
+      const people = Number(peopleRaw);
+      if (!peopleRaw || !Number.isInteger(people) || people < 1 || people > 1000) {
+        peopleEl.setAttribute('aria-invalid', 'true');
+        resetResult();
+        setStatus(text.invalidPeople, 'error');
         return;
       }
 
+      const subtotal = subtotalResult.value;
+      const tax = taxResult.value;
+      const service = serviceResult.value;
+
       const billTotal = subtotal + tax + service;
       const tipBase = (baseModeEl.value || 'subtotal') === 'total' ? billTotal : subtotal;
-      const tipRateRaw = Number(tipRateEl.value || 0);
-      const tipRate = Number.isFinite(tipRateRaw) ? clamp(tipRateRaw, 0, 100) : 0;
-      if (tipRateRaw !== tipRate) tipRateEl.value = tipRate;
-
-      const tipFixedRaw = Number(tipFixedEl.value || 0);
-      const tipFixed = Number.isFinite(tipFixedRaw) ? clamp(tipFixedRaw, 0, 1000000000000) : 0;
-      if (tipFixedRaw !== tipFixed) tipFixedEl.value = tipFixed;
-
-      const tipAmount = (tipModeEl.value || 'percent') === 'fixed'
-        ? tipFixed
-        : tipBase * (tipRate / 100);
+      const fixedMode = (tipModeEl.value || 'percent') === 'fixed';
+      let tipAmount;
+      if (fixedMode) {
+        const fixedResult = parseAmount(tipFixedEl);
+        if (!fixedResult.valid) {
+          tipFixedEl.setAttribute('aria-invalid', 'true');
+          resetResult();
+          setStatus(text.invalidFixed, 'error');
+          return;
+        }
+        tipAmount = fixedResult.value;
+      } else {
+        const rateRaw = tipRateEl.value.trim();
+        const tipRate = Number(rateRaw);
+        if (!rateRaw || !Number.isFinite(tipRate) || tipRate < 0 || tipRate > 100) {
+          tipRateEl.setAttribute('aria-invalid', 'true');
+          resetResult();
+          setStatus(text.invalidRate, 'error');
+          return;
+        }
+        tipAmount = tipBase * (tipRate / 100);
+      }
 
       const total = billTotal + tipAmount;
+      if (!Number.isFinite(total) || total > MAX_AMOUNT * 4) {
+        resetResult();
+        setStatus(text.tooLarge, 'error');
+        return;
+      }
       const per = total / people;
 
       outTip.textContent = fmtMoney(tipAmount);
       outTotal.textContent = fmtMoney(total);
       outPer.textContent = fmtMoney(per);
       outBase.textContent = fmtMoney(tipBase);
-      help.textContent = text.summary(fmtMoney(tipAmount), fmtMoney(total), fmtMoney(per), people.toLocaleString(numberLocale));
+      copyBtn.disabled = false;
+      setStatus(text.summary(fmtMoney(tipAmount), fmtMoney(total), fmtMoney(per), people.toLocaleString(numberLocale)), 'success');
     };
 
-    [subtotalEl, taxEl, serviceEl, peopleEl, baseModeEl, tipModeEl, tipRateEl, tipFixedEl].forEach((el) => el?.addEventListener('input', render));
+    [subtotalEl, taxEl, serviceEl, peopleEl, tipRateEl, tipFixedEl].forEach((el) => el.addEventListener('input', render));
+    [baseModeEl, tipModeEl].forEach((el) => el.addEventListener('change', render));
+    presetBtns.forEach((button) => button.addEventListener('click', () => {
+      tipModeEl.value = 'percent';
+      tipRateEl.value = button.dataset.tipRate || '15';
+      render();
+      tipRateEl.focus();
+    }));
 
-    copyBtn?.addEventListener('click', async () => {
+    exampleBtn.addEventListener('click', () => {
+      subtotalEl.value = '100';
+      taxEl.value = '8.25';
+      serviceEl.value = '0';
+      peopleEl.value = '2';
+      baseModeEl.value = 'subtotal';
+      tipModeEl.value = 'percent';
+      tipRateEl.value = '18';
+      tipFixedEl.value = '';
+      render();
+      setStatus(text.exampleLoaded, 'success');
+      subtotalEl.focus();
+    });
+
+    copyBtn.addEventListener('click', async () => {
       if (outTotal.textContent === '-') return;
       const msg = `${text.copy} | ${text.copyTip} ${outTip.textContent} | ${text.copyTotal} ${outTotal.textContent} | ${text.copyPerPerson} ${outPer.textContent} | ${text.copyBase} ${outBase.textContent}`;
-      await copyText(msg);
+      const copied = await copyText(msg);
+      if (!copied) {
+        setStatus(text.copyFail, 'error');
+        return;
+      }
       const old = copyBtn.textContent;
       copyBtn.textContent = text.copied;
       setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
     });
 
-    resetBtn?.addEventListener('click', () => {
-      subtotalEl.value = 100;
-      taxEl.value = 10;
-      serviceEl.value = 0;
-      peopleEl.value = 2;
+    resetBtn.addEventListener('click', () => {
+      subtotalEl.value = '';
+      taxEl.value = '';
+      serviceEl.value = '';
+      peopleEl.value = '1';
       baseModeEl.value = 'subtotal';
       tipModeEl.value = 'percent';
-      tipRateEl.value = 15;
+      tipRateEl.value = '15';
       tipFixedEl.value = '';
       render();
+      setStatus(text.cleared);
+      subtotalEl.focus();
     });
 
-    if (!subtotalEl.value) subtotalEl.value = 100;
-    if (!taxEl.value) taxEl.value = 10;
-    if (!peopleEl.value) peopleEl.value = 2;
-    if (!tipRateEl.value) tipRateEl.value = 15;
+    peopleEl.value = '1';
+    tipRateEl.value = '15';
     render();
   }
 

@@ -2017,6 +2017,10 @@ a:hover { color: #fff; text-decoration: none; }
   .jm-options-grid,
   .jm-actions { grid-template-columns: 1fr; }
   .tool-stats.jm-stats { grid-template-columns: 1fr 1fr; }
+  .tip-grid,
+  .tip-presets,
+  .tip-actions { grid-template-columns: 1fr; }
+  .tool-stats.tip-stats { grid-template-columns: 1fr 1fr; }
   .pm-categories,
   .pm-actions { grid-template-columns: 1fr; }
   .pm-stats { grid-template-columns: 1fr 1fr; }

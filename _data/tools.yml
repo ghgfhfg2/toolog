@@ -1978,13 +1978,17 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 팁 금액, 총 결제금액, 1인당 분할 금액을 퍼센트/직접입력 방식으로 빠르게 계산해요.
-  description_en: Calculate tip amount, total bill, and per-person split with percentage or fixed-tip modes.
-  description_ja: 割合指定・固定額指定でチップ額、合計支払額、1人あたり金額を素早く計算します。
+  description: 식사 금액과 세금·서비스 요금, 팁 비율 또는 직접 팁을 입력해 총 결제금액과 1인당 금액을 계산해요.
+  description_en: Calculate a restaurant tip, total bill, and per-person split from the subtotal, tax, service fee, and percentage or fixed tip.
+  description_ja: 小計、税金、サービス料、割合または固定チップから、合計支払額と1人あたりの割り勘額を計算します。
   url: /tools/tip-calculator/
   url_en: /en/tools/tip-calculator/
   url_ja: /ja/tools/tip-calculator/
   thumbnail: /assets/thumbs/tip-calculator.svg
+  thumbnail_en: /assets/thumbs/en/tip-calculator.svg
+  thumbnail_ja: /assets/thumbs/ja/tip-calculator.svg
+  tool_type: calculator
+  topic_cluster: travel
 
 - id: volumetric-weight-calculator
   title: 부피무게 계산기

@@ -1920,6 +1920,10 @@ textarea:focus-visible {
   .prmc-presets,
   .prmc-actions { grid-template-columns: 1fr; }
   .tool-stats.prmc-stats { grid-template-columns: 1fr 1fr; }
+  .tip-grid,
+  .tip-presets,
+  .tip-actions { grid-template-columns: 1fr; }
+  .tool-stats.tip-stats { grid-template-columns: 1fr 1fr; }
   .vw-grid,
   .vw-actions { grid-template-columns: 1fr; }
   .tool-stats.vw-stats { grid-template-columns: 1fr 1fr; }
