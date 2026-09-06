@@ -5519,10 +5519,13 @@
     const months = document.getElementById('age-months');
     const days = document.getElementById('age-days');
     const nextBirthday = document.getElementById('age-next-birthday');
+    const status = document.getElementById('age-status');
     const copyBtn = document.getElementById('age-copy');
-    const resetBtn = document.getElementById('age-reset');
+    const sampleBtn = document.getElementById('age-sample');
+    const todayBtn = document.getElementById('age-today');
+    const clearBtn = document.getElementById('age-clear');
 
-    if (!birth || !target || !international || !korean || !months || !days || !nextBirthday) return;
+    if (!birth || !target || !international || !korean || !months || !days || !nextBirthday || !status || !copyBtn) return;
 
     const ageI18n = {
       ko: {
@@ -5530,129 +5533,181 @@
         months: '개월',
         days: '일',
         hidden: '숨김',
-        idleNeedBoth: '생년월일과 기준일을 입력하세요.',
-        idleInvalid: '생년월일은 기준일보다 늦을 수 없습니다.',
+        idleBirth: '생년월일을 입력해 주세요.',
+        idleTarget: '기준일을 입력해 주세요.',
+        invalidDate: '날짜를 연-월-일 형식으로 정확히 입력해 주세요.',
+        birthAfterTarget: '생년월일은 기준일보다 늦을 수 없습니다.',
         nextBirthday: (date, dday) => `다음 생일: ${date} (${dday})`,
         dday: 'D-day',
         dminus: (days) => `D-${days}`,
-        copyInputCheck: '입력 확인',
         copyDefault: '결과 복사',
-        copied: '복사됨',
+        copied: '계산 결과를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다. 브라우저 권한을 확인해 주세요.',
+        calculated: (date) => `${date} 기준 나이를 계산했습니다.`,
+        exampleLoaded: '윤년 출생 예시를 입력했습니다.',
+        todaySet: '기준일을 오늘로 바꿨습니다.',
+        cleared: '입력값을 모두 지웠습니다.',
+        nextEmpty: '유효한 날짜를 입력하면 다음 생일이 표시됩니다.',
         copyText: (intl, kr, m, d, next) => `나이 계산 결과 | 만 나이 ${intl} | 세는나이 ${kr} | 총 ${m} / ${d} | ${next}`,
-        firstMessage: '생년월일을 입력하면 나이 계산 결과가 표시됩니다.'
+        sampleBirth: '2000-02-29'
       },
       en: {
         years: ' years',
         months: ' months',
         days: ' days',
         hidden: 'Hidden',
-        idleNeedBoth: 'Enter birth date and reference date.',
-        idleInvalid: 'Birth date cannot be later than the reference date.',
+        idleBirth: 'Enter your birth date.',
+        idleTarget: 'Enter a reference date.',
+        invalidDate: 'Enter a valid date in year-month-day format.',
+        birthAfterTarget: 'Birth date cannot be later than the reference date.',
         nextBirthday: (date, dday) => `Next birthday: ${date} (${dday})`,
         dday: 'D-day',
         dminus: (days) => `D-${days}`,
-        copyInputCheck: 'Check inputs',
         copyDefault: 'Copy result',
-        copied: 'Copied',
+        copied: 'Copied the calculation result.',
+        copyFail: 'Automatic copy is unavailable. Check your browser permissions.',
+        calculated: (date) => `Calculated age as of ${date}.`,
+        exampleLoaded: 'Loaded a leap-day birth example.',
+        todaySet: 'Set the reference date to today.',
+        cleared: 'Cleared all inputs.',
+        nextEmpty: 'Enter valid dates to show the next birthday.',
         copyText: (intl, kr, m, d, next) => `Age calculation | International age ${intl} | Korean age ${kr} | Total ${m} / ${d} | ${next}`,
-        firstMessage: 'Enter your birth date to show age calculation results.'
+        sampleBirth: '2000-02-29'
       },
       ja: {
         years: '歳',
         months: 'か月',
         days: '日',
         hidden: '非表示',
-        idleNeedBoth: '生年月日と基準日を入力してください。',
-        idleInvalid: '生年月日は基準日より後にできません。',
+        idleBirth: '生年月日を入力してください。',
+        idleTarget: '基準日を入力してください。',
+        invalidDate: '年月日を正しい形式で入力してください。',
+        birthAfterTarget: '生年月日は基準日より後にできません。',
         nextBirthday: (date, dday) => `次の誕生日: ${date}（${dday}）`,
         dday: 'D-day',
         dminus: (days) => `D-${days}`,
-        copyInputCheck: '入力を確認',
         copyDefault: '結果をコピー',
-        copied: 'コピー完了',
+        copied: '計算結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。ブラウザの権限を確認してください。',
+        calculated: (date) => `${date}時点の年齢を計算しました。`,
+        exampleLoaded: 'うるう日生まれの例を入力しました。',
+        todaySet: '基準日を今日に変更しました。',
+        cleared: '入力をすべてクリアしました。',
+        nextEmpty: '有効な日付を入力すると次の誕生日を表示します。',
         copyText: (intl, kr, m, d, next) => `年齢計算結果 | 満年齢 ${intl} | 韓国式年齢 ${kr} | 合計 ${m} / ${d} | ${next}`,
-        firstMessage: '生年月日を入力すると年齢計算結果を表示します。'
+        sampleBirth: '2000-02-29'
       }
     };
     const ageText = ageI18n[pageLang] || ageI18n.ko;
 
     const toDate = (value) => {
-      if (!value) return null;
-      const [y, m, d] = value.split('-').map(Number);
-      if (!y || !m || !d) return null;
-      const parsed = new Date(y, m - 1, d, 12, 0, 0, 0);
-      const isValid = parsed.getFullYear() === y && parsed.getMonth() === (m - 1) && parsed.getDate() === d;
-      return isValid ? parsed : null;
+      const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || '');
+      if (!match) return null;
+      const [, rawYear, rawMonth, rawDay] = match;
+      const year = Number(rawYear);
+      const month = Number(rawMonth);
+      const day = Number(rawDay);
+      if (year < 1 || year > 9999 || month < 1 || month > 12 || day < 1) return null;
+      const maxDay = new Date(Date.UTC(year, month, 0)).getUTCDate();
+      if (day > maxDay) return null;
+      return { year, month, day };
     };
 
-    const toUTCDate = (d) => Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
-    const dayDiff = (a, b) => Math.floor((toUTCDate(b) - toUTCDate(a)) / 86400000);
+    const toUTCDate = ({ year, month, day }) => {
+      const date = new Date(0);
+      date.setUTCHours(0, 0, 0, 0);
+      date.setUTCFullYear(year, month - 1, day);
+      return date.getTime();
+    };
+    const compareDates = (a, b) => Math.sign(toUTCDate(a) - toUTCDate(b));
+    const dayDiff = (a, b) => Math.round((toUTCDate(b) - toUTCDate(a)) / 86400000);
+    const lastDayOfMonth = (year, month) => new Date(Date.UTC(year, month, 0)).getUTCDate();
+    const anniversary = (b, year) => ({ year, month: b.month, day: Math.min(b.day, lastDayOfMonth(year, b.month)) });
+    const formatDate = ({ year, month, day }) => `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
     const getFullAge = (b, t) => {
-      let age = t.getFullYear() - b.getFullYear();
-      const monthDiff = t.getMonth() - b.getMonth();
-      const beforeBirthday = monthDiff < 0 || (monthDiff === 0 && t.getDate() < b.getDate());
-      if (beforeBirthday) age -= 1;
+      let age = t.year - b.year;
+      if (compareDates(t, anniversary(b, t.year)) < 0) age -= 1;
       return Math.max(0, age);
     };
 
     const getMonthSpan = (b, t) => {
-      let m = (t.getFullYear() - b.getFullYear()) * 12 + (t.getMonth() - b.getMonth());
-      if (t.getDate() < b.getDate()) m -= 1;
+      let m = (t.year - b.year) * 12 + (t.month - b.month);
+      const comparisonDay = Math.min(b.day, lastDayOfMonth(t.year, t.month));
+      if (t.day < comparisonDay) m -= 1;
       return Math.max(0, m);
     };
 
     const getNextBirthday = (b, t) => {
-      const year = t.getFullYear();
-      const month = b.getMonth();
-      const day = b.getDate();
-      const safeDate = (y) => {
-        const lastDay = new Date(y, month + 1, 0).getDate();
-        return new Date(y, month, Math.min(day, lastDay), 12, 0, 0, 0);
-      };
-
-      let candidate = safeDate(year);
-      if (dayDiff(t, candidate) < 0) candidate = safeDate(year + 1);
+      let candidate = anniversary(b, t.year);
+      if (compareDates(candidate, t) < 0) candidate = anniversary(b, t.year + 1);
       return candidate;
     };
 
     const copyText = async (text) => {
       try {
         await navigator.clipboard.writeText(text);
+        return true;
       } catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          const copied = document.execCommand('copy');
+          document.body.removeChild(ta);
+          return copied;
+        } catch (_) {
+          return false;
+        }
       }
     };
 
-    const setIdle = (msg) => {
+    const setStatus = (message, state = '') => {
+      status.textContent = message;
+      status.dataset.state = state;
+    };
+
+    const setIdle = (message, invalidField = null) => {
       international.textContent = '-';
       korean.textContent = '-';
       months.textContent = '-';
       days.textContent = '-';
-      nextBirthday.textContent = msg;
+      nextBirthday.textContent = ageText.nextEmpty;
+      copyBtn.disabled = true;
+      birth.setAttribute('aria-invalid', invalidField === birth ? 'true' : 'false');
+      target.setAttribute('aria-invalid', invalidField === target ? 'true' : 'false');
+      setStatus(message, invalidField ? 'error' : '');
     };
 
     const render = () => {
       const b = toDate(birth.value);
       const t = toDate(target.value);
-      if (!b || !t) {
-        setIdle(ageText.idleNeedBoth);
+      if (!birth.value) {
+        setIdle(ageText.idleBirth);
         return;
       }
-      if (b > t) {
-        setIdle(ageText.idleInvalid);
+      if (!b) {
+        setIdle(ageText.invalidDate, birth);
+        return;
+      }
+      if (!target.value) {
+        setIdle(ageText.idleTarget);
+        return;
+      }
+      if (!t) {
+        setIdle(ageText.invalidDate, target);
+        return;
+      }
+      if (compareDates(b, t) > 0) {
+        setIdle(ageText.birthAfterTarget, birth);
         return;
       }
 
       const fullAge = getFullAge(b, t);
-      const koreanAge = t.getFullYear() - b.getFullYear() + 1;
+      const koreanAge = t.year - b.year + 1;
       const totalMonths = getMonthSpan(b, t);
       const totalDays = dayDiff(b, t);
       const upcomingBirthday = getNextBirthday(b, t);
@@ -5663,9 +5718,13 @@
       months.textContent = `${totalMonths.toLocaleString(numberLocale)}${ageText.months}`;
       days.textContent = `${totalDays.toLocaleString(numberLocale)}${ageText.days}`;
 
-      const birthdayText = `${upcomingBirthday.getFullYear()}-${String(upcomingBirthday.getMonth() + 1).padStart(2, '0')}-${String(upcomingBirthday.getDate()).padStart(2, '0')}`;
+      const birthdayText = formatDate(upcomingBirthday);
       const ddayText = daysLeft === 0 ? ageText.dday : ageText.dminus(daysLeft.toLocaleString(numberLocale));
       nextBirthday.textContent = ageText.nextBirthday(birthdayText, ddayText);
+      birth.setAttribute('aria-invalid', 'false');
+      target.setAttribute('aria-invalid', 'false');
+      copyBtn.disabled = false;
+      setStatus(ageText.calculated(formatDate(t)), 'success');
     };
 
     const today = new Date();
@@ -5674,26 +5733,41 @@
 
     [birth, target, koreanMode].forEach((el) => el?.addEventListener('input', render));
 
-    resetBtn?.addEventListener('click', () => {
+    sampleBtn?.addEventListener('click', () => {
+      birth.value = ageText.sampleBirth;
+      if (!target.value) target.value = toISO(new Date());
+      render();
+      setStatus(ageText.exampleLoaded, 'success');
+      birth.focus();
+    });
+
+    todayBtn?.addEventListener('click', () => {
       target.value = toISO(new Date());
       render();
+      if (toDate(birth.value) && compareDates(toDate(birth.value), toDate(target.value)) <= 0) {
+        setStatus(ageText.todaySet, 'success');
+      }
+      target.focus();
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      birth.value = '';
+      target.value = '';
+      render();
+      setStatus(ageText.cleared);
+      birth.focus();
     });
 
     copyBtn?.addEventListener('click', async () => {
-      if (international.textContent === '-') {
-        const old = copyBtn.textContent;
-        copyBtn.textContent = ageText.copyInputCheck;
-        setTimeout(() => { copyBtn.textContent = old || ageText.copyDefault; }, 900);
-        return;
-      }
+      if (copyBtn.disabled) return;
       const text = ageText.copyText(international.textContent, korean.textContent, months.textContent, days.textContent, nextBirthday.textContent);
-      await copyText(text);
+      const copied = await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = ageText.copied;
+      copyBtn.textContent = copied ? ageText.copied : ageText.copyFail;
+      setStatus(copied ? ageText.copied : ageText.copyFail, copied ? 'success' : 'error');
       setTimeout(() => { copyBtn.textContent = old || ageText.copyDefault; }, 900);
     });
 
-    setIdle(ageText.firstMessage);
     render();
   }
 

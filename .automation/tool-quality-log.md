@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-06 21:00 KST
+- Tool: `age-calculator`
+- Selection reason: recent quality work covered `tip-calculator`, `d-day-calculator`, `profit-margin-calculator`, `savings-interest-calculator`, and `list-format-converter`; this tool had not been improved since March and calculated a Feb 29 birth inconsistently in non-leap years, while blank/invalid/copy states and mobile input actions were still weak.
+- Scope: improved the existing multilingual page, home metadata, accessible field descriptions/status, explicit blank/error/success states, example/today/clear/copy flow, robust year parsing, DST-safe day differences, consistent leap-day age/month/birthday handling, FAQ, related search-intent copy, and copy-failure feedback. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, mobile CSS rules, and targeted normal/leap-day/same-day/early-year/invalid/future-birth cases passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-05 21:00 KST
 - Tool: `tip-calculator`
 - Selection reason: recent quality work covered `d-day-calculator`, `profit-margin-calculator`, `savings-interest-calculator`, `list-format-converter`, and `volumetric-weight-calculator`; this older payment calculator silently clamped negative/out-of-range values and fractional/zero people, auto-filled a result instead of showing an empty state, and had weak copy-error and mobile action feedback.

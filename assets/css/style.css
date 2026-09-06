@@ -865,6 +865,11 @@ a:hover { color: #fff; text-decoration: none; }
 }
 .loan-ui #loan-help[data-state="error"] { color: #fca5a5; }
 .loan-ui #loan-help[data-state="success"] { color: #86efac; }
+.age-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.age-ui .tool-result[data-state="error"] { border-color: #ef4444; }
+.age-ui .tool-result[data-state="success"] { border-color: #16a34a; }
+.tool-stats.age-stats strong,
+.tool-stats.age-stats span { overflow-wrap: anywhere; }
 .bfat-ui input[aria-invalid="true"] { border-color: #ef4444; }
 .bfat-ui [data-disabled="true"] { opacity: .68; }
 .bfat-ui .tool-result[data-state="error"] { color: #fca5a5; }

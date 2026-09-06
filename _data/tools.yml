@@ -1864,9 +1864,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 만 나이·세는나이·총 개월 수·다음 생일 D-day를 한 번에 계산해요.
-  description_en: Calculate exact age, Korean counting age, total months lived, and days left until the next birthday.
-  description_ja: 満年齢・韓国式年齢・生後総月数・次の誕生日までの日数をまとめて計算できます。
+  description: 생년월일과 과거·오늘·미래 기준일로 만 나이, 세는나이, 총 개월·일수, 다음 생일 D-day를 계산해요. 윤년 2월 29일도 일관되게 처리합니다.
+  description_en: Calculate age on any past, present, or future date, Korean counting age, total months and days, and the next-birthday countdown with consistent leap-day handling.
+  description_ja: 生年月日と過去・今日・未来の基準日から、満年齢、韓国式年齢、総月数・日数、次の誕生日までを計算し、2月29日も一貫して処理します。
   url: /tools/age-calculator/
   url_en: /en/tools/age-calculator/
   url_ja: /ja/tools/age-calculator/

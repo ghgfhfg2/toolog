@@ -2947,29 +2947,33 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="dc-help">{% if page.lang == 'en' %}Enter list price and discount details to calculate the final payable amount.{% elsif page.lang == 'ja' %}定価と割引情報を入力すると、最終支払金額を計算できます。{% else %}정가와 할인 정보를 입력하면 최종 결제금액을 계산합니다.{% endif %}</p>
         </div>
       {% when 'age-calculator' %}
-        <div class="tool-ui">
+        <div class="tool-ui age-ui">
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="age-birth-date">{% if page.lang == 'en' %}Birth date{% elsif page.lang == 'ja' %}生年月日{% else %}생년월일{% endif %}</label>
-              <input id="age-birth-date" type="date" />
+              <input id="age-birth-date" type="date" min="0001-01-01" max="9999-12-31" required aria-describedby="age-status age-help" />
             </div>
             <div>
               <label for="age-target-date">{% if page.lang == 'en' %}Reference date{% elsif page.lang == 'ja' %}基準日{% else %}기준일{% endif %}</label>
-              <input id="age-target-date" type="date" />
+              <input id="age-target-date" type="date" min="0001-01-01" max="9999-12-31" required aria-describedby="age-status age-help" />
             </div>
           </div>
           <label class="tool-check"><input id="age-korean-mode" type="checkbox" checked /> {% if page.lang == 'en' %}Show international age + Korean age{% elsif page.lang == 'ja' %}満年齢＋韓国式年齢を表示{% else %}만나이 + 한국식 세는나이 함께 보기{% endif %}</label>
           <div class="tool-row-grid pct-actions">
-            <button id="age-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
-            <button id="age-reset" type="button">{% if page.lang == 'en' %}Reset to today{% elsif page.lang == 'ja' %}今日基準にリセット{% else %}오늘 기준으로 초기화{% endif %}</button>
+            <button id="age-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="age-sample" type="button">{% if page.lang == 'en' %}Try example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
+            <button id="age-today" type="button">{% if page.lang == 'en' %}Use today{% elsif page.lang == 'ja' %}今日を基準日へ{% else %}기준일을 오늘로{% endif %}</button>
+            <button id="age-clear" type="button">{% if page.lang == 'en' %}Clear all{% elsif page.lang == 'ja' %}すべてクリア{% else %}모두 지우기{% endif %}</button>
           </div>
-          <div class="tool-stats">
+          <div class="tool-stats age-stats" id="age-results" aria-label="{% if page.lang == 'en' %}Age calculation results{% elsif page.lang == 'ja' %}年齢計算結果{% else %}나이 계산 결과{% endif %}">
             <div><strong id="age-international">-</strong><span>{% if page.lang == 'en' %}International age{% elsif page.lang == 'ja' %}満年齢{% else %}만 나이{% endif %}</span></div>
             <div><strong id="age-korean">-</strong><span>{% if page.lang == 'en' %}Korean age{% elsif page.lang == 'ja' %}韓国式年齢{% else %}세는나이(한국식){% endif %}</span></div>
             <div><strong id="age-months">-</strong><span>{% if page.lang == 'en' %}Total months{% elsif page.lang == 'ja' %}総月数{% else %}총 개월 수{% endif %}</span></div>
             <div><strong id="age-days">-</strong><span>{% if page.lang == 'en' %}Total days{% elsif page.lang == 'ja' %}総日数{% else %}총 일수{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="age-next-birthday" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter your birth date to calculate the days remaining until your next birthday.{% elsif page.lang == 'ja' %}生年月日を入力すると、次の誕生日までの日数を計算します。{% else %}생년월일을 입력하면 다음 생일까지 남은 기간을 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="age-next-birthday">{% if page.lang == 'en' %}Your next birthday date and countdown will appear here.{% elsif page.lang == 'ja' %}次の誕生日と残り日数がここに表示されます。{% else %}다음 생일 날짜와 남은 일수가 여기에 표시됩니다.{% endif %}</p>
+          <p class="tool-result" id="age-status" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter your birth date to calculate your age.{% elsif page.lang == 'ja' %}生年月日を入力すると年齢を計算します。{% else %}생년월일을 입력하면 나이를 계산합니다.{% endif %}</p>
+          <p class="tool-help" id="age-help">{% if page.lang == 'en' %}The reference date may be today, a past date, or a future planning date. Feb 29 is treated as Feb 28 in non-leap years for this calculator.{% elsif page.lang == 'ja' %}基準日は今日・過去・将来の日付を選べます。この計算機では、うるう年以外の2月29日を2月28日として扱います。{% else %}기준일은 오늘·과거·미래 날짜를 선택할 수 있습니다. 이 계산기에서는 2월 29일 출생자의 평년 생일을 2월 28일로 처리합니다.{% endif %}</p>
         </div>
       {% when 'salary-calculator' %}
         <div class="tool-ui">

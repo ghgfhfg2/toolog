@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Age Calculator | Exact Age, Korean Counting Age, and Next Birthday
-description: Calculate exact age from date of birth, optional Korean counting age, total months/days lived, and days remaining until your next birthday.
+title: Age Calculator | Age on Any Date and Next Birthday
+description: Calculate age on any past, present, or future reference date, plus Korean counting age, total months and days, and the next-birthday countdown. Handles Feb 29 consistently.
 lang: en
 permalink: /en/tools/age-calculator/
 canonical_url: /en/tools/age-calculator/
@@ -22,7 +22,9 @@ faq:
   - q: What if the birth date is later than the reference date?
     a: The tool treats it as invalid input and does not show calculated results.
   - q: How is Feb 29 handled in non-leap years?
-    a: For non-leap years, the next birthday is treated as the last day of February.
+    a: This calculator consistently uses Feb 28 as the anniversary date in non-leap years for both age and next-birthday results. Check the applicable authority for official legal use.
+  - q: Can I calculate age on a past date?
+    a: Yes. Set the reference date to a past school, contract, medical, or application date to see your age at that time.
 alternate_urls:
   ko: /tools/age-calculator/
   en: /en/tools/age-calculator/
@@ -42,7 +44,9 @@ This tool shows everything in one view:
 - **Optional Korean counting age** display with toggle
 - **Lifetime duration view** in months and days
 - **Birthday countdown** with the next birthday date
-- **Input validation** for invalid date combinations
+- **Past and future reference dates** for forms and planning
+- **Consistent leap-day handling** using Feb 28 in non-leap years
+- **Input validation** with distinct empty, invalid, and date-order messages
 
 ## How to use
 1. Enter your date of birth.
