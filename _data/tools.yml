@@ -1479,13 +1479,17 @@
   badge: Popular
   badge_en: Popular
   badge_ja: 人気
-  description: 복리 계산기로 초기금·월 적립금·수익률 기준 만기 자산과 예상 수익을 계산해요.
-  description_en: Calculate ending balance, total principal, estimated profit, and inflation-adjusted value with monthly contributions.
-  description_ja: 初期資金・毎月積立・利回り・期間から、満期資産・元本合計・想定利益・インフレ調整後価値を計算します。
+  description: 초기 투자금·월말 적립금·연 수익률·복리 주기로 만기 자산, 납입 원금, 예상 수익과 물가 반영 실질가치를 계산해요.
+  description_en: Estimate ending balance, contributions, investment gain, and inflation-adjusted value from monthly deposits and compounding frequency.
+  description_ja: 初期投資・月末積立・年利・複利周期から、満期資産・積立元本・予想利益・インフレ調整後価値を試算します。
   url: /tools/compound-interest-calculator/
   url_en: /en/tools/compound-interest-calculator/
   url_ja: /ja/tools/compound-interest-calculator/
   thumbnail: /assets/thumbs/compound-interest-calculator.svg
+  thumbnail_en: /assets/thumbs/en/compound-interest-calculator.svg
+  thumbnail_ja: /assets/thumbs/ja/compound-interest-calculator.svg
+  tool_type: calculator
+  topic_cluster: finance
 
 - id: brokerage-fee-calculator
   title: 부동산 중개수수료 계산기

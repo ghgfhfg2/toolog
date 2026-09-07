@@ -2838,31 +2838,31 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="loan-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter amount, rate, and term to calculate monthly payment and total interest. Amount is capped at 1 quadrillion KRW and term at 50 years.{% elsif page.lang == 'ja' %}借入額・年利・期間を入力すると毎月返済額と総利息を計算します。借入額は1,000兆ウォン、期間は50年までです。{% else %}금액·이율·기간을 입력하면 월 납입액과 총 이자를 계산합니다. 금액은 1,000조 원, 기간은 50년까지 지원합니다.{% endif %}</p>
         </div>
       {% when 'compound-interest-calculator' %}
-        <div class="tool-ui">
+        <div class="tool-ui ci-ui">
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="ci-initial">{% if page.lang == 'en' %}Initial investment{% elsif page.lang == 'ja' %}初期投資額{% else %}초기 투자금(원){% endif %}</label>
-              <input id="ci-initial" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 1000000{% elsif page.lang == 'ja' %}例: 1000000{% else %}예: 1000000{% endif %}" inputmode="numeric" />
+              <input id="ci-initial" type="number" min="0" max="1000000000000000" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 1000000{% elsif page.lang == 'ja' %}例: 1000000{% else %}예: 1000000{% endif %}" inputmode="numeric" aria-describedby="ci-help ci-assumption" />
             </div>
             <div>
               <label for="ci-monthly">{% if page.lang == 'en' %}Monthly contribution{% elsif page.lang == 'ja' %}毎月の積立額{% else %}매월 추가 적립금(원){% endif %}</label>
-              <input id="ci-monthly" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 300000{% elsif page.lang == 'ja' %}例: 300000{% else %}예: 300000{% endif %}" inputmode="numeric" />
+              <input id="ci-monthly" type="number" min="0" max="100000000000000" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 300000{% elsif page.lang == 'ja' %}例: 300000{% else %}예: 300000{% endif %}" inputmode="numeric" aria-describedby="ci-help ci-assumption" />
             </div>
           </div>
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="ci-rate">{% if page.lang == 'en' %}Annual return (%) {% elsif page.lang == 'ja' %}年利回り(%) {% else %}연 수익률(%) {% endif %}</label>
-              <input id="ci-rate" type="number" min="0" max="100" step="0.01" placeholder="{% if page.lang == 'en' %}e.g. 7{% elsif page.lang == 'ja' %}例: 7{% else %}예: 7{% endif %}" inputmode="decimal" />
+              <input id="ci-rate" type="number" min="0" max="100" step="0.01" placeholder="{% if page.lang == 'en' %}e.g. 7{% elsif page.lang == 'ja' %}例: 7{% else %}예: 7{% endif %}" inputmode="decimal" aria-describedby="ci-help ci-assumption" />
             </div>
             <div>
               <label for="ci-years">{% if page.lang == 'en' %}Investment term (years){% elsif page.lang == 'ja' %}運用期間(年){% else %}투자 기간(년){% endif %}</label>
-              <input id="ci-years" type="number" min="1" max="100" step="1" placeholder="{% if page.lang == 'en' %}e.g. 10{% elsif page.lang == 'ja' %}例: 10{% else %}예: 10{% endif %}" inputmode="numeric" />
+              <input id="ci-years" type="number" min="1" max="100" step="1" placeholder="{% if page.lang == 'en' %}e.g. 10{% elsif page.lang == 'ja' %}例: 10{% else %}예: 10{% endif %}" inputmode="numeric" aria-describedby="ci-help ci-assumption" />
             </div>
           </div>
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="ci-compound">{% if page.lang == 'en' %}Compounding frequency{% elsif page.lang == 'ja' %}複利頻度{% else %}복리 주기{% endif %}</label>
-              <select id="ci-compound">
+              <select id="ci-compound" aria-describedby="ci-assumption">
                 <option value="12">{% if page.lang == 'en' %}Monthly{% elsif page.lang == 'ja' %}毎月{% else %}매월{% endif %}</option>
                 <option value="4">{% if page.lang == 'en' %}Quarterly{% elsif page.lang == 'ja' %}四半期{% else %}분기{% endif %}</option>
                 <option value="2">{% if page.lang == 'en' %}Semiannual{% elsif page.lang == 'ja' %}半年{% else %}반기{% endif %}</option>
@@ -2871,20 +2871,22 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             </div>
             <div>
               <label for="ci-inflation">{% if page.lang == 'en' %}Inflation rate (optional, %){% elsif page.lang == 'ja' %}インフレ率(任意, %){% else %}연 인플레이션(선택, %){% endif %}</label>
-              <input id="ci-inflation" type="number" min="0" max="50" step="0.01" placeholder="{% if page.lang == 'en' %}e.g. 2.5{% elsif page.lang == 'ja' %}例: 2.5{% else %}예: 2.5{% endif %}" inputmode="decimal" />
+              <input id="ci-inflation" type="number" min="0" max="50" step="0.01" placeholder="{% if page.lang == 'en' %}e.g. 2.5{% elsif page.lang == 'ja' %}例: 2.5{% else %}예: 2.5{% endif %}" inputmode="decimal" aria-describedby="ci-help ci-assumption" />
             </div>
           </div>
-          <div class="tool-row-grid pct-actions">
-            <button id="ci-copy" type="button">{% if page.lang == 'en' %}Copy results{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
-            <button id="ci-reset" type="button">{% if page.lang == 'en' %}Fill sample values{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시값 채우기{% endif %}</button>
+          <div class="tool-row-grid pct-actions ci-actions">
+            <button id="ci-copy" type="button" disabled>{% if page.lang == 'en' %}Copy results{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="ci-sample" type="button">{% if page.lang == 'en' %}Fill sample values{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시값 채우기{% endif %}</button>
+            <button id="ci-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
-          <div class="tool-stats">
+          <div class="tool-stats ci-stats" aria-label="{% if page.lang == 'en' %}Compound interest estimate{% elsif page.lang == 'ja' %}複利試算結果{% else %}복리 계산 결과{% endif %}">
             <div><strong id="ci-final">-</strong><span>{% if page.lang == 'en' %}Estimated ending balance{% elsif page.lang == 'ja' %}満期予想資産{% else %}만기 예상 자산{% endif %}</span></div>
             <div><strong id="ci-contrib">-</strong><span>{% if page.lang == 'en' %}Total principal contributed{% elsif page.lang == 'ja' %}元本合計(投下額){% else %}총 원금(투입액){% endif %}</span></div>
             <div><strong id="ci-interest">-</strong><span>{% if page.lang == 'en' %}Estimated profit{% elsif page.lang == 'ja' %}想定利益{% else %}예상 수익(이자){% endif %}</span></div>
             <div><strong id="ci-real">-</strong><span>{% if page.lang == 'en' %}Inflation-adjusted value{% elsif page.lang == 'ja' %}インフレ調整後価値{% else %}물가 반영 실질가치{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="ci-help">{% if page.lang == 'en' %}Enter your inputs to calculate compound growth instantly.{% elsif page.lang == 'ja' %}入力すると複利の結果をすぐに計算します。{% else %}입력값을 넣으면 복리 결과가 즉시 계산됩니다.{% endif %}</p>
+          <p class="tool-result" id="ci-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter an initial amount or monthly contribution, return, and term.{% elsif page.lang == 'ja' %}初期投資額または毎月積立額、利回り、期間を入力してください。{% else %}초기 투자금 또는 월 적립금과 수익률, 기간을 입력하세요.{% endif %}</p>
+          <p class="tool-result" id="ci-assumption">{% if page.lang == 'en' %}Assumes month-end contributions and converts the selected nominal compounding rate to an equivalent monthly rate. Taxes, fees, and return volatility are excluded.{% elsif page.lang == 'ja' %}毎月末に積み立て、選択した名目複利の利回りを月次相当利率に換算します。税金・手数料・利回り変動は含みません。{% else %}월말 적립을 가정하고 선택한 명목 복리 수익률을 월 환산 수익률로 적용합니다. 세금·수수료·수익률 변동은 포함하지 않습니다.{% endif %}</p>
         </div>
       {% when 'discount-calculator' %}
         <div class="tool-ui">

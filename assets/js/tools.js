@@ -5187,43 +5187,65 @@
     const real = document.getElementById('ci-real');
     const help = document.getElementById('ci-help');
     const copyBtn = document.getElementById('ci-copy');
-    const resetBtn = document.getElementById('ci-reset');
+    const sampleBtn = document.getElementById('ci-sample');
+    const clearBtn = document.getElementById('ci-clear');
 
-    if (!initial || !monthly || !rate || !years || !compound || !inflation || !final || !contrib || !interest || !real || !help) return;
+    if (!initial || !monthly || !rate || !years || !compound || !inflation || !final || !contrib || !interest || !real || !help || !copyBtn || !sampleBtn || !clearBtn) return;
 
     const ciI18n = {
       ko: {
         currency: '원',
-        idle: '입력값을 넣으면 복리 결과가 즉시 계산됩니다.',
-        invalid: '숫자만 입력해 주세요.',
-        term: '투자 기간(1년 이상)을 입력하세요.',
+        idle: '초기 투자금 또는 월 적립금과 수익률, 기간을 입력하세요.',
+        invalidInitial: '초기 투자금은 0원 이상 1,000조 원 이하로 입력하세요.',
+        invalidMonthly: '월 적립금은 0원 이상 100조 원 이하로 입력하세요.',
+        needMoney: '초기 투자금과 월 적립금 중 하나는 0원보다 커야 합니다.',
+        invalidRate: '연 수익률은 0% 이상 100% 이하로 입력하세요.',
+        invalidYears: '투자 기간은 1년 이상 100년 이하의 정수로 입력하세요.',
+        invalidInflation: '인플레이션율은 0% 이상 50% 이하로 입력하세요.',
+        overflow: '계산 결과가 너무 큽니다. 투자금·수익률·기간을 줄여 주세요.',
         noInflation: '인플레이션 미입력',
-        summary: (y, bal, annualized) => `${y}년 후 예상 자산은 ${bal}이며, 원금 대비 수익률은 약 ${annualized}%입니다.`,
+        summary: (y, bal, gainRate) => `${y}년 후 예상 자산은 ${bal}이며, 총 납입 원금 대비 예상 수익은 약 ${gainRate}%입니다.`,
         copy: (f,c,i,r) => `복리 계산 결과 | 만기 자산 ${f} | 총 원금 ${c} | 예상 수익 ${i} | 실질가치 ${r}`,
         copied: '복사됨',
-        copyDefault: '결과 복사'
+        copyDefault: '결과 복사',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력값을 초기화했습니다.'
       },
       en: {
         currency: ' KRW',
-        idle: 'Enter your inputs to calculate compound growth instantly.',
-        invalid: 'Please enter numbers only.',
-        term: 'Enter an investment term of at least 1 year.',
+        idle: 'Enter an initial amount or monthly contribution, return, and term.',
+        invalidInitial: 'Enter an initial amount from 0 to 1 quadrillion KRW.',
+        invalidMonthly: 'Enter a monthly contribution from 0 to 100 trillion KRW.',
+        needMoney: 'Either the initial amount or monthly contribution must be greater than zero.',
+        invalidRate: 'Enter an annual return from 0% to 100%.',
+        invalidYears: 'Enter a whole-number term from 1 to 100 years.',
+        invalidInflation: 'Enter an inflation rate from 0% to 50%.',
+        overflow: 'The estimate is too large. Reduce the amount, return, or term.',
         noInflation: 'No inflation input',
-        summary: (y, bal, annualized) => `Estimated ending balance after ${y} years is ${bal}, with an approximate return of ${annualized}% versus total principal.`,
+        summary: (y, bal, gainRate) => `Estimated ending balance after ${y} years is ${bal}, with an estimated gain of ${gainRate}% versus total contributions.`,
         copy: (f,c,i,r) => `Compound interest result | Ending balance ${f} | Total principal ${c} | Estimated profit ${i} | Inflation-adjusted value ${r}`,
         copied: 'Copied',
-        copyDefault: 'Copy results'
+        copyDefault: 'Copy results',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared all inputs.'
       },
       ja: {
         currency: 'ウォン',
-        idle: '入力すると複利の結果をすぐに計算します。',
-        invalid: '数値のみ入力してください。',
-        term: '運用期間は1年以上で入力してください。',
+        idle: '初期投資額または毎月積立額、利回り、期間を入力してください。',
+        invalidInitial: '初期投資額は0〜1,000兆ウォンで入力してください。',
+        invalidMonthly: '毎月積立額は0〜100兆ウォンで入力してください。',
+        needMoney: '初期投資額または毎月積立額のどちらかを0より大きくしてください。',
+        invalidRate: '年利回りは0〜100%で入力してください。',
+        invalidYears: '運用期間は1〜100年の整数で入力してください。',
+        invalidInflation: 'インフレ率は0〜50%で入力してください。',
+        overflow: '計算結果が大きすぎます。金額・利回り・期間を小さくしてください。',
         noInflation: 'インフレ率未入力',
-        summary: (y, bal, annualized) => `${y}年後の予想資産は ${bal}、元本に対する収益率は約 ${annualized}% です。`,
+        summary: (y, bal, gainRate) => `${y}年後の予想資産は ${bal}、積立元本に対する予想利益は約 ${gainRate}% です。`,
         copy: (f,c,i,r) => `複利計算結果 | 満期予想資産 ${f} | 元本合計 ${c} | 想定利益 ${i} | インフレ調整後価値 ${r}`,
         copied: 'コピー完了',
-        copyDefault: '結果をコピー'
+        copyDefault: '結果をコピー',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力値をクリアしました。'
       }
     };
     const t = ciI18n[pageLang] || ciI18n.ko;
@@ -5233,55 +5255,92 @@
       return `${rounded.toLocaleString(numberLocale)}${t.currency}`;
     };
 
-    const setIdle = (msg) => {
+    const copyText = async (text) => {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      const copied = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (!copied) throw new Error('copy failed');
+    };
+
+    const fields = [initial, monthly, rate, years, inflation];
+    const resetResult = (msg = t.idle, state = '') => {
       final.textContent = '-';
       contrib.textContent = '-';
       interest.textContent = '-';
       real.textContent = '-';
       help.textContent = msg;
+      help.dataset.state = state;
+      copyBtn.disabled = true;
     };
 
-    const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
-      catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-      }
+    const setInvalid = (field, message) => {
+      fields.forEach((el) => el.setAttribute('aria-invalid', el === field ? 'true' : 'false'));
+      resetResult(message, 'error');
     };
-
-    const clamp = (num, min, max) => Math.min(max, Math.max(min, num));
 
     const render = () => {
-      const p0 = clamp(Number(initial.value || 0), 0, 1000000000000);
-      const mAdd = clamp(Number(monthly.value || 0), 0, 100000000000);
-      const rAnnual = clamp(Number(rate.value || 0), 0, 100);
-      const y = Math.floor(clamp(Number(years.value || 0), 1, 100));
-      const n = Math.max(1, Number(compound.value || 12));
-      const inf = clamp(Number(inflation.value || 0), 0, 50);
+      const initialRaw = initial.value.trim();
+      const monthlyRaw = monthly.value.trim();
+      const rateRaw = rate.value.trim();
+      const yearsRaw = years.value.trim();
+      const inflationRaw = inflation.value.trim();
 
-      if (!Number.isFinite(p0) || !Number.isFinite(mAdd) || !Number.isFinite(rAnnual) || !Number.isFinite(y) || !Number.isFinite(inf)) {
-        setIdle(t.invalid);
-        return;
-      }
-      if (!(y > 0)) {
-        setIdle(t.term);
+      if (!initialRaw && !monthlyRaw && !rateRaw && !yearsRaw && !inflationRaw) {
+        fields.forEach((el) => el.setAttribute('aria-invalid', 'false'));
+        resetResult();
         return;
       }
 
-      if (Number(initial.value || 0) !== p0) initial.value = p0;
-      if (Number(monthly.value || 0) !== mAdd) monthly.value = mAdd;
-      if (Number(rate.value || 0) !== rAnnual) rate.value = rAnnual;
-      if (Number(years.value || 0) !== y) years.value = y;
-      if (Number(inflation.value || 0) !== inf) inflation.value = inf;
+      const p0 = initialRaw === '' ? 0 : Number(initialRaw);
+      const mAdd = monthlyRaw === '' ? 0 : Number(monthlyRaw);
+      const rAnnual = Number(rateRaw);
+      const y = Number(yearsRaw);
+      const inf = inflationRaw === '' ? 0 : Number(inflationRaw);
+      const n = Number(compound.value);
+
+      if (!Number.isFinite(p0) || p0 < 0 || p0 > 1000000000000000) {
+        setInvalid(initial, t.invalidInitial);
+        return;
+      }
+      if (!Number.isFinite(mAdd) || mAdd < 0 || mAdd > 100000000000000) {
+        setInvalid(monthly, t.invalidMonthly);
+        return;
+      }
+      if (p0 === 0 && mAdd === 0) {
+        setInvalid(initialRaw ? monthly : initial, t.needMoney);
+        return;
+      }
+      if (!rateRaw || !Number.isFinite(rAnnual) || rAnnual < 0 || rAnnual > 100) {
+        setInvalid(rate, t.invalidRate);
+        return;
+      }
+      if (!yearsRaw || !Number.isInteger(y) || y < 1 || y > 100) {
+        setInvalid(years, t.invalidYears);
+        return;
+      }
+      if (!Number.isFinite(inf) || inf < 0 || inf > 50) {
+        setInvalid(inflation, t.invalidInflation);
+        return;
+      }
+
+      fields.forEach((el) => el.setAttribute('aria-invalid', 'false'));
 
       let balance = p0;
-      const periodicRate = rAnnual / 100 / n;
+      const effectiveAnnualRate = Math.pow(1 + (rAnnual / 100 / n), n) - 1;
+      const effectiveMonthlyRate = Math.pow(1 + effectiveAnnualRate, 1 / 12) - 1;
       const totalMonths = y * 12;
-      const monthsPerPeriod = 12 / n;
 
       for (let month = 1; month <= totalMonths; month++) {
-        if (month % monthsPerPeriod === 0) balance *= (1 + periodicRate);
+        balance *= (1 + effectiveMonthlyRate);
         balance += mAdd;
       }
 
@@ -5289,13 +5348,20 @@
       const earned = balance - totalContrib;
       const realValue = balance / Math.pow(1 + inf / 100, y);
 
+      if (![balance, totalContrib, earned, realValue].every(Number.isFinite) || balance > Number.MAX_SAFE_INTEGER) {
+        resetResult(t.overflow, 'error');
+        return;
+      }
+
       final.textContent = fmtCurrency(balance);
       contrib.textContent = fmtCurrency(totalContrib);
       interest.textContent = fmtCurrency(earned);
       real.textContent = inf > 0 ? fmtCurrency(realValue) : t.noInflation;
 
-      const annualized = totalContrib > 0 ? ((balance / totalContrib - 1) * 100) : 0;
-      help.textContent = t.summary(y, fmtCurrency(balance), annualized.toLocaleString(numberLocale, { maximumFractionDigits: 2 }));
+      const gainRate = ((balance / totalContrib - 1) * 100);
+      help.textContent = t.summary(y, fmtCurrency(balance), gainRate.toLocaleString(numberLocale, { maximumFractionDigits: 2 }));
+      help.dataset.state = 'success';
+      copyBtn.disabled = false;
     };
 
     [initial, monthly, rate, years, compound, inflation].forEach((el) => {
@@ -5304,14 +5370,19 @@
     });
 
     copyBtn?.addEventListener('click', async () => {
-      const text = t.copy(final.textContent, contrib.textContent, interest.textContent, real.textContent);
-      await copyText(text);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = t.copied;
-      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+      if (copyBtn.disabled) return;
+      try {
+        await copyText(t.copy(final.textContent, contrib.textContent, interest.textContent, real.textContent));
+        const old = copyBtn.textContent;
+        copyBtn.textContent = t.copied;
+        setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+      } catch (_) {
+        help.textContent = t.copyFail;
+        help.dataset.state = 'error';
+      }
     });
 
-    resetBtn?.addEventListener('click', () => {
+    sampleBtn?.addEventListener('click', () => {
       initial.value = 1000000;
       monthly.value = 300000;
       rate.value = 7;
@@ -5319,12 +5390,16 @@
       compound.value = 12;
       inflation.value = 2.5;
       render();
+      initial.focus();
     });
 
-    if (!initial.value) initial.value = 1000000;
-    if (!monthly.value) monthly.value = 300000;
-    if (!rate.value) rate.value = 7;
-    if (!years.value) years.value = 10;
+    clearBtn?.addEventListener('click', () => {
+      fields.forEach((el) => { el.value = ''; el.setAttribute('aria-invalid', 'false'); });
+      compound.value = '12';
+      resetResult(t.cleared);
+      initial.focus();
+    });
+
     render();
   }
 

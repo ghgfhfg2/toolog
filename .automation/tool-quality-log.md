@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-07 21:00 KST
+- Tool: `compound-interest-calculator`
+- Selection reason: recent quality work covered `age-calculator`, `tip-calculator`, `d-day-calculator`, `profit-margin-calculator`, and `savings-interest-calculator`; this popular finance tool had not been improved since March and silently clamped negative, fractional-term, and oversized inputs while auto-filled defaults hid the empty state.
+- Scope: improved the existing multilingual page, home metadata, accessible descriptions/status, mobile actions and results, true blank/error/success states, strict range and integer-term validation, overflow protection, example/clear/copy flow, calculation assumptions, FAQ, related links, and search-intent copy. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, localized thumbnail existence, and targeted sample/0%/monthly-vs-quarterly/large-value cases passed. Mobile rules collapse input and action grids to one column. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-06 21:00 KST
 - Tool: `age-calculator`
 - Selection reason: recent quality work covered `tip-calculator`, `d-day-calculator`, `profit-margin-calculator`, `savings-interest-calculator`, and `list-format-converter`; this tool had not been improved since March and calculated a Feb 29 birth inconsistently in non-leap years, while blank/invalid/copy states and mobile input actions were still weak.
