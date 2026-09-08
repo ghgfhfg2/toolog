@@ -4255,6 +4255,7 @@
     const age = document.getElementById('bmi-age');
     const sex = document.getElementById('bmi-sex');
     const copyBtn = document.getElementById('bmi-copy');
+    const sampleBtn = document.getElementById('bmi-sample');
     const resetBtn = document.getElementById('bmi-reset');
     const bmiValue = document.getElementById('bmi-value');
     const bmiCategory = document.getElementById('bmi-category');
@@ -4265,52 +4266,58 @@
     if (!height || !weight || !bmiValue || !bmiCategory || !bmiNormal || !bmiBmr || !help) return;
 
     const RANGE = {
-      height: { min: 50, max: 260 },
-      weight: { min: 10, max: 400 },
-      age: { min: 1, max: 120 }
+      height: { min: 100, max: 250 },
+      weight: { min: 20, max: 300 },
+      age: { min: 18, max: 100 }
     };
 
     const bmiI18n = {
       ko: {
-        classify: ['저체중', '정상', '과체중', '비만', '고도비만'],
+        classify: ['저체중', '정상', '과체중', '1단계 비만', '2단계 비만', '3단계 비만'],
         idleDefault: '키와 몸무게를 입력하면 BMI를 계산합니다.',
         idlePending: '입력 대기',
-        idleNeedInputs: '키(cm)와 몸무게(kg)를 입력하세요.',
-        idleRange: (hMin, hMax, wMin, wMax) => `입력 범위를 확인하세요 (키 ${hMin}~${hMax}cm, 몸무게 ${wMin}~${wMax}kg).`,
-        bmrPending: '나이/성별 입력 시 계산',
-        bmrAgeRange: (aMin, aMax) => `나이는 ${aMin}~${aMax}세 범위로 입력하세요`,
-        help: (bmi, category) => `BMI ${bmi.toFixed(2)} (${category}). 성인 기준 참고값이며 진단을 대체하지 않습니다.`,
-        copyInputCheck: '입력 확인',
-        copyDefault: '결과 복사',
-        copied: '복사됨',
+        idleNeedInputs: '키와 몸무게를 모두 입력해 주세요.',
+        invalidNumber: '키와 몸무게는 숫자로 입력해 주세요.',
+        idleRange: (hMin, hMax, wMin, wMax) => `키는 ${hMin}~${hMax}cm, 몸무게는 ${wMin}~${wMax}kg 범위로 입력해 주세요.`,
+        bmrPending: '나이·성별 입력 시 계산',
+        bmrPair: '나이·성별을 모두 입력하세요',
+        bmrAgeRange: (aMin, aMax) => `나이는 ${aMin}~${aMax}세 정수로 입력하세요`,
+        help: (bmi, category) => `BMI ${bmi.toFixed(2)}, 아시아 성인 참고 기준 ${category}입니다. 진단을 대체하지 않습니다.`,
+        copied: '결과를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력값을 초기화했습니다.',
         copyText: (bmi, category, normal, bmr) => `BMI ${bmi} (${category}) | 정상 체중 범위 ${normal} | BMR ${bmr}`
       },
       en: {
-        classify: ['Underweight', 'Normal', 'Overweight', 'Obese', 'Severely obese'],
+        classify: ['Underweight', 'Normal range', 'Overweight', 'Obesity class 1', 'Obesity class 2', 'Obesity class 3'],
         idleDefault: 'Enter height and weight to calculate BMI.',
         idlePending: 'Waiting for input',
-        idleNeedInputs: 'Enter height (cm) and weight (kg).',
-        idleRange: (hMin, hMax, wMin, wMax) => `Check input range (height ${hMin}-${hMax} cm, weight ${wMin}-${wMax} kg).`,
-        bmrPending: 'Shown when age and sex are provided',
-        bmrAgeRange: (aMin, aMax) => `Enter age between ${aMin} and ${aMax}.`,
-        help: (bmi, category) => `BMI ${bmi.toFixed(2)} (${category}). This is a screening reference for adults and not a medical diagnosis.`,
-        copyInputCheck: 'Check inputs',
-        copyDefault: 'Copy result',
-        copied: 'Copied',
+        idleNeedInputs: 'Enter both height and weight.',
+        invalidNumber: 'Enter numeric values for height and weight.',
+        idleRange: (hMin, hMax, wMin, wMax) => `Enter height from ${hMin}–${hMax} cm and weight from ${wMin}–${wMax} kg.`,
+        bmrPending: 'Enter age and sex for BMR',
+        bmrPair: 'Enter both age and sex',
+        bmrAgeRange: (aMin, aMax) => `Enter age as a whole number from ${aMin}–${aMax}.`,
+        help: (bmi, category) => `BMI ${bmi.toFixed(2)}: ${category} by Asian adult reference cutoffs. This is not a diagnosis.`,
+        copied: 'Copied the result.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared all inputs.',
         copyText: (bmi, category, normal, bmr) => `BMI ${bmi} (${category}) | Healthy weight range ${normal} | BMR ${bmr}`
       },
       ja: {
-        classify: ['低体重', '普通体重', '過体重', '肥満', '高度肥満'],
+        classify: ['低体重', '普通体重', '過体重', '肥満1度', '肥満2度', '肥満3度'],
         idleDefault: '身長と体重を入力するとBMIを計算します。',
         idlePending: '入力待ち',
-        idleNeedInputs: '身長(cm)と体重(kg)を入力してください。',
-        idleRange: (hMin, hMax, wMin, wMax) => `入力範囲を確認してください（身長 ${hMin}〜${hMax}cm、体重 ${wMin}〜${wMax}kg）。`,
-        bmrPending: '年齢・性別を入力すると表示',
-        bmrAgeRange: (aMin, aMax) => `年齢は${aMin}〜${aMax}歳で入力してください。`,
-        help: (bmi, category) => `BMI ${bmi.toFixed(2)}（${category}）。成人向けの目安であり、診断の代わりにはなりません。`,
-        copyInputCheck: '入力を確認',
-        copyDefault: '結果をコピー',
-        copied: 'コピー完了',
+        idleNeedInputs: '身長と体重を両方入力してください。',
+        invalidNumber: '身長と体重は数値で入力してください。',
+        idleRange: (hMin, hMax, wMin, wMax) => `身長は${hMin}〜${hMax}cm、体重は${wMin}〜${wMax}kgで入力してください。`,
+        bmrPending: '年齢・性別入力時に計算',
+        bmrPair: '年齢と性別を両方入力してください',
+        bmrAgeRange: (aMin, aMax) => `年齢は${aMin}〜${aMax}歳の整数で入力してください。`,
+        help: (bmi, category) => `BMI ${bmi.toFixed(2)}、アジア成人の目安では${category}です。診断値ではありません。`,
+        copied: '結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力をクリアしました。',
         copyText: (bmi, category, normal, bmr) => `BMI ${bmi}（${category}） | 標準体重範囲 ${normal} | BMR ${bmr}`
       }
     };
@@ -4321,7 +4328,8 @@
       if (bmi < 23) return bmiText.classify[1];
       if (bmi < 25) return bmiText.classify[2];
       if (bmi < 30) return bmiText.classify[3];
-      return bmiText.classify[4];
+      if (bmi < 35) return bmiText.classify[4];
+      return bmiText.classify[5];
     };
 
     const calcBmr = ({ w, h, a, sx }) => {
@@ -4334,39 +4342,48 @@
     const copyText = async (text) => {
       try {
         await navigator.clipboard.writeText(text);
+        return true;
       } catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        return false;
       }
     };
 
-    const setIdle = (msg = bmiText.idleDefault) => {
+    const setIdle = (msg = bmiText.idleDefault, state = '') => {
       bmiValue.textContent = '-';
       bmiCategory.textContent = bmiText.idlePending;
       bmiNormal.textContent = '-';
       bmiBmr.textContent = '-';
       help.textContent = msg;
+      help.dataset.state = state;
+      copyBtn.disabled = true;
     };
 
     const render = () => {
-      const h = Number(height.value || 0);
-      const w = Number(weight.value || 0);
-      const a = Number(age?.value || 0);
+      const heightRaw = height.value.trim();
+      const weightRaw = weight.value.trim();
+      const ageRaw = age?.value.trim() || '';
+      const h = Number(heightRaw);
+      const w = Number(weightRaw);
+      const a = Number(ageRaw);
       const sx = sex?.value || '';
 
-      if (!(h > 0) || !(w > 0)) {
+      [height, weight, age, sex].forEach((el) => el?.setAttribute('aria-invalid', 'false'));
+      if (!heightRaw || !weightRaw) {
         setIdle(bmiText.idleNeedInputs);
         return false;
       }
-
-      if (h < RANGE.height.min || h > RANGE.height.max || w < RANGE.weight.min || w > RANGE.weight.max) {
-        setIdle(bmiText.idleRange(RANGE.height.min, RANGE.height.max, RANGE.weight.min, RANGE.weight.max));
+      if (!Number.isFinite(h) || !Number.isFinite(w)) {
+        height.setAttribute('aria-invalid', String(!Number.isFinite(h)));
+        weight.setAttribute('aria-invalid', String(!Number.isFinite(w)));
+        setIdle(bmiText.invalidNumber, 'error');
+        return false;
+      }
+      const heightInvalid = h < RANGE.height.min || h > RANGE.height.max;
+      const weightInvalid = w < RANGE.weight.min || w > RANGE.weight.max;
+      if (heightInvalid || weightInvalid) {
+        height.setAttribute('aria-invalid', String(heightInvalid));
+        weight.setAttribute('aria-invalid', String(weightInvalid));
+        setIdle(bmiText.idleRange(RANGE.height.min, RANGE.height.max, RANGE.weight.min, RANGE.weight.max), 'error');
         return false;
       }
 
@@ -4375,46 +4392,58 @@
       const normalMin = 18.5 * m * m;
       const normalMax = 22.9 * m * m;
       const category = classify(bmi);
-      const hasValidAge = !age?.value || (a >= RANGE.age.min && a <= RANGE.age.max);
-      const bmr = hasValidAge ? calcBmr({ w, h, a, sx }) : null;
+      const hasAge = Boolean(ageRaw);
+      const hasSex = Boolean(sx);
+      const hasValidAge = !hasAge || (Number.isInteger(a) && a >= RANGE.age.min && a <= RANGE.age.max);
+      if (!hasValidAge) age.setAttribute('aria-invalid', 'true');
+      const hasCompleteBmrInputs = hasAge && hasSex;
+      if (hasAge !== hasSex) (hasAge ? sex : age).setAttribute('aria-invalid', 'true');
+      const bmr = hasValidAge && hasCompleteBmrInputs ? calcBmr({ w, h, a, sx }) : null;
 
       bmiValue.textContent = bmi.toLocaleString(numberLocale, { maximumFractionDigits: 2 });
       bmiCategory.textContent = category;
       bmiNormal.textContent = `${normalMin.toLocaleString(numberLocale, { maximumFractionDigits: 1 })}kg ~ ${normalMax.toLocaleString(numberLocale, { maximumFractionDigits: 1 })}kg`;
       bmiBmr.textContent = Number.isFinite(bmr)
         ? `${Math.round(bmr).toLocaleString(numberLocale)} kcal`
-        : (hasValidAge ? bmiText.bmrPending : bmiText.bmrAgeRange(RANGE.age.min, RANGE.age.max));
+        : (!hasValidAge ? bmiText.bmrAgeRange(RANGE.age.min, RANGE.age.max) : ((hasAge || hasSex) ? bmiText.bmrPair : bmiText.bmrPending));
       help.textContent = bmiText.help(bmi, category);
+      help.dataset.state = hasValidAge && hasAge === hasSex ? 'success' : 'warning';
+      copyBtn.disabled = false;
       return true;
     };
 
     [height, weight, age, sex].forEach((el) => el?.addEventListener('input', render));
 
     resetBtn?.addEventListener('click', () => {
-      height.value = 170;
-      weight.value = 65;
+      height.value = '';
+      weight.value = '';
       if (age) age.value = '';
       if (sex) sex.value = '';
       render();
+      help.textContent = bmiText.cleared;
+      height.focus();
+    });
+
+    sampleBtn?.addEventListener('click', () => {
+      height.value = '170';
+      weight.value = '65';
+      if (age) age.value = '30';
+      if (sex) sex.value = 'female';
+      render();
+      height.focus();
     });
 
     copyBtn?.addEventListener('click', async () => {
       if (!render() || bmiValue.textContent === '-') {
-        const old = copyBtn.textContent;
-        copyBtn.textContent = bmiText.copyInputCheck;
-        setTimeout(() => { copyBtn.textContent = old || bmiText.copyDefault; }, 900);
         return;
       }
 
       const text = bmiText.copyText(bmiValue.textContent, bmiCategory.textContent, bmiNormal.textContent, bmiBmr.textContent);
-      await copyText(text);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = bmiText.copied;
-      setTimeout(() => { copyBtn.textContent = old || bmiText.copyDefault; }, 900);
+      const copied = await copyText(text);
+      help.textContent = copied ? bmiText.copied : bmiText.copyFail;
+      help.dataset.state = copied ? 'success' : 'error';
     });
 
-    if (!height.value) height.value = 170;
-    if (!weight.value) weight.value = 65;
     render();
   }
 

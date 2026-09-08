@@ -2703,42 +2703,44 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-hint" id="dday-rule">{% if page.lang == 'en' %}Business-day mode excludes Saturdays and Sundays only; public holidays are not excluded. The difference excludes the start date and includes the target date.{% elsif page.lang == 'ja' %}営業日モードで除外するのは土・日だけで、祝日は除外しません。差分は基準日を含めず、目標日を含めて数えます。{% else %}업무일 모드는 토·일만 제외하며 공휴일은 제외하지 않습니다. 차이는 기준일을 빼고 목표일을 포함해 셉니다.{% endif %}</p>
         </div>
       {% when 'bmi-calculator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui bmi-ui">
+          <div class="tool-row-grid pct-grid bmi-grid">
             <div>
               <label for="bmi-height">{% if page.lang == 'en' %}Height (cm){% elsif page.lang == 'ja' %}身長(cm){% else %}키(cm){% endif %}</label>
-              <input id="bmi-height" type="number" min="50" max="260" step="0.1" placeholder="{% if page.lang == 'en' %}e.g., 170{% elsif page.lang == 'ja' %}例: 170{% else %}예: 170{% endif %}" inputmode="decimal" />
+              <input id="bmi-height" type="number" min="100" max="250" step="0.1" placeholder="{% if page.lang == 'en' %}e.g., 170{% elsif page.lang == 'ja' %}例: 170{% else %}예: 170{% endif %}" inputmode="decimal" aria-describedby="bmi-help bmi-assumption" />
             </div>
             <div>
               <label for="bmi-weight">{% if page.lang == 'en' %}Weight (kg){% elsif page.lang == 'ja' %}体重(kg){% else %}몸무게(kg){% endif %}</label>
-              <input id="bmi-weight" type="number" min="10" max="400" step="0.1" placeholder="{% if page.lang == 'en' %}e.g., 65{% elsif page.lang == 'ja' %}例: 65{% else %}예: 65{% endif %}" inputmode="decimal" />
+              <input id="bmi-weight" type="number" min="20" max="300" step="0.1" placeholder="{% if page.lang == 'en' %}e.g., 65{% elsif page.lang == 'ja' %}例: 65{% else %}예: 65{% endif %}" inputmode="decimal" aria-describedby="bmi-help bmi-assumption" />
             </div>
           </div>
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid pct-grid bmi-grid">
             <div>
               <label for="bmi-age">{% if page.lang == 'en' %}Age (optional){% elsif page.lang == 'ja' %}年齢（任意）{% else %}나이(선택){% endif %}</label>
-              <input id="bmi-age" type="number" min="1" max="120" step="1" placeholder="{% if page.lang == 'en' %}e.g., 30{% elsif page.lang == 'ja' %}例: 30{% else %}예: 30{% endif %}" inputmode="numeric" />
+              <input id="bmi-age" type="number" min="18" max="100" step="1" placeholder="{% if page.lang == 'en' %}e.g., 30{% elsif page.lang == 'ja' %}例: 30{% else %}예: 30{% endif %}" inputmode="numeric" aria-describedby="bmi-help bmi-assumption" />
             </div>
             <div>
               <label for="bmi-sex">{% if page.lang == 'en' %}Sex (optional){% elsif page.lang == 'ja' %}性別（任意）{% else %}성별(선택){% endif %}</label>
-              <select id="bmi-sex">
+              <select id="bmi-sex" aria-describedby="bmi-help bmi-assumption">
                 <option value="">{% if page.lang == 'en' %}Prefer not to say{% elsif page.lang == 'ja' %}未選択{% else %}선택 안 함{% endif %}</option>
                 <option value="male">{% if page.lang == 'en' %}Male{% elsif page.lang == 'ja' %}男性{% else %}남성{% endif %}</option>
                 <option value="female">{% if page.lang == 'en' %}Female{% elsif page.lang == 'ja' %}女性{% else %}여성{% endif %}</option>
               </select>
             </div>
           </div>
-          <div class="tool-row-grid pct-actions">
-            <button id="bmi-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
-            <button id="bmi-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          <div class="tool-row-grid pct-actions bmi-actions" aria-label="{% if page.lang == 'en' %}BMI calculator actions{% elsif page.lang == 'ja' %}BMI計算機の操作{% else %}BMI 계산기 작업{% endif %}">
+            <button id="bmi-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="bmi-sample" type="button">{% if page.lang == 'en' %}Fill sample values{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시값 채우기{% endif %}</button>
+            <button id="bmi-reset" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
-          <div class="tool-stats">
+          <div class="tool-stats bmi-stats" aria-label="{% if page.lang == 'en' %}BMI and BMR results{% elsif page.lang == 'ja' %}BMI・BMR計算結果{% else %}BMI 및 BMR 계산 결과{% endif %}">
             <div><strong id="bmi-value">-</strong><span>BMI</span></div>
-            <div><strong id="bmi-category">{% if page.lang == 'en' %}Waiting for input{% elsif page.lang == 'ja' %}入力待ち{% else %}입력 대기{% endif %}</strong><span>{% if page.lang == 'en' %}Weight category{% elsif page.lang == 'ja' %}体重区分{% else %}체중 분류{% endif %}</span></div>
-            <div><strong id="bmi-normal">-</strong><span>{% if page.lang == 'en' %}Healthy weight range{% elsif page.lang == 'ja' %}標準体重範囲{% else %}정상 체중 범위{% endif %}</span></div>
+            <div><strong id="bmi-category">{% if page.lang == 'en' %}Waiting for input{% elsif page.lang == 'ja' %}入力待ち{% else %}입력 대기{% endif %}</strong><span>{% if page.lang == 'en' %}Asian adult reference category{% elsif page.lang == 'ja' %}アジア成人目安区分{% else %}아시아 성인 기준 분류{% endif %}</span></div>
+            <div><strong id="bmi-normal">-</strong><span>{% if page.lang == 'en' %}BMI 18.5–22.9 weight range{% elsif page.lang == 'ja' %}BMI 18.5〜22.9の体重範囲{% else %}BMI 18.5~22.9 체중 범위{% endif %}</span></div>
             <div><strong id="bmi-bmr">-</strong><span>{% if page.lang == 'en' %}Basal metabolic rate (BMR){% elsif page.lang == 'ja' %}基礎代謝量(BMR){% else %}기초대사량(BMR){% endif %}</span></div>
           </div>
-          <p class="tool-result" id="bmi-help">{% if page.lang == 'en' %}Enter height and weight to calculate BMI and healthy weight range.{% elsif page.lang == 'ja' %}身長と体重を入力すると、BMIと標準体重範囲を計算します。{% else %}키와 몸무게를 입력하면 BMI와 정상 체중 범위를 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="bmi-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter height and weight to calculate BMI and the reference weight range.{% elsif page.lang == 'ja' %}身長と体重を入力すると、BMIと目安体重範囲を計算します。{% else %}키와 몸무게를 입력하면 BMI와 참고 체중 범위를 계산합니다.{% endif %}</p>
+          <p class="tool-hint" id="bmi-assumption">{% if page.lang == 'en' %}For adults only. Categories use Asian adult cutoffs; BMR uses the Mifflin–St Jeor equation when both age (18–100) and sex are entered. Results are screening estimates, not a diagnosis.{% elsif page.lang == 'ja' %}成人向けです。区分はアジア成人の目安、BMRは年齢（18〜100歳）と性別の両方を入力した場合にMifflin–St Jeor式で推定します。診断値ではありません。{% else %}성인용입니다. 분류는 아시아 성인 참고 기준이며, BMR은 나이(18~100세)와 성별을 모두 입력하면 Mifflin–St Jeor 식으로 추정합니다. 진단값이 아닙니다.{% endif %}</p>
         </div>
       {% when 'body-fat-calculator' %}
         <div class="tool-ui bfat-ui">

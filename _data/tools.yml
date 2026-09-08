@@ -1849,13 +1849,15 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 키·몸무게로 BMI와 정상 체중 범위, 선택 입력 시 BMR까지 계산해요.
-  description_en: Calculate BMI and healthy weight range from height and weight, with optional BMR estimate from age and sex.
-  description_ja: 身長と体重からBMIと標準体重範囲を計算し、年齢・性別入力時はBMR目安も確認できます。
+  description: 성인 키·몸무게로 BMI와 아시아 성인 기준 체중 범위를 계산하고, 나이·성별 입력 시 BMR 추정값까지 확인해요.
+  description_en: Calculate adult BMI and an Asian-reference weight range, with an optional BMR estimate when age and sex are both entered.
+  description_ja: 成人の身長・体重からBMIとアジア成人基準の体重範囲を計算し、年齢・性別入力時はBMR目安も確認できます。
   url: /tools/bmi-calculator/
   url_en: /en/tools/bmi-calculator/
   url_ja: /ja/tools/bmi-calculator/
   thumbnail: /assets/thumbs/bmi-calculator.svg
+  tool_type: calculator
+  topic_cluster: health
 
 - id: age-calculator
   title: 만나이 계산기

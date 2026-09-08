@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: BMI Calculator | Body Mass Index, Healthy Weight Range, and BMR
-description: Enter height and weight to calculate BMI instantly, see weight category and healthy range, and optionally estimate BMR with age and sex.
+title: Adult BMI Calculator | Asian Cutoffs, Weight Range, and BMR
+description: Calculate adult BMI with Asian-reference categories, the weight range for BMI 18.5–22.9, and an optional Mifflin–St Jeor BMR estimate.
 lang: en
 permalink: /en/tools/bmi-calculator/
 canonical_url: /en/tools/bmi-calculator/
@@ -12,28 +12,32 @@ image:
   path: /assets/thumbs/bmi-calculator.svg
   alt: BMI calculator result preview
 tool_key: bmi-calculator
-keywords: [bmi calculator, body mass index, healthy weight range, obesity check, bmr calculator]
-related_tools: [percent-calculator, d-day-calculator]
+keywords: [adult bmi calculator, asian bmi calculator, body mass index, healthy weight range, bmr calculator]
+related_tools: [body-fat-calculator, tdee-calculator, age-calculator]
+faq:
+  - q: How is BMI calculated?
+    a: BMI is weight in kilograms divided by height in metres squared. For example, 65 kg and 170 cm gives about 22.49.
+  - q: Which BMI categories does this calculator use?
+    a: It uses Asian adult reference cutoffs—under 18.5, 18.5–22.9, 23–24.9, 25–29.9, 30–34.9, and 35 or above—and labels them clearly as screening references.
+  - q: How is the BMR estimate calculated?
+    a: When both age and sex are entered, the calculator applies the Mifflin–St Jeor equation. It is an estimate of resting daily energy use, not a calorie prescription.
+  - q: Is this calculator suitable for children or teenagers?
+    a: No. Growing children and teenagers require age- and sex-specific BMI percentiles rather than adult cutoffs.
 alternate_urls:
   ko: /tools/bmi-calculator/
   en: /en/tools/bmi-calculator/
   ja: /ja/tools/bmi-calculator/
 ---
 
-## Fast BMI check in seconds
-Use this tool to quickly understand your current weight status.
-With height and weight, it shows:
-- BMI value
-- Weight category
-- Healthy weight range
-
-If age and sex are provided, it also estimates BMR.
+## Check adult BMI with clearly stated Asian cutoffs
+Enter height and weight to see BMI, an Asian adult reference category, and the weight range corresponding to BMI 18.5–22.9. Add both age and sex to estimate basal metabolic rate (BMR).
 
 ## Key features
 - Real-time BMI calculation
-- Automatic category classification
-- Height-based healthy weight range
-- Optional BMR estimation
+- Six clearly separated adult reference categories
+- Height-based BMI 18.5–22.9 weight range
+- Optional Mifflin–St Jeor BMR estimate
+- Empty, out-of-range, and incomplete optional-input feedback
 
 ## How to use
 1. Enter height (cm).
@@ -42,9 +46,16 @@ If age and sex are provided, it also estimates BMR.
 4. Review BMI, category, and range.
 
 ## Notes
-- BMI is a screening indicator, not a diagnosis.
+- BMI and BMR are adult screening estimates, not diagnoses or prescriptions.
 - Athletes or high-muscle individuals may need additional body-composition checks.
+- Do not apply these adult categories during pregnancy or to growing children.
+
+## Formula and category boundaries
+- BMI = weight (kg) ÷ height (m)².
+- Categories: under 18.5, 18.5–22.9, 23–24.9, 25–29.9, 30–34.9, and 35 or above.
+- BMR uses weight, height, whole-number age from 18–100, and sex in the Mifflin–St Jeor equation.
 
 ## Related tools
-- Progress timeline: [D-Day Calculator]({{ '/en/tools/d-day-calculator/' | relative_url }})
-- Goal percentage tracking: [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
+- Add circumference context: [Body Fat Calculator]({{ '/en/tools/body-fat-calculator/' | relative_url }})
+- Estimate daily energy needs: [TDEE Calculator]({{ '/en/tools/tdee-calculator/' | relative_url }})
+- Check exact age: [Age Calculator]({{ '/en/tools/age-calculator/' | relative_url }})

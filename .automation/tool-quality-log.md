@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-08 21:00 KST
+- Tool: `bmi-calculator`
+- Selection reason: the most recent quality runs covered compound interest, age, tip, D-day, profit margin, and savings interest; this older health calculator had not been improved since March and carried higher error/interpretation risk because it silently prefilled values, accepted fractional BMR ages, grouped all BMI values above 30 into one label, and did not clearly identify its Asian adult thresholds.
+- Scope: improved the existing multilingual page, home metadata, mobile inputs/actions/results, accessible descriptions and live status, true empty/error/success states, strict adult ranges and integer-age validation, paired BMR inputs, six BMI categories, sample/clear/copy feedback, stated calculation assumptions, FAQ, related links, and search-intent copy. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, mobile CSS rules, and targeted underweight/normal/overweight/three obesity classes/range/BMR/age-boundary cases passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-07 21:00 KST
 - Tool: `compound-interest-calculator`
 - Selection reason: recent quality work covered `age-calculator`, `tip-calculator`, `d-day-calculator`, `profit-margin-calculator`, and `savings-interest-calculator`; this popular finance tool had not been improved since March and silently clamped negative, fractional-term, and oversized inputs while auto-filled defaults hid the empty state.
