@@ -17,8 +17,10 @@ related_tools: [body-fat-calculator, tdee-calculator, age-calculator]
 faq:
   - q: How is BMI calculated?
     a: BMI is weight in kilograms divided by height in metres squared. For example, 65 kg and 170 cm gives about 22.49.
+  - q: Can BMI alone determine whether I am healthy?
+    a: No. BMI is a quick adult weight-status screening measure and does not account for muscle mass, body-fat percentage, or medical history. Consult a healthcare professional for an individual assessment.
   - q: Which BMI categories does this calculator use?
-    a: It uses Asian adult reference cutoffs—under 18.5, 18.5–22.9, 23–24.9, 25–29.9, 30–34.9, and 35 or above—and labels them clearly as screening references.
+    a: It uses Asian adult reference cutoffs—under 18.5, 18.5–22.9, 23–24.9, 25–29.9, 30–34.9, and 35 or above. The displayed reference weight range corresponds to BMI 18.5 or above and below 23.
   - q: How is the BMR estimate calculated?
     a: When both age and sex are entered, the calculator applies the Mifflin–St Jeor equation. It is an estimate of resting daily energy use, not a calorie prescription.
   - q: Is this calculator suitable for children or teenagers?
@@ -42,8 +44,16 @@ Enter height and weight to see BMI, an Asian adult reference category, and the w
 ## How to use
 1. Enter height (cm).
 2. Enter weight (kg).
-3. Optionally enter age and sex for BMR.
-4. Review BMI, category, and range.
+3. Optionally enter both a whole-number age from 18–100 and sex for BMR.
+4. Review BMI, category, reference weight range, and BMR. You can also fill the sample values, copy a valid result, or clear all inputs.
+
+Blank required fields, values outside the supported ranges, fractional ages, and incomplete age/sex pairs are explained beside the results.
+
+## Example calculation
+- Height: 170 cm
+- Weight: 65 kg
+
+The BMI is about **22.49**, which is in the **normal range** under this calculator's Asian adult reference cutoffs. At the same height, the weight range corresponding to BMI 18.5–22.9 is approximately 53.5–66.2 kg.
 
 ## Notes
 - BMI and BMR are adult screening estimates, not diagnoses or prescriptions.
@@ -59,3 +69,6 @@ Enter height and weight to see BMI, an Asian adult reference category, and the w
 - Add circumference context: [Body Fat Calculator]({{ '/en/tools/body-fat-calculator/' | relative_url }})
 - Estimate daily energy needs: [TDEE Calculator]({{ '/en/tools/tdee-calculator/' | relative_url }})
 - Check exact age: [Age Calculator]({{ '/en/tools/age-calculator/' | relative_url }})
+
+## Summary
+This adult BMI calculator combines an Asian-reference weight category, a BMI-based weight range, and an optional BMR estimate. Use the result as a starting point for personal health planning, not as a diagnosis.
