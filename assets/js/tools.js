@@ -13243,49 +13243,65 @@
     const help = document.getElementById('we-help');
     const copyBtn = document.getElementById('we-copy');
     const resetBtn = document.getElementById('we-reset');
+    const exampleBtn = document.getElementById('we-example');
+    const presetBtns = [...document.querySelectorAll('[data-wet-start]')];
 
-    if (!startEl || !workEl || !breakEl || !endEl || !stayEl || !nextEl || !breakSummaryEl || !help) return;
+    if (!startEl || !workEl || !breakEl || !endEl || !stayEl || !nextEl || !breakSummaryEl || !help || !copyBtn) return;
 
     const t = {
       ko: {
         needInput: '출근 시각과 근무시간을 입력하세요.',
+        invalidStart: '출근 시각을 올바르게 입력해 주세요.',
+        invalidWork: '실근무시간은 0.25시간 이상 24시간 이하의 숫자로 입력해 주세요.',
+        invalidBreak: '휴게시간은 0분 이상 600분 이하의 정수로 입력해 주세요.',
+        tooLong: '실근무시간과 휴게시간의 합은 24시간 이하여야 합니다.',
         nextSame: '당일',
         nextDay: (n) => `+${n}일`,
         breakSummary: (m) => `총 ${m}분`,
+        duration: (h, m) => `${h}시간 ${m}분`,
         help: (end, day) => `예상 퇴근 시각은 ${end} (${day}) 입니다.`,
         copy: (e,s,d,b) => `퇴근 시간 계산 결과 | 퇴근 ${e} | 체류 ${s} | 날짜 ${d} | 휴게 ${b}`,
-        copied: '복사됨',
-        copyDefault: '결과 복사'
+        copied: '계산 결과를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다. 결과를 직접 선택해 복사해 주세요.',
+        cleared: '입력값을 비웠습니다.'
       },
       en: {
         needInput: 'Enter start time and work hours.',
+        invalidStart: 'Enter a valid start time.',
+        invalidWork: 'Enter actual work time from 0.25 to 24 hours.',
+        invalidBreak: 'Enter a whole-number break from 0 to 600 minutes.',
+        tooLong: 'Actual work time plus breaks must not exceed 24 hours.',
         nextSame: 'Same day',
         nextDay: (n) => `+${n} day(s)`,
         breakSummary: (m) => `${m} min total`,
+        duration: (h, m) => `${h}h ${m}m`,
         help: (end, day) => `Estimated clock-out time: ${end} (${day}).`,
         copy: (e,s,d,b) => `Work end time | End ${e} | Stay ${s} | Day ${d} | Break ${b}`,
-        copied: 'Copied',
-        copyDefault: 'Copy result'
+        copied: 'Copied the calculation result.',
+        copyFail: 'Automatic copy is unavailable. Select and copy the result manually.',
+        cleared: 'Cleared all inputs.'
       },
       ja: {
         needInput: '出勤時刻と勤務時間を入力してください。',
+        invalidStart: '正しい出勤時刻を入力してください。',
+        invalidWork: '実勤務時間は0.25〜24時間の数値で入力してください。',
+        invalidBreak: '休憩時間は0〜600分の整数で入力してください。',
+        tooLong: '実勤務時間と休憩時間の合計は24時間以内にしてください。',
         nextSame: '当日',
         nextDay: (n) => `+${n}日`,
         breakSummary: (m) => `合計 ${m}分`,
+        duration: (h, m) => `${h}時間${m}分`,
         help: (end, day) => `退勤予定時刻は ${end}（${day}）です。`,
         copy: (e,s,d,b) => `退勤時刻計算 | 退勤 ${e} | 滞在 ${s} | 日付 ${d} | 休憩 ${b}`,
-        copied: 'コピー完了',
-        copyDefault: '結果をコピー'
+        copied: '計算結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。結果を選択してコピーしてください。',
+        cleared: '入力をクリアしました。'
       }
     }[pageLang] || null;
 
-    const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
-      catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-      }
+    const setStatus = (message, state = '') => {
+      help.textContent = message;
+      help.dataset.state = state;
     };
 
     const fmtHM = (minutes) => {
@@ -13296,50 +13312,99 @@
     };
 
     const render = () => {
-      const start = startEl.value || '';
-      const workHours = Number(workEl.value || 0);
-      const breakMinutes = Number(breakEl.value || 0);
-
-      if (!start || !(workHours > 0)) {
+      const start = startEl.value.trim();
+      const workRaw = workEl.value.trim();
+      const breakRaw = breakEl.value.trim();
+      const workHours = Number(workRaw);
+      const breakMinutes = breakRaw === '' ? 0 : Number(breakRaw);
+      const resetResults = () => {
         endEl.textContent = '-'; stayEl.textContent = '-'; nextEl.textContent = '-'; breakSummaryEl.textContent = '-';
-        help.textContent = t.needInput;
+        copyBtn.disabled = true;
+      };
+      [startEl, workEl, breakEl].forEach((el) => el.setAttribute('aria-invalid', 'false'));
+
+      if (!start || !workRaw) {
+        resetResults();
+        setStatus(t.needInput);
         return;
       }
 
       const [h, m] = start.split(':').map(Number);
+      if (!/^\d{2}:\d{2}$/.test(start) || !Number.isInteger(h) || !Number.isInteger(m) || h < 0 || h > 23 || m < 0 || m > 59) {
+        startEl.setAttribute('aria-invalid', 'true');
+        resetResults();
+        setStatus(t.invalidStart, 'error');
+        return;
+      }
+      if (!Number.isFinite(workHours) || workHours < 0.25 || workHours > 24) {
+        workEl.setAttribute('aria-invalid', 'true');
+        resetResults();
+        setStatus(t.invalidWork, 'error');
+        return;
+      }
+      if (!Number.isInteger(breakMinutes) || breakMinutes < 0 || breakMinutes > 600) {
+        breakEl.setAttribute('aria-invalid', 'true');
+        resetResults();
+        setStatus(t.invalidBreak, 'error');
+        return;
+      }
+
       const startMinutes = (h * 60) + m;
-      const totalMinutes = Math.round(workHours * 60 + Math.max(0, breakMinutes));
+      const totalMinutes = Math.round(workHours * 60) + breakMinutes;
+      if (totalMinutes > 1440) {
+        workEl.setAttribute('aria-invalid', 'true');
+        breakEl.setAttribute('aria-invalid', 'true');
+        resetResults();
+        setStatus(t.tooLong, 'error');
+        return;
+      }
       const endMinutesRaw = startMinutes + totalMinutes;
       const dayOffset = Math.floor(endMinutesRaw / 1440);
       const endTime = fmtHM(endMinutesRaw);
 
       endEl.textContent = endTime;
-      stayEl.textContent = `${Math.floor(totalMinutes / 60)}h ${totalMinutes % 60}m`;
+      stayEl.textContent = t.duration(Math.floor(totalMinutes / 60), totalMinutes % 60);
       nextEl.textContent = dayOffset > 0 ? t.nextDay(dayOffset) : t.nextSame;
-      breakSummaryEl.textContent = t.breakSummary(Math.max(0, breakMinutes));
-      help.textContent = t.help(endTime, nextEl.textContent);
+      breakSummaryEl.textContent = t.breakSummary(breakMinutes);
+      copyBtn.disabled = false;
+      setStatus(t.help(endTime, nextEl.textContent), 'success');
     };
 
     [startEl, workEl, breakEl].forEach((el) => el.addEventListener('input', render));
 
-    resetBtn?.addEventListener('click', () => {
-      startEl.value = '09:00';
-      workEl.value = '8';
-      breakEl.value = '60';
+    const fillExample = (start = '09:00', work = '8', rest = '60') => {
+      startEl.value = start;
+      workEl.value = work;
+      breakEl.value = rest;
       render();
+      startEl.focus();
+    };
+
+    presetBtns.forEach((button) => button.addEventListener('click', () => {
+      fillExample(button.dataset.wetStart, button.dataset.wetWork, button.dataset.wetBreak);
+    }));
+    exampleBtn?.addEventListener('click', () => fillExample());
+
+    resetBtn?.addEventListener('click', () => {
+      startEl.value = '';
+      workEl.value = '';
+      breakEl.value = '';
+      render();
+      setStatus(t.cleared);
+      startEl.focus();
     });
 
     copyBtn?.addEventListener('click', async () => {
-      if (endEl.textContent === '-') return;
-      await copyText(t.copy(endEl.textContent, stayEl.textContent, nextEl.textContent, breakSummaryEl.textContent));
-      const old = copyBtn.textContent;
-      copyBtn.textContent = t.copied;
-      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+      if (copyBtn.disabled || endEl.textContent === '-') return;
+      const summary = t.copy(endEl.textContent, stayEl.textContent, nextEl.textContent, breakSummaryEl.textContent);
+      try {
+        await navigator.clipboard.writeText(summary);
+        setStatus(t.copied, 'success');
+      } catch (_) {
+        setStatus(t.copyFail, 'error');
+      }
     });
 
-    if (!startEl.value) startEl.value = '09:00';
-    if (!workEl.value) workEl.value = '8';
-    if (!breakEl.value) breakEl.value = '60';
     render();
   }
 

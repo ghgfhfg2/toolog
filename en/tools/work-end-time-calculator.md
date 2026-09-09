@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Work End Time Calculator | Auto clock-out estimate from start and break time
-description: Enter start time, work hours, and break time to calculate your estimated clock-out time and total stay duration.
+title: Work End Time Calculator | Clock-out time from shifts and breaks
+description: Enter start time, actual work hours, and lunch or break minutes to calculate same-day or next-day clock-out time and total stay duration.
 lang: en
 permalink: /en/tools/work-end-time-calculator/
 canonical_url: /en/tools/work-end-time-calculator/
@@ -13,7 +13,7 @@ image:
   path: /assets/thumbs/work-end-time-calculator.svg
   alt: Work end time calculator preview
 keywords: [work end time calculator, clock-out time calculator, work hours calculator, break time calculator]
-related_tools: [d-day-calculator, pomodoro-timer]
+related_tools: [time-difference-calculator, appointment-departure-buffer-simulator, pomodoro-timer]
 faq:
   - q: How should I enter break time?
     a: Add your legal break and actual lunch/rest periods together, then enter the total in minutes.
@@ -31,14 +31,15 @@ alternate_urls:
 You started work, but it’s often unclear **what time you can actually leave**.
 It gets harder to estimate by feel when flexible schedules, shifts, and off-site work are mixed.
 
-With this tool, just enter **start time + actual work hours + break time**
-and it instantly shows your estimated clock-out time and total stay duration.
+Enter **start time + actual work hours + unpaid break time** to see the estimated clock-out time and total stay. You can enter 7 hours 30 minutes as `7.5`, and overnight shifts show a next-day indicator.
 
 ## Key features
 - Enter start time (HH:MM)
 - Combined calculation of target work hours (hours) + break time (minutes)
 - Automatic estimated clock-out time
 - Displays total stay time (work + break) and next-day indicator
+- Quick examples for daytime and night shifts, plus result copy
+- Clear errors for negative breaks, fractional break minutes, and stays over 24 hours
 
 ## Example
 - Start time: 09:00
@@ -47,8 +48,14 @@ and it instantly shows your estimated clock-out time and total stay duration.
 
 → Estimated clock-out time: **18:00**
 
+For an overnight example, start at `22:00`, work `8` hours, and enter a `60`-minute break. The result is **07:00 the next day**.
+
+## Calculation assumptions
+The formula is `start time + actual work time + unpaid break time`. Do not add a paid break again if it is already included in work hours. Overtime, early leave, local labor rules, and workplace policies are not applied automatically; confirm the result against your attendance record.
+
 ## Good tools to use together
-- Deadline countdown: [D-Day Calculator]({{ '/en/tools/d-day-calculator/' | relative_url }})
+- Check a worked interval: [Time Difference Calculator]({{ '/en/tools/time-difference-calculator/' | relative_url }})
+- Plan when to leave: [Appointment Departure Buffer Simulator]({{ '/en/tools/appointment-departure-buffer-simulator/' | relative_url }})
 - Focus block routine: [Pomodoro Timer]({{ '/en/tools/pomodoro-timer/' | relative_url }})
 
 ## FAQ
@@ -60,3 +67,6 @@ Overtime, delayed meetings, or extra breaks can make real clock-out time differe
 
 ### Can I use it on mobile?
 Yes. It runs directly in your browser with no installation required.
+
+### How do I enter 7 hours 30 minutes?
+Enter `7.5` in actual work hours. Total stay is displayed again in hours and minutes.

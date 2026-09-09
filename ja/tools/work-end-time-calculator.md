@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: 退勤時刻計算機 | 出勤・休憩時間から自動計算
-description: 出勤時刻、勤務時間、休憩時間を入力すると、退勤予定時刻と総滞在時間を計算できます。
+title: 退勤時刻計算機 | 出勤・実勤務・休憩時間から自動計算
+description: 出勤時刻、実勤務時間、昼休み・休憩時間から、当日または翌日の退勤予定時刻と総滞在時間を計算できます。
 lang: ja
 permalink: /ja/tools/work-end-time-calculator/
 canonical_url: /ja/tools/work-end-time-calculator/
@@ -13,7 +13,7 @@ image:
   path: /assets/thumbs/work-end-time-calculator.svg
   alt: 退勤時刻計算機プレビュー
 keywords: [退勤時刻計算機, 勤務時間計算, 出勤 退勤 計算, 休憩時間 計算]
-related_tools: [d-day-calculator, pomodoro-timer]
+related_tools: [time-difference-calculator, appointment-departure-buffer-simulator, pomodoro-timer]
 faq:
   - q: 休憩時間はどう入力すればいいですか？
     a: 法定休憩や実際の昼休み・小休憩を分単位で合算して入力してください。
@@ -31,14 +31,15 @@ alternate_urls:
 出勤はしたけれど、**正確に何時に退勤できるか**迷うことはよくあります。
 特にフレックス勤務・交代勤務・外勤が混ざると、感覚だけでの計算は難しくなります。
 
-このツールは **出勤時刻 + 実勤務時間 + 休憩時間** を入力するだけで、
-退勤予定時刻と総滞在時間をすぐに表示します。
+**出勤時刻 + 実勤務時間 + 無給休憩時間**を入力すると、退勤予定時刻と総滞在時間を表示します。7時間30分は`7.5`時間として入力でき、夜勤では翌日表示も確認できます。
 
 ## 主な機能
 - 出勤時刻（時:分）入力
 - 目標勤務時間（時間）+ 休憩時間（分）の合算計算
 - 退勤予定時刻を自動算出
 - 総滞在時間（勤務+休憩）と翌日判定を表示
+- 日勤・夜勤のクイック入力と結果コピー
+- 負の休憩、休憩の小数、24時間超の日程をエラー表示
 
 ## 使用例
 - 出勤 09:00
@@ -47,8 +48,14 @@ alternate_urls:
 
 → 退勤予定時刻: **18:00**
 
+夜勤の例では、出勤`22:00`、実勤務`8時間`、休憩`60分`なら、結果は**翌日07:00**です。
+
+## 計算基準と注意点
+計算式は`出勤時刻 + 実勤務時間 + 無給休憩時間`です。有給休憩が勤務時間に含まれる場合は重ねて加算しないでください。残業、早退、法令、勤務先の規定は自動判定されないため、実際の勤怠記録と合わせて確認してください。
+
 ## 一緒に使うと便利なツール
-- 締切逆算: [D-Day計算機]({{ '/ja/tools/d-day-calculator/' | relative_url }})
+- 勤務区間の確認: [時間差計算機]({{ '/ja/tools/time-difference-calculator/' | relative_url }})
+- 出発時刻の準備: [約束の出発余裕シミュレーター]({{ '/ja/tools/appointment-departure-buffer-simulator/' | relative_url }})
 - 集中ブロック運用: [ポモドーロタイマー]({{ '/ja/tools/pomodoro-timer/' | relative_url }})
 
 ## FAQ
@@ -60,3 +67,6 @@ alternate_urls:
 
 ### モバイルでも使えますか？
 はい。ブラウザですぐ使え、別途インストールは不要です。
+
+### 7時間30分はどう入力しますか？
+実勤務時間に`7.5`と入力してください。総滞在時間は時間と分で表示されます。

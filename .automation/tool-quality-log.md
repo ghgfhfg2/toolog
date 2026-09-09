@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-09 21:00 KST
+- Tool: `work-end-time-calculator`
+- Selection reason: recent quality runs covered BMI, compound interest, age, tip, D-day, profit margin, and savings interest; this older time tool had not been improved since March and silently converted negative breaks to zero, allowed total stays beyond its documented 24-hour limit, auto-filled a result instead of exposing a true empty state, and gave weak mobile/error/copy feedback.
+- Scope: improved the existing multilingual page, home metadata, mobile input/actions/results, accessible descriptions and live status, true blank/error/success states, strict work/break/24-hour validation, daytime/decimal/night-shift presets, example/clear/copy feedback, localized duration labels, calculation assumptions, FAQ, related links, and search-intent copy. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, localized URL/thumbnail checks, mobile CSS rules, and targeted daytime/overnight/decimal/zero-break/24-hour-boundary/negative/fractional/oversized cases passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-08 21:00 KST
 - Tool: `bmi-calculator`
 - Selection reason: the most recent quality runs covered compound interest, age, tip, D-day, profit margin, and savings interest; this older health calculator had not been improved since March and carried higher error/interpretation risk because it silently prefilled values, accepted fractional BMR ages, grouped all BMI values above 30 into one label, and did not clearly identify its Asian adult thresholds.
