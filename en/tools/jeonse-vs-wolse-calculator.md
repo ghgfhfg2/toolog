@@ -7,16 +7,16 @@ permalink: /en/tools/jeonse-vs-wolse-calculator/
 canonical_url: /en/tools/jeonse-vs-wolse-calculator/
 category: calculator
 category_label: Real Estate
-thumbnail: /assets/thumbs/jeonse-vs-wolse-calculator.svg
+thumbnail: /assets/thumbs/en/jeonse-vs-wolse-calculator.svg
 image:
-  path: /assets/thumbs/jeonse-vs-wolse-calculator.svg
-  alt: Jeonse vs wolse calculator result preview
+  path: /assets/thumbs/en/jeonse-vs-wolse-calculator.svg
+  alt: Comparison of total housing cost and break-even rent for jeonse and wolse
 tool_key: jeonse-vs-wolse-calculator
-keywords: [jeonse vs wolse, korea rent comparison, housing cost calculator, break-even rent]
+keywords: [jeonse vs wolse calculator, korea rent comparison, jeonse opportunity cost, monthly-equivalent housing cost, break-even wolse rent]
 related_tools: [brokerage-fee-calculator, loan-calculator, savings-interest-calculator]
 faq:
-  - q: Why does this tool use an expected return rate?
-    a: Jeonse deposit ties up capital that could otherwise earn returns. The expected return models that opportunity cost.
+  - q: What expected return rate should I enter?
+    a: Use a realistic low-risk annual return you could earn elsewhere, such as a savings-deposit or bond yield. The calculator applies it as simple interest to estimate the opportunity cost of tied-up deposits.
   - q: What does break-even wolse rent mean?
     a: It is the monthly rent level where jeonse and wolse become equal on a monthly-equivalent cost basis under your inputs.
   - q: Does this include taxes, maintenance fees, or moving costs?
@@ -55,6 +55,9 @@ This tool compares both on the same basis: deposit opportunity cost, rent paymen
 - Break-even rent = `(jeonse deposit − wolse deposit) × annual return ÷ 12 + (jeonse costs − wolse costs) ÷ months`
 
 Monthly rent below the break-even amount favors wolse in this simplified model; rent above it favors jeonse. Opportunity cost uses simple interest. Treat the result as a scenario, not as financial or housing advice.
+
+## What to check before deciding
+This comparison includes deposit opportunity cost, monthly rent, and the one-time costs you enter. It does not include jeonse or wolse deposit-loan interest, deposit-return risk, differences in maintenance fees, taxes, or future rate changes. Add those items separately before signing a lease; the result is a planning scenario, not a guarantee of investment returns or deposit safety.
 
 ## Related tools
 - Loan planning: [Loan Calculator]({{ '/en/tools/loan-calculator/' | relative_url }})
