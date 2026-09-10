@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-10 21:00 KST
+- Tool: `jeonse-vs-wolse-calculator`
+- Selection reason: the previous eight quality runs covered other tools; this older housing-cost calculator had not been improved since its March launch and silently clamped negative, fractional, and oversized inputs, auto-filled results instead of showing a true empty state, and ignored differing one-time costs even though stay length was a core input.
+- Scope: improved the existing multilingual page, home metadata, three-column desktop and single-column mobile input flow, accessible descriptions/live status, true blank/error/success states, strict money/rate/integer-term validation, overflow protection, optional one-time cost comparison, 12/24/36-month presets, example/clear/copy feedback, negative break-even explanation, formulas, FAQ, related links, and search-intent copy. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, localized page/thumbnail checks, and targeted normal/zero-rate/negative-break-even/boundary/negative/fractional/oversized/overflow cases passed. Mobile rules collapse inputs/actions to one column and results to two columns. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-09 21:00 KST
 - Tool: `work-end-time-calculator`
 - Selection reason: recent quality runs covered BMI, compound interest, age, tip, D-day, profit margin, and savings interest; this older time tool had not been improved since March and silently converted negative breaks to zero, allowed total stays beyond its documented 24-hour limit, auto-filled a result instead of exposing a true empty state, and gave weak mobile/error/copy feedback.

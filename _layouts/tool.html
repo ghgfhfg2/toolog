@@ -3154,42 +3154,57 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="tdee-help">{% if page.lang == 'en' %}Enter values to calculate BMR/TDEE and goal-based calorie targets.{% elsif page.lang == 'ja' %}値を入力すると、BMR/TDEEと目的別カロリー目安を計算します。{% else %}값을 입력하면 BMR/TDEE와 목표별 칼로리가 계산됩니다.{% endif %}</p>
         </div>
       {% when 'jeonse-vs-wolse-calculator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui jv-ui">
+          <div class="tool-row-grid jv-grid">
             <div>
               <label for="jv-jeonse">{% if page.lang == 'en' %}Jeonse deposit{% elsif page.lang == 'ja' %}チョンセ保証金{% else %}전세 보증금(원){% endif %}</label>
-              <input id="jv-jeonse" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 400000000{% elsif page.lang == 'ja' %}例: 400000000{% else %}예: 400000000{% endif %}" inputmode="numeric" />
+              <input id="jv-jeonse" type="number" min="1" max="1000000000000000" step="1" placeholder="{% if page.lang == 'en' %}e.g. 400000000{% elsif page.lang == 'ja' %}例: 400000000{% else %}예: 400000000{% endif %}" inputmode="numeric" aria-describedby="jv-help jv-assumption" />
             </div>
             <div>
               <label for="jv-wolse-deposit">{% if page.lang == 'en' %}Wolse deposit{% elsif page.lang == 'ja' %}ウォルセ保証金{% else %}월세 보증금(원){% endif %}</label>
-              <input id="jv-wolse-deposit" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 50000000{% elsif page.lang == 'ja' %}例: 50000000{% else %}예: 50000000{% endif %}" inputmode="numeric" />
+              <input id="jv-wolse-deposit" type="number" min="0" max="1000000000000000" step="1" placeholder="{% if page.lang == 'en' %}e.g. 50000000{% elsif page.lang == 'ja' %}例: 50000000{% else %}예: 50000000{% endif %}" inputmode="numeric" aria-describedby="jv-help jv-assumption" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid jv-grid">
             <div>
               <label for="jv-wolse-rent">{% if page.lang == 'en' %}Monthly wolse rent{% elsif page.lang == 'ja' %}月額ウォルセ家賃{% else %}월세(원){% endif %}</label>
-              <input id="jv-wolse-rent" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 1100000{% elsif page.lang == 'ja' %}例: 1100000{% else %}예: 1100000{% endif %}" inputmode="numeric" />
+              <input id="jv-wolse-rent" type="number" min="0" max="1000000000000000" step="1" placeholder="{% if page.lang == 'en' %}e.g. 1100000{% elsif page.lang == 'ja' %}例: 1100000{% else %}예: 1100000{% endif %}" inputmode="numeric" aria-describedby="jv-help jv-assumption" />
             </div>
             <div>
               <label for="jv-rate">{% if page.lang == 'en' %}Expected annual return (%) {% elsif page.lang == 'ja' %}期待利回り(年 %) {% else %}기대 수익률(연 %) {% endif %}</label>
-              <input id="jv-rate" type="number" min="0" max="30" step="0.01" placeholder="{% if page.lang == 'en' %}e.g. 3.5{% elsif page.lang == 'ja' %}例: 3.5{% else %}예: 3.5{% endif %}" inputmode="decimal" />
+              <input id="jv-rate" type="number" min="0" max="30" step="0.01" placeholder="{% if page.lang == 'en' %}e.g. 3.5{% elsif page.lang == 'ja' %}例: 3.5{% else %}예: 3.5{% endif %}" inputmode="decimal" aria-describedby="jv-help jv-assumption" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid jv-grid">
             <div>
               <label for="jv-months">{% if page.lang == 'en' %}Stay period (months){% elsif page.lang == 'ja' %}居住期間(か月){% else %}거주기간(개월){% endif %}</label>
-              <input id="jv-months" type="number" min="1" max="120" step="1" placeholder="{% if page.lang == 'en' %}e.g. 24{% elsif page.lang == 'ja' %}例: 24{% else %}예: 24{% endif %}" inputmode="numeric" />
+              <input id="jv-months" type="number" min="1" max="120" step="1" placeholder="{% if page.lang == 'en' %}e.g. 24{% elsif page.lang == 'ja' %}例: 24{% else %}예: 24{% endif %}" inputmode="numeric" aria-describedby="jv-help jv-assumption" />
+            </div>
+            <div>
+              <label for="jv-jeonse-extra">{% if page.lang == 'en' %}Jeonse one-time costs (optional){% elsif page.lang == 'ja' %}チョンセの一時費用（任意）{% else %}전세 일회성 비용(선택){% endif %}</label>
+              <input id="jv-jeonse-extra" type="number" min="0" max="1000000000000000" step="1" inputmode="numeric" placeholder="{% if page.lang == 'en' %}Brokerage, moving, etc.{% elsif page.lang == 'ja' %}仲介料・引越し費用など{% else %}중개보수·이사비 등{% endif %}" aria-describedby="jv-help jv-assumption" />
+            </div>
+            <div>
+              <label for="jv-wolse-extra">{% if page.lang == 'en' %}Wolse one-time costs (optional){% elsif page.lang == 'ja' %}ウォルセの一時費用（任意）{% else %}월세 일회성 비용(선택){% endif %}</label>
+              <input id="jv-wolse-extra" type="number" min="0" max="1000000000000000" step="1" inputmode="numeric" placeholder="{% if page.lang == 'en' %}Brokerage, moving, etc.{% elsif page.lang == 'ja' %}仲介料・引越し費用など{% else %}중개보수·이사비 등{% endif %}" aria-describedby="jv-help jv-assumption" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-actions">
-            <button id="jv-copy" type="button">{% if page.lang == 'en' %}Copy results{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
-            <button id="jv-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          <div class="tool-row-grid jv-presets" role="group" aria-label="{% if page.lang == 'en' %}Stay-period presets{% elsif page.lang == 'ja' %}居住期間のクイック選択{% else %}거주기간 빠른 선택{% endif %}">
+            <button type="button" data-jv-months="12" aria-pressed="false">12{% if page.lang == 'en' %} months{% elsif page.lang == 'ja' %}か月{% else %}개월{% endif %}</button>
+            <button type="button" data-jv-months="24" aria-pressed="false">24{% if page.lang == 'en' %} months{% elsif page.lang == 'ja' %}か月{% else %}개월{% endif %}</button>
+            <button type="button" data-jv-months="36" aria-pressed="false">36{% if page.lang == 'en' %} months{% elsif page.lang == 'ja' %}か月{% else %}개월{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
+          <div class="tool-row-grid jv-actions">
+            <button id="jv-example" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
+            <button id="jv-copy" type="button" disabled>{% if page.lang == 'en' %}Copy results{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="jv-reset" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
+          </div>
+
+          <div class="tool-stats jv-stats" aria-label="{% if page.lang == 'en' %}Jeonse and wolse cost comparison{% elsif page.lang == 'ja' %}チョンセとウォルセの費用比較{% else %}전세와 월세 비용 비교 결과{% endif %}">
             <div><strong id="jv-jeonse-cost">-</strong><span>{% if page.lang == 'en' %}Total jeonse housing cost (opportunity cost){% elsif page.lang == 'ja' %}チョンセ総住居費(機会費用){% else %}전세 총 주거비(기회비용){% endif %}</span></div>
             <div><strong id="jv-wolse-cost">-</strong><span>{% if page.lang == 'en' %}Total wolse housing cost{% elsif page.lang == 'ja' %}ウォルセ総住居費{% else %}월세 총 주거비{% endif %}</span></div>
             <div><strong id="jv-monthly-jeonse">-</strong><span>{% if page.lang == 'en' %}Jeonse monthly-equivalent cost{% elsif page.lang == 'ja' %}チョンセ月額換算コスト{% else %}전세 월 환산 주거비{% endif %}</span></div>
@@ -3198,7 +3213,8 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <div><strong id="jv-break-even">-</strong><span>{% if page.lang == 'en' %}Break-even wolse rent{% elsif page.lang == 'ja' %}損益分岐ウォルセ家賃{% else %}손익분기 월세{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="jv-help">{% if page.lang == 'en' %}Enter deposits, monthly rent, expected return, and stay period to compare jeonse and wolse on a monthly-equivalent basis.{% elsif page.lang == 'ja' %}保証金・家賃・期待利回り・居住期間を入力すると、チョンセとウォルセを月額換算で比較できます。{% else %}보증금/월세/수익률/거주기간을 입력하면 전세와 월세를 같은 기준으로 비교합니다.{% endif %}</p>
+          <p class="tool-result" id="jv-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter deposits, monthly rent, expected return, and stay period to compare the two options.{% elsif page.lang == 'ja' %}保証金・家賃・期待利回り・居住期間を入力すると比較できます。{% else %}보증금·월세·수익률·거주기간을 입력하면 두 조건을 비교합니다.{% endif %}</p>
+          <p class="tool-result jv-note" id="jv-assumption">{% if page.lang == 'en' %}Opportunity cost uses simple interest. Optional one-time costs are spread across the stay. Loan interest, deposit-return risk, maintenance fees, and future rate changes are excluded.{% elsif page.lang == 'ja' %}機会費用は単利で計算し、一時費用は居住月数で按分します。借入利息、保証金返還リスク、管理費、将来の金利変動は含みません。{% else %}기회비용은 단리로 계산하고 일회성 비용은 거주기간에 나눠 반영합니다. 대출이자·보증금 반환 위험·관리비·향후 금리 변동은 포함하지 않습니다.{% endif %}</p>
         </div>
       {% when 'brokerage-fee-calculator' %}
         <div class="tool-ui">

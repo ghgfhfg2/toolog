@@ -6957,6 +6957,8 @@
     const wolseRent = document.getElementById('jv-wolse-rent');
     const rate = document.getElementById('jv-rate');
     const months = document.getElementById('jv-months');
+    const jeonseExtra = document.getElementById('jv-jeonse-extra');
+    const wolseExtra = document.getElementById('jv-wolse-extra');
     const jeonseCostEl = document.getElementById('jv-jeonse-cost');
     const wolseCostEl = document.getElementById('jv-wolse-cost');
     const monthlyJeonseEl = document.getElementById('jv-monthly-jeonse');
@@ -6964,53 +6966,82 @@
     const monthlyGapEl = document.getElementById('jv-monthly-gap');
     const breakEvenEl = document.getElementById('jv-break-even');
     const help = document.getElementById('jv-help');
+    const exampleBtn = document.getElementById('jv-example');
     const copyBtn = document.getElementById('jv-copy');
     const resetBtn = document.getElementById('jv-reset');
+    const presetBtns = Array.from(document.querySelectorAll('[data-jv-months]'));
 
-    if (!jeonse || !wolseDeposit || !wolseRent || !rate || !months || !jeonseCostEl || !wolseCostEl || !monthlyJeonseEl || !monthlyWolseEl || !monthlyGapEl || !breakEvenEl || !help) return;
+    if (!jeonse || !wolseDeposit || !wolseRent || !rate || !months || !jeonseExtra || !wolseExtra || !jeonseCostEl || !wolseCostEl || !monthlyJeonseEl || !monthlyWolseEl || !monthlyGapEl || !breakEvenEl || !help || !exampleBtn || !copyBtn || !resetBtn) return;
 
     const jvI18n = {
       ko: {
         currency: '원',
-        needInput: '전세 보증금과 거주기간을 입력하세요.',
+        needInput: '전세·월세 조건과 거주기간을 모두 입력해 주세요. 일회성 비용은 비워도 됩니다.',
+        invalidJeonse: '전세 보증금은 1원 이상 1,000조 원 이하의 정수로 입력해 주세요.',
+        invalidWolseDeposit: '월세 보증금은 0원 이상 1,000조 원 이하의 정수로 입력해 주세요.',
+        invalidRent: '월세는 0원 이상 1,000조 원 이하의 정수로 입력해 주세요.',
+        invalidRate: '기대 수익률은 0% 이상 30% 이하의 숫자로 입력해 주세요.',
+        invalidMonths: '거주기간은 1~120개월의 정수로 입력해 주세요.',
+        invalidExtra: '일회성 비용은 0원 이상 1,000조 원 이하의 정수로 입력해 주세요.',
+        tooLarge: '계산 결과가 너무 큽니다. 보증금·월세·비용을 더 작은 값으로 입력해 주세요.',
         jeonseBetter: '전세 유리',
         wolseBetter: '월세 유리',
         similar: '거의 동일',
+        noBreakEven: '양수 손익분기점 없음',
         monthlyGap: (v, label) => `${v} (${label})`,
         helpJeonse: (v) => `입력 조건에서는 전세의 월 환산 주거비가 약 ${v} 더 낮습니다.`,
         helpWolse: (v) => `입력 조건에서는 월세의 월 환산 주거비가 약 ${v} 더 낮습니다.`,
         helpSame: '입력 조건에서 전세와 월세의 월 환산 주거비가 거의 같습니다.',
         copy: (a,b,c,d,e,f) => `전세 vs 월세 비교 | 전세 총 주거비 ${a} | 월세 총 주거비 ${b} | 전세 월 환산 ${c} | 월세 월 환산 ${d} | 월 기준 비용 차이 ${e} | 손익분기 월세 ${f}`,
-        copied: '복사됨',
-        copyDefault: '결과 복사'
+        copied: '비교 결과를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력값을 초기화했습니다.'
       },
       en: {
         currency: '',
-        needInput: 'Enter jeonse deposit and stay period.',
+        needInput: 'Enter both housing options and the stay period. One-time costs may be left blank.',
+        invalidJeonse: 'Enter a whole-number jeonse deposit from 1 to 1 quadrillion KRW.',
+        invalidWolseDeposit: 'Enter a whole-number wolse deposit from 0 to 1 quadrillion KRW.',
+        invalidRent: 'Enter whole-number monthly rent from 0 to 1 quadrillion KRW.',
+        invalidRate: 'Enter an expected annual return from 0% to 30%.',
+        invalidMonths: 'Enter a whole-number stay period from 1 to 120 months.',
+        invalidExtra: 'Enter whole-number one-time costs from 0 to 1 quadrillion KRW.',
+        tooLarge: 'The result is too large. Use smaller deposit, rent, or cost values.',
         jeonseBetter: 'Jeonse is cheaper',
         wolseBetter: 'Wolse is cheaper',
         similar: 'Almost the same',
+        noBreakEven: 'No positive break-even point',
         monthlyGap: (v, label) => `${v} (${label})`,
         helpJeonse: (v) => `Under this scenario, jeonse is lower by about ${v} per month-equivalent cost.`,
         helpWolse: (v) => `Under this scenario, wolse is lower by about ${v} per month-equivalent cost.`,
         helpSame: 'Under this scenario, jeonse and wolse are nearly the same on a monthly-equivalent basis.',
         copy: (a,b,c,d,e,f) => `Jeonse vs Wolse | Total jeonse cost ${a} | Total wolse cost ${b} | Jeonse monthly-equivalent ${c} | Wolse monthly-equivalent ${d} | Monthly cost gap ${e} | Break-even wolse rent ${f}`,
-        copied: 'Copied',
-        copyDefault: 'Copy results'
+        copied: 'Copied the comparison.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared all inputs.'
       },
       ja: {
         currency: 'ウォン',
-        needInput: 'チョンセ保証金と居住期間を入力してください。',
+        needInput: '両方の住居条件と居住期間を入力してください。一時費用は空欄でも構いません。',
+        invalidJeonse: 'チョンセ保証金は1〜1,000兆ウォンの整数で入力してください。',
+        invalidWolseDeposit: 'ウォルセ保証金は0〜1,000兆ウォンの整数で入力してください。',
+        invalidRent: '月額家賃は0〜1,000兆ウォンの整数で入力してください。',
+        invalidRate: '期待利回りは0〜30%で入力してください。',
+        invalidMonths: '居住期間は1〜120か月の整数で入力してください。',
+        invalidExtra: '一時費用は0〜1,000兆ウォンの整数で入力してください。',
+        tooLarge: '計算結果が大きすぎます。保証金・家賃・費用を小さくしてください。',
         jeonseBetter: 'チョンセが有利',
         wolseBetter: 'ウォルセが有利',
         similar: 'ほぼ同じ',
+        noBreakEven: '正の損益分岐点なし',
         monthlyGap: (v, label) => `${v}（${label}）`,
         helpJeonse: (v) => `この条件では、月額換算でチョンセのほうが約 ${v} 低くなります。`,
         helpWolse: (v) => `この条件では、月額換算でウォルセのほうが約 ${v} 低くなります。`,
         helpSame: 'この条件では、月額換算でチョンセとウォルセはほぼ同水準です。',
         copy: (a,b,c,d,e,f) => `チョンセ vs ウォルセ | チョンセ総住居費 ${a} | ウォルセ総住居費 ${b} | チョンセ月額換算 ${c} | ウォルセ月額換算 ${d} | 月額コスト差 ${e} | 損益分岐ウォルセ家賃 ${f}`,
-        copied: 'コピー完了',
-        copyDefault: '結果をコピー'
+        copied: '比較結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力値をクリアしました。'
       }
     };
     const t = jvI18n[pageLang] || jvI18n.ko;
@@ -7021,15 +7052,28 @@
     };
 
     const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
-      catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch (_) {
+        let ta;
+        try {
+          ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          return document.execCommand('copy');
+        } catch (_) {
+          return false;
+        } finally {
+          ta?.remove();
+        }
       }
     };
 
-    const setIdle = (msg) => {
+    const setIdle = (msg, state = '') => {
       jeonseCostEl.textContent = '-';
       wolseCostEl.textContent = '-';
       monthlyJeonseEl.textContent = '-';
@@ -7037,51 +7081,99 @@
       monthlyGapEl.textContent = '-';
       breakEvenEl.textContent = '-';
       help.textContent = msg;
+      help.dataset.state = state;
+      copyBtn.disabled = true;
     };
 
-    const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
+    const moneyValue = (input, optional = false) => {
+      const raw = input.value.trim();
+      if (optional && raw === '') return 0;
+      if (raw === '') return null;
+      const value = Number(raw);
+      return Number.isSafeInteger(value) && value >= 0 && value <= 1000000000000000 ? value : NaN;
+    };
 
     const render = () => {
-      const j = Math.max(0, Number(jeonse.value || 0));
-      const wd = Math.max(0, Number(wolseDeposit.value || 0));
-      const wr = Math.max(0, Number(wolseRent.value || 0));
-      const rRaw = Number(rate.value || 0);
-      const mRaw = Number(months.value || 0);
+      const required = [jeonse, wolseDeposit, wolseRent, rate, months];
+      const inputs = [...required, jeonseExtra, wolseExtra];
+      inputs.forEach((el) => el.setAttribute('aria-invalid', 'false'));
+      presetBtns.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.jvMonths === months.value.trim())));
 
-      if (!(j > 0) || !(mRaw > 0)) {
+      if (required.some((el) => el.value.trim() === '')) {
         setIdle(t.needInput);
         return;
       }
+      const j = moneyValue(jeonse);
+      const wd = moneyValue(wolseDeposit);
+      const wr = moneyValue(wolseRent);
+      const je = moneyValue(jeonseExtra, true);
+      const we = moneyValue(wolseExtra, true);
+      const r = Number(rate.value);
+      const m = Number(months.value);
 
-      const r = Number.isFinite(rRaw) ? clamp(rRaw, 0, 30) : 0;
-      const m = Number.isFinite(mRaw) ? clamp(Math.floor(mRaw), 1, 120) : 1;
-      if (rRaw !== r) rate.value = r;
-      if (mRaw !== m) months.value = m;
+      if (!Number.isSafeInteger(j) || j < 1) {
+        jeonse.setAttribute('aria-invalid', 'true');
+        setIdle(t.invalidJeonse, 'error');
+        return;
+      }
+      if (!Number.isSafeInteger(wd)) {
+        wolseDeposit.setAttribute('aria-invalid', 'true');
+        setIdle(t.invalidWolseDeposit, 'error');
+        return;
+      }
+      if (!Number.isSafeInteger(wr)) {
+        wolseRent.setAttribute('aria-invalid', 'true');
+        setIdle(t.invalidRent, 'error');
+        return;
+      }
+      if (!Number.isFinite(r) || r < 0 || r > 30) {
+        rate.setAttribute('aria-invalid', 'true');
+        setIdle(t.invalidRate, 'error');
+        return;
+      }
+      if (!Number.isInteger(m) || m < 1 || m > 120) {
+        months.setAttribute('aria-invalid', 'true');
+        setIdle(t.invalidMonths, 'error');
+        return;
+      }
+      if (!Number.isSafeInteger(je) || !Number.isSafeInteger(we)) {
+        (Number.isSafeInteger(je) ? wolseExtra : jeonseExtra).setAttribute('aria-invalid', 'true');
+        setIdle(t.invalidExtra, 'error');
+        return;
+      }
 
       const annualRate = r / 100;
       const monthRate = annualRate / 12;
-      const jeonseCost = j * annualRate * (m / 12);
+      const jeonseCost = (j * annualRate * (m / 12)) + je;
       const wolseOpportunity = wd * annualRate * (m / 12);
-      const wolseCost = wolseOpportunity + (wr * m);
+      const wolseCost = wolseOpportunity + (wr * m) + we;
+
+      if (![jeonseCost, wolseCost].every((value) => Number.isSafeInteger(Math.round(value)))) {
+        setIdle(t.tooLarge, 'error');
+        return;
+      }
 
       const monthlyJeonse = jeonseCost / m;
       const monthlyWolse = wolseCost / m;
       const gapMonthly = monthlyWolse - monthlyJeonse;
-      const breakEvenMonthlyRent = Math.max(0, (j - wd) * monthRate);
+      const breakEvenMonthlyRent = ((j - wd) * monthRate) + ((je - we) / m);
 
       jeonseCostEl.textContent = fmtCurrency(jeonseCost);
       wolseCostEl.textContent = fmtCurrency(wolseCost);
       monthlyJeonseEl.textContent = fmtCurrency(monthlyJeonse);
       monthlyWolseEl.textContent = fmtCurrency(monthlyWolse);
-      monthlyGapEl.textContent = t.monthlyGap(fmtCurrency(Math.abs(gapMonthly)), gapMonthly > 0 ? t.jeonseBetter : gapMonthly < 0 ? t.wolseBetter : t.similar);
-      breakEvenEl.textContent = fmtCurrency(breakEvenMonthlyRent);
+      const isSimilar = Math.abs(gapMonthly) < 1;
+      monthlyGapEl.textContent = t.monthlyGap(fmtCurrency(Math.abs(gapMonthly)), isSimilar ? t.similar : gapMonthly > 0 ? t.jeonseBetter : t.wolseBetter);
+      breakEvenEl.textContent = breakEvenMonthlyRent < 0 ? t.noBreakEven : fmtCurrency(breakEvenMonthlyRent);
 
-      if (gapMonthly > 0) help.textContent = t.helpJeonse(fmtCurrency(Math.abs(gapMonthly)));
-      else if (gapMonthly < 0) help.textContent = t.helpWolse(fmtCurrency(Math.abs(gapMonthly)));
-      else help.textContent = t.helpSame;
+      if (isSimilar) help.textContent = t.helpSame;
+      else if (gapMonthly > 0) help.textContent = t.helpJeonse(fmtCurrency(Math.abs(gapMonthly)));
+      else help.textContent = t.helpWolse(fmtCurrency(Math.abs(gapMonthly)));
+      help.dataset.state = 'success';
+      copyBtn.disabled = false;
     };
 
-    [jeonse, wolseDeposit, wolseRent, rate, months].forEach((el) => el?.addEventListener('input', render));
+    [jeonse, wolseDeposit, wolseRent, rate, months, jeonseExtra, wolseExtra].forEach((el) => el.addEventListener('input', render));
 
     copyBtn?.addEventListener('click', async () => {
       if (jeonseCostEl.textContent === '-') return;
@@ -7093,26 +7185,40 @@
         monthlyGapEl.textContent,
         breakEvenEl.textContent
       );
-      await copyText(text);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = t.copied;
-      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+      if (await copyText(text)) {
+        help.textContent = t.copied;
+        help.dataset.state = 'success';
+      } else {
+        help.textContent = t.copyFail;
+        help.dataset.state = 'error';
+      }
     });
 
     resetBtn?.addEventListener('click', () => {
-      jeonse.value = 400000000;
-      wolseDeposit.value = 50000000;
-      wolseRent.value = 1100000;
-      rate.value = 3.5;
-      months.value = 24;
-      render();
+      [jeonse, wolseDeposit, wolseRent, rate, months, jeonseExtra, wolseExtra].forEach((el) => { el.value = ''; });
+      setIdle(t.cleared);
+      presetBtns.forEach((button) => button.setAttribute('aria-pressed', 'false'));
+      jeonse.focus();
     });
 
-    if (!jeonse.value) jeonse.value = 400000000;
-    if (!wolseDeposit.value) wolseDeposit.value = 50000000;
-    if (!wolseRent.value) wolseRent.value = 1100000;
-    if (!rate.value) rate.value = 3.5;
-    if (!months.value) months.value = 24;
+    exampleBtn.addEventListener('click', () => {
+      jeonse.value = '400000000';
+      wolseDeposit.value = '50000000';
+      wolseRent.value = '1100000';
+      rate.value = '3.5';
+      months.value = '24';
+      jeonseExtra.value = '2000000';
+      wolseExtra.value = '1200000';
+      render();
+      jeonse.focus();
+    });
+
+    presetBtns.forEach((button) => button.addEventListener('click', () => {
+      months.value = button.dataset.jvMonths || '';
+      render();
+      months.focus();
+    }));
+
     render();
   }
 

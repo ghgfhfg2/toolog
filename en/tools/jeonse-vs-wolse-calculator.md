@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Jeonse vs Wolse Calculator | Compare Monthly Housing Cost in Korea
-description: Compare jeonse and wolse by converting opportunity cost and monthly cash outflow into a single monthly-equivalent housing cost.
+title: Jeonse vs Wolse Calculator | Compare Korea Rental Costs
+description: Compare jeonse and wolse deposits, rent, opportunity cost, stay length, and one-time costs to estimate total cost, monthly-equivalent cost, and break-even rent.
 lang: en
 permalink: /en/tools/jeonse-vs-wolse-calculator/
 canonical_url: /en/tools/jeonse-vs-wolse-calculator/
@@ -13,14 +13,16 @@ image:
   alt: Jeonse vs wolse calculator result preview
 tool_key: jeonse-vs-wolse-calculator
 keywords: [jeonse vs wolse, korea rent comparison, housing cost calculator, break-even rent]
-related_tools: [loan-calculator, compound-interest-calculator, brokerage-fee-calculator]
+related_tools: [brokerage-fee-calculator, loan-calculator, savings-interest-calculator]
 faq:
   - q: Why does this tool use an expected return rate?
     a: Jeonse deposit ties up capital that could otherwise earn returns. The expected return models that opportunity cost.
   - q: What does break-even wolse rent mean?
     a: It is the monthly rent level where jeonse and wolse become equal on a monthly-equivalent cost basis under your inputs.
   - q: Does this include taxes, maintenance fees, or moving costs?
-    a: No. This tool focuses on deposit opportunity cost and rent cash flow. Add extra costs separately when making a final decision.
+    a: You can enter differing one-time costs such as brokerage and moving fees. Loan interest, deposit-return risk, maintenance-fee differences, taxes, and future rate changes remain excluded.
+  - q: Why can the result show no positive break-even rent?
+    a: If wolse deposit opportunity cost and wolse one-time costs already exceed the jeonse cost, wolse remains more expensive even at zero monthly rent under this model.
 alternate_urls:
   ko: /tools/jeonse-vs-wolse-calculator/
   en: /en/tools/jeonse-vs-wolse-calculator/
@@ -32,21 +34,29 @@ Simple deposit-vs-rent comparison can be misleading.
 Jeonse ties up a large deposit, creating opportunity cost.
 Wolse has explicit monthly rent but lower tied capital.
 
-This tool compares both on the same monthly-equivalent basis.
+This tool compares both on the same basis: deposit opportunity cost, rent payments, and optional one-time costs.
 
 ## Key features
-- Converts jeonse opportunity cost into monthly cost
-- Compares with wolse monthly outflow directly
-- Shows which option is cheaper per month
-- Provides break-even wolse rent estimate
+- Compares total and monthly-equivalent housing costs
+- Spreads optional brokerage, moving, and other one-time costs across the stay
+- Shows the cheaper option and monthly cost gap
+- Calculates break-even wolse rent with 12-, 24-, and 36-month presets
 
 ## How to use
 1. Enter jeonse deposit and expected annual return.
 2. Enter wolse deposit and monthly rent.
 3. Set expected stay period.
-4. Check monthly-equivalent cost and better option.
+4. Add one-time costs only when they differ between the options.
+5. Check total cost, monthly gap, and break-even wolse rent.
+
+## Formula and interpretation
+- Jeonse total cost = `jeonse deposit × annual return × months ÷ 12 + jeonse one-time costs`
+- Wolse total cost = `wolse deposit × annual return × months ÷ 12 + monthly rent × months + wolse one-time costs`
+- Break-even rent = `(jeonse deposit − wolse deposit) × annual return ÷ 12 + (jeonse costs − wolse costs) ÷ months`
+
+Monthly rent below the break-even amount favors wolse in this simplified model; rent above it favors jeonse. Opportunity cost uses simple interest. Treat the result as a scenario, not as financial or housing advice.
 
 ## Related tools
 - Loan planning: [Loan Calculator]({{ '/en/tools/loan-calculator/' | relative_url }})
-- Opportunity cost scenario: [Compound Interest Calculator]({{ '/en/tools/compound-interest-calculator/' | relative_url }})
+- Deposit-return scenario: [Savings Interest Calculator]({{ '/en/tools/savings-interest-calculator/' | relative_url }})
 - Moving transaction fee check: [Brokerage Fee Calculator]({{ '/en/tools/brokerage-fee-calculator/' | relative_url }})

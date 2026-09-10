@@ -758,6 +758,16 @@ textarea:focus-visible {
 .si-ui #si-help[data-state="success"] { color: #86efac; }
 .si-stats strong,
 .si-stats span { overflow-wrap: anywhere; }
+.jv-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; }
+.jv-presets,
+.jv-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.jv-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.jv-ui button:disabled { opacity: .55; cursor: not-allowed; }
+.jv-ui #jv-help[data-state="error"] { color: #fca5a5; }
+.jv-ui #jv-help[data-state="success"] { color: #86efac; }
+.jv-note { font-size: .82rem; line-height: 1.55; }
+.jv-stats strong,
+.jv-stats span { overflow-wrap: anywhere; }
 .wet-presets,
 .wet-grid,
 .wet-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -1948,6 +1958,10 @@ textarea:focus-visible {
   .si-presets,
   .si-actions { grid-template-columns: 1fr; }
   .tool-stats.si-stats { grid-template-columns: 1fr 1fr; }
+  .jv-grid,
+  .jv-presets,
+  .jv-actions { grid-template-columns: 1fr; }
+  .tool-stats.jv-stats { grid-template-columns: 1fr 1fr; }
   .prmc-grid,
   .prmc-presets,
   .prmc-actions { grid-template-columns: 1fr; }
