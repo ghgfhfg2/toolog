@@ -5886,6 +5886,7 @@
     const insuranceMonth = document.getElementById('sal-insurance-month');
     const summary = document.getElementById('sal-summary');
     const copyBtn = document.getElementById('sal-copy');
+    const exampleBtn = document.getElementById('sal-example');
     const resetBtn = document.getElementById('sal-reset');
 
     if (!annual || !nonTax || !dependent || !children || !netMonth || !netYear || !taxMonth || !insuranceMonth || !summary) return;
@@ -5894,28 +5895,49 @@
       ko: {
         currency: '원',
         idle: '연봉(세전)을 입력하면 예상 실수령액을 계산합니다.',
-        needAnnual: '연봉을 먼저 입력하세요.',
-        summary: (rate, capped) => `공제율 약 ${rate}% 기준 추정치입니다.${capped ? ' 비과세 월급은 월 총급여를 넘지 않도록 자동 보정했습니다.' : ''} 회사별 비과세·수당·정산에 따라 실제 수령액은 달라질 수 있습니다.`,
+        invalidAnnual: '연봉은 1원 이상 100억 원 이하의 정수로 입력해 주세요.',
+        invalidNonTax: '비과세 월급은 0원 이상의 정수로 입력해 주세요.',
+        nonTaxOver: '비과세 월급은 월 총급여를 넘을 수 없습니다.',
+        invalidDependents: '부양가족 수는 0~20명의 정수로 입력해 주세요.',
+        invalidChildren: '자녀 수는 0~10명의 정수로 입력해 주세요.',
+        childrenOver: '자녀 수는 부양가족 수보다 클 수 없습니다.',
+        summary: (rate) => `2026년 근로자 부담률로 추정한 총 공제율은 약 ${rate}%입니다. 실제 원천징수액은 간이세액표·회사 급여 조건·연말정산에 따라 달라질 수 있습니다.`,
         copyText: (m, y, t, i) => `실수령액 계산 결과 | 월 ${m} | 연 ${y} | 소득세+지방세(월) ${t} | 4대보험(월) ${i}`,
-        copied: '복사됨',
+        copied: '계산 결과를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력값을 모두 지웠습니다.',
         copyDefault: '결과 복사'
       },
       en: {
         currency: '',
         idle: 'Enter annual gross salary to estimate take-home pay.',
-        needAnnual: 'Enter annual salary first.',
-        summary: (rate, capped) => `Estimated deduction rate: about ${rate}%.${capped ? ' Non-taxable monthly income was auto-capped at monthly gross pay.' : ''} Actual net pay may vary by company policy, non-taxable items, and payroll settlement.`,
+        invalidAnnual: 'Enter a whole-number annual salary from 1 to 10 billion KRW.',
+        invalidNonTax: 'Enter a non-negative whole-number monthly non-taxable amount.',
+        nonTaxOver: 'Monthly non-taxable pay cannot exceed monthly gross pay.',
+        invalidDependents: 'Enter 0 to 20 dependents as a whole number.',
+        invalidChildren: 'Enter 0 to 10 children as a whole number.',
+        childrenOver: 'Children cannot exceed the total number of dependents.',
+        summary: (rate) => `The estimated total deduction rate is about ${rate}% using 2026 Korean employee rates. Actual withholding varies by payroll tables, employer conditions, and year-end settlement.`,
         copyText: (m, y, t, i) => `Take-home estimate | Monthly ${m} | Yearly ${y} | Income+local tax (monthly) ${t} | Social insurance (monthly) ${i}`,
-        copied: 'Copied',
+        copied: 'Copied the calculation result.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared all inputs.',
         copyDefault: 'Copy results'
       },
       ja: {
         currency: 'ウォン',
         idle: '額面年収を入力すると、手取り見込みを計算します。',
-        needAnnual: '先に年収を入力してください。',
-        summary: (rate, capped) => `控除率は約${rate}%の試算です。${capped ? ' 非課税月額は月額総支給を超えないよう自動補正しました。' : ''} 実際の手取りは会社規定・非課税項目・精算方法により変動します。`,
+        invalidAnnual: '年収は1〜100億ウォンの整数で入力してください。',
+        invalidNonTax: '非課税月額は0以上の整数で入力してください。',
+        nonTaxOver: '非課税月額は月額総支給を超えることができません。',
+        invalidDependents: '扶養人数は0〜20の整数で入力してください。',
+        invalidChildren: '子どもの人数は0〜10の整数で入力してください。',
+        childrenOver: '子どもの人数は扶養人数を超えることができません。',
+        summary: (rate) => `2026年の韓国の労働者負担率による総控除率は約${rate}%です。実際の源泉徴収額は簡易税額表・会社の給与条件・年末調整により異なります。`,
         copyText: (m, y, t, i) => `手取り試算結果 | 月 ${m} | 年 ${y} | 所得税+住民税(月) ${t} | 社会保険(月) ${i}`,
-        copied: 'コピー完了',
+        copied: '計算結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力をすべてクリアしました。',
         copyDefault: '結果をコピー'
       }
     };
@@ -5931,18 +5953,18 @@
       if (gross <= 15000000) return 3500000 + (gross - 5000000) * 0.4;
       if (gross <= 45000000) return 7500000 + (gross - 15000000) * 0.15;
       if (gross <= 100000000) return 12000000 + (gross - 45000000) * 0.05;
-      return 14750000 + (gross - 100000000) * 0.02;
+      return Math.min(20000000, 14750000 + (gross - 100000000) * 0.02);
     };
 
     const calcIncomeTax = (base) => {
-      if (base <= 12000000) return base * 0.06;
-      if (base <= 46000000) return base * 0.15 - 1080000;
-      if (base <= 88000000) return base * 0.24 - 5220000;
-      if (base <= 150000000) return base * 0.35 - 14900000;
-      if (base <= 300000000) return base * 0.38 - 19400000;
-      if (base <= 500000000) return base * 0.4 - 25400000;
-      if (base <= 1000000000) return base * 0.42 - 35400000;
-      return base * 0.45 - 65400000;
+      if (base <= 14000000) return base * 0.06;
+      if (base <= 50000000) return base * 0.15 - 1260000;
+      if (base <= 88000000) return base * 0.24 - 5760000;
+      if (base <= 150000000) return base * 0.35 - 15440000;
+      if (base <= 300000000) return base * 0.38 - 19940000;
+      if (base <= 500000000) return base * 0.4 - 25940000;
+      if (base <= 1000000000) return base * 0.42 - 35940000;
+      return base * 0.45 - 65940000;
     };
 
     const calcChildCredit = (n) => {
@@ -5956,54 +5978,78 @@
     const copyText = async (text) => {
       try {
         await navigator.clipboard.writeText(text);
+        return true;
       } catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          const copied = document.execCommand('copy');
+          document.body.removeChild(ta);
+          return copied;
+        } catch (_) {
+          return false;
+        }
       }
     };
 
-    const setIdle = (msg) => {
+    const setState = (msg, state = '') => {
       netMonth.textContent = '-';
       netYear.textContent = '-';
       taxMonth.textContent = '-';
       insuranceMonth.textContent = '-';
       summary.textContent = msg;
+      summary.dataset.state = state;
+      copyBtn.disabled = true;
+    };
+
+    const wholeNumber = (field, fallback = null) => {
+      const raw = field.value.trim();
+      if (!raw && fallback !== null) return fallback;
+      const value = Number(raw);
+      return Number.isFinite(value) && Number.isInteger(value) ? value : NaN;
+    };
+
+    const invalidate = (field, message) => {
+      [annual, nonTax, dependent, children].forEach((el) => el.setAttribute('aria-invalid', String(el === field)));
+      setState(message, 'error');
     };
 
     const render = () => {
-      const grossAnnual = Number(annual.value || 0);
-      const depCount = Math.min(20, Math.max(0, Math.floor(Number(dependent.value || 0))));
-      const childCount = Math.min(10, Math.max(0, Math.floor(Number(children.value || 0))));
-
-      if (!(grossAnnual > 0)) {
-        setIdle(salText.idle);
+      if (!annual.value.trim()) {
+        [annual, nonTax, dependent, children].forEach((el) => el.setAttribute('aria-invalid', 'false'));
+        setState(salText.idle);
         return;
       }
+      const grossAnnual = wholeNumber(annual);
+      const nonTaxMonthly = wholeNumber(nonTax, 0);
+      const depCount = wholeNumber(dependent, 0);
+      const childCount = wholeNumber(children, 0);
+      if (!Number.isFinite(grossAnnual) || grossAnnual < 1 || grossAnnual > 10000000000) return invalidate(annual, salText.invalidAnnual);
+      if (!Number.isFinite(nonTaxMonthly) || nonTaxMonthly < 0) return invalidate(nonTax, salText.invalidNonTax);
+      if (!Number.isFinite(depCount) || depCount < 0 || depCount > 20) return invalidate(dependent, salText.invalidDependents);
+      if (!Number.isFinite(childCount) || childCount < 0 || childCount > 10) return invalidate(children, salText.invalidChildren);
 
       const grossMonthly = grossAnnual / 12;
-      const nonTaxMonthlyRaw = Math.max(0, Number(nonTax.value || 0));
-      const nonTaxMonthly = Math.min(nonTaxMonthlyRaw, grossMonthly);
-      if (Number(dependent.value || 0) !== depCount) dependent.value = depCount;
-      if (Number(children.value || 0) !== childCount) children.value = childCount;
-      if (nonTaxMonthlyRaw !== nonTaxMonthly) nonTax.value = Math.round(nonTaxMonthly);
-      const pensionBase = Math.min(grossMonthly, 6170000);
-      const pension = pensionBase * 0.045;
-      const health = grossMonthly * 0.03545;
-      const longCare = health * 0.1295;
-      const employment = grossMonthly * 0.009;
+      if (nonTaxMonthly > grossMonthly) return invalidate(nonTax, salText.nonTaxOver);
+      if (childCount > depCount) return invalidate(children, salText.childrenOver);
+      [annual, nonTax, dependent, children].forEach((el) => el.setAttribute('aria-invalid', 'false'));
+      const taxableMonthly = Math.max(0, grossMonthly - nonTaxMonthly);
+      const pensionBase = Math.min(taxableMonthly, 6590000);
+      const pension = pensionBase * 0.0475;
+      const health = taxableMonthly * 0.03595;
+      const longCare = health * (0.009448 / 0.0719);
+      const employment = taxableMonthly * 0.009;
       const monthlyInsurance = pension + health + longCare + employment;
       const annualInsurance = monthlyInsurance * 12;
 
       const annualTaxableGross = Math.max(0, grossAnnual - (nonTaxMonthly * 12));
       const earnDed = earnedIncomeDeduction(annualTaxableGross);
       const earnIncome = Math.max(0, annualTaxableGross - earnDed);
-      const personalDed = (1 + depCount + childCount) * 1500000;
+      const personalDed = (1 + depCount) * 1500000;
       const taxBase = Math.max(0, earnIncome - personalDed - annualInsurance);
 
       let annualIncomeTax = Math.max(0, calcIncomeTax(taxBase));
@@ -6019,34 +6065,49 @@
       netYear.textContent = KRW(annualNet);
       taxMonth.textContent = KRW(monthlyTax);
       insuranceMonth.textContent = KRW(monthlyInsurance);
-      const cappedNonTax = nonTaxMonthlyRaw > nonTaxMonthly;
-      summary.textContent = salText.summary(effectiveRate.toLocaleString(numberLocale, { maximumFractionDigits: 2 }), cappedNonTax);
+      summary.textContent = salText.summary(effectiveRate.toLocaleString(numberLocale, { maximumFractionDigits: 2 }));
+      summary.dataset.state = 'success';
+      copyBtn.disabled = false;
     };
 
     [annual, nonTax, dependent, children].forEach((el) => el?.addEventListener('input', render));
 
     copyBtn?.addEventListener('click', async () => {
-      if (netMonth.textContent === '-') {
-        setIdle(salText.needAnnual);
-        return;
-      }
+      if (copyBtn.disabled) return;
       const text = salText.copyText(netMonth.textContent, netYear.textContent, taxMonth.textContent, insuranceMonth.textContent);
-      await copyText(text);
+      const copied = await copyText(text);
       const old = copyBtn.textContent;
-      copyBtn.textContent = salText.copied;
+      copyBtn.textContent = copied ? salText.copied : salText.copyFail;
+      summary.textContent = copied ? salText.copied : salText.copyFail;
+      summary.dataset.state = copied ? 'success' : 'error';
       setTimeout(() => { copyBtn.textContent = old || salText.copyDefault; }, 900);
     });
 
-    resetBtn?.addEventListener('click', () => {
-      annual.value = 50000000;
-      nonTax.value = 200000;
-      dependent.value = 0;
-      children.value = 0;
+    document.querySelectorAll('[data-sal-annual]').forEach((button) => button.addEventListener('click', () => {
+      annual.value = button.dataset.salAnnual || '';
       render();
+      annual.focus();
+    }));
+
+    exampleBtn?.addEventListener('click', () => {
+      annual.value = '50000000';
+      nonTax.value = '200000';
+      dependent.value = '2';
+      children.value = '1';
+      render();
+      annual.focus();
     });
 
-    if (!annual.value) annual.value = 50000000;
-    if (!nonTax.value) nonTax.value = 200000;
+    resetBtn?.addEventListener('click', () => {
+      annual.value = '';
+      nonTax.value = '';
+      dependent.value = '0';
+      children.value = '0';
+      render();
+      summary.textContent = salText.cleared;
+      annual.focus();
+    });
+
     render();
   }
 

@@ -1896,9 +1896,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 연봉과 비과세·가족 정보를 넣으면 월/연 실수령액과 세금·4대보험 공제를 빠르게 계산해요.
-  description_en: Estimate monthly and yearly take-home pay from annual salary, non-taxable income, and dependent information.
-  description_ja: 年収・非課税月額・扶養情報から、月/年の手取りと税金・4大保険控除の目安を素早く計算します。
+  description: 2026년 세전 연봉과 비과세·부양가족 정보를 넣으면 세후 월급과 소득세·근로자 부담 4대보험 공제를 추정해요.
+  description_en: Estimate 2026 Korean monthly and yearly take-home pay from gross salary, non-taxable income, dependents, tax, and employee insurance rates.
+  description_ja: 2026年の韓国の年収・非課税月額・扶養情報から、月・年の手取りと税金・労働者負担の社会保険料を試算します。
   url: /tools/salary-calculator/
   url_en: /en/tools/salary-calculator/
   url_ja: /ja/tools/salary-calculator/

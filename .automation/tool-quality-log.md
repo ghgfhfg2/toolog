@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-11 21:00 KST
+- Tool: `salary-calculator`
+- Selection reason: the recent quality runs covered other tools; this high-risk financial calculator still used outdated income-tax brackets and 2024 insurance rates, counted children twice in the personal deduction, included non-taxable pay in insurance bases, silently clamped inconsistent values, and auto-filled results instead of providing a true empty state.
+- Scope: updated only the existing multilingual salary tool, home metadata, layout, styles, and script with September 2026 employee insurance rates and tax brackets, corrected dependent handling and non-taxable insurance bases, strict whole-number/range/relationship validation, blank/error/success states, presets, example/clear/copy feedback, accessible descriptions/live status, one-column mobile inputs/actions, SEO titles/descriptions, calculation assumptions, FAQ, and related links. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, mobile CSS rules, and targeted normal/blank/zero/negative/fractional/oversized/non-tax-over/children-over/tax-bracket/pension-cap cases passed. Local build status is recorded in the deployment report.
+
 ## 2026-09-10 21:00 KST
 - Tool: `jeonse-vs-wolse-calculator`
 - Selection reason: the previous eight quality runs covered other tools; this older housing-cost calculator had not been improved since its March launch and silently clamped negative, fractional, and oversized inputs, auto-filled results instead of showing a true empty state, and ignored differing one-time costs even though stay length was a core input.

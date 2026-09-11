@@ -2980,38 +2980,45 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-help" id="age-help">{% if page.lang == 'en' %}The reference date may be today, a past date, or a future planning date. Feb 29 is treated as Feb 28 in non-leap years for this calculator.{% elsif page.lang == 'ja' %}基準日は今日・過去・将来の日付を選べます。この計算機では、うるう年以外の2月29日を2月28日として扱います。{% else %}기준일은 오늘·과거·미래 날짜를 선택할 수 있습니다. 이 계산기에서는 2월 29일 출생자의 평년 생일을 2월 28일로 처리합니다.{% endif %}</p>
         </div>
       {% when 'salary-calculator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui sal-ui">
+          <p class="tool-help" id="sal-help">{% if page.lang == 'en' %}2026 Korean employee-rate estimate. Enter whole KRW amounts; dependents exclude yourself, while children must also be included among dependents.{% elsif page.lang == 'ja' %}2026年の韓国の労働者負担率による概算です。金額はウォンの整数で、扶養人数は本人を除き、子どもも扶養人数に含めてください。{% else %}2026년 대한민국 근로자 부담률 기준 추정치입니다. 금액은 원 단위 정수로, 부양가족은 본인 제외 인원이며 자녀도 부양가족 수에 포함해 주세요.{% endif %}</p>
+          <div class="tool-row-grid sal-grid">
             <div>
               <label for="sal-annual">{% if page.lang == 'en' %}Annual salary (gross){% elsif page.lang == 'ja' %}年収(額面){% else %}연봉(세전, 원){% endif %}</label>
-              <input id="sal-annual" type="number" min="0" step="100000" placeholder="{% if page.lang == 'en' %}e.g. 50000000{% elsif page.lang == 'ja' %}例: 50000000{% else %}예: 50000000{% endif %}" inputmode="numeric" />
+              <input id="sal-annual" type="number" min="1" max="10000000000" step="1" placeholder="{% if page.lang == 'en' %}e.g. 50000000{% elsif page.lang == 'ja' %}例: 50000000{% else %}예: 50000000{% endif %}" inputmode="numeric" required aria-describedby="sal-help sal-summary" />
             </div>
             <div>
               <label for="sal-nontax">{% if page.lang == 'en' %}Non-taxable monthly pay (optional){% elsif page.lang == 'ja' %}非課税月額(任意){% else %}비과세 월급(원, 선택){% endif %}</label>
-              <input id="sal-nontax" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 200000{% elsif page.lang == 'ja' %}例: 200000{% else %}예: 200000{% endif %}" inputmode="numeric" />
+              <input id="sal-nontax" type="number" min="0" max="833333333" step="1" placeholder="{% if page.lang == 'en' %}e.g. 200000{% elsif page.lang == 'ja' %}例: 200000{% else %}예: 200000{% endif %}" inputmode="numeric" aria-describedby="sal-help sal-summary" />
             </div>
-          </div>
-          <div class="tool-row-grid pct-grid">
             <div>
               <label for="sal-dependent">{% if page.lang == 'en' %}Dependents (excluding self){% elsif page.lang == 'ja' %}扶養人数(本人除く){% else %}부양가족 수(본인 제외){% endif %}</label>
-              <input id="sal-dependent" type="number" min="0" max="20" step="1" placeholder="{% if page.lang == 'en' %}e.g. 1{% elsif page.lang == 'ja' %}例: 1{% else %}예: 1{% endif %}" inputmode="numeric" />
+              <input id="sal-dependent" type="number" min="0" max="20" step="1" value="0" inputmode="numeric" aria-describedby="sal-help sal-summary" />
             </div>
             <div>
               <label for="sal-children">{% if page.lang == 'en' %}Number of children{% elsif page.lang == 'ja' %}子どもの人数{% else %}자녀 수{% endif %}</label>
-              <input id="sal-children" type="number" min="0" max="10" step="1" placeholder="{% if page.lang == 'en' %}e.g. 1{% elsif page.lang == 'ja' %}例: 1{% else %}예: 1{% endif %}" inputmode="numeric" />
+              <input id="sal-children" type="number" min="0" max="10" step="1" value="0" inputmode="numeric" aria-describedby="sal-help sal-summary" />
             </div>
           </div>
-          <div class="tool-row-grid pct-actions">
-            <button id="sal-copy" type="button">{% if page.lang == 'en' %}Copy results{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
-            <button id="sal-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          <div class="tool-row sal-presets" aria-label="{% if page.lang == 'en' %}Salary presets{% elsif page.lang == 'ja' %}年収プリセット{% else %}연봉 빠른 입력{% endif %}">
+            <span>{% if page.lang == 'en' %}Quick salary:{% elsif page.lang == 'ja' %}年収:{% else %}연봉 빠른 입력:{% endif %}</span>
+            <button type="button" data-sal-annual="36000000">36M</button>
+            <button type="button" data-sal-annual="50000000">50M</button>
+            <button type="button" data-sal-annual="70000000">70M</button>
+            <button type="button" data-sal-annual="100000000">100M</button>
           </div>
-          <div class="tool-stats">
+          <div class="tool-row-grid pct-actions">
+            <button id="sal-copy" type="button" disabled>{% if page.lang == 'en' %}Copy results{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="sal-example" type="button">{% if page.lang == 'en' %}Try example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
+            <button id="sal-reset" type="button">{% if page.lang == 'en' %}Clear all{% elsif page.lang == 'ja' %}すべてクリア{% else %}모두 지우기{% endif %}</button>
+          </div>
+          <div class="tool-stats sal-stats" aria-label="{% if page.lang == 'en' %}Salary estimate results{% elsif page.lang == 'ja' %}手取り試算結果{% else %}연봉 실수령액 추정 결과{% endif %}">
             <div><strong id="sal-net-month">-</strong><span>{% if page.lang == 'en' %}Estimated net pay (monthly){% elsif page.lang == 'ja' %}推定手取り(月){% else %}예상 실수령액(월){% endif %}</span></div>
             <div><strong id="sal-net-year">-</strong><span>{% if page.lang == 'en' %}Estimated net pay (yearly){% elsif page.lang == 'ja' %}推定手取り(年){% else %}예상 실수령액(연){% endif %}</span></div>
             <div><strong id="sal-tax-month">-</strong><span>{% if page.lang == 'en' %}Income + local tax (monthly){% elsif page.lang == 'ja' %}所得税+住民税(月){% else %}소득세+지방세(월){% endif %}</span></div>
             <div><strong id="sal-insurance-month">-</strong><span>{% if page.lang == 'en' %}Social insurance (monthly){% elsif page.lang == 'ja' %}社会保険(月){% else %}4대보험(월){% endif %}</span></div>
           </div>
-          <p class="tool-result" id="sal-summary">{% if page.lang == 'en' %}Enter salary and deduction conditions to estimate take-home pay.{% elsif page.lang == 'ja' %}年収と控除条件を入力すると、手取り見込みを計算します。{% else %}연봉과 공제 조건을 입력하면 예상 실수령액을 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="sal-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter annual gross salary to estimate take-home pay.{% elsif page.lang == 'ja' %}額面年収を入力すると、手取り見込みを計算します。{% else %}연봉(세전)을 입력하면 예상 실수령액을 계산합니다.{% endif %}</p>
         </div>
       {% when 'severance-pay-calculator' %}
         <div class="tool-ui">
