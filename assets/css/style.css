@@ -885,6 +885,21 @@ a:hover { color: #fff; text-decoration: none; }
 }
 .loan-ui #loan-help[data-state="error"] { color: #fca5a5; }
 .loan-ui #loan-help[data-state="success"] { color: #86efac; }
+.sa-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.sa-target-grid { grid-template-columns: minmax(0, 1fr); }
+.sa-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.sa-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.sa-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.sa-ui button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+.sa-ui #sa-status[data-state="error"] { color: #fca5a5; }
+.sa-ui #sa-status[data-state="warning"] { color: #fbbf24; }
+.sa-ui #sa-status[data-state="success"] { color: #86efac; }
+.sa-ui .tool-hint { margin-top: -.2rem; }
+.sa-stats strong,
+.sa-stats span { overflow-wrap: anywhere; }
 .ci-ui input[aria-invalid="true"] { border-color: #ef4444; }
 .ci-ui #ci-help[data-state="error"] { color: #fca5a5; }
 .ci-ui #ci-help[data-state="success"] { color: #86efac; }
@@ -2019,6 +2034,9 @@ a:hover { color: #fff; text-decoration: none; }
   .loan-grid,
   .loan-actions { grid-template-columns: 1fr; }
   .loan-stats { grid-template-columns: 1fr 1fr; }
+  .sa-grid,
+  .sa-actions { grid-template-columns: 1fr; }
+  .sa-stats { grid-template-columns: 1fr 1fr; }
   .sb-grid,
   .sb-actions { grid-template-columns: 1fr; }
   .sb-stats { grid-template-columns: 1fr 1fr; }

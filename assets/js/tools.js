@@ -6308,18 +6308,27 @@
     const totalQtyOut = document.getElementById('sa-total-qty');
     const totalCostOut = document.getElementById('sa-total-cost');
     const needQtyOut = document.getElementById('sa-need-qty');
-    const help = document.getElementById('sa-help');
+    const status = document.getElementById('sa-status');
+    const sampleBtn = document.getElementById('sa-sample');
     const copyBtn = document.getElementById('sa-copy');
     const resetBtn = document.getElementById('sa-reset');
 
-    if (!currentQty || !currentPrice || !addQty || !addPrice || !newAvg || !totalQtyOut || !totalCostOut || !needQtyOut || !help) return;
+    if (!currentQty || !currentPrice || !addQty || !addPrice || !targetPrice || !newAvg || !totalQtyOut || !totalCostOut || !needQtyOut || !status) return;
 
     const stockI18n = {
       ko: {
         currency: '원',
         shareUnit: '주',
-        needCurrent: '현재 보유 수량과 평단가를 먼저 입력하세요.',
+        empty: '현재 보유 수량과 평단가를 입력하면 계산을 시작합니다.',
+        incomplete: '현재 보유 수량과 평단가를 모두 입력해 주세요.',
+        invalidQty: '수량은 0~10억 주 범위의 정수로 입력해 주세요. 현재 보유 수량은 1주 이상이어야 합니다.',
+        invalidPrice: '평단가와 매수가는 0보다 크고 1조 이하인 숫자로 입력해 주세요.',
+        addPriceRequired: '추가 매수 수량을 입력했다면 추가 매수가도 입력해 주세요.',
+        targetBuyPriceRequired: '목표 평단까지 필요한 수량을 계산하려면 추가 매수가를 입력해 주세요.',
+        tooLarge: '총 매수금액은 1,000조 원 이하인 범위에서 계산해 주세요.',
+        needTooLarge: '목표 달성에 필요한 추가 수량이 10억 주를 초과합니다. 입력 조건을 다시 확인해 주세요.',
         avgWithPlan: (avg) => `추가 매수 반영 시 새 평단가는 ${avg}입니다.`,
+        avgWithoutPlan: (avg) => `현재 평단가는 ${avg}입니다. 추가 매수 수량과 가격을 입력하면 새 평단가를 계산합니다.`,
         alreadyTarget: '현재 평단가가 이미 목표 평단 이하입니다.',
         alreadyWithPlan: '현재 입력된 추가 매수 계획까지 반영하면 이미 목표 평단을 만족합니다.',
         alreadyNow: '현재 보유 상태로 이미 목표 평단을 만족합니다.',
@@ -6336,13 +6345,24 @@
           need: '목표 평단 필요수량'
         },
         copied: '복사됨',
+        copyFail: '자동 복사를 사용할 수 없습니다. 브라우저 권한을 확인해 주세요.',
+        cleared: '입력값과 계산 결과를 초기화했습니다.',
+        sampleLoaded: '예시 값을 입력했습니다. 새 평단가와 목표 필요 수량을 확인하세요.',
         copyDefault: '결과 복사'
       },
       en: {
         currency: '',
         shareUnit: ' shares',
-        needCurrent: 'Enter current holding quantity and average cost first.',
+        empty: 'Enter current holdings and average price to begin.',
+        incomplete: 'Enter both current holdings and current average price.',
+        invalidQty: 'Use whole-share quantities from 0 to 1 billion; current holdings must be at least 1.',
+        invalidPrice: 'Average and buy prices must be numbers greater than 0 and no more than 1 trillion.',
+        addPriceRequired: 'Enter an expected buy price when a planned buy quantity is provided.',
+        targetBuyPriceRequired: 'Enter an expected buy price to calculate shares needed for the target.',
+        tooLarge: 'Keep the total invested amount at or below 1 quadrillion.',
+        needTooLarge: 'The target requires more than 1 billion additional shares. Review the inputs.',
         avgWithPlan: (avg) => `New average cost with planned buy: ${avg}.`,
+        avgWithoutPlan: (avg) => `Current average cost: ${avg}. Add a planned quantity and price to test a new average.`,
         alreadyTarget: 'Your current average cost is already at or below the target.',
         alreadyWithPlan: 'With the additional buy plan already entered, the target average is already met.',
         alreadyNow: 'Your current holdings already meet the target average.',
@@ -6359,13 +6379,24 @@
           need: 'Required shares for target average'
         },
         copied: 'Copied',
+        copyFail: 'Automatic copy is unavailable. Check your browser permission.',
+        cleared: 'Cleared all inputs and results.',
+        sampleLoaded: 'Loaded the example. Review the new average and target quantity.',
         copyDefault: 'Copy results'
       },
       ja: {
         currency: 'ウォン',
         shareUnit: '株',
-        needCurrent: '現在の保有株数と平均取得単価を先に入力してください。',
+        empty: '現在の保有株数と平均取得単価を入力してください。',
+        incomplete: '現在の保有株数と平均取得単価を両方入力してください。',
+        invalidQty: '株数は0〜10億株の整数で入力し、現在の保有株数は1株以上にしてください。',
+        invalidPrice: '平均単価と購入単価は0より大きく1兆以下の数値で入力してください。',
+        addPriceRequired: '追加購入株数を入力した場合は追加購入単価も入力してください。',
+        targetBuyPriceRequired: '目標までの必要株数を計算するには追加購入単価を入力してください。',
+        tooLarge: '総購入金額が1,000兆以下になる範囲で計算してください。',
+        needTooLarge: '目標達成に必要な追加株数が10億株を超えます。入力条件を確認してください。',
         avgWithPlan: (avg) => `追加購入を反映した新しい平均取得単価は ${avg} です。`,
+        avgWithoutPlan: (avg) => `現在の平均取得単価は ${avg} です。追加購入株数と単価を入力すると新しい平均を計算します。`,
         alreadyTarget: '現在の平均取得単価はすでに目標以下です。',
         alreadyWithPlan: '現在入力済みの追加購入計画まで反映すると、すでに目標単価を満たしています。',
         alreadyNow: '現在の保有状態ですでに目標単価を満たしています。',
@@ -6382,95 +6413,150 @@
           need: '目標単価に必要な株数'
         },
         copied: 'コピー完了',
+        copyFail: '自動コピーを利用できません。ブラウザの権限を確認してください。',
+        cleared: '入力値と計算結果をクリアしました。',
+        sampleLoaded: '例を入力しました。新しい平均単価と目標必要株数を確認してください。',
         copyDefault: '結果をコピー'
       }
     };
     const stockText = stockI18n[pageLang] || stockI18n.ko;
     const fmtKRW = (v) => {
-      const rounded = Math.round(v);
-      if (pageLang === 'en') return `${rounded.toLocaleString(numberLocale)} KRW`;
-      return `${rounded.toLocaleString(numberLocale)}${stockText.currency}`;
+      const formatted = new Intl.NumberFormat(numberLocale, { maximumFractionDigits: 2 }).format(v);
+      if (pageLang === 'en') return `${formatted} KRW`;
+      return `${formatted}${stockText.currency}`;
     };
     const fmtQty = (v) => `${Math.round(v).toLocaleString(numberLocale)}${stockText.shareUnit}`;
 
     const copyText = async (text) => {
       try {
         await navigator.clipboard.writeText(text);
+        return true;
       } catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        return false;
       }
     };
 
-    const setIdle = (msg) => {
+    const setStatus = (message, state = '') => {
+      status.textContent = message;
+      status.dataset.state = state;
+    };
+
+    const resetResults = () => {
       newAvg.textContent = '-';
       totalQtyOut.textContent = '-';
       totalCostOut.textContent = '-';
       needQtyOut.textContent = '-';
-      help.textContent = msg;
+      copyBtn.disabled = true;
+    };
+
+    const invalidate = (element, message) => {
+      element.setAttribute('aria-invalid', 'true');
+      resetResults();
+      setStatus(message, 'error');
     };
 
     const render = () => {
-      const cq = Math.max(0, Number(currentQty.value || 0));
-      const cp = Math.max(0, Number(currentPrice.value || 0));
-      const aq = Math.max(0, Number(addQty.value || 0));
-      const ap = Math.max(0, Number(addPrice.value || 0));
-      const tpRaw = targetPrice?.value || '';
-      const tp = tpRaw === '' ? null : Math.max(0, Number(tpRaw));
+      const fields = [currentQty, currentPrice, addQty, addPrice, targetPrice];
+      fields.forEach((el) => el.setAttribute('aria-invalid', 'false'));
+      const cqRaw = currentQty.value.trim();
+      const cpRaw = currentPrice.value.trim();
+      const aqRaw = addQty.value.trim();
+      const apRaw = addPrice.value.trim();
+      const tpRaw = targetPrice.value.trim();
 
-      if (!(cq > 0) || !(cp > 0)) {
-        setIdle(stockText.needCurrent);
+      if (!cqRaw && !cpRaw && !aqRaw && !apRaw && !tpRaw) {
+        resetResults();
+        setStatus(stockText.empty);
+        return;
+      }
+      if (!cqRaw || !cpRaw) {
+        invalidate(!cqRaw ? currentQty : currentPrice, stockText.incomplete);
+        return;
+      }
+
+      const cq = Number(cqRaw);
+      const cp = Number(cpRaw);
+      const aq = aqRaw ? Number(aqRaw) : 0;
+      const ap = apRaw ? Number(apRaw) : null;
+      const tp = tpRaw ? Number(tpRaw) : null;
+
+      if (!Number.isInteger(cq) || cq < 1 || cq > 1000000000) {
+        invalidate(currentQty, stockText.invalidQty);
+        return;
+      }
+      if (aqRaw && (!Number.isInteger(aq) || aq < 0 || aq > 1000000000)) {
+        invalidate(addQty, stockText.invalidQty);
+        return;
+      }
+      if (!Number.isFinite(cp) || cp <= 0 || cp > 1000000000000) {
+        invalidate(currentPrice, stockText.invalidPrice);
+        return;
+      }
+      if (apRaw && (!Number.isFinite(ap) || ap <= 0 || ap > 1000000000000)) {
+        invalidate(addPrice, stockText.invalidPrice);
+        return;
+      }
+      if (tpRaw && (!Number.isFinite(tp) || tp <= 0 || tp > 1000000000000)) {
+        invalidate(targetPrice, stockText.invalidPrice);
+        return;
+      }
+      if (aq > 0 && ap === null) {
+        invalidate(addPrice, stockText.addPriceRequired);
         return;
       }
 
       const baseCost = cq * cp;
-      const addCost = aq * ap;
+      const addCost = aq * (ap || 0);
       const totalQty = cq + aq;
       const totalCost = baseCost + addCost;
       const avg = totalQty > 0 ? totalCost / totalQty : 0;
 
+      if (!Number.isFinite(totalCost) || totalCost > 1000000000000000) {
+        invalidate(aq > 0 ? addQty : currentQty, stockText.tooLarge);
+        return;
+      }
+
       newAvg.textContent = fmtKRW(avg);
       totalQtyOut.textContent = fmtQty(totalQty);
       totalCostOut.textContent = fmtKRW(totalCost);
+      copyBtn.disabled = false;
 
-      if (tp === null || !Number.isFinite(tp)) {
+      if (tp === null) {
         needQtyOut.textContent = '-';
-        help.textContent = stockText.avgWithPlan(fmtKRW(avg));
+        setStatus(aq > 0 ? stockText.avgWithPlan(fmtKRW(avg)) : stockText.avgWithoutPlan(fmtKRW(avg)), 'success');
         return;
       }
 
-      if (tp >= cp && aq === 0) {
+      if (tp >= avg) {
         needQtyOut.textContent = stockText.zeroShares;
-        help.textContent = stockText.alreadyTarget;
+        setStatus(aq > 0 ? stockText.alreadyWithPlan : stockText.alreadyNow, 'success');
         return;
       }
 
+      if (ap === null) {
+        addPrice.setAttribute('aria-invalid', 'true');
+        needQtyOut.textContent = '-';
+        setStatus(stockText.targetBuyPriceRequired, 'error');
+        return;
+      }
       const denominator = tp - ap;
       const numerator = totalCost - (tp * totalQty);
-
-      if (numerator <= 0) {
-        needQtyOut.textContent = stockText.zeroShares;
-        help.textContent = aq > 0 ? stockText.alreadyWithPlan : stockText.alreadyNow;
-        return;
-      }
-
       if (denominator <= 0) {
         needQtyOut.textContent = stockText.impossible;
-        help.textContent = stockText.impossibleHelp;
+        setStatus(stockText.impossibleHelp, 'warning');
         return;
       }
 
       const need = Math.ceil(numerator / denominator);
+      if (!Number.isFinite(need) || need > 1000000000) {
+        needQtyOut.textContent = stockText.impossible;
+        setStatus(stockText.needTooLarge, 'warning');
+        return;
+      }
       needQtyOut.textContent = fmtQty(need);
-      help.textContent = aq > 0
+      setStatus(aq > 0
         ? stockText.needAfterPlan(fmtKRW(tp), fmtQty(need), fmtQty(aq))
-        : stockText.needNow(fmtKRW(tp), fmtQty(need));
+        : stockText.needNow(fmtKRW(tp), fmtQty(need)), 'success');
     };
 
     [currentQty, currentPrice, addQty, addPrice, targetPrice].forEach((el) => el?.addEventListener('input', render));
@@ -6478,25 +6564,34 @@
     copyBtn?.addEventListener('click', async () => {
       if (newAvg.textContent === '-') return;
       const text = `${stockText.copyTitle} | ${stockText.copyLabels.avg} ${newAvg.textContent} | ${stockText.copyLabels.qty} ${totalQtyOut.textContent} | ${stockText.copyLabels.cost} ${totalCostOut.textContent} | ${stockText.copyLabels.need} ${needQtyOut.textContent}`;
-      await copyText(text);
+      const copied = await copyText(text);
+      if (!copied) {
+        setStatus(stockText.copyFail, 'error');
+        return;
+      }
       const old = copyBtn.textContent;
       copyBtn.textContent = stockText.copied;
       setTimeout(() => { copyBtn.textContent = old || stockText.copyDefault; }, 900);
     });
 
-    resetBtn?.addEventListener('click', () => {
-      currentQty.value = 100;
-      currentPrice.value = 50000;
-      addQty.value = 100;
-      addPrice.value = 40000;
-      if (targetPrice) targetPrice.value = 43000;
+    sampleBtn?.addEventListener('click', () => {
+      currentQty.value = '100';
+      currentPrice.value = '50000';
+      addQty.value = '100';
+      addPrice.value = '40000';
+      targetPrice.value = '43000';
       render();
+      setStatus(stockText.sampleLoaded, 'success');
+      currentQty.focus();
     });
 
-    if (!currentQty.value) currentQty.value = 100;
-    if (!currentPrice.value) currentPrice.value = 50000;
-    if (!addQty.value) addQty.value = 100;
-    if (!addPrice.value) addPrice.value = 40000;
+    resetBtn?.addEventListener('click', () => {
+      [currentQty, currentPrice, addQty, addPrice, targetPrice].forEach((el) => { el.value = ''; });
+      render();
+      setStatus(stockText.cleared);
+      currentQty.focus();
+    });
+
     render();
   }
 

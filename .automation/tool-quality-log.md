@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-12 21:00 KST
+- Tool: `stock-average-calculator`
+- Selection reason: recent quality runs covered other tools; this older investment calculator had not received a full quality pass, silently converted negative values to zero, accepted fractional share quantities and incomplete buy plans, could produce unsafe oversized totals, prefilled sample values instead of showing a true empty state, and had thin localized SEO content.
+- Scope: improved only the existing multilingual stock-average tool, home metadata, layout, styles, and script with strict whole-share/price/total validation, paired buy-plan checks, overflow and unreachable-target guards, true blank/error/warning/success states, example/clear/copy feedback, decimal price display, accessible descriptions/live status, one-column mobile inputs/actions, expanded SEO copy and FAQ, and related links. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, mobile CSS rules, and targeted sample/already-met/unreachable/zero/negative/fractional/incomplete-pair/oversized cases passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-11 21:00 KST
 - Tool: `salary-calculator`
 - Selection reason: the recent quality runs covered other tools; this high-risk financial calculator still used outdated income-tax brackets and 2024 insurance rates, counted children twice in the personal deduction, included non-taxable pay in insurance bases, silently clamped inconsistent values, and auto-filled results instead of providing a true empty state.
