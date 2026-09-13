@@ -1509,13 +1509,15 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 주택 매매·전월세 거래금액 기준 법정 상한 요율로 중개보수 한도를 빠르게 계산해요.
-  description_en: Estimate the legal maximum brokerage fee for home sales and leases based on transaction value.
-  description_ja: 売買・賃貸の取引金額を基準に、法定上限料率で仲介手数料の上限目安を素早く計算します。
+  description: 주택 매매가 또는 보증금·월세를 입력하면 5천만원 미만 ×70 예외까지 반영해 적용 거래금액, 중개보수 상한, 부가세 참고액을 계산해요.
+  description_en: Estimate Korea's home brokerage-fee cap from a sale price or deposit and monthly rent, including the under-KRW-50-million ×70 conversion exception and VAT reference.
+  description_ja: 韓国の住宅売買金額または保証金・月家賃から、5,000万ウォン未満の×70換算例外、仲介手数料上限、VAT参考額を試算します。
   url: /tools/brokerage-fee-calculator/
   url_en: /en/tools/brokerage-fee-calculator/
   url_ja: /ja/tools/brokerage-fee-calculator/
   thumbnail: /assets/thumbs/brokerage-fee-calculator.svg
+  tool_type: calculator
+  topic_cluster: real-estate
 
 - id: password-generator
   title: 비밀번호 생성기

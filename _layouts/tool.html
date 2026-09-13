@@ -3226,45 +3226,48 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result jv-note" id="jv-assumption">{% if page.lang == 'en' %}Opportunity cost uses simple interest. Optional one-time costs are spread across the stay. Loan interest, deposit-return risk, maintenance fees, and future rate changes are excluded.{% elsif page.lang == 'ja' %}機会費用は単利で計算し、一時費用は居住月数で按分します。借入利息、保証金返還リスク、管理費、将来の金利変動は含みません。{% else %}기회비용은 단리로 계산하고 일회성 비용은 거주기간에 나눠 반영합니다. 대출이자·보증금 반환 위험·관리비·향후 금리 변동은 포함하지 않습니다.{% endif %}</p>
         </div>
       {% when 'brokerage-fee-calculator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui bf-ui">
+          <div class="tool-row-grid bf-grid">
             <div>
               <label for="bf-type">{% if page.lang == 'en' %}Transaction type{% elsif page.lang == 'ja' %}取引タイプ{% else %}거래 유형{% endif %}</label>
-              <select id="bf-type">
+              <select id="bf-type" aria-describedby="bf-help bf-assumption">
                 <option value="sale">{% if page.lang == 'en' %}Home sale{% elsif page.lang == 'ja' %}住宅売買{% else %}주택 매매{% endif %}</option>
                 <option value="rent">{% if page.lang == 'en' %}Lease (Jeonse/Wolse conversion){% elsif page.lang == 'ja' %}賃貸（チョンセ/ウォルセ換算）{% else %}주택 임대차(전세/월세 환산){% endif %}</option>
               </select>
             </div>
-            <div>
+            <div id="bf-amount-wrap">
               <label for="bf-amount">{% if page.lang == 'en' %}Transaction amount (KRW){% elsif page.lang == 'ja' %}取引金額（KRW）{% else %}거래금액(원){% endif %}</label>
-              <input id="bf-amount" type="number" min="0" step="10000" placeholder="e.g. 650000000" inputmode="numeric" />
+              <input id="bf-amount" type="number" min="1" max="1000000000000000" step="1" placeholder="e.g. 650000000" inputmode="numeric" aria-describedby="bf-help bf-assumption" />
             </div>
           </div>
 
-          <div id="bf-rent-helper" class="tool-row-grid pct-grid" hidden>
+          <div id="bf-rent-helper" class="tool-row-grid bf-grid" hidden>
             <div>
               <label for="bf-deposit">{% if page.lang == 'en' %}Deposit (KRW){% elsif page.lang == 'ja' %}保証金（KRW）{% else %}보증금(원){% endif %}</label>
-              <input id="bf-deposit" type="number" min="0" step="10000" placeholder="e.g. 50000000" inputmode="numeric" />
+              <input id="bf-deposit" type="number" min="0" max="1000000000000000" step="1" placeholder="e.g. 10000000" inputmode="numeric" aria-describedby="bf-help bf-assumption" />
             </div>
             <div>
               <label for="bf-monthly-rent">{% if page.lang == 'en' %}Monthly rent (KRW){% elsif page.lang == 'ja' %}月家賃（KRW）{% else %}월세(원){% endif %}</label>
-              <input id="bf-monthly-rent" type="number" min="0" step="10000" placeholder="e.g. 800000" inputmode="numeric" />
+              <input id="bf-monthly-rent" type="number" min="0" max="1000000000000000" step="1" placeholder="e.g. 500000" inputmode="numeric" aria-describedby="bf-help bf-assumption" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-actions">
-            <button id="bf-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
-            <button id="bf-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          <div class="tool-row-grid bf-actions">
+            <button id="bf-example" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
+            <button id="bf-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="bf-reset" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
+          <div class="tool-stats bf-stats" aria-label="{% if page.lang == 'en' %}Brokerage fee estimate{% elsif page.lang == 'ja' %}仲介手数料の試算結果{% else %}중개보수 계산 결과{% endif %}">
+            <div><strong id="bf-basis">-</strong><span>{% if page.lang == 'en' %}Transaction value used{% elsif page.lang == 'ja' %}適用取引金額{% else %}적용 거래금액{% endif %}</span></div>
             <div><strong id="bf-rate">-</strong><span>{% if page.lang == 'en' %}Applied max rate{% elsif page.lang == 'ja' %}適用上限料率{% else %}적용 상한 요율{% endif %}</span></div>
             <div><strong id="bf-limit">-</strong><span>{% if page.lang == 'en' %}Cap amount{% elsif page.lang == 'ja' %}上限額{% else %}상한액{% endif %}</span></div>
             <div><strong id="bf-fee">-</strong><span>{% if page.lang == 'en' %}Estimated brokerage fee (max){% elsif page.lang == 'ja' %}仲介手数料（上限目安）{% else %}예상 중개보수(한도){% endif %}</span></div>
             <div><strong id="bf-vat">-</strong><span>{% if page.lang == 'en' %}VAT included (reference){% elsif page.lang == 'ja' %}VAT込み（参考）{% else %}부가세 포함(참고){% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="bf-help">{% if page.lang == 'en' %}Calculated using Korea’s statutory residential brokerage-fee table (revised 2021-10). For lease deals, entering deposit/monthly rent auto-fills converted value (deposit + monthly rent × 100).{% elsif page.lang == 'ja' %}韓国の住宅仲介手数料上限表（2021年10月改定）に基づいて計算します。賃貸では保証金・月家賃を入力すると換算金額（保証金 + 月家賃×100）を自動入力できます。{% else %}주택 기준 상한 요율표(2021.10 개정)에 따라 계산합니다. 임대차에서 보증금/월세를 입력하면 환산금액(보증금 + 월세×100)도 바로 채울 수 있습니다.{% endif %}</p>
+          <p class="tool-result" id="bf-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Choose a transaction type and enter an amount to estimate the maximum fee.{% elsif page.lang == 'ja' %}取引タイプと金額を入力すると、手数料上限を試算します。{% else %}거래 유형과 금액을 입력하면 중개보수 상한을 계산합니다.{% endif %}</p>
+          <p class="tool-result bf-assumption" id="bf-assumption">{% if page.lang == 'en' %}Homes only. For monthly rent, value = deposit + rent × 100; when that result is below KRW 50 million, rent × 70 is used instead. Rates follow the national upper-limit table, but local ordinances and negotiation apply.{% elsif page.lang == 'ja' %}住宅のみ対象。月家賃は「保証金＋月家賃×100」で換算し、その結果が5,000万ウォン未満なら「×70」を適用します。全国上限表を基準とし、自治体条例と協議内容が優先されます。{% else %}주택만 대상입니다. 월세는 보증금+월세×100으로 환산하되 그 결과가 5천만원 미만이면 ×70을 적용합니다. 전국 상한표 기준이며 지역 조례와 당사자 협의가 우선합니다.{% endif %}</p>
         </div>
       {% when 'weekly-holiday-pay-calculator' %}
         <div class="tool-ui">

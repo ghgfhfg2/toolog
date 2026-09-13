@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-13 21:00 KST
+- Tool: `brokerage-fee-calculator`
+- Selection reason: recent runs covered other tools; this high-risk real-estate calculator had not received a quality pass since March, incorrectly used the lower rate at exact legal bracket boundaries such as KRW 900 million, and always used monthly rent ×100 instead of the statutory ×70 exception when the initial converted value is below KRW 50 million.
+- Scope: improved only the existing multilingual brokerage-fee tool, home metadata, layout, styles, and script with correct exclusive bracket boundaries, the ×70 monthly-rent conversion exception, strict whole-number/range/overflow checks, true empty/error/success states, derived transaction-value visibility, example/clear/copy feedback, accessible descriptions/live status, one-column mobile inputs/actions, legal assumptions, FAQ, related links, and search-intent copy. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, related-link existence, mobile CSS rules, and 12 targeted rate-boundary/×70/×100 cases passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-12 21:00 KST
 - Tool: `stock-average-calculator`
 - Selection reason: recent quality runs covered other tools; this older investment calculator had not received a full quality pass, silently converted negative values to zero, accepted fractional share quantities and incomplete buy plans, could produce unsafe oversized totals, prefilled sample values instead of showing a true empty state, and had thin localized SEO content.

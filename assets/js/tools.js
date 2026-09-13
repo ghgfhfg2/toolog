@@ -6794,6 +6794,8 @@
     const deposit = document.getElementById('bf-deposit');
     const monthlyRent = document.getElementById('bf-monthly-rent');
     const rentHelper = document.getElementById('bf-rent-helper');
+    const amountWrap = document.getElementById('bf-amount-wrap');
+    const basisEl = document.getElementById('bf-basis');
     const rateEl = document.getElementById('bf-rate');
     const limitEl = document.getElementById('bf-limit');
     const feeEl = document.getElementById('bf-fee');
@@ -6801,43 +6803,67 @@
     const help = document.getElementById('bf-help');
     const copyBtn = document.getElementById('bf-copy');
     const resetBtn = document.getElementById('bf-reset');
+    const exampleBtn = document.getElementById('bf-example');
+
+    if (!type || !amount || !deposit || !monthlyRent || !basisEl || !rateEl || !limitEl || !feeEl || !vatEl || !help || !copyBtn) return;
 
     const i18n = {
       ko: {
         currency: '원',
         noFixedCap: '법정 정액 상한 없음',
-        idle: '거래 유형과 거래금액을 입력하면 중개보수 상한을 계산합니다.',
+        idleSale: '매매 거래금액을 입력하면 중개보수 상한을 계산합니다.',
+        idleRent: '보증금과 월세를 입력하면 법정 방식으로 거래금액을 환산합니다.',
+        invalid: '금액은 0 이상의 정수로 입력해 주세요.',
+        requiredSale: '매매 거래금액은 1원 이상 입력해 주세요.',
+        requiredRent: '보증금 또는 월세 중 하나는 1원 이상 입력해 주세요.',
+        tooLarge: '적용 거래금액은 1,000조원 이하로 입력해 주세요.',
         typeSale: '매매',
         typeRent: '임대차',
-        rentHint: ' (환산금액: 보증금 + 월세×100)',
-        helpLine: (typeLabel, rentHint) => `주택 ${typeLabel} 상한 요율 기준 계산값입니다${rentHint}. 실제 중개보수는 공인중개사와 상한 이내 협의로 결정됩니다.`,
-        copyText: (typeLabel, amountText, rateText, feeText, vatText) => `거래유형: ${typeLabel}\n거래금액: ${amountText}\n적용 상한 요율: ${rateText}\n예상 중개보수(한도): ${feeText}\n부가세 포함(참고): ${vatText}`,
+        rentFormula: (multiplier) => `월세 환산식 ×${multiplier} 적용`,
+        helpLine: (typeLabel, formula) => `주택 ${typeLabel} 상한 요율 기준 계산값입니다${formula ? ` (${formula})` : ''}. 실제 중개보수는 지역 조례와 상한 이내 협의에 따라 달라집니다.`,
+        copyText: (typeLabel, amountText, rateText, feeText, vatText, formula) => `거래유형: ${typeLabel}\n적용 거래금액: ${amountText}${formula ? ` (${formula})` : ''}\n적용 상한 요율: ${rateText}\n예상 중개보수(한도): ${feeText}\n부가세 포함(참고): ${vatText}`,
         copiedPrimary: '결과를 클립보드에 복사했습니다.',
-        copiedFallback: '결과를 복사했습니다.'
+        copiedFallback: '결과를 복사했습니다.',
+        copyUnavailable: '자동 복사를 사용할 수 없습니다. 화면의 결과를 확인해 주세요.',
+        cleared: '입력값과 결과를 초기화했습니다.'
       },
       en: {
         currency: ' KRW',
         noFixedCap: 'No fixed statutory cap',
-        idle: 'Enter transaction type and amount to estimate the legal fee cap.',
+        idleSale: 'Enter the home sale price to estimate the fee cap.',
+        idleRent: 'Enter the deposit and monthly rent to derive the statutory transaction value.',
+        invalid: 'Enter whole-number amounts of zero or more.',
+        requiredSale: 'Enter a sale price of at least KRW 1.',
+        requiredRent: 'Enter a deposit or monthly rent of at least KRW 1.',
+        tooLarge: 'The transaction value must not exceed KRW 1 quadrillion.',
         typeSale: 'Home sale',
         typeRent: 'Lease',
-        rentHint: ' (converted value: deposit + monthly rent × 100)',
-        helpLine: (typeLabel, rentHint) => `Based on Korea’s statutory upper-rate table for ${typeLabel.toLowerCase()}${rentHint}. Actual brokerage fees are negotiated within the legal cap.`,
-        copyText: (typeLabel, amountText, rateText, feeText, vatText) => `Transaction type: ${typeLabel}\nTransaction amount: ${amountText}\nApplied max rate: ${rateText}\nEstimated brokerage fee (max): ${feeText}\nVAT included (reference): ${vatText}`,
+        rentFormula: (multiplier) => `monthly-rent multiplier ×${multiplier}`,
+        helpLine: (typeLabel, formula) => `Based on Korea’s statutory upper-rate table for ${typeLabel.toLowerCase()}${formula ? ` (${formula})` : ''}. Local ordinances and negotiation within the cap may change the actual fee.`,
+        copyText: (typeLabel, amountText, rateText, feeText, vatText, formula) => `Transaction type: ${typeLabel}\nTransaction value used: ${amountText}${formula ? ` (${formula})` : ''}\nApplied max rate: ${rateText}\nEstimated brokerage fee (max): ${feeText}\nVAT included (reference): ${vatText}`,
         copiedPrimary: 'Copied to clipboard.',
-        copiedFallback: 'Copied result.'
+        copiedFallback: 'Copied result.',
+        copyUnavailable: 'Automatic copy is unavailable. Review the displayed result instead.',
+        cleared: 'Cleared the inputs and result.'
       },
       ja: {
         currency: 'ウォン',
         noFixedCap: '法定の定額上限なし',
-        idle: '取引タイプと取引金額を入力すると、仲介手数料の上限を試算します。',
+        idleSale: '住宅の売買金額を入力すると、仲介手数料の上限を試算します。',
+        idleRent: '保証金と月家賃を入力すると、法定方式で取引金額を換算します。',
+        invalid: '金額は0以上の整数で入力してください。',
+        requiredSale: '売買金額は1ウォン以上で入力してください。',
+        requiredRent: '保証金または月家賃のどちらかを1ウォン以上入力してください。',
+        tooLarge: '適用取引金額は1,000兆ウォン以下で入力してください。',
         typeSale: '売買',
         typeRent: '賃貸',
-        rentHint: '（換算金額: 保証金 + 月家賃×100）',
-        helpLine: (typeLabel, rentHint) => `住宅${typeLabel}の上限料率に基づく試算です${rentHint ? ` ${rentHint}` : ''}。実際の仲介手数料は上限内で協議して決まります。`,
-        copyText: (typeLabel, amountText, rateText, feeText, vatText) => `取引タイプ: ${typeLabel}\n取引金額: ${amountText}\n適用上限料率: ${rateText}\n仲介手数料（上限目安）: ${feeText}\nVAT込み（参考）: ${vatText}`,
+        rentFormula: (multiplier) => `月家賃換算 ×${multiplier}`,
+        helpLine: (typeLabel, formula) => `住宅${typeLabel}の上限料率に基づく試算です${formula ? `（${formula}）` : ''}。実際の手数料は自治体条例と上限内の協議により異なります。`,
+        copyText: (typeLabel, amountText, rateText, feeText, vatText, formula) => `取引タイプ: ${typeLabel}\n適用取引金額: ${amountText}${formula ? `（${formula}）` : ''}\n適用上限料率: ${rateText}\n仲介手数料（上限目安）: ${feeText}\nVAT込み（参考）: ${vatText}`,
         copiedPrimary: 'クリップボードにコピーしました。',
-        copiedFallback: '結果をコピーしました。'
+        copiedFallback: '結果をコピーしました。',
+        copyUnavailable: '自動コピーを利用できません。画面の結果を確認してください。',
+        cleared: '入力値と結果をクリアしました。'
       }
     };
     const t = i18n[pageLang] || i18n.ko;
@@ -6846,79 +6872,149 @@
 
     const tables = {
       sale: [
-        { max: 50000000, rate: 0.006, cap: 250000 },
-        { max: 200000000, rate: 0.005, cap: 800000 },
-        { max: 900000000, rate: 0.004, cap: null },
-        { max: 1200000000, rate: 0.005, cap: null },
-        { max: 1500000000, rate: 0.006, cap: null },
-        { max: Infinity, rate: 0.007, cap: null }
+        { below: 50000000, rate: 0.006, cap: 250000 },
+        { below: 200000000, rate: 0.005, cap: 800000 },
+        { below: 900000000, rate: 0.004, cap: null },
+        { below: 1200000000, rate: 0.005, cap: null },
+        { below: 1500000000, rate: 0.006, cap: null },
+        { below: Infinity, rate: 0.007, cap: null }
       ],
       rent: [
-        { max: 50000000, rate: 0.005, cap: 200000 },
-        { max: 100000000, rate: 0.004, cap: 300000 },
-        { max: 600000000, rate: 0.003, cap: null },
-        { max: 1200000000, rate: 0.004, cap: null },
-        { max: 1500000000, rate: 0.005, cap: null },
-        { max: Infinity, rate: 0.006, cap: null }
+        { below: 50000000, rate: 0.005, cap: 200000 },
+        { below: 100000000, rate: 0.004, cap: 300000 },
+        { below: 600000000, rate: 0.003, cap: null },
+        { below: 1200000000, rate: 0.004, cap: null },
+        { below: 1500000000, rate: 0.005, cap: null },
+        { below: Infinity, rate: 0.006, cap: null }
       ]
     };
 
-    const resolveRow = (tt, v) => (tables[tt] || tables.sale).find((r) => v <= r.max) || tables.sale[tables.sale.length - 1];
+    const resolveRow = (tt, value) => (tables[tt] || tables.sale).find((row) => value < row.below) || tables.sale[tables.sale.length - 1];
 
-    const syncRentConvertedAmount = () => {
-      if ((type?.value || 'sale') !== 'rent' || !amount) return;
-      const d = Math.max(0, Number(deposit?.value || 0));
-      const m = Math.max(0, Number(monthlyRent?.value || 0));
-      if (!(d > 0 || m > 0)) return;
-      amount.value = String(Math.round(d + (m * 100)));
+    const parseMoney = (el) => {
+      const raw = el.value.trim();
+      if (!raw) return { empty: true, value: 0 };
+      const value = Number(raw);
+      if (!Number.isFinite(value) || value < 0 || !Number.isInteger(value)) return { invalid: true, value };
+      return { value };
     };
 
-    const run = () => {
-      if (rentHelper) rentHelper.hidden = (type?.value || 'sale') !== 'rent';
+    const getRentValue = (depositValue, rentValue) => {
+      const standard = depositValue + rentValue * 100;
+      const multiplier = standard < 50000000 ? 70 : 100;
+      return { value: depositValue + rentValue * multiplier, multiplier };
+    };
 
-      const v = Number(amount?.value || 0);
-      if (!v || v <= 0) {
-        rateEl.textContent = '-';
-        limitEl.textContent = '-';
-        feeEl.textContent = '-';
-        vatEl.textContent = '-';
-        if (help) help.textContent = t.idle;
+    const syncRentConvertedAmount = () => {
+      if (type.value !== 'rent') return;
+      const d = parseMoney(deposit);
+      const m = parseMoney(monthlyRent);
+      amount.value = (!d.invalid && !m.invalid && (d.value > 0 || m.value > 0))
+        ? String(getRentValue(d.value, m.value).value)
+        : '';
+    };
+
+    const resetOutputs = () => {
+      [basisEl, rateEl, limitEl, feeEl, vatEl].forEach((el) => { el.textContent = '-'; });
+      copyBtn.disabled = true;
+    };
+
+    const setStatus = (message, state = '') => {
+      help.textContent = message;
+      help.dataset.state = state;
+    };
+
+    const setInvalid = (elements, invalid) => elements.forEach((el) => el.setAttribute('aria-invalid', String(invalid)));
+
+    const run = () => {
+      const currentType = type.value || 'sale';
+      const isRent = currentType === 'rent';
+      if (rentHelper) rentHelper.hidden = !isRent;
+      if (amountWrap) amountWrap.hidden = isRent;
+      amount.readOnly = isRent;
+      setInvalid([amount, deposit, monthlyRent], false);
+
+      const fields = isRent ? [deposit, monthlyRent] : [amount];
+      const parsed = fields.map(parseMoney);
+      const hasInvalid = parsed.some((item) => item.invalid);
+      setInvalid(fields, hasInvalid);
+      if (hasInvalid) {
+        resetOutputs();
+        setStatus(t.invalid, 'error');
         return;
       }
 
-      const currentType = type?.value || 'sale';
+      let v;
+      let formula = '';
+      if (isRent) {
+        if (!parsed.some((item) => item.value > 0)) {
+          resetOutputs();
+          const isEmpty = parsed.every((item) => item.empty);
+          setStatus(isEmpty ? t.idleRent : t.requiredRent, isEmpty ? '' : 'error');
+          return;
+        }
+        const rentValue = getRentValue(parsed[0].value, parsed[1].value);
+        v = rentValue.value;
+        formula = t.rentFormula(rentValue.multiplier);
+        amount.value = String(v);
+      } else {
+        if (parsed[0].empty) {
+          resetOutputs();
+          setStatus(t.idleSale);
+          return;
+        }
+        v = parsed[0].value;
+        if (!(v > 0)) {
+          resetOutputs();
+          setStatus(t.requiredSale, 'error');
+          return;
+        }
+      }
+      if (!Number.isSafeInteger(v) || v > 1000000000000000) {
+        setInvalid(fields, true);
+        resetOutputs();
+        setStatus(t.tooLarge, 'error');
+        return;
+      }
+
       const row = resolveRow(currentType, v);
       const raw = v * row.rate;
       const capped = row.cap ? Math.min(raw, row.cap) : raw;
       const vatIncluded = capped * 1.1;
 
+      basisEl.textContent = KRW(v);
       rateEl.textContent = `${(row.rate * 100).toFixed(1)}%`;
       limitEl.textContent = row.cap ? KRW(row.cap) : t.noFixedCap;
       feeEl.textContent = KRW(capped);
       vatEl.textContent = KRW(vatIncluded);
 
-      if (help) {
-        const typeLabel = currentType === 'sale' ? t.typeSale : t.typeRent;
-        const rentHint = currentType === 'rent' ? t.rentHint : '';
-        help.textContent = t.helpLine(typeLabel, rentHint);
-      }
+      const typeLabel = currentType === 'sale' ? t.typeSale : t.typeRent;
+      setStatus(t.helpLine(typeLabel, formula), 'success');
+      copyBtn.disabled = false;
     };
 
-    [type, amount, deposit, monthlyRent].forEach((el) => el?.addEventListener('input', () => {
+    [deposit, monthlyRent].forEach((el) => el.addEventListener('input', () => {
       syncRentConvertedAmount();
       run();
     }));
-    type?.addEventListener('change', () => {
+    amount.addEventListener('input', run);
+    type.addEventListener('change', () => {
+      amount.value = '';
       syncRentConvertedAmount();
       run();
+      (type.value === 'rent' ? deposit : amount).focus();
     });
 
     copyBtn?.addEventListener('click', async () => {
-      const typeLabel = type?.selectedOptions?.[0]?.text || '-';
-      const text = t.copyText(typeLabel, KRW(Number(amount?.value || 0)), rateEl.textContent, feeEl.textContent, vatEl.textContent);
+      if (copyBtn.disabled) return;
+      const typeLabel = type.selectedOptions?.[0]?.text || '-';
+      const formula = type.value === 'rent'
+        ? t.rentFormula(getRentValue(Number(deposit.value || 0), Number(monthlyRent.value || 0)).multiplier)
+        : '';
+      const text = t.copyText(typeLabel, basisEl.textContent, rateEl.textContent, feeEl.textContent, vatEl.textContent, formula);
       try {
         await navigator.clipboard.writeText(text);
-        if (help) help.textContent = t.copiedPrimary;
+        setStatus(t.copiedPrimary, 'success');
       } catch {
         const ta = document.createElement('textarea');
         ta.value = text;
@@ -6926,10 +7022,20 @@
         ta.style.opacity = '0';
         document.body.appendChild(ta);
         ta.select();
-        document.execCommand('copy');
+        const copied = document.execCommand('copy');
         document.body.removeChild(ta);
-        if (help) help.textContent = t.copiedFallback;
+        setStatus(copied ? t.copiedFallback : t.copyUnavailable, copied ? 'success' : 'error');
       }
+    });
+
+    exampleBtn?.addEventListener('click', () => {
+      type.value = 'rent';
+      amount.value = '';
+      deposit.value = '10000000';
+      monthlyRent.value = '500000';
+      syncRentConvertedAmount();
+      run();
+      deposit.focus();
     });
 
     resetBtn?.addEventListener('click', () => {
@@ -6938,6 +7044,8 @@
       if (deposit) deposit.value = '';
       if (monthlyRent) monthlyRent.value = '';
       run();
+      setStatus(t.cleared);
+      amount.focus();
     });
 
     run();

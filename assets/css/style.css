@@ -10,6 +10,20 @@
   --hover: #3b82f6;
 }
 
+/* Brokerage fee calculator quality pass */
+.bf-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.bf-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.tool-stats.bf-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.bf-assumption { font-size: .92rem; color: var(--muted); }
+.bf-ui [hidden] { display: none; }
+
+@media (max-width: 700px) {
+  .bf-grid,
+  .bf-actions { grid-template-columns: 1fr; }
+  .tool-stats.bf-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bf-stats > div:first-child { grid-column: 1 / -1; }
+}
+
 * { box-sizing: border-box; }
 
 .sr-only {
