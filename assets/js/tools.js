@@ -2134,6 +2134,7 @@
     const diff = document.getElementById('pct-result-diff');
     const type = document.getElementById('pct-result-type');
     const help = document.getElementById('pct-help');
+    const exampleBtn = document.getElementById('pct-example');
     const copyBtn = document.getElementById('pct-copy');
     const resetBtn = document.getElementById('pct-reset');
 
@@ -2146,6 +2147,10 @@
         idlePercentOf: '기준값 A와 비율 B를 입력하세요.',
         idleRatio: '부분값 A와 전체값 B를 입력하세요.',
         idleChange: '이전값과 현재값을 입력하세요.',
+        invalid: '유효한 숫자를 입력해 주세요.',
+        tooLarge: '각 값은 절댓값 1,000조 이하로 입력해 주세요.',
+        overflow: '계산 결과가 너무 큽니다. 더 작은 값을 입력해 주세요.',
+        invalidPrevious: '증감률의 이전값은 0보다 커야 합니다. 0 또는 음수 기준의 변화는 별도 해석이 필요합니다.',
         cannotCalc: '계산 불가',
         positive: '양수 결과',
         negative: '음수 결과',
@@ -2161,8 +2166,10 @@
         msgChange: (oldVal, nowVal, rate, trend) => `이전값 ${oldVal} 대비 ${nowVal}는 ${rate}% ${trend}입니다.`,
         copyText: (main, sub, diff, type) => `주요 결과: ${main} | 보조 결과: ${sub} | 차이값: ${diff} | 판정: ${type}`,
         copied: '복사됨',
+        copyFail: '결과를 자동으로 복사하지 못했습니다.',
         copyDefault: '결과 복사',
-        resetMsg: '값을 입력하면 결과가 즉시 계산됩니다.'
+        resetMsg: '입력값을 초기화했습니다.',
+        sampleFilled: '예시 값을 입력했습니다.'
       },
       en: {
         idleDefault: 'Results appear after entering required values.',
@@ -2170,6 +2177,10 @@
         idlePercentOf: 'Enter base value A and rate B.',
         idleRatio: 'Enter part value A and whole value B.',
         idleChange: 'Enter previous and current values.',
+        invalid: 'Enter valid numbers.',
+        tooLarge: 'Each value must be no greater than 1 quadrillion in absolute value.',
+        overflow: 'The calculated result is too large. Enter smaller values.',
+        invalidPrevious: 'The previous value must be greater than 0. Change from a zero or negative baseline needs separate interpretation.',
         cannotCalc: 'Cannot calculate',
         positive: 'Positive result',
         negative: 'Negative result',
@@ -2185,8 +2196,10 @@
         msgChange: (oldVal, nowVal, rate, trend) => `From ${oldVal} to ${nowVal}: ${rate}% ${trend.toLowerCase()}.`,
         copyText: (main, sub, diff, type) => `Main result: ${main} | Secondary result: ${sub} | Difference: ${diff} | Status: ${type}`,
         copied: 'Copied',
+        copyFail: 'Could not copy the result automatically.',
         copyDefault: 'Copy result',
-        resetMsg: 'Results are calculated instantly after input.'
+        resetMsg: 'Cleared all values.',
+        sampleFilled: 'Filled in example values.'
       },
       ja: {
         idleDefault: '必須項目を入力すると結果を計算します。',
@@ -2194,6 +2207,10 @@
         idlePercentOf: '基準値Aと比率Bを入力してください。',
         idleRatio: '部分値Aと全体値Bを入力してください。',
         idleChange: '前の値と現在値を入力してください。',
+        invalid: '有効な数値を入力してください。',
+        tooLarge: '各値は絶対値1,000兆以下で入力してください。',
+        overflow: '計算結果が大きすぎます。より小さい値を入力してください。',
+        invalidPrevious: '増減率の前の値は0より大きくしてください。0または負の基準値からの変化は別途解釈が必要です。',
         cannotCalc: '計算不可',
         positive: '正の結果',
         negative: '負の結果',
@@ -2209,8 +2226,10 @@
         msgChange: (oldVal, nowVal, rate, trend) => `${oldVal}から${nowVal}への変化は${rate}%（${trend}）です。`,
         copyText: (main, sub, diff, type) => `主要結果: ${main} | 補助結果: ${sub} | 差分: ${diff} | 判定: ${type}`,
         copied: 'コピー完了',
+        copyFail: '結果を自動コピーできませんでした。',
         copyDefault: '結果をコピー',
-        resetMsg: '値を入力すると即時計算します。'
+        resetMsg: '入力値をクリアしました。',
+        sampleFilled: '例の値を入力しました。'
       }
     };
     const pctText = pctI18n[pageLang] || pctI18n.ko;
@@ -2220,19 +2239,63 @@
       return v.toLocaleString(numberLocale, { maximumFractionDigits: max });
     };
 
+    const MAX_INPUT = 1e15;
+    const MAX_RESULT = 1e18;
+    let currentSummary = '';
+
     const parseRequired = (el) => {
       const raw = (el?.value || '').trim();
-      if (raw === '') return null;
+      if (raw === '') return { state: 'empty' };
       const n = Number(raw);
-      return Number.isFinite(n) ? n : null;
+      if (!Number.isFinite(n)) return { state: 'invalid' };
+      if (Math.abs(n) > MAX_INPUT) return { state: 'tooLarge' };
+      return { state: 'valid', value: n };
     };
 
-    const setIdle = (msg = pctText.idleDefault) => {
+    const setStatus = (msg, state = '') => {
+      help.textContent = msg;
+      help.dataset.state = state;
+    };
+
+    const resetResult = (msg = pctText.idleDefault, state = '') => {
       main.textContent = '-';
       sub.textContent = '-';
       diff.textContent = '-';
-      type.textContent = pctText.idleInput;
-      help.textContent = msg;
+      type.textContent = state === 'error' ? pctText.cannotCalc : pctText.idleInput;
+      currentSummary = '';
+      if (copyBtn) copyBtn.disabled = true;
+      setStatus(msg, state);
+    };
+
+    const clearInvalid = () => {
+      Object.values(inputs).forEach((input) => input?.setAttribute('aria-invalid', 'false'));
+    };
+
+    const readPair = (first, second, idleMessage) => {
+      clearInvalid();
+      const parsed = [parseRequired(first), parseRequired(second)];
+      if (parsed.some((item) => item.state === 'empty')) {
+        resetResult(idleMessage);
+        return null;
+      }
+      const badIndex = parsed.findIndex((item) => item.state !== 'valid');
+      if (badIndex >= 0) {
+        [first, second][badIndex]?.setAttribute('aria-invalid', 'true');
+        resetResult(parsed[badIndex].state === 'tooLarge' ? pctText.tooLarge : pctText.invalid, 'error');
+        return null;
+      }
+      return parsed.map((item) => item.value);
+    };
+
+    const finishResult = (message) => {
+      if ([main, sub, diff].some((el) => el.textContent === '-' || !el.textContent)) {
+        resetResult(pctText.overflow, 'error');
+        return false;
+      }
+      currentSummary = pctText.copyText(main.textContent, sub.textContent, diff.textContent, type.textContent);
+      if (copyBtn) copyBtn.disabled = false;
+      setStatus(message, 'success');
+      return true;
     };
 
     const showByMode = () => {
@@ -2242,18 +2305,19 @@
     };
 
     const copyText = async (text) => {
-      try {
+      if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(text);
-      } catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        return;
       }
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      const copied = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (!copied) throw new Error('copy failed');
     };
 
     const render = () => {
@@ -2261,94 +2325,109 @@
       showByMode();
 
       if (currentMode === 'percent-of') {
-        const base = parseRequired(inputs.base);
-        const rate = parseRequired(inputs.rate);
-        if (base === null || rate === null) {
-          setIdle(pctText.idlePercentOf);
-          return;
-        }
+        const values = readPair(inputs.base, inputs.rate, pctText.idlePercentOf);
+        if (!values) return;
+        const [base, rate] = values;
 
         const result = base * (rate / 100);
         const remain = base - result;
+        if (![result, remain].every(Number.isFinite) || Math.abs(result) > MAX_RESULT || Math.abs(remain) > MAX_RESULT) {
+          resetResult(pctText.overflow, 'error');
+          return;
+        }
 
         main.textContent = fmt(result);
         sub.textContent = `${fmt(rate)}%`;
         diff.textContent = fmt(remain);
         type.textContent = result === 0 ? '0%' : (result > 0 ? pctText.positive : pctText.negative);
-        help.textContent = pctText.msgPercentOf(fmt(base), fmt(rate), fmt(result));
+        finishResult(pctText.msgPercentOf(fmt(base), fmt(rate), fmt(result)));
         return;
       }
 
       if (currentMode === 'ratio') {
-        const part = parseRequired(inputs.part);
-        const whole = parseRequired(inputs.whole);
-        if (part === null || whole === null) {
-          setIdle(pctText.idleRatio);
-          return;
-        }
+        const values = readPair(inputs.part, inputs.whole, pctText.idleRatio);
+        if (!values) return;
+        const [part, whole] = values;
 
         if (whole === 0) {
-          main.textContent = '-';
-          sub.textContent = '-';
-          diff.textContent = '-';
-          type.textContent = pctText.cannotCalc;
-          help.textContent = pctText.msgWholeZero;
+          inputs.whole.setAttribute('aria-invalid', 'true');
+          resetResult(pctText.msgWholeZero, 'error');
           return;
         }
 
         const ratio = (part / whole) * 100;
         const remain = whole - part;
+        if (![ratio, remain].every(Number.isFinite) || Math.abs(ratio) > MAX_RESULT || Math.abs(remain) > MAX_RESULT) {
+          resetResult(pctText.overflow, 'error');
+          return;
+        }
 
         main.textContent = `${fmt(ratio)}%`;
         sub.textContent = `${fmt(part)} / ${fmt(whole)}`;
         diff.textContent = fmt(remain);
         type.textContent = ratio > 100 ? pctText.over100 : pctText.normalRange;
-        help.textContent = pctText.msgRatio(fmt(part), fmt(whole), fmt(ratio));
+        finishResult(pctText.msgRatio(fmt(part), fmt(whole), fmt(ratio)));
         return;
       }
 
       if (currentMode === 'change') {
-        const oldVal = parseRequired(inputs.old);
-        const newVal = parseRequired(inputs.now);
-        if (oldVal === null || newVal === null) {
-          setIdle(pctText.idleChange);
-          return;
-        }
+        const values = readPair(inputs.old, inputs.now, pctText.idleChange);
+        if (!values) return;
+        const [oldVal, newVal] = values;
 
-        if (oldVal === 0) {
-          main.textContent = '-';
-          sub.textContent = '-';
-          diff.textContent = fmt(newVal - oldVal);
-          type.textContent = pctText.cannotCalc;
-          help.textContent = pctText.msgOldZero;
+        if (oldVal <= 0) {
+          inputs.old.setAttribute('aria-invalid', 'true');
+          resetResult(oldVal === 0 ? pctText.msgOldZero : pctText.invalidPrevious, 'error');
           return;
         }
 
         const delta = newVal - oldVal;
         const rate = (delta / oldVal) * 100;
+        if (![delta, rate].every(Number.isFinite) || Math.abs(delta) > MAX_RESULT || Math.abs(rate) > MAX_RESULT) {
+          resetResult(pctText.overflow, 'error');
+          return;
+        }
         const trend = delta > 0 ? pctText.increase : (delta < 0 ? pctText.decrease : pctText.unchanged);
 
         main.textContent = `${fmt(rate)}%`;
         sub.textContent = `${fmt(oldVal)} → ${fmt(newVal)}`;
         diff.textContent = fmt(delta);
         type.textContent = trend;
-        help.textContent = pctText.msgChange(fmt(oldVal), fmt(newVal), fmt(rate), trend);
+        finishResult(pctText.msgChange(fmt(oldVal), fmt(newVal), fmt(rate), trend));
       }
     };
 
     copyBtn?.addEventListener('click', async () => {
-      const text = pctText.copyText(main.textContent, sub.textContent, diff.textContent, type.textContent);
-      await copyText(text);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = pctText.copied;
-      setTimeout(() => { copyBtn.textContent = old || pctText.copyDefault; }, 900);
+      if (!currentSummary) return;
+      try {
+        await copyText(currentSummary);
+        const old = copyBtn.textContent;
+        copyBtn.textContent = pctText.copied;
+        setStatus(pctText.copied, 'success');
+        setTimeout(() => { copyBtn.textContent = old || pctText.copyDefault; }, 900);
+      } catch (_) {
+        setStatus(pctText.copyFail, 'error');
+      }
+    });
+
+    exampleBtn?.addEventListener('click', () => {
+      const samples = {
+        'percent-of': [['base', '129000'], ['rate', '15']],
+        ratio: [['part', '420'], ['whole', '1200']],
+        change: [['old', '80'], ['now', '100']]
+      };
+      (samples[mode.value] || samples['percent-of']).forEach(([key, value]) => { inputs[key].value = value; });
+      render();
+      setStatus(`${pctText.sampleFilled} ${help.textContent}`, 'success');
     });
 
     resetBtn?.addEventListener('click', () => {
       Object.values(inputs).forEach((input) => { if (input) input.value = ''; });
       mode.value = 'percent-of';
       showByMode();
-      setIdle(pctText.resetMsg);
+      clearInvalid();
+      resetResult(pctText.resetMsg);
+      inputs.base?.focus();
     });
 
     mode.addEventListener('change', render);

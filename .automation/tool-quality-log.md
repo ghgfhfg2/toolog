@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-14 21:00 KST
+- Tool: `percent-calculator`
+- Selection reason: recent quality runs covered other tools; this older calculator had not received a quality pass since its March launch and treated invalid and missing values alike, allowed oversized calculations, produced misleading percentage-change signs from negative baselines, allowed copying empty/error results, and lacked explicit input labels and a clear mobile action flow.
+- Scope: improved only the existing multilingual percent tool, home metadata, layout, styles, and script with explicit labels, a mode-specific example/clear/copy flow, valid-result-only copying with failure feedback, strict finite/range/overflow checks, zero-division and non-positive change-baseline guidance, accessible descriptions/live status, one-column mobile inputs/actions, formulas, FAQ, related links, privacy wording, and search-intent copy. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, localized related-link checks, mobile CSS rules, and 10 targeted normal/negative/zero/baseline/oversized/overflow cases passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-13 21:00 KST
 - Tool: `brokerage-fee-calculator`
 - Selection reason: recent runs covered other tools; this high-risk real-estate calculator had not received a quality pass since March, incorrectly used the lower rate at exact legal bracket boundaries such as KRW 900 million, and always used monthly rent ×100 instead of the statutory ×70 exception when the initial converted value is below KRW 50 million.

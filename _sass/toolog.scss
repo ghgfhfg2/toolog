@@ -707,6 +707,14 @@ textarea:focus-visible {
 .uc-stats strong { overflow-wrap: anywhere; }
 .pct-actions,
 .pct-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.pct-ui .pct-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.pct-ui .pct-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pct-ui .pct-grid > div { display: grid; gap: .4rem; min-width: 0; }
+.pct-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.pct-ui button:disabled { opacity: .55; cursor: not-allowed; }
+.pct-ui #pct-help[data-state="error"] { color: #fca5a5; }
+.pct-ui #pct-help[data-state="success"] { color: #86efac; }
+.pct-stats strong { overflow-wrap: anywhere; }
 .as-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .as-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .as-ui input[aria-invalid="true"] { border-color: #ef4444; }
@@ -1925,6 +1933,9 @@ textarea:focus-visible {
 @media (max-width: 980px) { .search-clusters { grid-template-columns: 1fr 1fr; } }
 
 @media (max-width: 780px) {
+  .pct-ui .pct-grid,
+  .pct-ui .pct-actions { grid-template-columns: 1fr; }
+  .tool-stats.pct-stats { grid-template-columns: 1fr 1fr; }
   .wet-presets,
   .wet-grid,
   .wet-actions { grid-template-columns: 1fr; }

@@ -1793,19 +1793,22 @@
   title_en: Percent Calculator
   title_ja: パーセント計算機
   category: data
-  category_label: 데이터/계산
-  category_label_en: Data/Math
-  category_label_ja: データ/計算
+  category_label: 계산/퍼센트
+  category_label_en: Math/Percentages
+  category_label_ja: 計算/パーセント
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 비율·증감률·백분율 계산을 한 화면에서 빠르게 처리해요.
-  description_en: Calculate percentages, ratios, and increase/decrease rates quickly in one place.
-  description_ja: 割合・比率・増減率を1つの画面で素早く計算できます。
+  description: 금액의 몇 %, 전체 대비 비율, 이전값 대비 증감률을 예시·오류 안내와 함께 한 화면에서 계산해요.
+  description_en: Calculate a percentage of a value, part-to-whole ratio, or rate of change with examples and input checks.
+  description_ja: 金額の何%、全体に対する割合、前の値からの増減率を、入力例とエラー案内付きで計算できます。
   url: /tools/percent-calculator/
   url_en: /en/tools/percent-calculator/
   url_ja: /ja/tools/percent-calculator/
   thumbnail: /assets/thumbs/percent-calculator.svg
+  published_at: '2026-03-01'
+  tool_type: calculator
+  topic_cluster: math
 
 - id: pyeong-calculator
   title: 평수 계산기

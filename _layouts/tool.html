@@ -2534,10 +2534,10 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <div id="fc-toast" class="copy-toast" aria-live="polite">{% if page.lang == 'en' %}Copied{% elsif page.lang == 'ja' %}コピーしました{% else %}복사되었습니다{% endif %}</div>
         </div>
       {% when 'percent-calculator' %}
-        <div class="tool-ui">
+        <div class="tool-ui pct-ui">
           <div class="tool-row">
-            <label>{% if page.lang == 'en' %}Calculation type{% elsif page.lang == 'ja' %}計算タイプ{% else %}계산 유형{% endif %}</label>
-            <select id="pct-mode">
+            <label for="pct-mode">{% if page.lang == 'en' %}Calculation type{% elsif page.lang == 'ja' %}計算タイプ{% else %}계산 유형{% endif %}</label>
+            <select id="pct-mode" aria-describedby="pct-help">
               <option value="percent-of">{% if page.lang == 'en' %}A% of B{% elsif page.lang == 'ja' %}AのB%を計算{% else %}A의 B% 계산{% endif %}</option>
               <option value="ratio">{% if page.lang == 'en' %}A is what percent of B{% elsif page.lang == 'ja' %}AはBの何%か{% else %}A는 B의 몇 %인지{% endif %}</option>
               <option value="change">{% if page.lang == 'en' %}Rate of change{% elsif page.lang == 'ja' %}増減率を計算{% else %}증감률 계산{% endif %}</option>
@@ -2545,33 +2545,34 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           </div>
 
           <div id="pct-fields-percent-of" class="tool-row-grid pct-grid">
-            <input id="pct-base" type="number" step="any" placeholder="{% if page.lang == 'en' %}Base value A (e.g., 250000){% elsif page.lang == 'ja' %}基準値A（例: 250000）{% else %}기준값 A (예: 250000){% endif %}" />
-            <input id="pct-rate" type="number" step="any" placeholder="{% if page.lang == 'en' %}Rate B% (e.g., 12){% elsif page.lang == 'ja' %}比率B%（例: 12）{% else %}비율 B% (예: 12){% endif %}" />
+            <div><label for="pct-base">{% if page.lang == 'en' %}Base value{% elsif page.lang == 'ja' %}基準値{% else %}기준값{% endif %}</label><input id="pct-base" type="number" step="any" inputmode="decimal" placeholder="{% if page.lang == 'en' %}e.g. 129000{% elsif page.lang == 'ja' %}例: 129000{% else %}예: 129000{% endif %}" aria-describedby="pct-help" /></div>
+            <div><label for="pct-rate">{% if page.lang == 'en' %}Percentage (%){% elsif page.lang == 'ja' %}割合（%）{% else %}비율(%){% endif %}</label><input id="pct-rate" type="number" step="any" inputmode="decimal" placeholder="{% if page.lang == 'en' %}e.g. 15{% elsif page.lang == 'ja' %}例: 15{% else %}예: 15{% endif %}" aria-describedby="pct-help" /></div>
           </div>
 
           <div id="pct-fields-ratio" class="tool-row-grid pct-grid" hidden>
-            <input id="pct-part" type="number" step="any" placeholder="{% if page.lang == 'en' %}Part value A{% elsif page.lang == 'ja' %}部分値A{% else %}부분값 A{% endif %}" />
-            <input id="pct-whole" type="number" step="any" placeholder="{% if page.lang == 'en' %}Whole value B{% elsif page.lang == 'ja' %}全体値B{% else %}전체값 B{% endif %}" />
+            <div><label for="pct-part">{% if page.lang == 'en' %}Part value{% elsif page.lang == 'ja' %}部分値{% else %}부분값{% endif %}</label><input id="pct-part" type="number" step="any" inputmode="decimal" placeholder="{% if page.lang == 'en' %}e.g. 420{% elsif page.lang == 'ja' %}例: 420{% else %}예: 420{% endif %}" aria-describedby="pct-help" /></div>
+            <div><label for="pct-whole">{% if page.lang == 'en' %}Whole value{% elsif page.lang == 'ja' %}全体値{% else %}전체값{% endif %}</label><input id="pct-whole" type="number" step="any" inputmode="decimal" placeholder="{% if page.lang == 'en' %}e.g. 1200{% elsif page.lang == 'ja' %}例: 1200{% else %}예: 1200{% endif %}" aria-describedby="pct-help" /></div>
           </div>
 
           <div id="pct-fields-change" class="tool-row-grid pct-grid" hidden>
-            <input id="pct-old" type="number" step="any" placeholder="{% if page.lang == 'en' %}Previous value{% elsif page.lang == 'ja' %}前の値{% else %}이전값{% endif %}" />
-            <input id="pct-new" type="number" step="any" placeholder="{% if page.lang == 'en' %}Current value{% elsif page.lang == 'ja' %}現在値{% else %}현재값{% endif %}" />
+            <div><label for="pct-old">{% if page.lang == 'en' %}Previous value (greater than 0){% elsif page.lang == 'ja' %}前の値（0より大きい値）{% else %}이전값(0 초과){% endif %}</label><input id="pct-old" type="number" step="any" inputmode="decimal" placeholder="{% if page.lang == 'en' %}e.g. 80{% elsif page.lang == 'ja' %}例: 80{% else %}예: 80{% endif %}" aria-describedby="pct-help" /></div>
+            <div><label for="pct-new">{% if page.lang == 'en' %}Current value{% elsif page.lang == 'ja' %}現在値{% else %}현재값{% endif %}</label><input id="pct-new" type="number" step="any" inputmode="decimal" placeholder="{% if page.lang == 'en' %}e.g. 100{% elsif page.lang == 'ja' %}例: 100{% else %}예: 100{% endif %}" aria-describedby="pct-help" /></div>
           </div>
 
-          <div class="tool-stats">
+          <div class="tool-stats pct-stats" aria-label="{% if page.lang == 'en' %}Percentage calculation result{% elsif page.lang == 'ja' %}パーセント計算結果{% else %}퍼센트 계산 결과{% endif %}">
             <div><strong id="pct-result-main">-</strong><span>{% if page.lang == 'en' %}Main result{% elsif page.lang == 'ja' %}主要結果{% else %}주요 결과{% endif %}</span></div>
             <div><strong id="pct-result-sub">-</strong><span>{% if page.lang == 'en' %}Secondary result{% elsif page.lang == 'ja' %}補助結果{% else %}보조 결과{% endif %}</span></div>
             <div><strong id="pct-result-diff">-</strong><span>{% if page.lang == 'en' %}Difference{% elsif page.lang == 'ja' %}差分{% else %}차이값{% endif %}</span></div>
             <div><strong id="pct-result-type">{% if page.lang == 'en' %}Waiting for input{% elsif page.lang == 'ja' %}入力待ち{% else %}입력 대기{% endif %}</strong><span>{% if page.lang == 'en' %}Status{% elsif page.lang == 'ja' %}判定{% else %}판정{% endif %}</span></div>
           </div>
 
-          <div class="tool-row-grid pct-actions">
-            <button id="pct-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
-            <button id="pct-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          <div class="tool-row-grid pct-actions" aria-label="{% if page.lang == 'en' %}Calculator actions{% elsif page.lang == 'ja' %}計算機の操作{% else %}계산기 작업{% endif %}">
+            <button id="pct-example" type="button">{% if page.lang == 'en' %}Fill example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 채우기{% endif %}</button>
+            <button id="pct-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="pct-reset" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <p class="tool-result" id="pct-help">{% if page.lang == 'en' %}Enter values to calculate instantly.{% elsif page.lang == 'ja' %}値を入力すると即時計算します。{% else %}값을 입력하면 결과가 즉시 계산됩니다.{% endif %}</p>
+          <p class="tool-result" id="pct-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter both values to calculate instantly.{% elsif page.lang == 'ja' %}2つの値を入力するとすぐに計算します。{% else %}두 값을 입력하면 결과가 즉시 계산됩니다.{% endif %}</p>
         </div>
       {% when 'password-generator' %}
         <div class="tool-ui pg-ui">
