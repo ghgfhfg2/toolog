@@ -1958,13 +1958,15 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: BMR·TDEE와 감량/유지/증량 하루 권장 칼로리를 빠르게 계산해요.
-  description_en: Estimate BMR, TDEE, and daily calorie targets for cutting, maintenance, and bulking.
-  description_ja: BMR・TDEEと、減量・維持・増量それぞれの1日カロリー目安を素早く計算します。
+  description: 만 18세 이상 성인의 나이·키·몸무게·활동량으로 BMR·TDEE와 감량·유지·증량 시작 칼로리를 추정해요.
+  description_en: Estimate adult BMR, TDEE, and starting calories for cutting, maintenance, or bulking from age, height, weight, and activity.
+  description_ja: 18歳以上の年齢・身長・体重・活動量から、BMR・TDEEと減量・維持・増量の開始カロリーを推定します。
   url: /tools/tdee-calculator/
   url_en: /en/tools/tdee-calculator/
   url_ja: /ja/tools/tdee-calculator/
   thumbnail: /assets/thumbs/tdee-calculator.svg
+  tool_type: calculator
+  topic_cluster: health
 
 - id: weekly-holiday-pay-calculator
   title: 주휴수당 계산기

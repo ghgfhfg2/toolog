@@ -3103,36 +3103,36 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="sa-status" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter current holdings and average price to begin.{% elsif page.lang == 'ja' %}現在の保有株数と平均取得単価を入力してください。{% else %}현재 보유 수량과 평단가를 입력하면 계산을 시작합니다.{% endif %}</p>
         </div>
       {% when 'tdee-calculator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui tdee-ui">
+          <div class="tool-row-grid tdee-grid">
             <div>
               <label for="tdee-sex">{% if page.lang == 'en' %}Sex{% elsif page.lang == 'ja' %}性別{% else %}성별{% endif %}</label>
-              <select id="tdee-sex">
+              <select id="tdee-sex" aria-describedby="tdee-help tdee-assumption">
                 <option value="male">{% if page.lang == 'en' %}Male{% elsif page.lang == 'ja' %}男性{% else %}남성{% endif %}</option>
                 <option value="female">{% if page.lang == 'en' %}Female{% elsif page.lang == 'ja' %}女性{% else %}여성{% endif %}</option>
               </select>
             </div>
             <div>
               <label for="tdee-age">{% if page.lang == 'en' %}Age{% elsif page.lang == 'ja' %}年齢{% else %}나이{% endif %}</label>
-              <input id="tdee-age" type="number" min="10" max="100" step="1" placeholder="{% if page.lang == 'en' %}e.g. 30{% elsif page.lang == 'ja' %}例: 30{% else %}예: 30{% endif %}" inputmode="numeric" />
+              <input id="tdee-age" type="number" min="18" max="100" step="1" placeholder="{% if page.lang == 'en' %}e.g. 30{% elsif page.lang == 'ja' %}例: 30{% else %}예: 30{% endif %}" inputmode="numeric" aria-describedby="tdee-help tdee-assumption" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid tdee-grid">
             <div>
               <label for="tdee-height">{% if page.lang == 'en' %}Height (cm){% elsif page.lang == 'ja' %}身長(cm){% else %}키(cm){% endif %}</label>
-              <input id="tdee-height" type="number" min="120" max="230" step="0.1" placeholder="{% if page.lang == 'en' %}e.g. 170{% elsif page.lang == 'ja' %}例: 170{% else %}예: 170{% endif %}" inputmode="decimal" />
+              <input id="tdee-height" type="number" min="120" max="230" step="0.1" placeholder="{% if page.lang == 'en' %}e.g. 170{% elsif page.lang == 'ja' %}例: 170{% else %}예: 170{% endif %}" inputmode="decimal" aria-describedby="tdee-help tdee-assumption" />
             </div>
             <div>
               <label for="tdee-weight">{% if page.lang == 'en' %}Weight (kg){% elsif page.lang == 'ja' %}体重(kg){% else %}몸무게(kg){% endif %}</label>
-              <input id="tdee-weight" type="number" min="25" max="250" step="0.1" placeholder="{% if page.lang == 'en' %}e.g. 68{% elsif page.lang == 'ja' %}例: 68{% else %}예: 68{% endif %}" inputmode="decimal" />
+              <input id="tdee-weight" type="number" min="25" max="250" step="0.1" placeholder="{% if page.lang == 'en' %}e.g. 68{% elsif page.lang == 'ja' %}例: 68{% else %}예: 68{% endif %}" inputmode="decimal" aria-describedby="tdee-help tdee-assumption" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid tdee-grid">
             <div>
               <label for="tdee-activity">{% if page.lang == 'en' %}Activity level{% elsif page.lang == 'ja' %}活動量{% else %}활동량{% endif %}</label>
-              <select id="tdee-activity">
+              <select id="tdee-activity" aria-describedby="tdee-help tdee-assumption">
                 <option value="1.2">{% if page.lang == 'en' %}Little to no exercise (sedentary){% elsif page.lang == 'ja' %}ほぼ運動なし（座位中心）{% else %}거의 운동 안 함 (좌식){% endif %}</option>
                 <option value="1.375">{% if page.lang == 'en' %}Light activity (1–3 workouts/week){% elsif page.lang == 'ja' %}軽い活動（週1〜3回）{% else %}가벼운 활동 (주 1~3회){% endif %}</option>
                 <option value="1.55">{% if page.lang == 'en' %}Moderate activity (3–5 workouts/week){% elsif page.lang == 'ja' %}中程度の活動（週3〜5回）{% else %}보통 활동 (주 3~5회){% endif %}</option>
@@ -3142,12 +3142,13 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             </div>
           </div>
 
-          <div class="tool-row-grid pct-actions">
-            <button id="tdee-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
-            <button id="tdee-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          <div class="tool-row-grid tdee-actions">
+            <button id="tdee-example" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
+            <button id="tdee-copy" type="button" disabled>{% if page.lang == 'en' %}Copy results{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="tdee-reset" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
+          <div class="tool-stats tdee-stats" aria-label="{% if page.lang == 'en' %}Estimated daily calorie results{% elsif page.lang == 'ja' %}1日の推定カロリー結果{% else %}하루 추정 칼로리 결과{% endif %}">
             <div><strong id="tdee-bmr">-</strong><span>{% if page.lang == 'en' %}BMR (Basal Metabolic Rate){% elsif page.lang == 'ja' %}BMR（基礎代謝量）{% else %}BMR(기초대사량){% endif %}</span></div>
             <div><strong id="tdee-maintain">-</strong><span>{% if page.lang == 'en' %}Maintenance calories (TDEE){% elsif page.lang == 'ja' %}維持カロリー（TDEE）{% else %}유지 칼로리(TDEE){% endif %}</span></div>
             <div><strong id="tdee-cut">-</strong><span>{% if page.lang == 'en' %}Cut target (moderate/aggressive){% elsif page.lang == 'ja' %}減量目安（緩やか/積極）{% else %}감량 권장(보수/적극){% endif %}</span></div>
@@ -3161,7 +3162,8 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <p class="tool-result" id="tdee-carb">{% if page.lang == 'en' %}Carbs{% elsif page.lang == 'ja' %}炭水化物{% else %}탄수화물{% endif %}: -</p>
           </div>
 
-          <p class="tool-result" id="tdee-help">{% if page.lang == 'en' %}Enter values to calculate BMR/TDEE and goal-based calorie targets.{% elsif page.lang == 'ja' %}値を入力すると、BMR/TDEEと目的別カロリー目安を計算します。{% else %}값을 입력하면 BMR/TDEE와 목표별 칼로리가 계산됩니다.{% endif %}</p>
+          <p class="tool-result" id="tdee-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter all fields to estimate BMR, TDEE, and goal-based calorie targets.{% elsif page.lang == 'ja' %}すべての項目を入力すると、BMR・TDEE・目的別カロリーを推定します。{% else %}모든 항목을 입력하면 BMR/TDEE와 목표별 칼로리를 추정합니다.{% endif %}</p>
+          <p class="tool-result tdee-note" id="tdee-assumption">{% if page.lang == 'en' %}For adults 18+. Results are planning estimates, not medical or dietetic advice. Pregnancy, breastfeeding, illness, medication, and eating-disorder history require professional guidance.{% elsif page.lang == 'ja' %}18歳以上の成人向けの計画用推定値で、医療・栄養指導ではありません。妊娠・授乳中、疾患・服薬中、摂食障害歴がある場合は専門家に相談してください。{% else %}만 18세 이상 성인의 계획용 추정치이며 의료·영양 상담을 대신하지 않습니다. 임신·수유, 질환·복약, 섭식장애 이력이 있다면 전문가와 상의하세요.{% endif %}</p>
         </div>
       {% when 'jeonse-vs-wolse-calculator' %}
         <div class="tool-ui jv-ui">

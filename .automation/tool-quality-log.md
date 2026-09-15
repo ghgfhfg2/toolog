@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-15 21:00 KST
+- Tool: `tdee-calculator`
+- Selection reason: recent quality runs covered other tools; this adult health calculator had never received a quality pass, auto-filled a result instead of exposing an empty state, accepted fractional ages and children as young as 10, used one generic error for every invalid field, allowed copying invalid/empty results, and had thin localized SEO and safety guidance.
+- Scope: improved only the existing multilingual TDEE tool, home metadata, layout, styles, and script with an adults-only range, strict finite/integer/field-specific validation, true blank/error/success states, example/clear/copy feedback, accessible descriptions/live status, one-column mobile inputs/actions, explicit estimation and health limitations, expanded FAQ/search-intent copy, and localized related links. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, localized related-link existence, mobile CSS rules, and targeted sample/underage/fractional-age/height/weight/non-number/low/high-boundary cases passed. The 18+ and pregnancy/breastfeeding limitation was cross-checked against NIDDK guidance, and the formula against the original Mifflin-St Jeor paper. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-14 21:00 KST
 - Tool: `percent-calculator`
 - Selection reason: recent quality runs covered other tools; this older calculator had not received a quality pass since its March launch and treated invalid and missing values alike, allowed oversized calculations, produced misleading percentage-change signs from negative baselines, allowed copying empty/error results, and lacked explicit input labels and a clear mobile action flow.

@@ -5832,18 +5832,20 @@
         await navigator.clipboard.writeText(text);
         return true;
       } catch (_) {
+        let ta;
         try {
-          const ta = document.createElement('textarea');
+          ta = document.createElement('textarea');
           ta.value = text;
           ta.style.position = 'fixed';
           ta.style.opacity = '0';
           document.body.appendChild(ta);
           ta.select();
           const copied = document.execCommand('copy');
-          document.body.removeChild(ta);
           return copied;
         } catch (_) {
           return false;
+        } finally {
+          ta?.remove();
         }
       }
     };
@@ -6689,6 +6691,7 @@
     const outFat = document.getElementById('tdee-fat');
     const outCarb = document.getElementById('tdee-carb');
     const help = document.getElementById('tdee-help');
+    const exampleBtn = document.getElementById('tdee-example');
     const copyBtn = document.getElementById('tdee-copy');
     const resetBtn = document.getElementById('tdee-reset');
 
@@ -6696,8 +6699,11 @@
 
     const tdeeI18n = {
       ko: {
-        idle: '값을 입력하면 BMR/TDEE와 목표별 칼로리가 계산됩니다.',
-        invalidRange: '나이(10~100), 키(120~230), 몸무게(25~250) 범위를 확인해 주세요.',
+        idle: '모든 항목을 입력하면 BMR/TDEE와 목표별 칼로리를 추정합니다.',
+        invalidNumber: '나이·키·몸무게에는 유효한 숫자를 입력해 주세요.',
+        invalidAge: '나이는 만 18~100세의 정수로 입력해 주세요.',
+        invalidHeight: '키는 120~230cm 범위로 입력해 주세요.',
+        invalidWeight: '몸무게는 25~250kg 범위로 입력해 주세요.',
         protein: '단백질',
         fat: '지방',
         carb: '탄수화물',
@@ -6711,11 +6717,17 @@
           bulk: '증량'
         },
         copied: '복사됨',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        sampleLoaded: '예시 값을 입력했습니다.',
+        cleared: '입력값을 모두 지웠습니다.',
         copyDefault: '결과 복사'
       },
       en: {
-        idle: 'Enter values to calculate BMR/TDEE and goal-based calories.',
-        invalidRange: 'Check ranges: age (10–100), height (120–230), weight (25–250).',
+        idle: 'Complete all fields to estimate BMR/TDEE and goal-based calories.',
+        invalidNumber: 'Enter valid numbers for age, height, and weight.',
+        invalidAge: 'Enter age as a whole number from 18 to 100.',
+        invalidHeight: 'Enter height from 120 to 230 cm.',
+        invalidWeight: 'Enter weight from 25 to 250 kg.',
         protein: 'Protein',
         fat: 'Fat',
         carb: 'Carbs',
@@ -6729,11 +6741,17 @@
           bulk: 'Bulk'
         },
         copied: 'Copied',
+        copyFail: 'Automatic copy is unavailable.',
+        sampleLoaded: 'Loaded example values.',
+        cleared: 'Cleared all inputs.',
         copyDefault: 'Copy results'
       },
       ja: {
-        idle: '値を入力すると、BMR/TDEEと目的別カロリーを計算します。',
-        invalidRange: '範囲を確認してください（年齢 10〜100、身長 120〜230、体重 25〜250）。',
+        idle: 'すべての項目を入力すると、BMR・TDEEと目的別カロリーを推定します。',
+        invalidNumber: '年齢・身長・体重には有効な数値を入力してください。',
+        invalidAge: '年齢は18〜100歳の整数で入力してください。',
+        invalidHeight: '身長は120〜230cmで入力してください。',
+        invalidWeight: '体重は25〜250kgで入力してください。',
         protein: 'たんぱく質',
         fat: '脂質',
         carb: '炭水化物',
@@ -6747,6 +6765,9 @@
           bulk: '増量'
         },
         copied: 'コピー完了',
+        copyFail: '自動コピーを利用できません。',
+        sampleLoaded: '例の値を入力しました。',
+        cleared: '入力値をすべて消去しました。',
         copyDefault: '結果をコピー'
       }
     };
@@ -6757,19 +6778,25 @@
     const copyText = async (text) => {
       try {
         await navigator.clipboard.writeText(text);
+        return true;
       } catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          const copied = document.execCommand('copy');
+          document.body.removeChild(ta);
+          return copied;
+        } catch (_) {
+          return false;
+        }
       }
     };
 
-    const setIdle = (msg = tdeeText.idle) => {
+    const setIdle = (msg = tdeeText.idle, state = '') => {
       outBmr.textContent = '-';
       outMaintain.textContent = '-';
       outCut.textContent = '-';
@@ -6778,16 +6805,40 @@
       outFat.textContent = `${tdeeText.fat}: -`;
       outCarb.textContent = `${tdeeText.carb}: -`;
       help.textContent = msg;
+      help.dataset.state = state;
+      copyBtn.disabled = true;
     };
 
     const render = () => {
-      const a = Number(age.value || 0);
-      const h = Number(height.value || 0);
-      const w = Number(weight.value || 0);
-      const af = Number(activity.value || 1.2);
+      const fields = [age, height, weight];
+      fields.forEach((field) => field.setAttribute('aria-invalid', 'false'));
+      if (fields.some((field) => field.value.trim() === '')) {
+        setIdle();
+        return;
+      }
+      const a = Number(age.value);
+      const h = Number(height.value);
+      const w = Number(weight.value);
+      const af = Number(activity.value);
 
-      if (!(a >= 10 && a <= 100) || !(h >= 120 && h <= 230) || !(w >= 25 && w <= 250)) {
-        setIdle(tdeeText.invalidRange);
+      if (![a, h, w, af].every(Number.isFinite)) {
+        fields.forEach((field) => field.setAttribute('aria-invalid', 'true'));
+        setIdle(tdeeText.invalidNumber, 'error');
+        return;
+      }
+      if (!Number.isInteger(a) || a < 18 || a > 100) {
+        age.setAttribute('aria-invalid', 'true');
+        setIdle(tdeeText.invalidAge, 'error');
+        return;
+      }
+      if (h < 120 || h > 230) {
+        height.setAttribute('aria-invalid', 'true');
+        setIdle(tdeeText.invalidHeight, 'error');
+        return;
+      }
+      if (w < 25 || w > 250) {
+        weight.setAttribute('aria-invalid', 'true');
+        setIdle(tdeeText.invalidWeight, 'error');
         return;
       }
 
@@ -6828,17 +6879,33 @@
         weeklyBulkKg.toLocaleString(numberLocale, { maximumFractionDigits: 2 }),
         macroNotice
       );
+      help.dataset.state = 'success';
+      copyBtn.disabled = false;
     };
 
     [sex, age, height, weight, activity].forEach((el) => el?.addEventListener('input', render));
 
     resetBtn?.addEventListener('click', () => {
+      age.value = '';
+      height.value = '';
+      weight.value = '';
       sex.value = 'male';
-      age.value = 30;
-      height.value = 170;
-      weight.value = 68;
+      activity.value = '1.2';
+      render();
+      help.textContent = tdeeText.cleared;
+      age.focus();
+    });
+
+    exampleBtn?.addEventListener('click', () => {
+      sex.value = 'male';
+      age.value = '30';
+      height.value = '170';
+      weight.value = '68';
       activity.value = '1.55';
       render();
+      help.textContent = tdeeText.sampleLoaded;
+      help.dataset.state = 'success';
+      age.focus();
     });
 
     copyBtn?.addEventListener('click', async () => {
@@ -6853,16 +6920,17 @@
         outFat.textContent,
         outCarb.textContent
       ].join(' | ');
-      await copyText(text);
+      const copied = await copyText(text);
+      if (!copied) {
+        help.textContent = tdeeText.copyFail;
+        help.dataset.state = 'error';
+        return;
+      }
       const old = copyBtn.textContent;
       copyBtn.textContent = tdeeText.copied;
       setTimeout(() => { copyBtn.textContent = old || tdeeText.copyDefault; }, 900);
     });
 
-    if (!age.value) age.value = 30;
-    if (!height.value) height.value = 170;
-    if (!weight.value) weight.value = 68;
-    if (!activity.value) activity.value = '1.55';
     render();
   }
 
