@@ -2892,10 +2892,10 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="ci-assumption">{% if page.lang == 'en' %}Assumes month-end contributions and converts the selected nominal compounding rate to an equivalent monthly rate. Taxes, fees, and return volatility are excluded.{% elsif page.lang == 'ja' %}毎月末に積み立て、選択した名目複利の利回りを月次相当利率に換算します。税金・手数料・利回り変動は含みません。{% else %}월말 적립을 가정하고 선택한 명목 복리 수익률을 월 환산 수익률로 적용합니다. 세금·수수료·수익률 변동은 포함하지 않습니다.{% endif %}</p>
         </div>
       {% when 'discount-calculator' %}
-        <div class="tool-ui">
+        <div class="tool-ui dc-ui">
           <div class="tool-row">
             <label for="dc-mode">{% if page.lang == 'en' %}Calculation mode{% elsif page.lang == 'ja' %}計算モード{% else %}계산 모드{% endif %}</label>
-            <select id="dc-mode">
+            <select id="dc-mode" aria-describedby="dc-status dc-assumption">
               <option value="forward">{% if page.lang == 'en' %}Discounted price calculation{% elsif page.lang == 'ja' %}割引適用価格を計算{% else %}할인 적용가 계산{% endif %}</option>
               <option value="reverse">{% if page.lang == 'en' %}Reverse-calculate discount for target price{% elsif page.lang == 'ja' %}目標価格から割引率を逆算{% else %}목표가 기준 할인율 역산{% endif %}</option>
             </select>
@@ -2904,52 +2904,54 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="dc-list-price">{% if page.lang == 'en' %}List price{% elsif page.lang == 'ja' %}定価{% else %}정가(원){% endif %}</label>
-              <input id="dc-list-price" type="number" min="0" step="100" placeholder="{% if page.lang == 'en' %}e.g. 59000{% elsif page.lang == 'ja' %}例: 59000{% else %}예: 59000{% endif %}" inputmode="numeric" />
+              <input id="dc-list-price" type="number" min="1" max="1000000000000" step="1" placeholder="{% if page.lang == 'en' %}e.g. 59000{% elsif page.lang == 'ja' %}例: 59000{% else %}예: 59000{% endif %}" inputmode="numeric" required aria-describedby="dc-status dc-assumption" />
             </div>
             <div>
               <label for="dc-discount-rate">{% if page.lang == 'en' %}Discount rate (%) {% elsif page.lang == 'ja' %}割引率(%) {% else %}할인율(%) {% endif %}</label>
-              <input id="dc-discount-rate" type="number" min="0" max="100" step="0.1" placeholder="{% if page.lang == 'en' %}e.g. 20{% elsif page.lang == 'ja' %}例: 20{% else %}예: 20{% endif %}" inputmode="decimal" />
+              <input id="dc-discount-rate" type="number" min="0" max="100" step="0.01" placeholder="{% if page.lang == 'en' %}e.g. 20{% elsif page.lang == 'ja' %}例: 20{% else %}예: 20{% endif %}" inputmode="decimal" required aria-describedby="dc-status dc-assumption" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid" id="dc-forward-fields">
             <div>
               <label for="dc-coupon">{% if page.lang == 'en' %}Coupon amount{% elsif page.lang == 'ja' %}クーポン額{% else %}쿠폰(원){% endif %}</label>
-              <input id="dc-coupon" type="number" min="0" step="100" placeholder="{% if page.lang == 'en' %}e.g. 3000{% elsif page.lang == 'ja' %}例: 3000{% else %}예: 3000{% endif %}" inputmode="numeric" />
+              <input id="dc-coupon" type="number" min="0" max="1000000000000" step="1" placeholder="{% if page.lang == 'en' %}Optional, e.g. 3000{% elsif page.lang == 'ja' %}任意、例: 3000{% else %}선택, 예: 3000{% endif %}" inputmode="numeric" aria-describedby="dc-status dc-assumption" />
             </div>
             <div>
               <label for="dc-quantity">{% if page.lang == 'en' %}Quantity{% elsif page.lang == 'ja' %}数量{% else %}수량{% endif %}</label>
-              <input id="dc-quantity" type="number" min="1" step="1" placeholder="{% if page.lang == 'en' %}e.g. 2{% elsif page.lang == 'ja' %}例: 2{% else %}예: 2{% endif %}" inputmode="numeric" />
+              <input id="dc-quantity" type="number" min="1" max="10000" step="1" placeholder="{% if page.lang == 'en' %}Optional, default 1{% elsif page.lang == 'ja' %}任意、初期値1{% else %}선택, 기본 1{% endif %}" inputmode="numeric" aria-describedby="dc-status dc-assumption" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid" id="dc-forward-fields-2">
             <div>
               <label for="dc-shipping">{% if page.lang == 'en' %}Shipping fee{% elsif page.lang == 'ja' %}送料{% else %}배송비(원){% endif %}</label>
-              <input id="dc-shipping" type="number" min="0" step="100" placeholder="{% if page.lang == 'en' %}e.g. 2500{% elsif page.lang == 'ja' %}例: 2500{% else %}예: 2500{% endif %}" inputmode="numeric" />
+              <input id="dc-shipping" type="number" min="0" max="1000000000000" step="1" placeholder="{% if page.lang == 'en' %}Optional, e.g. 2500{% elsif page.lang == 'ja' %}任意、例: 2500{% else %}선택, 예: 2500{% endif %}" inputmode="numeric" aria-describedby="dc-status dc-assumption" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid" id="dc-reverse-fields" hidden>
             <div>
               <label for="dc-target-price">{% if page.lang == 'en' %}Target selling price (per item){% elsif page.lang == 'ja' %}目標販売価格（1個あたり）{% else %}목표 판매가(원, 1개 기준){% endif %}</label>
-              <input id="dc-target-price" type="number" min="0" step="100" placeholder="{% if page.lang == 'en' %}e.g. 99000{% elsif page.lang == 'ja' %}例: 99000{% else %}예: 99000{% endif %}" inputmode="numeric" />
+              <input id="dc-target-price" type="number" min="0" max="1000000000000" step="1" placeholder="{% if page.lang == 'en' %}e.g. 99000{% elsif page.lang == 'ja' %}例: 99000{% else %}예: 99000{% endif %}" inputmode="numeric" required aria-describedby="dc-status dc-assumption" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-actions">
-            <button id="dc-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
-            <button id="dc-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          <div class="tool-row-grid pct-actions dc-actions">
+            <button id="dc-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="dc-sample" type="button">{% if page.lang == 'en' %}Fill sample values{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시값 채우기{% endif %}</button>
+            <button id="dc-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
+          <div class="tool-stats dc-stats" aria-label="{% if page.lang == 'en' %}Discount calculation results{% elsif page.lang == 'ja' %}割引計算結果{% else %}할인 계산 결과{% endif %}">
             <div><strong id="dc-discount-amount">-</strong><span>{% if page.lang == 'en' %}Discount amount (per item){% elsif page.lang == 'ja' %}割引額（1個あたり）{% else %}할인 금액(1개 기준){% endif %}</span></div>
             <div><strong id="dc-unit-price">-</strong><span>{% if page.lang == 'en' %}Discounted unit price{% elsif page.lang == 'ja' %}割引後の単価{% else %}할인 후 단가{% endif %}</span></div>
             <div><strong id="dc-final-total">-</strong><span>{% if page.lang == 'en' %}Final payable amount{% elsif page.lang == 'ja' %}最終支払金額{% else %}최종 결제금액{% endif %}</span></div>
-            <div><strong id="dc-effective-rate">-</strong><span>{% if page.lang == 'en' %}Effective discount rate{% elsif page.lang == 'ja' %}実質割引率{% else %}실질 할인율{% endif %}</span></div>
+            <div><strong id="dc-effective-rate">-</strong><span>{% if page.lang == 'en' %}Effective item discount{% elsif page.lang == 'ja' %}商品実質割引率{% else %}상품 실질 할인율{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="dc-help">{% if page.lang == 'en' %}Enter list price and discount details to calculate the final payable amount.{% elsif page.lang == 'ja' %}定価と割引情報を入力すると、最終支払金額を計算できます。{% else %}정가와 할인 정보를 입력하면 최종 결제금액을 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="dc-status" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter a list price and discount rate. Optional blank fields use coupon 0, quantity 1, and shipping 0.{% elsif page.lang == 'ja' %}定価と割引率を入力してください。任意項目の空欄はクーポン0、数量1、送料0として扱います。{% else %}정가와 할인율을 입력하세요. 선택 항목의 빈값은 쿠폰 0원, 수량 1개, 배송비 0원으로 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="dc-assumption">{% if page.lang == 'en' %}The coupon is deducted from every item after the percentage discount. Shipping is added once per order and excluded from the effective item discount rate.{% elsif page.lang == 'ja' %}クーポンは率引き後の商品1個ごとに差し引き、送料は注文全体に1回加算します。商品実質割引率に送料は含めません。{% else %}쿠폰은 할인율 적용 후 상품 1개마다 차감하고, 배송비는 주문 전체에 한 번 더합니다. 상품 실질 할인율에서는 배송비를 제외합니다.{% endif %}</p>
         </div>
       {% when 'age-calculator' %}
         <div class="tool-ui age-ui">

@@ -1974,6 +1974,12 @@ a:hover { color: #fff; text-decoration: none; }
   border-color: #3b82f6;
 }
 
+/* Discount calculator */
+.dc-ui .dc-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.dc-ui .tool-result[data-state="success"] { border-color: #9fd8b0; }
+.dc-ui .tool-result[data-state="warning"] { border-color: #efc36a; }
+.dc-ui .tool-result[data-state="error"] { border-color: #e7a1a8; }
+
 /* Font-change: sticky input */
 .font-change-ui #fc-input {
   position: sticky;
@@ -2138,6 +2144,9 @@ a:hover { color: #fff; text-decoration: none; }
   .search-clusters { grid-template-columns: 1fr; margin-left: 14px; margin-right: 14px; }
   .search-cluster p { min-height: 0; }
   .related-grid { grid-template-columns: 1fr; }
+  .dc-ui .pct-grid,
+  .dc-ui .dc-actions { grid-template-columns: 1fr; }
+  .dc-ui .dc-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ytk-grid,
   .ytk-actions { grid-template-columns: 1fr; }
   .ytk-card { padding: .6rem; }

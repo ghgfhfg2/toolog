@@ -5528,46 +5528,71 @@
     const unitPrice = document.getElementById('dc-unit-price');
     const finalTotal = document.getElementById('dc-final-total');
     const effectiveRate = document.getElementById('dc-effective-rate');
-    const help = document.getElementById('dc-help');
+    const status = document.getElementById('dc-status');
 
     const copyBtn = document.getElementById('dc-copy');
-    const resetBtn = document.getElementById('dc-reset');
+    const sampleBtn = document.getElementById('dc-sample');
+    const clearBtn = document.getElementById('dc-clear');
 
-    if (!mode || !listPrice || !discountRate || !coupon || !quantity || !shipping || !targetPrice || !discountAmount || !unitPrice || !finalTotal || !effectiveRate || !help) return;
+    if (!mode || !listPrice || !discountRate || !coupon || !quantity || !shipping || !targetPrice || !discountAmount || !unitPrice || !finalTotal || !effectiveRate || !status || !copyBtn || !sampleBtn || !clearBtn) return;
 
     const discountI18n = {
       ko: {
         currency: '원',
-        needPrice: '정가를 0원보다 크게 입력하세요.',
-        invalidRate: '할인율은 0%~100% 범위에서 입력하세요.',
+        empty: '정가와 할인율을 입력하세요.',
+        needPrice: '정가는 1원 이상 1조 원 이하의 정수로 입력하세요.',
+        invalidRate: '할인율은 0% 이상 100% 이하의 숫자로 입력하세요.',
+        invalidCoupon: '쿠폰은 0원 이상 1조 원 이하의 정수로 입력하세요.',
+        invalidQuantity: '수량은 1개 이상 10,000개 이하의 정수로 입력하세요.',
+        invalidShipping: '배송비는 0원 이상 1조 원 이하의 정수로 입력하세요.',
+        needTarget: '목표 판매가는 0원 이상 1조 원 이하의 정수로 입력하세요.',
+        tooLarge: '계산 결과가 너무 큽니다. 입력 금액이나 수량을 줄여 주세요.',
         forwardHelp: (price, q) => `${price} 상품 ${q}개 기준, 쿠폰/배송비까지 반영한 최종 결제금액입니다.`,
-        reverseHighTarget: '목표 판매가(1개 기준)가 정가보다 높아 할인율은 0%로 표시됩니다.',
+        reverseHighTarget: '목표 판매가가 정가보다 높습니다. 할인 대신 가격 인상이 필요한 경우입니다.',
         reverseHelp: (price, target, rate) => `정가 ${price}(1개)를 목표가 ${target}로 맞추려면 약 ${rate} 할인이 필요합니다.`,
         copyText: (discount, unit, total, rate) => `할인 계산 결과 | 할인 금액: ${discount} | 할인 후 단가: ${unit} | 최종 결제금액: ${total} | 실질 할인율: ${rate}`,
         copied: '복사됨',
-        copyDefault: '결과 복사'
+        copyDefault: '결과 복사',
+        copyFail: '자동 복사를 사용할 수 없습니다. 다시 시도해 주세요.',
+        cleared: '입력값을 초기화했습니다.'
       },
       en: {
         currency: ' KRW',
-        needPrice: 'Enter a list price greater than 0.',
-        invalidRate: 'Discount rate must be between 0% and 100%.',
+        empty: 'Enter a list price and discount rate.',
+        needPrice: 'Enter a whole-number list price from 1 to 1 trillion.',
+        invalidRate: 'Enter a discount rate from 0% to 100%.',
+        invalidCoupon: 'Enter a whole-number coupon from 0 to 1 trillion.',
+        invalidQuantity: 'Enter a whole-number quantity from 1 to 10,000.',
+        invalidShipping: 'Enter a whole-number shipping fee from 0 to 1 trillion.',
+        needTarget: 'Enter a whole-number target price from 0 to 1 trillion.',
+        tooLarge: 'The result is too large. Reduce the amount or quantity.',
         forwardHelp: (price, q) => `Final payable amount for ${q} item(s), including coupon and shipping, based on list price ${price}.`,
-        reverseHighTarget: 'Target selling price is higher than list price, so required discount is shown as 0%.',
+        reverseHighTarget: 'The target price is above the list price, so this requires a markup rather than a discount.',
         reverseHelp: (price, target, rate) => `To lower ${price} (per item) to target ${target}, you need about ${rate} discount.`,
         copyText: (discount, unit, total, rate) => `Discount calculation | Discount amount: ${discount} | Discounted unit price: ${unit} | Final payable amount: ${total} | Effective discount rate: ${rate}`,
         copied: 'Copied',
-        copyDefault: 'Copy result'
+        copyDefault: 'Copy result',
+        copyFail: 'Automatic copy is unavailable. Please try again.',
+        cleared: 'Cleared all inputs.'
       },
       ja: {
         currency: 'ウォン',
-        needPrice: '定価は0より大きい値を入力してください。',
-        invalidRate: '割引率は0%〜100%の範囲で入力してください。',
+        empty: '定価と割引率を入力してください。',
+        needPrice: '定価は1以上1兆以下の整数で入力してください。',
+        invalidRate: '割引率は0%以上100%以下で入力してください。',
+        invalidCoupon: 'クーポンは0以上1兆以下の整数で入力してください。',
+        invalidQuantity: '数量は1以上10,000以下の整数で入力してください。',
+        invalidShipping: '送料は0以上1兆以下の整数で入力してください。',
+        needTarget: '目標販売価格は0以上1兆以下の整数で入力してください。',
+        tooLarge: '計算結果が大きすぎます。金額または数量を減らしてください。',
         forwardHelp: (price, q) => `定価${price}・${q}個を基準に、クーポンと送料を反映した最終支払金額です。`,
-        reverseHighTarget: '目標販売価格（1個あたり）が定価より高いため、必要割引率は0%で表示します。',
+        reverseHighTarget: '目標販売価格が定価を上回るため、割引ではなく値上げが必要です。',
         reverseHelp: (price, target, rate) => `定価${price}（1個）を目標価格${target}にするには、約${rate}の割引が必要です。`,
         copyText: (discount, unit, total, rate) => `割引計算結果 | 割引額: ${discount} | 割引後単価: ${unit} | 最終支払金額: ${total} | 実質割引率: ${rate}`,
         copied: 'コピー完了',
-        copyDefault: '結果をコピー'
+        copyDefault: '結果をコピー',
+        copyFail: '自動コピーを利用できません。もう一度お試しください。',
+        cleared: '入力値をクリアしました。'
       }
     };
     const dcText = discountI18n[pageLang] || discountI18n.ko;
@@ -5577,10 +5602,9 @@
       return `${rounded}${dcText.currency}`;
     };
     const fmtPct = (v) => `${v.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}%`;
-    const n = (el, fallback = 0) => {
-      const num = Number(el?.value || fallback);
-      return Number.isFinite(num) ? num : fallback;
-    };
+    let current = null;
+    const fields = [listPrice, discountRate, coupon, quantity, shipping, targetPrice];
+    const read = (el) => el.value.trim() === '' ? null : Number(el.value);
 
     const setModeUI = () => {
       const isForward = (mode.value || 'forward') === 'forward';
@@ -5589,6 +5613,8 @@
       if (reverseFields) reverseFields.hidden = isForward;
       discountRate.disabled = !isForward;
       targetPrice.disabled = isForward;
+      discountRate.required = isForward;
+      targetPrice.required = !isForward;
     };
 
     const copyText = async (text) => {
@@ -5606,90 +5632,108 @@
       }
     };
 
-    const setOutput = ({ discount = '-', unit = '-', total = '-', rate = '-', message = '' } = {}) => {
+    const setOutput = ({ discount = '-', unit = '-', total = '-', rate = '-', message = '', state = '' } = {}) => {
       discountAmount.textContent = discount;
       unitPrice.textContent = unit;
       finalTotal.textContent = total;
       effectiveRate.textContent = rate;
-      help.textContent = message;
+      status.textContent = message;
+      status.dataset.state = state;
+      current = state === 'success' ? { discount, unit, total, rate } : null;
+      copyBtn.disabled = !current;
+    };
+
+    const invalidate = (el, message, state = 'error') => {
+      el.setAttribute('aria-invalid', 'true');
+      setOutput({ message, state });
     };
 
     const render = () => {
       setModeUI();
-      const price = Math.max(0, n(listPrice));
-      const q = Math.max(1, Math.floor(n(quantity, 1)));
-      const ship = Math.max(0, n(shipping));
+      fields.forEach((el) => el.setAttribute('aria-invalid', 'false'));
+      const price = read(listPrice);
+      const isForward = mode.value === 'forward';
 
-      if (price <= 0) {
-        setOutput({ message: dcText.needPrice });
+      if (price === null && (isForward ? read(discountRate) === null : read(targetPrice) === null)) {
+        setOutput({ message: dcText.empty });
         return;
       }
+      if (!Number.isInteger(price) || price < 1 || price > 1000000000000) return invalidate(listPrice, dcText.needPrice);
 
-      if ((mode.value || 'forward') === 'forward') {
-        const rate = n(discountRate);
-        if (rate < 0 || rate > 100) {
-          setOutput({ message: dcText.invalidRate });
-          return;
-        }
-
-        const couponAmount = Math.max(0, n(coupon));
+      if (isForward) {
+        const rate = read(discountRate);
+        const couponValue = read(coupon);
+        const quantityValue = read(quantity);
+        const shippingValue = read(shipping);
+        if (!Number.isFinite(rate) || rate < 0 || rate > 100) return invalidate(discountRate, dcText.invalidRate);
+        if (couponValue !== null && (!Number.isInteger(couponValue) || couponValue < 0 || couponValue > 1000000000000)) return invalidate(coupon, dcText.invalidCoupon);
+        if (quantityValue !== null && (!Number.isInteger(quantityValue) || quantityValue < 1 || quantityValue > 10000)) return invalidate(quantity, dcText.invalidQuantity);
+        if (shippingValue !== null && (!Number.isInteger(shippingValue) || shippingValue < 0 || shippingValue > 1000000000000)) return invalidate(shipping, dcText.invalidShipping);
+        const couponAmount = couponValue ?? 0;
+        const q = quantityValue ?? 1;
+        const ship = shippingValue ?? 0;
         const discounted = price * (1 - rate / 100);
         const unit = Math.max(0, discounted - couponAmount);
-        const totalBeforeShipping = unit * q;
-        const total = Math.max(0, totalBeforeShipping + ship);
-
-        const totalList = price * q + ship;
-        const effRate = totalList > 0 ? ((totalList - total) / totalList) * 100 : 0;
-
-        discountAmount.textContent = fmtKRW(price - discounted);
-        unitPrice.textContent = fmtKRW(unit);
-        finalTotal.textContent = fmtKRW(total);
-        effectiveRate.textContent = fmtPct(Math.max(0, effRate));
-        help.textContent = dcText.forwardHelp(fmtKRW(price), q);
+        const total = unit * q + ship;
+        if (![discounted, unit, total].every(Number.isFinite) || total > Number.MAX_SAFE_INTEGER) return invalidate(quantity, dcText.tooLarge);
+        const effRate = ((price - unit) / price) * 100;
+        setOutput({
+          discount: fmtKRW(price - discounted), unit: fmtKRW(unit), total: fmtKRW(total),
+          rate: fmtPct(Math.min(100, Math.max(0, effRate))),
+          message: dcText.forwardHelp(fmtKRW(price), q), state: 'success'
+        });
       } else {
-        const target = Math.max(0, n(targetPrice));
+        const target = read(targetPrice);
+        if (!Number.isInteger(target) || target < 0 || target > 1000000000000) return invalidate(targetPrice, dcText.needTarget);
         if (target > price) {
-          discountAmount.textContent = fmtKRW(0);
-          unitPrice.textContent = fmtKRW(target);
-          finalTotal.textContent = fmtKRW(target);
-          effectiveRate.textContent = fmtPct(0);
-          help.textContent = dcText.reverseHighTarget;
+          setOutput({ message: dcText.reverseHighTarget, state: 'warning' });
           return;
         }
 
-        const needRate = price === 0 ? 0 : ((price - target) / price) * 100;
-        discountAmount.textContent = fmtKRW(price - target);
-        unitPrice.textContent = fmtKRW(target);
-        finalTotal.textContent = fmtKRW(target);
-        effectiveRate.textContent = fmtPct(Math.max(0, needRate));
-        help.textContent = dcText.reverseHelp(fmtKRW(price), fmtKRW(target), fmtPct(needRate));
+        const needRate = ((price - target) / price) * 100;
+        setOutput({
+          discount: fmtKRW(price - target), unit: fmtKRW(target), total: fmtKRW(target), rate: fmtPct(needRate),
+          message: dcText.reverseHelp(fmtKRW(price), fmtKRW(target), fmtPct(needRate)), state: 'success'
+        });
       }
     };
 
-    [mode, listPrice, discountRate, coupon, quantity, shipping, targetPrice].forEach((el) => el?.addEventListener('input', render));
+    fields.forEach((el) => el.addEventListener('input', render));
+    mode.addEventListener('change', render);
 
-    copyBtn?.addEventListener('click', async () => {
-      const text = dcText.copyText(discountAmount.textContent, unitPrice.textContent, finalTotal.textContent, effectiveRate.textContent);
-      await copyText(text);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = dcText.copied;
-      setTimeout(() => { copyBtn.textContent = old || dcText.copyDefault; }, 900);
+    copyBtn.addEventListener('click', async () => {
+      if (!current) return;
+      try {
+        await copyText(dcText.copyText(current.discount, current.unit, current.total, current.rate));
+        const old = copyBtn.textContent;
+        copyBtn.textContent = dcText.copied;
+        setTimeout(() => { copyBtn.textContent = old || dcText.copyDefault; }, 900);
+      } catch (_) {
+        status.textContent = dcText.copyFail;
+        status.dataset.state = 'error';
+      }
     });
 
-    resetBtn?.addEventListener('click', () => {
+    sampleBtn.addEventListener('click', () => {
       mode.value = 'forward';
       listPrice.value = 59000;
       discountRate.value = 20;
       coupon.value = 3000;
-      quantity.value = 1;
-      shipping.value = 0;
-      targetPrice.value = 45000;
+      quantity.value = 2;
+      shipping.value = 2500;
+      targetPrice.value = '';
       render();
+      listPrice.focus();
     });
 
-    if (!listPrice.value) listPrice.value = 59000;
-    if (!discountRate.value) discountRate.value = 20;
-    if (!quantity.value) quantity.value = 1;
+    clearBtn.addEventListener('click', () => {
+      mode.value = 'forward';
+      fields.forEach((el) => { el.value = ''; el.setAttribute('aria-invalid', 'false'); });
+      setModeUI();
+      setOutput({ message: dcText.cleared });
+      listPrice.focus();
+    });
+
     render();
   }
 

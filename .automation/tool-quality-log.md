@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-16 21:00 KST
+- Tool: `discount-calculator`
+- Selection reason: recent quality runs covered other tools; this older shopping calculator had not received a quality pass since its March launch, silently clamped negative and fractional inputs, prefilled a result instead of showing an empty state, allowed copying invalid results, diluted the effective item discount with shipping, and did not clearly state whether coupons applied per item or per order.
+- Scope: improved only the existing multilingual discount tool, home metadata, layout, styles, and script with true blank/error/warning/success states, strict field-specific amount/rate/integer-quantity validation, result overflow protection, valid-result-only copying with failure feedback, example/clear actions, corrected shipping-excluded effective item discount, explicit per-item coupon and one-time shipping assumptions, accessible descriptions/live status, one-column mobile inputs/actions, expanded formulas, FAQ, related links, and search-intent copy. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, localized related-link/page checks, mobile CSS rules, and targeted sample/zero/100%/coupon-floor/reverse/boundary/negative/fractional/oversized cases passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-15 21:00 KST
 - Tool: `tdee-calculator`
 - Selection reason: recent quality runs covered other tools; this adult health calculator had never received a quality pass, auto-filled a result instead of exposing an empty state, accepted fractional ages and children as young as 10, used one generic error for every invalid field, allowed copying invalid/empty results, and had thin localized SEO and safety guidance.

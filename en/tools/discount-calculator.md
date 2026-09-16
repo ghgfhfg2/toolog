@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Discount Calculator | Discount Rate, Coupon, and Final Price
-description: Calculate discount amount, coupon-adjusted final price, effective discount rate, and target-price required discount in one place.
+title: Discount Calculator | Sale Price, Coupon, Quantity & Total
+description: Calculate sale price, per-item coupon savings, quantity total, shipping, effective item discount, and the rate needed to reach a target price.
 lang: en
 permalink: /en/tools/discount-calculator/
 canonical_url: /en/tools/discount-calculator/
@@ -18,27 +18,54 @@ alternate_urls:
   ko: /tools/discount-calculator/
   en: /en/tools/discount-calculator/
   ja: /ja/tools/discount-calculator/
+faq:
+  - q: Is the coupon applied before or after the percentage discount?
+    a: This calculator applies the percentage discount first, then deducts the fixed coupon from each item. Check the store because coupon rules can differ.
+  - q: Is shipping included in the effective discount rate?
+    a: No. Shipping is added once to the checkout total, while the effective item discount compares the list price with the discounted item price.
+  - q: Can I reverse-calculate the discount needed for a target price?
+    a: Yes. Select target-price mode and enter the list price and desired per-item selling price.
 ---
 
-## More than a simple percent-off tool
-This calculator helps you estimate real checkout cost with:
+## Discount calculator for sale price and checkout total
+Use this percentage-off calculator when a sale also includes a fixed coupon, multiple items, or shipping. It shows:
 - Base discount rate
-- Coupon amount
-- Quantity and delivery cost
+- Per-item coupon savings
+- Quantity total and one-time shipping
+- Effective item discount excluding shipping
 
-It also supports reverse calculation for target selling price.
+It also reverse-calculates the discount rate required for a target selling price.
 
 ## Key features
 - Standard discount mode and target-price reverse mode
 - Instant update for final payable amount
 - Effective discount rate output
-- Input guards for negative values and out-of-range rates
+- Field-specific checks for blanks, negatives, fractional quantity, oversized values, and out-of-range rates
 
 ## How to use
 1. Choose calculation mode.
 2. Enter list price and discount/coupon values.
 3. Add quantity and shipping if needed.
 4. Review final amount and discount summary.
+
+Blank optional fields use coupon 0, quantity 1, and shipping 0. The coupon is deducted from **each item** after the percentage discount.
+
+## Formula and assumptions
+- Discounted unit price = `list price × (1 - discount rate) - per-item coupon`
+- Final checkout total = `discounted unit price × quantity + shipping`
+- Effective item discount = `(list price - discounted unit price) ÷ list price × 100`
+
+Coupon stacking, minimum order requirements, maximum coupon savings, taxes, and store-specific rounding are not modeled. Confirm the actual checkout conditions before purchasing.
+
+## FAQ
+### Is the coupon applied before or after the percentage discount?
+The percentage discount is applied first, then the fixed coupon is deducted from every item.
+
+### Is shipping included in the effective discount rate?
+No. Shipping is included only in the final checkout total.
+
+### Can I reverse-calculate the discount needed for a target price?
+Yes. Choose target-price mode and enter a list price and target per-item price.
 
 ## Related tools
 - Percentage math: [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})

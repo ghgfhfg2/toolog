@@ -1446,13 +1446,16 @@
   badge: Hot
   badge_en: Hot
   badge_ja: 注目
-  description: 할인율 계산, 쿠폰, 배송비를 반영해 최종 결제금액과 실질 할인율을 확인해요.
-  description_en: Calculate final payable amount and effective discount using discount rate, coupon, quantity, and shipping.
-  description_ja: 割引率・クーポン・数量・送料を反映して、最終支払額と実質割引率を素早く計算します。
+  description: 정가와 할인율에 상품별 쿠폰, 수량, 배송비를 반영해 할인 후 가격·최종 결제금액·실질 할인율을 계산해요.
+  description_en: Calculate sale price, per-item coupon savings, final checkout total, and effective item discount with quantity and shipping.
+  description_ja: 定価と割引率に商品ごとのクーポン、数量、送料を反映し、割引後価格・最終支払額・実質割引率を計算します。
   url: /tools/discount-calculator/
   url_en: /en/tools/discount-calculator/
   url_ja: /ja/tools/discount-calculator/
   thumbnail: /assets/thumbs/discount-calculator.svg
+  published_at: '2026-03-03'
+  tool_type: calculator
+  topic_cluster: shopping
 
 - id: loan-calculator
   title: 대출 이자 계산기

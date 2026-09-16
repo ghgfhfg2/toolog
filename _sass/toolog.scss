@@ -2656,6 +2656,12 @@ a:hover { color: var(--primary-strong); }
 .to-top-btn { border: 1px solid #d6deea; background: #fff; color: var(--primary); box-shadow: var(--shadow-sm); }
 .to-top-btn:hover { border-color: #9eb5ed; }
 
+/* Discount calculator */
+.dc-ui .dc-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.dc-ui .tool-result[data-state="success"] { border-color: #9fd8b0; }
+.dc-ui .tool-result[data-state="warning"] { border-color: #efc36a; }
+.dc-ui .tool-result[data-state="error"] { border-color: #e7a1a8; }
+
 /* Footer */
 .site-footer { padding: 0; border: 0; border-top: 1px solid var(--line); background: #fff; }
 .site-footer__inner { min-height: 170px; display: flex; align-items: center; justify-content: space-between; gap: 36px; }
@@ -2730,6 +2736,9 @@ a:hover { color: var(--primary-strong); }
   .page-content .post:not(.tool-page) .post-header,
   .page-content .post:not(.tool-page) .post-content { padding: 23px 20px; border-radius: 18px; }
   .related-grid { grid-template-columns: 1fr; }
+  .dc-ui .pct-grid,
+  .dc-ui .dc-actions { grid-template-columns: 1fr; }
+  .dc-ui .dc-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .site-footer__inner { min-height: 190px; align-items: flex-start; flex-direction: column; justify-content: center; gap: 24px; }
   .footer-nav { flex-wrap: wrap; gap: 12px 20px; }
 }
