@@ -7247,61 +7247,75 @@
     const hours = document.getElementById('whp-hours');
     const days = document.getElementById('whp-days');
     const perfect = document.getElementById('whp-perfect');
+    const fullWeek = document.getElementById('whp-full-week');
     const eligibleEl = document.getElementById('whp-eligible');
     const paidHoursEl = document.getElementById('whp-hours-paid');
     const weeklyEl = document.getElementById('whp-weekly');
     const monthlyEl = document.getElementById('whp-monthly');
     const help = document.getElementById('whp-help');
+    const exampleBtn = document.getElementById('whp-example');
     const copyBtn = document.getElementById('whp-copy');
     const resetBtn = document.getElementById('whp-reset');
 
-    if (!hourly || !hours || !days || !perfect || !eligibleEl || !paidHoursEl || !weeklyEl || !monthlyEl || !help) return;
+    if (!hourly || !hours || !days || !perfect || !fullWeek || !eligibleEl || !paidHoursEl || !weeklyEl || !monthlyEl || !help || !copyBtn) return;
 
     const i18n = {
       ko: {
         currency: '원',
         hourUnit: '시간',
-        invalidNumber: '숫자 형식으로 입력해 주세요.',
-        needInput: '시급·주 소정근로시간·근무일수를 입력하세요.',
+        needInput: '시급과 주 소정근로시간을 입력해 주세요.',
+        invalidWage: '시급은 1원 이상 10억원 이하의 정수로 입력해 주세요.',
+        invalidHours: '주 소정근로시간은 0시간 초과 40시간 이하로 입력해 주세요.',
+        invalidDays: '통상근로자의 주 소정근로일수는 1~7일의 정수로 입력해 주세요.',
         eligible: '대상',
         ineligible: '비대상',
-        under15h: '주 15시간 미만이면 일반적으로 주휴수당 대상이 아닙니다.',
-        noPerfect: '개근 조건을 충족하지 않으면 해당 주 주휴수당이 제한될 수 있습니다.',
+        under15h: '4주 평균 주 소정근로시간이 15시간 미만이면 주휴 규정이 적용되지 않습니다.',
+        noPerfect: '소정근로일에 결근했다면 해당 주 주휴수당 대상이 아닐 수 있습니다.',
+        noFullWeek: '연속 7일의 해당 주 동안 근로관계가 유지되지 않았다면 지급 여부를 별도로 확인하세요.',
         capNotice: ' (주휴시간 상한 8시간 적용)',
         summary: (w, m, c) => `입력 기준 예상 주휴수당은 주 ${w}, 월 환산 ${m}입니다.${c}`,
-        copy: (e, h, w, m) => `주휴수당 계산 결과 | 대상 여부 ${e} | 주휴시간 ${h} | 주 ${w} | 월 환산 ${m}`,
-        copied: '복사됨',
-        copyDefault: '결과 복사'
+        copy: (e, h, w, m, d) => `주휴수당 계산 결과 | 대상 여부 ${e} | 주휴시간 ${h} | 주 ${w} | 월 환산 ${m} | 통상근로자 주 ${d}일 기준`,
+        copied: '계산 결과를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력값을 초기화했습니다.'
       },
       en: {
         currency: ' KRW',
         hourUnit: 'h',
-        invalidNumber: 'Please enter valid numbers.',
-        needInput: 'Enter hourly wage, weekly hours, and scheduled workdays.',
+        needInput: 'Enter an hourly wage and scheduled weekly hours.',
+        invalidWage: 'Enter a whole-number hourly wage from KRW 1 to 1 billion.',
+        invalidHours: 'Enter scheduled weekly hours greater than 0 and no more than 40.',
+        invalidDays: 'Enter 1 to 7 whole workdays for the comparable full-time worker.',
         eligible: 'Eligible',
         ineligible: 'Not eligible',
-        under15h: 'Under 15 weekly hours is generally not eligible for paid weekly holiday allowance.',
-        noPerfect: 'If perfect attendance is not met, the allowance may be limited for that week.',
+        under15h: 'The paid-weekly-holiday rule does not apply when 4-week average scheduled hours are under 15 per week.',
+        noPerfect: 'An absence on a scheduled workday may make that week ineligible.',
+        noFullWeek: 'Check eligibility separately if employment did not continue through the full 7-day week.',
         capNotice: ' (8-hour cap applied to paid holiday hours)',
         summary: (w, m, c) => `Estimated paid holiday allowance: ${w} per week, ${m} per month.${c}`,
-        copy: (e, h, w, m) => `Weekly holiday pay result | Eligibility: ${e} | Paid holiday hours: ${h} | Weekly: ${w} | Monthly est.: ${m}`,
-        copied: 'Copied',
-        copyDefault: 'Copy result'
+        copy: (e, h, w, m, d) => `Weekly holiday pay result | Eligibility: ${e} | Paid holiday hours: ${h} | Weekly: ${w} | Monthly est.: ${m} | Comparable schedule: ${d} days/week`,
+        copied: 'Copied the calculation result.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared the inputs.'
       },
       ja: {
         currency: 'ウォン',
         hourUnit: '時間',
-        invalidNumber: '数値形式で入力してください。',
-        needInput: '時給・週労働時間・勤務日数を入力してください。',
+        needInput: '時給と週所定労働時間を入力してください。',
+        invalidWage: '時給は1〜10億ウォンの整数で入力してください。',
+        invalidHours: '週所定労働時間は0時間超40時間以下で入力してください。',
+        invalidDays: '通常労働者の週所定労働日数は1〜7日の整数で入力してください。',
         eligible: '対象',
         ineligible: '対象外',
-        under15h: '週15時間未満の場合、一般的に週休手当の対象外です。',
-        noPerfect: '皆勤条件を満たさない場合、その週の週休手当は制限されることがあります。',
+        under15h: '4週平均の週所定労働時間が15時間未満の場合、週休規定は適用されません。',
+        noPerfect: '所定労働日に欠勤した場合、その週は対象外となることがあります。',
+        noFullWeek: '連続7日の週を通じて労働関係が継続しなかった場合は、対象可否を別途確認してください。',
         capNotice: '（週休時間の上限8時間を適用）',
         summary: (w, m, c) => `入力条件での週休手当見込みは週 ${w}、月換算 ${m} です。${c}`,
-        copy: (e, h, w, m) => `週休手当計算結果 | 対象可否 ${e} | 週休時間 ${h} | 週 ${w} | 月換算 ${m}`,
-        copied: 'コピーしました',
-        copyDefault: '結果をコピー'
+        copy: (e, h, w, m, d) => `週休手当計算結果 | 対象可否 ${e} | 週休時間 ${h} | 週 ${w} | 月換算 ${m} | 通常労働者は週${d}日基準`,
+        copied: '計算結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力をクリアしました。'
       }
     };
     const t = i18n[pageLang] || i18n.ko;
@@ -7309,99 +7323,109 @@
     const KRW = (n) => `${Math.round(n || 0).toLocaleString(numberLocale)}${t.currency}`;
     const HOURS = (n) => `${Number(n || 0).toLocaleString(numberLocale, { maximumFractionDigits: 2 })}${t.hourUnit}`;
 
-    const copyText = async (text) => {
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-      }
+    const setStatus = (msg, state = '') => {
+      help.textContent = msg;
+      help.dataset.state = state;
     };
 
-    const setIdle = (msg) => {
+    const setIdle = (msg, state = '') => {
       eligibleEl.textContent = '-';
       paidHoursEl.textContent = '-';
       weeklyEl.textContent = '-';
       monthlyEl.textContent = '-';
-      help.textContent = msg;
+      copyBtn.disabled = true;
+      setStatus(msg, state);
     };
 
-    const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
-
     const render = () => {
-      const wageRaw = Number(hourly.value || 0);
-      const weekHoursRaw = Number(hours.value || 0);
-      const weekDaysRaw = Number(days.value || 0);
-
-      if (!Number.isFinite(wageRaw) || !Number.isFinite(weekHoursRaw) || !Number.isFinite(weekDaysRaw)) {
-        setIdle(t.invalidNumber);
-        return;
-      }
-
-      const wage = clamp(wageRaw, 0, 1000000);
-      const weekHours = clamp(weekHoursRaw, 0, 80);
-      const weekDays = clamp(Math.floor(weekDaysRaw), 1, 7);
-      const isPerfect = !!perfect.checked;
-
-      if (wageRaw !== wage) hourly.value = wage;
-      if (weekHoursRaw !== weekHours) hours.value = weekHours;
-      if (weekDaysRaw !== weekDays) days.value = weekDays;
-
-      if (!(wage > 0) || !(weekHours > 0) || !(weekDays > 0)) {
+      [hourly, hours, days].forEach((el) => el.setAttribute('aria-invalid', 'false'));
+      const wageText = hourly.value.trim();
+      const hoursText = hours.value.trim();
+      const daysText = days.value.trim();
+      if (!wageText && !hoursText) {
         setIdle(t.needInput);
         return;
       }
+      const wage = Number(wageText);
+      const weekHours = Number(hoursText);
+      const weekDays = Number(daysText);
+      if (!Number.isFinite(wage) || !Number.isInteger(wage) || wage < 1 || wage > 1000000000) {
+        hourly.setAttribute('aria-invalid', 'true');
+        setIdle(t.invalidWage, 'error');
+        return;
+      }
+      if (!Number.isFinite(weekHours) || weekHours <= 0 || weekHours > 40) {
+        hours.setAttribute('aria-invalid', 'true');
+        setIdle(t.invalidHours, 'error');
+        return;
+      }
+      if (!Number.isFinite(weekDays) || !Number.isInteger(weekDays) || weekDays < 1 || weekDays > 7) {
+        days.setAttribute('aria-invalid', 'true');
+        setIdle(t.invalidDays, 'error');
+        return;
+      }
+      const isPerfect = !!perfect.checked;
+      const hasFullWeek = !!fullWeek.checked;
 
       const eligibleByHour = weekHours >= 15;
-      const eligible = eligibleByHour && isPerfect;
+      const eligible = eligibleByHour && isPerfect && hasFullWeek;
       const rawPaidHours = weekHours / weekDays;
       const paidHours = Math.min(8, rawPaidHours);
       const weeklyPay = eligible ? (paidHours * wage) : 0;
-      const monthlyPay = weeklyPay * 4.345;
+      const monthlyPay = weeklyPay * (365 / 7 / 12);
 
       eligibleEl.textContent = eligible ? t.eligible : t.ineligible;
       paidHoursEl.textContent = HOURS(eligible ? paidHours : 0);
       weeklyEl.textContent = KRW(weeklyPay);
       monthlyEl.textContent = KRW(monthlyPay);
+      copyBtn.disabled = false;
 
       if (!eligibleByHour) {
-        help.textContent = t.under15h;
+        setStatus(t.under15h, 'warning');
       } else if (!isPerfect) {
-        help.textContent = t.noPerfect;
+        setStatus(t.noPerfect, 'warning');
+      } else if (!hasFullWeek) {
+        setStatus(t.noFullWeek, 'warning');
       } else {
         const capNotice = rawPaidHours > 8 ? t.capNotice : '';
-        help.textContent = t.summary(KRW(weeklyPay), KRW(monthlyPay), capNotice);
+        setStatus(t.summary(KRW(weeklyPay), KRW(monthlyPay), capNotice), 'success');
       }
     };
 
-    [hourly, hours, days, perfect].forEach((el) => el?.addEventListener('input', render));
+    [hourly, hours, days, perfect, fullWeek].forEach((el) => el?.addEventListener('input', render));
+
+    exampleBtn?.addEventListener('click', () => {
+      hourly.value = '10320';
+      hours.value = '20';
+      days.value = '5';
+      perfect.checked = true;
+      fullWeek.checked = true;
+      render();
+      hourly.focus();
+    });
 
     copyBtn?.addEventListener('click', async () => {
-      if (eligibleEl.textContent === '-') return;
-      const text = t.copy(eligibleEl.textContent, paidHoursEl.textContent, weeklyEl.textContent, monthlyEl.textContent);
-      await copyText(text);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = t.copied;
-      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+      if (copyBtn.disabled) return;
+      const text = t.copy(eligibleEl.textContent, paidHoursEl.textContent, weeklyEl.textContent, monthlyEl.textContent, days.value);
+      try {
+        await navigator.clipboard.writeText(text);
+        setStatus(t.copied, 'success');
+      } catch (_) {
+        setStatus(t.copyFail, 'error');
+      }
     });
 
     resetBtn?.addEventListener('click', () => {
-      hourly.value = 10030;
-      hours.value = 20;
-      days.value = 5;
+      hourly.value = '';
+      hours.value = '';
+      days.value = '5';
       perfect.checked = true;
+      fullWeek.checked = true;
       render();
+      setStatus(t.cleared);
+      hourly.focus();
     });
 
-    if (!hourly.value) hourly.value = 10030;
-    if (!hours.value) hours.value = 20;
-    if (!days.value) days.value = 5;
     render();
   }
 

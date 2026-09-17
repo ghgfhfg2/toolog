@@ -3275,41 +3275,43 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result bf-assumption" id="bf-assumption">{% if page.lang == 'en' %}Homes only. For monthly rent, value = deposit + rent × 100; when that result is below KRW 50 million, rent × 70 is used instead. Rates follow the national upper-limit table, but local ordinances and negotiation apply.{% elsif page.lang == 'ja' %}住宅のみ対象。月家賃は「保証金＋月家賃×100」で換算し、その結果が5,000万ウォン未満なら「×70」を適用します。全国上限表を基準とし、自治体条例と協議内容が優先されます。{% else %}주택만 대상입니다. 월세는 보증금+월세×100으로 환산하되 그 결과가 5천만원 미만이면 ×70을 적용합니다. 전국 상한표 기준이며 지역 조례와 당사자 협의가 우선합니다.{% endif %}</p>
         </div>
       {% when 'weekly-holiday-pay-calculator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui whpay-ui">
+          <div class="tool-row-grid whpay-grid">
             <div>
               <label for="whp-hourly">{% if page.lang == 'en' %}Hourly wage (KRW){% elsif page.lang == 'ja' %}時給（KRW）{% else %}시급(원){% endif %}</label>
-              <input id="whp-hourly" type="number" min="0" step="10" placeholder="e.g. 10030" inputmode="numeric" />
+              <input id="whp-hourly" type="number" min="1" max="1000000000" step="1" placeholder="e.g. 10320" inputmode="numeric" aria-describedby="whp-help whp-assumption" />
             </div>
             <div>
               <label for="whp-hours">{% if page.lang == 'en' %}Scheduled weekly hours{% elsif page.lang == 'ja' %}週の所定労働時間{% else %}주 소정근로시간{% endif %}</label>
-              <input id="whp-hours" type="number" min="0" max="80" step="0.1" placeholder="e.g. 20" inputmode="decimal" />
-            </div>
-          </div>
-
-          <div class="tool-row-grid pct-grid">
-            <div>
-              <label for="whp-days">{% if page.lang == 'en' %}Scheduled workdays per week{% elsif page.lang == 'ja' %}週の所定勤務日数{% else %}주 소정근무일수{% endif %}</label>
-              <input id="whp-days" type="number" min="1" max="7" step="1" placeholder="e.g. 5" inputmode="numeric" />
+              <input id="whp-hours" type="number" min="0.1" max="40" step="0.1" placeholder="e.g. 20" inputmode="decimal" aria-describedby="whp-help whp-assumption" />
             </div>
             <div>
-              <label class="tool-check"><input id="whp-perfect" type="checkbox" checked /> {% if page.lang == 'en' %}Perfect attendance on scheduled days{% elsif page.lang == 'ja' %}所定勤務日の皆勤{% else %}소정근무일 개근{% endif %}</label>
+              <label for="whp-days">{% if page.lang == 'en' %}Comparable full-time workdays/week{% elsif page.lang == 'ja' %}通常労働者の週所定労働日数{% else %}통상근로자 주 소정근로일수{% endif %}</label>
+              <input id="whp-days" type="number" min="1" max="7" step="1" value="5" inputmode="numeric" aria-describedby="whp-days-help whp-help whp-assumption" />
+              <small id="whp-days-help">{% if page.lang == 'en' %}Usually 5. Use the comparable regular worker's schedule, not your own workdays.{% elsif page.lang == 'ja' %}通常は5日。本人ではなく、比較対象となる通常労働者の日数です。{% else %}보통 5일입니다. 본인이 아닌 비교 대상 통상근로자의 일수예요.{% endif %}</small>
             </div>
           </div>
 
-          <div class="tool-row-grid pct-actions">
-            <button id="whp-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
-            <button id="whp-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          <div class="tool-row-grid whpay-checks">
+            <label class="tool-check"><input id="whp-perfect" type="checkbox" checked /> {% if page.lang == 'en' %}No absence on scheduled workdays{% elsif page.lang == 'ja' %}所定労働日に欠勤なし{% else %}소정근로일에 결근 없음{% endif %}</label>
+            <label class="tool-check"><input id="whp-full-week" type="checkbox" checked /> {% if page.lang == 'en' %}Employment relationship continues for the full 7-day week{% elsif page.lang == 'ja' %}7日間の週を通じて労働関係が継続{% else %}연속 7일의 해당 주 동안 근로관계 유지{% endif %}</label>
           </div>
 
-          <div class="tool-stats">
+          <div class="tool-row-grid whpay-actions">
+            <button id="whp-example" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
+            <button id="whp-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="whp-reset" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
+          </div>
+
+          <div class="tool-stats whpay-stats" aria-label="{% if page.lang == 'en' %}Weekly holiday pay estimate{% elsif page.lang == 'ja' %}週休手当の試算結果{% else %}주휴수당 계산 결과{% endif %}">
             <div><strong id="whp-eligible">-</strong><span>{% if page.lang == 'en' %}Eligibility{% elsif page.lang == 'ja' %}対象可否{% else %}주휴수당 대상 여부{% endif %}</span></div>
             <div><strong id="whp-hours-paid">-</strong><span>{% if page.lang == 'en' %}Paid holiday hours{% elsif page.lang == 'ja' %}有給休日日数（時間）{% else %}주휴시간{% endif %}</span></div>
             <div><strong id="whp-weekly">-</strong><span>{% if page.lang == 'en' %}Weekly paid holiday pay{% elsif page.lang == 'ja' %}週あたり支給額{% else %}주휴수당(주){% endif %}</span></div>
             <div><strong id="whp-monthly">-</strong><span>{% if page.lang == 'en' %}Monthly estimate{% elsif page.lang == 'ja' %}月換算額{% else %}주휴수당(월 환산){% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="whp-help">{% if page.lang == 'en' %}Enter wage, weekly hours, and workdays to estimate eligibility and paid holiday allowance.{% elsif page.lang == 'ja' %}時給・週労働時間・勤務日数を入力すると、対象可否と支給見込み額を計算します。{% else %}시급/주근로시간/근무일수를 입력하면 주휴수당 대상 여부와 예상 금액을 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="whp-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter an hourly wage and scheduled weekly hours to begin.{% elsif page.lang == 'ja' %}時給と週所定労働時間を入力してください。{% else %}시급과 주 소정근로시간을 입력해 주세요.{% endif %}</p>
+          <p class="tool-result whpay-assumption" id="whp-assumption">{% if page.lang == 'en' %}Estimate for Korean labor rules: 4-week average scheduled hours must be at least 15 per week. Paid holiday hours are estimated as weekly hours ÷ comparable full-time workdays (usually 5), capped at 8. Verify irregular schedules with the workplace or MOEL 1350.{% elsif page.lang == 'ja' %}韓国の労働ルールに基づく簡易試算です。4週平均で週15時間以上が目安で、週休時間は週所定労働時間÷通常労働者の週所定労働日数（通常5日）、上限8時間で試算します。不規則勤務は勤務先または雇用労働部1350で確認してください。{% else %}한국 근로기준 간편 추정입니다. 4주 평균 주 소정근로시간 15시간 이상을 기준으로 하며, 주휴시간은 주 소정근로시간÷통상근로자 주 소정근로일수(보통 5일), 최대 8시간으로 계산합니다. 불규칙 근무는 사업장이나 고용노동부 1350에서 확인하세요.{% endif %}</p>
         </div>
       {% when 'tip-calculator' %}
         <div class="tool-ui tip-ui">

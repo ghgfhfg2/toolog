@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-17 21:00 KST
+- Tool: `weekly-holiday-pay-calculator`
+- Selection reason: recent quality runs covered other tools; this March-era labor calculator had no quality pass, used a worker's own workdays as an ambiguous divisor, silently clamped invalid/fractional/out-of-range inputs, prefilled a result instead of showing an empty state, and still used a 2025 minimum-wage example.
+- Scope: improved only the existing multilingual weekly holiday pay tool, home metadata, layout, styles, and script with the comparable full-time workday basis, 4-week average 15-hour wording, attendance/full-7-day checks, strict field-specific validation, true blank/error/warning/success states, 2026 minimum-wage example, example/clear/copy feedback, accessible descriptions/live status, one-column mobile inputs/actions, expanded FAQ/search-intent copy, official legal references, and localized related links. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, localized page/thumbnail checks, mobile CSS rules, and 10 targeted normal/15-hour/cap/absence/full-week/fractional/oversized cases passed. The 15-hour/attendance rule, standard `(weekly hours ÷ 40) × 8` example, and 2026 KRW 10,320 minimum wage were cross-checked against current MOEL and National Law Information Center guidance. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-16 21:00 KST
 - Tool: `discount-calculator`
 - Selection reason: recent quality runs covered other tools; this older shopping calculator had not received a quality pass since its March launch, silently clamped negative and fractional inputs, prefilled a result instead of showing an empty state, allowed copying invalid results, diluted the effective item discount with shipping, and did not clearly state whether coupons applied per item or per order.

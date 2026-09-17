@@ -527,6 +527,23 @@ a:hover { color: #fff; text-decoration: none; }
 .pct-grid { grid-template-columns: 1fr 1fr; }
 .pct-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .pct-ui .pct-grid > div { display: grid; gap: .4rem; min-width: 0; }
+.whpay-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.whpay-grid > div { display: grid; gap: .4rem; min-width: 0; }
+.whpay-grid small { color: var(--muted); line-height: 1.45; }
+.whpay-checks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.whpay-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.whpay-ui .tool-check {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: .55rem .65rem;
+  background: #1f2937;
+}
+.whpay-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.whpay-ui #whp-help[data-state="error"] { color: #fca5a5; }
+.whpay-ui #whp-help[data-state="warning"] { color: #fbbf24; }
+.whpay-ui #whp-help[data-state="success"] { color: #86efac; }
+.whpay-assumption { line-height: 1.55; }
 .pct-ui input[aria-invalid="true"] { border-color: #ef4444; }
 .pct-ui button:disabled { opacity: .55; cursor: not-allowed; }
 .pct-ui #pct-help[data-state="error"] { color: #fca5a5; }
@@ -2018,6 +2035,10 @@ a:hover { color: #fff; text-decoration: none; }
 @media (max-width: 780px) {
   .pct-ui .pct-grid,
   .pct-ui .pct-actions { grid-template-columns: 1fr; }
+  .whpay-grid,
+  .whpay-checks,
+  .whpay-actions { grid-template-columns: 1fr; }
+  .tool-stats.whpay-stats { grid-template-columns: 1fr 1fr; }
   .tool-stats.pct-stats { grid-template-columns: 1fr 1fr; }
   .wet-presets,
   .wet-grid,
