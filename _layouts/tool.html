@@ -3024,38 +3024,61 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="sal-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter annual gross salary to estimate take-home pay.{% elsif page.lang == 'ja' %}額面年収を入力すると、手取り見込みを計算します。{% else %}연봉(세전)을 입력하면 예상 실수령액을 계산합니다.{% endif %}</p>
         </div>
       {% when 'severance-pay-calculator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui sev-ui">
+          <div class="tool-row-grid sev-grid">
             <div>
-              <label for="sev-start">{% if page.lang == 'en' %}Start date{% elsif page.lang == 'ja' %}入社日{% else %}입사일{% endif %}</label>
-              <input id="sev-start" type="date" />
+              <label for="sev-start">{% if page.lang == 'en' %}Employment start date{% elsif page.lang == 'ja' %}入社日{% else %}입사일{% endif %}</label>
+              <input id="sev-start" type="date" aria-describedby="sev-input-help sev-status" />
             </div>
             <div>
-              <label for="sev-end">{% if page.lang == 'en' %}End date{% elsif page.lang == 'ja' %}退職日{% else %}퇴사일{% endif %}</label>
-              <input id="sev-end" type="date" />
-            </div>
-          </div>
-          <div class="tool-row-grid pct-grid">
-            <div>
-              <label for="sev-monthly">{% if page.lang == 'en' %}Recent monthly pay (gross){% elsif page.lang == 'ja' %}直近の月給（額面）{% else %}최근 월급(세전, 원){% endif %}</label>
-              <input id="sev-monthly" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 3200000{% elsif page.lang == 'ja' %}例: 3200000{% else %}예: 3200000{% endif %}" inputmode="numeric" />
-            </div>
-            <div>
-              <label for="sev-annual-bonus">{% if page.lang == 'en' %}Annual bonus (optional){% elsif page.lang == 'ja' %}年間賞与（任意）{% else %}연간 상여금(선택, 원){% endif %}</label>
-              <input id="sev-annual-bonus" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 6000000{% elsif page.lang == 'ja' %}例: 6000000{% else %}예: 6000000{% endif %}" inputmode="numeric" />
+              <label for="sev-end">{% if page.lang == 'en' %}Retirement date (day after last workday){% elsif page.lang == 'ja' %}退職日（最終勤務日の翌日）{% else %}퇴직일(마지막 근무일 다음 날){% endif %}</label>
+              <input id="sev-end" type="date" aria-describedby="sev-input-help sev-status" />
             </div>
           </div>
-          <div class="tool-row-grid pct-actions">
-            <button id="sev-copy" type="button">{% if page.lang == 'en' %}Copy results{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
-            <button id="sev-reset" type="button">{% if page.lang == 'en' %}Fill sample values{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시값 채우기{% endif %}</button>
+          <div class="tool-row-grid sev-grid">
+            <div>
+              <label for="sev-period-days">{% if page.lang == 'en' %}Calendar days in prior 3 months{% elsif page.lang == 'ja' %}退職前3か月の暦日数{% else %}퇴직 전 3개월 총일수{% endif %}</label>
+              <input id="sev-period-days" type="number" min="89" max="92" step="1" placeholder="91" inputmode="numeric" aria-describedby="sev-input-help sev-status" />
+            </div>
+            <div>
+              <label for="sev-three-month-wages">{% if page.lang == 'en' %}Gross wages paid for prior 3 months{% elsif page.lang == 'ja' %}退職前3か月の賃金総額（税込）{% else %}퇴직 전 3개월 임금총액(세전, 원){% endif %}</label>
+              <input id="sev-three-month-wages" type="number" min="1" max="1000000000000000" step="1" placeholder="{% if page.lang == 'en' %}e.g. 9600000{% elsif page.lang == 'ja' %}例: 9600000{% else %}예: 9600000{% endif %}" inputmode="numeric" aria-describedby="sev-input-help sev-status" />
+            </div>
           </div>
-          <div class="tool-stats">
+          <div class="tool-row-grid sev-grid">
+            <div>
+              <label for="sev-annual-bonus">{% if page.lang == 'en' %}Annual regular bonus (optional){% elsif page.lang == 'ja' %}年間定期賞与（任意）{% else %}연간 정기상여금(선택, 원){% endif %}</label>
+              <input id="sev-annual-bonus" type="number" min="0" max="1000000000000000" step="1" placeholder="0" inputmode="numeric" aria-describedby="sev-input-help sev-status" />
+            </div>
+            <div>
+              <label for="sev-annual-leave">{% if page.lang == 'en' %}Annual leave allowance used in average wage (optional){% elsif page.lang == 'ja' %}平均賃金に算入する年休手当（任意）{% else %}평균임금 반영 연차수당(선택, 원){% endif %}</label>
+              <input id="sev-annual-leave" type="number" min="0" max="1000000000000000" step="1" placeholder="0" inputmode="numeric" aria-describedby="sev-input-help sev-status" />
+            </div>
+          </div>
+          <div class="tool-row-grid sev-grid">
+            <div>
+              <label for="sev-ordinary-daily">{% if page.lang == 'en' %}Ordinary daily wage (optional comparison){% elsif page.lang == 'ja' %}1日通常賃金（任意・比較用）{% else %}1일 통상임금(선택·비교용, 원){% endif %}</label>
+              <input id="sev-ordinary-daily" type="number" min="0" max="1000000000000000" step="1" placeholder="0" inputmode="numeric" aria-describedby="sev-input-help sev-status" />
+            </div>
+            <div>
+              <label for="sev-weekly-hours">{% if page.lang == 'en' %}Average contracted hours per week{% elsif page.lang == 'ja' %}週平均所定労働時間{% else %}4주 평균 주 소정근로시간{% endif %}</label>
+              <input id="sev-weekly-hours" type="number" min="0" max="168" step="0.25" placeholder="40" inputmode="decimal" aria-describedby="sev-input-help sev-status" />
+            </div>
+          </div>
+          <p id="sev-input-help" class="tool-hint">{% if page.lang == 'en' %}Use the retirement date as the first day no longer employed. The 3-month total uses calendar days, not days worked; this simple mode supports the usual 89–92 days only.{% elsif page.lang == 'ja' %}退職日は在籍しない最初の日を入力します。3か月の総日数は勤務日数ではなく暦日数です。この簡易版は通常の89〜92日のみ対応します。{% else %}퇴직일은 재직하지 않는 첫날을 입력하세요. 3개월 총일수는 근무일수가 아닌 달력일수이며, 이 간편 계산은 일반적인 89~92일만 지원합니다.{% endif %}</p>
+          <div class="tool-row-grid sev-actions">
+            <button id="sev-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
+            <button id="sev-copy" type="button" disabled>{% if page.lang == 'en' %}Copy results{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="sev-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
+          </div>
+          <div class="tool-stats sev-stats" aria-label="{% if page.lang == 'en' %}Severance estimate summary{% elsif page.lang == 'ja' %}退職金試算の概要{% else %}퇴직금 계산 요약{% endif %}">
             <div><strong id="sev-service-days">-</strong><span>{% if page.lang == 'en' %}Service days{% elsif page.lang == 'ja' %}勤続日数{% else %}재직일수{% endif %}</span></div>
-            <div><strong id="sev-service-years">-</strong><span>{% if page.lang == 'en' %}Years of service{% elsif page.lang == 'ja' %}勤続年数{% else %}계속근로연수{% endif %}</span></div>
             <div><strong id="sev-daily-wage">-</strong><span>{% if page.lang == 'en' %}Estimated average daily wage{% elsif page.lang == 'ja' %}推定1日平均賃金{% else %}추정 1일 평균임금{% endif %}</span></div>
+            <div><strong id="sev-base-wage">-</strong><span>{% if page.lang == 'en' %}Daily wage used{% elsif page.lang == 'ja' %}計算に使う1日賃金{% else %}계산 적용 1일 임금{% endif %}</span></div>
             <div><strong id="sev-amount">-</strong><span>{% if page.lang == 'en' %}Estimated severance pay{% elsif page.lang == 'ja' %}退職金見込み{% else %}예상 퇴직금{% endif %}</span></div>
+            <div><strong id="sev-eligibility">-</strong><span>{% if page.lang == 'en' %}Basic eligibility check{% elsif page.lang == 'ja' %}基本支給要件{% else %}기본 지급요건{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="sev-help">{% if page.lang == 'en' %}Enter start date, end date, and monthly pay to estimate severance pay.{% elsif page.lang == 'ja' %}入社日・退職日・月給を入力すると、退職金見込みを計算します。{% else %}입사일·퇴사일·월급을 입력하면 예상 퇴직금을 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="sev-status" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter employment dates, prior 3-month wages, calendar days, and weekly hours.{% elsif page.lang == 'ja' %}入社日・退職日、退職前3か月の賃金と暦日数、週所定労働時間を入力してください。{% else %}입사일·퇴직일, 퇴직 전 3개월 임금·총일수와 주 소정근로시간을 입력하세요.{% endif %}</p>
         </div>
       {% when 'stock-average-calculator' %}
         <div class="tool-ui sa-ui">

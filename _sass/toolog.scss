@@ -2683,6 +2683,14 @@ a:hover { color: var(--primary-strong); }
 .dc-ui .tool-result[data-state="warning"] { border-color: #efc36a; }
 .dc-ui .tool-result[data-state="error"] { border-color: #e7a1a8; }
 
+/* Severance pay calculator */
+.sev-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.sev-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.sev-stats strong { overflow-wrap: anywhere; }
+.sev-ui .tool-result[data-state="success"] { border-color: #9fd8b0; }
+.sev-ui .tool-result[data-state="warning"] { border-color: #efc36a; }
+.sev-ui .tool-result[data-state="error"] { border-color: #e7a1a8; }
+
 /* Footer */
 .site-footer { padding: 0; border: 0; border-top: 1px solid var(--line); background: #fff; }
 .site-footer__inner { min-height: 170px; display: flex; align-items: center; justify-content: space-between; gap: 36px; }
@@ -2760,6 +2768,9 @@ a:hover { color: var(--primary-strong); }
   .dc-ui .pct-grid,
   .dc-ui .dc-actions { grid-template-columns: 1fr; }
   .dc-ui .dc-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sev-grid,
+  .sev-actions { grid-template-columns: 1fr; }
+  .tool-stats.sev-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .site-footer__inner { min-height: 190px; align-items: flex-start; flex-direction: column; justify-content: center; gap: 24px; }
   .footer-nav { flex-wrap: wrap; gap: 12px 20px; }
 }

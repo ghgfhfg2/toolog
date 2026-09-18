@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-18 21:00 KST
+- Tool: `severance-pay-calculator`
+- Selection reason: recent quality runs covered other calculators; this high-risk labor calculator had no quality pass since March, annualized one monthly wage instead of using the statutory prior-three-month wage period, counted the retirement date as service, checked only the one-year threshold, prefilled results, and lacked strict input/error states.
+- Scope: improved only the existing multilingual severance tool, home metadata, layout, styles, and script with the prior-three-month wage and calendar-day basis, 3/12 regular-bonus and leave-allowance additions, optional ordinary-wage comparison, retirement-date semantics, one-year and 15-hour basic checks, strict field validation, blank/error/warning/success states, example/clear/copy feedback, accessible descriptions/live status, one-column mobile inputs/actions, formulas, limitations, FAQ, official guidance, and localized related links. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, localized related-link checks, mobile CSS rules, and targeted sample/ordinary-wage-floor/one-year/15-hour/date/period/fraction/range cases passed. The 3-month calendar-day basis, 3/12 additions, ordinary-wage floor, formula, and basic eligibility thresholds were cross-checked against current Ministry of Employment and Labor and National Law Information Center guidance. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-17 21:00 KST
 - Tool: `weekly-holiday-pay-calculator`
 - Selection reason: recent quality runs covered other tools; this March-era labor calculator had no quality pass, used a worker's own workdays as an ambiguous divisor, silently clamped invalid/fractional/out-of-range inputs, prefilled a result instead of showing an empty state, and still used a 2025 minimum-wage example.

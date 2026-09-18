@@ -1914,8 +1914,8 @@
 
 - id: severance-pay-calculator
   title: 퇴직금 계산기
-  title_en: Severance Pay Calculator
-  title_ja: 退職金計算機
+  title_en: Korean Severance Pay Calculator
+  title_ja: 韓国の退職金計算機
   category: calculator
   category_label: 금융/비즈니스
   category_label_en: Finance/Business
@@ -1923,13 +1923,15 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 입사일·퇴사일·월급·상여금 입력으로 재직일수와 예상 퇴직금, 1년 요건 여부를 빠르게 확인해요.
-  description_en: Estimate service days, average daily wage, and expected severance pay from employment dates, monthly salary, and bonus.
-  description_ja: 入社日・退社日・月給・賞与から、勤続日数・平均賃金・退職金見込みを素早く試算します。
+  description: 입사일·퇴직일, 퇴직 전 3개월 임금총액·달력일수, 상여금·연차수당·통상임금으로 예상 퇴직금과 1년·주 15시간 기본요건을 확인해요.
+  description_en: Estimate Korean severance from service dates, prior 3-month wages and calendar days, bonus, leave allowance, ordinary wage, and weekly hours.
+  description_ja: 入社日・退職日、退職前3か月の賃金と暦日数、賞与・年休手当・通常賃金から韓国の退職金と基本要件を確認します。
   url: /tools/severance-pay-calculator/
   url_en: /en/tools/severance-pay-calculator/
   url_ja: /ja/tools/severance-pay-calculator/
   thumbnail: /assets/thumbs/severance-pay-calculator.svg
+  tool_type: calculator
+  topic_cluster: labor
 
 - id: stock-average-calculator
   title: 물타기 계산기

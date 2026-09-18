@@ -6239,84 +6239,128 @@
   if (slug === 'severance-pay-calculator') {
     const start = document.getElementById('sev-start');
     const end = document.getElementById('sev-end');
-    const monthly = document.getElementById('sev-monthly');
+    const periodDays = document.getElementById('sev-period-days');
+    const threeMonthWages = document.getElementById('sev-three-month-wages');
     const annualBonus = document.getElementById('sev-annual-bonus');
+    const annualLeave = document.getElementById('sev-annual-leave');
+    const ordinaryDaily = document.getElementById('sev-ordinary-daily');
+    const weeklyHours = document.getElementById('sev-weekly-hours');
     const serviceDays = document.getElementById('sev-service-days');
-    const serviceYears = document.getElementById('sev-service-years');
     const dailyWage = document.getElementById('sev-daily-wage');
+    const baseWage = document.getElementById('sev-base-wage');
     const amount = document.getElementById('sev-amount');
-    const help = document.getElementById('sev-help');
+    const eligibility = document.getElementById('sev-eligibility');
+    const status = document.getElementById('sev-status');
     const copyBtn = document.getElementById('sev-copy');
-    const resetBtn = document.getElementById('sev-reset');
+    const sampleBtn = document.getElementById('sev-sample');
+    const clearBtn = document.getElementById('sev-clear');
 
-    if (!start || !end || !monthly || !annualBonus || !serviceDays || !serviceYears || !dailyWage || !amount || !help) return;
+    if (!start || !end || !periodDays || !threeMonthWages || !annualBonus || !annualLeave || !ordinaryDaily || !weeklyHours || !serviceDays || !dailyWage || !baseWage || !amount || !eligibility || !status || !copyBtn) return;
 
     const sevI18n = {
       ko: {
         currency: '원',
-        chooseDates: '입사일과 퇴사일을 선택하세요.',
-        invalidRange: '퇴사일은 입사일보다 빠를 수 없습니다.',
-        needMonthly: '최근 월급(세전)을 입력하세요.',
+        empty: '입사일·퇴직일, 퇴직 전 3개월 임금·총일수와 주 소정근로시간을 입력하세요.',
+        invalidDate: '입사일과 퇴직일을 올바르게 선택해 주세요.',
+        invalidRange: '퇴직일은 입사일보다 늦어야 합니다. 퇴직일은 마지막 근무일의 다음 날입니다.',
+        serviceTooLong: '재직기간은 100년 이하로 입력해 주세요.',
+        invalidPeriod: '퇴직 전 3개월 총일수는 89~92 사이의 정수로 입력해 주세요.',
+        invalidWages: '3개월 임금총액은 1원 이상 1,000조 원 이하의 정수로 입력해 주세요.',
+        invalidOptional: (label) => `${label}은(는) 0원 이상 1,000조 원 이하의 정수로 입력해 주세요.`,
+        invalidHours: '4주 평균 주 소정근로시간은 0~168시간 범위로 입력해 주세요.',
+        overflow: '계산 결과가 너무 큽니다. 임금 입력값을 확인해 주세요.',
         dayUnit: '일',
-        yearUnit: '년',
-        eligibleHelp: '법정 평균임금의 간편 추정 방식(연 환산)으로 계산한 참고값입니다. 실제 퇴직금은 최근 3개월 임금·상여 반영 방식에 따라 달라질 수 있습니다.',
-        ineligibleHelp: '재직기간이 1년 미만으로 보입니다. 계산은 가능하지만 법적 지급 요건 충족 여부를 반드시 확인하세요.',
-        inputCheck: '입력 확인',
+        eligible: '기본요건 충족',
+        ineligibleYear: '1년 미만',
+        ineligibleHours: '주 15시간 미만',
+        ineligibleBoth: '기간·시간 미달',
+        averageBase: '평균임금 적용',
+        ordinaryBase: '통상임금 적용',
+        eligibleHelp: (base) => `기본 지급요건을 충족하는 것으로 보입니다. ${base}을 기준으로 계산한 세전 참고값이며 제외기간·중간정산·임금성 판단은 반영하지 않습니다.`,
+        ineligibleHelp: (reason) => `${reason}으로 기본 지급요건을 충족하지 않는 것으로 보입니다. 금액은 비교용으로만 표시합니다.`,
         copyResult: '퇴직금 계산 결과',
         copyLabels: {
           days: '재직일수',
-          years: '계속근로연수',
-          daily: '1일 평균임금',
-          amount: '예상 퇴직금'
+          daily: '추정 1일 평균임금',
+          base: '계산 적용 1일 임금',
+          amount: '예상 퇴직금',
+          eligibility: '기본 지급요건'
         },
-        copied: '복사됨',
-        copyDefault: '결과 복사'
+        copied: '계산 결과를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력값을 초기화했습니다.',
+        labels: { bonus: '연간 정기상여금', leave: '연차수당', ordinary: '1일 통상임금' }
       },
       en: {
-        currency: '',
-        chooseDates: 'Select start date and end date.',
-        invalidRange: 'End date cannot be earlier than start date.',
-        needMonthly: 'Enter recent monthly gross salary.',
+        currency: ' KRW',
+        empty: 'Enter employment dates, prior 3-month wages, calendar days, and weekly hours.',
+        invalidDate: 'Select valid employment start and retirement dates.',
+        invalidRange: 'Retirement date must be after the start date. Use the day after the final workday.',
+        serviceTooLong: 'Enter a service period of 100 years or less.',
+        invalidPeriod: 'Enter a whole-number 3-month calendar period from 89 to 92 days.',
+        invalidWages: 'Enter prior 3-month wages as a whole KRW amount from 1 to 1 quadrillion.',
+        invalidOptional: (label) => `Enter ${label} as a whole KRW amount from 0 to 1 quadrillion.`,
+        invalidHours: 'Enter average contracted weekly hours from 0 to 168.',
+        overflow: 'The result is too large. Check the wage inputs.',
         dayUnit: ' days',
-        yearUnit: ' years',
-        eligibleHelp: 'This is a simplified estimate based on annualized statutory average wage. Actual severance may differ depending on how wages and bonuses from the last 3 months are reflected.',
-        ineligibleHelp: 'Your service period appears to be under 1 year. Calculation is possible, but please verify legal eligibility requirements.',
-        inputCheck: 'Check inputs',
+        eligible: 'Basic check passed',
+        ineligibleYear: 'Under 1 year',
+        ineligibleHours: 'Under 15 h/week',
+        ineligibleBoth: 'Period and hours short',
+        averageBase: 'average daily wage',
+        ordinaryBase: 'ordinary daily wage',
+        eligibleHelp: (base) => `The basic eligibility check passes. This gross estimate uses the ${base}; excluded periods, interim settlements, and wage classification are not reflected.`,
+        ineligibleHelp: (reason) => `The basic eligibility check does not pass (${reason}). The amount is shown only for comparison.`,
         copyResult: 'Severance estimate',
         copyLabels: {
           days: 'Service days',
-          years: 'Years of service',
           daily: 'Average daily wage',
-          amount: 'Estimated severance'
+          base: 'Daily wage used',
+          amount: 'Estimated severance',
+          eligibility: 'Basic eligibility'
         },
-        copied: 'Copied',
-        copyDefault: 'Copy results'
+        copied: 'Copied the calculation result.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared all inputs.',
+        labels: { bonus: 'annual regular bonus', leave: 'annual leave allowance', ordinary: 'ordinary daily wage' }
       },
       ja: {
         currency: 'ウォン',
-        chooseDates: '入社日と退社日を選択してください。',
-        invalidRange: '退社日は入社日より前にできません。',
-        needMonthly: '直近の月給（額面）を入力してください。',
+        empty: '入社日・退職日、退職前3か月の賃金と暦日数、週所定労働時間を入力してください。',
+        invalidDate: '入社日と退職日を正しく選択してください。',
+        invalidRange: '退職日は入社日より後にしてください。最終勤務日の翌日を入力します。',
+        serviceTooLong: '勤続期間は100年以内で入力してください。',
+        invalidPeriod: '退職前3か月の暦日数は89〜92の整数で入力してください。',
+        invalidWages: '3か月の賃金総額は1以上1,000兆ウォン以下の整数で入力してください。',
+        invalidOptional: (label) => `${label}は0以上1,000兆ウォン以下の整数で入力してください。`,
+        invalidHours: '週平均所定労働時間は0〜168時間で入力してください。',
+        overflow: '計算結果が大きすぎます。賃金入力を確認してください。',
         dayUnit: '日',
-        yearUnit: '年',
-        eligibleHelp: '法定の平均賃金を年換算した簡易推定です。実際の退職金は直近3か月の賃金・賞与の反映方法により異なる場合があります。',
-        ineligibleHelp: '勤続期間が1年未満の可能性があります。計算は可能ですが、法的な支給要件を必ず確認してください。',
-        inputCheck: '入力を確認',
+        eligible: '基本要件を満たす',
+        ineligibleYear: '1年未満',
+        ineligibleHours: '週15時間未満',
+        ineligibleBoth: '期間・時間不足',
+        averageBase: '平均賃金',
+        ordinaryBase: '通常賃金',
+        eligibleHelp: (base) => `基本支給要件を満たすと見込まれます。${base}を基準にした税引前の参考値で、除外期間・中間精算・賃金性判断は反映していません。`,
+        ineligibleHelp: (reason) => `${reason}のため基本支給要件を満たさないと見込まれます。金額は比較用です。`,
         copyResult: '退職金試算結果',
         copyLabels: {
           days: '勤続日数',
-          years: '勤続年数',
-          daily: '1日平均賃金',
-          amount: '退職金見込み'
+          daily: '推定1日平均賃金',
+          base: '計算に使う1日賃金',
+          amount: '退職金見込み',
+          eligibility: '基本支給要件'
         },
-        copied: 'コピー完了',
-        copyDefault: '結果をコピー'
+        copied: '計算結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力をクリアしました。',
+        labels: { bonus: '年間定期賞与', leave: '年休手当', ordinary: '1日通常賃金' }
       }
     };
     const sevText = sevI18n[pageLang] || sevI18n.ko;
     const fmtKRW = (v) => {
       const rounded = Math.round(v);
-      if (pageLang === 'en') return `${rounded.toLocaleString(numberLocale)} KRW`;
       return `${rounded.toLocaleString(numberLocale)}${sevText.currency}`;
     };
 
@@ -6334,6 +6378,7 @@
     const copyText = async (text) => {
       try {
         await navigator.clipboard.writeText(text);
+        return true;
       } catch (_) {
         const ta = document.createElement('textarea');
         ta.value = text;
@@ -6341,85 +6386,146 @@
         ta.style.opacity = '0';
         document.body.appendChild(ta);
         ta.select();
-        document.execCommand('copy');
+        let copied = false;
+        try { copied = document.execCommand('copy'); } catch (_) {}
         document.body.removeChild(ta);
+        return copied;
       }
     };
 
-    const setIdle = (msg) => {
+    const fields = [start, end, periodDays, threeMonthWages, annualBonus, annualLeave, ordinaryDaily, weeklyHours];
+    let current = null;
+    const setStatus = (message, state = '') => {
+      status.textContent = message;
+      status.dataset.state = state;
+    };
+    const resetResult = () => {
       serviceDays.textContent = '-';
-      serviceYears.textContent = '-';
       dailyWage.textContent = '-';
+      baseWage.textContent = '-';
       amount.textContent = '-';
-      help.textContent = msg;
+      eligibility.textContent = '-';
+      copyBtn.disabled = true;
+      current = null;
+    };
+    const fail = (field, message) => {
+      resetResult();
+      field?.setAttribute('aria-invalid', 'true');
+      setStatus(message, 'error');
+    };
+    const parseWholeMoney = (field, label, required = false) => {
+      const raw = field.value.trim();
+      if (!raw && !required) return 0;
+      const value = Number(raw);
+      if (!Number.isSafeInteger(value) || value < (required ? 1 : 0) || value > 1000000000000000) {
+        fail(field, required ? sevText.invalidWages : sevText.invalidOptional(label));
+        return null;
+      }
+      return value;
     };
 
     const render = () => {
+      fields.forEach((field) => field.setAttribute('aria-invalid', 'false'));
+      if (fields.every((field) => !field.value.trim())) {
+        resetResult();
+        setStatus(sevText.empty);
+        return;
+      }
       const s = toDate(start.value);
       const e = toDate(end.value);
-      const m = Math.max(0, Number(monthly.value || 0));
-      const b = Math.max(0, Number(annualBonus.value || 0));
-
       if (!s || !e) {
-        setIdle(sevText.chooseDates);
+        fail(!s ? start : end, sevText.invalidDate);
         return;
       }
-      if (e < s) {
-        setIdle(sevText.invalidRange);
+      const days = dayDiff(s, e);
+      if (days <= 0) {
+        fail(end, sevText.invalidRange);
         return;
       }
-      if (!(m > 0)) {
-        setIdle(sevText.needMonthly);
+      if (days > 36525) {
+        fail(end, sevText.serviceTooLong);
+        return;
+      }
+      const period = Number(periodDays.value);
+      if (!Number.isInteger(period) || period < 89 || period > 92) {
+        fail(periodDays, sevText.invalidPeriod);
+        return;
+      }
+      const wages = parseWholeMoney(threeMonthWages, '', true);
+      if (wages === null) return;
+      const bonus = parseWholeMoney(annualBonus, sevText.labels.bonus);
+      if (bonus === null) return;
+      const leave = parseWholeMoney(annualLeave, sevText.labels.leave);
+      if (leave === null) return;
+      const ordinary = parseWholeMoney(ordinaryDaily, sevText.labels.ordinary);
+      if (ordinary === null) return;
+      const hoursRaw = weeklyHours.value.trim();
+      const hours = Number(hoursRaw);
+      if (!hoursRaw || !Number.isFinite(hours) || hours < 0 || hours > 168) {
+        fail(weeklyHours, sevText.invalidHours);
         return;
       }
 
-      const days = dayDiff(s, e) + 1;
-      const years = days / 365;
-      const annualizedWage = (m * 12) + b;
-      const avgDailyWage = annualizedWage / 365;
-      const severance = avgDailyWage * 30 * years;
-      const isEligible = days >= 365;
+      const avgDailyWage = (wages + ((bonus + leave) * 3 / 12)) / period;
+      const dailyBase = Math.max(avgDailyWage, ordinary);
+      const severance = dailyBase * 30 * (days / 365);
+      if (![avgDailyWage, dailyBase, severance].every(Number.isFinite) || severance > Number.MAX_SAFE_INTEGER) {
+        fail(threeMonthWages, sevText.overflow);
+        return;
+      }
+      const meetsYear = days >= 365;
+      const meetsHours = hours >= 15;
+      const isEligible = meetsYear && meetsHours;
+      const eligibilityText = isEligible
+        ? sevText.eligible
+        : (!meetsYear && !meetsHours ? sevText.ineligibleBoth : (!meetsYear ? sevText.ineligibleYear : sevText.ineligibleHours));
+      const baseLabel = ordinary > avgDailyWage ? sevText.ordinaryBase : sevText.averageBase;
 
       serviceDays.textContent = `${days.toLocaleString(numberLocale)}${sevText.dayUnit}`;
-      serviceYears.textContent = `${years.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}${sevText.yearUnit}`;
       dailyWage.textContent = fmtKRW(avgDailyWage);
+      baseWage.textContent = fmtKRW(dailyBase);
       amount.textContent = fmtKRW(severance);
-      help.textContent = isEligible ? sevText.eligibleHelp : sevText.ineligibleHelp;
+      eligibility.textContent = eligibilityText;
+      current = {
+        days: serviceDays.textContent,
+        daily: dailyWage.textContent,
+        base: `${baseWage.textContent} (${baseLabel})`,
+        amount: amount.textContent,
+        eligibility: eligibilityText
+      };
+      copyBtn.disabled = false;
+      setStatus(isEligible ? sevText.eligibleHelp(baseLabel) : sevText.ineligibleHelp(eligibilityText), isEligible ? 'success' : 'warning');
     };
 
-    const toISO = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
-    const today = new Date();
-    const sampleStart = new Date(today);
-    sampleStart.setFullYear(sampleStart.getFullYear() - 3);
+    fields.forEach((field) => field.addEventListener('input', render));
 
-    if (!start.value) start.value = toISO(sampleStart);
-    if (!end.value) end.value = toISO(today);
-
-    [start, end, monthly, annualBonus].forEach((el) => el?.addEventListener('input', render));
-
-    resetBtn?.addEventListener('click', () => {
-      start.value = toISO(sampleStart);
-      end.value = toISO(today);
-      monthly.value = 3200000;
-      annualBonus.value = 0;
+    sampleBtn?.addEventListener('click', () => {
+      start.value = '2023-09-19';
+      end.value = '2026-09-19';
+      periodDays.value = '92';
+      threeMonthWages.value = '9600000';
+      annualBonus.value = '4000000';
+      annualLeave.value = '0';
+      ordinaryDaily.value = '110000';
+      weeklyHours.value = '40';
       render();
+      start.focus();
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      fields.forEach((field) => { field.value = ''; });
+      render();
+      setStatus(sevText.cleared);
+      start.focus();
     });
 
     copyBtn?.addEventListener('click', async () => {
-      if (amount.textContent === '-') {
-        const old = copyBtn.textContent;
-        copyBtn.textContent = sevText.inputCheck;
-        setTimeout(() => { copyBtn.textContent = old || sevText.copyDefault; }, 900);
-        return;
-      }
-      const text = `${sevText.copyResult} | ${sevText.copyLabels.days} ${serviceDays.textContent} | ${sevText.copyLabels.years} ${serviceYears.textContent} | ${sevText.copyLabels.daily} ${dailyWage.textContent} | ${sevText.copyLabels.amount} ${amount.textContent}`;
-      await copyText(text);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = sevText.copied;
-      setTimeout(() => { copyBtn.textContent = old || sevText.copyDefault; }, 900);
+      if (!current) return;
+      const text = `${sevText.copyResult} | ${sevText.copyLabels.days} ${current.days} | ${sevText.copyLabels.daily} ${current.daily} | ${sevText.copyLabels.base} ${current.base} | ${sevText.copyLabels.amount} ${current.amount} | ${sevText.copyLabels.eligibility} ${current.eligibility}`;
+      const copied = await copyText(text);
+      setStatus(copied ? sevText.copied : sevText.copyFail, copied ? 'success' : 'error');
     });
 
-    if (!monthly.value) monthly.value = 3200000;
     render();
   }
 
