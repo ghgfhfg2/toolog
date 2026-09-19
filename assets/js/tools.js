@@ -17090,40 +17090,63 @@
     const rate = document.getElementById('ec-rate');
     const dailyKwh = document.getElementById('ec-daily-kwh');
     const monthlyKwh = document.getElementById('ec-monthly-kwh');
+    const dailyCost = document.getElementById('ec-daily-cost');
     const monthlyCost = document.getElementById('ec-monthly-cost');
     const yearlyCost = document.getElementById('ec-yearly-cost');
     const help = document.getElementById('ec-help');
     const copyBtn = document.getElementById('ec-copy');
-    const resetBtn = document.getElementById('ec-reset');
+    const sampleBtn = document.getElementById('ec-sample');
+    const clearBtn = document.getElementById('ec-clear');
 
-    if (!power || !hours || !days || !rate || !dailyKwh || !monthlyKwh || !monthlyCost || !yearlyCost || !help) return;
+    if (!power || !hours || !days || !rate || !dailyKwh || !monthlyKwh || !dailyCost || !monthlyCost || !yearlyCost || !help || !copyBtn) return;
 
     const i18n = {
       ko: {
         currency: '원',
         idle: '소비전력·사용시간·사용일수·전기단가를 입력하면 예상 전기요금을 계산합니다.',
-        needInput: '소비전력, 사용시간, 사용일수, 전기단가를 모두 입력하세요.',
+        needInput: '네 입력값을 모두 채워 주세요.',
+        invalid: '0보다 큰 숫자만 입력해 주세요.',
+        hoursRange: '하루 사용시간은 0.1~24시간으로 입력해 주세요.',
+        daysRange: '한 달 사용일수는 1~31일 사이의 정수로 입력해 주세요.',
+        powerRange: '소비전력은 0.1~1,000,000W로 입력해 주세요.',
+        rateRange: '전기단가는 0.01~1,000,000원으로 입력해 주세요.',
         summary: (m, y) => `예상 월 요금은 ${m}, 연간으로는 약 ${y}입니다. 실제 청구요금은 누진제/기본요금 등에 따라 달라질 수 있습니다.`,
-        copy: (d, m, mc, yc) => `전기요금 계산 결과 | 하루 사용량 ${d} | 월 사용량 ${m} | 예상 월 요금 ${mc} | 예상 연 요금 ${yc}`,
-        copied: '복사됨',
+        copy: (d, m, dc, mc, yc) => `전기요금 계산 결과 | 하루 사용량 ${d} | 월 사용량 ${m} | 예상 하루 요금 ${dc} | 예상 월 요금 ${mc} | 예상 연 요금 ${yc}`,
+        copied: '계산 결과를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력값을 초기화했습니다.',
         copyDefault: '결과 복사'
       },
       en: {
         currency: ' KRW',
         idle: 'Enter power, hours, days, and price per kWh to estimate electricity cost.',
-        needInput: 'Enter wattage, hours, days, and price per kWh.',
+        needInput: 'Complete all four inputs.',
+        invalid: 'Enter numbers greater than zero.',
+        hoursRange: 'Hours per day must be from 0.1 to 24.',
+        daysRange: 'Days per month must be a whole number from 1 to 31.',
+        powerRange: 'Power must be from 0.1 to 1,000,000 W.',
+        rateRange: 'Price per kWh must be from 0.01 to 1,000,000.',
         summary: (m, y) => `Estimated monthly cost is ${m}, and yearly cost is about ${y}. Actual bills can differ because of taxes, base fees, or tiered pricing.`,
-        copy: (d, m, mc, yc) => `Electricity cost result | Daily usage ${d} | Monthly usage ${m} | Monthly cost ${mc} | Yearly cost ${yc}`,
-        copied: 'Copied',
+        copy: (d, m, dc, mc, yc) => `Electricity cost result | Daily usage ${d} | Monthly usage ${m} | Daily cost ${dc} | Monthly cost ${mc} | Yearly cost ${yc}`,
+        copied: 'Copied the calculation result.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared all inputs.',
         copyDefault: 'Copy result'
       },
       ja: {
         currency: 'ウォン',
         idle: '消費電力・使用時間・使用日数・単価を入力すると電気料金を試算します。',
-        needInput: '消費電力、使用時間、使用日数、電気単価を入力してください。',
+        needInput: '4つの入力欄をすべて入力してください。',
+        invalid: '0より大きい数値を入力してください。',
+        hoursRange: '1日の使用時間は0.1〜24時間で入力してください。',
+        daysRange: '月の使用日数は1〜31日の整数で入力してください。',
+        powerRange: '消費電力は0.1〜1,000,000Wで入力してください。',
+        rateRange: '電気単価は0.01〜1,000,000で入力してください。',
         summary: (m, y) => `予想月額料金は ${m}、年間では約 ${y} です。実際の請求額は基本料金や段階料金などで変わる場合があります。`,
-        copy: (d, m, mc, yc) => `電気料金計算結果 | 1日の使用量 ${d} | 月間使用量 ${m} | 予想月額料金 ${mc} | 予想年額料金 ${yc}`,
-        copied: 'コピー完了',
+        copy: (d, m, dc, mc, yc) => `電気料金計算結果 | 1日の使用量 ${d} | 月間使用量 ${m} | 1日の料金 ${dc} | 予想月額料金 ${mc} | 予想年額料金 ${yc}`,
+        copied: '計算結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力をクリアしました。',
         copyDefault: '結果をコピー'
       }
     };
@@ -17137,67 +17160,90 @@
     const fmtKwh = (v) => `${Number(v || 0).toLocaleString(numberLocale, { maximumFractionDigits: 2 })} kWh`;
 
     const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
-      catch (_) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch (_) {
         const ta = document.createElement('textarea');
         ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        document.body.appendChild(ta); ta.select();
+        try { return document.execCommand('copy'); } catch (_) { return false; }
+        finally { document.body.removeChild(ta); }
       }
     };
 
-    const setIdle = (msg) => {
+    const setIdle = (msg, state = '') => {
       dailyKwh.textContent = '-';
       monthlyKwh.textContent = '-';
+      dailyCost.textContent = '-';
       monthlyCost.textContent = '-';
       yearlyCost.textContent = '-';
       help.textContent = msg;
+      help.dataset.state = state;
+      copyBtn.disabled = true;
     };
 
     const render = () => {
-      const p = Math.max(0, Number(power.value || 0));
-      const h = Math.max(0, Number(hours.value || 0));
-      const d = Math.max(0, Number(days.value || 0));
-      const r = Math.max(0, Number(rate.value || 0));
-
-      if (!(p > 0) || !(h > 0) || !(d > 0) || !(r > 0)) {
+      const inputs = [power, hours, days, rate];
+      inputs.forEach((el) => el.setAttribute('aria-invalid', 'false'));
+      if (inputs.some((el) => el.value.trim() === '')) {
         setIdle(t.needInput);
         return;
       }
+      const [p, h, d, r] = inputs.map((el) => Number(el.value));
+      if (![p, h, d, r].every((v) => Number.isFinite(v) && v > 0)) {
+        inputs.forEach((el) => {
+          const v = Number(el.value);
+          if (!Number.isFinite(v) || v <= 0) el.setAttribute('aria-invalid', 'true');
+        });
+        setIdle(t.invalid, 'error');
+        return;
+      }
+      if (p < 0.1 || p > 1000000) { power.setAttribute('aria-invalid', 'true'); setIdle(t.powerRange, 'error'); return; }
+      if (h < 0.1 || h > 24) { hours.setAttribute('aria-invalid', 'true'); setIdle(t.hoursRange, 'error'); return; }
+      if (!Number.isInteger(d) || d < 1 || d > 31) { days.setAttribute('aria-invalid', 'true'); setIdle(t.daysRange, 'error'); return; }
+      if (r < 0.01 || r > 1000000) { rate.setAttribute('aria-invalid', 'true'); setIdle(t.rateRange, 'error'); return; }
 
       const daily = (p / 1000) * h;
       const monthly = daily * d;
+      const dailyFee = daily * r;
       const monthlyFee = monthly * r;
       const yearlyFee = monthlyFee * 12;
 
       dailyKwh.textContent = fmtKwh(daily);
       monthlyKwh.textContent = fmtKwh(monthly);
+      dailyCost.textContent = fmtCurrency(dailyFee);
       monthlyCost.textContent = fmtCurrency(monthlyFee);
       yearlyCost.textContent = fmtCurrency(yearlyFee);
       help.textContent = t.summary(fmtCurrency(monthlyFee), fmtCurrency(yearlyFee));
+      help.dataset.state = 'success';
+      copyBtn.disabled = false;
     };
 
     [power, hours, days, rate].forEach((el) => el?.addEventListener('input', render));
 
     copyBtn?.addEventListener('click', async () => {
       if (monthlyCost.textContent === '-') return;
-      await copyText(t.copy(dailyKwh.textContent, monthlyKwh.textContent, monthlyCost.textContent, yearlyCost.textContent));
-      const old = copyBtn.textContent;
-      copyBtn.textContent = t.copied;
-      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+      const copied = await copyText(t.copy(dailyKwh.textContent, monthlyKwh.textContent, dailyCost.textContent, monthlyCost.textContent, yearlyCost.textContent));
+      help.textContent = copied ? t.copied : t.copyFail;
+      help.dataset.state = copied ? 'success' : 'error';
     });
 
-    resetBtn?.addEventListener('click', () => {
+    sampleBtn?.addEventListener('click', () => {
       power.value = 1500;
       hours.value = 4;
       days.value = 30;
       rate.value = 150;
       render();
+      power.focus();
     });
 
-    if (!power.value) power.value = 1500;
-    if (!hours.value) hours.value = 4;
-    if (!days.value) days.value = 30;
-    if (!rate.value) rate.value = 150;
+    clearBtn?.addEventListener('click', () => {
+      [power, hours, days, rate].forEach((el) => { el.value = ''; });
+      setIdle(t.cleared);
+      power.focus();
+    });
+
     render();
   }
 

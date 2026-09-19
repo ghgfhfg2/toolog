@@ -2160,11 +2160,15 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 소비전력·사용시간·사용일수·전기단가로 하루/월/연 예상 전기요금을 계산해요.
-  description_en: Estimate daily, monthly, and yearly electricity cost from wattage, usage hours, days, and price per kWh.
-  description_ja: 消費電力・使用時間・使用日数・電気単価から、1日/1か月/1年の電気料金を見積もります。
+  description: 가전 소비전력(W), 하루 사용시간, 월 사용일수, 1kWh 단가로 사용량과 하루·월·연 예상 전기요금을 계산해요.
+  description_en: Estimate appliance kWh usage and daily, monthly, and yearly electricity cost from wattage, hours, usage days, and price per kWh.
+  description_ja: 家電の消費電力(W)、1日の使用時間、月の使用日数、1kWh単価から使用量と1日・月・年の電気料金を見積もります。
   url: /tools/electricity-cost-calculator/
   url_en: /en/tools/electricity-cost-calculator/
   url_ja: /ja/tools/electricity-cost-calculator/
   thumbnail: /assets/thumbs/electricity-cost-calculator.svg
+  thumbnail_en: /assets/thumbs/en/electricity-cost-calculator.svg
+  thumbnail_ja: /assets/thumbs/ja/electricity-cost-calculator.svg
   published_at: 2026-03-27
+  tool_type: calculator
+  topic_cluster: household

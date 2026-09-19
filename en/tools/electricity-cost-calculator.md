@@ -1,6 +1,6 @@
 ---
 title: Electricity Cost Calculator | Estimate power usage and monthly energy cost
-description: Use the electricity cost calculator to estimate daily, monthly, and yearly energy cost from appliance wattage, usage hours, days, and price per kWh.
+description: Estimate appliance kWh usage and daily, monthly, and yearly electricity cost from wattage, usage hours, days per month, and price per kWh.
 category: calculator
 category_label: Lifestyle/Fees
 thumbnail: /assets/thumbs/en/electricity-cost-calculator.svg
@@ -30,6 +30,11 @@ This tool helps you estimate cost using just four inputs:
 - Hours used per day
 - Days used per month
 - Electricity price per kWh
+
+## Why this tool was selected for today's quality pass
+Recent quality passes focused on severance pay, weekly holiday pay, discount, TDEE, percent, brokerage fee, and stock average calculators, so this pass avoids repeating them. This calculator previously accepted zero, negative, more than 24 hours per day, more than 31 days per month, and fractional usage days without a clear error. Its prefilled result also hid the empty state. Because an energy estimate can be mistaken for a real bill, input validation and calculation assumptions were the priority.
+
+Accepted ranges are 0.1–1,000,000 W, 0.1–24 hours per day, 1–31 whole usage days, and 0.01–1,000,000 per kWh. Out-of-range entries now show a specific error instead of a misleading result.
 
 ## How it works
 The calculation is straightforward:
@@ -66,6 +71,8 @@ It also shows **daily cost, monthly cost, and yearly cost**, which makes it usef
 ## FAQ
 ### Why is the estimate different from my actual bill?
 Real electricity bills often include more than just energy usage, such as base fees, taxes, and progressive pricing. Use this tool as a quick estimate for a single appliance or usage pattern.
+
+The yearly estimate assumes the entered monthly pattern repeats for 12 months. Calculate seasonal usage separately when operating hours change during the year.
 
 ### What is the difference between W and kW?
 1000W equals 1kW. If your appliance label says 800W or 1500W, divide by 1000 to convert it into kW.

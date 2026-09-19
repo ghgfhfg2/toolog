@@ -1522,6 +1522,12 @@ a:hover { color: #fff; text-decoration: none; }
 .fe-limits {
   font-size: .9rem;
 }
+.ec-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.ec-ui #ec-help[data-state="error"] { color: #fca5a5; }
+.ec-ui #ec-help[data-state="success"] { color: #86efac; }
+.ec-note { font-size: .9rem; }
+.tool-stats.ec-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.tool-stats.ec-stats strong { overflow-wrap: anywhere; }
 .tool-stats { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: .5rem; }
 .tool-stats > div { border: 1px solid var(--line); border-radius: 10px; padding: .65rem; background: #1f2937; }
 .tool-stats strong { display:block; font-size: 1.05rem; }
@@ -2148,6 +2154,9 @@ a:hover { color: #fff; text-decoration: none; }
   .pec-ui .pct-grid { grid-template-columns: 1fr; }
   .fe-ui .fe-grid,
   .fe-ui .fe-actions { grid-template-columns: 1fr; }
+  .ec-ui .ec-grid,
+  .ec-ui .ec-actions { grid-template-columns: 1fr; }
+  .tool-stats.ec-stats { grid-template-columns: 1fr 1fr; }
   .fc-filter-grid { grid-template-columns: 1fr; }
   .font-change-controls { grid-template-columns: 1fr; }
   .font-change-groups { grid-template-columns: 1fr 1fr; }
