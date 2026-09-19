@@ -1,6 +1,6 @@
 ---
-title: Electricity Cost Calculator | Estimate power usage and monthly energy cost
-description: Estimate appliance kWh usage and daily, monthly, and yearly electricity cost from wattage, usage hours, days per month, and price per kWh.
+title: Electricity Cost Calculator | Estimate Appliance kWh and Energy Cost
+description: Calculate appliance kWh usage and estimated daily, monthly, and yearly electricity cost from wattage, hours per day, days per month, and price per kWh.
 category: calculator
 category_label: Lifestyle/Fees
 thumbnail: /assets/thumbs/en/electricity-cost-calculator.svg
@@ -31,10 +31,19 @@ This tool helps you estimate cost using just four inputs:
 - Days used per month
 - Electricity price per kWh
 
-## Why this tool was selected for today's quality pass
-Recent quality passes focused on severance pay, weekly holiday pay, discount, TDEE, percent, brokerage fee, and stock average calculators, so this pass avoids repeating them. This calculator previously accepted zero, negative, more than 24 hours per day, more than 31 days per month, and fractional usage days without a clear error. Its prefilled result also hid the empty state. Because an energy estimate can be mistaken for a real bill, input validation and calculation assumptions were the priority.
+## What was improved in this quality pass
+This calculator previously accepted zero, negative, more than 24 hours per day, more than 31 days per month, and fractional usage days without a clear error. Its prefilled result also hid the empty state. Because an appliance estimate can be mistaken for a real utility bill, this update prioritizes input validation, a clear empty state, and explicit calculation assumptions.
 
 Accepted ranges are 0.1–1,000,000 W, 0.1–24 hours per day, 1–31 whole usage days, and 0.01–1,000,000 per kWh. Out-of-range entries now show a specific error instead of a misleading result.
+
+## How to use the calculator
+1. Enter the appliance's rated power in watts (W).
+2. Enter how many hours it runs per day.
+3. Enter the number of days it runs in a typical month.
+4. Enter your electricity price per kWh.
+5. Review daily and monthly usage plus the estimated daily, monthly, and yearly cost.
+
+The result stays blank until all four inputs are valid. Use **Fill sample** to load a 1500 W heater example, **Copy result** to copy a valid summary, or **Clear** to return to the empty state.
 
 ## How it works
 The calculation is straightforward:
@@ -57,11 +66,30 @@ It also shows **daily cost, monthly cost, and yearly cost**, which makes it usef
 → Monthly usage: 180kWh  
 → Estimated monthly cost: **27,000 KRW**
 
+### Dehumidifier
+- Power: 300W
+- Usage: 8 hours/day
+- Days: 20
+- Electricity price: 150 KRW/kWh
+
+→ Monthly usage: 48kWh
+
+→ Estimated monthly cost: **7,200 KRW**
+
 ## Good use cases
 - Estimate air conditioner or heating cost
 - Calculate home lab / server electricity usage
 - Compare the operating cost of multiple appliances
 - Check whether a device is worth running every day
+
+## Empty and error states
+- Blank input: no cost is shown until all four fields are complete.
+- Wattage: enter 0.1–1,000,000 W.
+- Daily use: enter 0.1–24 hours.
+- Monthly use: enter a whole number from 1 to 31 days.
+- Electricity price: enter 0.01–1,000,000 per kWh.
+
+The calculator does not silently clamp an invalid value. Correct the highlighted field before copying a result.
 
 ## Related tools
 - Need unit conversion: [Unit Converter]({{ '/en/tools/unit-converter/' | relative_url }})
@@ -79,3 +107,6 @@ The yearly estimate assumes the entered monthly pattern repeats for 12 months. C
 
 ### Can I use this to compare appliances?
 Yes. Enter each appliance one by one and compare the monthly cost to see which one uses more electricity.
+
+## Summary
+This electricity cost calculator turns appliance wattage and operating time into kWh usage and a quick cost estimate. Use it to compare devices, then check your utility's rate structure when you need a bill-level estimate.
