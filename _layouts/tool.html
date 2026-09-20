@@ -2638,38 +2638,41 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="pw-help">{% if page.lang == 'en' %}Uses crypto.getRandomValues when available. Passwords stay in this browser; save them in a password manager before leaving the page.{% elsif page.lang == 'ja' %}利用可能な場合は crypto.getRandomValues を使用します。パスワードはこのブラウザ内だけで作成されるため、ページを離れる前にパスワードマネージャーへ保存してください。{% else %}가능한 경우 crypto.getRandomValues를 사용합니다. 비밀번호는 이 브라우저 안에서만 만들어지므로 페이지를 떠나기 전에 비밀번호 관리자에 저장하세요.{% endif %}</p>
         </div>
       {% when 'pyeong-calculator' %}
-        <div class="tool-ui">
+        <div class="tool-ui pyeong-ui">
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="py-m2">{% if page.lang == 'en' %}Area (m²){% elsif page.lang == 'ja' %}面積（㎡）{% else %}면적(㎡){% endif %}</label>
-              <input id="py-m2" type="number" min="0" step="0.01" placeholder="{% if page.lang == 'en' %}e.g., 84{% elsif page.lang == 'ja' %}例: 84{% else %}예: 84{% endif %}" inputmode="decimal" />
+              <input id="py-m2" type="number" min="0" max="1000000000" step="any" placeholder="{% if page.lang == 'en' %}e.g., 84{% elsif page.lang == 'ja' %}例: 84{% else %}예: 84{% endif %}" inputmode="decimal" aria-describedby="py-input-note py-help" />
             </div>
             <div>
               <label for="py-pyeong">{% if page.lang == 'en' %}Area (pyeong){% elsif page.lang == 'ja' %}面積（坪）{% else %}면적(평){% endif %}</label>
-              <input id="py-pyeong" type="number" min="0" step="0.01" placeholder="{% if page.lang == 'en' %}e.g., 25.41{% elsif page.lang == 'ja' %}例: 25.41{% else %}예: 25.41{% endif %}" inputmode="decimal" />
+              <input id="py-pyeong" type="number" min="0" max="1000000000" step="any" placeholder="{% if page.lang == 'en' %}e.g., 25.41{% elsif page.lang == 'ja' %}例: 25.41{% else %}예: 25.41{% endif %}" inputmode="decimal" aria-describedby="py-input-note py-help" />
             </div>
           </div>
+
+          <p class="tool-hint" id="py-input-note">{% if page.lang == 'en' %}Edit either area field; the other updates automatically. Conversion uses 1 pyeong = 3.305785 m².{% elsif page.lang == 'ja' %}どちらか一方を編集すると、もう一方が自動更新されます。1坪 = 3.305785㎡で換算します。{% else %}두 면적 중 하나만 수정하세요. 반대 단위가 자동 갱신되며 1평 = 3.305785㎡를 적용합니다.{% endif %}</p>
 
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="py-price">{% if page.lang == 'en' %}Total price (KRW, optional){% elsif page.lang == 'ja' %}総額（KRW・任意）{% else %}총액(원, 선택){% endif %}</label>
-              <input id="py-price" type="number" min="0" step="10000" placeholder="{% if page.lang == 'en' %}e.g., 900000000{% elsif page.lang == 'ja' %}例: 900000000{% else %}예: 900000000{% endif %}" inputmode="numeric" />
+              <input id="py-price" type="number" min="0" max="1000000000000000" step="1" placeholder="{% if page.lang == 'en' %}e.g., 900000000{% elsif page.lang == 'ja' %}例: 900000000{% else %}예: 900000000{% endif %}" inputmode="numeric" aria-describedby="py-input-note py-help" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-actions">
-            <button id="py-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="py-sample" type="button">{% if page.lang == 'en' %}Load 84m² / 900M example{% elsif page.lang == 'ja' %}84㎡・9億の例{% else %}84㎡·9억원 예시{% endif %}</button>
+            <button id="py-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
             <button id="py-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
+          <div class="tool-stats py-stats" aria-label="{% if page.lang == 'en' %}Pyeong conversion results{% elsif page.lang == 'ja' %}坪数換算結果{% else %}평수 변환 결과{% endif %}">
             <div><strong id="py-out-m2">-</strong><span>{% if page.lang == 'en' %}Square meters (m²){% elsif page.lang == 'ja' %}平方メートル（㎡）{% else %}제곱미터(㎡){% endif %}</span></div>
             <div><strong id="py-out-pyeong">-</strong><span>{% if page.lang == 'en' %}Pyeong{% elsif page.lang == 'ja' %}坪{% else %}평{% endif %}</span></div>
             <div><strong id="py-price-per">-</strong><span>{% if page.lang == 'en' %}Price per pyeong{% elsif page.lang == 'ja' %}坪単価{% else %}평당가{% endif %}</span></div>
             <div><strong id="py-price-per-10k">-</strong><span>{% if page.lang == 'en' %}Price per pyeong (10k KRW){% elsif page.lang == 'ja' %}坪単価（万ウォン）{% else %}평당가(만원){% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="py-help">{% if page.lang == 'en' %}Enter either m² or pyeong to convert automatically.{% elsif page.lang == 'ja' %}㎡または坪のどちらかを入力すると自動変換されます。{% else %}㎡ 또는 평 중 하나를 입력하면 자동으로 변환됩니다.{% endif %}</p>
+          <p class="tool-result" id="py-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter either m² or pyeong to convert automatically.{% elsif page.lang == 'ja' %}㎡または坪のどちらかを入力すると自動変換されます。{% else %}㎡ 또는 평 중 하나를 입력하면 자동으로 변환됩니다.{% endif %}</p>
         </div>
       {% when 'd-day-calculator' %}
         <div class="tool-ui dday-ui">

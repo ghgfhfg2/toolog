@@ -3926,6 +3926,8 @@
 
   if (slug === 'pyeong-calculator') {
     const FACTOR = 3.305785;
+    const MAX_AREA = 1000000000;
+    const MAX_PRICE = 1000000000000000;
     const m2Input = document.getElementById('py-m2');
     const pyeongInput = document.getElementById('py-pyeong');
     const priceInput = document.getElementById('py-price');
@@ -3934,6 +3936,7 @@
     const outPricePer = document.getElementById('py-price-per');
     const outPricePer10k = document.getElementById('py-price-per-10k');
     const help = document.getElementById('py-help');
+    const sampleBtn = document.getElementById('py-sample');
     const copyBtn = document.getElementById('py-copy');
     const resetBtn = document.getElementById('py-reset');
 
@@ -3948,11 +3951,17 @@
         invalidNumber: '숫자 형식으로 입력해 주세요.',
         needPositiveInput: '㎡ 또는 평 중 하나를 0보다 크게 입력하세요.',
         areaPositive: '면적은 0보다 커야 합니다.',
+        areaTooLarge: '면적은 10억 이하의 숫자로 입력해 주세요.',
+        priceInvalid: '총액은 0 이상의 원 단위 정수로 입력해 주세요.',
+        priceTooLarge: '총액은 1,000조원 이하로 입력해 주세요.',
         summaryPrice: (m2, p, per10k, eokText) => `입력 면적 ${m2}㎡(약 ${p}평) 기준 평당가는 ${per10k}만원${eokText ? ` (${eokText})` : ''}입니다.`,
         summaryArea: (m2, p) => `면적 ${m2}㎡ = 약 ${p}평`,
         needAreaFirst: '㎡ 또는 평 중 하나를 먼저 입력하세요.',
         copyText: (m2, p, pricePer, pricePer10k) => `평수 계산 결과 | ${m2} | ${p} | 평당가 ${pricePer} (${pricePer10k})`,
-        copied: '복사됨',
+        copied: '계산 결과를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        sampleLoaded: '84㎡·9억원 예시를 불러왔습니다.',
+        reset: '입력과 결과를 초기화했습니다.',
         copyDefault: '결과 복사',
         idle: '㎡ 또는 평 중 하나를 입력하면 자동으로 변환됩니다.'
       },
@@ -3964,11 +3973,17 @@
         invalidNumber: 'Please enter valid numeric values.',
         needPositiveInput: 'Enter either m² or pyeong greater than 0.',
         areaPositive: 'Area must be greater than 0.',
+        areaTooLarge: 'Enter an area no greater than 1 billion.',
+        priceInvalid: 'Enter the total price as a non-negative whole KRW amount.',
+        priceTooLarge: 'Enter a total price no greater than 1 quadrillion KRW.',
         summaryPrice: (m2, p, per10k, eokText) => `For ${m2}m² (about ${p} pyeong), price per pyeong is ${per10k} ${eokText ? `(${eokText})` : ''}.`,
         summaryArea: (m2, p) => `${m2}m² = about ${p} pyeong`,
         needAreaFirst: 'Enter m² or pyeong first.',
         copyText: (m2, p, pricePer, pricePer10k) => `Pyeong conversion result | ${m2} | ${p} | Price per pyeong ${pricePer} (${pricePer10k})`,
-        copied: 'Copied',
+        copied: 'Copied the calculation result.',
+        copyFail: 'Automatic copy is unavailable.',
+        sampleLoaded: 'Loaded the 84m² / 900M KRW example.',
+        reset: 'Cleared the inputs and results.',
         copyDefault: 'Copy result',
         idle: 'Enter either m² or pyeong to convert automatically.'
       },
@@ -3980,11 +3995,17 @@
         invalidNumber: '数値形式で入力してください。',
         needPositiveInput: '㎡または坪のどちらかに0より大きい値を入力してください。',
         areaPositive: '面積は0より大きい必要があります。',
+        areaTooLarge: '面積は10億以下の数値で入力してください。',
+        priceInvalid: '総額は0以上の整数（ウォン単位）で入力してください。',
+        priceTooLarge: '総額は1,000兆ウォン以下で入力してください。',
         summaryPrice: (m2, p, per10k, eokText) => `入力面積 ${m2}㎡（約${p}坪）を基準にした坪単価は ${per10k}${eokText ? `（${eokText}）` : ''}です。`,
         summaryArea: (m2, p) => `面積 ${m2}㎡ = 約${p}坪`,
         needAreaFirst: '先に㎡または坪を入力してください。',
         copyText: (m2, p, pricePer, pricePer10k) => `坪数計算結果 | ${m2} | ${p} | 坪単価 ${pricePer} (${pricePer10k})`,
-        copied: 'コピー完了',
+        copied: '計算結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。',
+        sampleLoaded: '84㎡・9億ウォンの例を読み込みました。',
+        reset: '入力と結果をリセットしました。',
         copyDefault: '結果をコピー',
         idle: '㎡または坪を入力すると自動で変換されます。'
       }
@@ -3992,115 +4013,172 @@
     const pyText = pyI18n[pageLang] || pyI18n.ko;
 
     let lock = false;
+    let lastSource = 'm2';
+    let currentSummary = '';
 
     const fmt = (v, max = 4) => Number(v).toLocaleString(numberLocale, { maximumFractionDigits: max });
     const fmtKRW = (v) => `${Math.round(v).toLocaleString(numberLocale)} ${pyText.currency}`;
     const fmtEok = (v) => `${fmt(v / 100000000, 2)} ${pyText.unitEok}`;
 
-    const setIdle = (msg) => {
+    const setStatus = (msg, state = '') => {
+      help.textContent = msg;
+      help.dataset.state = state;
+    };
+
+    const clearResults = (msg, state = '') => {
       outM2.textContent = '-';
       outPyeong.textContent = '-';
       outPricePer.textContent = '-';
       outPricePer10k.textContent = '-';
-      help.textContent = msg;
+      currentSummary = '';
+      if (copyBtn) copyBtn.disabled = true;
+      setStatus(msg, state);
     };
 
     const copyText = async (text) => {
-      try {
+      if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(text);
-      } catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        return;
       }
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      const copied = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (!copied) throw new Error('copy failed');
     };
 
     const render = (source = 'm2') => {
-      const m2Raw = Number(m2Input.value || 0);
-      const pRaw = Number(pyeongInput.value || 0);
-      const priceRaw = Number(priceInput.value || 0);
-      const price = Number.isFinite(priceRaw) ? Math.max(0, priceRaw) : 0;
+      lastSource = source;
+      const sourceInput = source === 'pyeong' ? pyeongInput : m2Input;
+      const targetInput = source === 'pyeong' ? m2Input : pyeongInput;
+      const rawArea = sourceInput.value.trim();
+      [m2Input, pyeongInput, priceInput].forEach((input) => input.setAttribute('aria-invalid', 'false'));
 
-      if (!Number.isFinite(m2Raw) || !Number.isFinite(pRaw)) {
-        setIdle(pyText.invalidNumber);
+      if (!rawArea) {
+        lock = true;
+        targetInput.value = '';
+        lock = false;
+        clearResults(pyText.idle);
+        return;
+      }
+      const area = Number(rawArea);
+      if (!Number.isFinite(area)) {
+        sourceInput.setAttribute('aria-invalid', 'true');
+        clearResults(pyText.invalidNumber, 'error');
+        return;
+      }
+      if (area <= 0) {
+        sourceInput.setAttribute('aria-invalid', 'true');
+        clearResults(pyText.areaPositive, 'error');
+        return;
+      }
+      if (area > MAX_AREA) {
+        sourceInput.setAttribute('aria-invalid', 'true');
+        clearResults(pyText.areaTooLarge, 'error');
         return;
       }
 
-      if (m2Raw <= 0 && pRaw <= 0) {
-        setIdle(pyText.needPositiveInput);
-        return;
-      }
-
-      let m2 = 0;
-      let p = 0;
-
-      if (source === 'pyeong') {
-        p = Math.max(0, pRaw);
-        m2 = p * FACTOR;
-      } else {
-        m2 = Math.max(0, m2Raw);
-        p = m2 / FACTOR;
-      }
-
-      if (!(m2 > 0) || !(p > 0)) {
-        setIdle(pyText.areaPositive);
+      const m2 = source === 'pyeong' ? area * FACTOR : area;
+      const p = source === 'pyeong' ? area : area / FACTOR;
+      if (m2 > MAX_AREA || p > MAX_AREA) {
+        sourceInput.setAttribute('aria-invalid', 'true');
+        targetInput.value = '';
+        clearResults(pyText.areaTooLarge, 'error');
         return;
       }
 
       lock = true;
-      m2Input.value = m2 ? m2.toFixed(2).replace(/\.00$/, '') : '';
-      pyeongInput.value = p ? p.toFixed(2).replace(/\.00$/, '') : '';
+      targetInput.value = (source === 'pyeong' ? m2 : p).toFixed(4).replace(/\.?0+$/, '');
       lock = false;
 
       outM2.textContent = `${fmt(m2, 2)}㎡`;
       outPyeong.textContent = `${fmt(p, 2)} ${pyText.unitPyeong}`;
 
-      if (price > 0) {
-        const per = price / p;
-        const per10k = per / 10000;
-        const eokText = per >= 100000000 ? fmtEok(per) : '';
-        outPricePer.textContent = fmtKRW(per);
-        outPricePer10k.textContent = eokText
-          ? `${fmt(per10k, 1)} ${pyText.unitManwon} (${eokText})`
-          : `${fmt(per10k, 1)} ${pyText.unitManwon}`;
-        help.textContent = pyText.summaryPrice(fmt(m2, 2), fmt(p, 2), fmt(per10k, 1), eokText);
+      const rawPrice = priceInput.value.trim();
+      if (rawPrice) {
+        const price = Number(rawPrice);
+        if (!Number.isFinite(price) || price < 0 || !Number.isInteger(price)) {
+          priceInput.setAttribute('aria-invalid', 'true');
+          outPricePer.textContent = '-';
+          outPricePer10k.textContent = '-';
+          currentSummary = '';
+          if (copyBtn) copyBtn.disabled = true;
+          setStatus(pyText.priceInvalid, 'error');
+          return;
+        }
+        if (price > MAX_PRICE) {
+          priceInput.setAttribute('aria-invalid', 'true');
+          outPricePer.textContent = '-';
+          outPricePer10k.textContent = '-';
+          currentSummary = '';
+          if (copyBtn) copyBtn.disabled = true;
+          setStatus(pyText.priceTooLarge, 'error');
+          return;
+        }
+        if (price === 0) {
+          outPricePer.textContent = '-';
+          outPricePer10k.textContent = '-';
+          setStatus(pyText.summaryArea(fmt(m2, 2), fmt(p, 2)), 'success');
+        } else {
+          const per = price / p;
+          const per10k = per / 10000;
+          const eokText = per >= 100000000 ? fmtEok(per) : '';
+          outPricePer.textContent = fmtKRW(per);
+          outPricePer10k.textContent = eokText
+            ? `${fmt(per10k, 1)} ${pyText.unitManwon} (${eokText})`
+            : `${fmt(per10k, 1)} ${pyText.unitManwon}`;
+          setStatus(pyText.summaryPrice(fmt(m2, 2), fmt(p, 2), fmt(per10k, 1), eokText), 'success');
+        }
       } else {
         outPricePer.textContent = '-';
         outPricePer10k.textContent = '-';
-        help.textContent = pyText.summaryArea(fmt(m2, 2), fmt(p, 2));
+        setStatus(pyText.summaryArea(fmt(m2, 2), fmt(p, 2)), 'success');
       }
+
+      currentSummary = pyText.copyText(outM2.textContent, outPyeong.textContent, outPricePer.textContent, outPricePer10k.textContent);
+      if (copyBtn) copyBtn.disabled = false;
     };
 
     m2Input.addEventListener('input', () => { if (!lock) render('m2'); });
     pyeongInput.addEventListener('input', () => { if (!lock) render('pyeong'); });
     priceInput.addEventListener('input', () => {
-      if (Number(m2Input.value || 0) > 0) render('m2');
-      else if (Number(pyeongInput.value || 0) > 0) render('pyeong');
-      else setIdle(pyText.needAreaFirst);
+      const activeArea = lastSource === 'pyeong' ? pyeongInput : m2Input;
+      if (activeArea.value.trim()) render(lastSource);
+      else clearResults(pyText.needAreaFirst, 'error');
     });
 
     copyBtn?.addEventListener('click', async () => {
-      if (outM2.textContent === '-') return;
-      const text = pyText.copyText(outM2.textContent, outPyeong.textContent, outPricePer.textContent, outPricePer10k.textContent);
-      await copyText(text);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = pyText.copied;
-      setTimeout(() => { copyBtn.textContent = old || pyText.copyDefault; }, 900);
+      if (!currentSummary) return;
+      try {
+        await copyText(currentSummary);
+        setStatus(pyText.copied, 'success');
+      } catch (_) {
+        setStatus(pyText.copyFail, 'error');
+      }
+    });
+
+    sampleBtn?.addEventListener('click', () => {
+      m2Input.value = '84';
+      priceInput.value = '900000000';
+      render('m2');
+      setStatus(pyText.sampleLoaded, 'success');
+      m2Input.focus();
     });
 
     resetBtn?.addEventListener('click', () => {
       m2Input.value = '';
       pyeongInput.value = '';
       priceInput.value = '';
-      setIdle(pyText.idle);
+      [m2Input, pyeongInput, priceInput].forEach((input) => input.setAttribute('aria-invalid', 'false'));
+      clearResults(pyText.reset);
+      m2Input.focus();
     });
 
-    setIdle(pyText.idle);
+    clearResults(pyText.idle);
   }
 
   if (slug === 'd-day-calculator') {

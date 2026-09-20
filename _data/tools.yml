@@ -1824,13 +1824,16 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: ㎡↔평 변환과 평당가 계산을 한 번에 처리해요.
-  description_en: Convert m² and pyeong both ways and estimate price per pyeong for property comparison.
-  description_ja: ㎡↔坪を相互変換し、坪単価もまとめて計算できます。
+  description: 제곱미터(㎡)와 평을 양방향 변환하고 총액 기준 평당가를 계산해요. 84㎡·9억원 예시와 빈값·음수·과대 입력 오류 안내도 제공합니다.
+  description_en: Convert m² and pyeong both ways, estimate price per pyeong, and check a practical 84m² example with clear input validation.
+  description_ja: ㎡と坪を相互変換し、総額から坪単価を計算。84㎡の例と空欄・負数・過大入力の案内も確認できます。
   url: /tools/pyeong-calculator/
   url_en: /en/tools/pyeong-calculator/
   url_ja: /ja/tools/pyeong-calculator/
   thumbnail: /assets/thumbs/pyeong-calculator.svg
+  published_at: '2026-03-04'
+  tool_type: calculator
+  topic_cluster: real-estate
 
 - id: d-day-calculator
   title: 디데이 계산기
