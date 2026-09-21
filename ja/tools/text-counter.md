@@ -12,7 +12,7 @@ image:
   path: /assets/thumbs/text-counter.svg
   alt: 文字数カウンターのプレビュー
 tool_key: text-counter
-keywords: [文字数カウンター, バイト数, 空白除外文字数, 文字数制限チェック, 単語数, UTF-8]
+keywords: [文字数カウンター, バイト数, 空白除外文字数, 文字数制限チェック, 単語数, UTF-8, 絵文字 文字数, 文字数 上限 切り詰め]
 related_tools: ['case-converter', 'readability-checker', 'text-line-break-cleaner']
 alternate_urls:
   ko: /tools/text-counter/
@@ -35,6 +35,9 @@ faq:
 この**文字数カウンター**は、空白を除いた文字数やUTF-8バイト数をすぐに確認したいときに使えるツールです。
 
 下書き中に上限を確認しておくと、提出直前の修正や文字数超過によるエラーを減らせます。
+
+## 本日このツールを改善した理由
+最近の品質改善が計算機に集中する一方、`text-counter`は2026年6月以降、個別の見直しがありませんでした。結合絵文字が複数文字として数えられる場合があり、上限を超えた文章も手作業で短くする必要があったため、文字境界の精度とモバイルでの編集フローを優先して改善しました。
 
 ## 主な機能
 - 文字数（空白含む）

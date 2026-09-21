@@ -12,7 +12,7 @@ image:
   path: /assets/thumbs/text-counter.svg
   alt: Text counter preview
 tool_key: text-counter
-keywords: [text counter, character count, byte counter, character limit checker, word count, utf-8 bytes]
+keywords: [text counter, character count, byte counter, character limit checker, word count, utf-8 bytes, emoji character counter, trim text to character limit]
 related_tools: ['case-converter', 'readability-checker', 'text-line-break-cleaner']
 alternate_urls:
   ko: /tools/text-counter/
@@ -35,6 +35,9 @@ faq:
 Use this **text counter** when you need a quick character count, a count without spaces, or a UTF-8 byte counter before submitting text.
 
 Checking the required limit while drafting helps prevent last-minute edits and rejected submissions.
+
+## Why this tool was improved today
+Recent quality updates had focused heavily on calculators, while `text-counter` had not received a dedicated review since June 2026. It still counted some joined emoji as multiple characters and required users to shorten over-limit text manually. This update prioritizes more accurate boundary handling and a smoother mobile editing flow.
 
 ## Key features
 - Characters (with spaces)
