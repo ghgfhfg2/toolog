@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Text Counter | Check Characters, Lines, UTF-8 Bytes, and Limits
-description: Count characters with or without spaces, words, lines, and UTF-8 bytes, then check whether an essay, post, or manuscript exceeds its submission limit.
+title: Text Counter | UTF-8 Bytes, Emoji, and Safe Limit Trimming
+description: Count user-perceived characters, joined emoji, words, lines, and UTF-8 bytes, then safely trim an essay, post, or manuscript to a selected limit.
 lang: en
 permalink: /en/tools/text-counter/
 canonical_url: /en/tools/text-counter/
@@ -26,7 +26,9 @@ faq:
   - q: Which count should I use for a 500-character limit?
     a: Check whether the form or platform specifies characters with spaces, characters without spaces, or UTF-8 bytes, then select that basis.
   - q: How are emoji counted?
-    a: An emoji is counted as one character, but it usually uses multiple UTF-8 bytes.
+    a: Joined emoji such as families, couples, and skin-tone sequences count as one visible character, while usually using multiple UTF-8 bytes.
+  - q: Can trimming to a UTF-8 byte limit break an emoji?
+    a: No. Trimming keeps complete user-perceived characters and stops before the next character would exceed the chosen limit.
 ---
 
 ## What search intent does this text counter serve?
@@ -41,7 +43,9 @@ Checking the required limit while drafting helps prevent last-minute edits and r
 - Lines
 - UTF-8 bytes
 - Limit checks based on characters with spaces, characters without spaces, or bytes
-- Example text and copyable count summary
+- Joined emoji and combining marks counted as visible characters
+- Safe prefix trimming to character, no-space, or byte limits
+- Copyable text, count summary, and example input
 
 ## How to use it
 ### 1. Paste your text
@@ -51,7 +55,7 @@ Paste an application essay, social post, manuscript, or other draft into the tex
 Check whether the destination uses characters with spaces, characters without spaces, or UTF-8 bytes. Enter the optional limit and choose the matching basis.
 
 ### 3. Edit any over-limit text
-If the counter shows that you are over the limit, remove repetition and move the main point earlier.
+If the counter shows that you are over the limit, remove repetition and move the main point earlier. Use **Trim to limit** when you need a quick prefix, then reread the final sentence because the tool does not rewrite meaning.
 
 When the text box is empty, the results remain at zero. An invalid limit shows an error until you enter a whole number from 1 to 10,000,000.
 
@@ -82,7 +86,10 @@ Characters require different amounts of storage. Many non-Latin characters and e
 Follow the destination's instructions and select characters with spaces, characters without spaces, or UTF-8 bytes accordingly.
 
 ### How are emoji counted?
-This tool counts an emoji as one character. Its UTF-8 byte count may be larger depending on the emoji.
+Joined sequences such as family, couple, flag, and skin-tone emoji count as one visible character. Their UTF-8 byte count is larger and varies by sequence.
+
+### Can trimming split an emoji or combining character?
+No. Character and UTF-8 byte trimming keep complete visible-character segments. You should still review the final sentence because trimming does not rewrite or complete it.
 
 ## Summary
 A text counter is more than a simple tally. It helps prevent submission errors and reduces editing time.

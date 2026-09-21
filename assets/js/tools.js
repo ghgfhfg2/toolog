@@ -13,12 +13,15 @@
     const words = document.getElementById('tc-words');
     const lines = document.getElementById('tc-lines');
     const bytes = document.getElementById('tc-bytes');
+    const inputMeter = document.getElementById('tc-input-meter');
     const limit = document.getElementById('tc-limit');
     const limitType = document.getElementById('tc-limit-type');
     const status = document.getElementById('tc-status');
     const meter = document.querySelector('.tc-meter');
     const meterBar = document.getElementById('tc-meter-bar');
     const sample = document.getElementById('tc-sample');
+    const trim = document.getElementById('tc-trim');
+    const copyTextBtn = document.getElementById('tc-copy-text');
     const copy = document.getElementById('tc-copy');
     const clear = document.getElementById('tc-clear');
     const tcText = {
@@ -29,6 +32,9 @@
         remaining: (n) => `제한까지 ${formatNum(n)} 남았습니다.`,
         exact: '설정한 제한에 정확히 맞았습니다.',
         exceeded: (n) => `설정한 제한을 ${formatNum(n)} 초과했습니다.`,
+        trimmed: '설정한 제한에 맞춰 초과 부분을 잘랐습니다.',
+        trimUnavailable: '먼저 올바른 제한 수치를 입력하고 초과한 텍스트를 확인해 주세요.',
+        copiedText: '본문을 복사했습니다.',
         copied: '결과 요약을 복사했습니다.',
         copyEmpty: '복사할 계산 결과가 없습니다.',
         copyFail: '자동 복사를 사용할 수 없습니다.',
@@ -43,6 +49,9 @@
         remaining: (n) => `${formatNum(n)} remaining before the limit.`,
         exact: 'The text exactly matches the limit.',
         exceeded: (n) => `The text exceeds the limit by ${formatNum(n)}.`,
+        trimmed: 'Trimmed the text to the selected limit.',
+        trimUnavailable: 'Enter a valid limit and make sure the text exceeds it first.',
+        copiedText: 'Copied the text.',
         copied: 'Copied the count summary.',
         copyEmpty: 'There is no count summary to copy yet.',
         copyFail: 'Automatic copy is unavailable.',
@@ -57,6 +66,9 @@
         remaining: (n) => `上限まで残り${formatNum(n)}です。`,
         exact: '設定した上限と一致しています。',
         exceeded: (n) => `設定した上限を${formatNum(n)}超えています。`,
+        trimmed: '選択した上限に合わせて超過部分を切り詰めました。',
+        trimUnavailable: '有効な上限を入力し、本文が上限を超えていることを確認してください。',
+        copiedText: '本文をコピーしました。',
         copied: '集計結果をコピーしました。',
         copyEmpty: 'コピーできる集計結果がまだありません。',
         copyFail: '自動コピーを利用できません。',
@@ -66,6 +78,57 @@
       }
     }[pageLang] || {};
     let current = { chars: 0, noSpaces: 0, words: 0, lines: 0, bytes: 0 };
+    let currentDiff = null;
+    const encoder = new TextEncoder();
+    const graphemeSegmenter = typeof Intl.Segmenter === 'function'
+      ? new Intl.Segmenter(pageLang === 'ko' ? 'ko' : pageLang, { granularity: 'grapheme' })
+      : null;
+    const wordSegmenter = typeof Intl.Segmenter === 'function'
+      ? new Intl.Segmenter(pageLang === 'ko' ? 'ko' : pageLang, { granularity: 'word' })
+      : null;
+
+    const splitGraphemes = (value) => graphemeSegmenter
+      ? Array.from(graphemeSegmenter.segment(value), ({ segment }) => segment)
+      : Array.from(value);
+
+    const countWords = (value) => {
+      if (!value.trim()) return 0;
+      if (!wordSegmenter) return (value.trim().match(/\S+/gu) || []).length;
+      return Array.from(wordSegmenter.segment(value)).filter(({ isWordLike }) => isWordLike).length;
+    };
+
+    const copyText = async (value) => {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(value);
+        return;
+      }
+      const fallback = document.createElement('textarea');
+      fallback.value = value;
+      fallback.setAttribute('readonly', '');
+      fallback.style.position = 'fixed';
+      fallback.style.opacity = '0';
+      document.body.appendChild(fallback);
+      fallback.select();
+      const copied = document.execCommand('copy');
+      fallback.remove();
+      if (!copied) throw new Error('copy failed');
+    };
+
+    const trimToLimit = (value, type, maximum) => {
+      const segments = splitGraphemes(value);
+      if (type === 'chars') return segments.slice(0, maximum).join('');
+      let used = 0;
+      const kept = [];
+      for (const segment of segments) {
+        const increment = type === 'bytes'
+          ? encoder.encode(segment).length
+          : (/\s/u.test(segment) ? 0 : 1);
+        if (used + increment > maximum) break;
+        kept.push(segment);
+        used += increment;
+      }
+      return kept.join('');
+    };
 
     const setStatus = (message, state = '') => {
       status.textContent = message;
@@ -74,18 +137,24 @@
 
     const update = () => {
       const v = input.value || '';
+      const graphemes = splitGraphemes(v);
       current = {
-        chars: [...v].length,
-        noSpaces: [...v.replace(/\s/gu, '')].length,
-        words: (v.trim().match(/\S+/gu) || []).length,
+        chars: graphemes.length,
+        noSpaces: graphemes.filter((character) => !/\s/u.test(character)).length,
+        words: countWords(v),
         lines: v ? v.split(/\r\n|\r|\n/).length : 0,
-        bytes: new TextEncoder().encode(v).length
+        bytes: encoder.encode(v).length
       };
       chars.textContent = formatNum(current.chars);
       noSpaces.textContent = formatNum(current.noSpaces);
       words.textContent = formatNum(current.words);
       lines.textContent = formatNum(current.lines);
       bytes.textContent = formatNum(current.bytes);
+      inputMeter.textContent = `${formatNum(current.chars)} / ${formatNum(100000)}`;
+      copy.disabled = !v;
+      copyTextBtn.disabled = !v;
+      trim.disabled = true;
+      currentDiff = null;
 
       const rawLimit = limit.value.trim();
       const limitValue = Number(rawLimit);
@@ -105,11 +174,14 @@
       limit.setAttribute('aria-invalid', 'false');
       const used = current[limitType.value] || 0;
       const diff = limitValue - used;
+      currentDiff = diff;
       const percent = Math.min(100, Math.round((used / limitValue) * 100));
       meter.hidden = false;
       meter.setAttribute('aria-valuenow', String(percent));
+      meter.setAttribute('aria-valuetext', `${formatNum(used)} / ${formatNum(limitValue)}`);
       meterBar.style.width = `${percent}%`;
       meterBar.dataset.state = diff < 0 ? 'over' : (diff === 0 ? 'exact' : 'within');
+      trim.disabled = diff >= 0;
       if (diff > 0) setStatus(tcText.remaining(diff), 'within');
       else if (diff === 0) setStatus(tcText.exact, 'exact');
       else setStatus(tcText.exceeded(Math.abs(diff)), 'over');
@@ -119,6 +191,17 @@
     sample?.addEventListener('click', () => {
       input.value = tcText.sample;
       update();
+      input.focus();
+    });
+    trim?.addEventListener('click', () => {
+      const maximum = Number(limit.value);
+      if (!Number.isInteger(maximum) || maximum < 1 || currentDiff === null || currentDiff >= 0) {
+        setStatus(tcText.trimUnavailable, 'error');
+        return;
+      }
+      input.value = trimToLimit(input.value, limitType.value, maximum);
+      update();
+      setStatus(tcText.trimmed, 'success');
       input.focus();
     });
     clear?.addEventListener('click', () => {
@@ -136,8 +219,21 @@
       }
       const summary = tcText.summary(current);
       try {
-        await navigator.clipboard.writeText(summary);
+        await copyText(summary);
         setStatus(tcText.copied);
+      } catch (_) {
+        setStatus(tcText.copyFail, 'error');
+      }
+    });
+    copyTextBtn?.addEventListener('click', async () => {
+      if (!input.value) {
+        setStatus(tcText.copyEmpty, 'error');
+        input.focus();
+        return;
+      }
+      try {
+        await copyText(input.value);
+        setStatus(tcText.copiedText, 'success');
       } catch (_) {
         setStatus(tcText.copyFail, 'error');
       }

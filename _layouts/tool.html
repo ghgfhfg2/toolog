@@ -29,7 +29,8 @@ layout: default
         <div class="tool-ui tc-ui">
           <div class="tool-row">
             <label for="tc-input">{% if page.lang == 'en' %}Text to count{% elsif page.lang == 'ja' %}カウントするテキスト{% else %}글자 수를 확인할 텍스트{% endif %}</label>
-            <textarea id="tc-input" maxlength="100000" aria-describedby="tc-status tc-help" placeholder="{% if page.lang == 'en' %}Paste an essay, caption, or manuscript here.{% elsif page.lang == 'ja' %}応募書類、投稿文、原稿などを貼り付けてください。{% else %}자기소개서, 게시글, 원고 등을 붙여넣으세요.{% endif %}"></textarea>
+            <textarea id="tc-input" maxlength="100000" aria-describedby="tc-input-meter tc-status tc-help" placeholder="{% if page.lang == 'en' %}Paste an essay, caption, or manuscript here.{% elsif page.lang == 'ja' %}応募書類、投稿文、原稿などを貼り付けてください。{% else %}자기소개서, 게시글, 원고 등을 붙여넣으세요.{% endif %}"></textarea>
+            <p class="tool-result tc-input-meter" id="tc-input-meter">0 / 100,000</p>
           </div>
           <div class="tool-row-grid tc-limit-grid">
             <div>
@@ -56,10 +57,12 @@ layout: default
           </div>
           <div class="tool-row-grid tc-actions">
             <button id="tc-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
-            <button id="tc-copy" type="button">{% if page.lang == 'en' %}Copy summary{% elsif page.lang == 'ja' %}集計結果をコピー{% else %}결과 요약 복사{% endif %}</button>
+            <button id="tc-trim" type="button" disabled>{% if page.lang == 'en' %}Trim to limit{% elsif page.lang == 'ja' %}上限まで切り詰める{% else %}제한에 맞춰 자르기{% endif %}</button>
+            <button id="tc-copy-text" type="button" disabled>{% if page.lang == 'en' %}Copy text{% elsif page.lang == 'ja' %}本文をコピー{% else %}본문 복사{% endif %}</button>
+            <button id="tc-copy" type="button" disabled>{% if page.lang == 'en' %}Copy summary{% elsif page.lang == 'ja' %}集計結果をコピー{% else %}결과 요약 복사{% endif %}</button>
             <button id="tc-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
-          <p class="tool-result" id="tc-help">{% if page.lang == 'en' %}Counts Unicode characters so an emoji counts as one character. Input stays in your browser and is limited to 100,000 characters.{% elsif page.lang == 'ja' %}絵文字も1文字として数えます。入力内容はブラウザ内だけで処理され、最大100,000文字です。{% else %}이모지도 1자로 계산합니다. 입력 내용은 브라우저 안에서만 처리되며 최대 100,000자까지 지원합니다.{% endif %}</p>
+          <p class="tool-result" id="tc-help">{% if page.lang == 'en' %}Counts user-perceived Unicode characters, so joined emoji and combining marks stay together. Input stays in your browser and is limited to 100,000 characters.{% elsif page.lang == 'ja' %}結合絵文字や合成文字を分割せず、見た目の1文字として数えます。入力内容はブラウザ内だけで処理され、最大100,000文字です。{% else %}결합 이모지와 조합 문자를 쪼개지 않고 화면에 보이는 1자로 계산합니다. 입력 내용은 브라우저 안에서만 처리되며 최대 100,000자까지 지원합니다.{% endif %}</p>
         </div>
       {% when 'vat-calculator' %}
         <div class="tool-ui vat-ui">

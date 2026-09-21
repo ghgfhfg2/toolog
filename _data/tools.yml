@@ -1680,13 +1680,15 @@
   badge: Popular
   badge_en: Popular
   badge_ja: 人気
-  description: 글자수 계산기로 공백 포함·제외 글자 수, 단어·줄 수, UTF-8 바이트와 제한 초과 여부를 확인해요.
-  description_en: Count characters, words, lines, UTF-8 bytes, and check whether text exceeds a chosen limit.
-  description_ja: 空白あり・なしの文字数、単語数、行数、UTF-8バイト数、設定した上限超過をまとめて確認できます。
+  description: 결합 이모지를 포함한 글자 수, 공백 제외·단어·줄·UTF-8 바이트를 세고 초과 문장을 안전하게 제한에 맞춰 잘라요.
+  description_en: Count joined emoji as single characters, check words, lines, UTF-8 bytes, and safely trim over-limit text.
+  description_ja: 結合絵文字を1文字として数え、空白除外・単語・行・UTF-8バイトを確認し、上限まで安全に切り詰めます。
   url: /tools/text-counter/
   url_en: /en/tools/text-counter/
   url_ja: /ja/tools/text-counter/
   thumbnail: /assets/thumbs/text-counter.svg
+  tool_type: utility
+  topic_cluster: text
 
 - id: case-converter
   title: 대소문자 변환기
