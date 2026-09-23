@@ -1196,14 +1196,16 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 총 가격과 수량을 기준으로 1개당·100g당·1L당 가격을 계산하고 두 상품의 가성비를 비교해요.
-  description_en: Compare value by price per item, per 100g, and per liter from total price and quantity.
-  description_ja: 総価格と数量から1個あたり・100gあたり・1Lあたりの単価を計算し、2商品のコスパを比較します。
+  description: 묶음·대용량 상품의 총 가격과 수량을 입력해 1개·100g·1kg·100ml·1L당 가격, 단가 차이와 절감률을 비교해요.
+  description_en: Compare bundles and package sizes by price per item, 100g, 1kg, 100ml, or 1L, including the unit-price gap and savings rate.
+  description_ja: まとめ買い・大容量商品の1個・100g・1kg・100ml・1Lあたりの価格、単価差、節約率を比較します。
   url: /tools/unit-price-calculator/
   url_en: /en/tools/unit-price-calculator/
   url_ja: /ja/tools/unit-price-calculator/
   thumbnail: /assets/thumbs/unit-price-calculator.svg
   published_at: 2026-03-26
+  tool_type: calculator
+  topic_cluster: shopping
 
 - id: time-difference-calculator
   title: 시간 차이 계산기

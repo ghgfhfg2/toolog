@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-23 21:00 KST
+- Tool: `unit-price-calculator`
+- Selection reason: recent quality runs covered other tools; this March-era shopping calculator had no recorded quality pass, silently clamped negative and invalid values to zero, prefilled results instead of showing a true empty state, allowed copying empty output, and did not reject incomplete product pairs or fractional item counts.
+- Scope: improved only the existing multilingual unit-price tool, home metadata, layout, styles, and script with optional-but-paired product input, strict price/quantity/count/range/overflow validation, true empty/error/success states, example/clear/copy feedback, precise decimal unit prices, shared-unit guidance, accessible fieldsets/descriptions/live status, one-column mobile inputs/actions, formulas, assumptions, FAQ, and localized related links. No new tool was added.
+- Validation: YAML/front matter and 98-tool multilingual integrity checks, `node --check`, `git diff --check`, tool-count preservation, localized link checks, mobile CSS rules, and actual DOM-driven empty/sample/negative/incomplete/fractional-count/weight/free-price/range/clear cases passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-18 21:00 KST
 - Tool: `severance-pay-calculator`
 - Selection reason: recent quality runs covered other calculators; this high-risk labor calculator had no quality pass since March, annualized one monthly wage instead of using the statutory prior-three-month wage period, counted the retirement date as service, checked only the one-year threshold, prefilled results, and lacked strict input/error states.

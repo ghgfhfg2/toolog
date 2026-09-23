@@ -18,6 +18,10 @@ faq:
     a: Yes. The calculator shows common unit-price conversions along with the main comparison result.
   - q: Can I compare a discounted product with a regular one?
     a: Yes. Enter product A and B to see which has the lower unit price and how much you save.
+  - q: Can I calculate only one product's unit price?
+    a: Yes. Complete product A and leave product B blank. Add both price and quantity for product B when you want a comparison.
+  - q: How do I compare 500g with 1kg?
+    a: Use one shared unit for both products, such as entering both quantities in grams or both in kilograms.
 canonical_url: /en/tools/unit-price-calculator/
 ---
 
@@ -37,6 +41,16 @@ This tool helps you compare:
 2. Enter total price and total quantity for product A and product B.
 3. Check unit prices and see which option is cheaper.
 
+Product B is optional. Once you start entering a product, both its total price and total quantity are required. Item counts must be whole numbers; weight and volume may use decimals. Invalid, zero-quantity, and oversized values show a field-specific error instead of a result.
+
+## Formula and comparison assumptions
+- Base unit price = total price ÷ total quantity
+- Price per 100g (100ml) = price per g (ml) × 100
+- Price per 1kg (1L) = price per g (ml) × 1,000
+- Savings rate = unit-price gap ÷ the higher unit price × 100
+
+Apply coupons, shipping, or reward credits to the entered total price first. Quality, contents, and expiration dates are not represented in the numeric comparison.
+
 ## Example
 - Product A: 4 packs for 5,980 KRW
 - Product B: 6 packs for 8,400 KRW
@@ -46,6 +60,16 @@ This tool helps you compare:
 → **Product B is cheaper per unit.**
 
 ## Related tools
-- [Discount Calculator]({{ '/tools/discount-calculator/' | relative_url }})
-- [Percent Calculator]({{ '/tools/percent-calculator/' | relative_url }})
-- [Split Bill Calculator]({{ '/tools/split-bill-calculator/' | relative_url }})
+- [Discount Calculator]({{ '/en/tools/discount-calculator/' | relative_url }})
+- [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
+- [Split Bill Calculator]({{ '/en/tools/split-bill-calculator/' | relative_url }})
+
+## FAQ
+### Can I calculate only one product?
+Yes. Complete product A and leave product B blank.
+
+### How do I compare 500g with 1kg?
+Choose weight and enter both quantities in the same unit—for example, 500g and 1000g.
+
+### Does a bundle automatically mean better value?
+No. Compare the unit prices after applying any discount to the total price.

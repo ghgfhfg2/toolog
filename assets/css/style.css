@@ -2014,6 +2014,19 @@ a:hover { color: #fff; text-decoration: none; }
 .dc-ui .tool-result[data-state="warning"] { border-color: #efc36a; }
 .dc-ui .tool-result[data-state="error"] { border-color: #e7a1a8; }
 
+/* Unit price calculator */
+.up-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.up-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.up-product { margin: 0; padding: 1rem; border: 1px solid var(--border); border-radius: 14px; }
+.up-product legend { padding: 0 .4rem; font-weight: 700; }
+.up-product .tool-row-grid { margin: 0; }
+.up-ui .tool-hint { margin: .4rem 0 0; color: var(--muted); font-size: .84rem; line-height: 1.55; }
+.up-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.up-ui #up-help[data-state="error"] { border-color: #e7a1a8; }
+.up-ui #up-help[data-state="warning"] { border-color: #efc36a; }
+.up-ui #up-help[data-state="success"] { border-color: #9fd8b0; }
+.up-stats strong { overflow-wrap: anywhere; }
+
 /* Severance pay calculator */
 .sev-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .sev-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -2197,6 +2210,9 @@ a:hover { color: #fff; text-decoration: none; }
   .dc-ui .pct-grid,
   .dc-ui .dc-actions { grid-template-columns: 1fr; }
   .dc-ui .dc-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .up-grid,
+  .up-actions { grid-template-columns: 1fr; }
+  .tool-stats.up-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sev-grid,
   .sev-actions { grid-template-columns: 1fr; }
   .tool-stats.sev-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }

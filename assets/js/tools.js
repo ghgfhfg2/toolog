@@ -17069,6 +17069,7 @@
     const subAEl = document.getElementById('up-sub-a');
     const subBEl = document.getElementById('up-sub-b');
     const help = document.getElementById('up-help');
+    const sampleBtn = document.getElementById('up-sample');
     const copyBtn = document.getElementById('up-copy');
     const resetBtn = document.getElementById('up-reset');
 
@@ -17076,8 +17077,12 @@
 
     const text = {
       ko: {
-        need: '가격과 수량을 입력하면 단가가 계산됩니다.',
-        invalid: '수량은 0보다 커야 합니다.',
+        need: '상품 A의 총 가격과 수량을 입력하세요. 상품 B까지 입력하면 비교할 수 있습니다.',
+        incomplete: (name) => `${name}의 가격과 수량을 모두 입력해 주세요.`,
+        invalidPrice: (name) => `${name} 가격은 0 이상 1조 원 이하의 정수로 입력해 주세요.`,
+        invalidQty: (name) => `${name} 수량은 0보다 크고 1조 이하인 숫자로 입력해 주세요.`,
+        countInteger: (name) => `${name} 개수는 1 이상의 정수로 입력해 주세요.`,
+        tooLarge: '계산 결과가 너무 큽니다. 가격이나 수량을 줄여 주세요.',
         same: '거의 동일',
         aCheaper: '상품 A가 더 저렴',
         bCheaper: '상품 B가 더 저렴',
@@ -17092,11 +17097,18 @@
         per1l: '1L당',
         copyDefault: '결과 복사',
         copied: '복사됨',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        sampleLoaded: '묶음 상품 비교 예시를 불러왔습니다.',
+        cleared: '입력값을 초기화했습니다.',
         copy: (a,b,c,d,sa,sb) => `단가 계산 결과 | A ${a} | B ${b} | 비교 ${c} | 절감 ${d} | A 보조 ${sa} | B 보조 ${sb}`
       },
       en: {
-        need: 'Enter price and quantity to calculate unit price.',
-        invalid: 'Quantity must be greater than 0.',
+        need: "Enter product A's total price and quantity. Add product B to compare.",
+        incomplete: (name) => `Enter both price and quantity for ${name}.`,
+        invalidPrice: (name) => `Enter ${name}'s price as a whole number from 0 to 1 trillion.`,
+        invalidQty: (name) => `Enter ${name}'s quantity as a number greater than 0 and no more than 1 trillion.`,
+        countInteger: (name) => `Enter ${name}'s item count as a whole number of at least 1.`,
+        tooLarge: 'The result is too large. Reduce the price or quantity range.',
         same: 'Almost the same',
         aCheaper: 'Product A is cheaper',
         bCheaper: 'Product B is cheaper',
@@ -17111,11 +17123,18 @@
         per1l: 'Per 1L',
         copyDefault: 'Copy result',
         copied: 'Copied',
+        copyFail: 'Automatic copy is unavailable.',
+        sampleLoaded: 'Loaded a bundle comparison example.',
+        cleared: 'Cleared all inputs.',
         copy: (a,b,c,d,sa,sb) => `Unit price result | A ${a} | B ${b} | Compare ${c} | Savings ${d} | A extra ${sa} | B extra ${sb}`
       },
       ja: {
-        need: '価格と数量を入力すると単価を計算できます。',
-        invalid: '数量は0より大きい必要があります。',
+        need: '商品Aの総価格と数量を入力してください。商品Bを追加すると比較できます。',
+        incomplete: (name) => `${name}の価格と数量を両方入力してください。`,
+        invalidPrice: (name) => `${name}の価格は0以上1兆以下の整数で入力してください。`,
+        invalidQty: (name) => `${name}の数量は0より大きく1兆以下の数値で入力してください。`,
+        countInteger: (name) => `${name}の個数は1以上の整数で入力してください。`,
+        tooLarge: '計算結果が大きすぎます。価格または数量を小さくしてください。',
         same: 'ほぼ同じ',
         aCheaper: '商品Aが安い',
         bCheaper: '商品Bが安い',
@@ -17130,19 +17149,25 @@
         per1l: '1Lあたり',
         copyDefault: '結果をコピー',
         copied: 'コピー完了',
+        copyFail: '自動コピーを利用できません。',
+        sampleLoaded: 'まとめ買い比較の例を入力しました。',
+        cleared: '入力をクリアしました。',
         copy: (a,b,c,d,sa,sb) => `単価計算結果 | A ${a} | B ${b} | 比較 ${c} | 節約 ${d} | A補助 ${sa} | B補助 ${sb}`
       }
-    }[pageLang] || { need: '가격과 수량을 입력하면 단가가 계산됩니다.', invalid: '수량은 0보다 커야 합니다.', same: '거의 동일', aCheaper: '상품 A가 더 저렴', bCheaper: '상품 B가 더 저렴', save: (money, pct) => `${money} 절약 · 약 ${pct}% 차이`, onlyA: '상품 A 단가만 계산했습니다.', onlyB: '상품 B 단가만 계산했습니다.', compare: (label, money, pct) => `${label} · 기준 단가 차이 ${money} (${pct}%)`, perItem: '1개당', per100g: '100g당', per1kg: '1kg당', per100ml: '100ml당', per1l: '1L당', copyDefault: '결과 복사', copied: '복사됨', copy: (a,b,c,d,sa,sb) => `단가 계산 결과 | A ${a} | B ${b} | 비교 ${c} | 절감 ${d} | A 보조 ${sa} | B 보조 ${sb}` };
+    }[pageLang] || {};
 
-    const fmtMoney = (v) => `${Math.round(v || 0).toLocaleString(numberLocale)}${pageLang === 'en' ? ' KRW' : (pageLang === 'ja' ? 'ウォン' : '원')}`;
-    const q = (el) => { const n = Number(el?.value || 0); return Number.isFinite(n) ? n : 0; };
+    const fmtMoney = (v) => `${Number(v || 0).toLocaleString(numberLocale, { maximumFractionDigits: 2 })}${pageLang === 'en' ? ' KRW' : (pageLang === 'ja' ? 'ウォン' : '원')}`;
     const copyText = async (textValue) => {
-      try { await navigator.clipboard.writeText(textValue); }
-      catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = textValue; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(textValue);
+        return;
       }
+      const ta = document.createElement('textarea');
+      ta.value = textValue; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      const copied = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (!copied) throw new Error('copy failed');
     };
 
     const syncUnits = () => {
@@ -17153,6 +17178,11 @@
       Array.from(unit.options).forEach((opt) => {
         const allowed = m === 'count' ? ['count'] : (m === 'weight' ? ['g','kg'] : ['ml','l']);
         opt.hidden = !allowed.includes(opt.value);
+      });
+      [qtyA, qtyB].forEach((input) => {
+        input.step = m === 'count' ? '1' : '0.01';
+        input.min = m === 'count' ? '1' : '0.01';
+        input.inputMode = m === 'count' ? 'numeric' : 'decimal';
       });
     };
 
@@ -17175,46 +17205,83 @@
       if (baseUnitPrice == null) return '-';
       if (unitValue === 'count') return `${text.perItem} ${fmtMoney(baseUnitPrice)}`;
       if (unitValue === 'g') return `${text.per100g} ${fmtMoney(baseUnitPrice * 100)} · ${text.per1kg} ${fmtMoney(baseUnitPrice * 1000)}`;
-      if (unitValue === 'kg') return `${text.per1kg} ${fmtMoney(baseUnitPrice * 1000)}`;
+      if (unitValue === 'kg') return `${text.per100g} ${fmtMoney(baseUnitPrice * 100)} · ${text.per1kg} ${fmtMoney(baseUnitPrice * 1000)}`;
       if (unitValue === 'ml') return `${text.per100ml} ${fmtMoney(baseUnitPrice * 100)} · ${text.per1l} ${fmtMoney(baseUnitPrice * 1000)}`;
-      return `${text.per1l} ${fmtMoney(baseUnitPrice * 1000)}`;
+      return `${text.per100ml} ${fmtMoney(baseUnitPrice * 100)} · ${text.per1l} ${fmtMoney(baseUnitPrice * 1000)}`;
     };
 
-    const render = () => {
+    const setStatus = (message, state = '') => {
+      help.textContent = message;
+      help.dataset.state = state;
+    };
+
+    const resetOutputs = () => {
+      [unitAEl, unitBEl, compareEl, savingsEl, subAEl, subBEl].forEach((el) => { el.textContent = '-'; });
+      copyBtn.disabled = true;
+    };
+
+    const setInvalid = (elements = []) => {
+      [priceA, qtyA, priceB, qtyB].forEach((el) => el.setAttribute('aria-invalid', elements.includes(el) ? 'true' : 'false'));
+    };
+
+    const readPair = (priceEl, qtyEl, name) => {
+      const priceRaw = priceEl.value.trim();
+      const qtyRaw = qtyEl.value.trim();
+      if (!priceRaw && !qtyRaw) return { missing: true };
+      if (!priceRaw || !qtyRaw) return { error: text.incomplete(name), fields: [!priceRaw ? priceEl : qtyEl] };
+      const price = Number(priceRaw);
+      const qtyValue = Number(qtyRaw);
+      if (!Number.isFinite(price) || !Number.isInteger(price) || price < 0 || price > 1000000000000) {
+        return { error: text.invalidPrice(name), fields: [priceEl] };
+      }
+      if (!Number.isFinite(qtyValue) || qtyValue <= 0 || qtyValue > 1000000000000) {
+        return { error: text.invalidQty(name), fields: [qtyEl] };
+      }
+      if (mode.value === 'count' && !Number.isInteger(qtyValue)) {
+        return { error: text.countInteger(name), fields: [qtyEl] };
+      }
+      return { price, qty: qtyValue };
+    };
+
+    const render = (message = '') => {
       syncUnits();
-      const pa = Math.max(0, q(priceA));
-      const qa = Math.max(0, q(qtyA));
-      const pb = Math.max(0, q(priceB));
-      const qb = Math.max(0, q(qtyB));
-      const uv = unit.value || 'count';
-
-      const ua = perBase(pa, qa, uv);
-      const ub = perBase(pb, qb, uv);
-
-      unitAEl.textContent = ua == null ? '-' : `${subLabel(uv)} ${fmtMoney(uv === 'count' ? ua : (['g','ml'].includes(uv) ? ua * 100 : ua * 1000))}`;
-      unitBEl.textContent = ub == null ? '-' : `${subLabel(uv)} ${fmtMoney(uv === 'count' ? ub : (['g','ml'].includes(uv) ? ub * 100 : ub * 1000))}`;
-      subAEl.textContent = subValue(ua, uv);
-      subBEl.textContent = subValue(ub, uv);
-
-      if (ua == null && ub == null) {
-        compareEl.textContent = '-';
-        savingsEl.textContent = '-';
-        help.textContent = text.need;
+      setInvalid();
+      resetOutputs();
+      const a = readPair(priceA, qtyA, pageLang === 'en' ? 'product A' : (pageLang === 'ja' ? '商品A' : '상품 A'));
+      const b = readPair(priceB, qtyB, pageLang === 'en' ? 'product B' : (pageLang === 'ja' ? '商品B' : '상품 B'));
+      const invalid = [a, b].find((item) => item.error);
+      if (invalid) {
+        setInvalid(invalid.fields);
+        setStatus(invalid.error, 'error');
         return;
       }
-      if ((qa <= 0 && pa > 0) || (qb <= 0 && pb > 0)) {
-        help.textContent = text.invalid;
+      if (a.missing && b.missing) {
+        setStatus(message || text.need);
+        return;
       }
+      const uv = unit.value || 'count';
+      const ua = a.missing ? null : perBase(a.price, a.qty, uv);
+      const ub = b.missing ? null : perBase(b.price, b.qty, uv);
+      const displayFactor = uv === 'count' ? 1 : (['g','ml'].includes(uv) ? 100 : 1000);
+      if ([ua, ub].some((value) => value != null && (!Number.isFinite(value * displayFactor) || value * displayFactor > 1000000000000000000))) {
+        setStatus(text.tooLarge, 'error');
+        return;
+      }
+
+      unitAEl.textContent = ua == null ? '-' : `${subLabel(uv)} ${fmtMoney(ua * displayFactor)}`;
+      unitBEl.textContent = ub == null ? '-' : `${subLabel(uv)} ${fmtMoney(ub * displayFactor)}`;
+      subAEl.textContent = subValue(ua, uv);
+      subBEl.textContent = subValue(ub, uv);
       if (ua != null && ub == null) {
         compareEl.textContent = 'A';
-        savingsEl.textContent = '-';
-        help.textContent = text.onlyA;
+        setStatus(message || text.onlyA, 'success');
+        copyBtn.disabled = false;
         return;
       }
       if (ua == null && ub != null) {
         compareEl.textContent = 'B';
-        savingsEl.textContent = '-';
-        help.textContent = text.onlyB;
+        setStatus(message || text.onlyB, 'success');
+        copyBtn.disabled = false;
         return;
       }
 
@@ -17224,35 +17291,46 @@
       if (cheaper === 'same' || diff < 1e-9) {
         compareEl.textContent = text.same;
         savingsEl.textContent = text.save(fmtMoney(0), '0');
-        help.textContent = text.compare(text.same, fmtMoney(0), '0');
+        setStatus(message || text.compare(text.same, fmtMoney(0), '0'), 'success');
       } else if (cheaper === 'A') {
         compareEl.textContent = text.aCheaper;
-        savingsEl.textContent = text.save(fmtMoney(uv === 'count' ? diff : diff * (['g','ml'].includes(uv) ? 100 : 1000)), pct.toLocaleString(numberLocale, { maximumFractionDigits: 2 }));
-        help.textContent = text.compare(text.aCheaper, fmtMoney(uv === 'count' ? diff : diff * (['g','ml'].includes(uv) ? 100 : 1000)), pct.toLocaleString(numberLocale, { maximumFractionDigits: 2 }));
+        savingsEl.textContent = text.save(fmtMoney(diff * displayFactor), pct.toLocaleString(numberLocale, { maximumFractionDigits: 2 }));
+        setStatus(message || text.compare(text.aCheaper, fmtMoney(diff * displayFactor), pct.toLocaleString(numberLocale, { maximumFractionDigits: 2 })), 'success');
       } else {
         compareEl.textContent = text.bCheaper;
-        savingsEl.textContent = text.save(fmtMoney(uv === 'count' ? diff : diff * (['g','ml'].includes(uv) ? 100 : 1000)), pct.toLocaleString(numberLocale, { maximumFractionDigits: 2 }));
-        help.textContent = text.compare(text.bCheaper, fmtMoney(uv === 'count' ? diff : diff * (['g','ml'].includes(uv) ? 100 : 1000)), pct.toLocaleString(numberLocale, { maximumFractionDigits: 2 }));
+        savingsEl.textContent = text.save(fmtMoney(diff * displayFactor), pct.toLocaleString(numberLocale, { maximumFractionDigits: 2 }));
+        setStatus(message || text.compare(text.bCheaper, fmtMoney(diff * displayFactor), pct.toLocaleString(numberLocale, { maximumFractionDigits: 2 })), 'success');
       }
+      copyBtn.disabled = false;
     };
 
-    [mode, unit, priceA, qtyA, priceB, qtyB].forEach((el) => el?.addEventListener('input', render));
+    [priceA, qtyA, priceB, qtyB].forEach((el) => el?.addEventListener('input', () => render()));
+    [mode, unit].forEach((el) => el?.addEventListener('change', () => render()));
+    sampleBtn?.addEventListener('click', () => {
+      mode.value = 'count'; unit.value = 'count';
+      priceA.value = '5980'; qtyA.value = '4'; priceB.value = '8400'; qtyB.value = '6';
+      render(text.sampleLoaded);
+      priceA.focus();
+    });
     copyBtn?.addEventListener('click', async () => {
+      if (copyBtn.disabled) return;
       const payload = text.copy(unitAEl.textContent, unitBEl.textContent, compareEl.textContent, savingsEl.textContent, subAEl.textContent, subBEl.textContent);
-      await copyText(payload);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = text.copied;
-      setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+      try {
+        await copyText(payload);
+        const old = copyBtn.textContent;
+        copyBtn.textContent = text.copied;
+        setStatus(text.copied, 'success');
+        setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+      } catch (_) {
+        setStatus(text.copyFail, 'error');
+      }
     });
     resetBtn?.addEventListener('click', () => {
       mode.value = 'count'; unit.value = 'count';
-      priceA.value = 5980; qtyA.value = 4; priceB.value = 8400; qtyB.value = 6;
-      render();
+      priceA.value = ''; qtyA.value = ''; priceB.value = ''; qtyB.value = '';
+      render(text.cleared);
+      priceA.focus();
     });
-    if (!priceA.value) priceA.value = 5980;
-    if (!qtyA.value) qtyA.value = 4;
-    if (!priceB.value) priceB.value = 8400;
-    if (!qtyB.value) qtyB.value = 6;
     render();
   }
 
