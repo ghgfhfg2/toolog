@@ -1,7 +1,9 @@
 ---
 layout: tool
-title: 単価計算ツール | 1個あたり・100gあたり・1Lあたりを比較
-description: 価格と数量を入力すると、1個あたり・100gあたり・1kgあたり・100mlあたり・1Lあたりの単価を比較できます。
+title: 単価計算ツール | まとめ買い・容量違いの価格を比較
+description: まとめ買い・大容量商品の1個・100g・1kg・100ml・1Lあたりの価格、単価差、節約率を比較できます。
+lang: ja
+permalink: /ja/tools/unit-price-calculator/
 category: calculator
 category_label: ショッピング/比較
 thumbnail: /assets/thumbs/ja/unit-price-calculator.svg
@@ -9,7 +11,9 @@ image:
   path: /assets/thumbs/ja/unit-price-calculator.svg
   alt: 単価計算ツールのサムネイル
 tool_key: unit-price-calculator
-keywords: [単価計算, 100gあたり価格, 1個あたり価格, まとめ買い比較, コスパ計算]
+tool_type: calculator
+topic_cluster: shopping
+keywords: [単価計算, 100gあたり価格, 1kgあたり価格, 1個あたり価格, 1Lあたり価格, まとめ買い比較, 容量違い 価格比較]
 related_tools: [discount-calculator, percent-calculator, split-bill-calculator]
 faq:
   - q: サイズが違う商品でも比較できますか？
@@ -23,6 +27,10 @@ faq:
   - q: 500gと1kgはどう比較しますか？
     a: 両方をg、または両方をkgのように同じ単位へそろえて入力します。
 canonical_url: /ja/tools/unit-price-calculator/
+alternate_urls:
+  ko: /tools/unit-price-calculator/
+  en: /en/tools/unit-price-calculator/
+  ja: /ja/tools/unit-price-calculator/
 ---
 
 ## 単価計算ツールはいつ便利？
@@ -36,10 +44,19 @@ canonical_url: /ja/tools/unit-price-calculator/
 - 商品A/Bの比較
 - 節約額と節約率
 
+## 主な機能
+- 総価格と個数から1個あたりの価格を計算
+- g・kg・ml・Lを使って重さ・容量あたりの価格を換算
+- 同じ基準単位で2商品を比較し、単価差と節約率を表示
+- 比較しないときは商品Aだけで単価を計算
+- 未入力・入力途中・範囲外を判別し、結果の代わりに案内を表示
+
 ## 使い方
 1. 比較基準（個数・重さ・容量）を選びます。
-2. 商品Aと商品Bの総価格と総数量を入力します。
-3. 単価と、どちらが安いかを確認します。
+2. 2商品に共通する数量単位を選び、表記単位が違う場合は総量を換算します。
+3. 商品Aの総価格と総数量を入力します。
+4. 比較する場合は、商品Bの価格と数量も両方入力します。
+5. 基本単価、換算単価、安い商品、単価差、節約率を確認します。
 
 商品Bは任意です。入力を始めた商品は価格と数量の両方が必要です。個数は整数、重さ・容量は小数も入力できます。負数、数量0、範囲外の値は結果を出さず、該当欄にエラーを表示します。
 
@@ -52,6 +69,7 @@ canonical_url: /ja/tools/unit-price-calculator/
 クーポン、送料、ポイントは先に総価格へ反映してください。品質、内容物、賞味期限などは数値比較に含まれません。
 
 ## 例
+### お菓子のまとめ買いを比較
 - 商品A: 4袋 5,980ウォン
 - 商品B: 6袋 8,400ウォン
 
@@ -59,12 +77,27 @@ canonical_url: /ja/tools/unit-price-calculator/
 → 商品B: 1袋あたり 1,400ウォン
 → **商品Bのほうが単価は安いです。**
 
+### 牛乳の容量違いを比較
+- 商品A: 900mlで2,480ウォン
+- 商品B: 1.8Lで4,690ウォン
+
+900mlと1800mlのように同じ単位へそろえて入力します。商品Aは100mlあたり約276ウォン、商品Bは約261ウォンとなり、大容量の商品Bのほうが単価は安くなります。
+
 ## 関連ツール
 - [割引計算機]({{ '/ja/tools/discount-calculator/' | relative_url }})
 - [パーセント計算機]({{ '/ja/tools/percent-calculator/' | relative_url }})
 - [割り勘計算機]({{ '/ja/tools/split-bill-calculator/' | relative_url }})
 
 ## FAQ
+### サイズが違う商品でも比較できますか？
+はい。総量を同じ単位へ換算してください。たとえば500gと1kgなら、500gと1000gとして比較できます。
+
+### 100g・1kg・100ml・1Lあたりの価格も表示されますか？
+はい。重さ・容量モードでは、基本単価と一緒によく使う換算単価を表示します。
+
+### セール商品と通常商品も比較できますか？
+はい。クーポン、送料、ポイントを各商品の総価格へ反映してから入力すると、実質単価を比較できます。
+
 ### 1商品だけでも計算できますか？
 はい。商品Aだけを入力し、商品Bは空欄のままで使えます。
 

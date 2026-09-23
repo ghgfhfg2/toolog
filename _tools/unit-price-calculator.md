@@ -8,6 +8,8 @@ image:
   path: /assets/thumbs/unit-price-calculator.svg
   alt: 단가 계산기 화면 예시 썸네일
 tool_key: unit-price-calculator
+tool_type: calculator
+topic_cluster: shopping
 keywords: [단가 계산기, 100g당 가격 계산, 1개당 가격 계산, 묶음 가격 비교, 가성비 계산기]
 related_tools: [discount-calculator, percent-calculator, split-bill-calculator]
 faq:
@@ -21,6 +23,10 @@ faq:
     a: 네. 상품 A의 가격과 수량만 입력하면 단가만 계산하고, 상품 B까지 입력하면 두 상품을 비교합니다.
   - q: 500g과 1kg처럼 표기 단위가 다르면 어떻게 하나요?
     a: 비교 기준을 무게로 고른 뒤 수량 단위를 g 또는 kg 중 하나로 통일해 입력하세요. 예를 들어 1kg은 1000g으로 입력할 수 있습니다.
+alternate_urls:
+  ko: /tools/unit-price-calculator/
+  en: /en/tools/unit-price-calculator/
+  ja: /ja/tools/unit-price-calculator/
 ---
 
 ## 단가 계산기, 왜 필요할까요?
