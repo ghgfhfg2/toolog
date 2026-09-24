@@ -15042,48 +15042,138 @@
     const hourly = document.getElementById('hms-hourly');
     const weeklyHours = document.getElementById('hms-weekly-hours');
     const weeks = document.getElementById('hms-weeks');
-    const days = document.getElementById('hms-days');
     const includeWeekly = document.getElementById('hms-include-weekly');
+    const attendance = document.getElementById('hms-attendance');
     const weeklyPay = document.getElementById('hms-weekly-pay');
     const monthlyPay = document.getElementById('hms-monthly-pay');
     const annualPay = document.getElementById('hms-annual-pay');
     const weeklyHoliday = document.getElementById('hms-weekly-holiday');
     const help = document.getElementById('hms-help');
+    const exampleBtn = document.getElementById('hms-example');
     const copyBtn = document.getElementById('hms-copy');
     const resetBtn = document.getElementById('hms-reset');
-    if (!hourly || !weeklyHours || !weeks || !days || !includeWeekly || !weeklyPay || !monthlyPay || !annualPay || !weeklyHoliday || !help) return;
+    if (!hourly || !weeklyHours || !weeks || !includeWeekly || !attendance || !weeklyPay || !monthlyPay || !annualPay || !weeklyHoliday || !help || !exampleBtn || !copyBtn || !resetBtn) return;
 
-    const fmt = (n) => `${Math.round(n || 0).toLocaleString(numberLocale)}${pageLang === 'en' ? ' KRW' : pageLang === 'ja' ? 'ウォン' : '원'}`;
+    const hmsText = {
+      ko: {
+        empty: '시급과 주 소정근로시간을 입력하세요.',
+        invalidHourly: '시급은 1원 이상 10억 원 이하의 정수로 입력해 주세요.',
+        invalidHours: '주 소정근로시간은 0.1시간 이상 40시간 이하로 입력해 주세요.',
+        invalidWeeks: '월 환산 주수는 4 이상 5 이하로 입력해 주세요.',
+        belowMinimum: '입력 시급이 2026년 최저임금 10,320원보다 낮습니다. 적용 예외 여부를 확인하세요.',
+        included: (hours) => `주휴 ${hours}시간을 포함한 세전 급여 예상값입니다.`,
+        under15: '4주 평균 주 15시간 미만으로 보고 주휴수당을 제외했습니다.',
+        absent: '소정근로일 개근 조건을 충족하지 않은 것으로 보고 주휴수당을 제외했습니다.',
+        excluded: '설정에 따라 주휴수당을 제외한 세전 급여 예상값입니다.',
+        copied: '계산 결과를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력값을 초기화했습니다.',
+        title: '시급 월급 계산 결과',
+        summary: (v) => `주급 ${v.weekly} / 월급(세전) ${v.monthly} / 연봉(세전) ${v.annual} / 주휴수당(주) ${v.holiday}`
+      },
+      en: {
+        empty: 'Enter an hourly wage and contracted weekly hours.',
+        invalidHourly: 'Enter a whole-number hourly wage from KRW 1 to KRW 1 billion.',
+        invalidHours: 'Enter contracted weekly hours from 0.1 to 40.',
+        invalidWeeks: 'Enter weeks per month from 4 to 5.',
+        belowMinimum: 'The wage entered is below Korea’s 2026 minimum wage of KRW 10,320. Check whether an exception applies.',
+        included: (hours) => `Gross estimate includes ${hours} weekly holiday hours.`,
+        under15: 'Weekly holiday pay was excluded because the 4-week average is treated as under 15 hours.',
+        absent: 'Weekly holiday pay was excluded because all contracted workdays were not completed.',
+        excluded: 'Gross estimate excludes weekly holiday pay as selected.',
+        copied: 'Copied the calculation result.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared the inputs.',
+        title: 'Hourly to monthly salary result',
+        summary: (v) => `Weekly ${v.weekly} / monthly gross ${v.monthly} / annual gross ${v.annual} / weekly holiday pay ${v.holiday}`
+      },
+      ja: {
+        empty: '時給と週の所定労働時間を入力してください。',
+        invalidHourly: '時給は1ウォン以上10億ウォン以下の整数で入力してください。',
+        invalidHours: '週の所定労働時間は0.1〜40時間で入力してください。',
+        invalidWeeks: '月換算週数は4〜5で入力してください。',
+        belowMinimum: '入力した時給は韓国の2026年最低賃金10,320ウォン未満です。適用除外の有無を確認してください。',
+        included: (hours) => `週休${hours}時間を含む額面給与の概算です。`,
+        under15: '4週平均が週15時間未満として週休手当を除外しました。',
+        absent: '所定労働日を皆勤していないものとして週休手当を除外しました。',
+        excluded: '設定により週休手当を除外した額面給与の概算です。',
+        copied: '計算結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力値をクリアしました。',
+        title: '時給・月給計算結果',
+        summary: (v) => `週給 ${v.weekly} / 月給（額面）${v.monthly} / 年収（額面）${v.annual} / 週休手当 ${v.holiday}`
+      }
+    }[pageLang] || {};
+    let current = null;
+
+    const fmt = (n) => `${Math.round(n).toLocaleString(numberLocale)}${pageLang === 'en' ? ' KRW' : pageLang === 'ja' ? 'ウォン' : '원'}`;
 
     const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
-      catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return;
       }
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      const copied = document.execCommand('copy');
+      ta.remove();
+      if (!copied) throw new Error('copy failed');
+    };
+
+    const setStatus = (message, state = '') => {
+      help.textContent = message;
+      help.dataset.state = state;
+    };
+
+    const clearResult = () => {
+      [weeklyPay, monthlyPay, annualPay, weeklyHoliday].forEach((el) => { el.textContent = '-'; });
+      copyBtn.disabled = true;
+      current = null;
     };
 
     const render = () => {
-      const h = Math.max(0, Number(hourly.value || 0));
-      const wh = Math.max(0, Number(weeklyHours.value || 0));
-      const wm = Math.min(5, Math.max(4, Number(weeks.value || 4.345)));
-      const wd = Math.min(7, Math.max(1, Math.floor(Number(days.value || 5))));
-      weeks.value = wm;
-      days.value = wd;
+      const hourlyRaw = hourly.value.trim();
+      const hoursRaw = weeklyHours.value.trim();
+      const weeksRaw = weeks.value.trim();
+      [hourly, weeklyHours, weeks].forEach((el) => el.setAttribute('aria-invalid', 'false'));
 
-      if (!(h > 0) || !(wh > 0)) {
-        weeklyPay.textContent = '-';
-        monthlyPay.textContent = '-';
-        annualPay.textContent = '-';
-        weeklyHoliday.textContent = '-';
-        help.textContent = pageLang === 'en' ? 'Enter hourly wage and weekly hours.' : pageLang === 'ja' ? '時給と週労働時間を入力してください。' : '시급과 주 근무시간을 입력하세요.';
+      if (!hourlyRaw && !hoursRaw) {
+        clearResult();
+        setStatus(hmsText.empty);
+        return;
+      }
+
+      const h = Number(hourlyRaw);
+      const wh = Number(hoursRaw);
+      const wm = Number(weeksRaw);
+      if (!Number.isInteger(h) || h < 1 || h > 1000000000) {
+        clearResult();
+        hourly.setAttribute('aria-invalid', 'true');
+        setStatus(hmsText.invalidHourly, 'error');
+        return;
+      }
+      if (!Number.isFinite(wh) || wh < 0.1 || wh > 40) {
+        clearResult();
+        weeklyHours.setAttribute('aria-invalid', 'true');
+        setStatus(hmsText.invalidHours, 'error');
+        return;
+      }
+      if (!Number.isFinite(wm) || wm < 4 || wm > 5) {
+        clearResult();
+        weeks.setAttribute('aria-invalid', 'true');
+        setStatus(hmsText.invalidWeeks, 'error');
         return;
       }
 
       const baseWeekly = h * wh;
-      const holidayHours = wh >= 15 ? Math.min(8, wh / wd) : 0;
-      const holidayPay = includeWeekly.checked ? holidayHours * h : 0;
+      const eligible = includeWeekly.checked && attendance.checked && wh >= 15;
+      const holidayHours = eligible ? Math.min(8, (wh / 40) * 8) : 0;
+      const holidayPay = holidayHours * h;
       const weekTotal = baseWeekly + holidayPay;
       const monthTotal = weekTotal * wm;
       const yearTotal = monthTotal * 12;
@@ -15092,30 +15182,50 @@
       monthlyPay.textContent = fmt(monthTotal);
       annualPay.textContent = fmt(yearTotal);
       weeklyHoliday.textContent = fmt(holidayPay);
-      help.textContent = wh >= 15
-        ? (pageLang === 'en' ? 'Weekly holiday pay included (15+ weekly hours).' : pageLang === 'ja' ? '週15時間以上のため週休手当を反映しました。' : '주 15시간 이상으로 주휴수당을 반영했습니다.')
-        : (pageLang === 'en' ? 'Weekly holiday pay is excluded under 15 weekly hours.' : pageLang === 'ja' ? '週15時間未満のため週休手当은 0です。' : '주 15시간 미만으로 주휴수당은 0원입니다.');
+      current = {
+        weekly: weeklyPay.textContent,
+        monthly: monthlyPay.textContent,
+        annual: annualPay.textContent,
+        holiday: weeklyHoliday.textContent
+      };
+      copyBtn.disabled = false;
+
+      if (h < 10320) setStatus(hmsText.belowMinimum, 'warning');
+      else if (!includeWeekly.checked) setStatus(hmsText.excluded, 'success');
+      else if (wh < 15) setStatus(hmsText.under15, 'warning');
+      else if (!attendance.checked) setStatus(hmsText.absent, 'warning');
+      else setStatus(hmsText.included(holidayHours.toLocaleString(numberLocale, { maximumFractionDigits: 2 })), 'success');
     };
 
-    [hourly, weeklyHours, weeks, days, includeWeekly].forEach((el) => el.addEventListener('input', render));
-    copyBtn?.addEventListener('click', async () => {
-      if (weeklyPay.textContent === '-') return;
-      const title = pageLang === 'en' ? 'Hourly↔Monthly salary result' : pageLang === 'ja' ? '時給↔月給計算結果' : '시급↔월급 계산 결과';
-      await copyText(`${title} | ${weeklyPay.textContent} | ${monthlyPay.textContent} | ${annualPay.textContent} | ${weeklyHoliday.textContent}`);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = pageLang === 'en' ? 'Copied' : pageLang === 'ja' ? 'コピー完了' : '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || (pageLang === 'en' ? 'Copy result' : pageLang === 'ja' ? '結果をコピー' : '결과 복사'); }, 900);
-    });
-    resetBtn?.addEventListener('click', () => {
-      hourly.value = 10030;
-      weeklyHours.value = 20;
-      weeks.value = 4.345;
-      days.value = 5;
+    [hourly, weeklyHours, weeks, includeWeekly, attendance].forEach((el) => el.addEventListener('input', render));
+    exampleBtn.addEventListener('click', () => {
+      hourly.value = '10320';
+      weeklyHours.value = '20';
+      weeks.value = '4.345';
       includeWeekly.checked = true;
+      attendance.checked = true;
       render();
+      hourly.focus();
     });
-    if (!hourly.value) hourly.value = 10030;
-    if (!weeklyHours.value) weeklyHours.value = 20;
+    copyBtn.addEventListener('click', async () => {
+      if (!current) return;
+      try {
+        await copyText(`${hmsText.title} | ${hmsText.summary(current)}`);
+        setStatus(hmsText.copied, 'success');
+      } catch (_) {
+        setStatus(hmsText.copyFail, 'error');
+      }
+    });
+    resetBtn.addEventListener('click', () => {
+      hourly.value = '';
+      weeklyHours.value = '';
+      weeks.value = '4.345';
+      includeWeekly.checked = true;
+      attendance.checked = true;
+      render();
+      setStatus(hmsText.cleared);
+      hourly.focus();
+    });
     render();
   }
 

@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-24 21:00 KST
+- Tool: `hourly-monthly-salary-calculator`
+- Selection reason: recent quality runs covered other tools; this oldest untouched March-era wage tool calculated short-time workers' weekly holiday hours from their own workdays, which could overstate pay, silently clamped invalid and out-of-range values, prefilled results instead of showing an empty state, and still used the 2025 minimum wage.
+- Scope: improved only the existing multilingual hourly-to-monthly salary tool, home metadata, layout, styles, and script with a proportional 40-hour weekly-holiday estimate, attendance and 15-hour eligibility handling, a 2026 KRW 10,320 minimum-wage warning/example, strict field validation, true empty/error/warning/success states, valid-result-only copying, accessible descriptions/live status, one-column mobile inputs/actions, expanded formulas/limitations/FAQ, official references, and localized related links. No new tool was added.
+- Validation: YAML/front matter and 98-tool multilingual integrity checks, `node --check`, `git diff --check`, tool-count preservation, localized related-link checks, mobile CSS rules, and DOM-driven empty/sample/prorated-holiday/15-hour/attendance/fractional/negative/range/clear cases passed. The minimum wage and weekly-holiday eligibility/proportional estimate were cross-checked against current Ministry of Employment and Labor and National Law Information Center guidance. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-23 21:00 KST
 - Tool: `unit-price-calculator`
 - Selection reason: recent quality runs covered other tools; this March-era shopping calculator had no recorded quality pass, silently clamped negative and invalid values to zero, prefilled results instead of showing a true empty state, allowed copying empty output, and did not reject incomplete product pairs or fractional item counts.

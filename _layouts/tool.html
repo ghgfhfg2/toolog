@@ -3713,43 +3713,40 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <p class="tool-result" id="ldp-rules">{% if page.lang == 'en' %}Blank entries are ignored, duplicate names are removed after trimming spaces, and winner count is capped at the unique participant count. The draw runs only in your browser.{% elsif page.lang == 'ja' %}空欄は除外し、前後の空白を整えた後に重複名を削除します。当選人数は重複除外後の参加者数までに制限され、抽選はブラウザ内だけで行われます。{% else %}빈 항목은 제외하고 앞뒤 공백을 정리한 뒤 중복 이름을 제거합니다. 당첨 인원은 고유 참여자 수까지만 허용하며 추첨은 브라우저 안에서만 처리됩니다.{% endif %}</p>
         </div>
       {% when 'hourly-monthly-salary-calculator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui hms-ui">
+          <div class="tool-row-grid hms-grid">
             <div>
               <label for="hms-hourly">{% if page.lang == 'en' %}Hourly wage{% elsif page.lang == 'ja' %}時給{% else %}시급(원){% endif %}</label>
-              <input id="hms-hourly" type="number" min="0" step="10" inputmode="numeric" />
+              <input id="hms-hourly" type="number" min="1" max="1000000000" step="1" inputmode="numeric" placeholder="{% if page.lang == 'en' %}e.g. 10320{% elsif page.lang == 'ja' %}例: 10320{% else %}예: 10320{% endif %}" aria-describedby="hms-help hms-rules" />
             </div>
             <div>
-              <label for="hms-weekly-hours">{% if page.lang == 'en' %}Weekly work hours{% elsif page.lang == 'ja' %}週の労働時間{% else %}주 근무시간{% endif %}</label>
-              <input id="hms-weekly-hours" type="number" min="0" max="80" step="0.5" inputmode="decimal" />
+              <label for="hms-weekly-hours">{% if page.lang == 'en' %}Contracted weekly hours{% elsif page.lang == 'ja' %}週の所定労働時間{% else %}주 소정근로시간{% endif %}</label>
+              <input id="hms-weekly-hours" type="number" min="0.1" max="40" step="0.1" inputmode="decimal" placeholder="{% if page.lang == 'en' %}e.g. 20{% elsif page.lang == 'ja' %}例: 20{% else %}예: 20{% endif %}" aria-describedby="hms-help hms-rules" />
             </div>
           </div>
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid hms-grid">
             <div>
-              <label for="hms-weeks">{% if page.lang == 'en' %}Weeks per month{% elsif page.lang == 'ja' %}月換算 주수{% else %}월 환산 주수{% endif %}</label>
-              <input id="hms-weeks" type="number" min="4" max="5" step="0.001" value="4.345" inputmode="decimal" />
+              <label for="hms-weeks">{% if page.lang == 'en' %}Weeks per month{% elsif page.lang == 'ja' %}月換算週数{% else %}월 환산 주수{% endif %}</label>
+              <input id="hms-weeks" type="number" min="4" max="5" step="0.001" value="4.345" inputmode="decimal" aria-describedby="hms-help hms-rules" />
             </div>
-            <div>
-              <label class="tool-check"><input id="hms-include-weekly" type="checkbox" checked /> {% if page.lang == 'en' %}Include weekly holiday pay (if eligible){% elsif page.lang == 'ja' %}週休手当を含める（対象時）{% else %}주휴수당 포함(대상 시){% endif %}</label>
-            </div>
-          </div>
-          <div class="tool-row-grid pct-grid">
-            <div>
-              <label for="hms-days">{% if page.lang == 'en' %}Workdays per week{% elsif page.lang == 'ja' %}週 근무일수{% else %}주 근무일수{% endif %}</label>
-              <input id="hms-days" type="number" min="1" max="7" step="1" value="5" inputmode="numeric" />
+            <div class="hms-checks" role="group" aria-label="{% if page.lang == 'en' %}Weekly holiday pay conditions{% elsif page.lang == 'ja' %}週休手当の条件{% else %}주휴수당 조건{% endif %}">
+              <label class="tool-check"><input id="hms-include-weekly" type="checkbox" checked /> {% if page.lang == 'en' %}Include weekly holiday pay{% elsif page.lang == 'ja' %}週休手当を含める{% else %}주휴수당 포함{% endif %}</label>
+              <label class="tool-check"><input id="hms-attendance" type="checkbox" checked /> {% if page.lang == 'en' %}Completed all contracted workdays{% elsif page.lang == 'ja' %}所定労働日を皆勤した{% else %}소정근로일 개근{% endif %}</label>
             </div>
           </div>
-          <div class="tool-row-grid pct-actions">
-            <button id="hms-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
-            <button id="hms-reset" type="button">{% if page.lang == 'en' %}Reset{% elsif page.lang == 'ja' %}リセット{% else %}초기화{% endif %}</button>
+          <div class="tool-row-grid hms-actions">
+            <button id="hms-example" type="button">{% if page.lang == 'en' %}Load 2026 example{% elsif page.lang == 'ja' %}2026年の例を入力{% else %}2026년 예시 입력{% endif %}</button>
+            <button id="hms-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="hms-reset" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
-          <div class="tool-stats">
+          <div class="tool-stats hms-stats" aria-label="{% if page.lang == 'en' %}Gross pay estimate{% elsif page.lang == 'ja' %}額面給与の試算結果{% else %}세전 급여 계산 결과{% endif %}">
             <div><strong id="hms-weekly-pay">-</strong><span>{% if page.lang == 'en' %}Weekly pay{% elsif page.lang == 'ja' %}週給{% else %}주급{% endif %}</span></div>
             <div><strong id="hms-monthly-pay">-</strong><span>{% if page.lang == 'en' %}Monthly pay (gross){% elsif page.lang == 'ja' %}月給(額面){% else %}월급(세전){% endif %}</span></div>
             <div><strong id="hms-annual-pay">-</strong><span>{% if page.lang == 'en' %}Annual pay (gross){% elsif page.lang == 'ja' %}年収(額面){% else %}연봉(세전){% endif %}</span></div>
-            <div><strong id="hms-weekly-holiday">-</strong><span>{% if page.lang == 'en' %}Weekly holiday pay included{% elsif page.lang == 'ja' %}週休手当 반영액{% else %}주휴수당 반영액(주){% endif %}</span></div>
+            <div><strong id="hms-weekly-holiday">-</strong><span>{% if page.lang == 'en' %}Weekly holiday pay{% elsif page.lang == 'ja' %}週休手当（週）{% else %}주휴수당(주){% endif %}</span></div>
           </div>
-          <p class="tool-result" id="hms-help">{% if page.lang == 'en' %}Enter hourly wage and hours to estimate monthly and annual gross salary.{% elsif page.lang == 'ja' %}時給と勤務時間を入力すると月給・年収の目安を計算します。{% else %}시급과 근무시간을 입력하면 월급·연봉(세전) 예상값을 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="hms-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter an hourly wage and contracted weekly hours.{% elsif page.lang == 'ja' %}時給と週の所定労働時間を入力してください。{% else %}시급과 주 소정근로시간을 입력하세요.{% endif %}</p>
+          <p class="tool-result" id="hms-rules">{% if page.lang == 'en' %}Korean estimate: weekly holiday hours are prorated as weekly hours ÷ 40 × 8 (max 8) when the 4-week average is at least 15 hours and all contracted workdays were completed. Overtime premiums, tax, insurance, paid leave, and other allowances are excluded.{% elsif page.lang == 'ja' %}韓国基準の概算です。4週平均が週15時間以上で所定労働日を皆勤した場合、週休時間を「週の所定労働時間÷40×8」（上限8時間）で比例計算します。時間外割増、税金、社会保険、その他の手当は含みません。{% else %}한국 기준의 간이 계산입니다. 4주 평균 주 15시간 이상이고 소정근로일을 개근한 경우 주휴시간을 `주 소정근로시간 ÷ 40 × 8`(최대 8시간)로 비례 계산합니다. 연장근로 가산, 세금·보험, 연차·기타 수당은 제외합니다.{% endif %}</p>
         </div>
       {% when 'volumetric-weight-calculator' %}
         <div class="tool-ui vw-ui">

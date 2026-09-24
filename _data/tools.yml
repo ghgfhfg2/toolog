@@ -1250,9 +1250,9 @@
   published_at: 2026-03-18
 
 - id: hourly-monthly-salary-calculator
-  title: 시급 월급 계산기
-  title_en: Hourly to Monthly Salary Calculator
-  title_ja: 時給・月給計算機
+  title: 시급 월급 계산기 (2026)
+  title_en: Korea Hourly to Monthly Salary Calculator
+  title_ja: 韓国の時給・月給計算機
   category: calculator
   category_label: 금융/비즈니스
   category_label_en: Finance/Business
@@ -1260,13 +1260,18 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 시급·주 근무시간·근무일수로 주휴 반영 주급, 월급, 연봉(세전)을 계산해요.
-  description_en: Estimate weekly, monthly, and annual gross pay from hourly wage, weekly hours, and workdays, with optional weekly holiday pay.
-  description_ja: 時給・週労働時間・勤務日数から、週休手当を含む週給・月給・年収（額面）を計算します。
+  description: 시급과 주 소정근로시간으로 주휴수당 포함 주급·월급·연봉을 계산하고 2026 최저임금 미달 여부를 확인해요.
+  description_en: Convert a Korean hourly wage to gross weekly, monthly, and annual pay with prorated weekly holiday pay and a 2026 minimum-wage warning.
+  description_ja: 韓国の時給と週の所定労働時間から、週休手当込みの週給・月給・年収を計算し、2026年最低賃金も確認できます。
   url: /tools/hourly-monthly-salary-calculator/
   url_en: /en/tools/hourly-monthly-salary-calculator/
   url_ja: /ja/tools/hourly-monthly-salary-calculator/
   thumbnail: /assets/thumbs/hourly-monthly-salary-calculator.svg
+  thumbnail_en: /assets/thumbs/en/hourly-monthly-salary-calculator.svg
+  thumbnail_ja: /assets/thumbs/ja/hourly-monthly-salary-calculator.svg
+  published_at: 2026-03-17
+  tool_type: calculator
+  topic_cluster: work
 
 - id: lucky-draw-picker
   title: 랜덤 추첨기
