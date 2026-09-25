@@ -16240,85 +16240,130 @@
     const help = document.getElementById('rg-help');
     const copyBtn = document.getElementById('rg-copy');
     const resetBtn = document.getElementById('rg-reset');
+    const clearBtn = document.getElementById('rg-clear');
 
-    if (!scale || !currentGpa || !completedCredits || !targetGpa || !remainingCredits || !neededGpa || !currentPoints || !maxFinalGpa || !status || !help) return;
+    if (!scale || !currentGpa || !completedCredits || !targetGpa || !remainingCredits || !neededGpa || !currentPoints || !maxFinalGpa || !status || !help || !copyBtn || !resetBtn || !clearBtn) return;
 
     const t = {
       ko: {
-        idle: '현재 GPA·이수학점·목표 GPA·남은 학점을 입력하면 앞으로 필요한 GPA를 계산합니다.',
+        idle: '네 가지 값을 모두 입력하면 앞으로 필요한 GPA를 계산합니다.',
         needInput: '현재 GPA, 이수학점, 목표 GPA, 남은 학점을 모두 입력하세요.',
-        invalid: '입력값이 학점 스케일 범위를 벗어났습니다.',
+        invalidGpa: (max) => `현재 GPA와 목표 GPA는 0 이상 ${max} 이하여야 합니다.`,
+        invalidCredits: '이수학점은 0~1,000, 남은 학점은 0보다 크고 1,000 이하여야 합니다.',
         guaranteed: '이미 목표권',
         achievable: '달성 가능',
         impossible: '달성 어려움',
         impossibleMsg: (need, max) => `남은 학기 평균 ${need}가 필요합니다. 현재 스케일 최고점 ${max}를 넘어 목표 달성이 어렵습니다.`,
         achievableMsg: (need) => `남은 학기 평균 GPA ${need}를 받으면 목표에 도달할 수 있습니다.`,
-        guaranteedMsg: '현재 누적 성적 기준으로 목표권에 있습니다.',
+        guaranteedMsg: '남은 학점의 GPA가 0이어도 최종 목표를 유지할 수 있습니다.',
         copy: (need, points, max, status) => `목표 학점 계산 결과 | 필요한 평균 GPA ${need} | 현재 총 평점 ${points} | 최대 최종 GPA ${max} | 판정 ${status}`,
-        copied: '복사됨',
-        copyDefault: '결과 복사'
+        copied: '계산 결과를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력값을 초기화했습니다.'
       },
       en: {
-        idle: 'Enter your current GPA, completed credits, target GPA, and remaining credits to calculate the GPA you need.',
+        idle: 'Enter all four values to calculate the GPA you need.',
         needInput: 'Enter current GPA, completed credits, target GPA, and remaining credits.',
-        invalid: 'One or more values are outside the selected GPA scale.',
+        invalidGpa: (max) => `Current and target GPA must be between 0 and ${max}.`,
+        invalidCredits: 'Completed credits must be 0–1,000 and remaining credits must be greater than 0 and no more than 1,000.',
         guaranteed: 'Already on track',
         achievable: 'Achievable',
         impossible: 'Very unlikely',
         impossibleMsg: (need, max) => `You need an average GPA of ${need} from now on. That exceeds the scale maximum of ${max}, so the target is not realistic under the current plan.`,
         achievableMsg: (need) => `You can reach the target if you average ${need} from now on.`,
-        guaranteedMsg: 'Your current cumulative record already keeps you within target range.',
+        guaranteedMsg: 'You would keep the final target even with a 0 GPA in the remaining credits.',
         copy: (need, points, max, status) => `Required GPA result | Needed GPA ${need} | Current grade points ${points} | Max final GPA ${max} | Status ${status}`,
-        copied: 'Copied',
-        copyDefault: 'Copy result'
+        copied: 'Copied the calculation result.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared all values.'
       },
       ja: {
-        idle: '現在GPA・取得済み単位・目標GPA・残り単位を入力すると、今後必要なGPAを計算します。',
+        idle: '4つの値を入力すると、今後必要なGPAを計算します。',
         needInput: '現在GPA、取得済み単位、目標GPA、残り単位を入力してください。',
-        invalid: '入力値が選択したGPAスケール範囲を超えています。',
+        invalidGpa: (max) => `現在GPAと目標GPAは0以上${max}以下で入力してください。`,
+        invalidCredits: '取得済み単位は0〜1,000、残り単位は0より大きく1,000以下で入力してください。',
         guaranteed: 'すでに目標圏内',
         achievable: '達成可能',
         impossible: '達成困難',
         impossibleMsg: (need, max) => `今後平均 ${need} のGPAが必要です。選択スケール上限 ${max} を超えるため、現在条件では目標達成が難しいです。`,
         achievableMsg: (need) => `今後平均 ${need} を取れば目標に到達できます。`,
-        guaranteedMsg: '現在の累積成績ですでに目標圏内です。',
+        guaranteedMsg: '残り単位のGPAが0でも最終目標を維持できます。',
         copy: (need, points, max, status) => `目標GPA逆算結果 | 必要GPA ${need} | 現在の総評点 ${points} | 最大最終GPA ${max} | 判定 ${status}`,
-        copied: 'コピー完了',
-        copyDefault: '結果をコピー'
+        copied: '計算結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力値をクリアしました。'
       }
     }[pageLang] || {};
 
-    const fmt = (v, digits = 2) => Number(v).toLocaleString(numberLocale, { maximumFractionDigits: digits, minimumFractionDigits: digits });
+    const inputs = [currentGpa, completedCredits, targetGpa, remainingCredits];
+    const fmt = (v, digits = 3) => Number(v).toLocaleString(numberLocale, { maximumFractionDigits: digits, minimumFractionDigits: Math.min(2, digits) });
     const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
-      catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return;
       }
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      const copied = document.execCommand('copy');
+      ta.remove();
+      if (!copied) throw new Error('copy failed');
     };
 
-    const setIdle = (msg = t.idle) => {
+    const setHelp = (message, state = '') => {
+      help.textContent = message;
+      help.dataset.state = state;
+    };
+
+    const setIdle = (message = t.idle, state = '') => {
       neededGpa.textContent = '-';
       currentPoints.textContent = '-';
       maxFinalGpa.textContent = '-';
       status.textContent = pageLang === 'en' ? 'Waiting for input' : (pageLang === 'ja' ? '入力待ち' : '입력 대기');
-      help.textContent = msg;
+      copyBtn.disabled = true;
+      setHelp(message, state);
+    };
+
+    const setValidity = (elements, invalid) => {
+      elements.forEach((element) => element.setAttribute('aria-invalid', String(invalid)));
     };
 
     const render = () => {
-      const s = Number(scale.value || 4.5);
-      const cur = Number(currentGpa.value || 0);
-      const done = Number(completedCredits.value || 0);
-      const target = Number(targetGpa.value || 0);
-      const left = Number(remainingCredits.value || 0);
+      const maxScale = Number(scale.value || 4.5);
+      currentGpa.max = String(maxScale);
+      targetGpa.max = String(maxScale);
+      setValidity(inputs, false);
 
-      if (!(cur >= 0) || !(done >= 0) || !(target >= 0) || !(left > 0)) {
-        setIdle(t.needInput);
+      const rawValues = inputs.map((element) => element.value.trim());
+      if (rawValues.some((value) => value === '')) {
+        setIdle(rawValues.every((value) => value === '') ? t.idle : t.needInput);
         return;
       }
-      if (cur > s || target > s) {
-        setIdle(t.invalid);
+
+      const s = Number(scale.value || 4.5);
+      const [cur, done, target, left] = rawValues.map(Number);
+
+      const invalidGpas = [currentGpa, targetGpa].filter((element) => {
+        const value = Number(element.value);
+        return !Number.isFinite(value) || value < 0 || value > s;
+      });
+      if (invalidGpas.length) {
+        setValidity(invalidGpas, true);
+        setIdle(t.invalidGpa(fmt(s, 1)), 'error');
+        return;
+      }
+
+      const invalidCredits = [completedCredits, remainingCredits].filter((element, index) => {
+        const value = Number(element.value);
+        return !Number.isFinite(value) || value > 1000 || (index === 0 ? value < 0 : value <= 0);
+      });
+      if (invalidCredits.length) {
+        setValidity(invalidCredits, true);
+        setIdle(t.invalidCredits, 'error');
         return;
       }
 
@@ -16330,42 +16375,51 @@
       neededGpa.textContent = fmt(Math.max(0, required));
       currentPoints.textContent = fmt(currentTotalPoints);
       maxFinalGpa.textContent = fmt(maxFinal);
+      copyBtn.disabled = false;
 
       if (required <= 0) {
         status.textContent = t.guaranteed;
-        help.textContent = t.guaranteedMsg;
+        setHelp(t.guaranteedMsg, 'success');
       } else if (required <= s) {
         status.textContent = t.achievable;
-        help.textContent = t.achievableMsg(fmt(required));
+        setHelp(t.achievableMsg(fmt(required)), 'success');
       } else {
         status.textContent = t.impossible;
-        help.textContent = t.impossibleMsg(fmt(required), fmt(s));
+        setHelp(t.impossibleMsg(fmt(required), fmt(s, 1)), 'warning');
       }
     };
 
-    [scale, currentGpa, completedCredits, targetGpa, remainingCredits].forEach((el) => el?.addEventListener('input', render));
+    [scale, ...inputs].forEach((el) => el.addEventListener('input', render));
+    scale.addEventListener('change', render);
 
-    resetBtn?.addEventListener('click', () => {
+    resetBtn.addEventListener('click', () => {
       scale.value = '4.5';
       currentGpa.value = '3.72';
       completedCredits.value = '96';
       targetGpa.value = '3.90';
       remainingCredits.value = '24';
       render();
+      currentGpa.focus();
     });
 
-    copyBtn?.addEventListener('click', async () => {
-      if (neededGpa.textContent === '-') return;
-      await copyText(t.copy(neededGpa.textContent, currentPoints.textContent, maxFinalGpa.textContent, status.textContent));
-      const old = copyBtn.textContent;
-      copyBtn.textContent = t.copied;
-      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    clearBtn.addEventListener('click', () => {
+      inputs.forEach((element) => { element.value = ''; });
+      scale.value = '4.5';
+      render();
+      setHelp(t.cleared);
+      currentGpa.focus();
     });
 
-    if (!currentGpa.value) currentGpa.value = '3.72';
-    if (!completedCredits.value) completedCredits.value = '96';
-    if (!targetGpa.value) targetGpa.value = '3.90';
-    if (!remainingCredits.value) remainingCredits.value = '24';
+    copyBtn.addEventListener('click', async () => {
+      if (copyBtn.disabled || neededGpa.textContent === '-') return;
+      try {
+        await copyText(t.copy(neededGpa.textContent, currentPoints.textContent, maxFinalGpa.textContent, status.textContent));
+        setHelp(t.copied, 'success');
+      } catch (_) {
+        setHelp(t.copyFail, 'error');
+      }
+    });
+
     render();
   }
 

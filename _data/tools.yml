@@ -2130,14 +2130,16 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 현재 GPA, 이수학점, 목표 GPA, 남은 학점을 넣으면 남은 학기에 필요한 평균 GPA를 계산해요.
-  description_en: Enter your current GPA, completed credits, target GPA, and remaining credits to calculate the GPA you need from now on.
-  description_ja: 現在のGPA、取得済み単位、目標GPA、残り単位数を入力すると、今後必要な平均GPAを計算します。
+  description: 현재 GPA와 이수·남은 학점으로 필요한 평균 평점, 달성 가능 여부, 가능한 최대 최종 GPA를 계산해요.
+  description_en: Calculate the GPA needed across your remaining credits, target feasibility, and maximum possible final GPA.
+  description_ja: 現在GPAと取得済み・残り単位から、必要な平均GPA、達成可能性、最大最終GPAを計算します。
   url: /tools/required-gpa-calculator/
   url_en: /en/tools/required-gpa-calculator/
   url_ja: /ja/tools/required-gpa-calculator/
   thumbnail: /assets/thumbs/required-gpa-calculator.svg
   published_at: 2026-03-23
+  tool_type: calculator
+  topic_cluster: study
 
 - id: average-speed-calculator
   title: 평균 속도 계산기

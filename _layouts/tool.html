@@ -3885,48 +3885,51 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
         </div>
 
       {% when 'required-gpa-calculator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui rg-ui">
+          <div class="tool-row-grid rg-grid">
             <div>
               <label for="rg-scale">{% if page.lang == 'en' %}GPA scale{% elsif page.lang == 'ja' %}GPAスケール{% else %}학점 스케일{% endif %}</label>
-              <select id="rg-scale">
+              <select id="rg-scale" aria-describedby="rg-scale-hint rg-help">
                 <option value="4.5">4.5</option>
                 <option value="4.3">4.3</option>
                 <option value="4.0">4.0</option>
               </select>
+              <small id="rg-scale-hint">{% if page.lang == 'en' %}Choose the maximum GPA used by your school.{% elsif page.lang == 'ja' %}学校で使う最高GPAを選択してください。{% else %}학교에서 사용하는 최고 평점을 선택하세요.{% endif %}</small>
             </div>
             <div>
               <label for="rg-current-gpa">{% if page.lang == 'en' %}Current GPA{% elsif page.lang == 'ja' %}現在のGPA{% else %}현재 GPA{% endif %}</label>
-              <input id="rg-current-gpa" type="number" min="0" step="0.01" inputmode="decimal" placeholder="3.72" />
+              <input id="rg-current-gpa" type="number" min="0" max="4.5" step="0.01" inputmode="decimal" autocomplete="off" aria-describedby="rg-current-hint rg-help" aria-invalid="false" placeholder="3.72" />
+              <small id="rg-current-hint">{% if page.lang == 'en' %}Your cumulative GPA before the remaining credits.{% elsif page.lang == 'ja' %}残り単位を履修する前の累積GPAです。{% else %}남은 학점을 듣기 전 누적 GPA를 입력하세요.{% endif %}</small>
             </div>
-          </div>
-          <div class="tool-row-grid pct-grid">
             <div>
               <label for="rg-completed-credits">{% if page.lang == 'en' %}Completed credits{% elsif page.lang == 'ja' %}取得済み単位{% else %}이수학점{% endif %}</label>
-              <input id="rg-completed-credits" type="number" min="0" step="0.5" inputmode="decimal" placeholder="96" />
+              <input id="rg-completed-credits" type="number" min="0" max="1000" step="0.5" inputmode="decimal" autocomplete="off" aria-describedby="rg-completed-hint rg-help" aria-invalid="false" placeholder="96" />
+              <small id="rg-completed-hint">{% if page.lang == 'en' %}Include only credits that count toward GPA.{% elsif page.lang == 'ja' %}GPAに算入される単位だけを入力します。{% else %}GPA에 반영되는 학점만 포함하세요.{% endif %}</small>
             </div>
             <div>
               <label for="rg-target-gpa">{% if page.lang == 'en' %}Target GPA{% elsif page.lang == 'ja' %}目標GPA{% else %}목표 GPA{% endif %}</label>
-              <input id="rg-target-gpa" type="number" min="0" step="0.01" inputmode="decimal" placeholder="3.9" />
+              <input id="rg-target-gpa" type="number" min="0" max="4.5" step="0.01" inputmode="decimal" autocomplete="off" aria-describedby="rg-target-hint rg-help" aria-invalid="false" placeholder="3.90" />
+              <small id="rg-target-hint">{% if page.lang == 'en' %}The cumulative GPA you want after all credits.{% elsif page.lang == 'ja' %}全単位修得後に目指す累積GPAです。{% else %}모든 학점 이수 후 원하는 누적 GPA입니다.{% endif %}</small>
             </div>
-          </div>
-          <div class="tool-row-grid pct-grid">
             <div>
               <label for="rg-remaining-credits">{% if page.lang == 'en' %}Remaining credits{% elsif page.lang == 'ja' %}残り単位{% else %}남은 학점{% endif %}</label>
-              <input id="rg-remaining-credits" type="number" min="0" step="0.5" inputmode="decimal" placeholder="24" />
+              <input id="rg-remaining-credits" type="number" min="0.5" max="1000" step="0.5" inputmode="decimal" autocomplete="off" aria-describedby="rg-remaining-hint rg-help" aria-invalid="false" placeholder="24" />
+              <small id="rg-remaining-hint">{% if page.lang == 'en' %}Must be greater than 0 and count toward GPA.{% elsif page.lang == 'ja' %}0より大きく、GPAに算入される単位数です。{% else %}0보다 큰 GPA 반영 예정 학점을 입력하세요.{% endif %}</small>
             </div>
           </div>
-          <div class="tool-row-grid pct-actions">
-            <button id="rg-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
-            <button id="rg-reset" type="button">{% if page.lang == 'en' %}Fill sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시값 채우기{% endif %}</button>
+          <div class="tool-row-grid rg-actions">
+            <button id="rg-reset" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시값 채우기{% endif %}</button>
+            <button id="rg-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="rg-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
-          <div class="tool-stats">
+          <p class="tool-result" id="rg-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter all four values to calculate the GPA you need.{% elsif page.lang == 'ja' %}4つの値を入力すると、今後必要なGPAを計算します。{% else %}네 가지 값을 모두 입력하면 앞으로 필요한 GPA를 계산합니다.{% endif %}</p>
+          <div class="tool-stats rg-stats" aria-label="{% if page.lang == 'en' %}Required GPA calculation result{% elsif page.lang == 'ja' %}目標GPA計算結果{% else %}목표 학점 계산 결과{% endif %}">
             <div><strong id="rg-needed-gpa">-</strong><span>{% if page.lang == 'en' %}Required GPA from now{% elsif page.lang == 'ja' %}今後必要な平均GPA{% else %}앞으로 필요한 평균 GPA{% endif %}</span></div>
             <div><strong id="rg-current-points">-</strong><span>{% if page.lang == 'en' %}Current total grade points{% elsif page.lang == 'ja' %}現在の総評点{% else %}현재 총 평점{% endif %}</span></div>
             <div><strong id="rg-max-final-gpa">-</strong><span>{% if page.lang == 'en' %}Maximum possible final GPA{% elsif page.lang == 'ja' %}到達可能な最大最終GPA{% else %}도달 가능한 최대 최종 GPA{% endif %}</span></div>
             <div><strong id="rg-status">{% if page.lang == 'en' %}Waiting for input{% elsif page.lang == 'ja' %}入力待ち{% else %}입력 대기{% endif %}</strong><span>{% if page.lang == 'en' %}Status{% elsif page.lang == 'ja' %}判定{% else %}판정{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="rg-help">{% if page.lang == 'en' %}Enter your current GPA, credits, target GPA, and remaining credits to calculate the GPA you need.{% elsif page.lang == 'ja' %}現在GPA・取得済み単位・目標GPA・残り単位を入力すると、今後必要なGPAを計算します。{% else %}현재 GPA·이수학점·목표 GPA·남은 학점을 입력하면 앞으로 필요한 GPA를 계산합니다.{% endif %}</p>
+          <p class="rg-note">{% if page.lang == 'en' %}Results use the values you enter without rounding. The display is rounded to three decimals, so confirm your school’s GPA and credit rules before making academic decisions.{% elsif page.lang == 'ja' %}計算自体は入力値を丸めずに行い、表示は小数第3位までです。履修判断の前に学校のGPA・単位算入ルールを確認してください。{% else %}계산은 입력값을 반올림하지 않고 진행하며 결과 표시는 소수 셋째 자리까지입니다. 수강 결정 전 학교의 GPA·학점 반영 규정을 확인하세요.{% endif %}</p>
         </div>
       {% when 'gpa-calculator' %}
         <div class="tool-ui gpa-ui">
