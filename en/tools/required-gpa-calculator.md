@@ -1,8 +1,8 @@
 ---
 layout: tool
 lang: en
-title: Required GPA Calculator | Calculate the GPA you need for your target
-description: Calculate the average GPA needed in your remaining credits, see whether your target is achievable, and check your maximum possible final GPA.
+title: Required GPA Calculator | Reverse-calculate your target GPA
+description: Enter your current GPA, completed credits, target GPA, and remaining credits to calculate the average GPA you need, target feasibility, and your maximum possible final GPA.
 permalink: /en/tools/required-gpa-calculator/
 canonical_url: /en/tools/required-gpa-calculator/
 category: calculator
@@ -27,9 +27,9 @@ alternate_urls:
   ja: /ja/tools/required-gpa-calculator/
 ---
 
-## See what GPA you need from this point forward
-If you already have a cumulative GPA,
-it is useful to know **what average GPA you need in the remaining credits** to hit your final target.
+## Reverse-calculate the GPA you need in your remaining credits
+Once you have a cumulative GPA,
+you may want to know **what average GPA you need across your remaining credits** to reach your graduation target.
 
 This tool takes your current GPA, completed credits, target GPA, and remaining credits,
 and instantly calculates the **required GPA for the rest of your courses**.
@@ -46,7 +46,7 @@ and instantly calculates the **required GPA for the rest of your courses**.
 2. Enter your current cumulative GPA.
 3. Enter completed credits.
 4. Enter your target GPA and remaining credits.
-5. Check the GPA you need for the remaining terms.
+5. Check the average GPA you need across the remaining credits.
 
 The calculator starts empty so it does not mistake a missing value for zero. Use **Load sample** to see a complete example or **Clear** to remove every value.
 
@@ -66,7 +66,7 @@ Calculations use the unrounded values you enter; displayed results are rounded t
 - [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
 
 ## FAQ
-### What if my target GPA is already lower than my current path?
+### What if my target GPA is lower than my current GPA?
 The tool still includes all remaining credits. It shows **Already on track** only if a 0 GPA across those credits would still preserve your target cumulative GPA.
 
 ### What if the required GPA is higher than the scale maximum?

@@ -1,8 +1,8 @@
 ---
 layout: tool
 lang: ja
-title: 目標GPA逆算計算機 | 残り単位で必要な平均GPAをすばやく計算
-description: 現在GPA・取得済み単位・目標GPA・残り単位から、今後必要な平均GPA、達成可能性、到達可能な最大最終GPAを計算できます。
+title: 目標GPA逆算計算機 | 残り単位に必要なGPAを計算
+description: 現在GPA・取得済み単位・目標GPA・残り単位を入力し、今後必要な平均GPA、目標の達成可能性、到達可能な最大最終GPAを計算できます。
 permalink: /ja/tools/required-gpa-calculator/
 canonical_url: /ja/tools/required-gpa-calculator/
 category: calculator
@@ -27,7 +27,7 @@ alternate_urls:
   ja: /ja/tools/required-gpa-calculator/
 ---
 
-## これから必要なGPAをすぐ確認したいときに便利
+## 目標GPAから残り単位に必要な平均GPAを逆算
 すでに累積GPAがある状態では、
 **最終的な目標GPAに届くために残り単位でどのくらいの平均GPAが必要か** を知りたい場面が多くあります。
 
@@ -46,7 +46,7 @@ alternate_urls:
 2. 現在の累積GPAを入力します。
 3. 取得済み単位数を入力します。
 4. 目標GPAと残り単位数を入力します。
-5. 今後必要な平均GPAを確認します。
+5. 残り単位で必要な平均GPAを確認します。
 
 未入力を0として扱わないよう、最初は空の状態です。**サンプル入力**で計算例を確認し、**クリア**ですべての値を消去できます。
 
