@@ -1134,14 +1134,16 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 총 금액과 비율 목록으로 각 항목 배분 금액, 퍼센트, 마지막 차액 보정까지 계산해요.
-  description_en: Split a total amount by custom ratios and calculate allocations, percentages, and final rounding adjustment.
-  description_ja: 総額を任意の比率で配分し、各項目の金額・割合・最後の差額補正まで計算します。
+  description: 총 금액과 이름·비율 목록을 입력해 항목별 배분액과 비중을 계산하고, 반올림 차액·음수 배분 위험까지 안전하게 점검해요.
+  description_en: Split a whole-number total by named or unnamed ratios, review each share, and safely handle rounding adjustments without negative allocations.
+  description_ja: 総額と名前付き・名前なしの比率から配分額と割合を計算し、差額補正やマイナス配分の危険も安全に確認します。
   url: /tools/ratio-split-calculator/
   url_en: /en/tools/ratio-split-calculator/
   url_ja: /ja/tools/ratio-split-calculator/
   thumbnail: /assets/thumbs/ratio-split-calculator.svg
   published_at: 2026-03-31
+  tool_type: calculator
+  topic_cluster: finance
 
 - id: goal-savings-calculator
   title: 목표 저축 기간 계산기

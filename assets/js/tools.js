@@ -17673,16 +17673,21 @@
     const checkTotal = document.getElementById('rs-check-total');
     const list = document.getElementById('rs-list');
     const help = document.getElementById('rs-help');
+    const sampleBtn = document.getElementById('rs-sample');
     const copyBtn = document.getElementById('rs-copy');
-    const resetBtn = document.getElementById('rs-reset');
+    const clearBtn = document.getElementById('rs-reset');
 
     if (!total || !rounding || !items || !ratioSum || !itemCount || !lastAdjust || !checkTotal || !list || !help) return;
 
     const t = {
       ko: {
         need: '총 금액과 항목별 비율을 입력하세요.',
-        invalidTotal: '총 금액은 0보다 커야 합니다.',
-        invalidItems: '항목은 한 줄에 이름,비율 형식으로 입력하고 비율은 0보다 커야 합니다.',
+        invalidTotal: '총 금액은 1 이상 1,000조 이하의 정수로 입력해 주세요.',
+        invalidLine: (line) => `${line}번째 줄을 확인하세요. 이름,비율 또는 비율만 입력할 수 있습니다.`,
+        invalidRatio: (line) => `${line}번째 줄의 비율은 0 초과 1조 이하의 숫자여야 합니다.`,
+        tooMany: '항목은 최대 100개까지 입력할 수 있습니다.',
+        unsafeRounding: '선택한 반올림 단위로는 마지막 배분액이 음수가 됩니다. 더 작은 반올림 단위를 선택하세요.',
+        overflow: '비율 합계가 너무 커 계산할 수 없습니다. 비율 값을 줄여 주세요.',
         ratioUnit: '합',
         itemUnit: '개',
         summary: (count, total, adjust) => `${count}개 항목으로 ${total}을 배분했습니다. 마지막 차액 보정은 ${adjust}입니다.`,
@@ -17693,13 +17698,19 @@
         share: '비중',
         totalAmount: '총 배분 합계',
         copyTitle: '비율 분배 계산 결과',
-        copied: '복사됨',
-        copyDefault: '결과 복사'
+        copied: '계산 결과를 복사했습니다.',
+        copyEmpty: '복사할 계산 결과가 없습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력값을 초기화했습니다.'
       },
       en: {
         need: 'Enter a total amount and item ratios.',
-        invalidTotal: 'Total amount must be greater than 0.',
-        invalidItems: 'Enter each item as name,ratio on a new line, and ratios must be greater than 0.',
+        invalidTotal: 'Enter a whole-number total from 1 to 1 quadrillion.',
+        invalidLine: (line) => `Check line ${line}. Enter name,ratio or a ratio only.`,
+        invalidRatio: (line) => `The ratio on line ${line} must be greater than 0 and no greater than 1 trillion.`,
+        tooMany: 'Enter no more than 100 items.',
+        unsafeRounding: 'This rounding unit would make the last allocation negative. Choose a smaller unit.',
+        overflow: 'The ratio total is too large to calculate safely. Reduce the ratio values.',
         ratioUnit: 'sum',
         itemUnit: 'items',
         summary: (count, total, adjust) => `Allocated ${total} across ${count} items. Final adjustment: ${adjust}.`,
@@ -17710,13 +17721,19 @@
         share: 'Share',
         totalAmount: 'Allocated total',
         copyTitle: 'Ratio split result',
-        copied: 'Copied',
-        copyDefault: 'Copy result'
+        copied: 'Copied the allocation result.',
+        copyEmpty: 'There is no valid allocation result to copy.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared all inputs.'
       },
       ja: {
         need: '総額と項目ごとの比率を入力してください。',
-        invalidTotal: '総額は0より大きい必要があります。',
-        invalidItems: '項目は1行ごとに 名前,比率 の形式で入力し、比率は0より大きくしてください。',
+        invalidTotal: '総額は1以上1,000兆以下の整数で入力してください。',
+        invalidLine: (line) => `${line}行目を確認してください。名前,比率 または比率のみ入力できます。`,
+        invalidRatio: (line) => `${line}行目の比率は0より大きく1兆以下の数値にしてください。`,
+        tooMany: '項目は最大100件まで入力できます。',
+        unsafeRounding: 'この丸め単位では最後の配分額がマイナスになります。より小さい単位を選んでください。',
+        overflow: '比率の合計が大きすぎて安全に計算できません。比率値を小さくしてください。',
         ratioUnit: '合計',
         itemUnit: '項目',
         summary: (count, total, adjust) => `${count}項目に ${total} を配分しました。最後の差額補正は ${adjust} です。`,
@@ -17727,65 +17744,111 @@
         share: '割合',
         totalAmount: '配分合計',
         copyTitle: '比率配分計算結果',
-        copied: 'コピー完了',
-        copyDefault: '結果をコピー'
+        copied: '配分結果をコピーしました。',
+        copyEmpty: 'コピーできる有効な配分結果がありません。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力をクリアしました。'
       }
     }[pageLang] || {};
 
-    const fmtMoney = (v) => Math.round(v || 0).toLocaleString(numberLocale);
+    const MAX_TOTAL = 1000000000000000;
+    const MAX_RATIO = 1000000000000;
+    const MAX_ITEMS = 100;
+    const fmtMoney = (v) => Math.round(v).toLocaleString(numberLocale);
     const roundValue = (value, unit) => Math.round(value / unit) * unit;
 
     const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
-      catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return;
       }
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      const copied = document.execCommand('copy');
+      ta.remove();
+      if (!copied) throw new Error('copy failed');
     };
 
-    const setIdle = (msg) => {
+    let current = null;
+    const setIdle = (msg, state = '') => {
       ratioSum.textContent = '-';
       itemCount.textContent = '-';
       lastAdjust.textContent = '-';
       checkTotal.textContent = '-';
       list.innerHTML = '';
       help.textContent = msg;
+      help.dataset.state = state;
+      copyBtn.disabled = true;
+      current = null;
     };
 
     const parseItems = () => {
       const lines = (items.value || '').split(/\n+/).map((line) => line.trim()).filter(Boolean);
+      if (lines.length > MAX_ITEMS) return { error: t.tooMany };
       const parsed = [];
       for (const [idx, line] of lines.entries()) {
         const parts = line.split(',');
-        if (parts.length < 2) return null;
-        const name = parts.slice(0, -1).join(',').trim() || `Item ${idx + 1}`;
-        const ratio = Number(parts[parts.length - 1].trim());
-        if (!Number.isFinite(ratio) || ratio <= 0) return null;
+        const ratioText = parts[parts.length - 1].trim();
+        const name = parts.length === 1 ? `Item ${idx + 1}` : (parts.slice(0, -1).join(',').trim() || `Item ${idx + 1}`);
+        const ratio = Number(ratioText);
+        if (!ratioText || !Number.isFinite(ratio) || ratio <= 0 || ratio > MAX_RATIO) {
+          return { error: t.invalidRatio(idx + 1) };
+        }
         parsed.push({ name, ratio });
       }
-      return parsed;
+      return { parsed };
+    };
+
+    const appendAllocation = (item) => {
+      const row = document.createElement('div');
+      row.className = 'bw-item';
+      const heading = document.createElement('strong');
+      heading.append(document.createTextNode(item.name));
+      const tag = document.createElement('span');
+      tag.className = 'bw-tag';
+      tag.textContent = `${item.percent.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}%`;
+      heading.append(tag);
+      const detail = document.createElement('p');
+      detail.textContent = `${t.amount}: ${fmtMoney(item.amount)} · ${t.weight}: ${item.ratio.toLocaleString(numberLocale, { maximumFractionDigits: 6 })} · ${t.share}: ${item.percent.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}%`;
+      row.append(heading, detail);
+      list.append(row);
     };
 
     const render = () => {
-      const totalAmount = Math.max(0, Number(total.value || 0));
-      const unit = Math.max(1, Number(rounding.value || 1));
-      const parsed = parseItems();
+      const rawTotal = total.value.trim();
+      const totalAmount = Number(rawTotal);
+      const unit = Number(rounding.value);
+      const itemResult = parseItems();
+      total.setAttribute('aria-invalid', 'false');
+      items.setAttribute('aria-invalid', 'false');
 
-      if (!(totalAmount > 0) && !(items.value || '').trim()) {
+      if (!rawTotal && !(items.value || '').trim()) {
         setIdle(t.need);
         return;
       }
-      if (!(totalAmount > 0)) {
-        setIdle(t.invalidTotal);
+      if (!rawTotal || !Number.isSafeInteger(totalAmount) || totalAmount < 1 || totalAmount > MAX_TOTAL) {
+        total.setAttribute('aria-invalid', 'true');
+        setIdle(t.invalidTotal, 'error');
         return;
       }
-      if (!parsed || !parsed.length) {
-        setIdle(t.invalidItems);
+      if (itemResult.error || !itemResult.parsed?.length) {
+        items.setAttribute('aria-invalid', 'true');
+        setIdle(itemResult.error || t.invalidLine(1), 'error');
         return;
       }
+      const parsed = itemResult.parsed;
 
       const sum = parsed.reduce((acc, item) => acc + item.ratio, 0);
+      if (!Number.isFinite(sum) || sum <= 0) {
+        items.setAttribute('aria-invalid', 'true');
+        setIdle(t.overflow, 'error');
+        return;
+      }
       const allocations = parsed.map((item) => ({
         ...item,
         percent: (item.ratio / sum) * 100,
@@ -17798,6 +17861,10 @@
         item.amount = roundValue(item.rawAmount, unit);
         allocated += item.amount;
       });
+      if (allocated > totalAmount) {
+        setIdle(t.unsafeRounding, 'error');
+        return;
+      }
       const last = allocations[allocations.length - 1];
       last.amount = totalAmount - allocated;
 
@@ -17809,31 +17876,34 @@
       lastAdjust.textContent = adjustment === 0 ? t.exact : `${fmtMoney(adjustment)} (${t.adjustment})`;
       checkTotal.textContent = fmtMoney(finalTotal);
 
-      list.innerHTML = allocations.map((item) => `
-        <div class="bw-item">
-          <strong>${item.name}<span class="bw-tag">${item.percent.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}%</span></strong>
-          <p>${t.amount}: ${fmtMoney(item.amount)} · ${t.weight}: ${item.ratio.toLocaleString(numberLocale, { maximumFractionDigits: 2 })} · ${t.share}: ${item.percent.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}%</p>
-        </div>
-      `).join('');
+      list.innerHTML = '';
+      allocations.forEach(appendAllocation);
 
       help.textContent = t.summary(allocations.length.toLocaleString(numberLocale), fmtMoney(totalAmount), adjustment === 0 ? t.exact : fmtMoney(adjustment));
+      help.dataset.state = 'success';
+      copyBtn.disabled = false;
+      current = { allocations, total: fmtMoney(finalTotal) };
     };
 
     [total, rounding, items].forEach((el) => el?.addEventListener('input', render));
 
     copyBtn?.addEventListener('click', async () => {
-      const parsed = parseItems();
-      if (!parsed || !parsed.length || !(Number(total.value || 0) > 0)) return;
-      render();
-      const lines = Array.from(list.querySelectorAll('.bw-item')).map((item) => item.textContent.trim().replace(/\s+/g, ' '));
-      const text = [t.copyTitle, ...lines, `${t.totalAmount}: ${checkTotal.textContent}`].join('\n');
-      await copyText(text);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = t.copied;
-      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+      if (!current) {
+        setIdle(t.copyEmpty, 'error');
+        return;
+      }
+      const lines = current.allocations.map((item) => `${item.name}: ${fmtMoney(item.amount)} (${item.percent.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}%)`);
+      try {
+        await copyText([t.copyTitle, ...lines, `${t.totalAmount}: ${current.total}`].join('\n'));
+        help.textContent = t.copied;
+        help.dataset.state = 'success';
+      } catch (_) {
+        help.textContent = t.copyFail;
+        help.dataset.state = 'error';
+      }
     });
 
-    resetBtn?.addEventListener('click', () => {
+    sampleBtn?.addEventListener('click', () => {
       total.value = 1000000;
       rounding.value = 100;
       items.value = pageLang === 'en'
@@ -17842,16 +17912,19 @@
           ? 'マーケ,5\n運営,3\n予備,2'
           : '항목 A,5\n항목 B,3\n항목 C,2');
       render();
+      total.focus();
     });
 
-    if (!total.value) total.value = 1000000;
-    if (!(items.value || '').trim()) {
-      items.value = pageLang === 'en'
-        ? 'Marketing,5\nOperations,3\nReserve,2'
-        : (pageLang === 'ja'
-          ? 'マーケ,5\n運営,3\n予備,2'
-          : '항목 A,5\n항목 B,3\n항목 C,2');
-    }
+    clearBtn?.addEventListener('click', () => {
+      total.value = '';
+      rounding.value = '1';
+      items.value = '';
+      total.setAttribute('aria-invalid', 'false');
+      items.setAttribute('aria-invalid', 'false');
+      setIdle(t.cleared);
+      total.focus();
+    });
+
     render();
   }
 
