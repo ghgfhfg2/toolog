@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-27 21:00 KST
+- Tool: `goal-savings-calculator`
+- Selection reason: recent runs improved other tools; this untouched March-era finance calculator silently clamped negative and invalid values, auto-filled results instead of showing an empty state, allowed copying invalid output, and had ambiguous deposit timing and contribution labels.
+- Scope: improved only the existing multilingual goal-savings tool, home metadata, layout, styles, script, and Korean SEO content with strict amount/rate/range validation, true empty/error/warning/success states, valid-result-only copying, example/clear/copy feedback, interest-only and already-achieved handling, a 100-year horizon guard, accessible descriptions/live status, single-column mobile inputs/actions, explicit beginning-of-month deposit assumptions, formulas, limitations, FAQ, and related links. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, related-link checks, mobile CSS rules, and DOM-driven empty/sample/0%/achieved/interest-only/negative/fractional/rate-range/long-input/100-year/clear cases passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-24 21:00 KST
 - Tool: `hourly-monthly-salary-calculator`
 - Selection reason: recent quality runs covered other tools; this oldest untouched March-era wage tool calculated short-time workers' weekly holiday hours from their own workdays, which could overstate pay, silently clamped invalid and out-of-range values, prefilled results instead of showing an empty state, and still used the 2025 minimum wage.

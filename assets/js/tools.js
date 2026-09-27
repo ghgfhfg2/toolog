@@ -17070,7 +17070,8 @@
     const outInterest = document.getElementById('gs-interest');
     const help = document.getElementById('gs-help');
     const copyBtn = document.getElementById('gs-copy');
-    const resetBtn = document.getElementById('gs-reset');
+    const exampleBtn = document.getElementById('gs-example');
+    const clearBtn = document.getElementById('gs-clear');
 
     if (!current || !target || !monthly || !rate || !outMonths || !outPeriod || !outContrib || !outInterest || !help) return;
 
@@ -17078,49 +17079,73 @@
       ko: {
         currency: '원',
         need: '현재 금액, 목표 금액, 월 저축액을 입력하세요.',
-        invalid: '목표 금액은 현재 금액보다 커야 하고, 월 저축액은 0보다 커야 합니다.',
+        invalidCurrent: '현재 금액은 0원 이상 1,000조 원 이하의 정수로 입력하세요.',
+        invalidTarget: '목표 금액은 1원 이상 1,000조 원 이하의 정수로 입력하세요.',
+        invalidMonthly: '월 저축액은 0원 이상 1,000조 원 이하의 정수로 입력하세요.',
+        invalidRate: '연 이율은 0% 이상 100% 이하의 숫자로 입력하세요.',
         achieved: '이미 목표 금액을 달성한 상태입니다.',
-        impossible: '월 저축액이 0원이면 목표 금액까지 도달할 수 없습니다.',
+        impossible: '월 저축액이 0원이고 이자로 불어날 현재 금액이 없으면 목표에 도달할 수 없습니다.',
+        horizon: '이 조건으로는 100년 안에 목표 금액에 도달하지 못합니다. 월 저축액이나 목표 금액을 조정해 보세요.',
+        overflow: '입력 조합의 계산 결과가 너무 큽니다. 금액이나 이율을 낮춰 주세요.',
+        cleared: '입력값을 초기화했습니다.',
         months: '개월',
         year: '년',
         month: '개월',
-        summary: (m, p, c, i) => `${m} 동안 모으면 ${p} 뒤 목표 달성이 예상됩니다. 총 납입액 ${c}, 예상 이자 ${i}`,
-        copy: (m, p, c, i) => `목표 저축 기간 계산 결과 | 필요 개월 수 ${m} | 기간 환산 ${p} | 총 납입액 ${c} | 예상 이자 ${i}`,
-        copied: '복사됨',
+        summary: (m, p, c, i) => `${p}(${m}) 뒤 목표 달성이 예상됩니다. 향후 납입액 ${c}, 예상 이자 ${i}입니다.`,
+        copy: (m, p, c, i) => `목표 저축 기간 계산 결과 | 필요 기간 ${p} (${m}) | 향후 납입액 ${c} | 예상 이자 ${i}`,
+        copied: '계산 결과를 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
         copyDefault: '결과 복사'
       },
       en: {
         currency: ' KRW',
         need: 'Enter current savings, target amount, and monthly savings.',
-        invalid: 'Target must be greater than current savings, and monthly savings must be greater than 0.',
+        invalidCurrent: 'Enter current savings as a whole amount from 0 to 1 quadrillion.',
+        invalidTarget: 'Enter a whole target amount from 1 to 1 quadrillion.',
+        invalidMonthly: 'Enter monthly savings as a whole amount from 0 to 1 quadrillion.',
+        invalidRate: 'Enter an annual interest rate from 0% to 100%.',
         achieved: 'You have already reached your target amount.',
-        impossible: 'You cannot reach the target if monthly savings is 0.',
+        impossible: 'The goal cannot grow from zero when monthly savings is also zero.',
+        horizon: 'These inputs do not reach the target within 100 years. Try increasing monthly savings or lowering the target.',
+        overflow: 'This input combination produces a result that is too large. Lower the amount or rate.',
+        cleared: 'Cleared all inputs.',
         months: 'months',
         year: 'yr',
         month: 'mo',
-        summary: (m, p, c, i) => `You are expected to reach the goal in ${m} (${p}). Total contributions ${c}, estimated interest ${i}.`,
-        copy: (m, p, c, i) => `Goal savings result | Required months ${m} | Period ${p} | Total contributions ${c} | Estimated interest ${i}`,
-        copied: 'Copied',
+        summary: (m, p, c, i) => `You are expected to reach the goal in ${p} (${m}). Future contributions ${c}, estimated interest ${i}.`,
+        copy: (m, p, c, i) => `Goal savings result | Required period ${p} (${m}) | Future contributions ${c} | Estimated interest ${i}`,
+        copied: 'Copied the calculation result.',
+        copyFail: 'Automatic copy is unavailable.',
         copyDefault: 'Copy result'
       },
       ja: {
         currency: 'ウォン',
         need: '現在の貯蓄額、目標金額、毎月の積立額を入力してください。',
-        invalid: '目標金額は現在額より大きく、毎月の積立額は0より大きい必要があります。',
+        invalidCurrent: '現在の貯蓄額は0以上1,000兆以下の整数で入力してください。',
+        invalidTarget: '目標金額は1以上1,000兆以下の整数で入力してください。',
+        invalidMonthly: '毎月の積立額は0以上1,000兆以下の整数で入力してください。',
+        invalidRate: '年利は0%以上100%以下の数値で入力してください。',
         achieved: 'すでに目標金額を達成しています。',
-        impossible: '毎月の積立額が0だと目標金額に到達できません。',
+        impossible: '現在額と毎月の積立額がともに0の場合、目標には到達できません。',
+        horizon: 'この条件では100年以内に目標金額へ到達しません。毎月の積立額または目標金額を調整してください。',
+        overflow: '入力条件の計算結果が大きすぎます。金額または利率を下げてください。',
+        cleared: '入力をクリアしました。',
         months: 'か月',
         year: '年',
         month: 'か月',
-        summary: (m, p, c, i) => `${m} で積み立てると、${p} 後に目標達成見込みです。総納入額 ${c}、想定利息 ${i}。`,
-        copy: (m, p, c, i) => `目標貯蓄期間計算結果 | 必要月数 ${m} | 期間 ${p} | 総納入額 ${c} | 想定利息 ${i}`,
-        copied: 'コピー完了',
+        summary: (m, p, c, i) => `${p}（${m}）後に目標達成見込みです。今後の積立総額 ${c}、想定利息 ${i}。`,
+        copy: (m, p, c, i) => `目標貯蓄期間計算結果 | 必要期間 ${p}（${m}）| 今後の積立総額 ${c} | 想定利息 ${i}`,
+        copied: '計算結果をコピーしました。',
+        copyFail: '自動コピーを利用できません。',
         copyDefault: '結果をコピー'
       }
     }[pageLang] || {};
 
-    const fmtMoney = (v) => `${Math.round(v || 0).toLocaleString(numberLocale)}${t.currency}`;
-    const fmtMonths = (v) => `${Math.round(v || 0).toLocaleString(numberLocale)} ${t.months}`;
+    const maximumAmount = 1000000000000000;
+    const maximumMonths = 1200;
+    let result = null;
+    const fmtMoney = (v) => `${Math.round(v).toLocaleString(numberLocale)}${t.currency}`;
+    const fmtMonths = (v) => `${v.toLocaleString(numberLocale)} ${t.months}`;
     const periodText = (months) => {
       const years = Math.floor(months / 12);
       const rem = months % 12;
@@ -17130,42 +17155,86 @@
     };
 
     const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
-      catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return;
       }
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      const copied = document.execCommand('copy');
+      ta.remove();
+      if (!copied) throw new Error('copy failed');
     };
 
-    const setIdle = (msg) => {
+    const setStatus = (msg, state = '') => {
+      help.textContent = msg;
+      help.dataset.state = state;
+    };
+
+    const resetResult = (msg, state = '') => {
       outMonths.textContent = '-';
       outPeriod.textContent = '-';
       outContrib.textContent = '-';
       outInterest.textContent = '-';
-      help.textContent = msg;
+      copyBtn.disabled = true;
+      result = null;
+      setStatus(msg, state);
+    };
+
+    const resetValidity = () => {
+      [current, target, monthly, rate].forEach((field) => field.setAttribute('aria-invalid', 'false'));
+    };
+
+    const reject = (field, message) => {
+      resetValidity();
+      field.setAttribute('aria-invalid', 'true');
+      resetResult(message, 'error');
     };
 
     const render = () => {
-      const cur = Math.max(0, Number(current.value || 0));
-      const tgt = Math.max(0, Number(target.value || 0));
-      const mon = Math.max(0, Number(monthly.value || 0));
-      const annualRate = Math.max(0, Number(rate.value || 0));
-
-      if (!(cur > 0) && !(tgt > 0) && !(mon > 0)) {
-        setIdle(t.need);
+      resetValidity();
+      const currentRaw = current.value.trim();
+      const targetRaw = target.value.trim();
+      const monthlyRaw = monthly.value.trim();
+      const rateRaw = rate.value.trim();
+      if (!currentRaw && !targetRaw && !monthlyRaw && !rateRaw) {
+        resetResult(t.need);
         return;
       }
+      if (!currentRaw || !targetRaw || !monthlyRaw) {
+        if (!currentRaw) current.setAttribute('aria-invalid', 'true');
+        if (!targetRaw) target.setAttribute('aria-invalid', 'true');
+        if (!monthlyRaw) monthly.setAttribute('aria-invalid', 'true');
+        resetResult(t.need, 'error');
+        return;
+      }
+
+      const cur = Number(currentRaw);
+      const tgt = Number(targetRaw);
+      const mon = Number(monthlyRaw);
+      const annualRate = rateRaw ? Number(rateRaw) : 0;
+      if (!Number.isInteger(cur) || cur < 0 || cur > maximumAmount) return reject(current, t.invalidCurrent);
+      if (!Number.isInteger(tgt) || tgt < 1 || tgt > maximumAmount) return reject(target, t.invalidTarget);
+      if (!Number.isInteger(mon) || mon < 0 || mon > maximumAmount) return reject(monthly, t.invalidMonthly);
+      if (!Number.isFinite(annualRate) || annualRate < 0 || annualRate > 100) return reject(rate, t.invalidRate);
+
       if (tgt <= cur) {
         outMonths.textContent = `0 ${t.months}`;
-        outPeriod.textContent = pageLang === 'en' ? '0 mo' : (pageLang === 'ja' ? '0か月' : '0개월');
+        outPeriod.textContent = periodText(0);
         outContrib.textContent = fmtMoney(0);
         outInterest.textContent = fmtMoney(0);
-        help.textContent = t.achieved;
+        result = { months: outMonths.textContent, period: outPeriod.textContent, contributions: outContrib.textContent, interest: outInterest.textContent };
+        copyBtn.disabled = false;
+        setStatus(t.achieved, 'success');
         return;
       }
-      if (!(mon > 0)) {
-        setIdle(t.impossible);
+      if (mon === 0 && (cur === 0 || annualRate === 0)) {
+        resetResult(t.impossible, 'error');
         return;
       }
 
@@ -17173,17 +17242,20 @@
       let balance = cur;
       let months = 0;
       let totalContrib = 0;
-      const maxMonths = 1200;
 
-      while (balance < tgt && months < maxMonths) {
+      while (balance < tgt && months < maximumMonths) {
         balance += mon;
         totalContrib += mon;
         if (monthlyRate > 0) balance *= (1 + monthlyRate);
         months += 1;
+        if (!Number.isFinite(balance)) {
+          resetResult(t.overflow, 'error');
+          return;
+        }
       }
 
       if (balance < tgt) {
-        setIdle(t.invalid);
+        resetResult(t.horizon, 'warning');
         return;
       }
 
@@ -17192,30 +17264,39 @@
       outPeriod.textContent = periodText(months);
       outContrib.textContent = fmtMoney(totalContrib);
       outInterest.textContent = fmtMoney(interest);
-      help.textContent = t.summary(outMonths.textContent, outPeriod.textContent, outContrib.textContent, outInterest.textContent);
+      result = { months: outMonths.textContent, period: outPeriod.textContent, contributions: outContrib.textContent, interest: outInterest.textContent };
+      copyBtn.disabled = false;
+      setStatus(t.summary(result.months, result.period, result.contributions, result.interest), 'success');
     };
 
     [current, target, monthly, rate].forEach((el) => el?.addEventListener('input', render));
 
     copyBtn?.addEventListener('click', async () => {
-      if (outMonths.textContent === '-') return;
-      await copyText(t.copy(outMonths.textContent, outPeriod.textContent, outContrib.textContent, outInterest.textContent));
-      const old = copyBtn.textContent;
-      copyBtn.textContent = t.copied;
-      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+      if (!result) return;
+      try {
+        await copyText(t.copy(result.months, result.period, result.contributions, result.interest));
+        setStatus(t.copied, 'success');
+      } catch (_) {
+        setStatus(t.copyFail, 'error');
+      }
     });
 
-    resetBtn?.addEventListener('click', () => {
+    exampleBtn?.addEventListener('click', () => {
       current.value = 2000000;
       target.value = 10000000;
       monthly.value = 500000;
       rate.value = 3;
       render();
+      current.focus();
     });
 
-    if (!current.value) current.value = 2000000;
-    if (!target.value) target.value = 10000000;
-    if (!monthly.value) monthly.value = 500000;
+    clearBtn?.addEventListener('click', () => {
+      [current, target, monthly, rate].forEach((field) => { field.value = ''; });
+      resetValidity();
+      resetResult(t.cleared);
+      current.focus();
+    });
+
     render();
   }
 

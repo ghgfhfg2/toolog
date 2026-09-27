@@ -1570,6 +1570,17 @@ a:hover { color: #fff; text-decoration: none; }
 .fe-limits {
   font-size: .9rem;
 }
+.gs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.gs-grid > div { display: grid; gap: .4rem; min-width: 0; }
+.gs-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.gs-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.gs-ui button:disabled { opacity: .55; cursor: not-allowed; }
+.gs-ui #gs-help[data-state="error"] { color: #fca5a5; }
+.gs-ui #gs-help[data-state="warning"] { color: #fbbf24; }
+.gs-ui #gs-help[data-state="success"] { color: #86efac; }
+.gs-rules { font-size: .9rem; line-height: 1.55; }
+.gs-stats strong,
+.gs-stats span { overflow-wrap: anywhere; }
 .ec-ui input[aria-invalid="true"] { border-color: #ef4444; }
 .ec-ui #ec-help[data-state="error"] { color: #fca5a5; }
 .ec-ui #ec-help[data-state="success"] { color: #86efac; }
@@ -2111,6 +2122,9 @@ a:hover { color: #fff; text-decoration: none; }
 @media (max-width: 980px) { .search-clusters { grid-template-columns: 1fr 1fr; } }
 
 @media (max-width: 780px) {
+  .gs-grid,
+  .gs-actions { grid-template-columns: 1fr; }
+  .tool-stats.gs-stats { grid-template-columns: 1fr 1fr; }
   .pct-ui .pct-grid,
   .pct-ui .pct-actions { grid-template-columns: 1fr; }
   .whpay-grid,
