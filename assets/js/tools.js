@@ -244,9 +244,11 @@
   if (slug === 'vat-calculator') {
     const mode = document.getElementById('vat-mode');
     const amt = document.getElementById('vat-amount');
+    const rate = document.getElementById('vat-rate');
     const rounding = document.getElementById('vat-rounding');
     const s = document.getElementById('vat-supply');
     const t = document.getElementById('vat-tax');
+    const taxLabel = document.getElementById('vat-tax-label');
     const total = document.getElementById('vat-total');
     const status = document.getElementById('vat-status');
     const example = document.getElementById('vat-example');
@@ -257,37 +259,43 @@
         empty: '0원 이상의 정수 금액을 입력하세요.',
         invalid: '금액은 0원 이상의 정수로 입력해 주세요.',
         tooLarge: '금액은 1,000조 원 이하로 입력해 주세요.',
-        calculated: (base) => `${base} 기준으로 부가세 10%를 계산했습니다.`,
+        invalidRate: '부가세율은 0~100 사이, 소수점 셋째 자리 이하로 입력해 주세요.',
+        calculated: (base, taxRate) => `${base} 기준으로 부가세 ${taxRate}%를 계산했습니다.`,
         supplyBase: '공급가',
         totalBase: '합계',
         copied: '계산 결과를 복사했습니다.',
         copyFail: '자동 복사를 사용할 수 없습니다.',
         cleared: '입력값을 초기화했습니다.',
-        summary: (v) => `공급가 ${v.supply}원 / 부가세(10%) ${v.tax}원 / 합계 ${v.total}원`
+        taxLabel: (taxRate) => `부가세 (${taxRate}%)`,
+        summary: (v) => `공급가 ${v.supply}원 / 부가세(${v.rate}%) ${v.tax}원 / 합계 ${v.total}원`
       },
       en: {
         empty: 'Enter a non-negative whole-unit amount.',
         invalid: 'Enter a non-negative whole-unit amount.',
         tooLarge: 'Enter an amount no greater than 1 quadrillion.',
-        calculated: (base) => `Calculated 10% VAT from the ${base}.`,
+        invalidRate: 'Enter a VAT rate from 0 to 100 with no more than three decimal places.',
+        calculated: (base, taxRate) => `Calculated ${taxRate}% VAT from the ${base}.`,
         supplyBase: 'net price',
         totalBase: 'gross total',
         copied: 'Copied the calculation result.',
         copyFail: 'Automatic copy is unavailable.',
         cleared: 'Cleared the amount.',
-        summary: (v) => `Net price ${v.supply} / VAT (10%) ${v.tax} / gross total ${v.total}`
+        taxLabel: (taxRate) => `VAT (${taxRate}%)`,
+        summary: (v) => `Net price ${v.supply} / VAT (${v.rate}%) ${v.tax} / gross total ${v.total}`
       },
       ja: {
         empty: '0以上の整数金額を入力してください。',
         invalid: '金額は0以上の整数で入力してください。',
         tooLarge: '金額は1,000兆以下で入力してください。',
-        calculated: (base) => `${base}を基準にVAT 10%を計算しました。`,
+        invalidRate: 'VAT率は0〜100の範囲で、小数第3位まで入力してください。',
+        calculated: (base, taxRate) => `${base}を基準にVAT ${taxRate}%を計算しました。`,
         supplyBase: '税抜価格',
         totalBase: '税込合計',
         copied: '計算結果をコピーしました。',
         copyFail: '自動コピーを利用できません。',
         cleared: '金額をクリアしました。',
-        summary: (v) => `税抜 ${v.supply} / VAT (10%) ${v.tax} / 税込合計 ${v.total}`
+        taxLabel: (taxRate) => `VAT (${taxRate}%)`,
+        summary: (v) => `税抜 ${v.supply} / VAT (${v.rate}%) ${v.tax} / 税込合計 ${v.total}`
       }
     }[pageLang];
     let current = null;
@@ -311,6 +319,22 @@
 
     const calc = () => {
       const raw = amt.value.trim();
+      const rawRate = rate.value.trim();
+      const taxRate = Number(rawRate);
+      const validRate = rawRate !== ''
+        && Number.isFinite(taxRate)
+        && taxRate >= 0
+        && taxRate <= 100
+        && /^\d{1,3}(?:\.\d{1,3})?$/.test(rawRate);
+      rate.setAttribute('aria-invalid', String(!validRate));
+      if (!validRate) {
+        amt.setAttribute('aria-invalid', 'false');
+        resetResult();
+        setStatus(vatText.invalidRate, 'error');
+        return;
+      }
+      const rateLabel = String(Number(taxRate.toFixed(3)));
+      taxLabel.textContent = vatText.taxLabel(rateLabel);
       if (!raw) {
         amt.setAttribute('aria-invalid', 'false');
         resetResult();
@@ -335,22 +359,22 @@
       let supply = 0, tax = 0, sum = 0;
       if ((mode.value || 'supply') === 'supply') {
         supply = v;
-        tax = roundAmount(v * 0.1);
+        tax = roundAmount(v * taxRate / 100);
         sum = supply + tax;
       } else {
         sum = v;
-        supply = roundAmount(v / 1.1);
+        supply = roundAmount(v / (1 + taxRate / 100));
         tax = sum - supply;
       }
       s.textContent = formatNum(supply);
       t.textContent = formatNum(tax);
       total.textContent = formatNum(sum);
-      current = { supply: formatNum(supply), tax: formatNum(tax), total: formatNum(sum) };
+      current = { supply: formatNum(supply), tax: formatNum(tax), total: formatNum(sum), rate: rateLabel };
       copy.disabled = false;
-      setStatus(vatText.calculated(mode.value === 'supply' ? vatText.supplyBase : vatText.totalBase), 'success');
+      setStatus(vatText.calculated(mode.value === 'supply' ? vatText.supplyBase : vatText.totalBase, rateLabel), 'success');
     };
     [mode, rounding].forEach(el => el.addEventListener('change', calc));
-    amt.addEventListener('input', calc);
+    [amt, rate].forEach(el => el.addEventListener('input', calc));
     example.addEventListener('click', () => {
       amt.value = '110000';
       calc();
@@ -358,6 +382,7 @@
     });
     clear.addEventListener('click', () => {
       amt.value = '';
+      rate.value = '10';
       calc();
       setStatus(vatText.cleared);
       amt.focus();
@@ -365,7 +390,21 @@
     copy.addEventListener('click', async () => {
       if (!current) return;
       try {
-        await navigator.clipboard.writeText(vatText.summary(current));
+        const value = vatText.summary(current);
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(value);
+        } else {
+          const fallback = document.createElement('textarea');
+          fallback.value = value;
+          fallback.setAttribute('readonly', '');
+          fallback.style.position = 'fixed';
+          fallback.style.opacity = '0';
+          document.body.appendChild(fallback);
+          fallback.select();
+          const copied = document.execCommand('copy');
+          fallback.remove();
+          if (!copied) throw new Error('copy failed');
+        }
         setStatus(vatText.copied, 'success');
       } catch (_) {
         setStatus(vatText.copyFail, 'error');

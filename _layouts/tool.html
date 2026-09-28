@@ -76,6 +76,10 @@ layout: default
               <input id="vat-amount" type="number" min="0" max="1000000000000000" step="1" inputmode="numeric" aria-describedby="vat-status vat-help" placeholder="{% if page.lang == 'en' %}e.g. 11000{% elsif page.lang == 'ja' %}例: 11000{% else %}예: 11000{% endif %}" />
             </div>
             <div>
+              <label for="vat-rate">{% if page.lang == 'en' %}VAT rate (%){% elsif page.lang == 'ja' %}VAT率 (%){% else %}부가세율 (%){% endif %}</label>
+              <input id="vat-rate" type="number" min="0" max="100" step="0.001" value="10" inputmode="decimal" aria-describedby="vat-status vat-help" />
+            </div>
+            <div>
               <label for="vat-rounding">{% if page.lang == 'en' %}Whole-unit handling{% elsif page.lang == 'ja' %}1円未満の処理{% else %}원 단위 처리{% endif %}</label>
               <select id="vat-rounding" aria-describedby="vat-help">
                 <option value="round">{% if page.lang == 'en' %}Round to nearest{% elsif page.lang == 'ja' %}四捨五入{% else %}반올림{% endif %}</option>
@@ -92,10 +96,10 @@ layout: default
           <p class="tool-result" id="vat-status" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter a non-negative whole-unit amount.{% elsif page.lang == 'ja' %}0以上の整数金額を入力してください。{% else %}0원 이상의 정수 금액을 입력하세요.{% endif %}</p>
           <div class="tool-stats vat-stats" aria-label="{% if page.lang == 'en' %}VAT calculation result{% elsif page.lang == 'ja' %}VAT計算結果{% else %}부가세 계산 결과{% endif %}">
             <div><strong id="vat-supply">-</strong><span>{% if page.lang == 'en' %}Net price{% elsif page.lang == 'ja' %}税抜{% else %}공급가{% endif %}</span></div>
-            <div><strong id="vat-tax">-</strong><span>{% if page.lang == 'en' %}VAT (10%){% elsif page.lang == 'ja' %}VAT (10%){% else %}부가세 (10%){% endif %}</span></div>
+            <div><strong id="vat-tax">-</strong><span id="vat-tax-label">{% if page.lang == 'en' %}VAT (10%){% elsif page.lang == 'ja' %}VAT (10%){% else %}부가세 (10%){% endif %}</span></div>
             <div><strong id="vat-total">-</strong><span>{% if page.lang == 'en' %}Gross total{% elsif page.lang == 'ja' %}税込合計{% else %}합계{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="vat-help">{% if page.lang == 'en' %}Uses a fixed 10% VAT rate. For gross-total calculations, net price is rounded first and VAT is the remaining amount so the total always matches.{% elsif page.lang == 'ja' %}VAT率は10%固定です。税込合計から逆算するときは税抜価格を先に丸め、差額をVATにするため合計額が一致します。{% else %}부가세율은 10%로 고정됩니다. 합계 기준 역산은 공급가를 먼저 원 단위 처리하고 차액을 부가세로 계산해 합계를 유지합니다.{% endif %}</p>
+          <p class="tool-result" id="vat-help">{% if page.lang == 'en' %}The default rate is 10%; enter 0–100% with up to three decimal places. For gross-total calculations, net price is rounded first and VAT is the remaining amount so the total always matches.{% elsif page.lang == 'ja' %}初期値は10%です。0〜100%の税率を小数第3位まで入力できます。税込合計から逆算するときは税抜価格を先に丸め、差額をVATにするため合計額が一致します。{% else %}기본 세율은 10%이며 0~100%를 소수점 셋째 자리까지 입력할 수 있습니다. 합계 기준 역산은 공급가를 먼저 원 단위 처리하고 차액을 부가세로 계산해 합계를 유지합니다.{% endif %}</p>
         </div>
       {% when 'unit-converter' %}
         <div class="tool-ui uc-ui">

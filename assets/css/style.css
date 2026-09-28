@@ -946,7 +946,7 @@ a:hover { color: #fff; text-decoration: none; }
 .tc-ui #tc-status[data-state="success"] { color: #86efac; }
 .tc-ui #tc-status[data-state="over"],
 .tc-ui #tc-status[data-state="error"] { color: #fca5a5; }
-.vat-input-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.vat-input-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .vat-input-grid > div { display: grid; gap: .4rem; min-width: 0; }
 .vat-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .vat-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -2135,6 +2135,9 @@ a:hover { color: #fff; text-decoration: none; }
   .hms-actions { grid-template-columns: 1fr; }
   .tool-stats.hms-stats { grid-template-columns: 1fr 1fr; }
   .tool-stats.pct-stats { grid-template-columns: 1fr 1fr; }
+  .vat-input-grid,
+  .vat-actions { grid-template-columns: 1fr; }
+  .tool-stats.vat-stats { grid-template-columns: 1fr 1fr; }
   .rg-grid,
   .rg-actions { grid-template-columns: 1fr; }
   .tool-stats.rg-stats { grid-template-columns: 1fr 1fr; }
