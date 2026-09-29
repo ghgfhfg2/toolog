@@ -8827,7 +8827,9 @@
     const topicsEl = document.getElementById('mag-topics');
     const includeOwnerEl = document.getElementById('mag-include-owner');
     const runBtn = document.getElementById('mag-run');
+    const sampleBtn = document.getElementById('mag-sample');
     const copyBtn = document.getElementById('mag-copy');
+    const clearBtn = document.getElementById('mag-clear');
     const topicCountEl = document.getElementById('mag-topic-count');
     const durationOutEl = document.getElementById('mag-duration-out');
     const formatEl = document.getElementById('mag-format');
@@ -8835,7 +8837,7 @@
     const outputEl = document.getElementById('mag-output');
     const helpEl = document.getElementById('mag-help');
 
-    if (!typeEl || !durationEl || !participantsEl || !goalEl || !topicsEl || !includeOwnerEl || !runBtn || !copyBtn || !topicCountEl || !durationOutEl || !formatEl || !followUpEl || !outputEl || !helpEl) return;
+    if (!typeEl || !durationEl || !participantsEl || !goalEl || !topicsEl || !includeOwnerEl || !runBtn || !sampleBtn || !copyBtn || !clearBtn || !topicCountEl || !durationOutEl || !formatEl || !followUpEl || !outputEl || !helpEl) return;
 
     const i18n = {
       ko: {
@@ -8846,99 +8848,161 @@
           client: '클라이언트 미팅',
           interview: '면담 / 인터뷰'
         },
-        intro: '회의 목적과 핵심 안건을 바탕으로 바로 공유 가능한 초안을 생성했습니다.',
-        title: '회의 안건',
-        purpose: '회의 목적',
-        attendees: '참여자',
-        agenda: '안건',
-        open: '오프닝 및 목표 확인',
-        close: '결론 정리 및 다음 액션',
-        owner: '담당자 / 후속조치',
-        minutes: '분',
-        output: '한국어 초안',
-        included: '포함',
-        excluded: '미포함',
-        placeholderTopic: '논의 주제',
-        copyDone: '복사됨',
-        copyDefault: '결과 복사',
-        needGoal: '회의 목표와 안건을 함께 넣으면 결과가 더 자연스러워집니다.'
+        intro: '입력한 시간과 정확히 일치하는 회의 안건을 생성했습니다.', title: '회의 안건', purpose: '회의 목적', attendees: '참여자', open: '오프닝 및 목표 확인', close: '결론 정리 및 다음 액션', owner: '담당자 / 후속조치', minutes: '분', output: '한국어', included: '포함', excluded: '미포함', current: '현재 상황 공유', decision: '결정 필요 사항 / 쟁점 정리', decisionLog: '결정 사항', due: '담당자 / 기한', total: '총',
+        empty: '회의 시간, 목표, 안건을 1개 이상 입력해 회의 안건을 만드세요.', invalidDuration: '회의 시간은 5~480 사이의 정수(분)로 입력해 주세요.', needGoal: '회의 목표를 입력해 주세요.', needTopics: '핵심 안건을 한 줄에 하나씩 입력해 주세요.', tooMany: '안건은 중복을 제외하고 최대 20개까지 입력할 수 있습니다.', tooLong: '각 안건은 120자 이하로 입력해 주세요.', tooShort: '회의 시간이 너무 짧습니다. 오프닝·마무리·각 안건에 최소 1분씩 배정할 수 있도록 늘려 주세요.', tight: '안건을 생성했지만 일부 안건 시간이 3분 미만입니다. 안건 수를 줄이거나 회의 시간을 늘려 보세요.',
+        sampleParticipants: 'PM, 디자인, 개발', sampleGoal: '다음 스프린트 우선순위와 블로커 확정', sampleTopics: '진행 상황 공유\n의사결정 필요 사항\n리스크 / 블로커', sampleLoaded: '30분 회의 예시를 입력했습니다.', cleared: '입력과 결과를 초기화했습니다.', copied: '회의 안건을 복사했습니다.', copyEmpty: '먼저 회의 안건을 생성해 주세요.', copyFail: '자동 복사를 사용할 수 없습니다.'
+      },
+      en: {
+        types: { weekly: 'Weekly sync', project: 'Project kickoff / update', retrospective: 'Retrospective', client: 'Client meeting', interview: 'Interview / screening' },
+        intro: 'Generated an agenda that exactly matches the entered duration.', title: 'Meeting agenda', purpose: 'Goal', attendees: 'Participants', open: 'Opening and goal check', close: 'Decisions and next steps', owner: 'Owners / follow-up', minutes: ' min', output: 'English', included: 'Included', excluded: 'Not included', current: 'Share current context', decision: 'Clarify decisions / discussion points', decisionLog: 'Decision', due: 'Owner / due date', total: 'Total',
+        empty: 'Enter a duration, goal, and at least one topic to generate an agenda.', invalidDuration: 'Enter a whole-number duration from 5 to 480 minutes.', needGoal: 'Enter the main meeting goal.', needTopics: 'Enter at least one key topic, one per line.', tooMany: 'Enter no more than 20 unique topics.', tooLong: 'Keep every topic to 120 characters or fewer.', tooShort: 'The meeting is too short. Allow at least one minute each for the opening, closing, and every topic.', tight: 'Agenda generated, but at least one topic has under 3 minutes. Reduce the topics or extend the meeting.',
+        sampleParticipants: 'Product, Design, Engineering', sampleGoal: 'Agree on next sprint priorities and blockers', sampleTopics: 'Progress update\nDecisions needed\nRisks / blockers', sampleLoaded: 'Loaded a 30-minute meeting example.', cleared: 'Cleared the inputs and result.', copied: 'Copied the meeting agenda.', copyEmpty: 'Generate an agenda before copying.', copyFail: 'Automatic copy is unavailable.'
+      },
+      ja: {
+        types: { weekly: '定例ミーティング', project: 'プロジェクトキックオフ / 更新', retrospective: '振り返り', client: '顧客ミーティング', interview: '面談・面接' },
+        intro: '入力した所要時間と正確に一致するアジェンダを生成しました。', title: '会議アジェンダ', purpose: '目的', attendees: '参加者', open: '開始・目的確認', close: '決定事項・次のアクション', owner: '担当者 / フォローアップ', minutes: '分', output: '日本語', included: 'あり', excluded: 'なし', current: '現状共有', decision: '判断事項 / 論点整理', decisionLog: '決定事項', due: '担当者 / 期限', total: '合計',
+        empty: '所要時間、目的、1件以上のトピックを入力してアジェンダを生成してください。', invalidDuration: '所要時間は5〜480の整数（分）で入力してください。', needGoal: '会議の目的を入力してください。', needTopics: '主要トピックを1行に1件ずつ入力してください。', tooMany: '重複を除いて最大20件まで入力できます。', tooLong: '各トピックは120文字以内にしてください。', tooShort: '会議時間が短すぎます。開始、終了、各トピックに最低1分ずつ確保してください。', tight: '生成しましたが、3分未満のトピックがあります。件数を減らすか時間を延ばしてください。',
+        sampleParticipants: 'PM、デザイン、開発', sampleGoal: '次スプリントの優先順位とブロッカーを確定', sampleTopics: '進捗共有\n判断が必要な事項\nリスク / ブロッカー', sampleLoaded: '30分会議の例を入力しました。', cleared: '入力と結果をクリアしました。', copied: '会議アジェンダをコピーしました。', copyEmpty: '先にアジェンダを生成してください。', copyFail: '自動コピーを利用できません。'
       }
     };
-    const t = i18n.ko;
+    const t = i18n[pageLang] || i18n.ko;
 
     const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
-      catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return;
       }
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      const copied = document.execCommand('copy');
+      ta.remove();
+      if (!copied) throw new Error('copy failed');
     };
 
-    const parseTopics = () => (topicsEl.value || '').split(/\n+/).map(v => v.trim()).filter(Boolean);
+    const setStatus = (message, state = '') => {
+      helpEl.textContent = message;
+      helpEl.dataset.state = state;
+    };
+
+    const resetResult = () => {
+      outputEl.value = '';
+      copyBtn.disabled = true;
+      topicCountEl.textContent = '-';
+      durationOutEl.textContent = '-';
+      formatEl.textContent = '-';
+      followUpEl.textContent = '-';
+    };
+
+    const parseTopics = () => {
+      const seen = new Set();
+      return (topicsEl.value || '').split(/\r?\n/u).map(v => v.trim()).filter((topic) => {
+        const key = topic.toLocaleLowerCase(pageLang === 'ko' ? 'ko-KR' : pageLang);
+        if (!topic || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    };
+
+    const timecode = (minutes) => `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
+    const timelineLine = (index, label, start, minutes) => `${index}. [${timecode(start)}–${timecode(start + minutes)}] ${label} (${minutes}${t.minutes})`;
+
+    const invalidateResult = () => {
+      resetResult();
+      [durationEl, goalEl, topicsEl].forEach(el => el.setAttribute('aria-invalid', 'false'));
+      setStatus(t.empty);
+    };
 
     const generate = () => {
       const meetingType = typeEl.value || 'weekly';
-      const duration = Math.min(240, Math.max(10, Number(durationEl.value || 30)));
-      durationEl.value = duration;
-      const participants = (participantsEl.value || '').trim() || '관련 담당자';
-      const goal = (goalEl.value || '').trim() || '핵심 이슈를 정리하고 다음 액션을 확정하기';
+      const rawDuration = durationEl.value.trim();
+      const duration = Number(rawDuration);
+      const participants = (participantsEl.value || '').trim();
+      const goal = (goalEl.value || '').trim();
       const topics = parseTopics();
-      const topicList = topics.length ? topics : [t.placeholderTopic];
       const includeOwner = !!includeOwnerEl.checked;
 
-      const opening = Math.max(5, Math.round(duration * 0.15));
-      const closing = Math.max(5, Math.round(duration * 0.15));
-      const remaining = Math.max(5, duration - opening - closing);
-      const base = Math.floor(remaining / topicList.length);
-      let extra = remaining - (base * topicList.length);
+      [durationEl, goalEl, topicsEl].forEach(el => el.setAttribute('aria-invalid', 'false'));
+      resetResult();
+      if (!rawDuration || !Number.isInteger(duration) || duration < 5 || duration > 480) {
+        durationEl.setAttribute('aria-invalid', 'true'); setStatus(t.invalidDuration, 'error'); durationEl.focus(); return;
+      }
+      if (!goal) { goalEl.setAttribute('aria-invalid', 'true'); setStatus(t.needGoal, 'error'); goalEl.focus(); return; }
+      if (!topics.length) { topicsEl.setAttribute('aria-invalid', 'true'); setStatus(t.needTopics, 'error'); topicsEl.focus(); return; }
+      if (topics.length > 20) { topicsEl.setAttribute('aria-invalid', 'true'); setStatus(t.tooMany, 'error'); topicsEl.focus(); return; }
+      if (topics.some(topic => Array.from(topic).length > 120)) { topicsEl.setAttribute('aria-invalid', 'true'); setStatus(t.tooLong, 'error'); topicsEl.focus(); return; }
+      if (duration < topics.length + 2) { durationEl.setAttribute('aria-invalid', 'true'); setStatus(t.tooShort, 'error'); durationEl.focus(); return; }
+
+      const opening = Math.min(5, Math.max(1, Math.floor(duration * 0.15)));
+      const closing = Math.min(5, Math.max(1, Math.floor(duration * 0.15)));
+      const remaining = duration - opening - closing;
+      const base = Math.floor(remaining / topics.length);
+      let extra = remaining - (base * topics.length);
+      let elapsed = 0;
 
       const lines = [];
       lines.push(`[${t.types[meetingType]}] ${t.title}`);
       lines.push(`- ${t.purpose}: ${goal}`);
-      lines.push(`- ${t.attendees}: ${participants}`);
-      lines.push(`- 총 ${duration}${t.minutes}`);
+      if (participants) lines.push(`- ${t.attendees}: ${participants}`);
+      lines.push(`- ${t.total}: ${duration}${t.minutes}`);
       lines.push('');
-      lines.push(`1. ${t.open} (${opening}${t.minutes})`);
+      lines.push(timelineLine(1, t.open, elapsed, opening));
+      elapsed += opening;
 
-      topicList.forEach((topic, index) => {
+      let tight = false;
+      topics.forEach((topic, index) => {
         const minutes = base + (extra > 0 ? 1 : 0);
         if (extra > 0) extra -= 1;
-        lines.push(`${index + 2}. ${topic} (${minutes}${t.minutes})`);
-        lines.push(`   - 현재 상황 공유`);
-        lines.push(`   - 결정 필요 사항 / 쟁점 정리`);
+        if (minutes < 3) tight = true;
+        lines.push(timelineLine(index + 2, topic, elapsed, minutes));
+        lines.push(`   - ${t.current}`);
+        lines.push(`   - ${t.decision}`);
+        elapsed += minutes;
       });
 
-      lines.push(`${topicList.length + 2}. ${t.close} (${closing}${t.minutes})`);
-      lines.push(`   - 결정 사항 요약`);
-      lines.push(`   - 다음 일정 / 마감 확인`);
+      lines.push(timelineLine(topics.length + 2, t.close, elapsed, closing));
+      lines.push(`   - ${t.decisionLog}:`);
+      lines.push(`   - ${t.due}:`);
 
       if (includeOwner) {
         lines.push('');
         lines.push(`[${t.owner}]`);
-        lines.push(`- 액션 1: 담당자 / 기한`);
-        lines.push(`- 액션 2: 담당자 / 기한`);
+        lines.push(`- 1: ${t.due}`);
+        lines.push(`- 2: ${t.due}`);
       }
 
       outputEl.value = lines.join('\n');
-      topicCountEl.textContent = String(topicList.length);
+      copyBtn.disabled = false;
+      topicCountEl.textContent = String(topics.length);
       durationOutEl.textContent = `${duration}${t.minutes}`;
       formatEl.textContent = t.output;
       followUpEl.textContent = includeOwner ? t.included : t.excluded;
-      helpEl.textContent = topics.length ? t.intro : t.needGoal;
+      setStatus(tight ? t.tight : t.intro, tight ? 'warning' : 'success');
     };
 
     runBtn.addEventListener('click', generate);
-    [typeEl, durationEl, participantsEl, goalEl, topicsEl, includeOwnerEl].forEach((el) => el.addEventListener('input', generate));
+    [typeEl, durationEl, participantsEl, goalEl, topicsEl, includeOwnerEl].forEach((el) => el.addEventListener('input', invalidateResult));
+    document.querySelectorAll('[data-mag-duration]').forEach(btn => btn.addEventListener('click', () => {
+      durationEl.value = btn.dataset.magDuration || '';
+      invalidateResult();
+      durationEl.focus();
+    }));
+    sampleBtn.addEventListener('click', () => {
+      durationEl.value = '30'; participantsEl.value = t.sampleParticipants; goalEl.value = t.sampleGoal; topicsEl.value = t.sampleTopics;
+      resetResult(); setStatus(t.sampleLoaded); goalEl.focus();
+    });
+    clearBtn.addEventListener('click', () => {
+      typeEl.value = 'weekly'; durationEl.value = ''; participantsEl.value = ''; goalEl.value = ''; topicsEl.value = ''; includeOwnerEl.checked = true;
+      [durationEl, goalEl, topicsEl].forEach(el => el.setAttribute('aria-invalid', 'false'));
+      resetResult(); setStatus(t.cleared); durationEl.focus();
+    });
     copyBtn.addEventListener('click', async () => {
-      if (!outputEl.value.trim()) generate();
-      await copyText(outputEl.value.trim());
-      const old = copyBtn.textContent;
-      copyBtn.textContent = t.copyDone;
-      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+      if (!outputEl.value.trim()) { setStatus(t.copyEmpty, 'error'); return; }
+      try { await copyText(outputEl.value.trim()); setStatus(t.copied, 'success'); }
+      catch (_) { setStatus(t.copyFail, 'error'); }
     });
 
-    generate();
+    invalidateResult();
   }
 
   if (slug === 'move-checklist-planner') {

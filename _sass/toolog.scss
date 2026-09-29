@@ -1349,6 +1349,18 @@ textarea:focus-visible {
 .avg-ui #avg-help[data-state="error"] { color: #fca5a5; }
 .avg-ui #avg-help[data-state="warning"] { color: #fbbf24; }
 .avg-ui #avg-help[data-state="success"] { color: #86efac; }
+
+.mag-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+.mag-presets { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.mag-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.mag-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.mag-ui small { display: block; margin-top: 0.35rem; color: var(--muted); }
+.mag-ui textarea[aria-invalid="true"],
+.mag-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.mag-ui #mag-help[data-state="error"] { border-color: #ef4444; }
+.mag-ui #mag-help[data-state="warning"] { border-color: #f59e0b; }
+.mag-ui #mag-help[data-state="success"] { border-color: #22c55e; }
+.mag-ui #mag-output { min-height: 22rem; white-space: pre; overflow: auto; }
 .gbc-grid { grid-template-columns: minmax(0, 1fr) minmax(180px, .55fr); }
 .gbc-grid > div { display: grid; gap: .35rem; min-width: 0; }
 .gbc-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -2009,6 +2021,9 @@ textarea:focus-visible {
   .bw-stats { grid-template-columns: 1fr 1fr; }
   .avg-actions { grid-template-columns: 1fr; }
   .avg-stats { grid-template-columns: 1fr 1fr; }
+  .mag-grid,.mag-actions { grid-template-columns: 1fr; }
+  .mag-presets,.mag-stats { grid-template-columns: 1fr 1fr; }
+  .mag-ui #mag-output { min-height: 18rem; font-size: 0.9rem; }
   .as-grid,
   .as-actions { grid-template-columns: 1fr; }
   .tool-stats.as-stats { grid-template-columns: 1fr 1fr; }

@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-29 21:00 KST
+- Tool: `meeting-agenda-generator`
+- Selection reason: recent runs improved other tools; this oldest untouched April-era generator silently substituted missing inputs, clamped invalid durations, generated totals longer than the requested meeting for short or topic-heavy inputs, and displayed Korean output on EN/JA pages.
+- Scope: improved only the existing multilingual meeting-agenda tool, home metadata, layout, styles, script, and SEO content with exact-sum elapsed timelines, strict 5–480-minute and topic validation, duplicate removal, true empty/error/warning/success states, localized KO/EN/JA output, duration presets, example/clear/copy feedback, accessible descriptions/live status, single-column mobile actions, privacy wording, FAQ, and meeting-workflow related links. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, localized related-link checks, mobile CSS rules, and DOM-driven blank/sample/exact-total/deduplication/fractional/too-short/too-many/long-topic/clear/localization cases passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-27 21:00 KST
 - Tool: `goal-savings-calculator`
 - Selection reason: recent runs improved other tools; this untouched March-era finance calculator silently clamped negative and invalid values, auto-filled results instead of showing an empty state, allowed copying invalid output, and had ambiguous deposit timing and contribution labels.

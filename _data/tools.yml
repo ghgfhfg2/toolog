@@ -1112,9 +1112,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 회의 유형, 시간, 목표, 핵심 안건을 바탕으로 바로 공유 가능한 회의 아젠다 초안을 만들어요.
-  description_en: Generate a ready-to-share meeting agenda draft from meeting type, duration, goal, and key topics.
-  description_ja: 会議タイプ・時間・目的・主要トピックをもとに、そのまま共有できる会議アジェンダの下書きを作成します。
+  description: 회의 시간·목표·핵심 안건을 입력하면 모든 구간의 합이 정확히 맞는 시간 배분 회의 아젠다를 만들어요.
+  description_en: Build a timed meeting agenda whose opening, topic blocks, and closing add up exactly to the duration entered.
+  description_ja: 所要時間・目的・トピックから、開始・各議題・終了の合計が正確に一致する会議アジェンダを作成します。
   url: /tools/meeting-agenda-generator/
   url_en: /en/tools/meeting-agenda-generator/
   url_ja: /ja/tools/meeting-agenda-generator/

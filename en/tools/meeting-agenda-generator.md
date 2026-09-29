@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Meeting Agenda Generator | Create a ready-to-share meeting agenda draft
-description: Enter meeting type, duration, goal, and key topics to generate a clear meeting agenda draft you can share right away.
+title: Meeting Agenda Generator | Build a timed meeting agenda
+description: Enter a duration, goal, and topics to build a timed meeting agenda whose opening, discussion blocks, and closing add up exactly. Copy a 15, 30, 45, or 60-minute agenda.
 lang: en
 permalink: /en/tools/meeting-agenda-generator/
 canonical_url: /en/tools/meeting-agenda-generator/
@@ -12,15 +12,17 @@ image:
   path: /assets/thumbs/en/meeting-agenda-generator.svg
   alt: Meeting agenda generator thumbnail
 tool_key: meeting-agenda-generator
-keywords: [meeting agenda generator, meeting outline tool, agenda maker, meeting prep tool, team meeting agenda]
-related_tools: [pomodoro-timer, text-counter, case-converter]
+keywords: [meeting agenda generator, timed meeting agenda, agenda maker, meeting time allocation, meeting outline tool, team meeting agenda]
+related_tools: [meeting-action-item-extractor, meeting-action-item-organizer, schedule-coordination-message-generator, text-counter]
 faq:
   - q: Does this tool create meeting minutes too?
     a: No. It is designed for pre-meeting agenda drafting. Meeting minutes should still be written after the meeting based on decisions and action items.
   - q: How is time allocated across agenda items?
-    a: The tool reserves basic opening and closing time first, then distributes the remaining time across the topics you entered.
+    a: It reserves about 15% each for opening and closing, capped at 1 to 5 minutes, then distributes the remaining whole minutes evenly. Every block always adds up to the duration entered.
   - q: Is it only for team meetings?
     a: No. It also works well for project updates, client calls, retrospectives, 1:1s, and interviews.
+  - q: Is my meeting information stored?
+    a: No. Inputs and agenda generation stay in your browser and are not sent to or stored on a server.
 ---
 
 ## Why use a meeting agenda generator?
@@ -33,6 +35,8 @@ This tool helps you build a practical agenda draft from just a few inputs:
 - participants
 - goal
 - key topics
+
+Enter a whole-number duration from 5 to 480 minutes and up to 20 unique topics, one per line. Blank lines and case-only duplicates are removed.
 
 ## What it creates
 The generated output includes:
@@ -67,19 +71,23 @@ Keep the conversation focused without sounding too rigid.
   - Decisions needed
   - Risks / blockers
 
-The tool turns that into a shareable agenda draft with allocated time blocks.
+The tool turns that into a shareable agenda with exact elapsed-time ranges such as `00:04–00:12`. Every block adds up to 30 minutes.
 
 ## Related tools
-- For focused prep time: [Pomodoro Timer]({{ '/en/tools/pomodoro-timer/' | relative_url }})
-- To check text length before sharing: [Text Counter]({{ '/en/tools/text-counter/' | relative_url }})
-- To adjust title/text casing: [Case Converter]({{ '/en/tools/case-converter/' | relative_url }})
+- Extract follow-ups after the meeting: [Meeting Action Item Extractor]({{ '/en/tools/meeting-action-item-extractor/' | relative_url }})
+- Organize owners and due dates: [Meeting Action Item Organizer]({{ '/en/tools/meeting-action-item-organizer/' | relative_url }})
+- Draft an attendance request: [Schedule Coordination Message Generator]({{ '/en/tools/schedule-coordination-message-generator/' | relative_url }})
+- Check the agenda length: [Text Counter]({{ '/en/tools/text-counter/' | relative_url }})
 
 ## FAQ
 ### Can I use the output as-is?
 Yes, for a draft. But it is still best to adjust wording and priorities for the actual meeting context.
 
 ### Does it work for short meetings too?
-Yes. Even 10 to 15 minute meetings benefit from a lightweight structure.
+Yes. The opening, closing, and every topic need at least one minute. The tool rejects a duration that cannot fit those blocks and warns when any topic gets under three minutes.
 
 ### Why does a follow-up section matter?
 Because meetings feel much more useful when the next owner and action are visible at the end.
+
+### Is my meeting information stored?
+No. Everything is processed in your browser and disappears when you leave or refresh the page.
