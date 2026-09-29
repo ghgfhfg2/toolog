@@ -36,7 +36,14 @@ This tool helps you build a practical agenda draft from just a few inputs:
 - goal
 - key topics
 
-Enter a whole-number duration from 5 to 480 minutes and up to 20 unique topics, one per line. Blank lines and case-only duplicates are removed.
+## How it works
+1. Choose a meeting type.
+2. Enter the total meeting duration.
+3. Add participants or teams if needed.
+4. Write the meeting goal in one line.
+5. Enter one key topic per line.
+
+Use a whole-number duration from 5 to 480 minutes and enter up to 20 unique topics. Blank lines and case-only duplicates are removed automatically. The generator then creates an opening, timed topic blocks, a closing section, and—if selected—owner and follow-up fields.
 
 ## What it creates
 The generated output includes:
@@ -62,7 +69,8 @@ List your questions and priorities before the meeting starts.
 ### 1:1s and interviews
 Keep the conversation focused without sounding too rigid.
 
-## Example
+## Examples
+### 30-minute weekly sync
 - Meeting type: Weekly sync
 - Duration: 30 minutes
 - Goal: Align next sprint priorities and blockers
@@ -71,7 +79,18 @@ Keep the conversation focused without sounding too rigid.
   - Decisions needed
   - Risks / blockers
 
-The tool turns that into a shareable agenda with exact elapsed-time ranges such as `00:04–00:12`. Every block adds up to 30 minutes.
+The result uses exact elapsed-time ranges: **4 minutes to open + 8, 7, and 7 minutes for the topics + 4 minutes to close = 30 minutes**.
+
+### 45-minute project update
+- Meeting type: Project kickoff / update
+- Duration: 45 minutes
+- Goal: Resolve the remaining decisions before launch
+- Topics:
+  - Schedule changes
+  - QA issue priorities
+  - Pre-deployment checklist
+
+The generated draft is formatted for easy pasting into team chat, a calendar description, or meeting notes.
 
 ## Related tools
 - Extract follow-ups after the meeting: [Meeting Action Item Extractor]({{ '/en/tools/meeting-action-item-extractor/' | relative_url }})
@@ -91,3 +110,6 @@ Because meetings feel much more useful when the next owner and action are visibl
 
 ### Is my meeting information stored?
 No. Everything is processed in your browser and disappears when you leave or refresh the page.
+
+## Summary
+This meeting agenda generator is a quick way to clarify the purpose of a meeting and keep every discussion within the planned time. Use it before a short team sync, client call, interview, or project meeting to create a structured, shareable agenda.
