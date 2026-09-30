@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-09-30 21:00 KST
+- Tool: `text-line-break-cleaner`
+- Selection reason: recent runs improved other tools; this untouched April-era utility still rendered Korean-only controls on EN/JA pages, enabled empty-result copying, reported enabled options as if they had changed text, and preserved sentence-ending PDF line breaks instead of joining the paragraph.
+- Scope: improved only the existing multilingual text line-break cleaner, home metadata, layout, styles, script, and SEO content with localized KO/EN/JA controls and samples, explicit labels and limits, true empty/unchanged/warning/success states, valid-result-only copying and failure feedback, clear action, actual changed-rule counts, broader Unicode bullet normalization, numbered-list/heading/paragraph-boundary preservation, mobile single-column actions, FAQ, and related links. No new tool was added.
+- Validation: YAML/front matter and the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, localized related-link checks, mobile CSS rules, and DOM-driven empty/sample/paragraph-join/Unicode-bullet/numbered-list/unchanged/no-option/clear cases passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-29 21:00 KST
 - Tool: `meeting-agenda-generator`
 - Selection reason: recent runs improved other tools; this oldest untouched April-era generator silently substituted missing inputs, clamped invalid durations, generated totals longer than the requested meeting for short or topic-heavy inputs, and displayed Korean output on EN/JA pages.

@@ -10489,39 +10489,51 @@
     const runBtn = document.getElementById('tlbc-run');
     const sampleBtn = document.getElementById('tlbc-sample');
     const copyBtn = document.getElementById('tlbc-copy');
+    const clearBtn = document.getElementById('tlbc-clear');
     const linesIn = document.getElementById('tlbc-lines-in');
     const linesOut = document.getElementById('tlbc-lines-out');
     const charsOut = document.getElementById('tlbc-chars-out');
     const changesEl = document.getElementById('tlbc-changes');
-    const help = document.getElementById('tlbc-help');
+    const status = document.getElementById('tlbc-status');
+    const meter = document.getElementById('tlbc-meter');
 
-    if (!input || !output || !trim || !spaces || !blank || !join || !bullets || !bulletStyle || !runBtn || !sampleBtn || !copyBtn || !linesIn || !linesOut || !charsOut || !changesEl || !help) return;
+    if (!input || !output || !trim || !spaces || !blank || !join || !bullets || !bulletStyle || !runBtn || !sampleBtn || !copyBtn || !clearBtn || !linesIn || !linesOut || !charsOut || !changesEl || !status || !meter) return;
 
     const tlbcText = {
       ko: {
-        idle: '텍스트를 붙여넣고 정리 옵션을 고르면 복붙 흔적을 빠르게 다듬습니다.',
-        copied: '복사됨',
-        copyDefault: '결과 복사', mustDo: '필수 작업',
-        summary: (n) => `선택한 정리 옵션 ${n}개를 적용했습니다. 결과를 한 번 더 눈으로 확인해 보세요.`
+        idle: '텍스트를 붙여넣으면 정리 결과를 미리 볼 수 있어요.',
+        noOptions: '정리 옵션을 하나 이상 선택해 주세요.',
+        unchanged: '선택한 옵션으로 바뀐 부분이 없습니다. 결과는 원문과 같습니다.',
+        summary: (n) => `${n}개 정리 항목에서 변경이 생겼습니다. 사용 전에 결과를 확인해 주세요.`,
+        copied: '정리 결과를 복사했습니다.',
+        copyEmpty: '복사할 정리 결과가 없습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다.',
+        cleared: '입력과 결과를 초기화했습니다.',
+        sample: '  회의 공지 초안  \n\n- 안건 1\n* 안건 2\n▪ 안건 3\n\nPDF에서 복사한 문장이라\n줄마다 강제로\n끊겨 보입니다.\n\n1. 참석 여부 확인\n2. 자료 준비\n\n\n금요일까지 알려주세요.  '
       },
       en: {
-        idle: 'Paste text and choose cleanup options to tidy copied formatting quickly.',
-        copied: 'Copied',
-        copyDefault: 'Copy result', mustDo: 'Must-do',
-        summary: (n) => `Applied ${n} selected cleanup option(s). Review the result once before using it.`
+        idle: 'Paste text to preview a cleaned result.',
+        noOptions: 'Select at least one cleanup option.',
+        unchanged: 'The selected options made no changes. The result matches the original.',
+        summary: (n) => `${n} cleanup rule(s) changed the text. Review the result before using it.`,
+        copied: 'Copied the cleaned result.',
+        copyEmpty: 'There is no cleaned result to copy.',
+        copyFail: 'Automatic copy is unavailable.',
+        cleared: 'Cleared the input and result.',
+        sample: '  Meeting announcement draft  \n\n- Agenda 1\n* Agenda 2\n▪ Agenda 3\n\nThis sentence was copied from a PDF\nand has forced line breaks\nin the middle of the paragraph.\n\n1. Confirm attendance\n2. Prepare materials\n\n\nPlease reply by Friday.  '
       },
       ja: {
-        idle: 'テキストを貼り付けて整形オプションを選ぶと、コピー時の崩れをすばやく整えます。',
-        copied: 'コピー完了',
-        copyDefault: '結果をコピー', mustDo: '必須タスク',
-        summary: (n) => `選択した整形オプション ${n} 件を適用しました。使用前に一度結果を確認してください。`
+        idle: 'テキストを貼り付けると整理結果を確認できます。',
+        noOptions: '整理オプションを1つ以上選んでください。',
+        unchanged: '選択したオプションによる変更はありません。結果は元の文章と同じです。',
+        summary: (n) => `${n}件の整理項目で変更がありました。使用前に結果を確認してください。`,
+        copied: '整理結果をコピーしました。',
+        copyEmpty: 'コピーできる整理結果がありません。',
+        copyFail: '自動コピーを利用できません。',
+        cleared: '入力と結果をクリアしました。',
+        sample: '  会議のお知らせ下書き  \n\n- 議題1\n* 議題2\n▪ 議題3\n\nPDFからコピーした文章なので\n段落の途中で\n改行されています。\n\n1. 出席確認\n2. 資料準備\n\n\n金曜日までに返信してください。  '
       }
-    }[pageLang] || {
-      idle: '텍스트를 붙여넣고 정리 옵션을 고르면 복붙 흔적을 빠르게 다듬습니다.',
-      copied: '복사됨',
-      copyDefault: '결과 복사',
-      summary: (n) => `선택한 정리 옵션 ${n}개를 적용했습니다. 결과를 한 번 더 눈으로 확인해 보세요.`
-    };
+    }[pageLang] || {};
 
     const copyText = async (text) => {
       try {
@@ -10533,37 +10545,73 @@
         ta.style.opacity = '0';
         document.body.appendChild(ta);
         ta.select();
-        document.execCommand('copy');
+        const copied = document.execCommand('copy');
         document.body.removeChild(ta);
+        if (!copied) throw new Error('copy failed');
       }
     };
 
-    const isBulletLine = (line) => /^\s*([-*•]|\d+[.)])\s+/.test(line);
+    const unorderedBulletPattern = /^\s*[-*•‣▪▫◦‒–—]\s+/u;
+    const isBulletLine = (line) => unorderedBulletPattern.test(line) || /^\s*\d{1,4}[.)]\s+/.test(line);
     const isHeadingLine = (line) => /^\s*#{1,6}\s+/.test(line) || /^\s*\[[^\]]+\]\s*$/.test(line);
-    const looksSentenceEnd = (line) => /[.!?。！？…:：]$/.test(line.trim());
+
+    const setStatus = (message, state = '') => {
+      status.textContent = message;
+      status.dataset.state = state;
+    };
+
+    const resetResult = (message = tlbcText.idle) => {
+      output.value = '';
+      linesIn.textContent = '0';
+      linesOut.textContent = '0';
+      charsOut.textContent = '0';
+      changesEl.textContent = '0';
+      copyBtn.disabled = true;
+      setStatus(message);
+    };
 
     const clean = () => {
       const selectedCount = [trim.checked, spaces.checked, blank.checked, join.checked, bullets.checked].filter(Boolean).length;
       const original = input.value || '';
       const originalLines = original === '' ? [] : original.replace(/\r\n?/g, '\n').split('\n');
       let lines = [...originalLines];
+      let changedRules = 0;
 
-      if (trim.checked) {
-        lines = lines.map((line) => line.trim());
+      meter.textContent = `${formatNum(original.length)} / ${formatNum(30000)}`;
+      bulletStyle.disabled = !bullets.checked;
+
+      if (!original) {
+        resetResult();
+        return;
+      }
+      if (!selectedCount) {
+        output.value = original.replace(/\r\n?/g, '\n');
+        linesIn.textContent = formatNum(originalLines.length);
+        linesOut.textContent = formatNum(originalLines.length);
+        charsOut.textContent = formatNum(output.value.length);
+        changesEl.textContent = '0';
+        copyBtn.disabled = false;
+        setStatus(tlbcText.noOptions, 'warning');
+        return;
       }
 
-      if (spaces.checked) {
-        lines = lines.map((line) => line.replace(/[ \t]{2,}/g, ' '));
-      }
+      const applyLineRule = (enabled, transform) => {
+        if (!enabled) return;
+        const before = lines.join('\n');
+        lines = transform(lines);
+        if (lines.join('\n') !== before) changedRules += 1;
+      };
 
-      if (bullets.checked) {
+      applyLineRule(trim.checked, (value) => value.map((line) => line.trim()));
+      applyLineRule(spaces.checked, (value) => value.map((line) => line.replace(/[ \t]{2,}/g, ' ')));
+      applyLineRule(bullets.checked, (value) => {
         const style = bulletStyle.value || '-';
-        lines = lines.map((line) => line.replace(/^\s*([-*•])\s+/, `${style} `));
-      }
+        return value.map((line) => line.replace(unorderedBulletPattern, `${style} `));
+      });
 
-      if (join.checked) {
+      applyLineRule(join.checked, (value) => {
         const merged = [];
-        lines.forEach((line) => {
+        value.forEach((line) => {
           const current = line || '';
           const prev = merged.length ? merged[merged.length - 1] : null;
           const currentTrim = current.trim();
@@ -10575,19 +10623,19 @@
             merged.push(currentTrim);
             return;
           }
-          if (isBulletLine(currentTrim) || isBulletLine(prev) || isHeadingLine(currentTrim) || isHeadingLine(prev) || looksSentenceEnd(prev)) {
+          if (isBulletLine(currentTrim) || isBulletLine(prev) || isHeadingLine(currentTrim) || isHeadingLine(prev)) {
             merged.push(currentTrim);
             return;
           }
           merged[merged.length - 1] = `${prev.trim()} ${currentTrim}`.replace(/[ \t]{2,}/g, ' ');
         });
-        lines = merged;
-      }
+        return merged;
+      });
 
-      if (blank.checked) {
+      applyLineRule(blank.checked, (value) => {
         const compact = [];
         let blankSeen = false;
-        lines.forEach((line) => {
+        value.forEach((line) => {
           if ((line || '').trim() === '') {
             if (!blankSeen) compact.push('');
             blankSeen = true;
@@ -10598,21 +10646,23 @@
         });
         while (compact.length && compact[0] === '') compact.shift();
         while (compact.length && compact[compact.length - 1] === '') compact.pop();
-        lines = compact;
-      }
+        return compact;
+      });
 
       const result = lines.join('\n');
       output.value = result;
       linesIn.textContent = formatNum(originalLines.length);
       linesOut.textContent = formatNum(result ? result.split('\n').length : 0);
       charsOut.textContent = formatNum(result.length);
-      changesEl.textContent = formatNum(selectedCount);
-      help.textContent = tlbcText.summary(selectedCount);
+      changesEl.textContent = formatNum(changedRules);
+      copyBtn.disabled = !result;
+      setStatus(changedRules ? tlbcText.summary(changedRules) : tlbcText.unchanged, changedRules ? 'success' : 'warning');
     };
 
     sampleBtn.addEventListener('click', () => {
-      input.value = "  회의 공지 초안  \n\n- 안건 1\n* 안건 2\n• 안건 3\n\nPDF에서 복사한 문장이라\n줄마다 강제로\n끊겨 보입니다.\n\n\n참석 가능 여부를\n금요일까지 알려주세요.  ";
+      input.value = tlbcText.sample;
       clean();
+      input.focus();
     });
 
     runBtn.addEventListener('click', clean);
@@ -10622,19 +10672,28 @@
     });
 
     copyBtn.addEventListener('click', async () => {
-      if (!output.value.trim()) clean();
-      if (!output.value.trim()) return;
-      await copyText(output.value);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = tlbcText.copied;
-      setTimeout(() => { copyBtn.textContent = old || tlbcText.copyDefault; }, 900);
+      if (!output.value) {
+        setStatus(tlbcText.copyEmpty, 'error');
+        input.focus();
+        return;
+      }
+      try {
+        await copyText(output.value);
+        setStatus(tlbcText.copied, 'success');
+      } catch (_) {
+        setStatus(tlbcText.copyFail, 'error');
+      }
     });
 
-    linesIn.textContent = '0';
-    linesOut.textContent = '0';
-    charsOut.textContent = '0';
-    changesEl.textContent = formatNum([trim.checked, spaces.checked, blank.checked, join.checked, bullets.checked].filter(Boolean).length);
-    help.textContent = tlbcText.idle;
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      meter.textContent = `0 / ${formatNum(30000)}`;
+      resetResult(tlbcText.cleared);
+      input.focus();
+    });
+
+    bulletStyle.disabled = !bullets.checked;
+    resetResult();
   }
 
   if (slug === 'blog-banned-word-checker') {

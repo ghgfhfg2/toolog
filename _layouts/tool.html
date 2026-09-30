@@ -447,46 +447,52 @@ layout: default
           <div id="bw-list" class="bw-list" aria-live="polite"></div>
         </div>
       {% when 'text-line-break-cleaner' %}
-        <div class="tool-ui">
-          <textarea id="tlbc-input" rows="10" maxlength="30000" placeholder="복사한 텍스트를 붙여넣으세요."></textarea>
-
-          <div class="tool-row-grid pct-grid pm-categories">
-            <label class="tool-check"><input id="tlbc-trim" type="checkbox" checked /> 줄 앞뒤 공백 제거</label>
-            <label class="tool-check"><input id="tlbc-spaces" type="checkbox" checked /> 중복 공백 정리</label>
+        <div class="tool-ui tlbc-ui">
+          <div class="tool-row">
+            <label for="tlbc-input">{% if page.lang == 'en' %}Text to clean{% elsif page.lang == 'ja' %}整理するテキスト{% else %}정리할 텍스트{% endif %}</label>
+            <textarea id="tlbc-input" rows="10" maxlength="30000" aria-describedby="tlbc-meter tlbc-status tlbc-help" placeholder="{% if page.lang == 'en' %}Paste text copied from a PDF, chat, or document.{% elsif page.lang == 'ja' %}PDF、チャット、文書からコピーしたテキストを貼り付けます。{% else %}PDF, 메신저, 문서에서 복사한 텍스트를 붙여넣으세요.{% endif %}"></textarea>
+            <p class="tool-result tlbc-meter" id="tlbc-meter">0 / 30,000</p>
           </div>
 
-          <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="tlbc-blank" type="checkbox" checked /> 여러 개의 빈줄 줄이기</label>
-            <label class="tool-check"><input id="tlbc-join" type="checkbox" checked /> 문단 내 강제 줄바꿈 합치기</label>
-          </div>
-
-          <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="tlbc-bullets" type="checkbox" checked /> 목록 기호 통일</label>
-            <div>
-              <label for="tlbc-bullet-style">불릿 스타일</label>
-              <select id="tlbc-bullet-style">
-                <option value="-">하이픈 (-)</option>
-                <option value="•">점 (•)</option>
+          <fieldset class="tlbc-options" aria-describedby="tlbc-status tlbc-help">
+            <legend>{% if page.lang == 'en' %}Cleanup options{% elsif page.lang == 'ja' %}整理オプション{% else %}정리 옵션{% endif %}</legend>
+            <div class="tool-row-grid tlbc-option-grid">
+              <label class="tool-check"><input id="tlbc-trim" type="checkbox" checked /> {% if page.lang == 'en' %}Trim each line{% elsif page.lang == 'ja' %}各行の前後空白を削除{% else %}줄 앞뒤 공백 제거{% endif %}</label>
+              <label class="tool-check"><input id="tlbc-spaces" type="checkbox" checked /> {% if page.lang == 'en' %}Collapse repeated spaces{% elsif page.lang == 'ja' %}連続する空白を整理{% else %}중복 공백 정리{% endif %}</label>
+              <label class="tool-check"><input id="tlbc-blank" type="checkbox" checked /> {% if page.lang == 'en' %}Reduce repeated blank lines{% elsif page.lang == 'ja' %}連続する空行を減らす{% else %}여러 개의 빈줄 줄이기{% endif %}</label>
+              <label class="tool-check"><input id="tlbc-join" type="checkbox" checked /> {% if page.lang == 'en' %}Join forced line breaks in paragraphs{% elsif page.lang == 'ja' %}段落内の強制改行を結合{% else %}문단 내 강제 줄바꿈 합치기{% endif %}</label>
+              <label class="tool-check"><input id="tlbc-bullets" type="checkbox" checked /> {% if page.lang == 'en' %}Normalize unordered bullets{% elsif page.lang == 'ja' %}箇条書き記号を統一{% else %}목록 기호 통일{% endif %}</label>
+              <div>
+                <label for="tlbc-bullet-style">{% if page.lang == 'en' %}Bullet style{% elsif page.lang == 'ja' %}箇条書き記号{% else %}불릿 스타일{% endif %}</label>
+                <select id="tlbc-bullet-style" aria-describedby="tlbc-help">
+                  <option value="-">{% if page.lang == 'en' %}Hyphen (-){% elsif page.lang == 'ja' %}ハイフン (-){% else %}하이픈 (-){% endif %}</option>
+                  <option value="•">{% if page.lang == 'en' %}Dot (•){% elsif page.lang == 'ja' %}中黒 (•){% else %}점 (•){% endif %}</option>
                 <option value="*">*</option>
-              </select>
+                </select>
+              </div>
             </div>
+          </fieldset>
+
+          <div class="tool-row-grid tlbc-actions" aria-label="{% if page.lang == 'en' %}Text cleanup actions{% elsif page.lang == 'ja' %}テキスト整理の操作{% else %}텍스트 정리 작업{% endif %}">
+            <button id="tlbc-run" type="button">{% if page.lang == 'en' %}Clean text{% elsif page.lang == 'ja' %}テキストを整理{% else %}텍스트 정리{% endif %}</button>
+            <button id="tlbc-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 넣기{% endif %}</button>
+            <button id="tlbc-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="tlbc-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-row-grid pct-actions pm-actions">
-            <button id="tlbc-run" type="button">텍스트 정리</button>
-            <button id="tlbc-sample" type="button">예시 넣기</button>
-            <button id="tlbc-copy" type="button">결과 복사</button>
+          <div class="tool-stats tlbc-stats" aria-label="{% if page.lang == 'en' %}Text cleanup summary{% elsif page.lang == 'ja' %}テキスト整理結果{% else %}텍스트 정리 결과{% endif %}">
+            <div><strong id="tlbc-lines-in">0</strong><span>{% if page.lang == 'en' %}Original lines{% elsif page.lang == 'ja' %}元の行数{% else %}원본 줄 수{% endif %}</span></div>
+            <div><strong id="tlbc-lines-out">0</strong><span>{% if page.lang == 'en' %}Cleaned lines{% elsif page.lang == 'ja' %}整理後の行数{% else %}정리 후 줄 수{% endif %}</span></div>
+            <div><strong id="tlbc-chars-out">0</strong><span>{% if page.lang == 'en' %}Output characters{% elsif page.lang == 'ja' %}整理後の文字数{% else %}정리 후 글자 수{% endif %}</span></div>
+            <div><strong id="tlbc-changes">0</strong><span>{% if page.lang == 'en' %}Rules that changed text{% elsif page.lang == 'ja' %}変更があった項目{% else %}변경된 정리 항목{% endif %}</span></div>
           </div>
 
-          <div class="tool-stats">
-            <div><strong id="tlbc-lines-in">0</strong><span>원본 줄 수</span></div>
-            <div><strong id="tlbc-lines-out">0</strong><span>정리 후 줄 수</span></div>
-            <div><strong id="tlbc-chars-out">0</strong><span>정리 후 글자 수</span></div>
-            <div><strong id="tlbc-changes">0</strong><span>적용 항목 수</span></div>
+          <p class="tool-result" id="tlbc-status" role="status" aria-live="polite">{% if page.lang == 'en' %}Paste text to preview a cleaned result.{% elsif page.lang == 'ja' %}テキストを貼り付けると整理結果を確認できます。{% else %}텍스트를 붙여넣으면 정리 결과를 미리 볼 수 있어요.{% endif %}</p>
+          <p class="tool-result" id="tlbc-help">{% if page.lang == 'en' %}Up to 30,000 characters. Paragraph joining preserves blank-line boundaries, Markdown headings, unordered bullets, and numbered list items. Review poetry, code, tables, and addresses before using the result.{% elsif page.lang == 'ja' %}最大30,000文字。段落結合では空行の区切り、Markdown見出し、箇条書き、番号付きリストを維持します。詩・コード・表・住所は使用前に確認してください。{% else %}최대 30,000자. 문단 합치기는 빈줄 경계, 마크다운 제목, 불릿, 번호 목록을 유지합니다. 시·코드·표·주소는 결과를 사용하기 전에 확인하세요.{% endif %}</p>
+          <div class="tool-row">
+            <label for="tlbc-output">{% if page.lang == 'en' %}Cleaned result{% elsif page.lang == 'ja' %}整理結果{% else %}정리 결과{% endif %}</label>
+            <textarea id="tlbc-output" rows="12" readonly aria-describedby="tlbc-status tlbc-help" placeholder="{% if page.lang == 'en' %}The cleaned result appears here.{% elsif page.lang == 'ja' %}整理結果がここに表示されます。{% else %}정리 결과가 여기에 표시됩니다.{% endif %}"></textarea>
           </div>
-
-          <p class="tool-result" id="tlbc-help">텍스트를 붙여넣고 정리 옵션을 고르면 복붙 흔적을 빠르게 다듬습니다.</p>
-          <textarea id="tlbc-output" rows="12" readonly placeholder="정리 결과가 여기에 표시됩니다."></textarea>
         </div>
       {% when 'filename-sanitizer' %}
         <div class="tool-ui fs-ui">

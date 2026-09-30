@@ -980,9 +980,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 복붙한 텍스트의 줄바꿈, 빈줄, 목록 기호, 중복 공백을 한 번에 정리해 읽기 좋은 형태로 바꿔줘요.
-  description_en: Clean pasted text by fixing awkward line breaks, extra blank lines, bullet styles, and repeated spaces in one pass.
-  description_ja: コピーしたテキストの不自然な改行、空行、箇条書き記号、重複スペースをまとめて整えます。
+  description: PDF·메신저·문서에서 복사한 글의 강제 줄바꿈, 빈줄, 불릿, 중복 공백을 정리하고 원문·결과 줄 수와 변경 항목을 확인해요.
+  description_en: Clean forced line breaks, extra blank lines, bullets, and repeated spaces in text copied from PDFs, chats, or documents, with change and line counts.
+  description_ja: PDF・チャット・文書からコピーした文章の強制改行、空行、箇条書き、重複スペースを整理し、変更項目と行数を確認できます。
   url: /tools/text-line-break-cleaner/
   url_en: /en/tools/text-line-break-cleaner/
   url_ja: /ja/tools/text-line-break-cleaner/
