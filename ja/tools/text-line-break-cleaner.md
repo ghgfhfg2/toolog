@@ -5,6 +5,10 @@ description: PDF・チャット・文書からコピーした文章の強制改�
 lang: ja
 permalink: /ja/tools/text-line-break-cleaner/
 canonical_url: /ja/tools/text-line-break-cleaner/
+alternate_urls:
+  ko: /tools/text-line-break-cleaner/
+  en: /en/tools/text-line-break-cleaner/
+  ja: /ja/tools/text-line-break-cleaner/
 category: text
 category_label: テキスト/ユーティリティ
 thumbnail: /assets/thumbs/ja/text-line-break-cleaner.svg

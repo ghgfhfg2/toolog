@@ -5,6 +5,10 @@ description: Clean forced line breaks, extra blank lines, mixed bullets, and rep
 lang: en
 permalink: /en/tools/text-line-break-cleaner/
 canonical_url: /en/tools/text-line-break-cleaner/
+alternate_urls:
+  ko: /tools/text-line-break-cleaner/
+  en: /en/tools/text-line-break-cleaner/
+  ja: /ja/tools/text-line-break-cleaner/
 category: text
 category_label: Text/Utility
 thumbnail: /assets/thumbs/en/text-line-break-cleaner.svg

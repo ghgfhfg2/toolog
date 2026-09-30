@@ -7,6 +7,10 @@ thumbnail: /assets/thumbs/text-line-break-cleaner.svg
 image:
   path: /assets/thumbs/text-line-break-cleaner.svg
   alt: 텍스트 줄바꿈 정리기 썸네일
+alternate_urls:
+  ko: /tools/text-line-break-cleaner/
+  en: /en/tools/text-line-break-cleaner/
+  ja: /ja/tools/text-line-break-cleaner/
 tool_key: text-line-break-cleaner
 tool_type: utility
 topic_cluster: text
