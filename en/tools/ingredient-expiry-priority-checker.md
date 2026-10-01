@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Ingredient Expiry Priority Checker | Decide what to use first
-description: Enter ingredients, days left, storage condition, amount, and plan to see what to use first and how to reduce waste.
+description: Compare remaining days and storage conditions to organize what to check today, use within 1–2 days, or use this week, with practical storage tips.
 lang: en
 permalink: /en/tools/ingredient-expiry-priority-checker/
 canonical_url: /en/tools/ingredient-expiry-priority-checker/
@@ -18,7 +18,7 @@ image:
 tool_key: ingredient-expiry-priority-checker
 tool_type: checker
 topic_cluster: food
-keywords: [ingredient expiry, fridge cleanup, food waste, use first, grocery planning]
+keywords: [ingredient expiry checker, fridge cleanup, food nearing expiry, ingredient priority, fridge inventory management, reduce food waste]
 related_tools: [fridge-ingredient-menu-picker, lunch-menu-picker, household-chore-picker]
 faq:
   - q: Does this decide whether expired food is safe to eat?
@@ -32,7 +32,10 @@ faq:
 ## Why use the Ingredient Expiry Priority Checker?
 When you open the fridge, it is easy to find small amounts of lettuce, tofu, milk, eggs, meat, leftovers, or sauces that are **hard to prioritize before they go bad**. The tricky part is that visible ingredients often get used before more urgent ones, while ingredients that already look risky can stay around too long because they feel wasteful to throw away.
 
-This tool looks at each ingredient's remaining days, storage condition, amount left, and whether you already have a cooking plan, then groups them into **use today / use this week / okay to monitor**.
+This tool looks at each ingredient's remaining days, storage condition, amount left, and whether you already have a cooking plan, then groups them into **check today / use within 1–2 days / use this week / can wait**.
+
+## Why this tool was improved today
+Recent quality work focused on other tools, including the line-break cleaner, meeting agenda generator, VAT calculator, and savings goal calculator. This checker had not received a dedicated review since its May 2026 launch. The update fixes the case where a missing day value was silently replaced with an arbitrary number, while improving the multilingual interface, mobile input flow, validation, empty states, and error guidance.
 
 ## How to use it
 1. Enter the ingredient name.
@@ -40,6 +43,8 @@ This tool looks at each ingredient's remaining days, storage condition, amount l
 3. Choose refrigerated, frozen, or room-temperature storage, package status, and amount left.
 4. Select whether you already have a meal plan for it.
 5. Review the priority result and storage tips.
+
+Enter a whole number from `-30` to `365`. `0` means today, and a negative number means the date you entered has passed. If you enter a name without a day value, or a value outside the allowed range, the checker stops and highlights the row instead of estimating it.
 
 ## Especially useful when
 ### 1) Cleaning out the fridge before grocery shopping
