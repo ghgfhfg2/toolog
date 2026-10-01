@@ -3805,8 +3805,9 @@
         ta.style.opacity = '0';
         document.body.appendChild(ta);
         ta.select();
-        document.execCommand('copy');
+        const copied = document.execCommand('copy');
         document.body.removeChild(ta);
+        if (!copied) throw new Error('copy failed');
       }
     };
 
@@ -20506,6 +20507,7 @@
     });
     const sampleBtn = document.getElementById('iepc-sample');
     const copyBtn = document.getElementById('iepc-copy');
+    const clearBtn = document.getElementById('iepc-clear');
     const countEl = document.getElementById('iepc-count');
     const urgentEl = document.getElementById('iepc-urgent');
     const weekEl = document.getElementById('iepc-week');
@@ -20524,36 +20526,159 @@
         ta.style.opacity = '0';
         document.body.appendChild(ta);
         ta.select();
-        document.execCommand('copy');
+        const copied = document.execCommand('copy');
         document.body.removeChild(ta);
+        if (!copied) throw new Error('copy failed');
       }
     };
 
-    const storageLabel = { fridge: '냉장', frozen: '냉동', room: '실온', opened: '개봉 후 냉장' };
-    const amountLabel = { small: '조금', medium: '보통', large: '많이' };
-    const planLabel = { none: '계획 없음', today: '오늘 사용 예정', week: '이번 주 사용 예정' };
+    const iepcText = {
+      ko: {
+        initial: '식재료 이름과 남은 소비기한을 입력해 주세요.',
+        missingNames: (count) => `남은 소비기한만 입력한 ${count}개 항목에 식재료 이름을 입력해 주세요.`,
+        missingDays: (count) => `이름을 입력한 재료 ${count}개의 남은 소비기한을 입력해 주세요.`,
+        invalidDays: (count) => `${count}개의 남은 소비기한은 -30~365 사이의 정수여야 합니다.`,
+        duplicate: (names) => `같은 이름의 재료가 있습니다: ${names.join(', ')}. 서로 구분되는 이름을 사용해 주세요.`,
+        summary: (name, count) => `${name}을(를) 먼저 확인하세요. ${count}개 재료를 우선순위로 정리했습니다.`,
+        title: '[식재료 소비기한 우선순위 점검 결과]',
+        days: '남은 소비기한', storage: '보관', amount: '양', plan: '계획', tip: '팁', note: '메모', score: '우선 점수',
+        copied: '결과를 복사했습니다.', copyFail: '자동 복사를 사용할 수 없습니다. 결과를 직접 선택해 복사해 주세요.',
+        cleared: '입력과 결과를 초기화했습니다.',
+        buckets: { today: '오늘 확인', soon: '1~2일 안에 사용', week: '이번 주 사용', later: '여유 있음' },
+        storage: { fridge: '냉장', frozen: '냉동', room: '실온', opened: '개봉 후 냉장' },
+        amount: { small: '조금', medium: '보통', large: '많이' },
+        plan: { none: '계획 없음', today: '오늘 사용 예정', week: '이번 주 사용 예정' },
+        tips: {
+          expired: '입력한 기한이 지났습니다. 냄새·색·곰팡이·질감·포장 팽창을 확인하고 이상하면 섭취하지 마세요.',
+          opened: '개봉한 재료는 밀폐하고, 물기 많은 채소·두부·유제품은 상태를 먼저 확인하세요.',
+          frozen: '냉동 보관도 품질이 무한정 유지되지는 않습니다. 소분·라벨 상태와 냉동 기간을 함께 확인하세요.',
+          large: '양이 많은데 계획이 없으니 한 번에 쓰는 메뉴를 정하거나 안전한 방식으로 소분 보관하세요.',
+          default: '오늘 조리 계획에 넣거나 눈에 보이는 칸으로 옮겨 잊히지 않게 하세요.'
+        }
+      },
+      en: {
+        initial: 'Enter an ingredient name and its days remaining to get started.',
+        missingNames: (count) => `Enter a name for ${count} row(s) that already have a day value.`,
+        missingDays: (count) => `Enter days remaining for ${count} named ingredient(s).`,
+        invalidDays: (count) => `${count} day value(s) must be whole numbers from -30 to 365.`,
+        duplicate: (names) => `Duplicate ingredient name(s): ${names.join(', ')}. Use distinct names.`,
+        summary: (name, count) => `Check ${name} first. Ranked ${count} ingredient(s) by priority.`,
+        title: '[Ingredient expiry priority check]',
+        days: 'Days remaining', storage: 'Storage', amount: 'Amount', plan: 'Plan', tip: 'Tip', note: 'Note', score: 'Priority score',
+        copied: 'Copied the result.', copyFail: 'Automatic copy is unavailable. Select the result and copy it manually.',
+        cleared: 'Cleared the inputs and result.',
+        buckets: { today: 'Check today', soon: 'Use within 1–2 days', week: 'Use this week', later: 'Can wait' },
+        storage: { fridge: 'Refrigerated', frozen: 'Frozen', room: 'Room temperature', opened: 'Opened and refrigerated' },
+        amount: { small: 'A little', medium: 'Medium', large: 'A lot' },
+        plan: { none: 'No plan', today: 'Use today', week: 'Use this week' },
+        tips: {
+          expired: 'The entered date has passed. Check smell, color, mold, texture, and swollen packaging; discard it if anything looks unusual.',
+          opened: 'Seal opened food and check moist produce, tofu, and dairy carefully before use.',
+          frozen: 'Freezing does not preserve quality forever. Check portion labels and how long the item has been frozen.',
+          large: 'There is a lot left and no plan. Choose a batch recipe or divide and store it safely.',
+          default: 'Add it to today’s meal plan or move it into view so it is not forgotten.'
+        }
+      },
+      ja: {
+        initial: '食材名と残り日数を入力してください。',
+        missingNames: (count) => `残り日数だけ入力した${count}件に食材名を入力してください。`,
+        missingDays: (count) => `名前を入力した${count}件の食材に残り日数を入力してください。`,
+        invalidDays: (count) => `${count}件の残り日数は-30〜365の整数で入力してください。`,
+        duplicate: (names) => `同じ食材名があります：${names.join('、')}。区別できる名前を使ってください。`,
+        summary: (name, count) => `${name}を先に確認しましょう。${count}件を優先順に整理しました。`,
+        title: '[食材消費期限優先度チェック結果]',
+        days: '残り日数', storage: '保存', amount: '残量', plan: '予定', tip: 'ヒント', note: 'メモ', score: '優先点数',
+        copied: '結果をコピーしました。', copyFail: '自動コピーを利用できません。結果を選択してコピーしてください。',
+        cleared: '入力と結果をリセットしました。',
+        buckets: { today: '今日確認', soon: '1〜2日以内に使用', week: '今週中に使用', later: '余裕あり' },
+        storage: { fridge: '冷蔵', frozen: '冷凍', room: '常温', opened: '開封後に冷蔵' },
+        amount: { small: '少量', medium: '普通', large: '多い' },
+        plan: { none: '予定なし', today: '今日使う', week: '今週中に使う' },
+        tips: {
+          expired: '入力した期限を過ぎています。におい・色・カビ・手触り・包装の膨張を確認し、異常があれば食べないでください。',
+          opened: '開封後は密閉し、水分の多い野菜・豆腐・乳製品は状態を先に確認してください。',
+          frozen: '冷凍でも品質が無期限に保たれるわけではありません。小分けラベルと冷凍期間を確認してください。',
+          large: '量が多く予定がないため、まとめて使う料理を決めるか、安全な方法で小分け保存してください。',
+          default: '今日の献立に入れるか、見える場所へ移して忘れないようにしましょう。'
+        }
+      }
+    }[pageLang] || {};
+    const storageLabel = iepcText.storage;
+    const amountLabel = iepcText.amount;
+    const planLabel = iepcText.plan;
+    const sampleData = {
+      ko: [
+        ['두부', '0', 'opened', 'medium', 'none', '개봉함'],
+        ['상추', '2', 'fridge', 'large', 'none', '숨이 조금 죽음'],
+        ['우유', '3', 'opened', 'small', 'today', '아침에 쓸 예정'],
+        ['닭가슴살', '12', 'frozen', 'large', 'week', '소분 필요'],
+        ['양파', '10', 'room', 'medium', 'none', '망에 보관']
+      ],
+      en: [
+        ['Tofu', '0', 'opened', 'medium', 'none', 'Opened'],
+        ['Lettuce', '2', 'fridge', 'large', 'none', 'Slightly wilted'],
+        ['Milk', '3', 'opened', 'small', 'today', 'Use for breakfast'],
+        ['Chicken breast', '12', 'frozen', 'large', 'week', 'Needs portioning'],
+        ['Onion', '10', 'room', 'medium', 'none', 'Stored in a net bag']
+      ],
+      ja: [
+        ['豆腐', '0', 'opened', 'medium', 'none', '開封済み'],
+        ['レタス', '2', 'fridge', 'large', 'none', '少ししおれている'],
+        ['牛乳', '3', 'opened', 'small', 'today', '朝食に使う予定'],
+        ['鶏むね肉', '12', 'frozen', 'large', 'week', '小分けが必要'],
+        ['玉ねぎ', '10', 'room', 'medium', 'none', 'ネット袋で保存']
+      ]
+    }[pageLang] || [];
 
     const getBucket = (score, days) => {
-      if (days < 0 || score >= 80) return '오늘 확인';
-      if (score >= 55) return '1~2일 안에 사용';
-      if (score >= 35) return '이번 주 사용';
-      return '여유 있음';
+      if (days < 0 || score >= 80) return iepcText.buckets.today;
+      if (score >= 55) return iepcText.buckets.soon;
+      if (score >= 35) return iepcText.buckets.week;
+      return iepcText.buckets.later;
     };
 
     const tipFor = (item) => {
-      if (item.days < 0) return '소비기한이 지났다면 냄새·색·곰팡이·포장 팽창을 확인하고, 이상하면 섭취하지 마세요.';
-      if (item.storage === 'opened') return '개봉 후 재료는 밀폐하고, 물기 많은 채소·두부·유제품은 상태 확인을 먼저 하세요.';
-      if (item.storage === 'frozen') return '냉동 상태라 급하지는 않지만, 양이 많다면 소분하거나 이번 주 메뉴에 배치하세요.';
-      if (item.amount === 'large' && item.plan === 'none') return '양이 많은데 계획이 없으니 볶음·국·샐러드처럼 한 번에 쓰는 메뉴를 먼저 잡아보세요.';
-      return '오늘 조리 계획에 넣거나 눈에 보이는 칸으로 옮겨 잊히지 않게 하세요.';
+      if (item.days < 0) return iepcText.tips.expired;
+      if (item.storage === 'opened') return iepcText.tips.opened;
+      if (item.storage === 'frozen') return iepcText.tips.frozen;
+      if (item.amount === 'large' && item.plan === 'none') return iepcText.tips.large;
+      return iepcText.tips.default;
     };
 
     const build = () => {
+      let missingNames = 0;
+      let missingDays = 0;
+      let invalidDays = 0;
+      rows.forEach((row) => {
+        row.name.setAttribute('aria-invalid', 'false');
+        row.days.setAttribute('aria-invalid', 'false');
+        const hasName = Boolean((row.name.value || '').trim());
+        const raw = row.days.value.trim();
+        if (!hasName) {
+          if (raw) {
+            missingNames += 1;
+            row.name.setAttribute('aria-invalid', 'true');
+          }
+          return;
+        }
+        if (!raw) {
+          missingDays += 1;
+          row.days.setAttribute('aria-invalid', 'true');
+          return;
+        }
+        const value = Number(raw);
+        if (!Number.isInteger(value) || value < -30 || value > 365) {
+          invalidDays += 1;
+          row.days.setAttribute('aria-invalid', 'true');
+        }
+      });
+
       const items = rows.map((row, idx) => {
         const name = (row.name.value || '').trim();
         if (!name) return null;
-        const rawDays = row.days.value === '' ? 7 : Number(row.days.value || 0);
-        const days = Number.isFinite(rawDays) ? rawDays : 7;
+        if (!row.days.value.trim()) return null;
+        const days = Number(row.days.value);
+        if (!Number.isInteger(days) || days < -30 || days > 365) return null;
         let score = 0;
         if (days < 0) score += 80;
         else if (days === 0) score += 70;
@@ -20576,38 +20701,53 @@
         return { idx, name, days, storage: row.storage.value, amount: row.amount.value, plan: row.plan.value, note, score, bucket };
       }).filter(Boolean).sort((a, b) => b.score - a.score || a.days - b.days);
 
-      countEl.textContent = String(items.length);
-      urgentEl.textContent = String(items.filter((item) => item.bucket === '오늘 확인').length);
-      weekEl.textContent = String(items.filter((item) => item.bucket === '1~2일 안에 사용' || item.bucket === '이번 주 사용').length);
-      topEl.textContent = items[0]?.name || '-';
+      const nameCounts = new Map();
+      items.forEach(({ name }) => {
+        const key = name.toLocaleLowerCase(pageLang === 'ko' ? 'ko-KR' : pageLang);
+        nameCounts.set(key, { name, count: (nameCounts.get(key)?.count || 0) + 1 });
+      });
+      const duplicates = Array.from(nameCounts.values()).filter(({ count }) => count > 1).map(({ name }) => name);
 
-      if (!items.length) {
-        summaryEl.textContent = '재료를 1개 이상 입력하면 먼저 확인할 순서와 보관 팁을 정리합니다.';
+      countEl.textContent = String(items.length);
+      urgentEl.textContent = String(items.filter((item) => item.bucket === iepcText.buckets.today).length);
+      weekEl.textContent = String(items.filter((item) => item.bucket === iepcText.buckets.soon || item.bucket === iepcText.buckets.week).length);
+      topEl.textContent = items[0]?.name || '-';
+      copyBtn.disabled = true;
+      summaryEl.dataset.state = '';
+
+      if (missingNames || missingDays || invalidDays) {
+        summaryEl.textContent = missingNames
+          ? iepcText.missingNames(missingNames)
+          : (missingDays ? iepcText.missingDays(missingDays) : iepcText.invalidDays(invalidDays));
+        summaryEl.dataset.state = 'error';
         outputEl.value = '';
         return;
       }
+      if (!items.length) {
+        summaryEl.textContent = iepcText.initial;
+        outputEl.value = '';
+        return;
+      }
+      if (duplicates.length) {
+        summaryEl.textContent = iepcText.duplicate(duplicates);
+        summaryEl.dataset.state = 'warning';
+      }
 
       const top = items[0];
-      summaryEl.textContent = `${top.name}을(를) 먼저 확인하는 것이 좋아요. 총 ${items.length}개 재료를 소비기한 우선순위로 정리했습니다.`;
+      if (!duplicates.length) summaryEl.textContent = iepcText.summary(top.name, items.length);
       outputEl.value = [
-        '[식재료 소비기한 우선순위 점검 결과]',
-        ...items.map((item, index) => `${index + 1}. ${item.name} | ${item.bucket} | 점수 ${Math.round(item.score)}
-- 남은 소비기한: ${item.days}일 / 보관: ${storageLabel[item.storage]} / 양: ${amountLabel[item.amount]} / 계획: ${planLabel[item.plan]}
-- 팁: ${tipFor(item)}${item.note ? `
-- 메모: ${item.note}` : ''}`)
+        iepcText.title,
+        ...items.map((item, index) => `${index + 1}. ${item.name} | ${item.bucket} | ${iepcText.score} ${Math.round(item.score)}
+- ${iepcText.days}: ${item.days} / ${iepcText.storage}: ${storageLabel[item.storage]} / ${iepcText.amount}: ${amountLabel[item.amount]} / ${iepcText.plan}: ${planLabel[item.plan]}
+- ${iepcText.tip}: ${tipFor(item)}${item.note ? `
+- ${iepcText.note}: ${item.note}` : ''}`)
       ].join('\n\n');
+      copyBtn.disabled = false;
     };
 
     sampleBtn?.addEventListener('click', () => {
-      const samples = [
-        ['두부', '0', 'opened', 'medium', 'none', '개봉함'],
-        ['상추', '2', 'fridge', 'large', 'none', '숨이 조금 죽음'],
-        ['우유', '3', 'opened', 'small', 'today', '아침에 쓸 예정'],
-        ['닭가슴살', '12', 'frozen', 'large', 'week', '소분 필요'],
-        ['양파', '10', 'room', 'medium', 'none', '망에 보관']
-      ];
       rows.forEach((row, idx) => {
-        const sample = samples[idx];
+        const sample = sampleData[idx];
         row.name.value = sample[0];
         row.days.value = sample[1];
         row.storage.value = sample[2];
@@ -20616,15 +20756,34 @@
         row.note.value = sample[5];
       });
       build();
+      rows[0].name.focus();
     });
 
     copyBtn?.addEventListener('click', async () => {
-      if (!outputEl.value.trim()) build();
       if (!outputEl.value.trim()) return;
-      await copyText(outputEl.value.trim());
-      const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      try {
+        await copyText(outputEl.value.trim());
+        summaryEl.textContent = iepcText.copied;
+        summaryEl.dataset.state = 'success';
+      } catch (_) {
+        summaryEl.textContent = iepcText.copyFail;
+        summaryEl.dataset.state = 'error';
+      }
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      rows.forEach((row) => {
+        row.name.value = '';
+        row.days.value = '';
+        row.storage.value = 'fridge';
+        row.amount.value = 'medium';
+        row.plan.value = 'none';
+        row.note.value = '';
+        row.days.setAttribute('aria-invalid', 'false');
+      });
+      build();
+      summaryEl.textContent = iepcText.cleared;
+      rows[0].name.focus();
     });
 
     rows.forEach((row) => {

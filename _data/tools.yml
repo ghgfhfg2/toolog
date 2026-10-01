@@ -394,7 +394,7 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 냉장고 속 식재료의 남은 소비기한, 보관 상태, 양, 사용 계획을 넣으면 오늘 먼저 써야 할 재료와 보관 팁을 빠르게 점검해요.
+  description: 냉장고 식재료의 남은 소비기한과 보관 상태를 비교해 오늘 확인할 재료, 1~2일 안에 쓸 재료, 이번 주 사용 순서와 보관 팁을 정리해요.
   description_en: Enter ingredients, days left, storage condition, amount, and plan to see what to use first and how to reduce waste.
   description_ja: 食材、残り日数、保存状態、量、使用予定を入力し、先に使うべき食材と廃棄を減らすヒントを確認できます。
   url: /tools/ingredient-expiry-priority-checker/
