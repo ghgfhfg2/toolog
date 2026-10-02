@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-10-02 21:00 KST
+- Tool: `memory-quiz-generator`
+- Selection reason: recent runs improved other tools; this oldest untouched April-era learning tool overwrote invalid-input feedback, allowed grading before revealing an answer, lost skipped cards from completion totals, altered punctuation while parsing, and inserted pasted card text into `innerHTML` in the review list.
+- Scope: improved only the existing multilingual memory quiz tool, home metadata, layout, styles, script, and SEO content with labels and input limits, safe first-separator parsing, duplicate/invalid/200-card handling, text-only review rendering, reveal-before-grade controls, explicit skipped-card tracking, retry/copy/clear flows, accessible live states, mobile actions, FAQ, and related-tool guidance. No new tool was added.
+- Validation: YAML/front matter and the 98-tool multilingual integrity check, `node --check`, `git diff --check`, localized related-link checks, unique layout IDs, mobile CSS rules, parser punctuation/invalid/duplicate/200-card/long-answer cases, and a DOM-driven empty/invalid/reveal/grade/skip/safe-review/retry/clear flow passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-09-30 21:00 KST
 - Tool: `text-line-break-cleaner`
 - Selection reason: recent runs improved other tools; this untouched April-era utility still rendered Korean-only controls on EN/JA pages, enabled empty-result copying, reported enabled options as if they had changed text, and preserved sentence-ending PDF line breaks instead of joining the paragraph.

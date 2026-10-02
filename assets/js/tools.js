@@ -18483,8 +18483,10 @@
 
   if (slug === 'memory-quiz-generator') {
     const input = document.getElementById('mqg-input');
+    const inputMeter = document.getElementById('mqg-input-meter');
     const sampleBtn = document.getElementById('mqg-sample');
     const buildBtn = document.getElementById('mqg-build');
+    const clearBtn = document.getElementById('mqg-clear');
     const shuffleInput = document.getElementById('mqg-shuffle');
     const totalEl = document.getElementById('mqg-total');
     const currentEl = document.getElementById('mqg-current');
@@ -18498,63 +18500,87 @@
     const correctBtn = document.getElementById('mqg-correct-btn');
     const wrongBtn = document.getElementById('mqg-wrong-btn');
     const nextBtn = document.getElementById('mqg-next');
+    const retryBtn = document.getElementById('mqg-retry');
+    const copyBtn = document.getElementById('mqg-copy');
+    const reviewActions = document.getElementById('mqg-review-actions');
     const missedEl = document.getElementById('mqg-missed');
     if (!input) return;
 
     const t = {
       ko: {
         idle: '질문-정답 목록을 붙여넣고 퀴즈를 만들면 셀프 테스트를 시작할 수 있습니다.',
-        invalid: '카드를 만들 수 없어요. 한 줄에 하나씩, 질문과 정답을 = 또는 : 또는 탭/쉼표로 구분해 주세요.',
-        ready: (n) => `${n}개의 카드가 준비됐어요. 먼저 답을 떠올린 뒤 정답을 확인해 보세요.`,
+        invalid: (n) => `유효한 카드를 찾지 못했습니다${n ? ` (${n}줄 확인 필요)` : ''}. 한 줄에 질문 = 정답 형식으로 입력해 주세요.`,
+        ready: (n) => `${n}개의 카드가 준비됐습니다. 먼저 답을 떠올린 뒤 정답을 확인하세요.`,
+        readyWithNotes: (n, invalid, duplicate, limited) => `${n}개 카드를 만들었습니다. 형식 오류 ${invalid}줄, 중복 ${duplicate}개${limited ? ', 200개 초과분 제외' : ''}.`,
+        cardProgress: (i, n) => `${i}/${n}번 카드입니다. 답을 떠올린 뒤 정답을 확인하세요.`,
         progress: (i, n) => `${i} / ${n}`,
         accuracy: (c, w) => `${Math.round((c / Math.max(1, c + w)) * 100)}%`,
         noQuiz: '아직 퀴즈가 없습니다',
         answerHidden: '정답 보기를 누르면 여기에 표시됩니다.',
-        complete: (c, w) => `퀴즈 완료! 총 ${c + w}장 중 ${c}개 정답, ${w}개 오답입니다.`,
+        complete: (n, c, w, s) => `퀴즈 완료! ${n}장 중 정답 ${c}개, 오답 ${w}개, 건너뜀 ${s}개입니다.`,
+        revealFirst: '정답을 확인한 뒤 맞음 또는 틀림으로 채점해 주세요.',
+        skipped: '카드를 건너뛰었습니다. 완료 후 복습 목록에서 다시 볼 수 있습니다.',
+        retrying: (n) => `오답과 건너뛴 카드 ${n}개로 다시 시작합니다.`,
         missedTitle: '다시 볼 카드',
         noneMissed: '틀린 카드가 없어요. 그대로 넘어가도 좋습니다.',
+        skippedLabel: '건너뜀',
+        wrongLabel: '오답',
+        copied: '복습 목록을 복사했습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다. 브라우저 권한을 확인해 주세요.',
+        cleared: '입력과 퀴즈 진행 상태를 초기화했습니다.',
         sample: '대한민국 수도 = 서울\nphotosynthesis = 식물이 빛으로 에너지를 만드는 과정\n갑오개혁 = 1894년\n우리 회사의 핵심 가치 = 고객 문제를 빠르게 해결하는 것'
       },
       en: {
         idle: 'Paste prompt-answer pairs and build a quiz to start self-testing.',
-        invalid: 'Could not create cards. Use one pair per line and separate prompt and answer with =, :, tab, or comma.',
-        ready: (n) => `${n} cards are ready. Try recalling the answer first, then reveal it.`,
+        invalid: (n) => `No valid cards found${n ? ` (${n} line${n === 1 ? '' : 's'} need review)` : ''}. Use one prompt = answer pair per line.`,
+        ready: (n) => `${n} cards are ready. Recall the answer first, then reveal it.`,
+        readyWithNotes: (n, invalid, duplicate, limited) => `Created ${n} cards. ${invalid} invalid line(s), ${duplicate} duplicate(s) skipped${limited ? ', and cards after 200 omitted' : ''}.`,
+        cardProgress: (i, n) => `Card ${i} of ${n}. Recall the answer, then reveal it.`,
         progress: (i, n) => `${i} / ${n}`,
         accuracy: (c, w) => `${Math.round((c / Math.max(1, c + w)) * 100)}%`,
         noQuiz: 'No quiz yet',
         answerHidden: 'The answer will appear here after reveal.',
-        complete: (c, w) => `Quiz complete. ${c} correct and ${w} wrong out of ${c + w} cards.`,
+        complete: (n, c, w, s) => `Quiz complete. ${c} correct, ${w} wrong, and ${s} skipped out of ${n} cards.`,
+        revealFirst: 'Reveal the answer before marking the card correct or wrong.',
+        skipped: 'Skipped this card. You can retry it from the review list after finishing.',
+        retrying: (n) => `Starting again with ${n} missed or skipped card(s).`,
         missedTitle: 'Cards to review',
         noneMissed: 'No missed cards. Nice.',
+        skippedLabel: 'Skipped',
+        wrongLabel: 'Wrong',
+        copied: 'Copied the review list.',
+        copyFail: 'Automatic copy is unavailable. Check your browser permission.',
+        cleared: 'Cleared the input and quiz progress.',
         sample: 'capital of Korea = Seoul\nphotosynthesis = process plants use to convert light into energy\nGapo Reform = 1894\ncore value = solve customer problems quickly'
       },
       ja: {
         idle: '質問と答えのペアを貼り付けてクイズを作成すると、セルフテストを始められます。',
-        invalid: 'カードを作成できませんでした。1行に1つずつ、質問と答えを =、:、タブ、カンマで区切ってください。',
-        ready: (n) => `${n}枚のカードを用意しました。先に答えを思い出してから確認してみてください。`,
+        invalid: (n) => `有効なカードがありません${n ? `（${n}行を要確認）` : ''}。1行ごとに 質問 = 答え の形式で入力してください。`,
+        ready: (n) => `${n}枚のカードを用意しました。先に答えを思い出してから確認してください。`,
+        readyWithNotes: (n, invalid, duplicate, limited) => `${n}枚を作成しました。形式エラー${invalid}行、重複${duplicate}件を除外${limited ? '、200枚を超えた分は省略' : ''}しました。`,
+        cardProgress: (i, n) => `${n}枚中${i}枚目です。答えを思い出してから表示してください。`,
         progress: (i, n) => `${i} / ${n}`,
         accuracy: (c, w) => `${Math.round((c / Math.max(1, c + w)) * 100)}%`,
         noQuiz: 'まだクイズがありません',
         answerHidden: '答えを表示するとここに出ます。',
-        complete: (c, w) => `クイズ完了。${c + w}枚中、正解 ${c}、不正解 ${w} です。`,
+        complete: (n, c, w, s) => `クイズ完了。${n}枚中、正解${c}、不正解${w}、スキップ${s}です。`,
+        revealFirst: '答えを表示してから、正解または不正解を記録してください。',
+        skipped: 'このカードをスキップしました。完了後に復習リストから再挑戦できます。',
+        retrying: (n) => `不正解・スキップの${n}枚でもう一度始めます。`,
         missedTitle: '復習するカード',
         noneMissed: '間違えたカードはありません。',
+        skippedLabel: 'スキップ',
+        wrongLabel: '不正解',
+        copied: '復習リストをコピーしました。',
+        copyFail: '自動コピーを利用できません。ブラウザの権限を確認してください。',
+        cleared: '入力とクイズの進捗をクリアしました。',
         sample: '韓国の首都 = ソウル\nphotosynthesis = 植物が光でエネルギーを作る過程\n甲午改革 = 1894年\n会社のコア価値 = 顧客課題を素早く解決すること'
       }
-    }[pageLang] || {
-      idle: '질문-정답 목록을 붙여넣고 퀴즈를 만들면 셀프 테스트를 시작할 수 있습니다.',
-      invalid: '카드를 만들 수 없어요. 한 줄에 하나씩, 질문과 정답을 = 또는 : 또는 탭/쉼표로 구분해 주세요.',
-      ready: (n) => `${n}개의 카드가 준비됐어요. 먼저 답을 떠올린 뒤 정답을 확인해 보세요.`,
-      progress: (i, n) => `${i} / ${n}`,
-      accuracy: (c, w) => `${Math.round((c / Math.max(1, c + w)) * 100)}%`,
-      noQuiz: '아직 퀴즈가 없습니다',
-      answerHidden: '정답 보기를 누르면 여기에 표시됩니다.',
-      complete: (c, w) => `퀴즈 완료! 총 ${c + w}장 중 ${c}개 정답, ${w}개 오답입니다.`,
-      missedTitle: '다시 볼 카드',
-      noneMissed: '틀린 카드가 없어요. 그대로 넘어가도 좋습니다.',
-      sample: '대한민국 수도 = 서울\nphotosynthesis = 식물이 빛으로 에너지를 만드는 과정\n갑오개혁 = 1894년\n우리 회사의 핵심 가치 = 고객 문제를 빠르게 해결하는 것'
-    };
+    }[pageLang];
 
+    const MAX_CARDS = 200;
+    const MAX_QUESTION_LENGTH = 300;
+    const MAX_ANSWER_LENGTH = 1000;
     let cards = [];
     let currentIndex = 0;
     let currentRevealed = false;
@@ -18569,104 +18595,239 @@
       return cloned;
     };
 
-    const parseCards = () => (input.value || '')
-      .split(/\n+/)
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .map((line) => {
-        const parts = line.split(/\s*(?:=|:|\t|,)\s*/);
-        if (parts.length < 2) return null;
-        return { question: parts[0].trim(), answer: parts.slice(1).join(' / ').trim() };
-      })
-      .filter((card) => card && card.question && card.answer);
+    const parseLine = (rawLine) => {
+      const line = rawLine.trim().replace(/^[-*•]\s+/, '');
+      const separators = ['\t', '=', ':', ','];
+      for (const separator of separators) {
+        const at = line.indexOf(separator);
+        if (at <= 0 || at >= line.length - separator.length) continue;
+        const question = line.slice(0, at).trim();
+        const answer = line.slice(at + separator.length).trim();
+        if (!question || !answer || question.length > MAX_QUESTION_LENGTH || answer.length > MAX_ANSWER_LENGTH) return null;
+        return { question, answer };
+      }
+      return null;
+    };
+
+    const parseCards = () => {
+      const lines = (input.value || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+      const seen = new Set();
+      const parsed = [];
+      let invalid = 0;
+      let duplicate = 0;
+      lines.forEach((line) => {
+        const card = parseLine(line);
+        if (!card) {
+          invalid += 1;
+          return;
+        }
+        const key = `${card.question.toLocaleLowerCase()}\u0000${card.answer.toLocaleLowerCase()}`;
+        if (seen.has(key)) {
+          duplicate += 1;
+          return;
+        }
+        seen.add(key);
+        parsed.push(card);
+      });
+      return { cards: parsed.slice(0, MAX_CARDS), invalid, duplicate, limited: parsed.length > MAX_CARDS };
+    };
+
+    const setStatus = (message, state = '') => {
+      summaryEl.textContent = message;
+      summaryEl.dataset.state = state;
+    };
+
+    const copyText = async (value) => {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(value);
+        return;
+      }
+      const fallback = document.createElement('textarea');
+      fallback.value = value;
+      fallback.setAttribute('readonly', '');
+      fallback.style.position = 'fixed';
+      fallback.style.opacity = '0';
+      document.body.appendChild(fallback);
+      fallback.select();
+      const copied = document.execCommand('copy');
+      fallback.remove();
+      if (!copied) throw new Error('copy failed');
+    };
 
     const renderMissed = () => {
-      const missed = results.filter((item) => item.result === 'wrong');
-      missedEl.innerHTML = `<div class="bw-item"><strong>${t.missedTitle}</strong><p>${missed.length ? '' : t.noneMissed}</p></div>` + missed.map((item) => `
-        <div class="bw-item">
-          <strong>${item.question}</strong>
-          <p>${item.answer}</p>
-        </div>
-      `).join('');
+      const missed = results.filter((item) => item.result !== 'correct');
+      missedEl.replaceChildren();
+      const heading = document.createElement('div');
+      heading.className = 'bw-item';
+      const title = document.createElement('strong');
+      title.textContent = t.missedTitle;
+      heading.appendChild(title);
+      if (!missed.length) {
+        const empty = document.createElement('p');
+        empty.textContent = t.noneMissed;
+        heading.appendChild(empty);
+      }
+      missedEl.appendChild(heading);
+      missed.forEach((item) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'bw-item';
+        const question = document.createElement('strong');
+        const answer = document.createElement('p');
+        const state = document.createElement('span');
+        question.textContent = item.question;
+        answer.textContent = item.answer;
+        state.className = 'mqg-review-state';
+        state.textContent = item.result === 'skipped' ? t.skippedLabel : t.wrongLabel;
+        wrapper.append(question, state, answer);
+        missedEl.appendChild(wrapper);
+      });
+      reviewActions.hidden = !missed.length;
     };
 
     const updateStats = () => {
       const correct = results.filter((item) => item.result === 'correct').length;
       const wrong = results.filter((item) => item.result === 'wrong').length;
       totalEl.textContent = formatNum(cards.length);
-      currentEl.textContent = cards.length ? t.progress(Math.min(currentIndex + (results.length === cards.length ? 0 : 1), cards.length), cards.length) : '0';
+      currentEl.textContent = cards.length ? t.progress(Math.min(currentIndex + (currentIndex < cards.length ? 1 : 0), cards.length), cards.length) : '0';
       correctEl.textContent = formatNum(correct);
       wrongEl.textContent = formatNum(wrong);
       accuracyEl.textContent = (correct + wrong) ? t.accuracy(correct, wrong) : '-';
     };
 
-    const renderCard = () => {
+    const renderCard = (message = '', state = '') => {
       updateStats();
       if (!cards.length) {
         questionEl.textContent = t.noQuiz;
         answerEl.textContent = t.answerHidden;
-        summaryEl.textContent = t.idle;
-        missedEl.innerHTML = '';
+        setStatus(message || t.idle, state);
+        missedEl.replaceChildren();
+        reviewActions.hidden = true;
+        revealBtn.disabled = true;
+        correctBtn.disabled = true;
+        wrongBtn.disabled = true;
+        nextBtn.disabled = true;
         return;
       }
       if (currentIndex >= cards.length) {
-        questionEl.textContent = t.complete(results.filter((item) => item.result === 'correct').length, results.filter((item) => item.result === 'wrong').length);
+        const correct = results.filter((item) => item.result === 'correct').length;
+        const wrong = results.filter((item) => item.result === 'wrong').length;
+        const skipped = results.filter((item) => item.result === 'skipped').length;
+        const completion = t.complete(cards.length, correct, wrong, skipped);
+        questionEl.textContent = completion;
         answerEl.textContent = t.answerHidden;
-        summaryEl.textContent = t.complete(results.filter((item) => item.result === 'correct').length, results.filter((item) => item.result === 'wrong').length);
+        setStatus(completion, wrong || skipped ? 'warning' : 'success');
+        revealBtn.disabled = true;
+        correctBtn.disabled = true;
+        wrongBtn.disabled = true;
+        nextBtn.disabled = true;
         renderMissed();
         return;
       }
       const card = cards[currentIndex];
       questionEl.textContent = card.question;
       answerEl.textContent = currentRevealed ? card.answer : t.answerHidden;
-      summaryEl.textContent = t.ready(cards.length);
+      setStatus(message || t.cardProgress(currentIndex + 1, cards.length), state);
+      revealBtn.disabled = currentRevealed;
+      correctBtn.disabled = !currentRevealed;
+      wrongBtn.disabled = !currentRevealed;
+      nextBtn.disabled = false;
+      reviewActions.hidden = true;
     };
 
     const mark = (result) => {
       if (!cards.length || currentIndex >= cards.length) return;
+      if (!currentRevealed) {
+        setStatus(t.revealFirst, 'error');
+        return;
+      }
       const card = cards[currentIndex];
-      results = results.filter((item) => item.index !== currentIndex);
       results.push({ index: currentIndex, question: card.question, answer: card.answer, result });
       currentIndex += 1;
       currentRevealed = false;
       renderCard();
     };
 
+    const updateInputMeter = () => {
+      inputMeter.textContent = `${formatNum(input.value.length)} / ${formatNum(20000)}`;
+    };
+
     sampleBtn?.addEventListener('click', () => {
       input.value = t.sample;
+      updateInputMeter();
+      input.focus();
     });
     buildBtn?.addEventListener('click', () => {
       const parsed = parseCards();
-      if (!parsed.length) {
+      if (!parsed.cards.length) {
         cards = [];
         results = [];
         currentIndex = 0;
         currentRevealed = false;
-        summaryEl.textContent = t.invalid;
-        renderCard();
+        input.setAttribute('aria-invalid', 'true');
+        renderCard(t.invalid(parsed.invalid), 'error');
         return;
       }
-      cards = shuffleInput?.checked ? shuffle(parsed) : parsed;
+      input.setAttribute('aria-invalid', 'false');
+      cards = shuffleInput?.checked ? shuffle(parsed.cards) : parsed.cards;
       results = [];
       currentIndex = 0;
       currentRevealed = false;
-      summaryEl.textContent = t.ready(cards.length);
-      renderCard();
+      const hasNotes = parsed.invalid || parsed.duplicate || parsed.limited;
+      renderCard(hasNotes ? t.readyWithNotes(cards.length, parsed.invalid, parsed.duplicate, parsed.limited) : t.ready(cards.length), hasNotes ? 'warning' : 'success');
+    });
+    clearBtn?.addEventListener('click', () => {
+      input.value = '';
+      input.setAttribute('aria-invalid', 'false');
+      cards = [];
+      results = [];
+      currentIndex = 0;
+      currentRevealed = false;
+      updateInputMeter();
+      renderCard(t.cleared);
+      input.focus();
     });
     revealBtn?.addEventListener('click', () => {
       if (!cards.length || currentIndex >= cards.length) return;
       currentRevealed = true;
       renderCard();
+      correctBtn.focus();
     });
     correctBtn?.addEventListener('click', () => mark('correct'));
     wrongBtn?.addEventListener('click', () => mark('wrong'));
     nextBtn?.addEventListener('click', () => {
       if (!cards.length || currentIndex >= cards.length) return;
+      const card = cards[currentIndex];
+      results.push({ index: currentIndex, question: card.question, answer: card.answer, result: 'skipped' });
       currentIndex += 1;
       currentRevealed = false;
-      renderCard();
+      renderCard(t.skipped, 'warning');
     });
 
+    retryBtn?.addEventListener('click', () => {
+      const retryCards = results.filter((item) => item.result !== 'correct').map(({ question, answer }) => ({ question, answer }));
+      if (!retryCards.length) return;
+      cards = shuffleInput?.checked ? shuffle(retryCards) : retryCards;
+      results = [];
+      currentIndex = 0;
+      currentRevealed = false;
+      renderCard(t.retrying(cards.length), 'success');
+      questionEl.focus?.();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      const missed = results.filter((item) => item.result !== 'correct');
+      if (!missed.length) return;
+      const text = [t.missedTitle, ...missed.map((item) => `- ${item.question} = ${item.answer} (${item.result === 'skipped' ? t.skippedLabel : t.wrongLabel})`)].join('\n');
+      try {
+        await copyText(text);
+        setStatus(t.copied, 'success');
+      } catch (_) {
+        setStatus(t.copyFail, 'error');
+      }
+    });
+
+    input.addEventListener('input', updateInputMeter);
+    updateInputMeter();
     renderCard();
   }
   if (slug === 'meeting-action-item-organizer') {

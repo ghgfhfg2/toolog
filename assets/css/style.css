@@ -2133,6 +2133,25 @@ a:hover { color: #fff; text-decoration: none; }
 .sev-ui .tool-result[data-state="warning"] { border-color: #efc36a; }
 .sev-ui .tool-result[data-state="error"] { border-color: #e7a1a8; }
 
+/* Memory quiz generator */
+.mqg-ui #mqg-input { min-height: 210px; resize: vertical; }
+.mqg-input-meta { display: flex; justify-content: space-between; gap: 16px; color: var(--muted); font-size: .74rem; line-height: 1.5; }
+.mqg-input-meta p { margin: 0; }
+#mqg-input-meter { flex: 0 0 auto; font-variant-numeric: tabular-nums; }
+.mqg-build-actions,
+.mqg-quiz-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; }
+.mqg-build-actions .tool-check { min-height: 44px; justify-content: center; }
+.mqg-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.mqg-card { display: block; min-height: 170px; padding: 22px; overflow-wrap: anywhere; }
+.mqg-card h3 { margin: 0 0 14px; font-size: 1.15rem; line-height: 1.55; }
+.mqg-card .tool-result { margin: 0; white-space: pre-wrap; }
+.mqg-ui .tool-result[data-state="success"] { border-color: #9fd8b0; }
+.mqg-ui .tool-result[data-state="warning"] { border-color: #efc36a; }
+.mqg-ui .tool-result[data-state="error"] { border-color: #e7a1a8; }
+.mqg-review-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.mqg-review-state { display: inline-flex; margin-left: 8px; padding: 2px 7px; border-radius: 999px; background: #fff1d6; color: #8a5a00; font-size: .68rem; font-weight: 700; }
+.mqg-missed .bw-item { overflow-wrap: anywhere; }
+
 /* Font-change: sticky input */
 .font-change-ui #fc-input {
   position: sticky;
@@ -2337,6 +2356,12 @@ a:hover { color: #fff; text-decoration: none; }
   .sev-grid,
   .sev-actions { grid-template-columns: 1fr; }
   .tool-stats.sev-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mqg-build-actions,
+  .mqg-quiz-actions,
+  .mqg-review-actions { grid-template-columns: 1fr; }
+  .tool-stats.mqg-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mqg-input-meta { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .mqg-card { min-height: 150px; padding: 17px; }
   .ytk-grid,
   .ytk-actions { grid-template-columns: 1fr; }
   .ytk-card { padding: .6rem; }

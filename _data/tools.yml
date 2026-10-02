@@ -1024,9 +1024,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 질문-정답 목록을 붙여넣으면 랜덤 퀴즈, 정답 보기, 자기 채점, 오답 복습까지 바로 할 수 있어요.
-  description_en: Paste prompt-answer pairs to create random quiz cards, reveal answers, self-mark results, and review missed items.
-  description_ja: 質問と答えの一覧を貼り付けると、ランダム出題、答え表示、自己採点、間違い復習までその場でできます。
+  description: 질문-정답 목록을 붙여넣어 최대 200개 랜덤 암기 퀴즈를 만들고, 정답 보기·자기 채점·건너뛴 카드와 오답 재도전까지 브라우저에서 진행해요.
+  description_en: Turn up to 200 prompt-answer pairs into shuffled self-test cards, reveal answers, mark or skip each card, and retry missed items in your browser.
+  description_ja: 最大200件の質問と答えをランダム暗記クイズに変換し、答え表示・自己採点・スキップ・間違いカードの再挑戦までブラウザ内で行えます。
   url: /tools/memory-quiz-generator/
   url_en: /en/tools/memory-quiz-generator/
   url_ja: /ja/tools/memory-quiz-generator/
