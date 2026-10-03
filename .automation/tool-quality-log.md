@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-10-03 21:00 KST
+- Tool: `move-checklist-planner`
+- Selection reason: recent quality runs improved other tools; this oldest untouched April-era planner rendered Korean-only controls and output on EN/JA pages, did not use the move date to calculate actual preparation dates, prefilled a result instead of showing an empty state, and lacked past/far-date and copy-failure handling.
+- Scope: improved only the existing multilingual move checklist tool, home metadata, layout, styles, script, and SEO content with fully localized KO/EN/JA controls and tasks, actual 14-day/3-day/move-day calendar dates, strict today-to-five-years date validation, true empty/error/success states, example/clear/copy flows, accessible labels and live feedback, mobile single-column actions, expanded FAQ/search-intent wording, and condition-specific moving tasks. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, mobile CSS rules, and DOM-driven KO/EN/JA empty/past-date/example/localization/clear cases passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-10-02 21:00 KST
 - Tool: `memory-quiz-generator`
 - Selection reason: recent runs improved other tools; this oldest untouched April-era learning tool overwrote invalid-input feedback, allowed grading before revealing an answer, lost skipped cards from completion totals, altered punctuation while parsing, and inserted pasted card text into `innerHTML` in the review list.

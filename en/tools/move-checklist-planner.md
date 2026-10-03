@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Move Checklist Planner | Organize what to do before, right before, and on move day
-description: Enter your move date and setup to generate a practical moving checklist for two weeks before, three days before, and move day.
+title: Moving Checklist Planner | Dated Prep and Move-Day Tasks
+description: Enter your move date, home, packing, elevator, and transfer needs to build a dated moving checklist for two weeks before, three days before, and move day.
 lang: en
 permalink: /en/tools/move-checklist-planner/
 canonical_url: /en/tools/move-checklist-planner/
@@ -14,6 +14,8 @@ image:
 tool_key: move-checklist-planner
 keywords: [move checklist planner, moving checklist, moving prep list, move day checklist, apartment moving planner]
 related_tools: [meeting-agenda-generator, d-day-calculator, text-counter]
+tool_type: planner
+topic_cluster: lifestyle
 faq:
   - q: Can I use it with only a move date?
     a: Yes. The base checklist works with only a move date, and it becomes more tailored when you also choose move style, elevator access, and utility transfer needs.
@@ -21,6 +23,8 @@ faq:
     a: No. It can also help with office or studio moves because it highlights setup, address, and equipment tasks too.
   - q: Can I copy the result into notes or chat?
     a: Yes. The output is designed to be pasted into notes, family chat, or a simple shared checklist.
+  - q: Does it calculate the two-week and three-day dates?
+    a: Yes. It subtracts 14 days and 3 days from your move date and prints the calendar date in each checklist section.
 ---
 
 ## Why this move checklist planner helps
@@ -29,6 +33,8 @@ This tool turns the process into a staged checklist so you can see what to do:
 - two weeks before
 - three days before
 - on move day
+
+Each section includes its actual calendar date. Empty, past, invalid, and more-than-five-years-away dates are rejected with a clear message.
 
 ## What it covers
 Based on your move setup, it adjusts emphasis for:
@@ -59,3 +65,6 @@ The core structure is fixed, but highlighted tasks change based on your selectio
 
 ### Is it a replacement for a professional moving service checklist?
 No. It is a practical planning draft, and you should still confirm service-specific requirements with your mover or building manager.
+
+### What date range can I use?
+Choose today or a future date within five years. This guard prevents accidental past-date plans and implausibly long schedules.

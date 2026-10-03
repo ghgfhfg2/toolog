@@ -1087,12 +1087,12 @@
   category_label: 생활/준비
   category_label_en: Lifestyle/Preparation
   category_label_ja: 生活/準備
-  badge: New
-  badge_en: New
-  badge_ja: 新着
-  description: 이사 날짜와 조건을 입력하면 2주 전, 3일 전, 이사 당일 기준으로 해야 할 일을 단계별로 정리해요.
-  description_en: Build a move checklist organized by two weeks before, three days before, and move day from your move date and setup.
-  description_ja: 引っ越し日と条件をもとに、2週間前・3日前・当日のやることを段階別に整理します。
+  badge: Improved
+  badge_en: Improved
+  badge_ja: 改善
+  description: 이사 날짜와 집·포장·엘리베이터 조건을 입력해 실제 날짜가 표시된 2주 전, 3일 전, 이사 당일 체크리스트를 만들어요.
+  description_en: Build a dated checklist for two weeks before, three days before, and move day based on your home, packing, elevator, and transfer needs.
+  description_ja: 引っ越し日、住居、梱包、エレベーター条件から、実際の日付入りの2週間前・3日前・当日チェックリストを作成します。
   url: /tools/move-checklist-planner/
   url_en: /en/tools/move-checklist-planner/
   url_ja: /ja/tools/move-checklist-planner/

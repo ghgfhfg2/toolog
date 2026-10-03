@@ -9013,174 +9013,173 @@
     const elevatorEl = document.getElementById('mcp-elevator');
     const utilitiesEl = document.getElementById('mcp-utilities');
     const essentialsEl = document.getElementById('mcp-essentials');
+    const exampleBtn = document.getElementById('mcp-example');
     const runBtn = document.getElementById('mcp-run');
     const copyBtn = document.getElementById('mcp-copy');
+    const clearBtn = document.getElementById('mcp-clear');
     const totalEl = document.getElementById('mcp-total');
     const urgentEl = document.getElementById('mcp-urgent');
     const focusEl = document.getElementById('mcp-focus');
-    const formatEl = document.getElementById('mcp-format');
+    const daysLeftEl = document.getElementById('mcp-days-left');
     const outputEl = document.getElementById('mcp-output');
     const helpEl = document.getElementById('mcp-help');
 
-    if (!dateEl || !homeEl || !styleEl || !elevatorEl || !utilitiesEl || !essentialsEl || !runBtn || !copyBtn || !totalEl || !urgentEl || !focusEl || !formatEl || !outputEl || !helpEl) return;
+    if (!dateEl || !homeEl || !styleEl || !elevatorEl || !utilitiesEl || !essentialsEl || !runBtn || !copyBtn || !totalEl || !urgentEl || !daysLeftEl || !focusEl || !outputEl || !helpEl) return;
 
-    const t = {
-      homes: {
-        studio: '원룸 / 오피스텔',
-        apartment: '아파트 / 가족 이사',
-        office: '사무실 / 작업실'
+    const translations = {
+      ko: {
+        homes: { studio: '원룸 / 오피스텔', apartment: '아파트 / 가족 이사', office: '사무실 / 작업실' },
+        styles: { full: '포장이사', semi: '반포장 / 셀프 포장', self: '직접 운반 / 소형 이사' },
+        elevators: { yes: '엘리베이터 있음', no: '엘리베이터 없음', unknown: '엘리베이터 확인 필요' },
+        focusHome: { studio: '생활 정리', apartment: '가족 일정', office: '설비·주소 이전' },
+        focusStyle: { full: '예약·검수', semi: '포장 우선순위', self: '짐 줄이기·동선' },
+        empty: '이사 날짜를 선택해 주세요.', invalid: '올바른 이사 날짜를 선택해 주세요.', past: '이사 날짜는 오늘 이후로 선택해 주세요.', far: '이사 날짜는 오늘부터 5년 이내로 선택해 주세요.',
+        success: (n) => `실제 날짜가 포함된 ${n}개 준비 항목을 만들었습니다.`, cleared: '입력과 결과를 초기화했습니다.', example: '3주 뒤 가족 이사 예시를 불러왔습니다.', copied: '체크리스트를 복사했습니다.', copyFail: '자동 복사를 사용할 수 없습니다.',
+        title: '이사 체크리스트', labels: { home: '집 형태', style: '이사 방식', elevator: '현장 조건', utilities: '공과금/인터넷 이전', essentials: '첫날 필수 박스' }, yes: '필요', no: '불필요', ready: '준비', notReady: '미준비', days: (n) => n === 0 ? '오늘' : `${n}일`,
+        sections: ['2주 전', '3일 전', '이사 당일'],
+        base: [
+          ['이사업체·차량 일정 비교 후 예약 확정', '버릴 물건·기부할 물건·가져갈 물건 분류', '자주 안 쓰는 짐부터 박스와 라벨 준비'],
+          ['냉장고·냉동실 비우기와 음식물 처리 계획', '귀중품·서류·파손주의 물품 별도 분리', '청소도구·휴지·충전기 등 바로 쓸 물건 모으기'],
+          ['출발 전 집 사진·계량기·열쇠·비밀번호 확인', '도착 후 큰 가구 위치와 박스 이동 순서 결정', '퇴실·입실 상태와 누락 짐 마지막 확인']
+        ],
+        extras: {
+          apartment: [['관리사무소·주차·엘리베이터 예약 확인'], ['가족별 옷·세면도구·필수 가방 분리'], ['아이·반려동물·가족의 안전 동선 확보']],
+          office: [['사업자·우편물·거래처 주소 변경 목록 작성'], ['장비·케이블·문서·백업 드라이브 라벨링'], ['인터넷·프린터·전원 장비 작동 점검']],
+          studio: [['소형가전·계절옷·침구류부터 순차 포장'], [], []],
+          semi: [['박스마다 방·우선순위·파손주의 표시'], ['무거운 짐과 가벼운 짐을 나눠 재포장'], []],
+          self: [['운반 인원·차량·주차·이동 동선 확인'], [], ['운반 동선을 비우고 미끄럼 위험 제거']],
+          no: [[], ['계단 이동에 맞춰 박스 무게와 손잡이 점검'], ['무거운 짐부터 옮기고 휴식 구간 확보']],
+          unknown: [['엘리베이터 사용 시간과 예약 필요 여부 확인'], [], []],
+          utilities: [['전기·가스·수도·인터넷 이전 신청'], ['전입신고·우편물·자동결제 주소 변경 점검'], []],
+          essentials: [[], ['첫날 박스: 세면도구·충전기·상비약·옷 1벌'], ['첫날 박스를 먼저 열어 잠자리·세면 동선 준비']]
+        }
       },
-      styles: {
-        full: '포장이사',
-        semi: '반포장 / 셀프 포장',
-        self: '직접 운반 / 소형 이사'
+      en: {
+        homes: { studio: 'Studio / one-room', apartment: 'Apartment / family home', office: 'Office / workspace' }, styles: { full: 'Full-service packing', semi: 'Partial / self packing', self: 'Self move / small load' }, elevators: { yes: 'Elevator available', no: 'No elevator', unknown: 'Elevator access unconfirmed' },
+        focusHome: { studio: 'Home setup', apartment: 'Family schedule', office: 'Equipment & address' }, focusStyle: { full: 'Booking & inspection', semi: 'Packing priority', self: 'Load & route' },
+        empty: 'Choose a move date.', invalid: 'Choose a valid move date.', past: 'Choose today or a future move date.', far: 'Choose a move date within the next 5 years.', success: (n) => `Built ${n} dated moving tasks.`, cleared: 'Cleared the inputs and result.', example: 'Loaded a family-move example for three weeks from today.', copied: 'Copied the checklist.', copyFail: 'Automatic copy is unavailable.',
+        title: 'Move checklist', labels: { home: 'Move type', style: 'Moving service', elevator: 'Site access', utilities: 'Utility/internet transfer', essentials: 'First-day essentials box' }, yes: 'Needed', no: 'Not needed', ready: 'Prepare', notReady: 'Not selected', days: (n) => n === 0 ? 'Today' : `${n} days`, sections: ['Two weeks before', 'Three days before', 'Move day'],
+        base: [['Confirm mover or vehicle booking', 'Sort items into keep, donate, and discard groups', 'Prepare boxes and labels for low-use items'], ['Plan to empty the refrigerator and freezer', 'Separate valuables, documents, and fragile items', 'Group cleaning supplies, chargers, and immediate-use items'], ['Photograph the old space and check meters, keys, and access codes', 'Set large-furniture positions before moving boxes', 'Inspect both spaces and check for missing items']],
+        extras: { apartment: [['Confirm building, parking, and elevator reservations'], ['Pack clothes, toiletries, and essentials by family member'], ['Secure a safe route for children, pets, and family']], office: [['List business, mail, and client address changes'], ['Label equipment, cables, documents, and backup drives'], ['Test internet, printers, and power equipment']], studio: [['Pack small appliances, seasonal clothes, and bedding first'], [], []], semi: [['Label every box by room, priority, and fragility'], ['Separate heavy and light items before transport'], []], self: [['Confirm helpers, vehicle, parking, and carrying route'], [], ['Clear the carrying route and remove slip hazards']], no: [[], ['Reduce box weight and check handles for stairs'], ['Move heavy items first and plan rest points']], unknown: [['Confirm elevator hours and reservation rules'], [], []], utilities: [['Schedule electricity, gas, water, and internet transfers'], ['Review address changes for mail and recurring payments'], []], essentials: [[], ['Pack toiletries, chargers, medicine, and one change of clothes'], ['Open the essentials box first and set up sleep and wash areas']] }
       },
-      elevator: {
-        yes: '엘리베이터 있음',
-        no: '엘리베이터 없음',
-        unknown: '엘리베이터 확인 필요'
-      },
-      focusByHome: {
-        studio: '생활 정리',
-        apartment: '가족 일정',
-        office: '설비 / 주소 이전'
-      },
-      focusByStyle: {
-        full: '예약 / 검수',
-        semi: '포장 우선순위',
-        self: '짐 줄이기 / 동선'
-      },
-      intro: '이사 준비를 2주 전, 3일 전, 당일 순서로 정리한 체크리스트입니다.',
-      format: '복사형 체크리스트',
-      copyDone: '복사됨',
-      copyDefault: '결과 복사'
+      ja: {
+        homes: { studio: 'ワンルーム', apartment: 'マンション / 家族世帯', office: 'オフィス / 作業場' }, styles: { full: 'おまかせパック', semi: '一部 / セルフ梱包', self: '自力 / 小規模引っ越し' }, elevators: { yes: 'エレベーターあり', no: 'エレベーターなし', unknown: 'エレベーター要確認' },
+        focusHome: { studio: '生活整理', apartment: '家族の予定', office: '設備・住所変更' }, focusStyle: { full: '予約・検品', semi: '梱包優先順位', self: '荷物・動線' },
+        empty: '引っ越し日を選んでください。', invalid: '正しい引っ越し日を選んでください。', past: '引っ越し日は今日以降を選んでください。', far: '引っ越し日は今日から5年以内を選んでください。', success: (n) => `日付入りの準備項目を${n}件作成しました。`, cleared: '入力と結果をクリアしました。', example: '3週間後の家族引っ越し例を入力しました。', copied: 'チェックリストをコピーしました。', copyFail: '自動コピーを利用できません。',
+        title: '引っ越しチェックリスト', labels: { home: '引っ越し先', style: '引っ越し方式', elevator: '現場条件', utilities: '光熱費・ネット移転', essentials: '初日必需品ボックス' }, yes: '必要', no: '不要', ready: '準備', notReady: '未選択', days: (n) => n === 0 ? '今日' : `${n}日`, sections: ['2週間前', '3日前', '引っ越し当日'],
+        base: [['業者・車両の日程を比較して予約を確定', '残す・譲る・処分する物に分類', '使用頻度の低い物から箱とラベルを準備'], ['冷蔵庫・冷凍庫を空にする計画を立てる', '貴重品・書類・割れ物を分ける', '掃除用品・充電器などすぐ使う物をまとめる'], ['出発前に室内写真・メーター・鍵・暗証番号を確認', '大きな家具の位置を先に決める', '退去・入居状態と忘れ物を最終確認']],
+        extras: { apartment: [['管理会社・駐車場・エレベーター予約を確認'], ['家族別の服・洗面用品・必需品バッグを分ける'], ['子ども・ペット・家族の安全動線を確保']], office: [['事業者・郵便物・取引先の住所変更一覧を作成'], ['機器・ケーブル・書類・バックアップをラベル分け'], ['ネット・プリンター・電源機器を確認']], studio: [['小型家電・季節服・寝具から梱包'], [], []], semi: [['箱ごとに部屋・優先度・ワレモノを表示'], ['重い物と軽い物を分けて再確認'], []], self: [['人員・車両・駐車・運搬動線を確認'], [], ['運搬動線を空け、滑る場所を解消']], no: [[], ['階段運搬に合わせて箱の重さと持ち手を確認'], ['重い荷物から運び、休憩場所を確保']], unknown: [['利用時間と予約の要否を確認'], [], []], utilities: [['電気・ガス・水道・ネットの移転を申請'], ['転居届・郵便物・定期支払いの住所を確認'], []], essentials: [[], ['洗面用品・充電器・薬・着替えを初日用に梱包'], ['初日用ボックスを先に開けて寝床と洗面を準備']] }
+      }
     };
+    const t = translations[pageLang] || translations.ko;
 
-    const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
-      catch (_) {
+    const copyText = async (value) => {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(value);
+        return;
+      }
+      {
         const ta = document.createElement('textarea');
-        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        ta.value = value; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        const copied = document.execCommand('copy');
+        ta.remove();
+        if (!copied) throw new Error('copy failed');
       }
     };
 
-    const formatDate = (value) => {
-      if (!value) return '미정';
-      const [y, m, d] = value.split('-').map(Number);
-      if (!y || !m || !d) return value;
-      return `${y}.${String(m).padStart(2, '0')}.${String(d).padStart(2, '0')}`;
+    const localDay = (date = new Date()) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const parseDate = (value) => {
+      const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+      if (!match) return null;
+      const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+      return date.getFullYear() === Number(match[1]) && date.getMonth() === Number(match[2]) - 1 && date.getDate() === Number(match[3]) ? date : null;
+    };
+    const inputDate = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    const displayDate = (date) => new Intl.DateTimeFormat(numberLocale, { year: 'numeric', month: 'short', day: 'numeric', weekday: 'short' }).format(date);
+    const shiftDays = (date, amount) => new Date(date.getFullYear(), date.getMonth(), date.getDate() + amount);
+    const setStatus = (message, state = '') => { helpEl.textContent = message; helpEl.dataset.state = state; };
+    const resetResult = () => {
+      [totalEl, urgentEl, daysLeftEl, focusEl].forEach((el) => { el.textContent = '-'; });
+      outputEl.value = '';
+      copyBtn.disabled = true;
     };
 
     const generate = () => {
-      const moveDate = dateEl.value || '';
+      const rawDate = dateEl.value.trim();
+      if (!rawDate) { dateEl.setAttribute('aria-invalid', 'true'); resetResult(); setStatus(t.empty, 'warning'); return false; }
+      const moveDate = parseDate(rawDate);
+      if (!moveDate) { dateEl.setAttribute('aria-invalid', 'true'); resetResult(); setStatus(t.invalid, 'error'); return false; }
+      const today = localDay();
+      const maxDate = new Date(today.getFullYear() + 5, today.getMonth(), today.getDate());
+      if (moveDate < today) { dateEl.setAttribute('aria-invalid', 'true'); resetResult(); setStatus(t.past, 'error'); return false; }
+      if (moveDate > maxDate) { dateEl.setAttribute('aria-invalid', 'true'); resetResult(); setStatus(t.far, 'error'); return false; }
+      dateEl.setAttribute('aria-invalid', 'false');
       const home = homeEl.value || 'studio';
       const style = styleEl.value || 'full';
       const elevator = elevatorEl.value || 'yes';
       const needUtilities = !!utilitiesEl.checked;
       const needEssentials = !!essentialsEl.checked;
 
-      const checklist = {
-        before2w: [
-          '이사업체 / 차량 일정 비교 후 예약 확정',
-          '버릴 물건, 기부할 물건, 가져갈 물건 3분류 정리',
-          '자주 안 쓰는 짐부터 박스 / 봉투 / 라벨 준비'
-        ],
-        before3d: [
-          '냉장고 / 냉동실 비우기 시작, 음식물 처리 계획 세우기',
-          '깨지기 쉬운 물건 / 귀중품 / 서류 별도 분리',
-          '청소도구, 휴지, 충전기 등 당일 바로 쓸 물건 한데 모으기'
-        ],
-        day0: [
-          '출발 전 기존 집 사진 / 계량기 / 비밀번호 / 열쇠 상태 확인',
-          '도착 후 큰 가구 위치 먼저 결정하고 박스 이동 순서 정리',
-          '퇴실·입실 체크리스트 마지막 확인'
-        ]
-      };
-
-      if (home === 'apartment') {
-        checklist.before2w.push('관리사무소 / 주차 / 엘리베이터 예약 가능 여부 확인');
-        checklist.before3d.push('가족별 필수 가방 / 옷 / 세면도구 분리 포장');
-        checklist.day0.push('아이 / 반려동물 / 가족 동선 먼저 확보');
-      } else if (home === 'office') {
-        checklist.before2w.push('사업자 주소 / 우편물 / 거래처 주소 변경 항목 정리');
-        checklist.before3d.push('장비, 케이블, 문서, 백업 드라이브를 구역별로 라벨링');
-        checklist.day0.push('인터넷 / 프린터 / 전원 멀티탭 작동 여부 즉시 점검');
-      } else {
-        checklist.before2w.push('생활 소형가전, 계절옷, 침구류부터 순차 포장');
-      }
-
-      if (style !== 'full') {
-        checklist.before2w.push('박스별 방 이름 / 우선순위 / 파손주의 표시하기');
-        checklist.before3d.push('무거운 짐과 가벼운 짐을 섞지 않도록 재포장 점검');
-      }
-      if (style === 'self') {
-        checklist.before2w.push('사다리차 / 운반 인원 / 차량 동선 직접 확인');
-        checklist.day0.push('들고 이동할 동선을 미리 비워두고 미끄럼 위험 제거');
-      }
-
-      if (elevator === 'no') {
-        checklist.before3d.push('계단 이동 대비 짐 무게 줄이기, 손잡이 박스 우선 배치');
-        checklist.day0.push('무거운 짐은 가장 먼저 옮기고 휴식 구간 확보');
-      } else if (elevator === 'unknown') {
-        checklist.before2w.push('엘리베이터 사용 가능 시간 / 예약 필요 여부 재확인');
-      }
-
-      if (needUtilities) {
-        checklist.before2w.push('전기 / 가스 / 수도 / 인터넷 이전 신청 일정 체크');
-        checklist.before3d.push('전입신고, 우편물 주소 변경, 각종 자동결제 주소 점검');
-      }
-
-      if (needEssentials) {
-        checklist.before3d.push('첫날 박스 따로 만들기: 세면도구, 충전기, 상비약, 옷 1벌');
-        checklist.day0.push('도착 즉시 첫날 박스부터 열고 잠자리 / 세면 동선부터 세팅');
-      }
-
-      const sections = [
-        ['2주 전', checklist.before2w],
-        ['3일 전', checklist.before3d],
-        ['이사 당일', checklist.day0]
-      ];
+      const checklist = t.base.map((items) => [...items]);
+      const append = (key) => t.extras[key]?.forEach((items, index) => checklist[index].push(...items));
+      append(home);
+      if (style !== 'full') append('semi');
+      if (style === 'self') append('self');
+      if (elevator !== 'yes') append(elevator);
+      if (needUtilities) append('utilities');
+      if (needEssentials) append('essentials');
+      const sectionDates = [shiftDays(moveDate, -14), shiftDays(moveDate, -3), moveDate];
+      const daysLeft = Math.round((moveDate - today) / 86400000);
 
       const lines = [];
-      lines.push(`[이사 체크리스트] ${formatDate(moveDate)}`);
-      lines.push(`- 집 형태: ${t.homes[home]}`);
-      lines.push(`- 이사 방식: ${t.styles[style]}`);
-      lines.push(`- 현장 조건: ${t.elevator[elevator]}`);
-      lines.push(`- 공과금/인터넷 이전: ${needUtilities ? '필요' : '불필요'}`);
-      lines.push(`- 당일 필수 박스: ${needEssentials ? '준비' : '미준비'}`);
+      lines.push(`[${t.title}] ${displayDate(moveDate)}`);
+      lines.push(`- ${t.labels.home}: ${t.homes[home]}`);
+      lines.push(`- ${t.labels.style}: ${t.styles[style]}`);
+      lines.push(`- ${t.labels.elevator}: ${t.elevators[elevator]}`);
+      lines.push(`- ${t.labels.utilities}: ${needUtilities ? t.yes : t.no}`);
+      lines.push(`- ${t.labels.essentials}: ${needEssentials ? t.ready : t.notReady}`);
       lines.push('');
 
-      sections.forEach(([label, items]) => {
-        lines.push(`[${label}]`);
+      checklist.forEach((items, index) => {
+        lines.push(`[${t.sections[index]} · ${displayDate(sectionDates[index])}]`);
         items.forEach((item) => lines.push(`- ${item}`));
         lines.push('');
       });
 
       outputEl.value = lines.join('\n').trim();
-      totalEl.textContent = String(checklist.before2w.length + checklist.before3d.length + checklist.day0.length);
-      urgentEl.textContent = String(checklist.before3d.length + checklist.day0.length);
-      focusEl.textContent = `${t.focusByHome[home]} / ${t.focusByStyle[style]}`;
-      formatEl.textContent = t.format;
-      helpEl.textContent = t.intro;
+      const total = checklist.reduce((sum, items) => sum + items.length, 0);
+      totalEl.textContent = formatNum(total);
+      urgentEl.textContent = formatNum(checklist[1].length + checklist[2].length);
+      daysLeftEl.textContent = t.days(daysLeft);
+      focusEl.textContent = `${t.focusHome[home]} / ${t.focusStyle[style]}`;
+      copyBtn.disabled = false;
+      setStatus(t.success(total), 'success');
+      return true;
     };
 
     runBtn.addEventListener('click', generate);
-    [dateEl, homeEl, styleEl, elevatorEl, utilitiesEl, essentialsEl].forEach((el) => el.addEventListener('input', generate));
+    [homeEl, styleEl, elevatorEl, utilitiesEl, essentialsEl].forEach((el) => el.addEventListener('change', () => { if (outputEl.value) generate(); }));
+    dateEl.addEventListener('input', () => { dateEl.setAttribute('aria-invalid', 'false'); if (outputEl.value) generate(); });
+    exampleBtn?.addEventListener('click', () => {
+      const date = shiftDays(localDay(), 21);
+      dateEl.value = inputDate(date); homeEl.value = 'apartment'; styleEl.value = 'semi'; elevatorEl.value = 'unknown'; utilitiesEl.checked = true; essentialsEl.checked = true;
+      generate(); setStatus(t.example, 'success'); dateEl.focus();
+    });
+    clearBtn?.addEventListener('click', () => {
+      dateEl.value = ''; homeEl.value = 'studio'; styleEl.value = 'full'; elevatorEl.value = 'yes'; utilitiesEl.checked = true; essentialsEl.checked = true;
+      dateEl.setAttribute('aria-invalid', 'false'); resetResult(); setStatus(t.cleared); dateEl.focus();
+    });
     copyBtn.addEventListener('click', async () => {
-      if (!outputEl.value.trim()) generate();
-      await copyText(outputEl.value.trim());
-      const old = copyBtn.textContent;
-      copyBtn.textContent = t.copyDone;
-      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+      if (!outputEl.value.trim()) return;
+      try { await copyText(outputEl.value.trim()); setStatus(t.copied, 'success'); }
+      catch (_) { setStatus(t.copyFail, 'error'); }
     });
 
-    if (!dateEl.value) {
-      const now = new Date();
-      const future = new Date(now.getTime() + 14 * 86400000);
-      dateEl.value = new Date(future.getTime() - future.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
-    }
-    generate();
+    const today = localDay();
+    dateEl.min = inputDate(today);
+    dateEl.max = inputDate(new Date(today.getFullYear() + 5, today.getMonth(), today.getDate()));
+    resetResult();
   }
 
   if (slug === 'business-trip-checklist-planner') {

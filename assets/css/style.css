@@ -664,6 +664,19 @@ a:hover { color: #fff; text-decoration: none; }
 .tool-stats.prmc-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .prmc-stats strong,
 .prmc-stats span { overflow-wrap: anywhere; }
+.mcp-grid,
+.mcp-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.mcp-grid > div { display: grid; gap: .4rem; min-width: 0; }
+.mcp-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.mcp-ui .tool-check { min-height: 44px; align-items: center; }
+.mcp-ui textarea { min-height: 22rem; line-height: 1.55; }
+.mcp-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.mcp-ui button:disabled { opacity: .55; cursor: not-allowed; }
+.mcp-ui #mcp-help[data-state="error"] { color: #fca5a5; }
+.mcp-ui #mcp-help[data-state="warning"] { color: #fbbf24; }
+.mcp-ui #mcp-help[data-state="success"] { color: #86efac; }
+.mcp-stats strong,
+.mcp-stats span { overflow-wrap: anywhere; }
 .vw-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .vw-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .vw-ui input[aria-invalid="true"] { border-color: #ef4444; }
@@ -2293,6 +2306,10 @@ a:hover { color: #fff; text-decoration: none; }
   .prmc-presets,
   .prmc-actions { grid-template-columns: 1fr; }
   .tool-stats.prmc-stats { grid-template-columns: 1fr 1fr; }
+  .mcp-grid,
+  .mcp-options,
+  .mcp-actions { grid-template-columns: 1fr; }
+  .tool-stats.mcp-stats { grid-template-columns: 1fr 1fr; }
   .vw-grid,
   .vw-actions { grid-template-columns: 1fr; }
   .tool-stats.vw-stats { grid-template-columns: 1fr 1fr; }

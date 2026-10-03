@@ -1686,60 +1686,64 @@ layout: default
           <p class="tool-result" id="mag-detail">{% if page.lang == 'en' %}Blank lines and duplicate topics are removed. The timeline always adds up to the duration you enter and stays in your browser.{% elsif page.lang == 'ja' %}空行と重複トピックを除外し、入力した所要時間と一致するタイムラインをブラウザ内で作成します。{% else %}빈 줄과 중복 안건을 제외하고, 입력한 회의 시간과 정확히 일치하는 타임라인을 브라우저에서 만듭니다.{% endif %}</p>
         </div>
       {% when 'move-checklist-planner' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui mcp-ui">
+          <div class="tool-row-grid mcp-grid">
             <div>
-              <label for="mcp-date">이사 날짜</label>
-              <input id="mcp-date" type="date" />
+              <label for="mcp-date">{% if page.lang == 'en' %}Move date{% elsif page.lang == 'ja' %}引っ越し日{% else %}이사 날짜{% endif %}</label>
+              <input id="mcp-date" type="date" aria-describedby="mcp-date-help mcp-help" />
+              <small id="mcp-date-help">{% if page.lang == 'en' %}Choose today or a future date within 5 years.{% elsif page.lang == 'ja' %}今日から5年以内の日付を選んでください。{% else %}오늘부터 5년 이내 날짜를 선택하세요.{% endif %}</small>
             </div>
             <div>
-              <label for="mcp-home">집 형태</label>
+              <label for="mcp-home">{% if page.lang == 'en' %}Move type{% elsif page.lang == 'ja' %}引っ越し先の種類{% else %}집 형태{% endif %}</label>
               <select id="mcp-home">
-                <option value="studio">원룸 / 오피스텔</option>
-                <option value="apartment">아파트 / 가족 이사</option>
-                <option value="office">사무실 / 작업실</option>
+                <option value="studio">{% if page.lang == 'en' %}Studio / one-room{% elsif page.lang == 'ja' %}ワンルーム{% else %}원룸 / 오피스텔{% endif %}</option>
+                <option value="apartment">{% if page.lang == 'en' %}Apartment / family home{% elsif page.lang == 'ja' %}マンション / 家族世帯{% else %}아파트 / 가족 이사{% endif %}</option>
+                <option value="office">{% if page.lang == 'en' %}Office / workspace{% elsif page.lang == 'ja' %}オフィス / 作業場{% else %}사무실 / 작업실{% endif %}</option>
               </select>
             </div>
           </div>
 
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid mcp-grid">
             <div>
-              <label for="mcp-style">이사 방식</label>
+              <label for="mcp-style">{% if page.lang == 'en' %}Moving service{% elsif page.lang == 'ja' %}引っ越し方式{% else %}이사 방식{% endif %}</label>
               <select id="mcp-style">
-                <option value="full">포장이사</option>
-                <option value="semi">반포장 / 셀프 포장</option>
-                <option value="self">직접 운반 / 소형 이사</option>
+                <option value="full">{% if page.lang == 'en' %}Full-service packing{% elsif page.lang == 'ja' %}おまかせパック{% else %}포장이사{% endif %}</option>
+                <option value="semi">{% if page.lang == 'en' %}Partial / self packing{% elsif page.lang == 'ja' %}一部 / セルフ梱包{% else %}반포장 / 셀프 포장{% endif %}</option>
+                <option value="self">{% if page.lang == 'en' %}Self move / small load{% elsif page.lang == 'ja' %}自力 / 小規模引っ越し{% else %}직접 운반 / 소형 이사{% endif %}</option>
               </select>
             </div>
             <div>
-              <label for="mcp-elevator">엘리베이터</label>
+              <label for="mcp-elevator">{% if page.lang == 'en' %}Elevator access{% elsif page.lang == 'ja' %}エレベーター{% else %}엘리베이터{% endif %}</label>
               <select id="mcp-elevator">
-                <option value="yes">있음</option>
-                <option value="no">없음</option>
-                <option value="unknown">확인 필요</option>
+                <option value="yes">{% if page.lang == 'en' %}Available{% elsif page.lang == 'ja' %}あり{% else %}있음{% endif %}</option>
+                <option value="no">{% if page.lang == 'en' %}Not available{% elsif page.lang == 'ja' %}なし{% else %}없음{% endif %}</option>
+                <option value="unknown">{% if page.lang == 'en' %}Need to confirm{% elsif page.lang == 'ja' %}要確認{% else %}확인 필요{% endif %}</option>
               </select>
             </div>
           </div>
 
-          <div class="tool-row-grid pct-grid">
-            <label class="tool-check"><input id="mcp-utilities" type="checkbox" checked /> 공과금 / 인터넷 이전 신청 필요</label>
-            <label class="tool-check"><input id="mcp-essentials" type="checkbox" checked /> 당일 필수 박스 따로 챙기기</label>
+          <div class="tool-row-grid mcp-options">
+            <label class="tool-check"><input id="mcp-utilities" type="checkbox" checked /> {% if page.lang == 'en' %}Need utility / internet transfers{% elsif page.lang == 'ja' %}光熱費 / インターネットの移転が必要{% else %}공과금 / 인터넷 이전 신청 필요{% endif %}</label>
+            <label class="tool-check"><input id="mcp-essentials" type="checkbox" checked /> {% if page.lang == 'en' %}Prepare a first-day essentials box{% elsif page.lang == 'ja' %}初日必需品ボックスを準備{% else %}당일 필수 박스 따로 챙기기{% endif %}</label>
           </div>
 
-          <div class="tool-row-grid pct-actions">
-            <button id="mcp-run" type="button">체크리스트 생성</button>
-            <button id="mcp-copy" type="button">결과 복사</button>
+          <div class="tool-row-grid mcp-actions">
+            <button id="mcp-example" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
+            <button id="mcp-run" type="button">{% if page.lang == 'en' %}Build checklist{% elsif page.lang == 'ja' %}チェックリスト作成{% else %}체크리스트 생성{% endif %}</button>
+            <button id="mcp-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="mcp-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}전체 지우기{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
-            <div><strong id="mcp-total">0</strong><span>전체 항목</span></div>
-            <div><strong id="mcp-urgent">0</strong><span>3일 전 + 당일</span></div>
-            <div><strong id="mcp-focus">-</strong><span>강조 포인트</span></div>
-            <div><strong id="mcp-format">-</strong><span>출력 형식</span></div>
+          <div class="tool-stats mcp-stats" aria-label="{% if page.lang == 'en' %}Move checklist summary{% elsif page.lang == 'ja' %}引っ越しチェックリスト概要{% else %}이사 체크리스트 요약{% endif %}">
+            <div><strong id="mcp-total">-</strong><span>{% if page.lang == 'en' %}Total tasks{% elsif page.lang == 'ja' %}全項目{% else %}전체 항목{% endif %}</span></div>
+            <div><strong id="mcp-urgent">-</strong><span>{% if page.lang == 'en' %}Last 3 days + move day{% elsif page.lang == 'ja' %}3日前＋当日{% else %}3일 전 + 당일{% endif %}</span></div>
+            <div><strong id="mcp-days-left">-</strong><span>{% if page.lang == 'en' %}Days until move{% elsif page.lang == 'ja' %}引っ越しまで{% else %}이사까지{% endif %}</span></div>
+            <div><strong id="mcp-focus">-</strong><span>{% if page.lang == 'en' %}Main focus{% elsif page.lang == 'ja' %}重点項目{% else %}강조 포인트{% endif %}</span></div>
           </div>
 
-          <textarea id="mcp-output" rows="16" readonly placeholder="이사 체크리스트가 여기에 생성됩니다."></textarea>
-          <p class="tool-result" id="mcp-help">이사 날짜와 조건을 입력하면 단계별 준비 목록을 바로 정리합니다.</p>
+          <label class="sr-only" for="mcp-output">{% if page.lang == 'en' %}Generated move checklist{% elsif page.lang == 'ja' %}作成された引っ越しチェックリスト{% else %}생성된 이사 체크리스트{% endif %}</label>
+          <textarea id="mcp-output" rows="18" readonly placeholder="{% if page.lang == 'en' %}Your move checklist will appear here.{% elsif page.lang == 'ja' %}引っ越しチェックリストがここに表示されます。{% else %}이사 체크리스트가 여기에 생성됩니다.{% endif %}"></textarea>
+          <p class="tool-result" id="mcp-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Choose a move date to build a dated checklist.{% elsif page.lang == 'ja' %}引っ越し日を選ぶと、日付入りのチェックリストを作成します。{% else %}이사 날짜를 선택하면 실제 날짜가 포함된 준비 목록을 만듭니다.{% endif %}</p>
         </div>
       {% when 'business-trip-checklist-planner' %}
         <div class="tool-ui">
