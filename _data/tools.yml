@@ -271,12 +271,12 @@
   category_label: 생활/분리배출 학습
   category_label_en: Lifestyle/Recycling Practice
   category_label_ja: 生活/分別学習
-  badge: New
-  badge_en: New
-  badge_ja: 新着
-  description: 헷갈리는 생활 쓰레기 품목을 퀴즈로 풀며 종이, 플라스틱, 캔, 유리, 음식물, 일반쓰레기 분리 기준을 빠르게 연습해요.
-  description_en: Practice confusing household waste sorting with quick quizzes across paper, plastic, cans, glass, food waste, and general trash.
-  description_ja: 迷いやすい家庭ごみの分別を、紙・プラスチック・缶・びん・生ごみ・一般ごみのクイズで練習できます。
+  badge: 개선
+  badge_en: Updated
+  badge_ja: 改善
+  description: 헷갈리는 생활 쓰레기 분리배출을 반복 없는 퀴즈와 즉시 해설로 연습하고, 오답 복습·정답률·연속 정답까지 확인해요.
+  description_en: Practice household waste sorting with no-repeat quiz rounds, instant explanations, missed-item review, accuracy, and streak tracking.
+  description_ja: 迷いやすい家庭ごみの分別を、重複しないクイズ、すぐ読める解説、間違い復習、正答率、連続正解で練習できます。
   url: /tools/recycling-sorting-practice/
   url_en: /en/tools/recycling-sorting-practice/
   url_ja: /ja/tools/recycling-sorting-practice/

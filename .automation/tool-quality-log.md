@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-10-04 21:00 KST
+- Tool: `recycling-sorting-practice`
+- Selection reason: recent quality runs improved other tools; this untouched May-era learning tool mixed unrelated questions into the food range and medium questions into easy mode, allowed unanswered skips, could immediately repeat random questions, and had weak mobile/status feedback.
+- Scope: improved only the existing multilingual recycling quiz, home metadata, layout, styles, script, and SEO content with corrected difficulty/range filters, shuffled no-repeat rounds, answer-before-next flow, missed-only review, best-streak tracking, accessible live and pressed states, clearer correct/wrong feedback, mobile two-column answers and single-column actions, expanded search-intent copy, FAQ, local-rule caveats, and related links. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, localized page/thumbnail and related-tool checks, mobile CSS rules, and a DOM-driven no-repeat/filter/answer-lock/double-answer/missed-review/streak/reset flow passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-10-03 21:00 KST
 - Tool: `move-checklist-planner`
 - Selection reason: recent quality runs improved other tools; this oldest untouched April-era planner rendered Korean-only controls and output on EN/JA pages, did not use the move date to calculate actual preparation dates, prefilled a result instead of showing an empty state, and lacked past/far-date and copy-failure handling.

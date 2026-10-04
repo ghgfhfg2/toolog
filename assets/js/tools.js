@@ -23368,6 +23368,8 @@
     const totalEl = $('rsp-total');
     const rateEl = $('rsp-rate');
     const missedEl = $('rsp-missed');
+    const streakEl = $('rsp-streak');
+    const progressEl = $('rsp-progress');
     const choiceBtns = Array.from(document.querySelectorAll('#rsp-choices [data-answer]'));
     if (!itemEl || !feedbackEl || !choiceBtns.length) return;
 
@@ -23378,7 +23380,10 @@
         wrong: (picked, label, why) => `아쉬워요. 선택: ${picked} / 정답: ${label}. ${why}`,
         reviewEmpty: '아직 복습할 오답이 없습니다.',
         reset: '점수를 초기화했습니다. 새 문제를 풀어보세요.',
-        hint: '알맞은 배출 분류를 고르세요.'
+        filterChanged: '출제 조건을 바꿨습니다. 새 문제부터 점수에 반영합니다.',
+        hint: '알맞은 배출 분류를 고르세요.',
+        progress: (current, count) => `${current}/${count}번 문제`,
+        reviewProgress: (count) => `오답 복습 · ${count}개 남음`
       },
       en: {
         labels: { paper: 'Paper', plastic: 'Plastic', can: 'Can / metal', glass: 'Glass bottle', food: 'Food waste', general: 'General trash' },
@@ -23386,7 +23391,10 @@
         wrong: (picked, label, why) => `Not quite. Your choice: ${picked} / Answer: ${label}. ${why}`,
         reviewEmpty: 'No missed items to review yet.',
         reset: 'Score reset. Try a new question.',
-        hint: 'Choose the best sorting category.'
+        filterChanged: 'Question settings changed. Scoring continues with the new set.',
+        hint: 'Choose the best sorting category.',
+        progress: (current, count) => `Question ${current} of ${count}`,
+        reviewProgress: (count) => `Missed review · ${count} remaining`
       },
       ja: {
         labels: { paper: '紙', plastic: 'プラスチック', can: '缶/金属', glass: 'びん', food: '生ごみ', general: '一般ごみ' },
@@ -23394,7 +23402,10 @@
         wrong: (picked, label, why) => `惜しいです。選択: ${picked} / 正解: ${label}。${why}`,
         reviewEmpty: '復習する間違いはまだありません。',
         reset: 'スコアをリセットしました。新しい問題を解いてみましょう。',
-        hint: '適切な分別カテゴリを選んでください。'
+        filterChanged: '出題条件を変更しました。新しい問題から成績に反映します。',
+        hint: '適切な分別カテゴリを選んでください。',
+        progress: (current, count) => `${count}問中${current}問目`,
+        reviewProgress: (count) => `間違い復習 · 残り${count}問`
       }
     }[pageLang] || null;
 
@@ -23416,55 +23427,115 @@
     let current = null;
     let correct = 0;
     let total = 0;
+    let currentStreak = 0;
+    let bestStreak = 0;
+    let answered = false;
+    let reviewMode = false;
+    let deck = [];
+    let deckIndex = 0;
     const missed = [];
 
     const localize = (obj) => obj?.[pageLang] || obj?.ko || '';
     const pool = () => {
       const diff = difficultyEl?.value || 'mixed';
       const range = rangeEl?.value || 'all';
-      return questions.filter(q => (diff === 'mixed' || q.level === diff || (diff === 'easy' && q.level === 'mixed')) && (range === 'all' || q.range === range || (range === 'food' && q.range === 'all')));
+      return questions.filter(q => (diff === 'mixed' || q.level === diff || (diff === 'hard' && q.level === 'mixed')) && (range === 'all' || q.range === range));
+    };
+    const shuffle = (items) => {
+      const result = [...items];
+      for (let i = result.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [result[i], result[j]] = [result[j], result[i]];
+      }
+      return result;
+    };
+    const rebuildDeck = () => {
+      deck = shuffle(pool());
+      if (deck.length > 1 && deck[0] === current) [deck[0], deck[1]] = [deck[1], deck[0]];
+      deckIndex = 0;
     };
     const updateStats = () => {
       correctEl.textContent = formatNum(correct);
       totalEl.textContent = formatNum(total);
       rateEl.textContent = total ? `${Math.round(correct / total * 100)}%` : '0%';
       missedEl.textContent = formatNum(missed.length);
+      if (streakEl) streakEl.textContent = formatNum(bestStreak);
+      if (reviewBtn) reviewBtn.disabled = !missed.length;
     };
     const nextQuestion = (fromMissed = false) => {
-      const source = fromMissed && missed.length ? missed : pool();
-      current = source[Math.floor(Math.random() * source.length)] || questions[0];
+      reviewMode = Boolean(fromMissed && missed.length);
+      if (reviewMode) {
+        current = missed[0];
+      } else {
+        if (!deck.length || deckIndex >= deck.length) rebuildDeck();
+        current = deck[deckIndex] || questions[0];
+        deckIndex += 1;
+      }
+      answered = false;
       itemEl.textContent = localize(current.item);
       hintEl.textContent = t.hint;
       feedbackEl.textContent = t.hint;
-      choiceBtns.forEach(btn => { btn.disabled = false; btn.style.opacity = '1'; });
+      feedbackEl.dataset.state = '';
+      if (progressEl) progressEl.textContent = reviewMode ? t.reviewProgress(missed.length) : t.progress(deckIndex, deck.length);
+      if (nextBtn) nextBtn.disabled = true;
+      choiceBtns.forEach(btn => {
+        btn.disabled = false;
+        btn.removeAttribute('data-state');
+        btn.setAttribute('aria-pressed', 'false');
+      });
     };
 
     choiceBtns.forEach(btn => btn.addEventListener('click', () => {
-      if (!current) return;
+      if (!current || answered) return;
+      answered = true;
       const picked = btn.dataset.answer;
       const label = t.labels[current.answer];
       const pickedLabel = t.labels[picked] || picked;
       total += 1;
       if (picked === current.answer) {
         correct += 1;
+        currentStreak += 1;
+        bestStreak = Math.max(bestStreak, currentStreak);
         feedbackEl.textContent = t.correct(label, localize(current.why));
+        feedbackEl.dataset.state = 'success';
         const idx = missed.indexOf(current);
         if (idx >= 0) missed.splice(idx, 1);
       } else {
+        currentStreak = 0;
         feedbackEl.textContent = t.wrong(pickedLabel, label, localize(current.why));
+        feedbackEl.dataset.state = 'error';
         if (!missed.includes(current)) missed.push(current);
       }
-      choiceBtns.forEach(b => { b.disabled = true; b.style.opacity = b.dataset.answer === current.answer ? '1' : '0.65'; });
+      choiceBtns.forEach(b => {
+        b.disabled = true;
+        b.dataset.state = b.dataset.answer === current.answer ? 'correct' : (b === btn ? 'wrong' : 'idle');
+        b.setAttribute('aria-pressed', String(b === btn));
+      });
+      if (nextBtn) nextBtn.disabled = false;
       updateStats();
     }));
 
-    nextBtn?.addEventListener('click', () => nextQuestion(false));
+    nextBtn?.addEventListener('click', () => nextQuestion(reviewMode && missed.length > 0));
     reviewBtn?.addEventListener('click', () => {
       if (!missed.length) { feedbackEl.textContent = t.reviewEmpty; return; }
       nextQuestion(true);
     });
-    resetBtn?.addEventListener('click', () => { correct = 0; total = 0; missed.length = 0; updateStats(); feedbackEl.textContent = t.reset; nextQuestion(false); });
-    [difficultyEl, rangeEl].forEach(el => el?.addEventListener('change', () => nextQuestion(false)));
+    resetBtn?.addEventListener('click', () => {
+      correct = 0;
+      total = 0;
+      currentStreak = 0;
+      bestStreak = 0;
+      missed.length = 0;
+      deck = [];
+      updateStats();
+      nextQuestion(false);
+      feedbackEl.textContent = t.reset;
+    });
+    [difficultyEl, rangeEl].forEach(el => el?.addEventListener('change', () => {
+      deck = [];
+      nextQuestion(false);
+      feedbackEl.textContent = t.filterChanged;
+    }));
     updateStats();
     nextQuestion(false);
   }

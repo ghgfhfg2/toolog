@@ -4642,7 +4642,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           </div>
         </div>
       {% when 'recycling-sorting-practice' %}
-        <div class="tool-ui">
+        <div class="tool-ui rsp-ui">
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="rsp-difficulty">{% if page.lang == 'en' %}Difficulty{% elsif page.lang == 'ja' %}難易度{% else %}난이도{% endif %}</label>
@@ -4662,12 +4662,13 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             </div>
           </div>
 
-          <div class="tool-result" id="rsp-card">
+          <div class="tool-result rsp-card" id="rsp-card" aria-labelledby="rsp-item" aria-describedby="rsp-hint">
+            <span class="rsp-progress" id="rsp-progress">{% if page.lang == 'en' %}Question 1{% elsif page.lang == 'ja' %}第1問{% else %}1번 문제{% endif %}</span>
             <strong id="rsp-item">-</strong>
             <span id="rsp-hint">{% if page.lang == 'en' %}Choose the best sorting category.{% elsif page.lang == 'ja' %}適切な分別カテゴリを選んでください。{% else %}알맞은 배출 분류를 고르세요.{% endif %}</span>
           </div>
 
-          <div class="tool-row-grid pct-actions rsp-choices" id="rsp-choices">
+          <div class="tool-row-grid pct-actions rsp-choices" id="rsp-choices" role="group" aria-label="{% if page.lang == 'en' %}Sorting category answers{% elsif page.lang == 'ja' %}分別カテゴリの回答{% else %}분리배출 분류 답안{% endif %}">
             <button type="button" data-answer="paper">{% if page.lang == 'en' %}Paper{% elsif page.lang == 'ja' %}紙{% else %}종이{% endif %}</button>
             <button type="button" data-answer="plastic">{% if page.lang == 'en' %}Plastic{% elsif page.lang == 'ja' %}プラスチック{% else %}플라스틱{% endif %}</button>
             <button type="button" data-answer="can">{% if page.lang == 'en' %}Can / metal{% elsif page.lang == 'ja' %}缶/金属{% else %}캔·금속{% endif %}</button>
@@ -4676,20 +4677,22 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <button type="button" data-answer="general">{% if page.lang == 'en' %}General trash{% elsif page.lang == 'ja' %}一般ごみ{% else %}일반쓰레기{% endif %}</button>
           </div>
 
-          <div class="tool-row-grid pct-actions">
-            <button id="rsp-next" type="button">{% if page.lang == 'en' %}Next question{% elsif page.lang == 'ja' %}次の問題{% else %}다음 문제{% endif %}</button>
-            <button id="rsp-review" type="button">{% if page.lang == 'en' %}Review missed{% elsif page.lang == 'ja' %}間違い復習{% else %}틀린 문제 다시 풀기{% endif %}</button>
+          <div class="tool-row-grid pct-actions rsp-actions">
+            <button id="rsp-next" type="button" disabled>{% if page.lang == 'en' %}Next question{% elsif page.lang == 'ja' %}次の問題{% else %}다음 문제{% endif %}</button>
+            <button id="rsp-review" type="button" disabled>{% if page.lang == 'en' %}Review missed{% elsif page.lang == 'ja' %}間違い復習{% else %}틀린 문제 다시 풀기{% endif %}</button>
             <button id="rsp-reset" type="button">{% if page.lang == 'en' %}Reset score{% elsif page.lang == 'ja' %}スコアリセット{% else %}점수 초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
+          <div class="tool-stats rsp-stats" aria-label="{% if page.lang == 'en' %}Quiz score{% elsif page.lang == 'ja' %}クイズ成績{% else %}퀴즈 점수{% endif %}">
             <div><strong id="rsp-correct">0</strong><span>{% if page.lang == 'en' %}Correct{% elsif page.lang == 'ja' %}正解{% else %}정답{% endif %}</span></div>
             <div><strong id="rsp-total">0</strong><span>{% if page.lang == 'en' %}Answered{% elsif page.lang == 'ja' %}回答{% else %}풀이 수{% endif %}</span></div>
             <div><strong id="rsp-rate">0%</strong><span>{% if page.lang == 'en' %}Accuracy{% elsif page.lang == 'ja' %}正答率{% else %}정답률{% endif %}</span></div>
             <div><strong id="rsp-missed">0</strong><span>{% if page.lang == 'en' %}Missed set{% elsif page.lang == 'ja' %}復習候補{% else %}복습 후보{% endif %}</span></div>
+            <div><strong id="rsp-streak">0</strong><span>{% if page.lang == 'en' %}Best streak{% elsif page.lang == 'ja' %}最高連続正解{% else %}최고 연속 정답{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="rsp-feedback">{% if page.lang == 'en' %}Start with the first item and choose a category.{% elsif page.lang == 'ja' %}最初の品目から分別カテゴリを選んでください。{% else %}첫 품목을 보고 배출 분류를 골라보세요.{% endif %}</p>
+          <p class="tool-result" id="rsp-feedback" role="status" aria-live="polite">{% if page.lang == 'en' %}Start with the first item and choose a category.{% elsif page.lang == 'ja' %}最初の品目から分別カテゴリを選んでください。{% else %}첫 품목을 보고 배출 분류를 골라보세요.{% endif %}</p>
+          <p class="tool-result rsp-help" id="rsp-help">{% if page.lang == 'en' %}Answer once to unlock the next question. Questions do not repeat until the selected set is complete. Local rules may differ.{% elsif page.lang == 'ja' %}1回回答すると次の問題へ進めます。選択した問題セットを一巡するまで同じ問題は出ません。地域ルールが優先です。{% else %}한 번 답하면 다음 문제로 넘어갈 수 있습니다. 선택한 문제 묶음을 한 바퀴 돌기 전에는 같은 문제가 반복되지 않으며 지역 기준이 우선입니다.{% endif %}</p>
         </div>
       {% when 'meeting-action-item-extractor' %}
         <div class="tool-ui maie-ui">

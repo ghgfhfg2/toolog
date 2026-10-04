@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Recycling Sorting Practice | Learn confusing household waste sorting rules
-description: Practice confusing household waste sorting with quick quizzes across paper, plastic, cans, glass, food waste, and general trash.
+title: Recycling Quiz | Practice Household Waste Sorting Rules
+description: Practice household waste sorting with no-repeat quiz rounds, instant explanations, missed-item review, accuracy, and streak tracking.
 lang: en
 permalink: /en/tools/recycling-sorting-practice/
 canonical_url: /en/tools/recycling-sorting-practice/
@@ -18,7 +18,7 @@ image:
 tool_key: recycling-sorting-practice
 tool_type: learning
 topic_cluster: lifestyle
-keywords: [recycling quiz, waste sorting practice, household waste sorting, food waste rules, recycling learning]
+keywords: [recycling quiz, waste sorting quiz, household waste sorting, food waste rules, trash sorting practice, recycling learning]
 related_tools: [ingredient-expiry-priority-checker, household-chore-picker, emergency-bag-checklist-planner]
 faq:
   - q: Does this exactly match local municipal rules?
@@ -27,7 +27,12 @@ faq:
     a: The basic rule is to empty and rinse items before disposal. If cleaning is difficult or the item has heavy oil or food residue, the tool guides it as general trash.
   - q: What is the food waste rule based on?
     a: It generally explains food waste by whether animals can eat it and whether it can be processed, but there are many exceptions such as bones, shells, tea bags, and herbal medicine residue. Check local guidance too.
+  - q: Will the same question keep repeating?
+    a: No. The selected set is shown once per round before it is reshuffled, and you can separately retry only missed items.
 ---
+
+## Why this tool was selected for today's quality pass
+Recent quality work focused on other tools, including `move-checklist-planner`, `memory-quiz-generator`, `ingredient-expiry-priority-checker`, and `text-line-break-cleaner`, so this pass avoids repeating them. This May 2026 learning tool had no dedicated quality pass, and its filters mixed unrelated questions into the food range and medium questions into easy mode. It could also repeat a question immediately, skip unanswered questions, and needed clearer mobile answer and status states.
 
 ## Why use Recycling Sorting Practice?
 Recycling is something we do every day, but it is surprisingly easy to get wrong. Cup noodle containers, receipts, broken glass, chicken bones, and dirty plastic bags can **look recyclable at first but need to be disposed of differently**.
@@ -36,10 +41,12 @@ This tool helps you repeatedly practice the rules for **paper, plastic, cans, gl
 
 ## How to use it
 1. Choose the difficulty and question range.
-2. Press `Next question`, or review the item already shown.
+2. Choose a sorting category for the item already shown.
 3. Select the disposal category that fits best.
 4. Read whether you were correct and the short reason.
-5. Retry missed questions to strengthen the rules that still feel confusing.
+5. Questions do not repeat within a round, and you can retry only missed items.
+
+Accuracy and best streak are shown as you practice. The next button stays disabled until you answer, preventing accidental skips.
 
 ## Especially useful when
 ### 1) Aligning household rules before sharing chores
@@ -67,5 +74,4 @@ Many items depend on their condition. The tool explains conditional rules such a
 No. Scores and answers are handled only in your current browser screen and are not sent to or stored on a server.
 
 ## Summary
-Recycling Sorting Practice is a **learning-style tool that teaches household waste sorting rules through short questions and explanations**.
-The immediately previous tool was a utility and the one before it was a planner, so this release adds a learning interaction rather than another calculator-style tool and broadens the recent publishing pattern.
+Recycling Sorting Practice is a **learning tool that teaches household waste sorting through short questions, instant explanations, and missed-item review**. Always use your local rules as the final authority before disposal.

@@ -1651,6 +1651,24 @@ a:hover { color: #fff; text-decoration: none; }
 .tool-stats > div { border: 1px solid var(--line); border-radius: 10px; padding: .65rem; background: #1f2937; }
 .tool-stats strong { display:block; font-size: 1.05rem; }
 .tool-stats span { font-size: .78rem; color: var(--muted); }
+.rsp-card { display: grid; gap: 6px; min-height: 112px; align-content: center; }
+.rsp-card strong { font-size: clamp(1.15rem, 3vw, 1.45rem); color: var(--heading); }
+.rsp-progress { color: var(--primary); font-size: .78rem; font-weight: 750; }
+.rsp-choices { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.rsp-choices button { min-height: 48px; }
+.rsp-choices button[data-state="correct"] { border-color: #16a34a; background: #ecfdf3; color: #166534; opacity: 1; }
+.rsp-choices button[data-state="wrong"] { border-color: #dc2626; background: #fef2f2; color: #991b1b; opacity: 1; }
+.rsp-choices button[data-state="idle"] { opacity: .58; }
+.rsp-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.rsp-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.rsp-help { font-size: .82rem; color: #64748b; }
+@media (max-width: 640px) {
+  .rsp-ui .pct-grid,
+  .rsp-actions { grid-template-columns: 1fr; }
+  .rsp-choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rsp-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rsp-stats > div:last-child { grid-column: 1 / -1; }
+}
 .pyeong-ui .py-stats strong,
 .pyeong-ui .py-stats span { overflow-wrap: anywhere; }
 .pyeong-ui .pct-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
