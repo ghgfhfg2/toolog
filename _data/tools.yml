@@ -1650,8 +1650,8 @@
   badge_en: New
   badge_ja: 新着
   description: 영문·숫자를 다양한 유니코드 폰트로 실시간 변환하고 실제로 바뀌는 결과만 추려 스타일 검색, 즐겨찾기, 개별·일괄 복사로 인스타·SNS 문구 후보를 비교해요.
-  description_en: Convert letters and numbers into Unicode font styles, hide unchanged results, search and favorite styles, then copy one or all visible candidates for Instagram bios and social captions.
-  description_ja: 英字と数字をUnicodeフォントへ変換し、変化のない候補を除外。検索、お気に入り、個別・一括コピーでインスタプロフィールやSNS文言を比較できます。
+  description_en: Convert letters and numbers into Unicode font styles in real time, hide unchanged results, search and favorite styles, then copy candidates for Instagram bios and social captions.
+  description_ja: 英字と数字をUnicodeフォントへリアルタイム変換し、変化のない候補を除外。検索、お気に入り、個別・一括コピーでインスタプロフィールやSNS文言を比較できます。
   url: /tools/font-change/
   url_en: /en/tools/font-change/
   url_ja: /ja/tools/font-change/
