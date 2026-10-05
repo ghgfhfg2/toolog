@@ -13611,6 +13611,7 @@
     const toast = document.getElementById('fc-toast');
     const showFavBtn = document.getElementById('fc-show-fav');
     const showAllBtn = document.getElementById('fc-show-all');
+    const changedOnlyBtn = document.getElementById('fc-changed-only');
     const clearFavBtn = document.getElementById('fc-clear-fav');
     const clearInputBtn = document.getElementById('fc-clear-input');
     const sampleBtn = document.getElementById('fc-sample');
@@ -13626,8 +13627,15 @@
     let favorites = new Set();
     let onlyFav = false;
     let showAll = false;
+    let onlyChanged = false;
     let activeGroup = 'all';
     let visibleResults = [];
+    const graphemeSegmenter = typeof Intl.Segmenter === 'function'
+      ? new Intl.Segmenter(pageLang === 'ko' ? 'ko' : pageLang, { granularity: 'grapheme' })
+      : null;
+    const splitCharacters = (value) => graphemeSegmenter
+      ? Array.from(graphemeSegmenter.segment(value), ({ segment }) => segment)
+      : Array.from(value);
 
     try {
       const saved = JSON.parse(localStorage.getItem(favStoreKey) || '[]');
@@ -13952,6 +13960,7 @@
         noMatch: '검색 조건에 맞는 스타일이 없습니다.',
         noGroup: '선택한 그룹에 표시할 스타일이 없습니다. 확장 폰트 보기를 켜거나 다른 그룹을 선택해 주세요.',
         noFav: '즐겨찾기된 폰트가 없습니다.',
+        noChanged: '현재 문구에서 실제로 바뀌는 스타일이 없습니다. 영문이나 숫자를 넣거나 필터를 꺼 주세요.',
         noVisible: '복사할 표시 스타일이 없습니다.',
         truncated: '입력은 최대 500자까지 지원합니다. 초과한 내용은 잘라냈습니다.',
         copied: (label) => `${label} 스타일을 복사했습니다.`,
@@ -13971,6 +13980,7 @@
         noMatch: 'No styles match your search.',
         noGroup: 'No styles are visible in this group. Turn on extended styles or choose another group.',
         noFav: 'No favorite styles yet.',
+        noChanged: 'None of the visible styles change this text. Add Latin letters or numbers, or turn off the filter.',
         noVisible: 'There are no visible styles to copy.',
         truncated: 'Input is limited to 500 characters. Extra text was trimmed.',
         copied: (label) => `Copied the ${label} style.`,
@@ -13990,6 +14000,7 @@
         noMatch: '検索条件に一致するスタイルがありません。',
         noGroup: 'このグループに表示できるスタイルがありません。拡張スタイルをオンにするか、別のグループを選んでください。',
         noFav: 'お気に入り登録されたスタイルがありません。',
+        noChanged: '現在のテキストが変化するスタイルはありません。英数字を入力するか、絞り込みをオフにしてください。',
         noVisible: 'コピーできる表示スタイルがありません。',
         truncated: '入力は最大500文字です。超過分を削除しました。',
         copied: (label) => `${label}スタイルをコピーしました。`,
@@ -14064,6 +14075,12 @@
           ? `拡張スタイル表示: ${showAll ? 'ON' : 'OFF'}`
           : `확장 폰트 보기: ${showAll ? 'ON' : 'OFF'}`;
       if (showAllBtn) showAllBtn.setAttribute('aria-pressed', showAll ? 'true' : 'false');
+      if (changedOnlyBtn) changedOnlyBtn.textContent = (pageLang === 'en')
+        ? `Changed results only: ${onlyChanged ? 'ON' : 'OFF'}`
+        : (pageLang === 'ja')
+          ? `変換ありのみ: ${onlyChanged ? 'ON' : 'OFF'}`
+          : `실제 변환 결과만: ${onlyChanged ? 'ON' : 'OFF'}`;
+      if (changedOnlyBtn) changedOnlyBtn.setAttribute('aria-pressed', onlyChanged ? 'true' : 'false');
       groupButtons.forEach((button) => {
         button.setAttribute('aria-pressed', button.dataset.fcGroup === activeGroup ? 'true' : 'false');
       });
@@ -14071,7 +14088,7 @@
 
     const render = () => {
       const rawValue = input.value || '';
-      const rawChars = Array.from(rawValue);
+      const rawChars = splitCharacters(rawValue);
       let wasTrimmed = false;
       if (rawChars.length > 500) {
         input.value = rawChars.slice(0, 500).join('');
@@ -14088,11 +14105,14 @@
       }
       if (onlyFav) targets = targets.filter((f) => favorites.has(f.key));
       if (query) targets = targets.filter((f) => `${f.key} ${f.label} ${getStyleLabel(f)} ${Object.entries(styleGroups).filter(([, set]) => set.has(f.key)).map(([name]) => groupLabels[name] || name).join(' ')}`.toLocaleLowerCase().includes(query));
-      if (charCount) charCount.textContent = formatNum([...value].length);
+      const sampleText = pageLang === 'en' ? 'Hello Font' : (pageLang === 'ja' ? 'フォントサンプル' : '폰트 샘플');
+      const sourceText = value || sampleText;
+      if (onlyChanged) targets = targets.filter((font) => font.convert(sourceText) !== sourceText);
+      if (charCount) charCount.textContent = formatNum(splitCharacters(value).length);
       if (styleCount) styleCount.textContent = formatNum(targets.length);
 
       if (!targets.length) {
-        const message = query ? fcText.noMatch : (onlyFav ? fcText.noFav : fcText.noGroup);
+        const message = query ? fcText.noMatch : (onlyFav ? fcText.noFav : (onlyChanged ? fcText.noChanged : fcText.noGroup));
         const empty = document.createElement('div');
         empty.className = 'empty-state';
         empty.setAttribute('role', 'listitem');
@@ -14108,8 +14128,6 @@
       let changed = 0;
       let unchanged = 0;
       targets.forEach((font) => {
-        const sampleText = pageLang === 'en' ? 'Hello Font' : (pageLang === 'ja' ? 'フォントサンプル' : '폰트 샘플');
-        const sourceText = value || sampleText;
         const out = font.convert(sourceText);
         if (out === sourceText) unchanged += 1;
         else changed += 1;
@@ -14126,6 +14144,7 @@
         favBtn.title = pageLang === 'en' ? 'Favorite' : (pageLang === 'ja' ? 'お気に入り' : '즐겨찾기');
         favBtn.setAttribute('aria-label', `${favBtn.title}: ${getStyleLabel(font)}`);
         favBtn.setAttribute('aria-pressed', favorites.has(font.key) ? 'true' : 'false');
+        favBtn.dataset.fontKey = font.key;
 
         const body = document.createElement('div');
         body.className = 'font-preview-body';
@@ -14155,6 +14174,7 @@
           saveFav();
           render();
           setStatus(message, 'success');
+          list.querySelector(`[data-font-key="${font.key}"]`)?.focus();
         });
 
         const copyResult = async () => {
@@ -14206,6 +14226,12 @@
 
     showAllBtn?.addEventListener('click', () => {
       showAll = !showAll;
+      updateButtonsText();
+      render();
+    });
+
+    changedOnlyBtn?.addEventListener('click', () => {
+      onlyChanged = !onlyChanged;
       updateButtonsText();
       render();
     });

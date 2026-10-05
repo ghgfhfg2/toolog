@@ -1931,7 +1931,7 @@ a:hover { color: #fff; text-decoration: none; }
 .font-change-controls {
   display: grid;
   gap: .45rem;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 .font-change-controls button {
   min-height: 42px;

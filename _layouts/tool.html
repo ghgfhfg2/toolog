@@ -2538,7 +2538,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
         <div class="tool-ui font-change-ui">
           <div class="tool-row">
             <label for="fc-input">{% if page.lang == 'en' %}Text to style{% elsif page.lang == 'ja' %}変換するテキスト{% else %}변환할 텍스트{% endif %}</label>
-            <textarea id="fc-input" maxlength="500" aria-describedby="fc-status fc-help fc-limit" placeholder="{% if page.lang == 'en' %}Enter a profile name or short caption{% elsif page.lang == 'ja' %}プロフィール名や短い文章を入力{% else %}프로필 이름이나 짧은 문구를 입력하세요{% endif %}"></textarea>
+            <textarea id="fc-input" aria-describedby="fc-status fc-help fc-limit" placeholder="{% if page.lang == 'en' %}Enter a profile name or short caption{% elsif page.lang == 'ja' %}プロフィール名や短い文章を入力{% else %}프로필 이름이나 짧은 문구를 입력하세요{% endif %}"></textarea>
             <p class="tool-result fc-limit" id="fc-limit">{% if page.lang == 'en' %}Up to 500 characters. Best for short social bios, nicknames, titles, and captions.{% elsif page.lang == 'ja' %}最大500文字。SNSプロフィール、ニックネーム、タイトル、短いキャプション向けです。{% else %}최대 500자까지 입력할 수 있습니다. SNS 소개문, 닉네임, 제목, 짧은 캡션에 적합합니다.{% endif %}</p>
           </div>
           <div class="tool-row-grid fc-filter-grid">
@@ -2552,6 +2552,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <button id="fc-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 입력{% endif %}</button>
             <button id="fc-show-fav" type="button" aria-pressed="false">{% if page.lang == 'en' %}★ Favorites only: OFF{% elsif page.lang == 'ja' %}★ お気に入りのみ: OFF{% else %}★ 즐겨찾기만 보기: OFF{% endif %}</button>
             <button id="fc-show-all" type="button" aria-pressed="false">{% if page.lang == 'en' %}Show extended styles: OFF{% elsif page.lang == 'ja' %}拡張スタイル表示: OFF{% else %}확장 폰트 보기: OFF{% endif %}</button>
+            <button id="fc-changed-only" type="button" aria-pressed="false">{% if page.lang == 'en' %}Changed results only: OFF{% elsif page.lang == 'ja' %}変換ありのみ: OFF{% else %}실제 변환 결과만: OFF{% endif %}</button>
             <button id="fc-copy-visible" type="button">{% if page.lang == 'en' %}Copy visible styles{% elsif page.lang == 'ja' %}表示スタイルをコピー{% else %}표시된 스타일 복사{% endif %}</button>
             <button id="fc-clear-fav" type="button">{% if page.lang == 'en' %}Reset favorites{% elsif page.lang == 'ja' %}お気に入りをリセット{% else %}즐겨찾기 초기화{% endif %}</button>
           </div>
