@@ -992,9 +992,9 @@
   topic_cluster: text
 
 - id: remote-work-cost-simulator
-  title: 재택 vs 출근 비용 비교 시뮬레이터
-  title_en: Remote Work vs Commute Cost Simulator
-  title_ja: 在宅勤務 vs 通勤コスト比較シミュレーター
+  title: 재택근무 vs 출근 비용 계산기
+  title_en: Remote Work vs Commute Cost Calculator
+  title_ja: 在宅勤務 vs 通勤コスト計算ツール
   category: productivity
   category_label: 업무/생산성
   category_label_en: Work/Productivity
@@ -1002,9 +1002,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 재택과 출근의 교통비, 식비, 커피값, 통근시간, 재택 추가비용을 월 기준으로 비교해 어떤 근무 방식이 더 유리한지 살펴봐요.
-  description_en: Compare commuting, meals, coffee, extra home-office costs, and travel time on a monthly basis to see which work style feels cheaper.
-  description_ja: 通勤費、食費、コーヒー代、移動時間、在宅追加費用を月単位で比較して、どの働き方が有利か確認できます。
+  description: 월 근무일·출근일, 교통비, 식비, 재택 추가비, 통근시간을 입력해 현재 하이브리드 근무와 전일 출근·전일 재택의 월 비용 차이를 비교해요.
+  description_en: Compare your current hybrid schedule with full-office and full-remote monthly costs using commute, meals, home-office expenses, and optional travel-time value.
+  description_ja: 勤務日数・出社日数、交通費、食費、在宅追加費、通勤時間から、現在のハイブリッド勤務と全日出社・全日在宅の月間費用を比較します。
   url: /tools/remote-work-cost-simulator/
   url_en: /en/tools/remote-work-cost-simulator/
   url_ja: /ja/tools/remote-work-cost-simulator/

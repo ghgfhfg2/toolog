@@ -860,66 +860,74 @@ layout: default
           <textarea id="psc-output" rows="11" readonly placeholder="{% if page.lang == 'en' %}The summary will appear here.{% elsif page.lang == 'ja' %}点検結果がここに表示されます。{% else %}점검 요약이 여기에 표시됩니다.{% endif %}"></textarea>
         </div>
       {% when 'remote-work-cost-simulator' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui rw-ui">
+          <p class="tool-result rw-intro" id="rw-intro">{% if page.lang == 'en' %}Compare your current hybrid schedule with full-office and full-remote monthly scenarios. Time value is optional.{% elsif page.lang == 'ja' %}現在のハイブリッド勤務と、全日出社・全日在宅の月間シナリオを比較します。時間単価は任意です。{% else %}현재 하이브리드 일정과 전일 출근·전일 재택의 월간 비용을 비교합니다. 시간 가치는 선택 입력입니다.{% endif %}</p>
+
+          <div class="tool-row-grid rw-grid">
             <div>
-              <label for="rw-total-days">월 근무일 수</label>
-              <input id="rw-total-days" type="number" min="1" max="31" step="1" value="20" inputmode="numeric" />
+              <label for="rw-total-days">{% if page.lang == 'en' %}Workdays per month{% elsif page.lang == 'ja' %}月間勤務日数{% else %}월 근무일 수{% endif %}</label>
+              <input id="rw-total-days" type="number" min="1" max="31" step="1" value="20" inputmode="numeric" aria-describedby="rw-intro rw-help" />
             </div>
             <div>
-              <label for="rw-office-days">월 출근일 수</label>
-              <input id="rw-office-days" type="number" min="0" max="31" step="1" value="8" inputmode="numeric" />
+              <label for="rw-office-days">{% if page.lang == 'en' %}Office days per month{% elsif page.lang == 'ja' %}月間出社日数{% else %}월 출근일 수{% endif %}</label>
+              <input id="rw-office-days" type="number" min="0" max="31" step="1" value="8" inputmode="numeric" aria-describedby="rw-intro rw-help" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid rw-presets" aria-label="{% if page.lang == 'en' %}Office-day presets{% elsif page.lang == 'ja' %}出社日数プリセット{% else %}출근일 프리셋{% endif %}">
+            <button type="button" data-rw-office="0">{% if page.lang == 'en' %}Full remote{% elsif page.lang == 'ja' %}全日在宅{% else %}전일 재택{% endif %}</button>
+            <button type="button" data-rw-office="hybrid">{% if page.lang == 'en' %}2 days/week{% elsif page.lang == 'ja' %}週2日出社{% else %}주 2일 출근{% endif %}</button>
+            <button type="button" data-rw-office="all">{% if page.lang == 'en' %}Full office{% elsif page.lang == 'ja' %}全日出社{% else %}전일 출근{% endif %}</button>
+          </div>
+
+          <div class="tool-row-grid rw-grid">
             <div>
-              <label for="rw-commute-cost">출근 1일 교통비(왕복)</label>
-              <input id="rw-commute-cost" type="number" min="0" step="100" value="4000" inputmode="numeric" />
+              <label for="rw-commute-cost">{% if page.lang == 'en' %}Round-trip transport / office day{% elsif page.lang == 'ja' %}出社1日の往復交通費{% else %}출근 1일 교통비(왕복){% endif %}</label>
+              <input id="rw-commute-cost" type="number" min="0" max="1000000000" step="100" value="4000" inputmode="numeric" aria-describedby="rw-help" />
             </div>
             <div>
-              <label for="rw-lunch-cost">출근 1일 점심값</label>
-              <input id="rw-lunch-cost" type="number" min="0" step="100" value="11000" inputmode="numeric" />
+              <label for="rw-lunch-cost">{% if page.lang == 'en' %}Lunch / office day{% elsif page.lang == 'ja' %}出社1日のランチ代{% else %}출근 1일 점심값{% endif %}</label>
+              <input id="rw-lunch-cost" type="number" min="0" max="1000000000" step="100" value="11000" inputmode="numeric" aria-describedby="rw-help" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid rw-grid">
             <div>
-              <label for="rw-coffee-cost">출근 1일 커피/간식비</label>
-              <input id="rw-coffee-cost" type="number" min="0" step="100" value="3000" inputmode="numeric" />
+              <label for="rw-coffee-cost">{% if page.lang == 'en' %}Coffee/snacks / office day{% elsif page.lang == 'ja' %}出社1日のコーヒー・軽食代{% else %}출근 1일 커피/간식비{% endif %}</label>
+              <input id="rw-coffee-cost" type="number" min="0" max="1000000000" step="100" value="3000" inputmode="numeric" aria-describedby="rw-help" />
             </div>
             <div>
-              <label for="rw-home-extra">재택 1일 추가비용</label>
-              <input id="rw-home-extra" type="number" min="0" step="100" value="2000" inputmode="numeric" />
-            </div>
-          </div>
-
-          <div class="tool-row-grid pct-grid">
-            <div>
-              <label for="rw-commute-minutes">왕복 통근시간(분)</label>
-              <input id="rw-commute-minutes" type="number" min="0" max="360" step="5" value="80" inputmode="numeric" />
-            </div>
-            <div>
-              <label for="rw-hour-value">시간 가치 시급(선택)</label>
-              <input id="rw-hour-value" type="number" min="0" step="500" placeholder="예: 15000" inputmode="numeric" />
+              <label for="rw-home-extra">{% if page.lang == 'en' %}Extra cost / remote day{% elsif page.lang == 'ja' %}在宅1日の追加費用{% else %}재택 1일 추가비용{% endif %}</label>
+              <input id="rw-home-extra" type="number" min="0" max="1000000000" step="100" value="2000" inputmode="numeric" aria-describedby="rw-help" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-actions">
-            <button id="rw-copy" type="button">결과 복사</button>
-            <button id="rw-reset" type="button">예시값 채우기</button>
+          <div class="tool-row-grid rw-grid">
+            <div>
+              <label for="rw-commute-minutes">{% if page.lang == 'en' %}Round-trip commute (minutes){% elsif page.lang == 'ja' %}往復通勤時間（分）{% else %}왕복 통근시간(분){% endif %}</label>
+              <input id="rw-commute-minutes" type="number" min="0" max="360" step="1" value="80" inputmode="numeric" aria-describedby="rw-help" />
+            </div>
+            <div>
+              <label for="rw-hour-value">{% if page.lang == 'en' %}Hourly value of time (optional){% elsif page.lang == 'ja' %}時間価値の時給（任意）{% else %}시간 가치 시급(선택){% endif %}</label>
+              <input id="rw-hour-value" type="number" min="0" max="10000000" step="100" placeholder="{% if page.lang == 'en' %}e.g. 15,000{% elsif page.lang == 'ja' %}例: 15,000{% else %}예: 15,000{% endif %}" inputmode="numeric" aria-describedby="rw-help" />
+            </div>
           </div>
 
-          <div class="tool-stats">
-            <div><strong id="rw-office-total">-</strong><span>출근 총비용</span></div>
-            <div><strong id="rw-home-total">-</strong><span>재택 총비용</span></div>
-            <div><strong id="rw-time-cost">-</strong><span>통근 시간 환산</span></div>
-            <div><strong id="rw-gap">-</strong><span>월 체감 차이</span></div>
-            <div><strong id="rw-hours">-</strong><span>월 통근시간</span></div>
-            <div><strong id="rw-break-even">-</strong><span>손익분기 출근일</span></div>
+          <div class="tool-row-grid rw-actions">
+            <button id="rw-copy" type="button">{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
+            <button id="rw-reset" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}入力例{% else %}예시값 채우기{% endif %}</button>
           </div>
 
-          <p class="tool-result" id="rw-help">월 근무일 수와 출근 비용을 입력하면 재택/출근 비용 차이를 시뮬레이션합니다.</p>
+          <div class="tool-stats rw-stats" aria-label="{% if page.lang == 'en' %}Monthly work-style comparison{% elsif page.lang == 'ja' %}月間勤務スタイル比較{% else %}월간 근무 방식 비교 결과{% endif %}">
+            <div><strong id="rw-office-total">-</strong><span>{% if page.lang == 'en' %}Full-office cash cost{% elsif page.lang == 'ja' %}全日出社の実費{% else %}전일 출근 실비{% endif %}</span></div>
+            <div><strong id="rw-home-total">-</strong><span>{% if page.lang == 'en' %}Full-remote cash cost{% elsif page.lang == 'ja' %}全日在宅の実費{% else %}전일 재택 실비{% endif %}</span></div>
+            <div><strong id="rw-time-cost">-</strong><span>{% if page.lang == 'en' %}Current commute value{% elsif page.lang == 'ja' %}現在の通勤時間価値{% else %}현재 통근 시간가치{% endif %}</span></div>
+            <div><strong id="rw-gap">-</strong><span>{% if page.lang == 'en' %}Full-office vs remote gap{% elsif page.lang == 'ja' %}全日出社と在宅の差{% else %}전일 출근·재택 차이{% endif %}</span></div>
+            <div><strong id="rw-hours">-</strong><span>{% if page.lang == 'en' %}Current commute time{% elsif page.lang == 'ja' %}現在の月間通勤時間{% else %}현재 월 통근시간{% endif %}</span></div>
+            <div><strong id="rw-break-even">-</strong><span>{% if page.lang == 'en' %}Current mixed cash cost{% elsif page.lang == 'ja' %}現在の混合勤務実費{% else %}현재 혼합근무 실비{% endif %}</span></div>
+          </div>
+
+          <p class="tool-result" id="rw-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter your schedule and daily costs to compare scenarios.{% elsif page.lang == 'ja' %}勤務日数と1日あたりの費用を入力すると比較できます。{% else %}근무일 수와 하루 비용을 입력하면 시나리오를 비교합니다.{% endif %}</p>
         </div>
 
       {% when 'subscription-cleanup-simulator' %}

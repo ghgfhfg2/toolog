@@ -19030,29 +19030,75 @@
     const helpEl = document.getElementById('rw-help');
     const copyBtn = document.getElementById('rw-copy');
     const resetBtn = document.getElementById('rw-reset');
+    const presetBtns = [...document.querySelectorAll('[data-rw-office]')];
 
     if (!totalDaysEl || !officeDaysEl || !commuteCostEl || !lunchCostEl || !coffeeCostEl || !homeExtraEl || !commuteMinutesEl || !hourValueEl || !officeTotalEl || !homeTotalEl || !timeCostEl || !gapEl || !hoursEl || !breakEvenEl || !helpEl) return;
 
-    const t = {
-      currency: '원',
-      day: '일',
-      hour: '시간',
-      noValue: '미반영',
-      winOffice: '출근 쪽이 유리',
-      winHome: '재택 쪽이 유리',
-      similar: '거의 비슷함',
-      helpOffice: (gap) => `입력 기준으로는 출근 쪽이 월 ${gap} 더 유리합니다.`,
-      helpHome: (gap) => `입력 기준으로는 재택 쪽이 월 ${gap} 더 유리합니다.`,
-      helpSimilar: '입력 기준으로는 두 방식의 체감 차이가 크지 않습니다.',
-      copy: (office, home, time, gap, hours, be) => `재택 vs 출근 비교 | 출근 총비용 ${office} | 재택 총비용 ${home} | 통근 시간 환산 ${time} | 월 체감 차이 ${gap} | 월 통근시간 ${hours} | 손익분기 출근일 ${be}`,
-      copied: '복사됨',
-      copyDefault: '결과 복사'
+    const texts = {
+      ko: {
+        currency: '원', hour: '시간', noValue: '미반영',
+        invalidDays: '월 근무일 수는 1~31 사이의 정수로 입력해 주세요.',
+        invalidOffice: '월 출근일 수는 0 이상이며 월 근무일 수보다 클 수 없습니다.',
+        invalidCost: '비용은 0~10억 사이의 숫자로 입력해 주세요.',
+        invalidMinutes: '왕복 통근시간은 0~360 사이의 정수(분)로 입력해 주세요.',
+        invalidHourValue: '시간 가치 시급은 비워두거나 0~1,000만 사이의 숫자로 입력해 주세요.',
+        winOffice: '전일 출근 유리', winHome: '전일 재택 유리', similar: '거의 비슷함',
+        resultOffice: (current, gap) => `현재 혼합근무 실비는 ${current}입니다. 시간 가치까지 보면 전일 출근이 전일 재택보다 월 ${gap} 유리합니다.`,
+        resultHome: (current, gap) => `현재 혼합근무 실비는 ${current}입니다. 시간 가치까지 보면 전일 재택이 전일 출근보다 월 ${gap} 유리합니다.`,
+        resultSimilar: (current) => `현재 혼합근무 실비는 ${current}이며, 전일 출근과 전일 재택의 월 차이는 1,000원 미만입니다.`,
+        copy: (office, home, time, gap, hours, mixed) => `재택 vs 출근 월간 비교 | 전일 출근 실비 ${office} | 전일 재택 실비 ${home} | 현재 통근 시간가치 ${time} | 전일 출근·재택 차이 ${gap} | 현재 월 통근시간 ${hours} | 현재 혼합근무 실비 ${mixed}`,
+        copied: '결과를 복사했습니다.', copyFail: '자동 복사를 사용할 수 없습니다.', copyDefault: '결과 복사'
+      },
+      en: {
+        currency: ' KRW', hour: ' hr', noValue: 'Not included',
+        invalidDays: 'Enter whole-number monthly workdays from 1 to 31.',
+        invalidOffice: 'Office days must be a whole number from 0 to the total workdays.',
+        invalidCost: 'Enter each cost as a number from 0 to 1,000,000,000.',
+        invalidMinutes: 'Enter a whole-number round-trip commute from 0 to 360 minutes.',
+        invalidHourValue: 'Leave hourly value blank or enter a number from 0 to 10,000,000.',
+        winOffice: 'Full office costs less', winHome: 'Full remote costs less', similar: 'Nearly equal',
+        resultOffice: (current, gap) => `Your current mixed cash cost is ${current}. Including time value, full office costs ${gap} less per month than full remote.`,
+        resultHome: (current, gap) => `Your current mixed cash cost is ${current}. Including time value, full remote costs ${gap} less per month than full office.`,
+        resultSimilar: (current) => `Your current mixed cash cost is ${current}, and the full-office versus full-remote gap is under 1,000 KRW.`,
+        copy: (office, home, time, gap, hours, mixed) => `Remote vs office monthly comparison | Full-office cash cost ${office} | Full-remote cash cost ${home} | Current commute time value ${time} | Full-office vs remote gap ${gap} | Current monthly commute ${hours} | Current mixed cash cost ${mixed}`,
+        copied: 'Copied the result.', copyFail: 'Automatic copy is unavailable.', copyDefault: 'Copy result'
+      },
+      ja: {
+        currency: 'ウォン', hour: '時間', noValue: '未反映',
+        invalidDays: '月間勤務日数は1〜31の整数で入力してください。',
+        invalidOffice: '月間出社日数は0以上、月間勤務日数以下の整数で入力してください。',
+        invalidCost: '各費用は0〜10億の数値で入力してください。',
+        invalidMinutes: '往復通勤時間は0〜360分の整数で入力してください。',
+        invalidHourValue: '時間価値の時給は空欄、または0〜1,000万の数値で入力してください。',
+        winOffice: '全日出社が有利', winHome: '全日在宅が有利', similar: 'ほぼ同じ',
+        resultOffice: (current, gap) => `現在の混合勤務の実費は${current}です。時間価値を含めると、全日出社は全日在宅より月${gap}有利です。`,
+        resultHome: (current, gap) => `現在の混合勤務の実費は${current}です。時間価値を含めると、全日在宅は全日出社より月${gap}有利です。`,
+        resultSimilar: (current) => `現在の混合勤務の実費は${current}で、全日出社と全日在宅の月間差は1,000ウォン未満です。`,
+        copy: (office, home, time, gap, hours, mixed) => `在宅 vs 出社の月間比較 | 全日出社の実費 ${office} | 全日在宅の実費 ${home} | 現在の通勤時間価値 ${time} | 全日出社・在宅の差 ${gap} | 現在の月間通勤時間 ${hours} | 現在の混合勤務実費 ${mixed}`,
+        copied: '結果をコピーしました。', copyFail: '自動コピーを利用できません。', copyDefault: '結果をコピー'
+      }
+    };
+    const t = texts[pageLang] || texts.ko;
+
+    const inputs = [totalDaysEl, officeDaysEl, commuteCostEl, lunchCostEl, coffeeCostEl, homeExtraEl, commuteMinutesEl, hourValueEl];
+    const resultEls = [officeTotalEl, homeTotalEl, timeCostEl, gapEl, hoursEl, breakEvenEl];
+    const fmtMoney = (v) => `${Math.round(v).toLocaleString(numberLocale)}${t.currency}`;
+    const fmtHours = (mins) => `${(mins / 60).toLocaleString(numberLocale, { maximumFractionDigits: 1 })}${t.hour}`;
+
+    const setError = (element, message) => {
+      element.setAttribute('aria-invalid', 'true');
+      resultEls.forEach((result) => { result.textContent = '-'; });
+      copyBtn.disabled = true;
+      helpEl.textContent = message;
+      helpEl.dataset.state = 'error';
     };
 
-    const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
-    const fmtMoney = (v) => `${Math.round(v || 0).toLocaleString(numberLocale)}${t.currency}`;
-    const fmtHours = (mins) => `${(mins / 60).toLocaleString(numberLocale, { maximumFractionDigits: 1 })}${t.hour}`;
-    const fmtDays = (days) => `${Math.round(days).toLocaleString(numberLocale)}${t.day}`;
+    const validNumber = (element, maximum, optional = false) => {
+      const raw = element.value.trim();
+      if (optional && raw === '') return true;
+      const value = Number(raw);
+      return raw !== '' && Number.isFinite(value) && value >= 0 && value <= maximum;
+    };
 
     const copyText = async (text) => {
       try { await navigator.clipboard.writeText(text); }
@@ -19064,48 +19110,81 @@
     };
 
     const render = () => {
-      const totalDays = clamp(Math.floor(Number(totalDaysEl.value || 0)), 1, 31);
-      const officeDays = clamp(Math.floor(Number(officeDaysEl.value || 0)), 0, totalDays);
-      const homeDays = Math.max(0, totalDays - officeDays);
-      const commuteCost = Math.max(0, Number(commuteCostEl.value || 0));
-      const lunchCost = Math.max(0, Number(lunchCostEl.value || 0));
-      const coffeeCost = Math.max(0, Number(coffeeCostEl.value || 0));
-      const homeExtra = Math.max(0, Number(homeExtraEl.value || 0));
-      const commuteMinutes = clamp(Number(commuteMinutesEl.value || 0), 0, 360);
-      const hourValue = Math.max(0, Number(hourValueEl.value || 0));
+      inputs.forEach((element) => element.setAttribute('aria-invalid', 'false'));
+      helpEl.dataset.state = '';
+      const totalDays = Number(totalDaysEl.value);
+      const officeDays = Number(officeDaysEl.value);
+      if (!Number.isInteger(totalDays) || totalDays < 1 || totalDays > 31) {
+        setError(totalDaysEl, t.invalidDays);
+        return;
+      }
+      if (!Number.isInteger(officeDays) || officeDays < 0 || officeDays > totalDays) {
+        setError(officeDaysEl, t.invalidOffice);
+        return;
+      }
+      const costInputs = [commuteCostEl, lunchCostEl, coffeeCostEl, homeExtraEl];
+      const invalidCost = costInputs.find((element) => !validNumber(element, 1000000000));
+      if (invalidCost) {
+        setError(invalidCost, t.invalidCost);
+        return;
+      }
+      const commuteMinutes = Number(commuteMinutesEl.value);
+      if (!Number.isInteger(commuteMinutes) || commuteMinutes < 0 || commuteMinutes > 360) {
+        setError(commuteMinutesEl, t.invalidMinutes);
+        return;
+      }
+      if (!validNumber(hourValueEl, 10000000, true)) {
+        setError(hourValueEl, t.invalidHourValue);
+        return;
+      }
 
-      totalDaysEl.value = totalDays;
-      officeDaysEl.value = officeDays;
+      const homeDays = Math.max(0, totalDays - officeDays);
+      const commuteCost = Number(commuteCostEl.value);
+      const lunchCost = Number(lunchCostEl.value);
+      const coffeeCost = Number(coffeeCostEl.value);
+      const homeExtra = Number(homeExtraEl.value);
+      const hourValue = hourValueEl.value.trim() === '' ? 0 : Number(hourValueEl.value);
 
       const officeDaily = commuteCost + lunchCost + coffeeCost;
-      const officeTotal = officeDaily * officeDays;
-      const homeTotal = homeExtra * homeDays;
-      const totalCommuteMinutes = commuteMinutes * officeDays;
-      const timeCost = hourValue > 0 ? (totalCommuteMinutes / 60) * hourValue : 0;
-      const effectiveOffice = officeTotal + timeCost;
-      const gap = effectiveOffice - homeTotal;
-      const dailyGap = officeDaily + ((commuteMinutes / 60) * hourValue) + homeExtra;
-      const breakEvenDays = dailyGap <= 0 ? 0 : Math.ceil(homeTotal / dailyGap);
+      const officeTotal = officeDaily * totalDays;
+      const homeTotal = homeExtra * totalDays;
+      const currentCash = (officeDaily * officeDays) + (homeExtra * homeDays);
+      const currentCommuteMinutes = commuteMinutes * officeDays;
+      const currentTimeCost = hourValue > 0 ? (currentCommuteMinutes / 60) * hourValue : 0;
+      const fullOfficeTimeCost = hourValue > 0 ? ((commuteMinutes * totalDays) / 60) * hourValue : 0;
+      const gap = (officeTotal + fullOfficeTimeCost) - homeTotal;
 
       officeTotalEl.textContent = fmtMoney(officeTotal);
       homeTotalEl.textContent = fmtMoney(homeTotal);
-      timeCostEl.textContent = hourValue > 0 ? fmtMoney(timeCost) : t.noValue;
-      hoursEl.textContent = fmtHours(totalCommuteMinutes);
-      breakEvenEl.textContent = fmtDays(Math.min(totalDays, breakEvenDays));
+      timeCostEl.textContent = hourValue > 0 ? fmtMoney(currentTimeCost) : t.noValue;
+      hoursEl.textContent = fmtHours(currentCommuteMinutes);
+      breakEvenEl.textContent = fmtMoney(currentCash);
+      copyBtn.disabled = false;
+      helpEl.dataset.state = 'success';
 
       if (Math.abs(gap) < 1000) {
         gapEl.textContent = `${fmtMoney(Math.abs(gap))} (${t.similar})`;
-        helpEl.textContent = t.helpSimilar;
+        helpEl.textContent = t.resultSimilar(fmtMoney(currentCash));
       } else if (gap < 0) {
         gapEl.textContent = `${fmtMoney(Math.abs(gap))} (${t.winOffice})`;
-        helpEl.textContent = t.helpOffice(fmtMoney(Math.abs(gap)));
+        helpEl.textContent = t.resultOffice(fmtMoney(currentCash), fmtMoney(Math.abs(gap)));
       } else {
         gapEl.textContent = `${fmtMoney(Math.abs(gap))} (${t.winHome})`;
-        helpEl.textContent = t.helpHome(fmtMoney(Math.abs(gap)));
+        helpEl.textContent = t.resultHome(fmtMoney(currentCash), fmtMoney(Math.abs(gap)));
       }
     };
 
     [totalDaysEl, officeDaysEl, commuteCostEl, lunchCostEl, coffeeCostEl, homeExtraEl, commuteMinutesEl, hourValueEl].forEach((el) => el.addEventListener('input', render));
+
+    presetBtns.forEach((button) => button.addEventListener('click', () => {
+      const totalDays = Number.isInteger(Number(totalDaysEl.value)) && Number(totalDaysEl.value) >= 1 && Number(totalDaysEl.value) <= 31
+        ? Number(totalDaysEl.value)
+        : 20;
+      const preset = button.dataset.rwOffice;
+      officeDaysEl.value = preset === 'all' ? totalDays : (preset === 'hybrid' ? Math.round(totalDays * 2 / 5) : 0);
+      render();
+      officeDaysEl.focus();
+    }));
 
     resetBtn?.addEventListener('click', () => {
       totalDaysEl.value = 20;
@@ -19120,10 +19199,16 @@
     });
 
     copyBtn?.addEventListener('click', async () => {
-      await copyText(t.copy(officeTotalEl.textContent, homeTotalEl.textContent, timeCostEl.textContent, gapEl.textContent, hoursEl.textContent, breakEvenEl.textContent));
-      const old = copyBtn.textContent;
-      copyBtn.textContent = t.copied;
-      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+      if (copyBtn.disabled) return;
+      try {
+        await copyText(t.copy(officeTotalEl.textContent, homeTotalEl.textContent, timeCostEl.textContent, gapEl.textContent, hoursEl.textContent, breakEvenEl.textContent));
+        const old = copyBtn.textContent;
+        copyBtn.textContent = t.copied;
+        setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+      } catch (_) {
+        helpEl.textContent = t.copyFail;
+        helpEl.dataset.state = 'error';
+      }
     });
 
     render();
