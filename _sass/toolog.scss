@@ -2786,6 +2786,30 @@ a:hover { color: var(--primary-strong); }
 .mqg-review-state { display: inline-flex; margin-left: 8px; padding: 2px 7px; border-radius: 999px; background: #fff1d6; color: #8a5a00; font-size: .68rem; font-weight: 700; }
 .mqg-missed .bw-item { overflow-wrap: anywhere; }
 
+/* Priority decision matrix quality pass */
+.pdm-ui { gap: 1rem; }
+.pdm-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .85rem;
+  min-width: 0;
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid var(--line);
+}
+.pdm-card legend { padding: 0 .4rem; color: var(--muted); font-weight: 800; }
+.pdm-grid { grid-template-columns: minmax(0, 1.35fr) minmax(150px, .65fr); }
+.pdm-rating-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pdm-grid > div,
+.pdm-card .tool-row > div { display: grid; gap: .35rem; min-width: 0; }
+.pdm-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pdm-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.pdm-stats strong { overflow-wrap: anywhere; }
+.pdm-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.pdm-ui #pdm-summary[data-state="error"] { color: #fca5a5; }
+.pdm-ui #pdm-summary[data-state="success"] { color: #86efac; }
+.pdm-ui #pdm-output { min-height: 20rem; white-space: pre; overflow: auto; }
+
 /* Footer */
 .site-footer { padding: 0; border: 0; border-top: 1px solid var(--line); background: #fff; }
 .site-footer__inner { min-height: 170px; display: flex; align-items: center; justify-content: space-between; gap: 36px; }
@@ -2872,6 +2896,11 @@ a:hover { color: var(--primary-strong); }
   .tool-stats.mqg-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .mqg-input-meta { align-items: flex-start; flex-direction: column; gap: 4px; }
   .mqg-card { min-height: 150px; padding: 17px; }
+  .pdm-grid,
+  .pdm-rating-grid,
+  .pdm-actions { grid-template-columns: 1fr; }
+  .pdm-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pdm-card { grid-template-columns: 1fr; min-height: 0; padding: .85rem; }
   .site-footer__inner { min-height: 190px; align-items: flex-start; flex-direction: column; justify-content: center; gap: 24px; }
   .footer-nav { flex-wrap: wrap; gap: 12px 20px; }
 }

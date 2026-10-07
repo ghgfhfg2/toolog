@@ -19697,6 +19697,7 @@
     }));
     const sampleBtn = document.getElementById('pdm-sample');
     const copyBtn = document.getElementById('pdm-copy');
+    const clearBtn = document.getElementById('pdm-clear');
     const countEl = document.getElementById('pdm-count');
     const topEl = document.getElementById('pdm-top');
     const nowEl = document.getElementById('pdm-now');
@@ -19704,95 +19705,216 @@
     const holdEl = document.getElementById('pdm-hold');
     const summaryEl = document.getElementById('pdm-summary');
     const outputEl = document.getElementById('pdm-output');
-    if (rows.some((row) => !row.name || !row.urgency || !row.impact || !row.effort || !row.confidence || !row.note) || !sampleBtn || !copyBtn || !countEl || !topEl || !nowEl || !weekEl || !holdEl || !summaryEl || !outputEl) return;
+    if (rows.some((row) => !row.name || !row.urgency || !row.impact || !row.effort || !row.confidence || !row.note) || !sampleBtn || !copyBtn || !clearBtn || !countEl || !topEl || !nowEl || !weekEl || !holdEl || !summaryEl || !outputEl) return;
 
-    const sampleData = [
-      { name: '결제 오류 재현 및 수정', urgency: 5, impact: 5, effort: 3, confidence: 4, note: '오늘 안에 CS 문의 대응 필요' },
-      { name: '다음 주 제안서 마무리', urgency: 4, impact: 4, effort: 4, confidence: 4, note: '자료는 거의 모였음' },
-      { name: '뉴스레터 초안 정리', urgency: 3, impact: 3, effort: 2, confidence: 5, note: '1시간 안에 끝낼 수 있음' },
-      { name: '새 분석 대시보드 탐색', urgency: 2, impact: 4, effort: 5, confidence: 2, note: '요구사항 추가 확인 필요' },
-      { name: '회의록 정리 후 공유', urgency: 4, impact: 3, effort: 1, confidence: 5, note: '빠르게 처리 가능' }
-    ];
-
-    const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
-      catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+    const pdmText = {
+      ko: {
+        empty: '항목을 1개 이상 입력하면 우선순위를 정리합니다.',
+        duplicate: '같은 이름의 항목이 있습니다. 서로 구분되는 이름으로 수정해 주세요.',
+        summary: (name, count) => `${name}을(를) 1순위로 추천합니다. ${count}개 항목을 같은 기준으로 정렬했습니다.`,
+        copied: '우선순위 결과를 복사했습니다.',
+        copyEmpty: '복사할 결과가 없습니다. 항목을 먼저 입력해 주세요.',
+        copyFail: '자동 복사를 사용할 수 없습니다. 결과 영역을 직접 선택해 복사해 주세요.',
+        cleared: '입력과 결과를 초기화했습니다.',
+        buckets: { now: '지금 실행', week: '이번 주 진행', hold: '보류 검토' },
+        reasons: { urgent: '마감 압박 높음', impact: '결과 영향 큼', quick: '비교적 빠르게 처리 가능', uncertain: '진행 전 확인 필요', balanced: '전체 조건이 보통' },
+        heading: '[우선순위 결정 매트릭스 결과]',
+        score: '점수', ratings: '긴급도 / 영향도 / 노력도 / 확신도', reason: '판단 근거', note: '추가 메모',
+        samples: [
+          ['결제 오류 재현 및 수정', 5, 5, 3, 4, '오늘 안에 고객 문의 대응 필요'],
+          ['다음 주 제안서 마무리', 4, 4, 4, 4, '자료는 거의 모였음'],
+          ['뉴스레터 초안 정리', 3, 3, 2, 5, '1시간 안에 끝낼 수 있음'],
+          ['새 분석 대시보드 탐색', 2, 4, 5, 2, '요구사항 추가 확인 필요'],
+          ['회의록 정리 후 공유', 4, 3, 1, 5, '빠르게 처리 가능']
+        ]
+      },
+      en: {
+        empty: 'Enter at least one item to create a ranked plan.',
+        duplicate: 'Two or more items have the same name. Give each item a distinct name.',
+        summary: (name, count) => `${name} is the top recommendation. Ranked ${count} items using the same criteria.`,
+        copied: 'Copied the priority plan.',
+        copyEmpty: 'There is no result to copy. Enter an item first.',
+        copyFail: 'Automatic copy is unavailable. Select the result area and copy it manually.',
+        cleared: 'Cleared the inputs and result.',
+        buckets: { now: 'Do now', week: 'This week', hold: 'Review later' },
+        reasons: { urgent: 'High time pressure', impact: 'Large outcome impact', quick: 'Relatively quick to complete', uncertain: 'Verify before starting', balanced: 'Balanced conditions' },
+        heading: '[Priority decision matrix result]',
+        score: 'Score', ratings: 'Urgency / impact / effort / confidence', reason: 'Rationale', note: 'Context note',
+        samples: [
+          ['Reproduce and fix checkout error', 5, 5, 3, 4, 'Customer response needed today'],
+          ['Finish next week’s proposal', 4, 4, 4, 4, 'Most research is ready'],
+          ['Edit newsletter draft', 3, 3, 2, 5, 'Can finish within an hour'],
+          ['Explore a new analytics dashboard', 2, 4, 5, 2, 'Requirements need clarification'],
+          ['Clean up and share meeting notes', 4, 3, 1, 5, 'Quick to complete']
+        ]
+      },
+      ja: {
+        empty: '項目を1件以上入力すると優先順位を整理します。',
+        duplicate: '同じ名前の項目があります。それぞれ区別できる名前に変更してください。',
+        summary: (name, count) => `${name}を最優先として提案します。同じ基準で${count}件を並べ替えました。`,
+        copied: '優先順位の結果をコピーしました。',
+        copyEmpty: 'コピーできる結果がありません。先に項目を入力してください。',
+        copyFail: '自動コピーを利用できません。結果欄を選択して手動でコピーしてください。',
+        cleared: '入力と結果をクリアしました。',
+        buckets: { now: '今やる', week: '今週進行', hold: '保留検討' },
+        reasons: { urgent: '締切の圧力が高い', impact: '結果への影響が大きい', quick: '比較的すぐ完了できる', uncertain: '開始前に確認が必要', balanced: '全体条件は標準的' },
+        heading: '[優先順位決定マトリクスの結果]',
+        score: '点数', ratings: '緊急度 / 影響度 / 手間 / 確信度', reason: '判断理由', note: '補足メモ',
+        samples: [
+          ['決済エラーの再現と修正', 5, 5, 3, 4, '今日中に顧客対応が必要'],
+          ['来週の提案書を仕上げる', 4, 4, 4, 4, '資料はほぼ揃っている'],
+          ['ニュースレター草案を整える', 3, 3, 2, 5, '1時間以内に完了可能'],
+          ['新しい分析画面を検討する', 2, 4, 5, 2, '要件の追加確認が必要'],
+          ['議事録を整理して共有する', 4, 3, 1, 5, '短時間で対応可能']
+        ]
       }
+    }[pageLang] || null;
+    if (!pdmText) return;
+    let currentOutput = '';
+
+    const copyText = async (value) => {
+      if (navigator.clipboard?.writeText) {
+        try {
+          await navigator.clipboard.writeText(value);
+          return;
+        } catch (_) {
+          // Fall through to the selection-based copy method.
+        }
+      }
+      const ta = document.createElement('textarea');
+      ta.value = value;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      const copied = document.execCommand('copy');
+      ta.remove();
+      if (!copied) throw new Error('copy failed');
     };
 
     const getBucket = (score, urgency, impact) => {
-      if (score >= 4.1 || (urgency >= 4 && impact >= 4)) return '지금 실행';
-      if (score >= 3 || impact >= 4) return '이번 주 진행';
-      return '보류 검토';
+      if (score >= 4.1 || (urgency >= 4 && impact >= 4)) return 'now';
+      if (score >= 3 || impact >= 4) return 'week';
+      return 'hold';
+    };
+
+    const setSummary = (message, state = '') => {
+      summaryEl.textContent = message;
+      summaryEl.dataset.state = state;
+    };
+
+    const resetResult = () => {
+      countEl.textContent = '0';
+      topEl.textContent = '-';
+      nowEl.textContent = '0';
+      weekEl.textContent = '0';
+      holdEl.textContent = '0';
+      outputEl.value = '';
+      currentOutput = '';
+      copyBtn.disabled = true;
     };
 
     const build = () => {
+      rows.forEach(({ name }) => name.setAttribute('aria-invalid', 'false'));
       const items = rows.map((row, idx) => {
-        const name = (row.name.value || '').trim();
+        const name = (row.name.value || '').trim().replace(/\s+/gu, ' ');
         if (!name) return null;
-        const urgency = Number(row.urgency.value || 3);
-        const impact = Number(row.impact.value || 3);
-        const effort = Number(row.effort.value || 3);
-        const confidence = Number(row.confidence.value || 3);
-        const note = (row.note.value || '').trim();
+        const urgency = Number(row.urgency.value);
+        const impact = Number(row.impact.value);
+        const effort = Number(row.effort.value);
+        const confidence = Number(row.confidence.value);
+        const note = (row.note.value || '').trim().replace(/\s+/gu, ' ');
         const score = (urgency * 0.35) + (impact * 0.4) + ((6 - effort) * 0.15) + (confidence * 0.1);
         const bucket = getBucket(score, urgency, impact);
         const reason = [];
-        if (urgency >= 4) reason.push('마감 압박 높음');
-        if (impact >= 4) reason.push('결과 영향 큼');
-        if (effort <= 2) reason.push('비교적 빠르게 처리 가능');
-        if (confidence <= 2) reason.push('진행 전 확인 필요');
-        if (!reason.length) reason.push('전체 균형은 보통');
+        if (urgency >= 4) reason.push(pdmText.reasons.urgent);
+        if (impact >= 4) reason.push(pdmText.reasons.impact);
+        if (effort <= 2) reason.push(pdmText.reasons.quick);
+        if (confidence <= 2) reason.push(pdmText.reasons.uncertain);
+        if (!reason.length) reason.push(pdmText.reasons.balanced);
         return { idx, name, urgency, impact, effort, confidence, note, score, bucket, reason: reason.join(', ') };
-      }).filter(Boolean).sort((a, b) => b.score - a.score || b.impact - a.impact || b.urgency - a.urgency);
-
-      countEl.textContent = String(items.length);
-      topEl.textContent = items[0]?.name || '-';
-      nowEl.textContent = String(items.filter((item) => item.bucket === '지금 실행').length);
-      weekEl.textContent = String(items.filter((item) => item.bucket === '이번 주 진행').length);
-      holdEl.textContent = String(items.filter((item) => item.bucket === '보류 검토').length);
+      }).filter(Boolean);
 
       if (!items.length) {
-        summaryEl.textContent = '항목을 1개 이상 입력하면 우선순위 추천 결과가 여기에 표시됩니다.';
-        outputEl.value = '';
+        resetResult();
+        setSummary(pdmText.empty);
         return;
       }
 
-      summaryEl.textContent = `${items[0].name}을(를) 가장 먼저 보는 흐름이 유리해 보여요. 총 ${items.length}개 항목을 우선순위 순으로 정리했습니다.`;
-      outputEl.value = [
-        '[우선순위 결정 매트릭스 결과]',
-        ...items.map((item, index) => `${index + 1}. ${item.name} | ${item.bucket} | 점수 ${item.score.toFixed(2)}\n- 긴급도 ${item.urgency} / 영향도 ${item.impact} / 노력도 ${item.effort} / 확신도 ${item.confidence}\n- 판단 메모: ${item.reason}${item.note ? `\n- 추가 메모: ${item.note}` : ''}`)
+      const names = new Map();
+      items.forEach((item) => {
+        const key = item.name.toLocaleLowerCase(pageLang === 'ko' ? 'ko-KR' : (pageLang === 'ja' ? 'ja-JP' : 'en-US'));
+        const matches = names.get(key) || [];
+        matches.push(item.idx);
+        names.set(key, matches);
+      });
+      const duplicateIndexes = Array.from(names.values()).filter((indexes) => indexes.length > 1).flat();
+      if (duplicateIndexes.length) {
+        duplicateIndexes.forEach((idx) => rows[idx].name.setAttribute('aria-invalid', 'true'));
+        resetResult();
+        setSummary(pdmText.duplicate, 'error');
+        return;
+      }
+
+      items.sort((a, b) => b.score - a.score || b.impact - a.impact || b.urgency - a.urgency || a.idx - b.idx);
+
+      countEl.textContent = String(items.length);
+      topEl.textContent = items[0].name;
+      nowEl.textContent = String(items.filter((item) => item.bucket === 'now').length);
+      weekEl.textContent = String(items.filter((item) => item.bucket === 'week').length);
+      holdEl.textContent = String(items.filter((item) => item.bucket === 'hold').length);
+
+      currentOutput = [
+        pdmText.heading,
+        ...items.map((item, index) => `${index + 1}. ${item.name} | ${pdmText.buckets[item.bucket]} | ${pdmText.score} ${item.score.toFixed(2)}\n- ${pdmText.ratings}: ${item.urgency} / ${item.impact} / ${item.effort} / ${item.confidence}\n- ${pdmText.reason}: ${item.reason}${item.note ? `\n- ${pdmText.note}: ${item.note}` : ''}`)
       ].join('\n\n');
+      outputEl.value = currentOutput;
+      copyBtn.disabled = false;
+      setSummary(pdmText.summary(items[0].name, items.length), 'success');
     };
 
     sampleBtn.addEventListener('click', () => {
       rows.forEach((row, idx) => {
-        const sample = sampleData[idx];
-        row.name.value = sample.name;
-        row.urgency.value = String(sample.urgency);
-        row.impact.value = String(sample.impact);
-        row.effort.value = String(sample.effort);
-        row.confidence.value = String(sample.confidence);
-        row.note.value = sample.note;
+        const [name, urgency, impact, effort, confidence, note] = pdmText.samples[idx];
+        row.name.value = name;
+        row.urgency.value = String(urgency);
+        row.impact.value = String(impact);
+        row.effort.value = String(effort);
+        row.confidence.value = String(confidence);
+        row.note.value = note;
       });
       build();
+      rows[0].name.focus();
     });
 
     copyBtn.addEventListener('click', async () => {
-      if (!outputEl.value.trim()) build();
-      if (!outputEl.value.trim()) return;
-      await copyText(outputEl.value.trim());
-      const old = copyBtn.textContent;
-      copyBtn.textContent = '복사됨';
-      setTimeout(() => { copyBtn.textContent = old || '결과 복사'; }, 900);
+      if (!currentOutput) {
+        setSummary(pdmText.copyEmpty, 'error');
+        rows[0].name.focus();
+        return;
+      }
+      try {
+        await copyText(currentOutput);
+        setSummary(pdmText.copied, 'success');
+      } catch (_) {
+        setSummary(pdmText.copyFail, 'error');
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      rows.forEach((row) => {
+        row.name.value = '';
+        row.urgency.value = '3';
+        row.impact.value = '3';
+        row.effort.value = '3';
+        row.confidence.value = '3';
+        row.note.value = '';
+        row.name.setAttribute('aria-invalid', 'false');
+      });
+      resetResult();
+      setSummary(pdmText.cleared);
+      rows[0].name.focus();
     });
 
     rows.forEach((row) => {

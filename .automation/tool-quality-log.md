@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-10-07 21:00 KST
+- Tool: `priority-decision-matrix-planner`
+- Selection reason: recent quality runs covered other tools; this untouched May-era planner rendered Korean-only controls, examples, statuses, and copied output on EN/JA pages, allowed empty-result copy attempts, lacked clear and copy-failure flows, and compressed five dense input cards poorly on mobile.
+- Scope: improved only the existing multilingual priority planner, home metadata, layout, styles, script, and SEO content with fully localized KO/EN/JA controls and result reasoning, accessible fieldsets/live and invalid states, true empty/error/success states, duplicate-name protection, deterministic tie-breaking, clear/example/copy feedback, copy fallback, one-column mobile input/actions and two-column stats, explicit scoring formula and thresholds, privacy/limitation wording, FAQ, and related links. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, localized page/thumbnail checks, mobile CSS rules, and a DOM-driven empty/localized-sample/ranking/clear/duplicate/boundary flow passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-10-04 21:00 KST
 - Tool: `recycling-sorting-practice`
 - Selection reason: recent quality runs improved other tools; this untouched May-era learning tool mixed unrelated questions into the food range and medium questions into easy mode, allowed unanswered skips, could immediately repeat random questions, and had weak mobile/status feedback.
