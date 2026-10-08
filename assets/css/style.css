@@ -2216,6 +2216,21 @@ a:hover { color: #fff; text-decoration: none; }
 .mqg-review-state { display: inline-flex; margin-left: 8px; padding: 2px 7px; border-radius: 999px; background: #fff1d6; color: #8a5a00; font-size: .68rem; font-weight: 700; }
 .mqg-missed .bw-item { overflow-wrap: anywhere; }
 
+/* Deadline backward planner quality pass */
+.dbp-ui { gap: 1rem; }
+.dbp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.dbp-grid > div { display: grid; gap: .4rem; min-width: 0; }
+.dbp-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.dbp-weekdays { min-height: 46px; }
+.dbp-stats strong,
+.dbp-stats span { overflow-wrap: anywhere; }
+.dbp-ui input[aria-invalid="true"] { border-color: #ef4444; }
+.dbp-ui .empty-state { margin: 0; color: var(--muted); }
+.dbp-ui .bw-item strong { min-width: 0; overflow-wrap: anywhere; }
+.dbp-ui #dbp-summary[data-state="success"] { border-color: #9fd8b0; }
+.dbp-ui #dbp-summary[data-state="warning"] { border-color: #efc36a; }
+.dbp-ui #dbp-summary[data-state="error"] { border-color: #e7a1a8; }
+
 /* Font-change: sticky input */
 .font-change-ui #fc-input {
   position: sticky;
@@ -2434,6 +2449,10 @@ a:hover { color: #fff; text-decoration: none; }
   .tool-stats.mqg-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .mqg-input-meta { align-items: flex-start; flex-direction: column; gap: 4px; }
   .mqg-card { min-height: 150px; padding: 17px; }
+  .dbp-grid,
+  .dbp-actions { grid-template-columns: 1fr; }
+  .dbp-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dbp-ui .bw-item strong { align-items: flex-start; }
   .pdm-grid,
   .pdm-rating-grid,
   .pdm-actions { grid-template-columns: 1fr; }

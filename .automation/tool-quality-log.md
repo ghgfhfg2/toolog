@@ -1,5 +1,11 @@
 # Tool Quality Log
 
+## 2026-10-08 21:00 KST
+- Tool: `deadline-backward-planner`
+- Selection reason: recent runs improved other tools; this untouched April planner silently clamped invalid numeric values, generated plans for past deadlines, and treated a review buffer longer than the available period as a valid one-day schedule.
+- Scope: improved only the existing multilingual deadline planner, home metadata, layout, styles, script, and SEO content with strict future/one-year and half-hour validation, true empty/error/warning/success states, latest-safe-start scheduling, exact half-hour allocation, optional weekend exclusion, buffer-overflow protection, clear/example/copy-failure flows, accessible descriptions/live and invalid states, mobile single-column inputs/actions, calculation assumptions, FAQ, and related links. No new tool was added.
+- Validation: YAML/front matter parsing, the 98-tool multilingual integrity check, `node --check`, `git diff --check`, tool-count preservation, mobile CSS rules, and a DOM-driven empty/past-deadline/half-hour/buffer-overflow/weekday-filter/exact-total/clear flow passed. Local `bundle exec jekyll build` could not run because Bundler 4.0.9 from `Gemfile.lock` is not installed in the system Ruby 2.6 environment.
+
 ## 2026-10-07 21:00 KST
 - Tool: `priority-decision-matrix-planner`
 - Selection reason: recent quality runs covered other tools; this untouched May-era planner rendered Korean-only controls, examples, statuses, and copied output on EN/JA pages, allowed empty-result copy attempts, lacked clear and copy-failure flows, and compressed five dense input cards poorly on mobile.

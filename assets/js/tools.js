@@ -11552,147 +11552,294 @@
     const hoursEl = document.getElementById('dbp-hours');
     const dailyHoursEl = document.getElementById('dbp-daily-hours');
     const bufferEl = document.getElementById('dbp-buffer-days');
+    const weekdaysEl = document.getElementById('dbp-weekdays');
     const sampleBtn = document.getElementById('dbp-sample');
     const copyBtn = document.getElementById('dbp-copy');
+    const clearBtn = document.getElementById('dbp-clear');
     const daysEl = document.getElementById('dbp-days');
     const startEl = document.getElementById('dbp-start');
     const dailyEl = document.getElementById('dbp-daily');
     const reviewEl = document.getElementById('dbp-review');
     const summaryEl = document.getElementById('dbp-summary');
     const listEl = document.getElementById('dbp-list');
-    if (!deadlineEl || !hoursEl || !dailyHoursEl || !bufferEl || !sampleBtn || !copyBtn || !daysEl || !startEl || !dailyEl || !reviewEl || !summaryEl || !listEl) return;
+    if (!deadlineEl || !hoursEl || !dailyHoursEl || !bufferEl || !weekdaysEl || !sampleBtn || !copyBtn || !clearBtn || !daysEl || !startEl || !dailyEl || !reviewEl || !summaryEl || !listEl) return;
 
     const copyByLang = {
       ko: {
-        empty: '마감일을 입력하면 역산 계획을 만들어줍니다.',
-        copied: '복사됨',
-        copyDefault: '계획 복사',
-        tight: (need, cap) => `일정이 다소 빡빡합니다. 하루 평균 ${need}시간이 필요해 입력한 집중 가능 시간 ${cap}시간을 넘습니다.`,
-        normal: (need, cap) => `하루 평균 ${need}시간 정도면 마감 전까지 진행 가능합니다. 입력한 집중 가능 시간 ${cap}시간 안에 들어옵니다.`,
-        late: '이미 검토 버퍼를 두기 어려운 상태예요. 오늘 바로 핵심 작업부터 시작하는 편이 안전합니다.',
+        empty: '네 가지 값을 입력하면 역산 계획을 만들어줍니다.',
+        invalidDeadline: '마감일시는 현재보다 늦고 1년 이내여야 합니다.',
+        invalidHours: '총 작업 시간은 0.5~200시간 사이에서 0.5시간 단위로 입력해 주세요.',
+        invalidDaily: '하루 집중 가능 시간은 0.5~16시간 사이에서 0.5시간 단위로 입력해 주세요.',
+        invalidBuffer: '검토 버퍼는 0~30 사이의 정수로 입력해 주세요.',
+        bufferTooLong: '검토 버퍼를 제외하면 작업할 날짜가 없습니다. 버퍼를 줄이거나 마감을 늦춰 주세요.',
+        copied: '계획을 복사했습니다.', copyFail: '자동 복사를 사용할 수 없습니다.', copyDefault: '계획 복사',
+        cleared: '입력과 계획을 초기화했습니다.',
+        tight: (need, cap, available) => `일정이 빡빡합니다. 남은 ${available}일에 배치하면 가장 긴 작업이 ${need}시간으로, 하루 집중 가능 시간 ${cap}시간을 넘습니다.`,
+        normal: (days, cap) => `하루 ${cap}시간 한도 안에서 늦어도 시작할 날짜부터 ${days}일에 나눠 배치했습니다.`,
+        today: '마감이 오늘입니다. 남은 실제 시간과 제출 준비 시간을 따로 확인하세요.',
         phase: ['자료 정리·구조 잡기', '핵심 작업 진행', '빈칸 보완·마무리', '최종 검토·제출 체크'],
         dayLabel: (date, dday) => `${date} · D-${dday}`,
         work: (hours, label) => `${hours}시간 · ${label}`,
         review: (hours) => `${hours}시간 · 최종 검토와 제출 준비`,
+        combined: (hours) => `${hours}시간 · 핵심 작업, 최종 검토와 제출 준비`,
+        emptyList: '날짜별 작업 계획이 여기에 표시됩니다.',
+        finalTag: '최종',
         summaryLine: '생성된 계획은 그대로 복사해 캘린더나 할 일 앱에 붙여 넣어 쓰면 편합니다.'
       },
       en: {
-        empty: 'Enter a deadline to build a backward plan.', copied: 'Copied', copyDefault: 'Copy plan',
-        tight: (need, cap) => `This schedule is tight. You need about ${need} hours per day, above your stated ${cap}-hour daily capacity.`,
-        normal: (need, cap) => `About ${need} hours per day should keep this on track before the deadline, within your ${cap}-hour daily capacity.`,
-        late: 'There is almost no room for a review buffer now, so it is safer to start the core work immediately.',
+        empty: 'Enter all four values to build a backward plan.',
+        invalidDeadline: 'Set a deadline later than now and no more than one year away.',
+        invalidHours: 'Enter total work in 0.5-hour steps from 0.5 to 200 hours.',
+        invalidDaily: 'Enter daily focus capacity in 0.5-hour steps from 0.5 to 16 hours.',
+        invalidBuffer: 'Enter review buffer as a whole number from 0 to 30.',
+        bufferTooLong: 'The review buffer leaves no work date. Reduce the buffer or move the deadline later.',
+        copied: 'Copied the plan.', copyFail: 'Automatic copy is unavailable.', copyDefault: 'Copy plan',
+        cleared: 'Cleared the inputs and plan.',
+        tight: (need, cap, available) => `This schedule is tight. Across the ${available} available days, the largest block is ${need} hours—above your ${cap}-hour daily capacity.`,
+        normal: (days, cap) => `Scheduled across ${days} days from the latest safe start while staying within your ${cap}-hour daily capacity.`,
+        today: 'The deadline is today. Check the actual hours remaining and submission time separately.',
         phase: ['research and outline', 'main work block', 'gap-filling and refinement', 'final review and submission check'],
         dayLabel: (date, dday) => `${date} · D-${dday}`,
         work: (hours, label) => `${hours}h · ${label}`,
         review: (hours) => `${hours}h · final review and submission prep`,
+        combined: (hours) => `${hours}h · core work, final review, and submission prep`,
+        emptyList: 'Your dated work plan will appear here.',
+        finalTag: 'Final',
         summaryLine: 'You can copy this plan straight into your calendar or task app.'
       },
       ja: {
-        empty: '締切を入力すると逆算プランを作成します。', copied: 'コピー完了', copyDefault: '計画をコピー',
-        tight: (need, cap) => `予定がやや厳しめです。1日平均 ${need} 時間が必要で、入力した集中可能時間 ${cap} 時間を上回ります。`,
-        normal: (need, cap) => `1日平均 ${need} 時間ほどで進めれば、締切前までに収まりそうです。入力した集中可能時間 ${cap} 時間の範囲です。`,
-        late: '見直しバッファを確保しにくい状態です。今日すぐに本作業へ入るのが安全です。',
+        empty: '4つの項目を入力すると逆算プランを作成します。',
+        invalidDeadline: '締切日時は現在より後、1年以内に設定してください。',
+        invalidHours: '総作業時間は0.5〜200時間の範囲で、0.5時間単位で入力してください。',
+        invalidDaily: '1日の集中可能時間は0.5〜16時間の範囲で、0.5時間単位で入力してください。',
+        invalidBuffer: '見直しバッファは0〜30の整数で入力してください。',
+        bufferTooLong: '見直しバッファを除くと作業日がありません。バッファを減らすか締切を遅らせてください。',
+        copied: '計画をコピーしました。', copyFail: '自動コピーを利用できません。', copyDefault: '計画をコピー',
+        cleared: '入力と計画をクリアしました。',
+        tight: (need, cap, available) => `予定が厳しめです。残り${available}日へ配分すると最大${need}時間となり、1日の集中可能時間${cap}時間を上回ります。`,
+        normal: (days, cap) => `1日${cap}時間の範囲で、着手期限の目安から${days}日に分けて配分しました。`,
+        today: '締切は今日です。実際の残り時間と提出準備時間を別途確認してください。',
         phase: ['調査・構成づくり', '本作業を進める', '不足分の補完・仕上げ', '最終確認・提出チェック'],
         dayLabel: (date, dday) => `${date} · D-${dday}`,
         work: (hours, label) => `${hours}時間 · ${label}`,
         review: (hours) => `${hours}時間 · 最終確認と提出準備`,
+        combined: (hours) => `${hours}時間 · 本作業、最終確認、提出準備`,
+        emptyList: '日付入りの作業計画がここに表示されます。',
+        finalTag: '最終',
         summaryLine: '作成した計画はカレンダーやタスク管理にそのまま移して使えます。'
       }
     };
     const t = copyByLang[pageLang] || copyByLang.ko;
 
-    const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
     const fmtDate = (date) => new Intl.DateTimeFormat(pageLang === 'en' ? 'en-US' : pageLang === 'ja' ? 'ja-JP' : 'ko-KR', { month: 'short', day: 'numeric', weekday: 'short' }).format(date);
     const fmtHour = (n) => Number(n).toLocaleString(numberLocale, { maximumFractionDigits: 1 });
     const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
-      catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return;
       }
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      const copied = document.execCommand('copy');
+      ta.remove();
+      if (!copied) throw new Error('copy failed');
     };
 
-    if (!deadlineEl.value) {
-      const now = new Date();
-      const base = new Date(now.getTime() + (48 * 60 * 60 * 1000));
-      base.setHours(18, 0, 0, 0);
-      deadlineEl.value = new Date(base.getTime() - base.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-    }
+    const atStartOfDay = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const calendarDaysBetween = (from, to) => {
+      const fromUtc = Date.UTC(from.getFullYear(), from.getMonth(), from.getDate());
+      const toUtc = Date.UTC(to.getFullYear(), to.getMonth(), to.getDate());
+      return Math.round((toUtc - fromUtc) / 86400000);
+    };
+    const validHalfHour = (raw, min, max) => {
+      const value = Number(raw);
+      return raw !== '' && Number.isFinite(value) && value >= min && value <= max && Number.isInteger(value * 2);
+    };
+    const resetResult = (message = t.empty, state = '') => {
+      daysEl.textContent = '-';
+      startEl.textContent = '-';
+      dailyEl.textContent = '-';
+      reviewEl.textContent = '-';
+      summaryEl.textContent = message;
+      summaryEl.dataset.state = state;
+      listEl.replaceChildren();
+      const empty = document.createElement('p');
+      empty.className = 'empty-state';
+      empty.textContent = t.emptyList;
+      listEl.appendChild(empty);
+      copyBtn.disabled = true;
+      delete copyBtn.dataset.plan;
+    };
+    const setInvalid = (target, invalid) => target.setAttribute('aria-invalid', String(invalid));
 
     const buildPlan = () => {
       const now = new Date();
-      const deadline = new Date(deadlineEl.value);
-      const totalHours = clamp(Number(hoursEl.value || 0), 1, 200);
-      const dailyCap = clamp(Number(dailyHoursEl.value || 0), 0.5, 16);
-      const bufferDays = clamp(Number(bufferEl.value || 0), 0, 14);
-      hoursEl.value = totalHours;
-      dailyHoursEl.value = dailyCap;
-      bufferEl.value = bufferDays;
+      const deadline = deadlineEl.value ? new Date(deadlineEl.value) : null;
+      const totalRaw = hoursEl.value.trim();
+      const dailyRaw = dailyHoursEl.value.trim();
+      const bufferRaw = bufferEl.value.trim();
+      [deadlineEl, hoursEl, dailyHoursEl, bufferEl].forEach((el) => setInvalid(el, false));
 
-      if (!(deadline instanceof Date) || Number.isNaN(deadline.getTime())) {
-        summaryEl.textContent = t.empty;
-        listEl.innerHTML = '';
+      if (!deadlineEl.value || !totalRaw || !dailyRaw || !bufferRaw) {
+        resetResult();
         return;
       }
 
-      const effectiveEnd = new Date(deadline);
-      effectiveEnd.setDate(effectiveEnd.getDate() - bufferDays);
-      const startDay = new Date(now); startDay.setHours(0, 0, 0, 0);
-      const endDay = new Date(effectiveEnd); endDay.setHours(0, 0, 0, 0);
-      const diffDays = Math.floor((endDay - startDay) / 86400000) + 1;
-      const workDays = Math.max(1, diffDays);
-      const reviewHours = Math.min(Math.max(totalHours * 0.15, 1), Math.min(3, totalHours));
-      const buildDays = Math.max(1, workDays - 1);
-      const buildHours = Math.max(0, totalHours - reviewHours);
-      const dailyNeed = totalHours / workDays;
-      const workPerBuildDay = buildHours / buildDays;
-      const isTight = dailyNeed > dailyCap;
-
-      daysEl.textContent = workDays.toLocaleString(numberLocale);
-      startEl.textContent = fmtDate(startDay);
-      dailyEl.textContent = `${fmtHour(dailyNeed)}h`;
-      reviewEl.textContent = `${fmtHour(reviewHours)}h`;
-      summaryEl.textContent = diffDays <= 0 ? t.late : (isTight ? t.tight(fmtHour(dailyNeed), fmtHour(dailyCap)) : t.normal(fmtHour(dailyNeed), fmtHour(dailyCap)));
-
-      const plan = [];
-      for (let i = 0; i < workDays; i += 1) {
-        const date = new Date(startDay);
-        date.setDate(startDay.getDate() + i);
-        const remaining = workDays - i - 1;
-        const progress = workDays === 1 ? 1 : i / (workDays - 1);
-        const phaseIndex = i === workDays - 1 ? 3 : progress < 0.34 ? 0 : progress < 0.75 ? 1 : 2;
-        const hours = i === workDays - 1 ? reviewHours : workPerBuildDay;
-        const dday = Math.max(0, Math.ceil((endDay - date) / 86400000));
-        plan.push({
-          label: t.dayLabel(fmtDate(date), dday),
-          detail: i === workDays - 1 ? t.review(fmtHour(hours)) : t.work(fmtHour(hours), t.phase[phaseIndex]),
-          tag: remaining === 0 ? 'final' : `${fmtHour(hours)}h`
-        });
+      const maxDeadline = new Date(now);
+      maxDeadline.setFullYear(maxDeadline.getFullYear() + 1);
+      if (!deadline || Number.isNaN(deadline.getTime()) || deadline <= now || deadline > maxDeadline) {
+        setInvalid(deadlineEl, true);
+        resetResult(t.invalidDeadline, 'error');
+        return;
+      }
+      if (!validHalfHour(totalRaw, 0.5, 200)) {
+        setInvalid(hoursEl, true);
+        resetResult(t.invalidHours, 'error');
+        return;
+      }
+      if (!validHalfHour(dailyRaw, 0.5, 16)) {
+        setInvalid(dailyHoursEl, true);
+        resetResult(t.invalidDaily, 'error');
+        return;
+      }
+      const bufferDays = Number(bufferRaw);
+      if (!Number.isInteger(bufferDays) || bufferDays < 0 || bufferDays > 30) {
+        setInvalid(bufferEl, true);
+        resetResult(t.invalidBuffer, 'error');
+        return;
       }
 
-      listEl.innerHTML = plan.map((item) => `<div class="bw-item"><strong>${item.label}<span class="bw-tag">${item.tag}</span></strong><p>${item.detail}</p></div>`).join('');
+      const totalHours = Number(totalRaw);
+      const dailyCap = Number(dailyRaw);
+
+      const effectiveEnd = new Date(deadline);
+      effectiveEnd.setDate(effectiveEnd.getDate() - bufferDays);
+      const startDay = atStartOfDay(now);
+      const endDay = atStartOfDay(effectiveEnd);
+      if (endDay < startDay) {
+        setInvalid(bufferEl, true);
+        resetResult(t.bufferTooLong, 'error');
+        return;
+      }
+
+      const availableDates = [];
+      for (const cursor = new Date(startDay); cursor <= endDay; cursor.setDate(cursor.getDate() + 1)) {
+        const day = cursor.getDay();
+        if (!weekdaysEl.checked || (day !== 0 && day !== 6)) availableDates.push(new Date(cursor));
+      }
+      if (!availableDates.length) {
+        setInvalid(bufferEl, true);
+        resetResult(t.bufferTooLong, 'error');
+        return;
+      }
+
+      const totalUnits = Math.round(totalHours * 2);
+      const reviewUnits = Math.min(totalUnits, Math.max(1, Math.min(6, Math.round(totalUnits * 0.15))));
+      const buildUnits = totalUnits - reviewUnits;
+      const capUnits = Math.round(dailyCap * 2);
+      const requiredBuildDays = buildUnits ? Math.ceil(buildUnits / capUnits) : 0;
+      const requiredDays = Math.max(1, requiredBuildDays + (buildUnits ? 1 : 0));
+      const plannedCount = Math.min(requiredDays, availableDates.length);
+      const planDates = availableDates.slice(-plannedCount);
+      const buildDays = Math.max(0, plannedCount - 1);
+      const buildAllocations = [];
+      if (buildDays > 0) {
+        const base = Math.floor(buildUnits / buildDays);
+        let remainder = buildUnits % buildDays;
+        for (let i = 0; i < buildDays; i += 1) {
+          buildAllocations.push(base + (remainder > 0 ? 1 : 0));
+          if (remainder > 0) remainder -= 1;
+        }
+      }
+      const oneDayUnits = plannedCount === 1 ? totalUnits : reviewUnits;
+      const largestUnits = Math.max(oneDayUnits, ...buildAllocations);
+      const isTight = largestUnits > capUnits;
+      const plan = planDates.map((date, i) => {
+        const isFinal = i === planDates.length - 1;
+        const units = isFinal ? oneDayUnits : buildAllocations[i];
+        const hours = units / 2;
+        const progress = buildDays <= 1 ? 0.5 : i / (buildDays - 1);
+        const phaseIndex = progress < 0.34 ? 0 : progress < 0.75 ? 1 : 2;
+        const dday = Math.max(0, calendarDaysBetween(date, atStartOfDay(deadline)));
+        return {
+          label: t.dayLabel(fmtDate(date), dday),
+          detail: plannedCount === 1 ? t.combined(fmtHour(hours)) : (isFinal ? t.review(fmtHour(hours)) : t.work(fmtHour(hours), t.phase[phaseIndex])),
+          tag: isFinal ? t.finalTag : `${fmtHour(hours)}h`
+        };
+      });
+
+      daysEl.textContent = plannedCount.toLocaleString(numberLocale);
+      startEl.textContent = fmtDate(planDates[0]);
+      dailyEl.textContent = `${fmtHour(largestUnits / 2)}h`;
+      reviewEl.textContent = `${fmtHour(reviewUnits / 2)}h`;
+      const deadlineIsToday = calendarDaysBetween(startDay, atStartOfDay(deadline)) === 0;
+      summaryEl.textContent = deadlineIsToday ? t.today : (isTight ? t.tight(fmtHour(largestUnits / 2), fmtHour(dailyCap), availableDates.length.toLocaleString(numberLocale)) : t.normal(plannedCount.toLocaleString(numberLocale), fmtHour(dailyCap)));
+      summaryEl.dataset.state = isTight || deadlineIsToday ? 'warning' : 'success';
+
+      listEl.replaceChildren();
+      plan.forEach((item) => {
+        const card = document.createElement('div');
+        card.className = 'bw-item';
+        const heading = document.createElement('strong');
+        heading.append(document.createTextNode(item.label));
+        const tag = document.createElement('span');
+        tag.className = 'bw-tag';
+        tag.textContent = item.tag;
+        heading.appendChild(tag);
+        const detail = document.createElement('p');
+        detail.textContent = item.detail;
+        card.append(heading, detail);
+        listEl.appendChild(card);
+      });
       copyBtn.dataset.plan = [summaryEl.textContent, ...plan.map((item) => `- ${item.label}: ${item.detail}`), t.summaryLine].join('\n');
+      copyBtn.disabled = false;
     };
 
     [deadlineEl, hoursEl, dailyHoursEl, bufferEl].forEach((el) => el.addEventListener('input', buildPlan));
+    weekdaysEl.addEventListener('change', buildPlan);
     sampleBtn.addEventListener('click', () => {
       const now = new Date();
-      const sample = new Date(now.getTime() + (5 * 86400000));
+      const sample = new Date(now);
+      sample.setDate(sample.getDate() + 7);
       sample.setHours(18, 0, 0, 0);
       deadlineEl.value = new Date(sample.getTime() - sample.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
       hoursEl.value = 11;
       dailyHoursEl.value = 2.5;
       bufferEl.value = 1;
+      weekdaysEl.checked = true;
       buildPlan();
+      deadlineEl.focus();
+    });
+    clearBtn.addEventListener('click', () => {
+      deadlineEl.value = '';
+      hoursEl.value = '';
+      dailyHoursEl.value = '';
+      bufferEl.value = '';
+      weekdaysEl.checked = false;
+      [deadlineEl, hoursEl, dailyHoursEl, bufferEl].forEach((el) => setInvalid(el, false));
+      resetResult(t.cleared);
+      deadlineEl.focus();
     });
     copyBtn.addEventListener('click', async () => {
-      await copyText(copyBtn.dataset.plan || summaryEl.textContent || '');
-      const old = copyBtn.textContent;
-      copyBtn.textContent = t.copied;
-      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+      if (!copyBtn.dataset.plan) return;
+      try {
+        await copyText(copyBtn.dataset.plan);
+        summaryEl.textContent = t.copied;
+        summaryEl.dataset.state = 'success';
+        const old = copyBtn.textContent;
+        copyBtn.textContent = t.copied;
+        setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+      } catch (_) {
+        summaryEl.textContent = t.copyFail;
+        summaryEl.dataset.state = 'error';
+      }
     });
-    buildPlan();
+    resetResult();
   }
 
   if (slug === 'privacy-exposure-checker') {

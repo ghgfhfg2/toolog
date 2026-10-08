@@ -684,43 +684,47 @@ layout: default
           <div id="rc-list" class="bw-list" aria-live="polite"></div>
         </div>
       {% when 'deadline-backward-planner' %}
-        <div class="tool-ui">
-          <div class="tool-row-grid pct-grid">
+        <div class="tool-ui dbp-ui">
+          <div class="tool-row-grid dbp-grid">
             <div>
               <label for="dbp-deadline">{% if page.lang == 'en' %}Deadline{% elsif page.lang == 'ja' %}締切日時{% else %}마감일시{% endif %}</label>
-              <input id="dbp-deadline" type="datetime-local" />
+              <input id="dbp-deadline" type="datetime-local" aria-describedby="dbp-summary dbp-help" />
             </div>
             <div>
               <label for="dbp-hours">{% if page.lang == 'en' %}Total work hours{% elsif page.lang == 'ja' %}総作業時間{% else %}총 작업 시간{% endif %}</label>
-              <input id="dbp-hours" type="number" min="1" max="200" step="0.5" value="8" inputmode="decimal" />
+              <input id="dbp-hours" type="number" min="0.5" max="200" step="0.5" placeholder="8" inputmode="decimal" aria-describedby="dbp-summary dbp-help" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-grid">
+          <div class="tool-row-grid dbp-grid">
             <div>
               <label for="dbp-daily-hours">{% if page.lang == 'en' %}Focus hours per day{% elsif page.lang == 'ja' %}1日の集中可能時間{% else %}하루 집중 가능 시간{% endif %}</label>
-              <input id="dbp-daily-hours" type="number" min="0.5" max="16" step="0.5" value="2.5" inputmode="decimal" />
+              <input id="dbp-daily-hours" type="number" min="0.5" max="16" step="0.5" placeholder="2.5" inputmode="decimal" aria-describedby="dbp-summary dbp-help" />
             </div>
             <div>
               <label for="dbp-buffer-days">{% if page.lang == 'en' %}Review buffer days{% elsif page.lang == 'ja' %}見直しバッファ日数{% else %}검토 버퍼 일수{% endif %}</label>
-              <input id="dbp-buffer-days" type="number" min="0" max="14" step="1" value="1" inputmode="numeric" />
+              <input id="dbp-buffer-days" type="number" min="0" max="30" step="1" placeholder="1" inputmode="numeric" aria-describedby="dbp-summary dbp-help" />
             </div>
           </div>
 
-          <div class="tool-row-grid pct-actions">
+          <label class="tool-check dbp-weekdays"><input id="dbp-weekdays" type="checkbox" /> {% if page.lang == 'en' %}Exclude Saturdays and Sundays from work days{% elsif page.lang == 'ja' %}土曜日・日曜日を作業日から除外{% else %}토요일·일요일은 작업일에서 제외{% endif %}</label>
+
+          <div class="tool-row-grid dbp-actions">
             <button id="dbp-sample" type="button">{% if page.lang == 'en' %}Load sample{% elsif page.lang == 'ja' %}サンプル入力{% else %}예시 입력{% endif %}</button>
-            <button id="dbp-copy" type="button">{% if page.lang == 'en' %}Copy plan{% elsif page.lang == 'ja' %}計画をコピー{% else %}계획 복사{% endif %}</button>
+            <button id="dbp-copy" type="button" disabled>{% if page.lang == 'en' %}Copy plan{% elsif page.lang == 'ja' %}計画をコピー{% else %}계획 복사{% endif %}</button>
+            <button id="dbp-clear" type="button">{% if page.lang == 'en' %}Clear{% elsif page.lang == 'ja' %}クリア{% else %}초기화{% endif %}</button>
           </div>
 
-          <div class="tool-stats">
-            <div><strong id="dbp-days">0</strong><span>{% if page.lang == 'en' %}Work days{% elsif page.lang == 'ja' %}作業日数{% else %}작업 가능 일수{% endif %}</span></div>
-            <div><strong id="dbp-start">-</strong><span>{% if page.lang == 'en' %}Recommended start{% elsif page.lang == 'ja' %}開始目安{% else %}시작 권장일{% endif %}</span></div>
-            <div><strong id="dbp-daily">0h</strong><span>{% if page.lang == 'en' %}Avg. daily hours{% elsif page.lang == 'ja' %}1日平均時間{% else %}하루 평균 시간{% endif %}</span></div>
-            <div><strong id="dbp-review">0h</strong><span>{% if page.lang == 'en' %}Final review block{% elsif page.lang == 'ja' %}最終確認時間{% else %}최종 검토 시간{% endif %}</span></div>
+          <div class="tool-stats dbp-stats" aria-label="{% if page.lang == 'en' %}Backward plan summary{% elsif page.lang == 'ja' %}逆算プランの概要{% else %}역산 일정 요약{% endif %}">
+            <div><strong id="dbp-days">-</strong><span>{% if page.lang == 'en' %}Planned work days{% elsif page.lang == 'ja' %}計画した作業日数{% else %}계획 작업일 수{% endif %}</span></div>
+            <div><strong id="dbp-start">-</strong><span>{% if page.lang == 'en' %}Latest safe start{% elsif page.lang == 'ja' %}着手期限の目安{% else %}늦어도 시작할 날{% endif %}</span></div>
+            <div><strong id="dbp-daily">-</strong><span>{% if page.lang == 'en' %}Largest work block{% elsif page.lang == 'ja' %}最大作業時間{% else %}가장 긴 작업 시간{% endif %}</span></div>
+            <div><strong id="dbp-review">-</strong><span>{% if page.lang == 'en' %}Final review block{% elsif page.lang == 'ja' %}最終確認時間{% else %}최종 검토 시간{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="dbp-summary">{% if page.lang == 'en' %}Enter a deadline to build a backward plan.{% elsif page.lang == 'ja' %}締切を入力すると逆算プランを作成します。{% else %}마감일을 입력하면 역산 계획을 만들어줍니다.{% endif %}</p>
-          <div id="dbp-list" class="bw-list"></div>
+          <p class="tool-result" id="dbp-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter all four values to build a backward plan.{% elsif page.lang == 'ja' %}4つの項目を入力すると逆算プランを作成します。{% else %}네 가지 값을 입력하면 역산 계획을 만들어줍니다.{% endif %}</p>
+          <p class="tool-result" id="dbp-help">{% if page.lang == 'en' %}The deadline must be within one year. Review buffer means calendar days. The final review block is included in total work hours, and all processing stays in your browser.{% elsif page.lang == 'ja' %}締切は1年以内に設定してください。見直しバッファは暦日です。最終確認時間は総作業時間に含まれ、入力はブラウザ内だけで処理されます。{% else %}마감은 1년 이내로 설정해 주세요. 검토 버퍼는 달력 날짜 기준이며 최종 검토 시간은 총 작업 시간에 포함됩니다. 입력값은 브라우저 안에서만 처리됩니다.{% endif %}</p>
+          <div id="dbp-list" class="bw-list" aria-live="polite"><p class="empty-state">{% if page.lang == 'en' %}Your dated work plan will appear here.{% elsif page.lang == 'ja' %}日付入りの作業計画がここに表示されます。{% else %}날짜별 작업 계획이 여기에 표시됩니다.{% endif %}</p></div>
         </div>
       {% when 'privacy-exposure-checker' %}
         <div class="tool-ui pec-ui">

@@ -682,9 +682,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 마감일, 예상 소요 시간, 하루 집중 가능 시간, 검토 버퍼를 바탕으로 역산 일정표를 바로 만들어요.
-  description_en: Build a backward plan from the due date using estimated work hours, daily focus capacity, and review buffer days.
-  description_ja: 締切日時、想定作業時間、1日の集中可能時間、見直しバッファ日数から逆算スケジュールを作成します。
+  description: 마감일, 총 작업 시간, 하루 집중 가능 시간, 검토 버퍼를 입력해 늦어도 시작할 날짜와 날짜별 작업량을 계산하고 주말 제외 일정도 만들어요.
+  description_en: Calculate the latest safe start and dated work blocks from a deadline, total hours, daily capacity, review buffer, and optional weekend exclusion.
+  description_ja: 締切、総作業時間、1日の集中可能時間、見直しバッファから着手期限と日別作業量を計算し、週末を除く計画も作成できます。
   url: /tools/deadline-backward-planner/
   url_en: /en/tools/deadline-backward-planner/
   url_ja: /ja/tools/deadline-backward-planner/
