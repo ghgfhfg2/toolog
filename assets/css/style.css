@@ -908,7 +908,7 @@ a:hover { color: #fff; text-decoration: none; }
   color: var(--muted);
 }
 .pm-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-.tz-grid { grid-template-columns: 1fr 1fr 1fr; align-items: end; }
+.tz-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; }
 .tz-ui label {
   display: block;
   margin-bottom: .35rem;
@@ -927,8 +927,10 @@ a:hover { color: #fff; text-decoration: none; }
   line-height: 1.35;
   word-break: keep-all;
 }
+.tz-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .tz-ui .tool-result[data-state="error"] { border-color: #ef4444; }
 .tz-ui .tool-result[data-state="warning"] { border-color: #f59e0b; }
+.tz-ui .tool-result[data-state="success"] { border-color: #22c55e; }
 .cc-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .cc-actions { grid-template-columns: repeat(3, 1fr); }
 .cc-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -2316,6 +2318,7 @@ a:hover { color: #fff; text-decoration: none; }
   .frac-expression-grid,.frac-actions { grid-template-columns: 1fr; }
   .tz-actions { grid-template-columns: 1fr; }
   .tz-presets { grid-template-columns: 1fr 1fr; }
+  .tool-stats.tz-stats { grid-template-columns: 1fr 1fr; }
   .cc-grid { grid-template-columns: 1fr 1fr; }
   .cc-actions { grid-template-columns: 1fr; }
   .cc-stats { grid-template-columns: 1fr 1fr; }

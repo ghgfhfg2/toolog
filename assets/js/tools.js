@@ -619,7 +619,9 @@
     const sourceOut = document.getElementById('tz-source');
     const targetOut = document.getElementById('tz-target');
     const offsetOut = document.getElementById('tz-offset');
+    const differenceOut = document.getElementById('tz-difference');
     const dayDiffOut = document.getElementById('tz-daydiff');
+    const disambiguation = document.getElementById('tz-disambiguation');
     const nowBtn = document.getElementById('tz-now');
     const swapBtn = document.getElementById('tz-swap');
     const copyBtn = document.getElementById('tz-copy');
@@ -631,7 +633,7 @@
         empty: '날짜와 시간을 입력하면 대상 지역의 현지 시간이 표시됩니다.',
         invalid: '날짜나 시간 형식을 확인해 주세요.',
         nonexistent: '선택한 기준 시간대에서 DST 전환으로 존재하지 않는 현지 시각입니다. 다른 시각을 입력해 주세요.',
-        ambiguous: 'DST 종료로 두 번 반복되는 현지 시각입니다. 이른 시각 기준 결과를 표시합니다.',
+        ambiguous: (choice) => `DST 종료로 두 번 반복되는 현지 시각입니다. ${choice === 'later' ? '두 번째' : '첫 번째'} 시각 기준 결과입니다.`,
         copied: '변환 결과를 복사했습니다.',
         copyFail: '복사할 변환 결과가 아직 없습니다.',
         copyUnavailable: '자동 복사를 사용할 수 없습니다.',
@@ -640,14 +642,14 @@
         prevDay: '전날',
         nextDay: '다음날',
         diffDays: (n) => n > 0 ? `${n}일 뒤` : `${Math.abs(n)}일 전`,
-        result: (fromText, toText, timeText, offset, dayDiff) => `${fromText} 기준 → ${toText}: ${timeText} (${offset}, ${dayDiff})`
+        result: (fromText, sourceTime, toText, targetTime, offset, dayDiff) => `${fromText} ${sourceTime} → ${toText} ${targetTime} (${offset}, ${dayDiff})`
       },
       en: {
         locale: 'en-US',
         empty: 'Enter a date and time to see the converted local time.',
         invalid: 'Check the date and time format.',
         nonexistent: 'This local time does not exist in the source zone because of a DST transition. Choose another time.',
-        ambiguous: 'This local time repeats when DST ends. Showing the earlier occurrence.',
+        ambiguous: (choice) => `This local time repeats when DST ends. Showing the ${choice === 'later' ? 'second' : 'first'} occurrence.`,
         copied: 'Copied the converted time.',
         copyFail: 'There is no converted result to copy yet.',
         copyUnavailable: 'Automatic copy is unavailable.',
@@ -656,14 +658,14 @@
         prevDay: 'Previous day',
         nextDay: 'Next day',
         diffDays: (n) => n > 0 ? `${n} days later` : `${Math.abs(n)} days earlier`,
-        result: (fromText, toText, timeText, offset, dayDiff) => `${fromText} → ${toText}: ${timeText} (${offset}, ${dayDiff})`
+        result: (fromText, sourceTime, toText, targetTime, offset, dayDiff) => `${fromText} ${sourceTime} → ${toText} ${targetTime} (${offset}, ${dayDiff})`
       },
       ja: {
         locale: 'ja-JP',
         empty: '日付と時刻を入力すると、変換先の現地時刻を表示します。',
         invalid: '日付または時刻の形式を確認してください。',
         nonexistent: 'DST切替により、基準タイムゾーンに存在しない現地時刻です。別の時刻を選んでください。',
-        ambiguous: 'DST終了で2回繰り返される現地時刻です。早い方の時刻を表示します。',
+        ambiguous: (choice) => `DST終了で2回繰り返される現地時刻です。${choice === 'later' ? '2回目' : '1回目'}の時刻を表示します。`,
         copied: '変換結果をコピーしました。',
         copyFail: 'コピーできる変換結果がまだありません。',
         copyUnavailable: '自動コピーを利用できません。',
@@ -672,10 +674,12 @@
         prevDay: '前日',
         nextDay: '翌日',
         diffDays: (n) => n > 0 ? `${n}日後` : `${Math.abs(n)}日前`,
-        result: (fromText, toText, timeText, offset, dayDiff) => `${fromText} 基準 → ${toText}: ${timeText} (${offset}, ${dayDiff})`
+        result: (fromText, sourceTime, toText, targetTime, offset, dayDiff) => `${fromText} ${sourceTime} → ${toText} ${targetTime} (${offset}, ${dayDiff})`
       }
     };
     const tzText = tzI18n[pageLang] || tzI18n.ko;
+    let currentSummary = '';
+    let currentInstant = null;
     const zones = [
       ['Asia/Seoul', 'Seoul (KST)'],
       ['Asia/Tokyo', 'Tokyo (JST)'],
@@ -737,7 +741,7 @@
       Number(parts.minute) === target.m
     );
 
-    const zonedToUtc = (dateStr, timeZone) => {
+    const zonedToUtc = (dateStr, timeZone, repeatedTimeChoice = 'earlier') => {
       const targetParts = parseLocalInput(dateStr);
       if (!targetParts) return null;
       const { Y, M, D, h, m } = targetParts;
@@ -758,7 +762,11 @@
         .sort((a, b) => a.getTime() - b.getTime());
       const unique = candidates.filter((candidate, index) => index === 0 || candidate.getTime() !== candidates[index - 1].getTime());
       if (!unique.length) return { nonexistent: true };
-      return { date: unique[0], ambiguous: unique.length > 1 };
+      const ambiguous = unique.length > 1;
+      return {
+        date: ambiguous && repeatedTimeChoice === 'later' ? unique[unique.length - 1] : unique[0],
+        ambiguous
+      };
     };
 
     const formatDateTime = (date, timeZone, options = {}) => new Intl.DateTimeFormat(tzText.locale, {
@@ -767,16 +775,25 @@
       timeZone
     }).format(date);
 
-    const getOffsetLabel = (date, timeZone) => {
+    const getOffsetMinutes = (date, timeZone) => {
       const parts = getParts(date, timeZone);
       const localAsUTC = Date.UTC(
         Number(parts.year), Number(parts.month) - 1, Number(parts.day),
         Number(parts.hour), Number(parts.minute), Number(parts.second || 0)
       );
-      const offsetMinutes = Math.round((localAsUTC - date.getTime()) / 60000);
-      const sign = offsetMinutes >= 0 ? '+' : '-';
-      const abs = Math.abs(offsetMinutes);
-      return `UTC${sign}${String(Math.floor(abs / 60)).padStart(2, '0')}:${String(abs % 60).padStart(2, '0')}`;
+      return Math.round((localAsUTC - date.getTime()) / 60000);
+    };
+
+    const formatSignedMinutes = (minutes, prefix = '') => {
+      const normalized = Object.is(minutes, -0) ? 0 : minutes;
+      const sign = normalized >= 0 ? '+' : '-';
+      const abs = Math.abs(normalized);
+      return `${prefix}${sign}${String(Math.floor(abs / 60)).padStart(2, '0')}:${String(abs % 60).padStart(2, '0')}`;
+    };
+
+    const getOffsetLabel = (date, timeZone) => {
+      const offsetMinutes = getOffsetMinutes(date, timeZone);
+      return formatSignedMinutes(offsetMinutes, 'UTC');
     };
 
     const getDayDiffText = (date, fromZone, toZone) => {
@@ -791,10 +808,11 @@
       return tzText.diffDays(diff);
     };
 
-    const setStats = (source = '-', target = '-', offset = '-', dayDiff = '-') => {
+    const setStats = (source = '-', target = '-', offset = '-', difference = '-', dayDiff = '-') => {
       if (sourceOut) sourceOut.textContent = source;
       if (targetOut) targetOut.textContent = target;
       if (offsetOut) offsetOut.textContent = offset;
+      if (differenceOut) differenceOut.textContent = difference;
       if (dayDiffOut) dayDiffOut.textContent = dayDiff;
     };
 
@@ -807,6 +825,8 @@
       setStatus(message, state);
       setStats();
       copyBtn.disabled = true;
+      currentSummary = '';
+      currentInstant = null;
     };
 
     const formatInputForZone = (date, timeZone) => {
@@ -820,7 +840,7 @@
         resetResult(tzText.empty);
         return;
       }
-      const conversion = zonedToUtc(dt.value, from.value);
+      const conversion = zonedToUtc(dt.value, from.value, disambiguation?.value);
       if (!conversion) {
         dt.setAttribute('aria-invalid', 'true');
         resetResult(tzText.invalid, 'error');
@@ -837,10 +857,13 @@
       const targetText = formatDateTime(utcDate, to.value);
       const resultText = formatDateTime(utcDate, to.value, { dateStyle: 'full' });
       const offset = getOffsetLabel(utcDate, to.value);
+      const difference = formatSignedMinutes(getOffsetMinutes(utcDate, to.value) - getOffsetMinutes(utcDate, from.value));
       const dayDiff = getDayDiffText(utcDate, from.value, to.value);
-      const result = tzText.result(from.options[from.selectedIndex].text, to.options[to.selectedIndex].text, resultText, offset, dayDiff);
-      setStatus(conversion.ambiguous ? `${tzText.ambiguous} ${result}` : result, conversion.ambiguous ? 'warning' : 'success');
-      setStats(sourceText, targetText, offset, dayDiff);
+      const result = tzText.result(from.options[from.selectedIndex].text, sourceText, to.options[to.selectedIndex].text, resultText, offset, dayDiff);
+      currentSummary = result;
+      currentInstant = utcDate;
+      setStatus(conversion.ambiguous ? `${tzText.ambiguous(disambiguation?.value)} ${result}` : result, conversion.ambiguous ? 'warning' : 'success');
+      setStats(sourceText, targetText, offset, difference, dayDiff);
       copyBtn.disabled = false;
     };
 
@@ -850,8 +873,8 @@
       dt.focus();
     };
 
-    [from, to, dt].forEach(el => el?.addEventListener('input', run));
-    [from, to].forEach(el => el?.addEventListener('change', run));
+    [from, to, dt, disambiguation].forEach(el => el?.addEventListener('input', run));
+    [from, to, disambiguation].forEach(el => el?.addEventListener('change', run));
     nowBtn?.addEventListener('click', setNow);
     clearBtn?.addEventListener('click', () => {
       dt.value = '';
@@ -860,20 +883,34 @@
       dt.focus();
     });
     swapBtn?.addEventListener('click', () => {
+      const instant = currentInstant;
       const oldFrom = from.value;
       from.value = to.value;
       to.value = oldFrom;
+      if (instant) dt.value = formatInputForZone(instant, from.value);
       run();
     });
     copyBtn?.addEventListener('click', async () => {
-      const text = out.textContent || '';
-      if (!text || text === tzText.empty || text === tzText.invalid) {
-        out.textContent = tzText.copyFail;
+      if (!currentSummary) {
+        setStatus(tzText.copyFail, 'error');
         return;
       }
       try {
-        await navigator.clipboard.writeText(text);
-        setStatus(`${tzText.copied} ${text}`, out.dataset.state);
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(currentSummary);
+        } else {
+          const fallback = document.createElement('textarea');
+          fallback.value = currentSummary;
+          fallback.setAttribute('readonly', '');
+          fallback.style.position = 'fixed';
+          fallback.style.opacity = '0';
+          document.body.appendChild(fallback);
+          fallback.select();
+          const copied = document.execCommand('copy');
+          fallback.remove();
+          if (!copied) throw new Error('copy failed');
+        }
+        setStatus(`${tzText.copied} ${currentSummary}`, 'success');
       } catch (_) {
         setStatus(tzText.copyUnavailable, 'error');
       }
