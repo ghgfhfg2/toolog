@@ -2069,8 +2069,8 @@
   badge_en: New
   badge_ja: 新着
   description: 음수 분수와 1/2 + 1/3 같은 식을 계산하고 정확한 약분 결과, 대분수, 반올림한 소수·백분율을 확인해요. 분모 0과 0 나눗셈 오류도 안내해요.
-  description_en: Enter an expression like 1/2 + 1/3 or fill fraction fields to calculate operations, simplification, mixed-number, decimal, percent, and input errors.
-  description_ja: 1/2 + 1/3 のような式や分子・分母入力から、四則演算、約分、帯分数、小数、百分率、入力エラーを確認できます。
+  description_en: Calculate negative fractions or expressions like 1/2 + 1/3 and see exact simplified fractions, mixed numbers, and rounded decimals and percentages, with warnings for zero denominators and division by zero.
+  description_ja: 負の分数や1/2 + 1/3のような式を計算し、正確な約分結果、帯分数、丸めた小数・百分率を確認できます。分母0や0で割る計算のエラーも案内します。
   url: /tools/fraction-calculator/
   url_en: /en/tools/fraction-calculator/
   url_ja: /ja/tools/fraction-calculator/

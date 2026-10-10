@@ -1,7 +1,7 @@
 ---
 layout: tool
 lang: en
-title: Fraction Calculator | Operations, simplification, mixed number, decimal
+title: Fraction Calculator | Arithmetic, Simplification, Mixed Numbers & Decimals
 description: Enter a quick expression like 1/2 + 1/3 or fill numerator and denominator fields to add, subtract, multiply, or divide fractions and see simplified, mixed-number, decimal, and percent results.
 permalink: /en/tools/fraction-calculator/
 canonical_url: /en/tools/fraction-calculator/
@@ -48,7 +48,7 @@ You can also paste a one-line expression such as `1/2 + 1/3`, `-7/12 + 5/8`, or 
 - Auto-simplify the final result
 - Show mixed-number form when useful
 - Show decimal and percent at the same time
-- Clear warnings for negative denominators, zero denominators, division by zero, and out-of-range inputs
+- Normalize negative denominator signs and get clear warnings for zero denominators, division by zero, and out-of-range inputs
 - Copy the result quickly
 
 ## How to use it
@@ -82,4 +82,7 @@ Use `+` for addition, `-` for subtraction, `×` or `*` for multiplication, and `
 It helps when you want to interpret a fraction as a rate, share, or ratio in percent form.
 
 ## Negative fractions and invalid inputs
-Apply a quick expression with Enter; the Unicode minus in `−1/2 + 1/3` is accepted. A zero denominator or division by a zero-valued fraction shows an error and disables copying. Sign normalization only runs on valid inputs and never turns a blank numerator into zero. Reset clears all inputs and results. Very small decimals may round to zero; use the simplified fraction for the exact value.
+Apply a quick expression with Enter; the Unicode minus in `−1/2 + 1/3` is accepted. `1/0 + 1/3` triggers a zero-denominator error; `1/2 ÷ 0/3` triggers a division-by-zero error. Both disable result copying. Sign normalization only runs on valid inputs and never turns a blank numerator into zero. Reset clears all inputs and results; enter two fractions or apply an expression to calculate again.
+
+### Why do the decimal and percent results show zero?
+Very small values may round to zero at the displayed precision. Decimals use up to 8 decimal places and percentages up to 4. Check the simplified fraction for the exact value.
