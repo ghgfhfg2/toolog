@@ -16290,7 +16290,9 @@
       catch (_) {
         const ta = document.createElement('textarea');
         ta.value = value; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        document.body.appendChild(ta); ta.select();
+        try { if (!document.execCommand('copy')) throw new Error('Copy failed'); }
+        finally { document.body.removeChild(ta); }
       }
     };
     const inputs = [aNum, aDen, bNum, bDen];
@@ -16318,6 +16320,7 @@
       return { value };
     };
     const render = () => {
+      if (copyBtn) copyBtn.textContent = text.copyDefault;
       const parsed = inputs.map(readInteger);
       const emptyInputs = inputs.filter((_, index) => parsed[index].error === 'empty');
       if (emptyInputs.length) {
@@ -16365,6 +16368,7 @@
       setHelp(`${an}/${ad} ${op.options[op.selectedIndex].text} ${bn}/${bd} = ${outResult.textContent}`, 'success');
       setInvalid();
       if (copyBtn) copyBtn.disabled = false;
+      return true;
     };
     const operatorValue = (symbol) => {
       if (symbol === '+') return 'add';
@@ -16373,9 +16377,9 @@
       return 'div';
     };
     const applyExpression = () => {
-      const raw = expression?.value.trim() || '';
+      const raw = (expression?.value.trim() || '').normalize('NFKC').replace(/−/g, '-');
       const match = raw.match(/^([+-]?\d+)\s*\/\s*([+-]?\d+)\s*([+\-×x*÷/])\s*([+-]?\d+)\s*\/\s*([+-]?\d+)$/u);
-      if (!match) {
+      if (raw.length > 160 || !match) {
         if (expression) expression.setAttribute('aria-invalid', 'true');
         setIdle(text.expressionInvalid, [], 'error');
         expression?.focus();
@@ -16385,18 +16389,17 @@
       aNum.value = an; aDen.value = ad; bNum.value = bn; bDen.value = bd; op.value = operatorValue(symbol);
       expression?.setAttribute('aria-invalid', 'false');
       render();
-      setHelp(text.expressionApplied, 'success');
       aNum.focus();
     };
     const normalizeSigns = () => {
+      if (!render()) return;
       [[aNum, aDen], [bNum, bDen]].forEach(([num, den]) => {
         if (Number(den.value) < 0) {
           num.value = String(Number(num.value || 0) * -1);
           den.value = String(Math.abs(Number(den.value)));
         }
       });
-      render();
-      setHelp(text.signsNormalized, 'success');
+      if (render()) setHelp(text.signsNormalized, 'success');
       aNum.focus();
     };
     [...inputs, op].forEach((el) => el.addEventListener('input', render));
@@ -16423,12 +16426,13 @@
       aNum.focus();
     });
     resetBtn?.addEventListener('click', () => {
-      aNum.value = 1; aDen.value = 2; bNum.value = 1; bDen.value = 3; op.value = 'add';
+      inputs.forEach((input) => { input.value = ''; }); op.value = 'add';
       if (expression) {
         expression.value = '';
         expression.setAttribute('aria-invalid', 'false');
       }
-      render();
+      setIdle(text.idle);
+      aNum.focus();
     });
     copyBtn?.addEventListener('click', async () => {
       if (outResult.textContent === '-') return;
@@ -16442,11 +16446,7 @@
         setHelp(text.copyFail, 'error');
       }
     });
-    if (!aNum.value) aNum.value = 1;
-    if (!aDen.value) aDen.value = 2;
-    if (!bNum.value) bNum.value = 1;
-    if (!bDen.value) bDen.value = 3;
-    render();
+    setIdle(text.idle);
   }
 
   if (slug === 'split-bill-calculator') {

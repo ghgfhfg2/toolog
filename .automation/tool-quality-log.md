@@ -197,3 +197,9 @@
 - Tool: `lunch-menu-picker`
 - Selection reason: recent quality commits focused on other tools, while this older picker still had localized pages producing Korean-only UI/results, weak copy-button state, and unclear fallback behavior when filters were too narrow.
 - Scope: improved existing page copy, layout labels, accessibility status, localized result generation, fallback messaging, and mobile result readability. No new tool was added.
+
+## 2026-10-10 21:00 KST
+- Tool: `fraction-calculator` (existing tool only; no new tool files).
+- Selection: last improved July 25, unlike recent timezone/deadline/priority tools. Reproduced success messages overwriting zero-denominator/range errors after applying an expression, and blank numerators becoming zero during sign normalization.
+- Changes: preserve validation errors; guard sign normalization; honest copy fallback failure; clear/idle input flow; Unicode minus/fullwidth expression support and length limit; accessible limit/rounding guidance; mobile result wrapping, touch targets, focus; KO/EN/JA FAQ and rounding explanation; home metadata.
+- Validation: 93 Chromium assertions passed across KO/EN/JA runtime using the captured page fixture with candidate JS/CSS: all four operations, empty/invalid/range/zero/negative/long inputs, copy-denied fallback, 320/360/390px overflow checks. YAML/front matter/FAQ/related IDs/home catalog checks, 98-tool integrity, node syntax and diff whitespace passed. Local Jekyll build unavailable: system Ruby 2.6 lacks locked Bundler 4.0.9; GitHub Pages CI will perform the production build.

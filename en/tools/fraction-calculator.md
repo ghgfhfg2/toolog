@@ -25,10 +25,13 @@ faq:
     a: For exact fraction simplification, each numerator and denominator must be a whole number from -10,000,000 to 10,000,000.
   - q: Can I paste a fraction expression in one line?
     a: Yes. Enter an expression like 1/2 + 1/3, then apply it to fill the fraction fields automatically.
+  - q: Are decimal and percent outputs exact?
+    a: The simplified fraction is exact. Decimals are rounded to up to 8 places and percentages to up to 4 places, so recurring decimals such as 1/3 are approximations.
 alternate_urls:
   ko: /tools/fraction-calculator/
   en: /en/tools/fraction-calculator/
   ja: /ja/tools/fraction-calculator/
+
 ---
 
 ## A quick way to calculate fractions
@@ -77,3 +80,6 @@ Use `+` for addition, `-` for subtraction, `×` or `*` for multiplication, and `
 
 ### When is percent output useful?
 It helps when you want to interpret a fraction as a rate, share, or ratio in percent form.
+
+## Negative fractions and invalid inputs
+Apply a quick expression with Enter; the Unicode minus in `−1/2 + 1/3` is accepted. A zero denominator or division by a zero-valued fraction shows an error and disables copying. Sign normalization only runs on valid inputs and never turns a blank numerator into zero. Reset clears all inputs and results. Very small decimals may round to zero; use the simplified fraction for the exact value.
