@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Password Generator | Random Passwords, Hidden Results & Bulk Copy
-description: Generate up to 20 random passwords, 4–128 characters long. Uniform secure sampling includes every selected type, with hidden results by default, individual or bulk copy, and constraint-aware entropy.
+description: Generate 1–20 random passwords of 4–128 characters in your browser. Every selected character type is included, results are hidden by default, and individual or bulk copy and entropy estimates reflect your settings.
 lang: en
 permalink: /en/tools/password-generator/
 canonical_url: /en/tools/password-generator/
@@ -42,16 +42,17 @@ This tool helps you create **strong, hard-to-predict random passwords** quickly 
 - Choose uppercase, lowercase, numbers, and symbols
 - Choose website-friendly symbols or a wider symbol set
 - Exclude confusing characters (`O/0`, `l/I/1`, `B/8`, `S/5`, `Z/2`, etc.)
-- View estimated strength, pool size, combinations, and entropy bits
+- View estimated strength, character pool size, and approximate combinations and entropy that account for every selected character type being required
 - Generate in bulk with duplicate minimization plus single-password and copy-all support
-- Hide generated results on screen when you are in a shared or public space
+- Results are hidden by default; reveal them only when you want to read them on screen
 - Get immediate validation for invalid length, count, or character-set choices
 
 ## How to use
-1. Enter password length and count.
-2. Select character types and the symbol range.
-3. Enable confusing-character exclusion or screen hiding if needed.
-4. Click generate, then copy one password or the full list.
+1. Enter a whole-number length from **4 to 128** and a count from **1 to 20**, or use a 12-, 16-, or 24-character length preset.
+2. Select at least one character type and, if using symbols, choose the symbol set accepted by the website.
+3. Optionally exclude similar characters. Leave **Show generated passwords on screen** off to keep results hidden.
+4. Click **Generate passwords**, or press Enter in either number field. Nothing is generated automatically when you open the page.
+5. Copy a single password or choose **Copy all**. Both copy the actual passwords, even when the display is masked. Save them in a password manager before leaving the page.
 
 ## Security tips
 - Use a **different password** for every service.
@@ -84,12 +85,12 @@ The generator prioritizes unique results where possible. If the character pool i
 The password generator is a practical baseline tool for account security.
 Adjust **length, character sets, and readability options** to quickly create passwords that are safer and still usable.
 
-## Random password generation and hidden results
-Use whole-number lengths from 4 to 128 and counts from 1 to 20. Blank, fractional or out-of-range values and selecting no character types clear the results and show an error. Changing settings clears old passwords.
+## Empty results, input errors, and hidden passwords
+Use whole-number lengths from 4 to 128 and counts from 1 to 20. Blank, fractional or out-of-range values and selecting no character types clear the results and show an error. Changing the length, count, character types, symbol set, or similar-character exclusion clears old passwords so you cannot accidentally copy a result made with previous settings. The visibility option only changes the display.
 
 Passwords are sampled uniformly from the full pool, rejecting candidates that omit a selected type. Approximate entropy and combination counts account for this requirement; they are not a security guarantee.
 
 Hiding replaces displayed characters with dots, not encryption. Passwords remain in page memory, and individual or bulk copy still copies the real values. Clear result does not erase a previously copied clipboard.
 
 ### Why are results empty at first and masked after generation?
-Press Generate passwords or Enter in a number field to generate. Results are hidden by default. Enable Show generated passwords to reveal them; copy buttons copy the real passwords even while hidden.
+The page waits for you to click **Generate passwords** or press Enter in a number field. Generated passwords are masked by default, not missing. Turn on **Show generated passwords on screen** to reveal them; the copy buttons work while they are hidden.
