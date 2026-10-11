@@ -3013,7 +3013,7 @@
         tooShort: (length, n) => `현재 길이(${length})로는 선택한 문자 유형 ${n}개를 모두 포함할 수 없습니다.`,
         preview: (pool, bits) => `문자풀 ${pool}자, 예상 엔트로피 ${bits} bit입니다.`,
         generatedAll: (length, count) => `길이 ${length}, ${count}개 생성 완료. 각 비밀번호는 선택한 모든 문자 유형을 최소 1개 이상 포함합니다.`,
-        generatedPartial: (size, count) => `중복 없는 비밀번호 ${size}개를 생성했습니다. (요청 ${count}개, 문자풀/길이 조합 제한)`,
+        generatedPartial: (size, count) => `중복 없는 비밀번호 ${size}개를 생성했습니다. (요청 ${count}개, 재시도 제한 도달. 다시 생성해 주세요.)`,
         goodLength: '중요 계정에는 16자 이상을 권장합니다.',
         presetApplied: (length) => `${length}자 권장 길이를 적용했습니다.`,
         copiedOne: '선택한 비밀번호를 복사했습니다.',
@@ -3040,7 +3040,7 @@
         tooShort: (length, n) => `Current length (${length}) cannot include all ${n} selected character types.`,
         preview: (pool, bits) => `Pool size is ${pool} characters with about ${bits} bits of entropy.`,
         generatedAll: (length, count) => `Generated ${count} password(s) at length ${length}. Each password includes every selected character type at least once.`,
-        generatedPartial: (size, count) => `Generated ${size} unique password(s). (Requested: ${count}; limited by pool/length combination)`,
+        generatedPartial: (size, count) => `Generated ${size} unique password(s). (Requested: ${count}; retry limit reached. Generate again.)`,
         goodLength: 'Use 16 or more characters for important accounts.',
         presetApplied: (length) => `Applied the ${length}-character recommendation.`,
         copiedOne: 'Copied the selected password.',
@@ -3067,7 +3067,7 @@
         tooShort: (length, n) => `現在の長さ（${length}）では、選択した${n}種類すべてを含められません。`,
         preview: (pool, bits) => `文字プールは${pool}文字、推定エントロピーは${bits} bitです。`,
         generatedAll: (length, count) => `長さ${length}で${count}件生成しました。各パスワードは選択した文字種をすべて最低1文字含みます。`,
-        generatedPartial: (size, count) => `重複なしパスワードを${size}件生成しました。（要求${count}件、文字プール/長さの組み合わせ制限）`,
+        generatedPartial: (size, count) => `重複なしパスワードを${size}件生成しました。（要求${count}件、再試行の上限に到達。再生成してください。）`,
         goodLength: '重要なアカウントには16文字以上がおすすめです。',
         presetApplied: (length) => `${length}文字の推奨長を適用しました。`,
         copiedOne: '選択したパスワードをコピーしました。',
@@ -3103,19 +3103,9 @@
       const arr = new Uint32Array(1);
       const max = Math.floor(0x100000000 / str.length) * str.length;
       do {
-        crypto.getRandomValues(arr);
+        window.crypto.getRandomValues(arr);
       } while (arr[0] >= max);
       return str[arr[0] % str.length];
-    };
-
-    const shuffle = (arr) => {
-      for (let i = arr.length - 1; i > 0; i--) {
-        const rand = new Uint32Array(1);
-        window.crypto.getRandomValues(rand);
-        const j = rand[0] % (i + 1);
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
     };
 
     const toScientificFromLog10 = (log10Value) => {
@@ -3150,6 +3140,19 @@
       return pwText.scoreVeryStrong;
     };
 
+    // Inclusion-exclusion counts only strings containing every selected type.
+    const validProbability = (sets, len, poolSize) => {
+      let probability = 0;
+      for (let mask = 0; mask < (1 << sets.length); mask++) {
+        let removed = 0, count = 0;
+        sets.forEach((set, i) => {
+          if (mask & (1 << i)) { removed += set.chars.length; count++; }
+        });
+        probability += (count % 2 ? -1 : 1) * ((poolSize - removed) / poolSize) ** len;
+      }
+      return Math.max(Number.EPSILON, Math.min(1, probability));
+    };
+
     const renderStats = (poolSize, len) => {
       if (!(poolSize > 0) || !(len > 0)) {
         strength.textContent = '-';
@@ -3158,8 +3161,8 @@
         bitsOut.textContent = '-';
         return;
       }
-      const bits = len * Math.log2(poolSize);
-      const log10Combos = len * Math.log10(poolSize);
+      const bits = len * Math.log2(poolSize) + Math.log2(validProbability(buildSet().normalized, len, poolSize));
+      const log10Combos = bits * Math.LOG10E * Math.LN2;
       strength.textContent = scoreLabel(bits);
       poolOut.textContent = `${poolSize.toLocaleString(numberLocale)} ${pwText.poolUnit}`;
       combosOut.textContent = toScientificFromLog10(log10Combos);
@@ -3177,7 +3180,9 @@
       return value;
     };
 
+    let passwords = [];
     const clearResult = () => {
+      passwords = [];
       output.value = '';
       listOut.innerHTML = '';
       copyAllBtn.disabled = true;
@@ -3185,6 +3190,10 @@
 
     const applyVisibility = () => {
       const masked = !showResult.checked;
+      output.value = passwords.map(p => masked ? '•'.repeat(p.length) : p).join('\n');
+      listOut.querySelectorAll('.pg-secret-text').forEach((el, i) => {
+        el.textContent = masked ? '•'.repeat(passwords[i].length) : passwords[i];
+      });
       output.classList.toggle('pg-masked', masked);
       listOut.classList.toggle('pg-masked', masked);
       output.setAttribute('aria-label', masked ? pwText.outputHiddenLabel : pwText.outputVisibleLabel);
@@ -3200,20 +3209,23 @@
         ta.style.opacity = '0';
         document.body.appendChild(ta);
         ta.select();
-        const ok = document.execCommand('copy');
-        document.body.removeChild(ta);
-        if (!ok) throw new Error('copy failed');
+        try {
+          if (!document.execCommand('copy')) throw new Error('copy failed');
+        } finally {
+          ta.value = '';
+          ta.remove();
+        }
       }
     };
 
-    const renderPasswordList = (passwords) => {
+    const renderPasswordList = () => {
       listOut.innerHTML = '';
       passwords.forEach((password, idx) => {
         const row = document.createElement('div');
         row.className = 'pg-list-row';
         const text = document.createElement('code');
         text.className = 'pg-secret-text';
-        text.textContent = password;
+        text.textContent = showResult.checked ? password : '•'.repeat(password.length);
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.textContent = pwText.copyOne;
@@ -3277,33 +3289,41 @@
       const list = [];
       const seen = new Set();
       let attempts = 0;
-      const maxAttempts = Math.max(200, count * 30);
+      const maxAttempts = count * 2000;
 
-      while (list.length < count && attempts < maxAttempts) {
-        attempts += 1;
-        const chars = [];
-        normalized.forEach((set) => chars.push(pick(set.chars)));
-        while (chars.length < length) chars.push(pick(pool));
-        const candidate = shuffle(chars).join('');
-        if (seen.has(candidate)) continue;
-        seen.add(candidate);
-        list.push(candidate);
+      try {
+        // Uniform samples from the whole pool, rejecting missing character types.
+        // Forcing one character per type before shuffling biases the distribution.
+        while (list.length < count && attempts < maxAttempts) {
+          attempts += 1;
+          let candidate = '';
+          while (candidate.length < length) candidate += pick(pool);
+          if (!normalized.every(set => Array.from(candidate).some(ch => set.chars.includes(ch)))) continue;
+          if (seen.has(candidate)) continue;
+          seen.add(candidate);
+          list.push(candidate);
+        }
+      } catch (_) {
+        clearResult();
+        renderStats(0, 0);
+        setStatus(pwText.cryptoUnavailable, 'error');
+        return;
       }
 
-      output.value = list.join('\n');
+      passwords = list;
       copyAllBtn.disabled = !list.length;
       if (list.length === count) {
         setStatus(`${pwText.generatedAll(length, count)} ${length < 16 ? pwText.goodLength : ''}`.trim(), 'success');
       } else {
         setStatus(pwText.generatedPartial(list.length, count), 'warning');
       }
-      renderPasswordList(list);
+      renderPasswordList();
     };
 
     const previewStats = () => {
       const length = parseBoundedInt(lenInput, 4, 128);
       const count = parseBoundedInt(countInput, 1, 20);
-      const { pool } = buildSet();
+      const { pool, normalized } = buildSet();
       clearResult();
       if (length === null) {
         renderStats(0, 0);
@@ -3320,7 +3340,7 @@
         setStatus(pwText.chooseType, 'error');
         return;
       }
-      const bits = length * Math.log2(pool.length);
+      const bits = length * Math.log2(pool.length) + Math.log2(validProbability(normalized, length, pool.length));
       renderStats(pool.length, length);
       setStatus(pwText.preview(pool.length.toLocaleString(numberLocale), bits.toLocaleString(numberLocale, { maximumFractionDigits: 1 })));
     };
@@ -3331,6 +3351,9 @@
     };
 
     runBtn.addEventListener('click', generate);
+    [lenInput, countInput].forEach(el => el.addEventListener('keydown', event => {
+      if (event.key === 'Enter') { event.preventDefault(); generate(); }
+    }));
     [lenInput, countInput].forEach((el) => el.addEventListener('input', previewStats));
     [upper, lower, number, symbol, excludeSimilar, symbolPreset].forEach((el) => el.addEventListener('change', () => {
       updateControls();
@@ -3341,18 +3364,18 @@
       btn.addEventListener('click', () => {
         lenInput.value = btn.dataset.pwLength || '16';
         previewStats();
-        setStatus(pwText.presetApplied(lenInput.value));
+        if (status.dataset.state !== 'error') setStatus(pwText.presetApplied(lenInput.value));
         lenInput.focus();
       });
     });
 
     copyAllBtn.addEventListener('click', async () => {
-      if (!output.value.trim()) {
+      if (!passwords.length) {
         setStatus(pwText.copyEmpty, 'error');
         return;
       }
       try {
-        await copyText(output.value.trim());
+        await copyText(passwords.join('\n'));
         const old = copyAllBtn.textContent;
         copyAllBtn.textContent = pwText.copied;
         setStatus(pwText.copied, 'success');
@@ -3365,11 +3388,11 @@
     clearBtn.addEventListener('click', () => {
       clearResult();
       setStatus(pwText.cleared);
-      output.focus();
+      lenInput.focus();
     });
 
     updateControls();
-    generate();
+    previewStats();
   }
 
   if (slug === 'korean-spelling-practice') {

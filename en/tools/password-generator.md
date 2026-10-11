@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Password Generator | Create, Hide, and Copy Strong Random Passwords
-description: Generate 4-128 character random passwords in your browser with uppercase, lowercase, numbers, website-friendly symbols, similar-character exclusion, screen hiding, entropy bits, strength estimates, and one-by-one or copy-all support.
+title: Password Generator | Random Passwords, Hidden Results & Bulk Copy
+description: Generate up to 20 random passwords, 4–128 characters long. Uniform secure sampling includes every selected type, with hidden results by default, individual or bulk copy, and constraint-aware entropy.
 lang: en
 permalink: /en/tools/password-generator/
 canonical_url: /en/tools/password-generator/
@@ -19,6 +19,8 @@ alternate_urls:
   en: /en/tools/password-generator/
   ja: /ja/tools/password-generator/
 faq:
+  - q: Why are results empty at first and masked after generation?
+    a: Press Generate passwords or Enter in a number field to generate. Results are hidden by default. Enable Show generated passwords to reveal them; copy buttons copy the real passwords even while hidden.
   - q: Are generated passwords sent to a server?
     a: No. This tool runs in your browser and does not send input or output to an external server.
   - q: Will each password include all selected character types?
@@ -81,3 +83,13 @@ The generator prioritizes unique results where possible. If the character pool i
 ## Summary
 The password generator is a practical baseline tool for account security.
 Adjust **length, character sets, and readability options** to quickly create passwords that are safer and still usable.
+
+## Random password generation and hidden results
+Use whole-number lengths from 4 to 128 and counts from 1 to 20. Blank, fractional or out-of-range values and selecting no character types clear the results and show an error. Changing settings clears old passwords.
+
+Passwords are sampled uniformly from the full pool, rejecting candidates that omit a selected type. Approximate entropy and combination counts account for this requirement; they are not a security guarantee.
+
+Hiding replaces displayed characters with dots, not encryption. Passwords remain in page memory, and individual or bulk copy still copies the real values. Clear result does not erase a previously copied clipboard.
+
+### Why are results empty at first and masked after generation?
+Press Generate passwords or Enter in a number field to generate. Results are hidden by default. Enable Show generated passwords to reveal them; copy buttons copy the real passwords even while hidden.
