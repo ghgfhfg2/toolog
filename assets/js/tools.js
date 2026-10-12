@@ -13455,6 +13455,12 @@
     let downloadUrl = '';
     let currentResult = '';
     let selectedFiles = [];
+    let inputRevision = 0;
+    const jmLimits = {
+      ko: { depth: '중첩 깊이는 최대 100단계까지 지원합니다. 입력 구조를 단순화해 주세요.', number: '브라우저에서 표현할 수 없는 숫자가 있습니다. 큰 숫자는 문자열로 입력하세요.', text: '붙여넣기는 최대 2,000,000자까지 지원합니다.', ambiguous: '공통 배열이 여러 개입니다. 객체 키 병합 또는 루트 배열 감싸기를 선택하세요.' },
+      en: { depth: 'Nesting is limited to 100 levels. Simplify the input structure.', number: 'A number is outside the browser numeric range. Store very large numbers as strings.', text: 'Pasted input is limited to 2,000,000 characters.', ambiguous: 'Multiple common arrays found. Choose object-key merge or wrap roots instead.' },
+      ja: { depth: '入れ子は100階層までです。入力構造を簡略化してください。', number: 'ブラウザで表せない数値があります。大きな数値は文字列で入力してください。', text: '貼り付けは2,000,000文字までです。', ambiguous: '共通配列が複数あります。キー統合またはルートを配列で包む方式を選んでください。' }
+    }[pageLang];
 
     const fmt = (n) => Number(n || 0).toLocaleString(numberLocale);
     const formatMb = (bytes) => (bytes / (1024 * 1024)).toLocaleString(numberLocale, { maximumFractionDigits: 2 });
@@ -13540,7 +13546,7 @@
 
     const renderFileList = (files) => {
       fileList.replaceChildren();
-      files.slice(0, 8).forEach((file) => {
+      files.forEach((file) => {
         const pill = document.createElement('span');
         pill.className = 'jm-file-pill';
         const text = document.createElement('span');
@@ -13559,11 +13565,7 @@
         pill.append(text, remove);
         fileList.appendChild(pill);
       });
-      if (files.length > 8) {
-        const more = document.createElement('span');
-        more.textContent = `+${fmt(files.length - 8)}`;
-        fileList.appendChild(more);
-      }
+
     };
 
     const getCount = (value) => {
@@ -13598,9 +13600,10 @@
     };
 
     const validateInputs = (files, manualSources) => {
+      if (manualInput.value.length > 2000000) return jmLimits.text;
       if (!files.length && !manualSources.length) return jmText.needInput;
       if (files.length > MAX_FILES) return jmText.tooManyFiles(files.length);
-      const manualBytes = byteLength(manualSources.map((source) => source.text).join('\n---\n'));
+      const manualBytes = byteLength(manualInput.value);
       const totalBytes = files.reduce((sum, file) => sum + file.size, 0) + manualBytes;
       if (!files.length && manualBytes > MAX_TOTAL_BYTES) return jmText.manualTooLarge(formatMb(manualBytes));
       if (totalBytes > MAX_TOTAL_BYTES) return jmText.tooLarge(formatMb(totalBytes));
@@ -13608,9 +13611,11 @@
     };
 
     const updateInputState = () => {
+      inputRevision += 1;
+      document.querySelector('.jm-ui').setAttribute('aria-busy', 'false');
       const files = selectedFiles;
       const manualSources = getManualSources();
-      const manualBytes = byteLength(manualSources.map((source) => source.text).join('\n---\n'));
+      const manualBytes = byteLength(manualInput.value);
       const totalBytes = files.reduce((sum, file) => sum + file.size, 0) + manualBytes;
       const error = validateInputs(files, manualSources);
       clearResult();
@@ -13638,9 +13643,9 @@
     jsonlChk.addEventListener('change', updateInputState);
 
     [modeSel, dedupeChk, formatSel].forEach((control) => control?.addEventListener('change', () => {
-      if (!output.value) return;
-      clearResult();
-      setHelp(jmText.optionChanged, 'warning');
+      const hadResult = !!output.value;
+      updateInputState();
+      if (hadResult) setHelp(jmText.optionChanged, 'warning');
     }));
 
     runBtn.addEventListener('click', async () => {
@@ -13653,27 +13658,41 @@
         return;
       }
 
+      const revision = ++inputRevision;
+      const selected = modeSel.value || 'auto';
+      const dedupeEnabled = !!dedupeChk.checked;
+      const minified = formatSel.value === 'minified';
       clearResult();
       runBtn.disabled = true;
+      document.querySelector('.jm-ui').setAttribute('aria-busy', 'true');
       filesInput.setAttribute('aria-invalid', 'false');
       manualInput.setAttribute('aria-invalid', 'false');
       setHelp(jmText.working(files.length + manualSources.length));
       try {
         const fileSources = await Promise.all(files.map(async (file) => ({ name: file.name, text: await readText(file) })));
+        if (revision !== inputRevision) return;
         const sources = [...fileSources, ...manualSources];
         const parsed = sources.map((source) => {
           const txt = source.text || '';
           if (!txt.trim()) throw new Error(jmText.emptyFile(source.name));
           try {
-            return JSON.parse(txt);
+            return JSON.parse(txt.replace(/^\uFEFF/, ''));
           } catch (_) {
             throw new Error(jmText.parseFail(source.name));
           }
         });
 
-        const selected = modeSel.value || 'auto';
+        // Validate iteratively before recursive deduplication / serialization.
+        const stack = parsed.map((value) => ({ value, depth: 0 }));
+        while (stack.length) {
+          const { value, depth } = stack.pop();
+          if (typeof value === 'number' && !Number.isFinite(value)) throw new Error(jmLimits.number);
+          if (value && typeof value === 'object') {
+            if (depth >= 100) throw new Error(jmLimits.depth);
+            for (const key of Object.keys(value)) stack.push({ value: value[key], depth: depth + 1 });
+          }
+        }
         const mode = selected === 'auto' ? detectMode(parsed) : selected;
-        const dedupeEnabled = !!dedupeChk?.checked;
         const allObjects = parsed.every((value) => value && typeof value === 'object' && !Array.isArray(value));
         if (mode === 'object-merge' && !allObjects) throw new Error(jmText.invalidObjectMode);
 
@@ -13694,9 +13713,11 @@
           if (!allObjects) throw new Error(jmText.invalidObjectArrayMode);
           const keySets = parsed.map((obj) => Object.keys(obj));
           const commonKeys = keySets.reduce((acc, keys) => acc.filter((k) => keys.includes(k)), keySets[0] || []);
-          const arrayKey = commonKeys.find((k) => parsed.every((obj) => Array.isArray(obj[k])));
+          const arrayKeys = commonKeys.filter((k) => parsed.every((obj) => Array.isArray(obj[k])));
+          if (arrayKeys.length > 1) throw new Error(jmLimits.ambiguous);
+          const arrayKey = arrayKeys[0];
           if (!arrayKey) throw new Error(jmText.invalidObjectArrayMode);
-          merged = { ...(parsed[0] || {}) };
+          merged = Object.assign(Object.create(null), parsed[0]);
           const arr = parsed.flatMap((obj) => Array.isArray(obj[arrayKey]) ? obj[arrayKey] : []);
           if (dedupeEnabled) {
             const deduped = dedupeWithCount(arr);
@@ -13713,7 +13734,7 @@
             });
           });
         } else if (mode === 'object-merge') {
-          merged = {};
+          merged = Object.create(null);
           parsed.forEach((obj) => {
             if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return;
             Object.keys(obj).forEach((k) => {
@@ -13725,7 +13746,7 @@
           merged = parsed;
         }
 
-        const pretty = formatSel.value === 'minified' ? JSON.stringify(merged) : JSON.stringify(merged, null, 2);
+        const pretty = minified ? JSON.stringify(merged) : JSON.stringify(merged, null, 2);
         currentResult = pretty;
         output.value = pretty.length > MAX_PREVIEW_CHARS ? `${pretty.slice(0, MAX_PREVIEW_CHARS)}\n...` : pretty;
 
@@ -13744,6 +13765,10 @@
         const doneMessage = `${jmText.mergeDone(sources.length, jmText.modeLabelMap[mode] || mode, formatKb(outputBytes))}${removedDuplicates ? ` · ${jmText.dedupeRemoved(removedDuplicates)}` : ''}`;
         setHelp(pretty.length > MAX_PREVIEW_CHARS ? `${doneMessage} ${jmText.outputTooLarge}` : doneMessage, 'success');
       } catch (err) {
+        if (revision !== inputRevision) return;
+        clearResult();
+        filesInput.setAttribute('aria-invalid', files.length ? 'true' : 'false');
+        manualInput.setAttribute('aria-invalid', manualSources.length ? 'true' : 'false');
         output.value = '';
         itemCount.textContent = '-';
         conflictCount.textContent = '-';
@@ -13751,7 +13776,10 @@
         sizeOut.textContent = '-';
         setHelp(err?.message || jmText.mergeError, 'error');
       } finally {
-        runBtn.disabled = false;
+        if (revision === inputRevision) {
+          runBtn.disabled = !!validateInputs(selectedFiles, getManualSources());
+          document.querySelector('.jm-ui').setAttribute('aria-busy', 'false');
+        }
       }
     });
 
@@ -13774,7 +13802,11 @@
     });
 
     clearBtn.addEventListener('click', () => {
+      inputRevision += 1;
+      document.querySelector('.jm-ui').setAttribute('aria-busy', 'false');
       clearResult();
+      modeSel.value = 'auto';
+      dedupeChk.checked = false;
       filesInput.value = '';
       selectedFiles = [];
       manualInput.value = '';

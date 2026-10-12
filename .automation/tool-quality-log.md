@@ -1,5 +1,13 @@
 # Tool Quality Log
 
+## 2026-10-12 21:00 KST
+- Tool: `json-merge` (existing tool only; no new tool files).
+- Selection: recent runs improved password-generator, fraction-calculator, timezone-converter, and planners; JSON merge last received broad work in August. Higher-risk data handling still dropped `__proto__` keys and allowed stale file reads to repopulate cleared/changed inputs, making error prevention the priority.
+- Changes: null-prototype merge results preserve special keys; revision checks cancel stale asynchronous results; options are captured at run start; reset restores defaults; UTF-8 BOM support; explicit 100-level nesting and finite-number validation; ambiguous common-array rejection; raw pasted-byte and 2,000,000-character checks; every selected file can be removed; 44px touch targets, 16px mobile controls, accessible busy/invalid states and input help. KO/EN/JA SEO and FAQ now explain shallow merge, limits, conflicts, full-result copy/download; outdated internal selection prose removed. Existing catalog remains 98 tools.
+- Tests: 187 routed Chromium assertions passed across KO/EN/JA, including blank/invalid/mixed/JSONL inputs, special keys, deduplication, 100/101 nesting, infinite numbers, 50/51 files, 20MiB combined limit, 2,000,000/2,000,001 characters, long-preview full copy/download, BOM, delayed reads with clear/edit/option changes, 320/360/390px widths, and touch targets. All catalog/front matter YAML parsed; site integrity, JS syntax, and diff checks passed. Routed browser tests use current production page shells with the updated UI/script/styles; actual generated SEO and Pages build will be checked after push.
+- Local build: blocked because system Ruby 2.6 lacks Bundler 4.0.9 required by Gemfile.lock. GitHub Pages CI is the build verification path.
+- Follow-up: exact preservation of numbers above JavaScript safe-integer precision is not implemented; current guidance recommends strings. Keep an eye on very large JSONL performance.
+
 ## 2026-10-08 21:00 KST
 - Tool: `deadline-backward-planner`
 - Selection reason: recent runs improved other tools; this untouched April planner silently clamped invalid numeric values, generated plans for past deadlines, and treated a review buffer longer than the available period as a valid one-day schedule.

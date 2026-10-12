@@ -1733,9 +1733,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: JSON 파일, 붙여넣은 API 응답, JSONL 로그를 브라우저에서 병합하고 중복 제거 개수와 키 충돌을 확인해 다운로드해요.
-  description_en: Merge JSON files, pasted API responses, and JSONL logs in your browser with array concat, object-key merge, duplicate-removal counts, conflict checks, pretty/minified output, copy, and download.
-  description_ja: JSONファイル、貼り付けたAPIレスポンス、JSONLログをブラウザ内で結合し、配列連結、オブジェクトキー統合、重複削除数、キー競合、整形/圧縮出力、コピー、保存まで確認できます。
+  description: JSON 파일·API 응답·JSONL을 브라우저에서 합치고 배열 중복 제거, 객체 키 충돌, 얕은 병합 규칙과 오류를 확인하세요. 결과 전체 복사와 다운로드를 지원해요.
+  description_en: Merge JSON files, API responses, and JSONL in your browser with array deduplication, key-conflict checks, clear shallow-merge rules, validation, full-result copy, and download.
+  description_ja: JSONファイル・APIレスポンス・JSONLをブラウザ内で結合。配列の重複削除、キー競合、浅い結合ルールとエラーを確認し、結果全体をコピー・保存できます。
   url: /tools/json-merge/
   url_en: /en/tools/json-merge/
   url_ja: /ja/tools/json-merge/

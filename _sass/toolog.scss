@@ -2949,3 +2949,12 @@ a:hover { color: var(--primary-strong); }
   .pg-number-grid { grid-template-columns: 1fr; }
   .pg-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* JSON merge: readable mobile inputs and touch-friendly file removal. */
+.jm-ui textarea { max-width: 100%; box-sizing: border-box; }
+.jm-file-pill__remove { width: 2.75rem; height: 2.75rem; min-height: 2.75rem; }
+.jm-ui .tool-result { overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  .jm-ui #jm-manual, .jm-ui #jm-output, .jm-ui select { font-size: 1rem; }
+  .jm-ui .jm-options-grid, .jm-ui .jm-actions { grid-template-columns: 1fr; }
+}

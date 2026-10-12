@@ -32,6 +32,8 @@ faq:
     a: Yes. Choose Pretty printed or Minified before merging; the preview, copy result, and downloaded file use that output style.
   - q: Why is the merge button disabled?
     a: It stays disabled until at least one JSON file or pasted JSON input is present, so an empty merge cannot run by mistake.
+  - q: Is object merging a deep merge?
+    a: No. A conflicting key is replaced by the complete value from the last file or pasted document. Common-array concatenation requires exactly one shared array key.
 alternate_urls:
   ko: /tools/json-merge/
   en: /en/tools/json-merge/
@@ -44,11 +46,6 @@ Use **JSON Merge** when split JSON files with similar schema need to be combined
 Examples: paged API exports, chunked logs, and batch output files.
 
 It is useful when you saved API responses page by page or need to turn several batch outputs into one `merged.json` without uploading private data elsewhere. For smaller snippets, paste JSON directly instead of saving temporary files, then test the same array merge or object merge behavior. JSONL logs can also be parsed line by line and merged locally, with empty lines and full-line `//` comments skipped.
-
-## Why this tool was refreshed today
-Recent quality passes focused on `link-list-cleaner`, `average-speed-calculator`, `cafe-work-seat-simulator`, `blog-banned-word-checker`, `image-upscaler`, `case-converter`, and `grocery-budget-checker`, so this update avoids repeating the same tool.
-
-`json-merge` was selected because it has several failure-prone input paths: file upload, direct paste, JSON parsing, large-size limits, and object-key conflicts. It also matches a clear data-work search intent for people trying to combine JSON files, merge arrays, or test pasted API responses locally.
 
 ## Key features
 - Multi-file JSON upload
@@ -87,3 +84,15 @@ Recent quality passes focused on `link-list-cleaner`, `average-speed-calculator`
 - Link cleanup: [Link List Cleaner]({{ '/en/tools/link-list-cleaner/' | relative_url }})
 - Text length check: [Text Counter]({{ '/en/tools/text-counter/' | relative_url }})
 - Key/style cleanup: [Case Converter]({{ '/en/tools/case-converter/' | relative_url }})
+
+## JSON merge errors and data preservation
+- Object-key merging is shallow: a later nested object replaces the earlier value, rather than recursively combining its fields.
+- Special JSON keys such as `__proto__`, `constructor`, and `toString` are preserved as ordinary data.
+- If multiple common arrays exist, choose object-key merge or wrap roots instead of an ambiguous common-array merge.
+- UTF-8 BOM files are supported; standard JSON comma and quotation rules still apply.
+- Pasted input is limited to 2,000,000 characters and nesting to 100 levels. Out-of-range numbers such as `1e400` are rejected. Store precision-sensitive large integers as strings.
+- Changing input/options or clearing while files are being read cancels the old result. Merge the new input again.
+- Large previews are truncated, but copying and downloading retain the complete JSON.
+
+### Is object merging a deep merge?
+No. A conflicting key is replaced by the complete value from the last file or pasted document. Common-array concatenation requires exactly one shared array key.
