@@ -2147,8 +2147,8 @@
 
 - id: average-speed-calculator
   title: 평균 속도 계산기
-  title_en: Average Speed Calculator
-  title_ja: 平均速度計算機
+  title_en: Average Speed & Running Pace Calculator
+  title_ja: 平均速度・ランニングペース計算機
   category: calculator
   category_label: 이동/생활
   category_label_en: Travel/Lifestyle

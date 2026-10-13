@@ -22,7 +22,7 @@ faq:
   - q: What do the estimated 5K and 10K times mean?
     a: They are simple projections based on keeping the same average speed throughout the whole distance.
   - q: Which inputs show an error?
-    a: Distance must be from 0.000001 to 100,000 km. Hours, minutes and seconds must be non-negative whole numbers, and total time must be greater than 0.
+    a: Distance must be from 0.000001 to 100,000 km. Hours, minutes and seconds must be non-negative whole numbers, and total time must be greater than 0 and no more than 9,999 hours.
   - q: Can I calculate a running record with seconds?
     a: Yes. Combine hours, minutes and seconds, or enter total minutes or seconds alone. Blank time fields count as zero. Total duration must be greater than zero and no more than 9,999 hours.
 alternate_urls:
@@ -31,7 +31,7 @@ alternate_urls:
   ja: /ja/tools/average-speed-calculator/
 ---
 
-## Quickly calculate your average speed and pace
+## Average speed and running pace from distance and time
 When you walk, run, cycle, or travel,
 it is useful to know **how fast you actually moved**.
 
@@ -43,16 +43,16 @@ If you only know total minutes, you can enter 90 minutes directly without conver
 - Calculate average speed from distance and time
 - Automatically show pace per kilometer
 - Support total-minute entries greater than 59
-- Flag empty, negative, decimal time, and zero-duration inputs
+- Explain missing distance, negative or fractional time values, and zero-duration inputs
 - Estimate 5K and 10K times from the same speed
 - Load an example, clear inputs, and copy valid results
 - Useful for running, walking, cycling, and trip planning
 
 ## How to use it
 1. Enter the travel distance in kilometers.
-2. Enter the total time in hours and minutes. For 90 minutes, you can leave hours blank and enter `90` in minutes.
+2. Enter hours, minutes and optional seconds. For 1 hour 30 minutes, enter `1` hour and `30` minutes. For 90 minutes, leave hours blank and enter `90` in minutes. You can also enter total seconds alone.
 3. Check average speed and pace.
-4. Use the projected 5K and 10K times as quick references.
+4. Use the projected 5K and 10K times as quick references, then copy the valid results. To try the seconds input, load the 10 km / 52 min 30 sec running example; use Clear to start again.
 
 ## Formula
 - Average speed (km/h) = **distance ÷ total time in hours**
@@ -65,10 +65,11 @@ your average speed is **10 km/h** and your pace is **6:00 per km**.
 If you run 10 km in 52 minutes, the result is about **11.54 km/h** with a **5:12/km** pace. The 5K and 10K estimates are simple conversions from that same pace.
 
 ## Input checks
-- Distance must be greater than 0 and no more than 100,000 km.
-- Hours and minutes must be non-negative whole numbers.
+- Distance is required and must be from 0.000001 to 100,000 km. Decimal distances such as 3.5 km and 42.195 km are supported.
+- Hours, minutes and seconds must be non-negative whole numbers. Blank time fields count as zero.
 - Minutes can be greater than 59, so `90` minutes is valid.
-- Total time must be greater than 0 because speed and pace cannot be calculated from zero time.
+- Total time must be greater than 0 and no more than 9,999 hours. Zero duration or a duration above the limit shows an error.
+- With all fields empty, results show `-` and the tool prompts you to enter distance and time. Invalid inputs clear the results and disable copying; correct the highlighted fields to calculate again.
 
 ## Related tools
 - [Unit Converter]({{ '/en/tools/unit-converter/' | relative_url }})
