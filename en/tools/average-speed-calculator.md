@@ -1,8 +1,8 @@
 ---
 layout: tool
 lang: en
-title: Average Speed Calculator | Calculate km/h and pace from distance and time
-description: Enter distance, hours, or total minutes to calculate average speed in km/h, pace per kilometer, total time, and estimated 5K/10K finish times with safer input checks.
+title: Average Speed & Running Pace Calculator | Hours, Minutes, Seconds
+description: Calculate km/h, running pace per kilometer and estimated 5K/10K times from distance and hours, minutes or seconds. Supports total minutes, decimal distances, input checks and result copying.
 permalink: /en/tools/average-speed-calculator/
 canonical_url: /en/tools/average-speed-calculator/
 category: calculator
@@ -22,7 +22,9 @@ faq:
   - q: What do the estimated 5K and 10K times mean?
     a: They are simple projections based on keeping the same average speed throughout the whole distance.
   - q: Which inputs show an error?
-    a: Distance must be greater than 0 and no more than 100,000 km. Hours and minutes must be non-negative whole numbers, and total time must be greater than 0.
+    a: Distance must be from 0.000001 to 100,000 km. Hours, minutes and seconds must be non-negative whole numbers, and total time must be greater than 0.
+  - q: Can I calculate a running record with seconds?
+    a: Yes. Combine hours, minutes and seconds, or enter total minutes or seconds alone. Blank time fields count as zero. Total duration must be greater than zero and no more than 9,999 hours.
 alternate_urls:
   ko: /tools/average-speed-calculator/
   en: /en/tools/average-speed-calculator/
@@ -85,3 +87,14 @@ Yes. Minute values are treated as total minutes, so 90 minutes is calculated as 
 
 ### Are the estimated times official race predictions?
 No. They are simple projections based on your entered average speed and should be used as rough references only.
+
+
+## Seconds and result precision
+For **10 km in 52 minutes 30 seconds**, average speed is about **11.43 km/h**, pace is **5:15/km**, and estimated 5K time is **26:15**. Total minutes or total seconds alone also work.
+
+Distance must be **0.000001–100,000 km**; hours, minutes and seconds must be non-negative integers. Speed is rounded to two decimal places; pace and finish times to whole seconds. Very small speeds display as `<0.01 km/h`; times under one second display as `<0:01`. Seconds are preserved rather than first rounding the input to minutes.
+
+Include stops for overall trip speed, or exclude them for moving speed. Calculations stay in your browser and are not saved. If automatic copy is blocked, select and copy the results manually.
+
+### Can I calculate a running record with seconds?
+Yes. Combine hours, minutes and seconds, or enter total minutes or seconds alone. Blank time fields count as zero. Total duration must be greater than zero and no more than 9,999 hours.

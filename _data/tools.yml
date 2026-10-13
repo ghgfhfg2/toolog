@@ -2156,9 +2156,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 이동거리와 시간 또는 총 분을 넣으면 평균 속도, 1km 페이스, 총 시간, 예상 5K·10K 기록을 한 번에 계산하고 오류 입력을 안내해요.
-  description_en: Enter distance, hours, or total minutes to calculate average speed, pace per kilometer, total time, and estimated 5K/10K times with safer input checks.
-  description_ja: 移動距離、時間、総分数から、平均速度・1kmペース・総時間・予想5K/10Kタイムを計算し、入力エラーも案内します。
+  description: 거리(km)와 시·분·초로 평균 속도(km/h), 1km 러닝 페이스, 예상 5K·10K 기록을 계산하세요. 90분 총 분 입력, 소수 거리, 입력 오류 안내와 결과 복사를 지원합니다.
+  description_en: Calculate km/h, running pace per kilometer and estimated 5K/10K times from distance and hours, minutes or seconds. Supports total minutes, decimal distances, input checks and result copying.
+  description_ja: 距離と時・分・秒から平均速度(km/h)、1kmペース、予想5K/10Kタイムを計算。総分数・小数距離、入力エラー確認、結果コピーに対応します。
   url: /tools/average-speed-calculator/
   url_en: /en/tools/average-speed-calculator/
   url_ja: /ja/tools/average-speed-calculator/

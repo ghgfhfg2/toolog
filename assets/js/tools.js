@@ -15839,6 +15839,7 @@
     const distance = document.getElementById('as-distance');
     const hours = document.getElementById('as-hours');
     const minutes = document.getElementById('as-minutes');
+    const seconds = document.getElementById('as-seconds');
     const totalTime = document.getElementById('as-time');
     const speed = document.getElementById('as-speed');
     const pace = document.getElementById('as-pace');
@@ -15849,13 +15850,13 @@
     const copyBtn = document.getElementById('as-copy');
     const resetBtn = document.getElementById('as-reset');
 
-    if (!distance || !hours || !minutes || !totalTime || !speed || !pace || !out5k || !out10k || !help) return;
+    if (!distance || !hours || !minutes || !seconds || !totalTime || !speed || !pace || !out5k || !out10k || !help) return;
 
     const t = {
       ko: {
         idle: '거리와 시간을 입력하면 속도와 페이스를 계산합니다.',
-        invalidDistance: '이동거리는 0보다 크고 100,000km 이하인 숫자로 입력해 주세요.',
-        invalidTime: '시간과 분은 0 이상의 정수로 입력하고, 총 시간은 0보다 커야 합니다.',
+        invalidDistance: '이동거리는 0.000001km 이상 100,000km 이하인 숫자로 입력해 주세요.',
+        invalidTime: '시간·분·초는 0 이상의 정수로 입력하고, 총 시간은 0보다 커야 합니다.',
         tooLong: '총 시간이 너무 큽니다. 9,999시간 이하의 기록만 계산해 주세요.',
         summary: (d, time, s, p) => `${d}km를 ${time} 동안 이동한 기준으로 평균 속도 ${s}, 1km 페이스 ${p}를 계산했습니다.`,
         copied: '복사됨',
@@ -15866,8 +15867,8 @@
       },
       en: {
         idle: 'Enter distance and time to calculate speed and pace.',
-        invalidDistance: 'Enter a distance greater than 0 and no more than 100,000 km.',
-        invalidTime: 'Enter non-negative whole numbers for hours and minutes, with total time greater than 0.',
+        invalidDistance: 'Enter a distance from 0.000001 to 100,000 km.',
+        invalidTime: 'Enter non-negative whole numbers for hours, minutes, and seconds, with total time greater than 0.',
         tooLong: 'The total time is too large. Please calculate records up to 9,999 hours.',
         summary: (d, time, s, p) => `Calculated ${s} average speed and ${p} pace for ${d} km over ${time}.`,
         copied: 'Copied',
@@ -15878,8 +15879,8 @@
       },
       ja: {
         idle: '距離と時間を入力すると速度とペースを計算します。',
-        invalidDistance: '距離は0より大きく100,000km以下の数値で入力してください。',
-        invalidTime: '時間と分は0以上の整数で入力し、総時間は0より大きくしてください。',
+        invalidDistance: '距離は0.000001km以上100,000km以下の数値で入力してください。',
+        invalidTime: '時間・分・秒は0以上の整数で入力し、総時間は0より大きくしてください。',
         tooLong: '総時間が大きすぎます。9,999時間以下の記録を計算してください。',
         summary: (d, time, s, p) => `${d}kmを${time}で移動した条件で、平均速度 ${s}、1kmペース ${p} を計算しました。`,
         copied: 'コピー完了',
@@ -15890,8 +15891,8 @@
       }
     }[pageLang] || {
       idle: '거리와 시간을 입력하면 속도와 페이스를 계산합니다.',
-      invalidDistance: '이동거리는 0보다 크고 100,000km 이하인 숫자로 입력해 주세요.',
-      invalidTime: '시간과 분은 0 이상의 정수로 입력하고, 총 시간은 0보다 커야 합니다.',
+      invalidDistance: '이동거리는 0.000001km 이상 100,000km 이하인 숫자로 입력해 주세요.',
+      invalidTime: '시간·분·초는 0 이상의 정수로 입력하고, 총 시간은 0보다 커야 합니다.',
       tooLong: '총 시간이 너무 큽니다. 9,999시간 이하의 기록만 계산해 주세요.',
       summary: (d, time, s, p) => `${d}km를 ${time} 동안 이동한 기준으로 평균 속도 ${s}, 1km 페이스 ${p}를 계산했습니다.`,
       copied: '복사됨', copyDefault: '결과 복사', cleared: '입력값을 초기화했습니다.', sample: '10km 러닝 예시를 입력했습니다.',
@@ -15912,9 +15913,10 @@
     };
     const parseIntegerField = (el) => {
       const raw = el.value.trim();
+      if (el.validity.badInput) return NaN;
       if (!raw) return 0;
       const value = Number(raw);
-      return Number.isInteger(value) ? value : NaN;
+      return /^\d+$/.test(raw) && Number.isSafeInteger(value) ? value : NaN;
     };
     const formatRaceTime = (minutesTotal) => {
       const totalSeconds = Math.round(minutesTotal * 60);
@@ -15924,20 +15926,23 @@
       return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
     };
     const formatDuration = (minutesTotal) => {
-      const total = Math.round(minutesTotal);
-      const h = Math.floor(total / 60);
-      const m = total % 60;
-      if (pageLang === 'en') return h ? `${h}h ${m}m` : `${m}m`;
-      if (pageLang === 'ja') return h ? `${h}時間 ${m}分` : `${m}分`;
-      return h ? `${h}시간 ${m}분` : `${m}분`;
+      const total = Math.round(minutesTotal * 60);
+      const h = Math.floor(total / 3600), m = Math.floor(total % 3600 / 60), s = total % 60;
+      if (pageLang === 'en') return `${h ? h + 'h ' : ''}${m}m ${s}s`;
+      if (pageLang === 'ja') return `${h ? h + '時間 ' : ''}${m}分 ${s}秒`;
+      return `${h ? h + '시간 ' : ''}${m}분 ${s}초`;
     };
-
+    const copyFailure = { ko: '자동 복사가 차단되었습니다. 결과를 직접 선택해 복사해 주세요.', en: 'Automatic copy is blocked. Select and copy the results manually.', ja: '自動コピーがブロックされました。結果を選択してコピーしてください。' }[pageLang];
     const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
+      try { await navigator.clipboard.writeText(text); return true; }
       catch (_) {
+        const active = document.activeElement;
         const ta = document.createElement('textarea');
         ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        document.body.appendChild(ta);
+        try { ta.select(); return document.execCommand('copy'); }
+        catch (_) { return false; }
+        finally { ta.remove(); active?.focus(); }
       }
     };
 
@@ -15946,18 +15951,20 @@
       const d = Number(distanceRaw || 0);
       const h = parseIntegerField(hours);
       const m = parseIntegerField(minutes);
+      const sec = parseIntegerField(seconds);
 
-      const totalHours = h + (m / 60);
-      const totalMinutes = (h * 60) + m;
-      const distanceInvalid = !!distanceRaw && (!Number.isFinite(d) || d <= 0 || d > 100000);
-      const timeInvalid = !Number.isFinite(h) || !Number.isFinite(m) || h < 0 || m < 0 || (!distanceRaw && (h > 0 || m > 0));
-      const noInput = !distanceRaw && !hours.value.trim() && !minutes.value.trim();
+      const totalHours = h + (m / 60) + (sec / 3600);
+      const totalMinutes = (h * 60) + m + sec / 60;
+      const distanceInvalid = distance.validity.badInput || (!!distanceRaw && (!Number.isFinite(d) || d < 0.000001 || d > 100000));
+      const timeInvalid = !Number.isFinite(h) || !Number.isFinite(m) || !Number.isFinite(sec) || h < 0 || m < 0 || sec < 0;
+      const noInput = !distanceRaw && !hours.value.trim() && !minutes.value.trim() && !seconds.value.trim() && !distanceInvalid && !timeInvalid;
       const noTime = distanceRaw && totalHours <= 0;
       const tooLong = totalHours > 9999;
 
-      setInvalid(distance, distanceInvalid);
+      setInvalid(distance, distanceInvalid || (!distanceRaw && !noInput));
       setInvalid(hours, timeInvalid || noTime || tooLong);
       setInvalid(minutes, timeInvalid || noTime || tooLong);
+      setInvalid(seconds, timeInvalid || noTime || tooLong);
 
       if (noInput) {
         resetResult();
@@ -15982,22 +15989,23 @@
 
       const speedKmh = d / totalHours;
       const paceMin = totalMinutes / d;
-      const distanceText = d.toLocaleString(numberLocale, { maximumFractionDigits: 3 });
+      const distanceText = d.toLocaleString(numberLocale, { maximumFractionDigits: 6 });
       const durationText = formatDuration(totalMinutes);
       totalTime.textContent = durationText;
-      speed.textContent = `${speedKmh.toLocaleString(numberLocale, { maximumFractionDigits: 2 })} km/h`;
-      pace.textContent = `${formatRaceTime(paceMin)}/km`;
-      out5k.textContent = formatRaceTime(paceMin * 5);
-      out10k.textContent = formatRaceTime(paceMin * 10);
+      speed.textContent = `${speedKmh < 0.01 ? '<0.01' : speedKmh.toLocaleString(numberLocale, { maximumFractionDigits: 2 })} km/h`;
+      pace.textContent = `${(paceMin * 60 < 1 ? '<0:01' : formatRaceTime(paceMin))}/km`;
+      out5k.textContent = paceMin * 300 < 1 ? '<0:01' : formatRaceTime(paceMin * 5);
+      out10k.textContent = paceMin * 600 < 1 ? '<0:01' : formatRaceTime(paceMin * 10);
       copyBtn.disabled = false;
       setStatus(t.summary(distanceText, durationText, speed.textContent, pace.textContent), 'success');
     };
 
-    [distance, hours, minutes].forEach((el) => el?.addEventListener('input', render));
+    [distance, hours, minutes, seconds].forEach((el) => el?.addEventListener('input', render));
 
     copyBtn?.addEventListener('click', async () => {
       if (speed.textContent === '-') return;
-      await copyText(t.copy(distance.value.trim(), totalTime.textContent, speed.textContent, pace.textContent, out5k.textContent, out10k.textContent));
+      const copied = await copyText(t.copy(distance.value.trim(), totalTime.textContent, speed.textContent, pace.textContent, out5k.textContent, out10k.textContent));
+      if (!copied) { setStatus(copyFailure, 'error'); return; }
       const old = copyBtn.textContent;
       copyBtn.textContent = t.copied;
       setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
@@ -16007,6 +16015,7 @@
       distance.value = 10;
       hours.value = 0;
       minutes.value = 52;
+      seconds.value = 30;
       render();
       setStatus(t.sample, 'success');
       distance.focus();
@@ -16016,6 +16025,7 @@
       distance.value = '';
       hours.value = '';
       minutes.value = '';
+      seconds.value = '';
       render();
       setStatus(t.cleared);
       distance.focus();

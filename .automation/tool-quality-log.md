@@ -1,3 +1,11 @@
+## 2026-10-13 21:00 KST
+- Tool: `average-speed-calculator` (existing tool only; 98-tool count preserved).
+- Selection: recent runs improved JSON merge, password, fraction, timezone and deadline tools. This older speed calculator could overflow race-time results for tiny distances, silently treat malformed blank numeric fields as zero, could not accept seconds, and reported copy success even when the fallback failed. Prioritized correctness and mobile input usability.
+- Changes: bounded distance at 0.000001–100,000 km; safe whole-number hours/minutes/seconds, 9,999-hour total limit, true missing-distance invalid state, seconds-aware duration and running sample, small-result indicators instead of misleading zero, clipboard-denied feedback and fallback cleanup. Scoped 44px controls, 16px fonts, keyboard focus and responsive inputs/results. KO/EN/JA titles/descriptions, visible FAQ and matching structured FAQ explain seconds, limits, rounding and stopped/moving time; home descriptions updated. Removed internal selection prose from the public Korean page. No new tool files.
+- Validation: 237 Chromium assertions across KO/EN/JA with candidate layout/script/CSS on captured production shells: normal, seconds-only, total minutes, empty, invalid, negative/fractional, long and boundary values, tiny-distance overflow protection, copy denied, clear, missing-distance accessibility, 320/360/390px overflow and touch targets. All catalog/front matter YAML, related tool/catalog paths, 98-tool integrity, JS syntax and whitespace checks pass.
+- Local build: unavailable because system Ruby 2.6 lacks Bundler 4.0.9 required by Gemfile.lock. Production build and deployment verified through GitHub Pages CI after push.
+- Follow-up: only kilometer input is supported; mile input is not added. Pace/finish times remain constant-speed estimates, not race predictions. Requested /home path is absent; actual repository is /Users/sooya/.openclaw/workspace/toolog.
+
 # Tool Quality Log
 
 ## 2026-10-12 21:00 KST
