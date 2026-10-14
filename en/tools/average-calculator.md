@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Average Calculator | Mean, Median, Std. Deviation, Quartiles
-description: Paste a number list to calculate average, median, sum, min, max, range, Q1, Q3, and standard deviation instantly. Supports thousands separators, currency symbols, decimals, and negative values.
+title: Average Calculator | Mean, Median, Standard Deviation & Comma Modes
+description: Calculate mean, median, sum, population standard deviation and quartiles. Choose comma or line separators, review ignored entries and validate number limits in your browser.
 lang: en
 permalink: /en/tools/average-calculator/
 canonical_url: /en/tools/average-calculator/
@@ -25,10 +25,15 @@ faq:
     a: Yes. The tool shows population standard deviation plus Q1 and Q3 from the sorted values.
   - q: What happens if text is mixed with numbers?
     a: Non-number entries are ignored and the ignored count is shown with the result.
+  - q: Does 1,234 mean two values?
+    a: Auto mode treats it as 1234. Select every comma to calculate 1 and 234 as separate values.
+  - q: What limits and standard deviation method are used?
+    a: Up to 5,000 nonempty entries and 100,000 characters are allowed. Each value must be between -1 quadrillion and 1 quadrillion. Invalid entries count toward the entry limit. Standard deviation uses the population formula. For odd-sized lists, Q1 and Q3 are medians of the lower and upper halves excluding the overall median. For one value, both quartiles equal that value and deviation is zero. Results are rounded to eight decimal places; tiny nonzero results use scientific notation.
 alternate_urls:
   ko: /tools/average-calculator/
   en: /en/tools/average-calculator/
   ja: /ja/tools/average-calculator/
+
 ---
 
 ## Quick stats from a number list
@@ -78,3 +83,15 @@ Yes. Standard deviation is calculated as population standard deviation, and Q1/Q
 
 ### What happens if text is mixed with numbers?
 Text and blank entries are excluded from the calculation, and the ignored-entry count is shown in the result. As long as valid numbers remain, mean, median, and range are still calculated.
+
+
+## Comma separators and invalid entries
+Auto mode reads 1,234 as the single number 1234. Select every comma to calculate 1 and 234 separately. Use one number per line for spreadsheet columns. Dates, 12kg, 10%, and 1.2.3 are ignored as whole entries, never partially extracted. Currency prefixes ₩, $, ¥, €, and £ are supported.
+
+### Does 1,234 mean two values?
+Auto mode treats it as 1234. Select every comma to calculate 1 and 234 as separate values.
+
+### What limits and standard deviation method are used?
+Up to 5,000 nonempty entries and 100,000 characters are allowed. Each value must be between -1 quadrillion and 1 quadrillion. Invalid entries count toward the entry limit.
+
+Standard deviation uses the population formula. For odd-sized lists, Q1 and Q3 are medians of the lower and upper halves excluding the overall median. For one value, both quartiles equal that value and deviation is zero. Results are rounded to eight decimal places; tiny nonzero results use scientific notation.

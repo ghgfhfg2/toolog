@@ -2513,3 +2513,11 @@ a:hover { color: #fff; text-decoration: none; }
   .as-ui .as-grid, .as-ui .as-actions { grid-template-columns: 1fr; }
   .as-ui .as-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* Average calculator: bounded mobile cards and accessible input flow. */
+.avg-ui :is(textarea, select, button) { font-size: 16px; min-height: 44px; }
+.avg-ui :is(textarea, select, button):focus-visible { outline: 3px solid #60a5fa; outline-offset: 3px; }
+.avg-ui .tool-row, .avg-stats > div { min-width: 0; }
+.avg-stats strong, .avg-ui .tool-result { overflow-wrap: anywhere; }
+.avg-stats strong { font-size: clamp(1rem, 4vw, 1.35rem); }
+@media (max-width: 480px) { .avg-actions { grid-template-columns: 1fr; } .avg-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

@@ -16036,6 +16036,7 @@
 
   if (slug === 'average-calculator') {
     const input = document.getElementById('avg-input');
+    const separator = document.getElementById('avg-separator');
     const countEl = document.getElementById('avg-count');
     const sumEl = document.getElementById('avg-sum');
     const meanEl = document.getElementById('avg-mean');
@@ -16118,7 +16119,8 @@
 
     const MAX_ITEMS = 5000;
     const MAX_ABS = 1000000000000000;
-    const fmt = (n) => Number(n).toLocaleString(numberLocale, { maximumFractionDigits: 8 });
+    const fmt = (n) => n !== 0 && Math.abs(n) < 0.00000001 ? n.toExponential(6) : Number(n).toLocaleString(numberLocale, { maximumFractionDigits: 8 });
+    const lengthError = { ko: '입력은 최대 100,000자까지 가능합니다.', en: 'Input is limited to 100,000 characters.', ja: '入力は100,000文字までです。' }[pageLang];
 
     const copyText = async (value) => {
       try {
@@ -16128,7 +16130,10 @@
       catch (_) {
         const ta = document.createElement('textarea');
         ta.value = value; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        const active = document.activeElement;
+        document.body.appendChild(ta);
+        try { ta.select(); if (!document.execCommand('copy')) throw new Error('copy denied'); }
+        finally { ta.remove(); active?.focus(); }
       }
     };
 
@@ -16145,23 +16150,40 @@
       if (copyBtn) copyBtn.disabled = true;
     };
 
+    // Validate whole tokens: never turn dates, percentages, labels or malformed decimals into numbers.
     const parseNumbers = (raw) => {
-      const source = raw || '';
-      const numberPattern = /[-+]?(?:(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?|\.\d+)(?:e[-+]?\d+)?/gi;
+      const mode = separator?.value || 'auto';
+      const source = (raw || '').normalize('NFKC').replace(/−/g, '-');
+      const numeric = /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[-+]?\d+)?$/i;
+      const grouped = /^[-+]?\d{1,3}(?:,\d{3})+(?:\.\d+)?(?:e[-+]?\d+)?$/i;
+      const clean = (token) => token.trim().replace(/^([+-]?)[₩$¥€£]/, '$1');
+      const chunks = mode === 'lines' ? source.split(/\r?\n|[;|]/) : source.split(/[\s;|]+/);
       const nums = [];
-      const matches = [...source.matchAll(numberPattern)];
-      matches.forEach((match) => {
-        const token = match[0];
-        const normalized = token.replace(/_/g, '').replace(/,/g, '');
-        const value = Number(normalized);
-        if (Number.isFinite(value)) nums.push(value);
-      });
-      const leftovers = source.replace(numberPattern, ' ');
-      const invalid = leftovers
-        .split(/[\s,;|/()[\]{}<>]+/)
-        .map((v) => v.trim())
-        .filter((v) => v && /[0-9A-Za-z가-힣ぁ-んァ-ヶ一-龥]/.test(v)).length;
-      return { nums, invalid, tokenCount: matches.length + invalid };
+      let invalid = 0, tokenCount = 0;
+      for (const chunk of chunks) {
+        let token = clean(chunk);
+        if (mode === 'auto' && token.endsWith(',') && grouped.test(token.slice(0, -1))) token = token.slice(0, -1);
+        const tokens = mode === 'comma' ? token.split(',') : mode === 'lines' || grouped.test(token) ? [token] : token.split(',');
+        for (const part of tokens) {
+          const valueToken = clean(part);
+          if (!valueToken) continue;
+          tokenCount++;
+          const normalized = mode !== 'comma' && grouped.test(valueToken) ? valueToken.replace(/,/g, '') : valueToken;
+          const value = numeric.test(normalized) ? Number(normalized) : NaN;
+          if (Number.isFinite(value)) nums.push(value); else invalid++;
+        }
+      }
+      return { nums, invalid, tokenCount };
+    };
+    // Neumaier summation preserves small values when positive/negative large values cancel.
+    const stableSum = (values) => {
+      let total = 0, correction = 0;
+      for (const value of values) {
+        const next = total + value;
+        correction += Math.abs(total) >= Math.abs(value) ? (total - next) + value : (value - next) + total;
+        total = next;
+      }
+      return total + correction;
     };
 
     const medianOf = (values) => {
@@ -16171,9 +16193,10 @@
     };
 
     const render = () => {
+      if (input.value.length > 100000) { setIdle(lengthError, 'error'); return; }
       const parsed = parseNumbers(input.value);
       const nums = parsed.nums;
-      if (nums.length > MAX_ITEMS) {
+      if (parsed.tokenCount > MAX_ITEMS) {
         setIdle(text.tooMany, 'error');
         return;
       }
@@ -16187,7 +16210,7 @@
       }
       const sorted = [...nums].sort((a, b) => a - b);
       const count = nums.length;
-      const sum = nums.reduce((acc, cur) => acc + cur, 0);
+      const sum = stableSum(nums);
       const mean = sum / count;
       const median = medianOf(sorted);
       const min = sorted[0];
@@ -16197,7 +16220,8 @@
       const upperHalf = count === 1 ? sorted : sorted.slice(Math.ceil(count / 2));
       const q1 = medianOf(lowerHalf);
       const q3 = medianOf(upperHalf);
-      const stdDev = Math.sqrt(nums.reduce((acc, cur) => acc + ((cur - mean) ** 2), 0) / count);
+      const deviationScale = Math.max(Math.abs(min - mean), Math.abs(max - mean));
+      const stdDev = deviationScale === 0 ? 0 : deviationScale * Math.sqrt(stableSum(nums.map((cur) => ((cur - mean) / deviationScale) ** 2)) / count);
 
       input.setAttribute('aria-invalid', 'false');
       countEl.textContent = count.toLocaleString(numberLocale);
@@ -16217,7 +16241,9 @@
     };
 
     input.addEventListener('input', render);
+    separator?.addEventListener('change', render);
     sampleBtn?.addEventListener('click', () => {
+      if (separator) separator.value = 'auto';
       input.value = text.sample;
       render();
       input.focus();
@@ -16240,6 +16266,7 @@
     });
     resetBtn?.addEventListener('click', () => {
       input.value = '';
+      if (separator) separator.value = 'auto';
       setIdle(text.idle);
       input.focus();
     });

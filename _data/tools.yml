@@ -1244,9 +1244,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 숫자 목록의 평균·중앙값·합계·범위·사분위수·표준편차를 계산하고, 천 단위 쉼표와 통화기호가 섞여도 숫자만 추려 표시해요.
-  description_en: Calculate average, median, sum, range, quartiles, and standard deviation from a number list, while handling thousands separators, currency symbols, and ignored text.
-  description_ja: 数値リストの平均・中央値・合計・範囲・四分位・標準偏差を計算し、桁区切りや通貨記号、除外文字も確認できます。
+  description: 평균 계산기로 숫자 목록의 평균·중앙값·합계·모집단 표준편차·사분위수를 계산하세요. 쉼표 구분 방식을 직접 선택하고 잘못된 항목과 입력 한도를 확인할 수 있습니다.
+  description_en: Calculate mean, median, sum, population standard deviation and quartiles. Choose comma or line separators, review ignored entries and validate number limits in your browser.
+  description_ja: 数値リストの平均・中央値・合計・母標準偏差・四分位数を計算。カンマや行の区切りを選択し、除外項目と入力制限をブラウザで確認できます。
   url: /tools/average-calculator/
   url_en: /en/tools/average-calculator/
   url_ja: /ja/tools/average-calculator/

@@ -1,3 +1,11 @@
+## 2026-10-14 21:00 KST
+- Tool: `average-calculator` (one existing tool; 98-tool count unchanged).
+- Selection: last improved July 14; recent runs improved average speed, JSON merge, password and fraction tools. Reproduced partial-number extraction from dates, 12kg, percentages and malformed decimals, plus ambiguous comma interpretation and dishonest clipboard fallback success. Correctness took priority over cosmetic work.
+- Changes: whole-token numeric validation; explicit auto/comma/one-per-line modes; thousands/currency/scientific/fullwidth inputs; invalid-entry and raw-length limits; compensated summation and scaled deviation for cancellation/tiny values; true copy failure and cleanup; accessible separator help, keyboard focus, 44px controls, mobile card wrapping; KO/EN/JA metadata, visible/structured FAQ and catalog descriptions explain ambiguity, limits, population deviation and quartile method. No new tool files or broad refactoring.
+- Validation: 198 Chromium assertions across KO/EN/JA production shells with candidate layout/script/CSS: blank, invalid/date/unit/percent/malformed tokens, separator modes, single/even/odd counts, currency, cancellation, tiny values, 5,000/5,001 entries, 100,001 characters, range, example/reset/copy failure, and 320/360/390px overflow/touch targets. All 294 front matters, 98 catalog entries and related IDs parsed/checked; site integrity, JS syntax and whitespace passed.
+- Local build: attempted but unavailable because system Ruby 2.6 lacks locked Bundler 4.0.9. GitHub Pages CI is the production build verification path.
+- Follow-up: auto mode cannot infer intent for 1,234; the explicit separator control and guidance resolve this. Statistics use floating-point arithmetic, not arbitrary precision. Requested /home path is absent; actual repository is /Users/sooya/.openclaw/workspace/toolog.
+
 ## 2026-10-13 21:00 KST
 - Tool: `average-speed-calculator` (existing tool only; 98-tool count preserved).
 - Selection: recent runs improved JSON merge, password, fraction, timezone and deadline tools. This older speed calculator could overflow race-time results for tiny distances, silently treat malformed blank numeric fields as zero, could not accept seconds, and reported copy success even when the fallback failed. Prioritized correctness and mobile input usability.
