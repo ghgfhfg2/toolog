@@ -18222,14 +18222,17 @@
     const copyBtn = document.getElementById('rs-copy');
     const clearBtn = document.getElementById('rs-reset');
 
-    if (!total || !rounding || !items || !ratioSum || !itemCount || !lastAdjust || !checkTotal || !list || !help) return;
+    if (!total || !rounding || !items || !ratioSum || !itemCount || !lastAdjust || !checkTotal || !list || !help || !copyBtn || !sampleBtn || !clearBtn) return;
 
     const t = {
       ko: {
         need: '총 금액과 항목별 비율을 입력하세요.',
         invalidTotal: '총 금액은 1 이상 1,000조 이하의 정수로 입력해 주세요.',
         invalidLine: (line) => `${line}번째 줄을 확인하세요. 이름,비율 또는 비율만 입력할 수 있습니다.`,
-        invalidRatio: (line) => `${line}번째 줄의 비율은 0 초과 1조 이하의 숫자여야 합니다.`,
+        invalidRatio: (line) => `${line}번째 줄: 비율은 0 초과 1조 이하, 소수점 아래 최대 12자리의 십진수로 입력하세요. 지수·16진수·% 표기는 지원하지 않습니다.`,
+        tooLong: '입력은 빈 줄을 포함해 최대 10,000자입니다.',
+        invalidUnit: '반올림 단위는 1, 10, 100, 1000 중에서 선택하세요.',
+        itemName: (n) => `항목 ${n}`,
         tooMany: '항목은 최대 100개까지 입력할 수 있습니다.',
         unsafeRounding: '선택한 반올림 단위로는 마지막 배분액이 음수가 됩니다. 더 작은 반올림 단위를 선택하세요.',
         overflow: '비율 합계가 너무 커 계산할 수 없습니다. 비율 값을 줄여 주세요.',
@@ -18252,7 +18255,10 @@
         need: 'Enter a total amount and item ratios.',
         invalidTotal: 'Enter a whole-number total from 1 to 1 quadrillion.',
         invalidLine: (line) => `Check line ${line}. Enter name,ratio or a ratio only.`,
-        invalidRatio: (line) => `The ratio on line ${line} must be greater than 0 and no greater than 1 trillion.`,
+        invalidRatio: (line) => `Line ${line}: enter a decimal ratio greater than 0 and up to 1 trillion, with at most 12 decimal places. Exponents, hexadecimal and % are not supported.`,
+        tooLong: 'Input is limited to 10,000 characters, including blank lines.',
+        invalidUnit: 'Choose a rounding unit of 1, 10, 100 or 1000.',
+        itemName: (n) => `Item ${n}`,
         tooMany: 'Enter no more than 100 items.',
         unsafeRounding: 'This rounding unit would make the last allocation negative. Choose a smaller unit.',
         overflow: 'The ratio total is too large to calculate safely. Reduce the ratio values.',
@@ -18275,7 +18281,10 @@
         need: '総額と項目ごとの比率を入力してください。',
         invalidTotal: '総額は1以上1,000兆以下の整数で入力してください。',
         invalidLine: (line) => `${line}行目を確認してください。名前,比率 または比率のみ入力できます。`,
-        invalidRatio: (line) => `${line}行目の比率は0より大きく1兆以下の数値にしてください。`,
+        invalidRatio: (line) => `${line}行目: 比率は0より大きく1兆以下、小数点以下12桁までの十進数で入力してください。指数・16進数・%表記は使えません。`,
+        tooLong: '空行を含めて10,000文字まで入力できます。',
+        invalidUnit: '丸め単位は1、10、100、1000から選んでください。',
+        itemName: (n) => `項目 ${n}`,
         tooMany: '項目は最大100件まで入力できます。',
         unsafeRounding: 'この丸め単位では最後の配分額がマイナスになります。より小さい単位を選んでください。',
         overflow: '比率の合計が大きすぎて安全に計算できません。比率値を小さくしてください。',
@@ -18297,10 +18306,21 @@
     }[pageLang] || {};
 
     const MAX_TOTAL = 1000000000000000;
-    const MAX_RATIO = 1000000000000;
+    const SCALE = 1000000000000n;
+    const MAX_RATIO = 1000000000000n * SCALE;
     const MAX_ITEMS = 100;
     const fmtMoney = (v) => Math.round(v).toLocaleString(numberLocale);
-    const roundValue = (value, unit) => Math.round(value / unit) * unit;
+    // Ratios are fixed-point decimals; round half up without floating-point ties.
+    const roundShare = (amount, weight, sum, unit) => {
+      const divisor = sum * unit;
+      return ((2n * amount * weight + divisor) / (2n * divisor)) * unit;
+    };
+    const fmtRatio = (weight) => {
+      const fraction = (weight % SCALE).toString().padStart(12, '0').replace(/0+$/, '');
+      const decimalSeparator = new Intl.NumberFormat(numberLocale).formatToParts(1.1).find((part) => part.type === 'decimal').value;
+      return (weight / SCALE).toLocaleString(numberLocale) + (fraction ? decimalSeparator + fraction : '');
+    };
+    const fmtPercent = (value) => value < 0.01 ? '<0.01' : value.toLocaleString(numberLocale, { maximumFractionDigits: 2 });
 
     const copyText = async (text) => {
       if (navigator.clipboard?.writeText) {
@@ -18314,9 +18334,9 @@
       ta.style.opacity = '0';
       document.body.appendChild(ta);
       ta.select();
-      const copied = document.execCommand('copy');
-      ta.remove();
-      if (!copied) throw new Error('copy failed');
+      try {
+        if (!document.execCommand('copy')) throw new Error('copy failed');
+      } finally { ta.remove(); }
     };
 
     let current = null;
@@ -18333,17 +18353,19 @@
     };
 
     const parseItems = () => {
-      const lines = (items.value || '').split(/\n+/).map((line) => line.trim()).filter(Boolean);
+      if (items.value.length > 10000) return { error: t.tooLong };
+      const lines = items.value.split(/\r\n|\r|\n/).map((line, index) => ({ text: line.trim(), line: index + 1 })).filter((entry) => entry.text);
       if (lines.length > MAX_ITEMS) return { error: t.tooMany };
       const parsed = [];
-      for (const [idx, line] of lines.entries()) {
-        const parts = line.split(',');
-        const ratioText = parts[parts.length - 1].trim();
-        const name = parts.length === 1 ? `Item ${idx + 1}` : (parts.slice(0, -1).join(',').trim() || `Item ${idx + 1}`);
-        const ratio = Number(ratioText);
-        if (!ratioText || !Number.isFinite(ratio) || ratio <= 0 || ratio > MAX_RATIO) {
-          return { error: t.invalidRatio(idx + 1) };
-        }
+      for (const [idx, entry] of lines.entries()) {
+        const parts = entry.text.split(',');
+        const ratioText = parts.pop().trim();
+        const name = parts.join(',').trim() || t.itemName(idx + 1);
+        const match = ratioText.match(/^\+?(?:(\d+)(?:\.(\d*))?|\.(\d+))$/);
+        const fraction = (match?.[2] || match?.[3] || '').replace(/0+$/, '');
+        if (!match || fraction.length > 12) return { error: t.invalidRatio(entry.line) };
+        const ratio = BigInt(match[1] || '0') * SCALE + BigInt(fraction.padEnd(12, '0'));
+        if (ratio <= 0n || ratio > MAX_RATIO) return { error: t.invalidRatio(entry.line) };
         parsed.push({ name, ratio });
       }
       return { parsed };
@@ -18356,10 +18378,10 @@
       heading.append(document.createTextNode(item.name));
       const tag = document.createElement('span');
       tag.className = 'bw-tag';
-      tag.textContent = `${item.percent.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}%`;
+      tag.textContent = `${fmtPercent(item.percent)}%`;
       heading.append(tag);
       const detail = document.createElement('p');
-      detail.textContent = `${t.amount}: ${fmtMoney(item.amount)} · ${t.weight}: ${item.ratio.toLocaleString(numberLocale, { maximumFractionDigits: 6 })} · ${t.share}: ${item.percent.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}%`;
+      detail.textContent = `${t.amount}: ${fmtMoney(item.amount)} · ${t.weight}: ${fmtRatio(item.ratio)} · ${t.share}: ${fmtPercent(item.percent)}%`;
       row.append(heading, detail);
       list.append(row);
     };
@@ -18371,7 +18393,13 @@
       const itemResult = parseItems();
       total.setAttribute('aria-invalid', 'false');
       items.setAttribute('aria-invalid', 'false');
+      rounding.setAttribute('aria-invalid', 'false');
 
+      if (total.validity.badInput) {
+        total.setAttribute('aria-invalid', 'true');
+        setIdle(t.invalidTotal, 'error');
+        return;
+      }
       if (!rawTotal && !(items.value || '').trim()) {
         setIdle(t.need);
         return;
@@ -18386,24 +18414,30 @@
         setIdle(itemResult.error || t.invalidLine(1), 'error');
         return;
       }
+      if (![1, 10, 100, 1000].includes(unit)) {
+        rounding.setAttribute('aria-invalid', 'true');
+        setIdle(t.invalidUnit, 'error');
+        return;
+      }
       const parsed = itemResult.parsed;
 
-      const sum = parsed.reduce((acc, item) => acc + item.ratio, 0);
-      if (!Number.isFinite(sum) || sum <= 0) {
+      const sum = parsed.reduce((acc, item) => acc + item.ratio, 0n);
+      if (sum <= 0n) {
         items.setAttribute('aria-invalid', 'true');
         setIdle(t.overflow, 'error');
         return;
       }
       const allocations = parsed.map((item) => ({
         ...item,
-        percent: (item.ratio / sum) * 100,
-        rawAmount: totalAmount * (item.ratio / sum)
+        percent: (Number(item.ratio) / Number(sum)) * 100
       }));
 
+      const amountBig = BigInt(totalAmount);
+      const unitBig = BigInt(unit);
       let allocated = 0;
       allocations.forEach((item, idx) => {
         if (idx === allocations.length - 1) return;
-        item.amount = roundValue(item.rawAmount, unit);
+        item.amount = Number(roundShare(amountBig, item.ratio, sum, unitBig));
         allocated += item.amount;
       });
       if (allocated > totalAmount) {
@@ -18414,9 +18448,9 @@
       last.amount = totalAmount - allocated;
 
       const finalTotal = allocations.reduce((acc, item) => acc + item.amount, 0);
-      const adjustment = last.amount - roundValue(last.rawAmount, unit);
+      const adjustment = last.amount - Number(roundShare(amountBig, last.ratio, sum, unitBig));
 
-      ratioSum.textContent = `${sum.toLocaleString(numberLocale, { maximumFractionDigits: 2 })} ${t.ratioUnit}`;
+      ratioSum.textContent = `${fmtRatio(sum)} ${t.ratioUnit}`;
       itemCount.textContent = `${allocations.length.toLocaleString(numberLocale)} ${t.itemUnit}`;
       lastAdjust.textContent = adjustment === 0 ? t.exact : `${fmtMoney(adjustment)} (${t.adjustment})`;
       checkTotal.textContent = fmtMoney(finalTotal);
@@ -18437,7 +18471,7 @@
         setIdle(t.copyEmpty, 'error');
         return;
       }
-      const lines = current.allocations.map((item) => `${item.name}: ${fmtMoney(item.amount)} (${item.percent.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}%)`);
+      const lines = current.allocations.map((item) => `${item.name}: ${fmtMoney(item.amount)} (${fmtPercent(item.percent)}%)`);
       try {
         await copyText([t.copyTitle, ...lines, `${t.totalAmount}: ${current.total}`].join('\n'));
         help.textContent = t.copied;
@@ -18466,6 +18500,7 @@
       items.value = '';
       total.setAttribute('aria-invalid', 'false');
       items.setAttribute('aria-invalid', 'false');
+      rounding.setAttribute('aria-invalid', 'false');
       setIdle(t.cleared);
       total.focus();
     });

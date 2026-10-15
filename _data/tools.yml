@@ -1134,9 +1134,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 총 금액과 이름·비율 목록을 입력해 항목별 배분액과 비중을 계산하고, 반올림 차액·음수 배분 위험까지 안전하게 점검해요.
-  description_en: Split a whole-number total by named or unnamed ratios, review each share, and safely handle rounding adjustments without negative allocations.
-  description_ja: 総額と名前付き・名前なしの比率から配分額と割合を計算し、差額補正やマイナス配分の危険も安全に確認します。
+  description: 총금액을 2:3:5 같은 상대 비율이나 소수 비율로 나누세요. 항목별 금액과 비중, 마지막 잔액 보정을 확인하고 예산·공동 수익 정산 결과를 복사할 수 있습니다.
+  description_en: Split a budget or shared revenue using relative or decimal ratios. Review each allocation, percentage and final balance adjustment, then copy your result.
+  description_ja: 総額を相対比率や小数比率で按分。予算・共同利益の配分金額、割合、最後の残額補正を確認し、結果をコピーできます。
   url: /tools/ratio-split-calculator/
   url_en: /en/tools/ratio-split-calculator/
   url_ja: /ja/tools/ratio-split-calculator/

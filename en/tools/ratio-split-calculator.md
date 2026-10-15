@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Ratio Split Calculator | Allocate a Total by Custom Ratios
-description: Split a whole-number total by named or unnamed ratios, calculate each percentage and allocation, and safely handle the final rounding adjustment.
+title: Ratio Split Calculator | Decimal Ratios & Budget Allocation
+description: Split a budget or shared revenue using relative or decimal ratios. Review each allocation, percentage and final balance adjustment, then copy your result.
 lang: en
 permalink: /en/tools/ratio-split-calculator/
 canonical_url: /en/tools/ratio-split-calculator/
@@ -23,6 +23,10 @@ faq:
     a: Yes. Values like 50, 30, 20 work exactly the same because only the relative size matters.
   - q: Why does the tool warn that the last allocation would be negative?
     a: The rounding unit is too large for the total, so earlier rounded items would exceed it. Choose a smaller rounding unit.
+  - q: Does changing item order change the amounts?
+    a: It can. Earlier items are rounded and the last receives the balance, which may not be a multiple of the rounding unit. This is not a fair largest-remainder allocation method.
+  - q: How do I enter decimal ratios?
+    a: Use a decimal point and up to 12 decimal places. Ratios 0.3 and 0.1 have the same weights as 3 and 1. Exponents, hexadecimal and % signs are not supported.
 ---
 
 ## Split a total amount by ratio
@@ -88,6 +92,12 @@ The calculator converts the ratios into percentage shares, rounds each allocatio
 - For equal split by people: [Split Bill Calculator]({{ '/en/tools/split-bill-calculator/' | relative_url }})
 - For unit value comparison: [Unit Price Calculator]({{ '/en/tools/unit-price-calculator/' | relative_url }})
 
+## Decimal ratios and exact rounding
+Enter decimal ratios with up to 12 decimal places. For example, `0.3` and `0.1` have the same weights as `3` and `1`. Enter `50`, not `50%`. Exponents (`1e-3`), hexadecimal and decimal commas are not supported. The last comma separates the name from the ratio. Blank lines are ignored, but error messages keep the original line numbers. Input is limited to 10,000 characters and 100 items.
+
+Allocation amounts use exact integer arithmetic for decimal ratios and **round half up**. For a total of 2, ratios 0.3:0.1 and unit 1, the first amount rounds from 1.5 to 2 and the last receives the remaining 0. Only percentage displays are rounded to two decimal places; a share below 0.01% displays as `<0.01%`.
+
+
 ## FAQ
 ### Do I need item names?
 No. Names are optional, but using them makes the copied result easier to read.
@@ -103,3 +113,9 @@ Yes. Enter values such as `5`, `3`, and `2` on separate lines and the tool assig
 
 ### Why can a rounding unit be rejected?
 If it is too large for a small total, rounding earlier items can exceed the available amount. Rejecting that case prevents a negative final allocation.
+
+### Does changing item order change the amounts?
+It can. Earlier items are rounded and the last receives the balance, which may not be a multiple of the rounding unit. This is not a fair largest-remainder allocation method.
+
+### How do I enter decimal ratios?
+Use a decimal point and up to 12 decimal places. Ratios 0.3 and 0.1 have the same weights as 3 and 1. Exponents, hexadecimal and % signs are not supported.

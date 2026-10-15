@@ -3917,18 +3917,19 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             </div>
             <div>
               <label for="rs-rounding">{% if page.lang == 'en' %}Rounding unit{% elsif page.lang == 'ja' %}丸め単位{% else %}반올림 단위{% endif %}</label>
-              <select id="rs-rounding" aria-describedby="rs-format rs-help">
+              <select id="rs-rounding" aria-describedby="rs-rounding-help rs-help">
                 <option value="1">1</option>
                 <option value="10">10</option>
                 <option value="100">100</option>
                 <option value="1000">1000</option>
               </select>
+              <p class="tool-hint" id="rs-rounding-help">{% if page.lang == 'en' %}Round half up; the last item receives the remaining balance and may not be a multiple of this unit. Order matters.{% elsif page.lang == 'ja' %}四捨五入後、残額を最後の項目へ配分します。最後の金額は単位の倍数とは限りません。順序で結果が変わります。{% else %}앞 항목부터 반올림하고 마지막 항목에 잔액을 배분합니다. 마지막 금액은 선택 단위의 배수가 아닐 수 있으며 순서에 따라 달라집니다.{% endif %}</p>
             </div>
           </div>
           <div class="tool-row">
             <label for="rs-items">{% if page.lang == 'en' %}Items (one per line: name,ratio){% elsif page.lang == 'ja' %}項目（1行ごと: 名前,比率）{% else %}항목 목록 (한 줄에 이름,비율){% endif %}</label>
             <textarea id="rs-items" rows="7" maxlength="10000" spellcheck="false" placeholder="{% if page.lang == 'en' %}Marketing,5&#10;Operations,3&#10;Reserve,2{% elsif page.lang == 'ja' %}マーケ,5&#10;運営,3&#10;予備,2{% else %}항목 A,5&#10;항목 B,3&#10;항목 C,2{% endif %}" aria-describedby="rs-format rs-help"></textarea>
-            <p class="tool-hint" id="rs-format">{% if page.lang == 'en' %}Up to 100 lines. Use name,ratio or ratio only. Ratios may be decimals; each must be greater than 0 and no greater than 1 trillion.{% elsif page.lang == 'ja' %}最大100行。名前,比率 または比率のみで入力します。小数比率も使え、各値は0より大きく1兆以下です。{% else %}최대 100줄. 이름,비율 또는 비율만 입력하세요. 소수 비율도 가능하며 각 값은 0 초과 1조 이하여야 합니다.{% endif %}</p>
+            <p class="tool-hint" id="rs-format">{% if page.lang == 'en' %}Up to 100 items / 10,000 characters. Use name,ratio or ratio only; the last comma separates the ratio. Use a decimal point, up to 12 decimal places, greater than 0 and up to 1 trillion. No exponents or % signs. Blank lines are ignored.{% elsif page.lang == 'ja' %}最大100項目・10,000文字。名前,比率 または比率のみ。最後のカンマが区切りです。比率は0より大きく1兆以下、小数点はピリオドで12桁まで。指数・%表記は不可。空行は無視します。{% else %}최대 100항목·10,000자. 이름,비율 또는 비율만 입력하며 마지막 쉼표가 구분자입니다. 비율은 0 초과 1조 이하, 소수점은 마침표로 최대 12자리까지 입력하세요. 지수·% 표기는 지원하지 않으며 빈 줄은 무시합니다.{% endif %}</p>
           </div>
           <div class="tool-row-grid rs-actions">
             <button id="rs-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
@@ -3941,7 +3942,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <div><strong id="rs-last-adjust">-</strong><span>{% if page.lang == 'en' %}Last-item adjustment{% elsif page.lang == 'ja' %}最後の差額補正{% else %}마지막 차액 보정{% endif %}</span></div>
             <div><strong id="rs-check-total">-</strong><span>{% if page.lang == 'en' %}Allocated total{% elsif page.lang == 'ja' %}配分合計{% else %}배분 합계{% endif %}</span></div>
           </div>
-          <div id="rs-list" class="bw-list" aria-live="polite"></div>
+          <div id="rs-list" class="bw-list"></div>
           <p class="tool-result" id="rs-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter a total and ratios to split the amount instantly.{% elsif page.lang == 'ja' %}総額と比率を入力すると、金額をすぐ配分します。{% else %}총 금액과 비율을 입력하면 금액을 즉시 나눕니다.{% endif %}</p>
         </div>
 

@@ -2521,3 +2521,11 @@ a:hover { color: #fff; text-decoration: none; }
 .avg-stats strong, .avg-ui .tool-result { overflow-wrap: anywhere; }
 .avg-stats strong { font-size: clamp(1rem, 4vw, 1.35rem); }
 @media (max-width: 480px) { .avg-actions { grid-template-columns: 1fr; } .avg-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Ratio split: readable exact-decimal results and accessible touch controls. */
+.rs-ui input, .rs-ui select, .rs-ui textarea, .rs-ui button { font-size: 16px; min-height: 44px; }
+.rs-ui input, .rs-ui select, .rs-ui textarea, .rs-ui .tool-stats > div { min-width: 0; max-width: 100%; box-sizing: border-box; }
+.rs-ui :is(input, select, textarea, button):focus-visible { outline: 2px solid #93c5fd; outline-offset: 3px; }
+.rs-ui select[aria-invalid="true"] { border-color: #ef4444; }
+.rs-ui .tool-stats strong, .rs-ui .tool-stats span, .rs-ui .bw-item p, .rs-ui .tool-hint { overflow-wrap: anywhere; }
+@media (max-width: 380px) { .tool-stats.rs-stats { grid-template-columns: 1fr; } }
