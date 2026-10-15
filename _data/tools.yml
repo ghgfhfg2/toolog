@@ -1135,8 +1135,8 @@
   badge_en: New
   badge_ja: 新着
   description: 총금액을 2:3:5 같은 상대 비율이나 소수 비율로 나누세요. 항목별 금액과 비중, 마지막 잔액 보정을 확인하고 예산·공동 수익 정산 결과를 복사할 수 있습니다.
-  description_en: Split a budget or shared revenue using relative or decimal ratios. Review each allocation, percentage and final balance adjustment, then copy your result.
-  description_ja: 総額を相対比率や小数比率で按分。予算・共同利益の配分金額、割合、最後の残額補正を確認し、結果をコピーできます。
+  description_en: Split budgets or shared revenue by relative or decimal ratios. Check amounts, percentage shares, half-up rounding and the final balance adjustment, then copy the result.
+  description_ja: 予算や共同利益を相対比率・小数比率で按分。項目別の金額と割合、四捨五入、最後の残額補正を確認して結果をコピーできます。
   url: /tools/ratio-split-calculator/
   url_en: /en/tools/ratio-split-calculator/
   url_ja: /ja/tools/ratio-split-calculator/

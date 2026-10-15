@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Ratio Split Calculator | Decimal Ratios & Budget Allocation
-description: Split a budget or shared revenue using relative or decimal ratios. Review each allocation, percentage and final balance adjustment, then copy your result.
+title: Ratio Split Calculator | Decimal Ratios, Budgets & Rounding
+description: Split budgets or shared revenue by relative or decimal ratios. Check amounts, percentage shares, half-up rounding and the final balance adjustment, then copy the result.
 lang: en
 permalink: /en/tools/ratio-split-calculator/
 canonical_url: /en/tools/ratio-split-calculator/
@@ -58,7 +58,7 @@ The calculator starts with an empty result. **Load example** fills in a complete
 
 ## Input format and limits
 - Total: a whole number from 1 to 1 quadrillion
-- Items: up to 100 lines in `name,ratio` format, or one ratio per line
+- Items: up to 100 non-empty items and 10,000 characters in total, in `name,ratio` format or one ratio per line
 - Ratio: a positive number no greater than 1 trillion; decimals are accepted
 - Rounding: 1, 10, 100, or 1,000 units
 
@@ -81,10 +81,12 @@ If rounded earlier allocations would exceed the total and make the last allocati
 
 The calculator converts the ratios into percentage shares, rounds each allocation, and adjusts the last item so the final sum remains exactly 2,350,000 KRW.
 
-## Validation and error messages
+## Empty results, input errors and copying
 - A total must be a whole number from 1 to 1 quadrillion.
 - Every ratio must be greater than 0 and no greater than 1 trillion.
-- Invalid lines identify the line that needs correction.
+- Blank lines are skipped; invalid ratios report the original line number. Use a decimal point, not a decimal comma, and omit `%`, exponents and hexadecimal notation.
+- With empty or invalid inputs, the previous result is cleared and **Copy result** is disabled. Correct the highlighted input to calculate again.
+- If automatic copying is unavailable, select and copy the displayed amounts manually. Processing stays in your browser; copying puts the result on your device clipboard.
 - If a large rounding unit would make the final allocation negative, no result is produced; choose a smaller unit and calculate again.
 
 ## Good companion tools
@@ -92,15 +94,19 @@ The calculator converts the ratios into percentage shares, rounds each allocatio
 - For equal split by people: [Split Bill Calculator]({{ '/en/tools/split-bill-calculator/' | relative_url }})
 - For unit value comparison: [Unit Price Calculator]({{ '/en/tools/unit-price-calculator/' | relative_url }})
 
-## Decimal ratios and exact rounding
+## Decimal ratios, half-up rounding and item order
 Enter decimal ratios with up to 12 decimal places. For example, `0.3` and `0.1` have the same weights as `3` and `1`. Enter `50`, not `50%`. Exponents (`1e-3`), hexadecimal and decimal commas are not supported. The last comma separates the name from the ratio. Blank lines are ignored, but error messages keep the original line numbers. Input is limited to 10,000 characters and 100 items.
 
 Allocation amounts use exact integer arithmetic for decimal ratios and **round half up**. For a total of 2, ratios 0.3:0.1 and unit 1, the first amount rounds from 1.5 to 2 and the last receives the remaining 0. Only percentage displays are rounded to two decimal places; a share below 0.01% displays as `<0.01%`.
 
+The final item receives the balance after all earlier items have been rounded. **Changing item order can change the amounts**, and the final amount need not be a multiple of the selected unit. This is not a largest-remainder method for distributing rounding differences fairly.
 
 ## FAQ
 ### Do I need item names?
 No. Names are optional, but using them makes the copied result easier to read.
+
+### Do the ratios have to add up to 100?
+No. Use relative weights such as `1`, `1`, `2` on separate lines, or `50`, `30`, `20` for percentage-style weights without the percent sign. The calculator normalizes their sum.
 
 ### Is this useful for budget planning?
 Yes. It is especially practical when a total budget must be allocated across departments, marketing channels, project partners, or expense categories.
