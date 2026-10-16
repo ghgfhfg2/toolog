@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Unit Converter | Length, Weight, Temperature, Inches to CM, LB to KG
-description: Instantly convert mm, cm, m, km, inches, miles, kg, lb, oz, °C, °F, and K with examples, unit swapping, result copy, and clear absolute-zero or oversized-value errors.
+title: Unit Converter | Inches to CM, LB to KG, Fahrenheit to Celsius
+description: Convert length, weight and temperature with absolute-zero validation and scientific notation for tiny values. Includes inches to cm, lb to kg, examples and result copy.
 lang: en
 permalink: /en/tools/unit-converter/
 canonical_url: /en/tools/unit-converter/
@@ -20,9 +20,11 @@ faq:
   - q: Are temperature conversions calculated differently from length and weight?
     a: Yes. Length and weight use proportional conversion factors, while temperatures use separate formulas because their zero points differ.
   - q: How many decimal places are shown?
-    a: Results are displayed to a maximum of 10 decimal places, with unnecessary trailing zeros removed.
+    a: Use a decimal point or exponent (e.g. 1e-8), without commas or unit text. Enter zero or a magnitude from 1e-100 to 1e15, within 100 characters. Results are rounded to at most 12 significant digits; magnitudes below 0.000001 or at least 1e15 use scientific notation. 1E-8 means 0.00000001, not zero. Floating-point results are approximations, not certified measurement or settlement values.
   - q: Can I copy the conversion result?
     a: Yes. After a valid conversion, the copy button copies a one-line summary such as `12 inch = 30.48 cm`.
+  - q: Precision and input limits?
+    a: Use a decimal point or exponent (e.g. 1e-8), without commas or unit text. Enter zero or a magnitude from 1e-100 to 1e15, within 100 characters. Results are rounded to at most 12 significant digits; magnitudes below 0.000001 or at least 1e15 use scientific notation. 1E-8 means 0.00000001, not zero. Floating-point results are approximations, not certified measurement or settlement values. Swapping units keeps the input number and only reverses the units. Enter the result number for a reverse conversion. Identical units preserve the original value. Absolute zero is allowed at -273.15 °C, -459.67 °F and 0 K; lower temperatures are rejected.
 alternate_urls:
   ko: /tools/unit-converter/
   en: /en/tools/unit-converter/
@@ -31,10 +33,6 @@ alternate_urls:
 
 ## When should you use a unit converter?
 This **unit converter** is built for searches and everyday tasks such as `lb to kg`, `inches to cm`, `miles to km`, and `Fahrenheit to Celsius`. It helps resolve unit mismatches immediately without manual formulas.
-
-## Why this tool was selected today
-Recent quality passes focused on tools such as `privacy-exposure-checker`, `meeting-action-item-extractor`, `filename-sanitizer`, `fraction-calculator`, `body-fat-calculator`, and `customer-support-message-generator`, so this pass avoided repeating them.
-`unit-converter` was selected because conversion tools have visible failure points around empty values, oversized numbers, absolute-zero temperature limits, and mobile button flow.
 
 ## Supported units
 - Length: mm, cm, m, km, inch, ft, yd, mile
@@ -49,7 +47,7 @@ Recent quality passes focused on tools such as `privacy-exposure-checker`, `meet
 5. Load a sample conversion or copy the final one-line result when needed.
 
 ## Validation and precision
-Leave the value field empty and the tool will prompt you to enter a value. Invalid numbers, non-finite values such as `Infinity`, and values above `1e15` are rejected to keep the page responsive. Temperatures below absolute zero are also rejected. Results are rounded to a maximum of 10 decimal places, and unnecessary trailing zeros are omitted.
+Leave the value field empty and the tool will prompt you to enter a value. Invalid numbers, non-finite values such as `Infinity`, and values above `1e15` are rejected to keep the page responsive. Temperatures below absolute zero are also rejected. Results use up to 12 significant digits, with scientific notation for tiny or large values.
 
 ## Practical examples
 - Convert product dimensions from inches to centimeters
@@ -72,10 +70,15 @@ It supports the most commonly used length, weight, and temperature units, includ
 Temperature scales have different zero points, so they cannot be converted with a simple proportional factor like length or weight.
 
 ### How precise are the results?
-Results are displayed to a maximum of 10 decimal places, which is sufficient for most everyday and practical work.
+Use a decimal point or exponent (e.g. 1e-8), without commas or unit text. Enter zero or a magnitude from 1e-100 to 1e15, within 100 characters. Results are rounded to at most 12 significant digits; magnitudes below 0.000001 or at least 1e15 use scientific notation. 1E-8 means 0.00000001, not zero. Floating-point results are approximations, not certified measurement or settlement values.
 
 ### Can I copy the conversion result?
 Yes. After a valid conversion, **Copy result** copies the source value, source unit, converted value, and target unit as one line.
 
 ## Summary
 This unit converter reduces manual calculation errors and makes it easier to interpret measurements from international products, documents, travel information, and weather data.
+
+## Precision and input limits
+Use a decimal point or exponent (e.g. 1e-8), without commas or unit text. Enter zero or a magnitude from 1e-100 to 1e15, within 100 characters. Results are rounded to at most 12 significant digits; magnitudes below 0.000001 or at least 1e15 use scientific notation. 1E-8 means 0.00000001, not zero. Floating-point results are approximations, not certified measurement or settlement values.
+
+Swapping units keeps the input number and only reverses the units. Enter the result number for a reverse conversion. Identical units preserve the original value. Absolute zero is allowed at -273.15 °C, -459.67 °F and 0 K; lower temperatures are rejected.

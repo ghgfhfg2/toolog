@@ -2984,3 +2984,13 @@ a:hover { color: var(--primary-strong); }
 .rs-ui select[aria-invalid="true"] { border-color: #ef4444; }
 .rs-ui .tool-stats strong, .rs-ui .tool-stats span, .rs-ui .bw-item p, .rs-ui .tool-hint { overflow-wrap: anywhere; }
 @media (max-width: 380px) { .tool-stats.rs-stats { grid-template-columns: 1fr; } }
+
+/* Existing unit converter: readable input flow and touch targets. */
+.uc-ui input, .uc-ui select, .uc-ui button { min-height: 44px; font-size: 16px; }
+.uc-ui input:focus-visible, .uc-ui select:focus-visible, .uc-ui button:focus-visible { outline: 2px solid #60a5fa; outline-offset: 3px; }
+.uc-ui .tool-row-grid > * { min-width: 0; }
+.uc-ui #uc-result, .uc-ui #uc-help { overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  .uc-ui .tool-row-grid { grid-template-columns: minmax(0, 1fr); }
+  .uc-ui .tool-stats { grid-template-columns: minmax(0, 1fr); }
+}

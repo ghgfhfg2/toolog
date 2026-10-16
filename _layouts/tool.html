@@ -105,7 +105,7 @@ layout: default
         <div class="tool-ui uc-ui">
           <div class="tool-row-grid uc-top-grid">
             <label for="uc-type">{% if page.lang == 'en' %}Conversion type{% elsif page.lang == 'ja' %}変換タイプ{% else %}변환 타입{% endif %}</label>
-            <select id="uc-type">
+            <select id="uc-type" aria-describedby="uc-help">
               <option value="length">{% if page.lang == 'en' %}Length{% elsif page.lang == 'ja' %}長さ{% else %}길이{% endif %}</option>
               <option value="weight">{% if page.lang == 'en' %}Weight{% elsif page.lang == 'ja' %}重さ{% else %}무게{% endif %}</option>
               <option value="temperature">{% if page.lang == 'en' %}Temperature{% elsif page.lang == 'ja' %}温度{% else %}온도{% endif %}</option>
@@ -115,7 +115,7 @@ layout: default
           <div class="tool-row-grid">
             <div>
               <label for="uc-value">{% if page.lang == 'en' %}Value{% elsif page.lang == 'ja' %}値{% else %}변환할 값{% endif %}</label>
-              <input id="uc-value" type="number" step="any" value="1" inputmode="decimal" autocomplete="off" aria-describedby="uc-result uc-help" />
+              <input id="uc-value" type="text" maxlength="100" inputmode="decimal" autocomplete="off" aria-describedby="uc-result uc-help" />
             </div>
             <div>
               <label for="uc-from">{% if page.lang == 'en' %}From unit{% elsif page.lang == 'ja' %}変換元{% else %}기준 단위{% endif %}</label>
@@ -137,7 +137,7 @@ layout: default
             <div><strong id="uc-target">-</strong><span>{% if page.lang == 'en' %}Converted{% elsif page.lang == 'ja' %}換算結果{% else %}변환값{% endif %}</span></div>
             <div><strong id="uc-category">-</strong><span>{% if page.lang == 'en' %}Category{% elsif page.lang == 'ja' %}カテゴリ{% else %}분류{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="uc-help">{% if page.lang == 'en' %}Temperature values below absolute zero are rejected. Results are rounded to a maximum of 10 decimal places.{% elsif page.lang == 'ja' %}絶対零度未満の温度は計算できません。結果は小数点以下最大10桁で表示します。{% else %}절대영도보다 낮은 온도는 계산할 수 없습니다. 결과는 소수점 아래 최대 10자리까지 표시합니다.{% endif %}</p>
+          <p class="tool-result" id="uc-help">{% if page.lang == 'en' %}Use a decimal point or exponent (1e-8), without commas or units. Enter 0 or a magnitude from 1e-100 to 1e15. Below absolute zero is invalid. Results use up to 12 significant digits; tiny/large values use scientific notation. Swapping units keeps the input number.{% elsif page.lang == 'ja' %}小数点・指数表記（1e-8）を使用でき、カンマ・単位は不要です。0または絶対値1e-100〜1e15に対応。絶対零度未満は無効です。最大有効12桁で、微小・巨大値は指数表示します。単位交換時は入力値を維持します。{% else %}소수점·지수 표기(1e-8)를 지원하며 쉼표·단위는 빼고 입력하세요. 0 또는 절댓값 1e-100~1e15를 지원합니다. 절대영도 미만은 오류입니다. 최대 유효숫자 12자리이며 작은 값·큰 값은 지수로 표시합니다. 단위 교환은 입력 숫자를 유지합니다.{% endif %}</p>
         </div>
       {% when 'timezone-converter' %}
         <div class="tool-ui tz-ui">

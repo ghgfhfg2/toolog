@@ -455,8 +455,8 @@
     const ucText = {
       ko: {
         empty: '변환할 값을 입력해 주세요.',
-        invalid: '유효한 숫자를 입력해 주세요.',
-        tooLarge: '값이 너무 큽니다. 1e15 이하의 숫자로 입력해 주세요.',
+        invalid: '100자 이내의 숫자를 입력하세요. 소수점·지수 표기는 가능하며 쉼표·단위는 제외해 주세요.',
+        tooLarge: '0 또는 절댓값 1e-100 이상 1e15 이하의 숫자를 입력하세요.',
         absoluteZero: '절대영도보다 낮은 온도는 계산할 수 없습니다.',
         copied: '변환 결과를 복사했습니다.',
         copyFail: '자동 복사를 사용할 수 없습니다.',
@@ -466,8 +466,8 @@
       },
       en: {
         empty: 'Enter a value to convert.',
-        invalid: 'Enter a valid number.',
-        tooLarge: 'The value is too large. Enter a number no greater than 1e15.',
+        invalid: 'Enter a number within 100 characters. Decimal points and exponents are allowed; omit commas and units.',
+        tooLarge: 'Enter zero or a number with magnitude between 1e-100 and 1e15.',
         absoluteZero: 'Temperatures below absolute zero cannot be converted.',
         copied: 'Copied the conversion result.',
         copyFail: 'Automatic copy is unavailable.',
@@ -477,8 +477,8 @@
       },
       ja: {
         empty: '変換する値を入力してください。',
-        invalid: '有効な数値を入力してください。',
-        tooLarge: '値が大きすぎます。1e15以下の数値を入力してください。',
+        invalid: '100文字以内の数値を入力してください。小数点・指数表記は使用可能です。カンマ・単位は除いてください。',
+        tooLarge: '0、または絶対値が1e-100以上1e15以下の数値を入力してください。',
         absoluteZero: '絶対零度未満の温度は計算できません。',
         copied: '変換結果をコピーしました。',
         copyFail: '自動コピーを利用できません。',
@@ -512,13 +512,17 @@
     };
 
     const convertTemp = (v, f, t) => {
-      let c = v;
-      if (f === 'f') c = (v - 32) * 5 / 9;
-      if (f === 'k') c = v - 273.15;
-      if (t === 'f') return c * 9 / 5 + 32;
-      if (t === 'k') return c + 273.15;
-      return c;
+      if (f === t) return v;
+      if (f === 'c') return t === 'f' ? v * 9 / 5 + 32 : v + 273.15;
+      if (f === 'f') return t === 'c' ? (v - 32) * 5 / 9 : (v + 459.67) * 5 / 9;
+      return t === 'c' ? v - 273.15 : v * 9 / 5 - 459.67;
     };
+
+    // Keep small nonzero conversions visible; display rounding is not exact arithmetic.
+    const displayNumber = n => new Intl.NumberFormat(numberLocale, {
+      maximumSignificantDigits: 12,
+      notation: n !== 0 && (Math.abs(n) < 0.000001 || Math.abs(n) >= 1e15) ? 'scientific' : 'standard'
+    }).format(Object.is(n, -0) ? 0 : n);
 
     const isBelowAbsoluteZero = (v, unit) => (
       (unit === 'c' && v < -273.15) ||
@@ -532,12 +536,17 @@
         setStatus(ucText.empty);
         return;
       }
-      const v = Number(value.value);
+      const raw = value.value.trim();
+      if (value.value.length > 100 || !/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(raw)) {
+        setStatus(ucText.invalid, 'error');
+        return;
+      }
+      const v = Number(raw);
       if (!Number.isFinite(v)) {
         setStatus(ucText.invalid, 'error');
         return;
       }
-      if (Math.abs(v) > 1000000000000000) {
+      if (Math.abs(v) > 1e15 || (v !== 0 && Math.abs(v) < 1e-100) || (v === 0 && /[1-9]/.test(raw.split(/e/i)[0]))) {
         setStatus(ucText.tooLarge, 'error');
         return;
       }
@@ -551,12 +560,12 @@
       } else {
         const map = maps[t];
         const base = v * (map[from.value] || 1);
-        result = base / (map[to.value] || 1);
+        result = from.value === to.value ? v : base / map[to.value];
       }
       const fromLabel = from.options[from.selectedIndex]?.text || '';
       const toLabel = to.options[to.selectedIndex]?.text || '';
-      const source = v.toLocaleString(numberLocale, { maximumFractionDigits: 10 });
-      const converted = result.toLocaleString(numberLocale, { maximumFractionDigits: 10 });
+      const source = displayNumber(v);
+      const converted = displayNumber(result);
       currentSummary = `${source} ${fromLabel} = ${converted} ${toLabel}`;
       out.textContent = currentSummary;
       out.dataset.state = 'success';
@@ -596,6 +605,7 @@
       const summary = currentSummary;
       try {
         await navigator.clipboard.writeText(summary);
+        if (currentSummary !== summary) return;
         out.textContent = ucText.copied;
         out.dataset.state = 'success';
         value.setAttribute('aria-invalid', 'false');
@@ -603,6 +613,7 @@
           if (currentSummary === summary) out.textContent = summary;
         }, 900);
       } catch (_) {
+        if (currentSummary !== summary) return;
         out.textContent = `${summary} · ${ucText.copyFail}`;
         out.dataset.state = 'error';
         value.setAttribute('aria-invalid', 'false');

@@ -1775,9 +1775,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: mm·cm·m·km·inch·mile, kg·lb, ℃·℉·K를 예시 입력, 단위 교환, 결과 복사, 오류 안내와 함께 즉시 변환해요.
-  description_en: Convert length, weight, and temperature units with examples, unit swapping, result copy, and clear invalid-value guidance.
-  description_ja: 長さ・重さ・温度の単位を、例入力、単位入れ替え、結果コピー、エラー案内付きですぐに換算できます。
+  description: 길이·무게·온도를 변환하고 절대영도 오류와 작은 값의 지수 표시를 확인하세요. inch cm, lb kg, 화씨 섭씨 변환, 예시 입력과 결과 복사를 지원합니다.
+  description_en: Convert length, weight and temperature with absolute-zero validation and scientific notation for tiny values. Includes inches to cm, lb to kg, examples and result copy.
+  description_ja: 長さ・重さ・温度を変換し、絶対零度のエラーと微小値の指数表示を確認できます。inch cm、lb kg、華氏摂氏の変換、例の入力と結果コピーに対応。
   url: /tools/unit-converter/
   url_en: /en/tools/unit-converter/
   url_ja: /ja/tools/unit-converter/
