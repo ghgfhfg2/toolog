@@ -1776,8 +1776,8 @@
   badge_en: New
   badge_ja: 新着
   description: 길이·무게·온도를 변환하고 절대영도 오류와 작은 값의 지수 표시를 확인하세요. inch cm, lb kg, 화씨 섭씨 변환, 예시 입력과 결과 복사를 지원합니다.
-  description_en: Convert length, weight and temperature with absolute-zero validation and scientific notation for tiny values. Includes inches to cm, lb to kg, examples and result copy.
-  description_ja: 長さ・重さ・温度を変換し、絶対零度のエラーと微小値の指数表示を確認できます。inch cm、lb kg、華氏摂氏の変換、例の入力と結果コピーに対応。
+  description_en: Convert inches to cm, lb to kg and Fahrenheit to Celsius. Keep tiny values visible with scientific notation, check absolute-zero limits and copy results.
+  description_ja: インチからcm、ポンドからkg、華氏から摂氏へ変換。微小な値も指数表記で確認でき、絶対零度の入力チェック、例の入力、結果コピーに対応します。
   url: /tools/unit-converter/
   url_en: /en/tools/unit-converter/
   url_ja: /ja/tools/unit-converter/
