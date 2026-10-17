@@ -3150,32 +3150,32 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <div class="tool-row-grid sa-grid">
             <div>
               <label for="sa-current-qty">{% if page.lang == 'en' %}Current holdings (shares){% elsif page.lang == 'ja' %}現在の保有株数{% else %}현재 보유 수량(주){% endif %}</label>
-              <input id="sa-current-qty" type="number" min="1" max="1000000000" step="1" placeholder="{% if page.lang == 'en' %}e.g. 100{% elsif page.lang == 'ja' %}例: 100{% else %}예: 100{% endif %}" inputmode="numeric" aria-describedby="sa-input-help sa-status" />
+              <input id="sa-current-qty" type="text" maxlength="32" autocomplete="off" spellcheck="false" placeholder="{% if page.lang == 'en' %}e.g. 100{% elsif page.lang == 'ja' %}例: 100{% else %}예: 100{% endif %}" inputmode="numeric" aria-describedby="sa-input-help sa-status" />
             </div>
             <div>
               <label for="sa-current-price">{% if page.lang == 'en' %}Current average price{% elsif page.lang == 'ja' %}現在の平均取得単価{% else %}현재 평단가(원){% endif %}</label>
-              <input id="sa-current-price" type="number" min="0.01" max="1000000000000" step="0.01" placeholder="{% if page.lang == 'en' %}e.g. 50000{% elsif page.lang == 'ja' %}例: 50000{% else %}예: 50000{% endif %}" inputmode="decimal" aria-describedby="sa-input-help sa-status" />
+              <input id="sa-current-price" type="text" maxlength="32" autocomplete="off" spellcheck="false" placeholder="{% if page.lang == 'en' %}e.g. 50000{% elsif page.lang == 'ja' %}例: 50000{% else %}예: 50000{% endif %}" inputmode="decimal" aria-describedby="sa-input-help sa-status" />
             </div>
           </div>
 
           <div class="tool-row-grid sa-grid">
             <div>
               <label for="sa-add-qty">{% if page.lang == 'en' %}Planned buy quantity (optional){% elsif page.lang == 'ja' %}追加購入株数（任意）{% else %}추가 매수 수량(주, 선택){% endif %}</label>
-              <input id="sa-add-qty" type="number" min="0" max="1000000000" step="1" placeholder="{% if page.lang == 'en' %}e.g. 100{% elsif page.lang == 'ja' %}例: 100{% else %}예: 100{% endif %}" inputmode="numeric" aria-describedby="sa-input-help sa-status" />
+              <input id="sa-add-qty" type="text" maxlength="32" autocomplete="off" spellcheck="false" placeholder="{% if page.lang == 'en' %}e.g. 100{% elsif page.lang == 'ja' %}例: 100{% else %}예: 100{% endif %}" inputmode="numeric" aria-describedby="sa-input-help sa-status" />
             </div>
             <div>
               <label for="sa-add-price">{% if page.lang == 'en' %}Expected buy price (optional){% elsif page.lang == 'ja' %}追加購入単価（任意）{% else %}추가 매수가(원, 선택){% endif %}</label>
-              <input id="sa-add-price" type="number" min="0.01" max="1000000000000" step="0.01" placeholder="{% if page.lang == 'en' %}e.g. 40000{% elsif page.lang == 'ja' %}例: 40000{% else %}예: 40000{% endif %}" inputmode="decimal" aria-describedby="sa-input-help sa-status" />
+              <input id="sa-add-price" type="text" maxlength="32" autocomplete="off" spellcheck="false" placeholder="{% if page.lang == 'en' %}e.g. 40000{% elsif page.lang == 'ja' %}例: 40000{% else %}예: 40000{% endif %}" inputmode="decimal" aria-describedby="sa-input-help sa-status" />
             </div>
           </div>
 
           <div class="tool-row-grid sa-target-grid">
             <div>
               <label for="sa-target-price">{% if page.lang == 'en' %}Target average price (optional){% elsif page.lang == 'ja' %}目標平均単価（任意）{% else %}목표 평단가(원, 선택){% endif %}</label>
-              <input id="sa-target-price" type="number" min="0.01" max="1000000000000" step="0.01" placeholder="{% if page.lang == 'en' %}e.g. 43000{% elsif page.lang == 'ja' %}例: 43000{% else %}예: 43000{% endif %}" inputmode="decimal" aria-describedby="sa-input-help sa-status" />
+              <input id="sa-target-price" type="text" maxlength="32" autocomplete="off" spellcheck="false" placeholder="{% if page.lang == 'en' %}e.g. 43000{% elsif page.lang == 'ja' %}例: 43000{% else %}예: 43000{% endif %}" inputmode="decimal" aria-describedby="sa-input-help sa-status" />
             </div>
           </div>
-          <p id="sa-input-help" class="tool-hint">{% if page.lang == 'en' %}Quantities must be whole shares. Enter an expected buy price to calculate shares needed for a target; fees, taxes, and FX costs are excluded.{% elsif page.lang == 'ja' %}株数は整数で入力してください。目標までの必要株数を求めるには追加購入単価が必要です。手数料・税金・為替費用は含みません。{% else %}수량은 정수로 입력하세요. 목표 평단 필요 수량 계산에는 추가 매수가가 필요하며 수수료·세금·환전 비용은 제외합니다.{% endif %}</p>
+          <p id="sa-input-help" class="tool-hint">{% if page.lang == 'en' %}Use whole shares and decimal prices with up to 2 places (no commas or exponents). Prices are KRW; averages display rounded to 2 places, but targets use exact unrounded amounts. Enter an expected buy price to calculate shares needed for a target; fees, taxes, and FX costs are excluded.{% elsif page.lang == 'ja' %}株数は整数、単価はウォンで小数点以下2桁まで（カンマ・指数表記不可）。平均は2桁に四捨五入して表示し、目標判定は丸め前の金額で計算します。目標までの必要株数を求めるには追加購入単価が必要です。手数料・税金・為替費用は含みません。{% else %}수량은 정수, 가격은 원화 기준 소수 둘째 자리까지 입력하세요(쉼표·지수 표기 불가). 평단 표시는 소수 둘째 자리 반올림이며 목표 판정은 반올림 전 금액으로 계산합니다. 목표 평단 필요 수량 계산에는 추가 매수가가 필요하며 수수료·세금·환전 비용은 제외합니다.{% endif %}</p>
 
           <div class="tool-row-grid sa-actions">
             <button id="sa-sample" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
@@ -3190,7 +3190,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <div><strong id="sa-need-qty">-</strong><span>{% if page.lang == 'en' %}Additional shares needed for target{% elsif page.lang == 'ja' %}目標単価までに必要な追加株数{% else %}목표 평단까지 남은 추가수량{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="sa-status" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter current holdings and average price to begin.{% elsif page.lang == 'ja' %}現在の保有株数と平均取得単価を入力してください。{% else %}현재 보유 수량과 평단가를 입력하면 계산을 시작합니다.{% endif %}</p>
+          <p class="tool-result" id="sa-status" role="status" aria-live="polite" aria-atomic="true">{% if page.lang == 'en' %}Enter current holdings and average price to begin.{% elsif page.lang == 'ja' %}現在の保有株数と平均取得単価を入力してください。{% else %}현재 보유 수량과 평단가를 입력하면 계산을 시작합니다.{% endif %}</p>
         </div>
       {% when 'tdee-calculator' %}
         <div class="tool-ui tdee-ui">

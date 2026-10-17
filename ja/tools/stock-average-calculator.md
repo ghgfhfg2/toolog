@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: ナンピン計算機 | 平均取得単価・目標単価の必要株数
-description: 現在の保有株数・平均単価と追加購入の株数・価格から、新しい平均取得単価、総投資額、目標単価までに必要な株数を計算します。
+title: ナンピン計算機 | 平均取得単価・目標までの必要株数
+description: 保有株数・平均単価と追加購入計画から、新しい平均取得単価、総購入金額、目標までにさらに必要な最小株数を計算。小数価格を正確に処理し、手数料・税金は除外します。
 lang: ja
 permalink: /ja/tools/stock-average-calculator/
 canonical_url: /ja/tools/stock-average-calculator/
@@ -15,6 +15,8 @@ tool_key: stock-average-calculator
 keywords: [ナンピン計算, 平均取得単価, 追加購入, 目標単価, 株 平均単価 計算]
 related_tools: [percent-calculator, profit-margin-calculator, compound-interest-calculator]
 faq:
+  - q: 小数価格と目標に必要な株数はどう処理しますか？
+    a: 価格はウォンで小数点以下2桁まで入力し、カンマ・指数表記は使えません。金額は整数演算、必要株数は切り上げです。平均の表示は小数点以下2桁に四捨五入しますが、目標判定には丸め前の金額を使います。
   - q: 追加購入後の平均取得単価はどう計算しますか？
     a: 現在の取得金額と追加購入金額を合計し、合計株数で割って計算します。
   - q: 目標平均単価を達成できないのはなぜですか？
@@ -54,3 +56,6 @@ alternate_urls:
 - [複利計算機]({{ '/ja/tools/compound-interest-calculator/' | relative_url }})
 - [パーセント計算機]({{ '/ja/tools/percent-calculator/' | relative_url }})
 - [利益率計算機]({{ '/ja/tools/profit-margin-calculator/' | relative_url }})
+
+### 小数価格と目標に必要な株数はどう処理しますか？
+価格はウォンで小数点以下2桁まで入力し、カンマ・指数表記は使えません。金額は整数演算、必要株数は切り上げです。平均の表示は小数点以下2桁に四捨五入しますが、目標判定には丸め前の金額を使います。

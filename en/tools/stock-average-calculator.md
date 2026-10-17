@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Stock Average Calculator | Average Down & Target Price
-description: Enter current shares, average cost, and a planned buy to calculate your new average price, total investment, and whole shares needed for a target average.
+title: Stock Average Calculator | Average Down & Target Shares
+description: Calculate a new stock average, total cost, and the minimum extra whole shares for a target after your planned buy. Exact decimal-price arithmetic; excludes fees and taxes.
 lang: en
 permalink: /en/tools/stock-average-calculator/
 canonical_url: /en/tools/stock-average-calculator/
@@ -15,6 +15,8 @@ tool_key: stock-average-calculator
 keywords: [stock average calculator, average down calculator, average cost, buy the dip calculator, target average price]
 related_tools: [percent-calculator, profit-margin-calculator, compound-interest-calculator]
 faq:
+  - q: How are decimal prices and target shares handled?
+    a: Enter KRW prices with up to 2 decimal places, without commas or exponents. Amounts use integer arithmetic and required shares round up. The displayed average rounds to 2 places, while target checks use unrounded amounts.
   - q: How is the new stock average cost calculated?
     a: The calculator adds current cost and planned purchase cost, then divides by the combined whole-share quantity.
   - q: Why can a target average be impossible?
@@ -54,3 +56,6 @@ No. This version calculates whole shares. For fractional-share trading, use your
 - [Compound Interest Calculator]({{ '/en/tools/compound-interest-calculator/' | relative_url }})
 - [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
 - [Profit Margin Calculator]({{ '/en/tools/profit-margin-calculator/' | relative_url }})
+
+### How are decimal prices and target shares handled?
+Enter KRW prices with up to 2 decimal places, without commas or exponents. Amounts use integer arithmetic and required shares round up. The displayed average rounds to 2 places, while target checks use unrounded amounts.

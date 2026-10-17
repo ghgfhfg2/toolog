@@ -1960,9 +1960,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 보유 수량·평단가와 추가 매수 가격·수량을 비교해 새 평균단가, 총 투자금, 목표 평단까지 더 필요한 주식 수를 계산해요.
-  description_en: Compare current holdings with a planned buy to calculate the new average cost, total investment, and extra whole shares needed for a target average.
-  description_ja: 現在の保有株数・平均単価と追加購入条件から、新しい平均単価、総投資額、目標単価までに必要な追加株数を計算します。
+  description: 주식 보유 수량·평단가와 추가 매수 계획으로 새 평균단가, 총 매수금액, 목표 평단까지 더 필요한 최소 수량을 계산하세요. 소수 가격을 정확히 처리하며 수수료·세금은 제외합니다.
+  description_en: Calculate a new stock average, total cost, and the minimum extra whole shares for a target after your planned buy. Exact decimal-price arithmetic; excludes fees and taxes.
+  description_ja: 保有株数・平均単価と追加購入計画から、新しい平均取得単価、総購入金額、目標までにさらに必要な最小株数を計算。小数価格を正確に処理し、手数料・税金は除外します。
   url: /tools/stock-average-calculator/
   url_en: /en/tools/stock-average-calculator/
   url_ja: /ja/tools/stock-average-calculator/
