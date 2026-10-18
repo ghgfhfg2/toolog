@@ -18097,7 +18097,7 @@
         currency: '원',
         idle: '소비전력·사용시간·사용일수·전기단가를 입력하면 예상 전기요금을 계산합니다.',
         needInput: '네 입력값을 모두 채워 주세요.',
-        invalid: '0보다 큰 숫자만 입력해 주세요.',
+        invalid: '0보다 큰 십진수를 입력하세요. 지수·쉼표·단위 표기는 지원하지 않습니다.',
         hoursRange: '하루 사용시간은 0.1~24시간으로 입력해 주세요.',
         daysRange: '한 달 사용일수는 1~31일 사이의 정수로 입력해 주세요.',
         powerRange: '소비전력은 0.1~1,000,000W로 입력해 주세요.',
@@ -18113,7 +18113,7 @@
         currency: ' KRW',
         idle: 'Enter power, hours, days, and price per kWh to estimate electricity cost.',
         needInput: 'Complete all four inputs.',
-        invalid: 'Enter numbers greater than zero.',
+        invalid: 'Enter positive decimals without exponents, commas, or units.',
         hoursRange: 'Hours per day must be from 0.1 to 24.',
         daysRange: 'Days per month must be a whole number from 1 to 31.',
         powerRange: 'Power must be from 0.1 to 1,000,000 W.',
@@ -18129,7 +18129,7 @@
         currency: 'ウォン',
         idle: '消費電力・使用時間・使用日数・単価を入力すると電気料金を試算します。',
         needInput: '4つの入力欄をすべて入力してください。',
-        invalid: '0より大きい数値を入力してください。',
+        invalid: '正の小数を入力してください。指数・カンマ・単位は使えません。',
         hoursRange: '1日の使用時間は0.1〜24時間で入力してください。',
         daysRange: '月の使用日数は1〜31日の整数で入力してください。',
         powerRange: '消費電力は0.1〜1,000,000Wで入力してください。',
@@ -18145,11 +18145,11 @@
     const t = i18n[pageLang] || i18n.ko;
 
     const fmtCurrency = (v) => {
-      const rounded = Math.round(v || 0).toLocaleString(numberLocale);
+      const rounded = v > 0 && v < 1 ? '< 1' : Math.round(v).toLocaleString(numberLocale);
       if (pageLang === 'en') return `${rounded}${t.currency}`;
       return `${rounded}${t.currency}`;
     };
-    const fmtKwh = (v) => `${Number(v || 0).toLocaleString(numberLocale, { maximumFractionDigits: 2 })} kWh`;
+    const fmtKwh = (v) => `${v > 0 && v < 0.0001 ? '< 0.0001' : v.toLocaleString(numberLocale, { maximumFractionDigits: 4 })} kWh`;
 
     const copyText = async (text) => {
       try {
@@ -18178,19 +18178,24 @@
     const render = () => {
       const inputs = [power, hours, days, rate];
       inputs.forEach((el) => el.setAttribute('aria-invalid', 'false'));
-      if (inputs.some((el) => el.value.trim() === '')) {
-        setIdle(t.needInput);
+      const raw = inputs.map(el => el.value.trim());
+      if (raw.every(value => value === '')) {
+        setIdle(t.idle);
         return;
       }
-      const [p, h, d, r] = inputs.map((el) => Number(el.value));
-      if (![p, h, d, r].every((v) => Number.isFinite(v) && v > 0)) {
-        inputs.forEach((el) => {
-          const v = Number(el.value);
-          if (!Number.isFinite(v) || v <= 0) el.setAttribute('aria-invalid', 'true');
-        });
+      const malformed = inputs.filter((el, i) => raw[i] !== '' &&
+        (raw[i].length > 32 || !/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(raw[i]) || !Number.isFinite(Number(raw[i])) || Number(raw[i]) <= 0));
+      if (malformed.length) {
+        malformed.forEach(el => el.setAttribute('aria-invalid', 'true'));
         setIdle(t.invalid, 'error');
         return;
       }
+      if (raw.some(value => value === '')) {
+        inputs.forEach((el, i) => el.setAttribute('aria-invalid', String(raw[i] === '')));
+        setIdle(t.needInput, 'error');
+        return;
+      }
+      const [p, h, d, r] = raw.map(Number);
       if (p < 0.1 || p > 1000000) { power.setAttribute('aria-invalid', 'true'); setIdle(t.powerRange, 'error'); return; }
       if (h < 0.1 || h > 24) { hours.setAttribute('aria-invalid', 'true'); setIdle(t.hoursRange, 'error'); return; }
       if (!Number.isInteger(d) || d < 1 || d > 31) { days.setAttribute('aria-invalid', 'true'); setIdle(t.daysRange, 'error'); return; }
@@ -18232,10 +18237,16 @@
 
     clearBtn?.addEventListener('click', () => {
       [power, hours, days, rate].forEach((el) => { el.value = ''; });
+      render();
       setIdle(t.cleared);
       power.focus();
     });
 
+    document.querySelectorAll('[data-ec-hours]').forEach(button => button.addEventListener('click', () => {
+      hours.value = button.dataset.ecHours;
+      render();
+      hours.focus();
+    }));
     render();
   }
 

@@ -4214,24 +4214,31 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <div class="tool-row-grid pct-grid ec-grid">
             <div>
               <label for="ec-power">{% if page.lang == 'en' %}Power consumption (W){% elsif page.lang == 'ja' %}消費電力(W){% else %}소비전력(W){% endif %}</label>
-              <input id="ec-power" type="number" min="0.1" max="1000000" step="0.1" inputmode="decimal" autocomplete="off" aria-describedby="ec-limits ec-help" placeholder="1500" />
+              <input id="ec-power" type="text" maxlength="32" spellcheck="false" inputmode="decimal" autocomplete="off" aria-describedby="ec-limits ec-help" placeholder="1500" />
             </div>
             <div>
               <label for="ec-hours">{% if page.lang == 'en' %}Hours per day{% elsif page.lang == 'ja' %}1日の使用時間{% else %}하루 사용시간{% endif %}</label>
-              <input id="ec-hours" type="number" min="0.1" max="24" step="0.1" inputmode="decimal" autocomplete="off" aria-describedby="ec-limits ec-help" placeholder="4" />
+              <input id="ec-hours" type="text" maxlength="32" spellcheck="false" inputmode="decimal" autocomplete="off" aria-describedby="ec-limits ec-help" placeholder="4" />
             </div>
           </div>
 
           <div class="tool-row-grid pct-grid ec-grid">
             <div>
               <label for="ec-days">{% if page.lang == 'en' %}Days per month{% elsif page.lang == 'ja' %}月の使用日数{% else %}한 달 사용일수{% endif %}</label>
-              <input id="ec-days" type="number" min="1" max="31" step="1" inputmode="numeric" autocomplete="off" aria-describedby="ec-limits ec-help" placeholder="30" />
+              <input id="ec-days" type="text" maxlength="32" spellcheck="false" inputmode="numeric" autocomplete="off" aria-describedby="ec-limits ec-help" placeholder="30" />
             </div>
             <div>
-              <label for="ec-rate">{% if page.lang == 'en' %}Price per kWh{% elsif page.lang == 'ja' %}1kWhあたり単価{% else %}전기단가(1kWh당){% endif %}</label>
-              <input id="ec-rate" type="number" min="0.01" max="1000000" step="0.01" inputmode="decimal" autocomplete="off" aria-describedby="ec-limits ec-help" placeholder="150" />
+              <label for="ec-rate">{% if page.lang == 'en' %}Price per kWh (KRW){% elsif page.lang == 'ja' %}1kWh単価（ウォン）{% else %}전기단가(1kWh당){% endif %}</label>
+              <input id="ec-rate" type="text" maxlength="32" spellcheck="false" inputmode="decimal" autocomplete="off" aria-describedby="ec-limits ec-help" placeholder="150" />
             </div>
           </div>
+
+          <div class="tool-row-grid ec-presets" role="group" aria-label="{% if page.lang == 'en' %}Daily usage shortcuts{% elsif page.lang == 'ja' %}1日の使用時間を選択{% else %}하루 사용시간 빠른 입력{% endif %}">
+            <button type="button" data-ec-hours="1">{% if page.lang == 'en' %}1 hour/day{% elsif page.lang == 'ja' %}1日1時間{% else %}하루 1시간{% endif %}</button>
+            <button type="button" data-ec-hours="8">{% if page.lang == 'en' %}8 hours/day{% elsif page.lang == 'ja' %}1日8時間{% else %}하루 8시간{% endif %}</button>
+            <button type="button" data-ec-hours="24">{% if page.lang == 'en' %}Always on (24h){% elsif page.lang == 'ja' %}常時稼働（24時間）{% else %}상시 가동(24시간){% endif %}</button>
+          </div>
+          <p class="tool-result ec-note">{% if page.lang == 'en' %}KRW estimate, not an official bill. Enter your own rate; 150 is only an example. Yearly cost = monthly cost × 12. Positive usage below 0.0001 kWh and cost below 1 KRW use a &lt; sign.{% elsif page.lang == 'ja' %}ウォン建ての目安で、正式な請求額ではありません。150は単価の入力例です。年額＝月額×12。0.0001kWh未満・1ウォン未満の正の値は &lt; で表示します。{% else %}원화 기준 기기별 추정치이며 청구액이 아닙니다. 단가 150은 입력 예시일 뿐입니다. 연간 요금=월 요금×12. 양수인 0.0001kWh 미만·1원 미만은 &lt; 기호로 표시합니다.{% endif %}</p>
 
           <p class="tool-result ec-note" id="ec-limits">{% if page.lang == 'en' %}Limits: 0.1–1,000,000 W, 0.1–24 hours, 1–31 whole days, and 0.01–1,000,000 per kWh.{% elsif page.lang == 'ja' %}入力範囲: 0.1〜1,000,000W、0.1〜24時間、1〜31日の整数、1kWh単価0.01〜1,000,000。{% else %}입력 범위: 0.1~1,000,000W, 0.1~24시간, 1~31일 정수, 1kWh당 0.01~1,000,000원.{% endif %}</p>
 

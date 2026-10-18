@@ -1,6 +1,7 @@
 ---
-title: Electricity Cost Calculator | Estimate Appliance kWh and Energy Cost
-description: Calculate appliance kWh usage and estimated daily, monthly, and yearly electricity cost from wattage, hours per day, days per month, and price per kWh.
+layout: tool
+title: Electricity Cost Calculator | Appliance & Standby kWh in KRW
+description: Estimate daily, monthly, and yearly appliance cost in KRW from watts, hours, days, and your own price per kWh. Includes always-on shortcuts and tiny standby usage.
 category: calculator
 category_label: Lifestyle/Fees
 thumbnail: /assets/thumbs/en/electricity-cost-calculator.svg
@@ -20,6 +21,8 @@ faq:
     a: 1kW equals 1000W. For example, a 1500W heater used for 2 hours consumes 3kWh.
   - q: Can I compare multiple appliances with this tool?
     a: Yes. Change the wattage and usage time for each appliance to compare which one costs more to run.
+  - q: Why do small usage and costs show a < sign?
+    a: Positive usage below 0.0001 kWh is shown as < 0.0001 kWh, and costs below 1 KRW as < 1 KRW. Usage is rounded to four decimal places; costs of 1 KRW or more to whole won.
 ---
 
 ## Why use an electricity cost calculator?
@@ -30,11 +33,6 @@ This tool helps you estimate cost using just four inputs:
 - Hours used per day
 - Days used per month
 - Electricity price per kWh
-
-## What was improved in this quality pass
-This calculator previously accepted zero, negative, more than 24 hours per day, more than 31 days per month, and fractional usage days without a clear error. Its prefilled result also hid the empty state. Because an appliance estimate can be mistaken for a real utility bill, this update prioritizes input validation, a clear empty state, and explicit calculation assumptions.
-
-Accepted ranges are 0.1–1,000,000 W, 0.1–24 hours per day, 1–31 whole usage days, and 0.01–1,000,000 per kWh. Out-of-range entries now show a specific error instead of a misleading result.
 
 ## How to use the calculator
 1. Enter the appliance's rated power in watts (W).
@@ -110,3 +108,11 @@ Yes. Enter each appliance one by one and compare the monthly cost to see which o
 
 ## Summary
 This electricity cost calculator turns appliance wattage and operating time into kWh usage and a quick cost estimate. Use it to compare devices, then check your utility's rate structure when you need a bill-level estimate.
+
+## Standby power, always-on devices, and rate assumptions
+Choose 1, 8, or 24 hours per day with the shortcuts. 0.1 hour means 6 minutes. Enter decimals such as `0.5` or `.5`; commas, exponents, and units are not accepted. Complete all four inputs. Invalid input clears the result and marks the field.
+
+All costs are in **KRW**. Enter your own price per kWh: 150 is an example, not a current utility tariff. This is not an official bill calculator and does not add tiered rates, base fees, or taxes. Yearly cost repeats the entered month 12 times. Constant wattage is assumed; for cycling appliances such as refrigerators or air conditioners, compare measured average power instead.
+
+### Why do small usage and costs show a < sign?
+Positive usage below 0.0001 kWh is shown as < 0.0001 kWh, and costs below 1 KRW as < 1 KRW. Usage is rounded to four decimal places; costs of 1 KRW or more to whole won.
