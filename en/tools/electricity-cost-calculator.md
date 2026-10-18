@@ -12,7 +12,7 @@ tool_key: electricity-cost-calculator
 lang: en
 permalink: /en/tools/electricity-cost-calculator/
 canonical_url: /en/tools/electricity-cost-calculator/
-keywords: [electricity cost calculator, energy cost estimate, kWh calculator, wattage calculator, appliance electricity cost]
+keywords: [electricity cost calculator, energy cost estimate, kWh calculator, wattage calculator, appliance electricity cost, standby power cost, KRW electricity cost]
 related_tools: [unit-converter, percent-calculator, average-calculator]
 faq:
   - q: Why can the result be different from my real electric bill?
@@ -32,13 +32,13 @@ This tool helps you estimate cost using just four inputs:
 - Power consumption (W)
 - Hours used per day
 - Days used per month
-- Electricity price per kWh
+- Electricity price in Korean won (KRW) per kWh
 
 ## How to use the calculator
-1. Enter the appliance's rated power in watts (W).
-2. Enter how many hours it runs per day.
+1. Enter the appliance's power in watts (W). For cycling devices such as refrigerators or air conditioners, use measured average power when available; the calculation assumes constant power.
+2. Enter how many hours it runs per day, or choose **1 hour/day**, **8 hours/day**, or **Always on (24h)**. For short periods, 0.1 hour is 6 minutes.
 3. Enter the number of days it runs in a typical month.
-4. Enter your electricity price per kWh.
+4. Enter your electricity price in **KRW per kWh**, not dollars or another currency. The sample rate of 150 is illustrative, not a current utility tariff.
 5. Review daily and monthly usage plus the estimated daily, monthly, and yearly cost.
 
 The result stays blank until all four inputs are valid. Use **Fill sample** to load a 1500 W heater example, **Copy result** to copy a valid summary, or **Clear** to return to the empty state.
@@ -85,7 +85,9 @@ It also shows **daily cost, monthly cost, and yearly cost**, which makes it usef
 - Wattage: enter 0.1–1,000,000 W.
 - Daily use: enter 0.1–24 hours.
 - Monthly use: enter a whole number from 1 to 31 days.
-- Electricity price: enter 0.01–1,000,000 per kWh.
+- Electricity price: enter 0.01–1,000,000 KRW per kWh.
+- Decimal format: use `0.5` or `.5`, without commas, exponents, or unit symbols.
+- Missing or invalid values clear the previous result and mark the affected fields; copying stays disabled until all four inputs are valid.
 
 The calculator does not silently clamp an invalid value. Correct the highlighted field before copying a result.
 
@@ -109,10 +111,8 @@ Yes. Enter each appliance one by one and compare the monthly cost to see which o
 ## Summary
 This electricity cost calculator turns appliance wattage and operating time into kWh usage and a quick cost estimate. Use it to compare devices, then check your utility's rate structure when you need a bill-level estimate.
 
-## Standby power, always-on devices, and rate assumptions
-Choose 1, 8, or 24 hours per day with the shortcuts. 0.1 hour means 6 minutes. Enter decimals such as `0.5` or `.5`; commas, exponents, and units are not accepted. Complete all four inputs. Invalid input clears the result and marks the field.
-
-All costs are in **KRW**. Enter your own price per kWh: 150 is an example, not a current utility tariff. This is not an official bill calculator and does not add tiered rates, base fees, or taxes. Yearly cost repeats the entered month 12 times. Constant wattage is assumed; for cycling appliances such as refrigerators or air conditioners, compare measured average power instead.
+## Standby power and small kWh readings
+For a device running around the clock, select **Always on (24h)** and enter the number of days in your comparison month. A 0.1 W standby load running 24 hours for 30 days uses **0.072 kWh**; at the illustrative 150 KRW/kWh rate, its monthly cost is **11 KRW** after rounding.
 
 ### Why do small usage and costs show a < sign?
-Positive usage below 0.0001 kWh is shown as < 0.0001 kWh, and costs below 1 KRW as < 1 KRW. Usage is rounded to four decimal places; costs of 1 KRW or more to whole won.
+Positive usage below 0.0001 kWh is shown as **&lt; 0.0001 kWh**, and positive costs below 1 KRW as **&lt; 1 KRW**, rather than zero. Usage is rounded to four decimal places; costs of 1 KRW or more are rounded to whole won. Calculations use the unrounded values, so do not multiply the displayed rounded daily figures to recreate the monthly total.
