@@ -6041,6 +6041,8 @@
 
     const ageI18n = {
       ko: {
+        beyondRange: '다음 생일이 지원 범위(9999-12-31)를 벗어납니다.',
+        context: (b, t) => `생년월일 ${b} | 기준일 ${t}`,
         years: '세',
         months: '개월',
         days: '일',
@@ -6064,6 +6066,8 @@
         sampleBirth: '2000-02-29'
       },
       en: {
+        beyondRange: 'Next birthday is beyond the supported range (9999-12-31).',
+        context: (b, t) => `Birth date ${b} | Reference date ${t}`,
         years: ' years',
         months: ' months',
         days: ' days',
@@ -6087,6 +6091,8 @@
         sampleBirth: '2000-02-29'
       },
       ja: {
+        beyondRange: '次の誕生日は対応範囲（9999-12-31）外です。',
+        context: (b, t) => `生年月日 ${b} | 基準日 ${t}`,
         years: '歳',
         months: 'か月',
         days: '日',
@@ -6112,6 +6118,9 @@
     };
     const ageText = ageI18n[pageLang] || ageI18n.ko;
 
+    // Gregorian arithmetic avoids Date.UTC's special handling of years 0–99.
+    const lastDayOfMonth = (year, month) => [31, (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1];
+    let revision = 0;
     const toDate = (value) => {
       const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || '');
       if (!match) return null;
@@ -6120,7 +6129,7 @@
       const month = Number(rawMonth);
       const day = Number(rawDay);
       if (year < 1 || year > 9999 || month < 1 || month > 12 || day < 1) return null;
-      const maxDay = new Date(Date.UTC(year, month, 0)).getUTCDate();
+      const maxDay = lastDayOfMonth(year, month);
       if (day > maxDay) return null;
       return { year, month, day };
     };
@@ -6133,7 +6142,6 @@
     };
     const compareDates = (a, b) => Math.sign(toUTCDate(a) - toUTCDate(b));
     const dayDiff = (a, b) => Math.round((toUTCDate(b) - toUTCDate(a)) / 86400000);
-    const lastDayOfMonth = (year, month) => new Date(Date.UTC(year, month, 0)).getUTCDate();
     const anniversary = (b, year) => ({ year, month: b.month, day: Math.min(b.day, lastDayOfMonth(year, b.month)) });
     const formatDate = ({ year, month, day }) => `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
@@ -6153,7 +6161,7 @@
     const getNextBirthday = (b, t) => {
       let candidate = anniversary(b, t.year);
       if (compareDates(candidate, t) < 0) candidate = anniversary(b, t.year + 1);
-      return candidate;
+      return candidate.year <= 9999 ? candidate : null;
     };
 
     const copyText = async (text) => {
@@ -6197,8 +6205,12 @@
     };
 
     const render = () => {
+      revision += 1;
+      copyBtn.textContent = ageText.copyDefault;
       const b = toDate(birth.value);
       const t = toDate(target.value);
+      if (birth.validity.badInput) { setIdle(ageText.invalidDate, birth); return; }
+      if (target.validity.badInput) { setIdle(ageText.invalidDate, target); return; }
       if (!birth.value) {
         setIdle(ageText.idleBirth);
         return;
@@ -6225,16 +6237,16 @@
       const totalMonths = getMonthSpan(b, t);
       const totalDays = dayDiff(b, t);
       const upcomingBirthday = getNextBirthday(b, t);
-      const daysLeft = dayDiff(t, upcomingBirthday);
+      const daysLeft = upcomingBirthday ? dayDiff(t, upcomingBirthday) : null;
 
       international.textContent = `${fullAge.toLocaleString(numberLocale)}${ageText.years}`;
       korean.textContent = koreanMode?.checked ? `${koreanAge.toLocaleString(numberLocale)}${ageText.years}` : ageText.hidden;
       months.textContent = `${totalMonths.toLocaleString(numberLocale)}${ageText.months}`;
       days.textContent = `${totalDays.toLocaleString(numberLocale)}${ageText.days}`;
 
-      const birthdayText = formatDate(upcomingBirthday);
-      const ddayText = daysLeft === 0 ? ageText.dday : ageText.dminus(daysLeft.toLocaleString(numberLocale));
-      nextBirthday.textContent = ageText.nextBirthday(birthdayText, ddayText);
+      const birthdayText = upcomingBirthday ? formatDate(upcomingBirthday) : null;
+      const ddayText = daysLeft === null ? '' : daysLeft === 0 ? ageText.dday : ageText.dminus(daysLeft.toLocaleString(numberLocale));
+      nextBirthday.textContent = upcomingBirthday ? ageText.nextBirthday(birthdayText, ddayText) : ageText.beyondRange;
       birth.setAttribute('aria-invalid', 'false');
       target.setAttribute('aria-invalid', 'false');
       copyBtn.disabled = false;
@@ -6251,7 +6263,7 @@
       birth.value = ageText.sampleBirth;
       if (!target.value) target.value = toISO(new Date());
       render();
-      setStatus(ageText.exampleLoaded, 'success');
+      if (!copyBtn.disabled) setStatus(ageText.exampleLoaded, 'success');
       birth.focus();
     });
 
@@ -6274,12 +6286,11 @@
 
     copyBtn?.addEventListener('click', async () => {
       if (copyBtn.disabled) return;
-      const text = ageText.copyText(international.textContent, korean.textContent, months.textContent, days.textContent, nextBirthday.textContent);
+      const snapshot = revision;
+      const text = ageText.context(birth.value, target.value) + '\n' + ageText.copyText(international.textContent, korean.textContent, months.textContent, days.textContent, nextBirthday.textContent);
       const copied = await copyText(text);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = copied ? ageText.copied : ageText.copyFail;
+      if (snapshot !== revision) return;
       setStatus(copied ? ageText.copied : ageText.copyFail, copied ? 'success' : 'error');
-      setTimeout(() => { copyBtn.textContent = old || ageText.copyDefault; }, 900);
     });
 
     render();

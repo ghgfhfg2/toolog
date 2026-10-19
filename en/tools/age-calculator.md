@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Age Calculator by Date of Birth | Age on Any Date
-description: Calculate your age from your date of birth on any past, present, or future date, including total months and days, Korean counting age, and the next birthday countdown. Handles Feb 29 consistently.
+title: Age Calculator | Age on Any Date & Month-End Rules
+description: Calculate age, Korean counting age, elapsed months and days, and birthday countdown from dates in years 0001–9999. Check leap-day and month-end rules and copy results with the reference date.
 lang: en
 permalink: /en/tools/age-calculator/
 canonical_url: /en/tools/age-calculator/
@@ -25,14 +25,15 @@ faq:
     a: This calculator consistently uses Feb 28 as the anniversary date in non-leap years for both age and next-birthday results. Check the applicable authority for official legal use.
   - q: Can I calculate age on a past date?
     a: Yes. Set the reference date to a past school, contract, medical, or application date to see your age at that time.
+  - q: How are full months counted?
+    a: The birth day is clamped to the last day of the reference month when needed. January 31 to February 28, 2025 counts as one month. Elapsed days start at zero on the birth date and are not months multiplied by 30.
+  - q: What date range is supported?
+    a: Dates from 0001-01-01 to 9999-12-31 use the proleptic Gregorian calendar. A next birthday in year 10000 is marked out of range. Today uses your device’s local date. Historical regional calendar conversion and official age determinations are not supported.
 alternate_urls:
   ko: /tools/age-calculator/
   en: /en/tools/age-calculator/
   ja: /ja/tools/age-calculator/
 ---
-
-## Why this tool was selected for improvement
-Recent quality updates focused on D-day, profit margin, savings interest, and tip calculators, while this age calculator had not been refreshed since March 2026. Its handling of Feb 29 birthdays was inconsistent between age and next-birthday results, and its empty, invalid-input, copy-failure, and mobile input flows needed clearer feedback.
 
 ## Why use an age calculator?
 Insurance forms, medical questionnaires, job applications, school eligibility, and age restrictions often require your precise age from your date of birth.
@@ -95,3 +96,10 @@ No. It is a practical calculator. For legal procedures, always follow the offici
 
 ## Summary
 Enter a date of birth and reference date to calculate age, Korean counting age, elapsed months and days, and the next-birthday countdown in one view.
+
+
+### How are full months counted?
+The birth day is clamped to the last day of the reference month when needed. January 31 to February 28, 2025 counts as one month. Elapsed days start at zero on the birth date and are not months multiplied by 30.
+
+### What date range is supported?
+Dates from 0001-01-01 to 9999-12-31 use the proleptic Gregorian calendar. A next birthday in year 10000 is marked out of range. Today uses your device’s local date. Historical regional calendar conversion and official age determinations are not supported.

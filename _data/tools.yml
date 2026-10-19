@@ -1901,9 +1901,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 생년월일과 과거·오늘·미래 기준일로 만 나이, 세는나이, 총 개월·일수, 다음 생일 D-day를 계산해요. 윤년 2월 29일도 일관되게 처리합니다.
-  description_en: Calculate age on any past, present, or future date, Korean counting age, total months and days, and the next-birthday countdown with consistent leap-day handling.
-  description_ja: 生年月日と過去・今日・未来の基準日から、満年齢、韓国式年齢、総月数・日数、次の誕生日までを計算し、2月29日も一貫して処理します。
+  description: 생년월일과 기준일로 만 나이, 세는나이, 총 개월·일수와 생일 D-day를 계산하세요. 0001~9999년 날짜, 윤년 및 월말 보정 규칙을 확인하고 기준일이 포함된 결과를 복사할 수 있습니다.
+  description_en: Calculate age, Korean counting age, elapsed months and days, and birthday countdown from dates in years 0001–9999. Check leap-day and month-end rules and copy results with the reference date.
+  description_ja: 0001～9999年の生年月日と基準日から満年齢、韓国式年齢、総月数・日数、誕生日までの日数を計算。うるう日・月末補正の規約を確認し、基準日付きで結果をコピーできます。
   url: /tools/age-calculator/
   url_en: /en/tools/age-calculator/
   url_ja: /ja/tools/age-calculator/

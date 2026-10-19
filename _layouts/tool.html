@@ -3045,7 +3045,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           </div>
           <p class="tool-result" id="age-next-birthday">{% if page.lang == 'en' %}Your next birthday date and countdown will appear here.{% elsif page.lang == 'ja' %}次の誕生日と残り日数がここに表示されます。{% else %}다음 생일 날짜와 남은 일수가 여기에 표시됩니다.{% endif %}</p>
           <p class="tool-result" id="age-status" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter your birth date to calculate your age.{% elsif page.lang == 'ja' %}生年月日を入力すると年齢を計算します。{% else %}생년월일을 입력하면 나이를 계산합니다.{% endif %}</p>
-          <p class="tool-help" id="age-help">{% if page.lang == 'en' %}The reference date may be today, a past date, or a future planning date. Feb 29 is treated as Feb 28 in non-leap years for this calculator.{% elsif page.lang == 'ja' %}基準日は今日・過去・将来の日付を選べます。この計算機では、うるう年以外の2月29日を2月28日として扱います。{% else %}기준일은 오늘·과거·미래 날짜를 선택할 수 있습니다. 이 계산기에서는 2월 29일 출생자의 평년 생일을 2월 28일로 처리합니다.{% endif %}</p>
+          <p class="tool-help" id="age-help">{% if page.lang == 'en' %}The reference date may be today, a past date, or a future planning date. Dates from 0001-01-01 to 9999-12-31 are supported. Full months use month-end clamping (Jan 31 → Feb 28 is one month). Feb 29 uses Feb 28 in non-leap years; this is a calculator convention, not an official age ruling.{% elsif page.lang == 'ja' %}基準日は今日・過去・将来の日付を選べます。対応範囲は0001-01-01～9999-12-31です。月末補正で総月数を計算します（1月31日→2月28日は1か月）。平年の2月29日は2月28日とする計算上の規約で、公的な年齢判定ではありません。{% else %}기준일은 오늘·과거·미래 날짜를 선택할 수 있습니다. 지원 범위는 0001-01-01~9999-12-31입니다. 총 개월은 월말 보정으로 계산합니다(1월 31일→2월 28일은 1개월). 평년의 2월 29일 생일은 2월 28일로 계산하는 도구 자체 규칙이며 공식 연령 판정이 아닙니다.{% endif %}</p>
         </div>
       {% when 'salary-calculator' %}
         <div class="tool-ui sal-ui">
