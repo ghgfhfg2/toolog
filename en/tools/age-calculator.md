@@ -16,7 +16,7 @@ keywords: [age calculator, age calculator by date of birth, chronological age, a
 related_tools: ['d-day-calculator', 'percent-calculator', 'bmi-calculator']
 faq:
   - q: What is the difference between exact age and Korean counting age?
-    a: Exact age increases on your birthday. Korean counting age is calculated as current year minus birth year plus one.
+    a: Exact age increases on your birthday. Korean counting age is calculated as reference year minus birth year plus one.
   - q: Can I calculate age for a future date?
     a: Yes. Set a future reference date to estimate your age and birthday countdown at that point.
   - q: What if the birth date is later than the reference date?
@@ -47,7 +47,9 @@ This age calculator shows the following in one place:
 ## Key features
 - **Automatic age calculation** that checks whether the birthday has occurred by the reference date
 - **Optional Korean counting age** that can be shown or hidden
-- **Elapsed-time details** in full months and total days
+- **Elapsed-time details** in full months and total days, with month-end adjustment rather than a 30-day approximation
+- **Dates from 0001 to 9999** using the proleptic Gregorian calendar
+- **Copyable date context** including both birth date and reference date
 - **Next-birthday countdown** with the upcoming birthday date
 - **Past and future reference dates** for school, contract, medical, application, and planning dates
 - **Consistent leap-day handling** that treats Feb 28 as the anniversary in non-leap years
@@ -57,7 +59,8 @@ This age calculator shows the following in one place:
 1. Enter your date of birth.
 2. Keep today as the reference date, or choose a past or future date.
 3. Review the age, Korean counting age, total months and days, and next-birthday countdown.
-4. Use **Try example** to test a leap-day boundary case, or **Copy result** to share the summary.
+4. Use **Try example** to test a leap-day boundary case, or **Copy result** to share the summary with the birth date and reference date.
+5. Use **Use today** to return to your device’s local date, or **Clear all** to clear both date fields and results.
 
 ## Example
 - Date of birth: 1995-10-12
@@ -67,11 +70,16 @@ Example result:
 - Age: 30 years
 - Korean counting age: 32 years
 - Total full months: 364 months
-- Total elapsed days: more than 11,100 days
+- Total elapsed days: 11,100 days
 - Next birthday: 2026-10-12 (D-223)
 
+## Month-end and leap-day examples
+- From 2025-01-31 to 2025-02-28: **1 full month and 28 elapsed days**. The monthly anniversary is adjusted to February’s last day.
+- Born on 2000-02-29, reference date 2025-02-28: **25 years old**, with the birthday countdown showing **D-day** under this calculator’s February 28 rule.
+- Born on the reference date: **0 years, 0 months, 0 elapsed days**. The birth date itself is day zero.
+
 ## Input, empty, and error states
-If the birth date is blank, the calculator prompts you to enter it and keeps all result cards empty. It separately identifies an invalid date, a missing reference date, or a birth date later than the reference date. Copy remains unavailable until a valid calculation exists, and a browser permission problem produces a copy-failure message.
+If the birth date is blank, the calculator prompts you to enter it and keeps all result cards empty. It separately identifies an invalid date, a missing reference date, or a birth date later than the reference date. Copy remains unavailable until a valid calculation exists, and if both clipboard copying and its fallback fail, a copy-failure message is shown. If the next birthday would fall in year 10000, only the birthday field reports that it is out of range; the other age results remain available.
 
 ## FAQ
 ### Can I use this for future planning dates?
@@ -89,6 +97,12 @@ For consistent results throughout this calculator, Feb 28 is used as the anniver
 ### Does this replace official legal age checks?
 No. It is a practical calculator. For legal procedures, always follow the official authority’s rule.
 
+### How are full months counted?
+The birth day is clamped to the last day of the reference month when needed. January 31 to February 28, 2025 counts as one month. Elapsed days start at zero on the birth date and are not months multiplied by 30.
+
+### What date range is supported?
+Dates from 0001-01-01 to 9999-12-31 use the proleptic Gregorian calendar. A next birthday in year 10000 is marked out of range. Today uses your device’s local date. Historical regional calendar conversion and official age determinations are not supported.
+
 ## Related tools
 - Date gap and countdown: [D-Day Calculator]({{ '/en/tools/d-day-calculator/' | relative_url }})
 - Percentage math: [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
@@ -96,10 +110,3 @@ No. It is a practical calculator. For legal procedures, always follow the offici
 
 ## Summary
 Enter a date of birth and reference date to calculate age, Korean counting age, elapsed months and days, and the next-birthday countdown in one view.
-
-
-### How are full months counted?
-The birth day is clamped to the last day of the reference month when needed. January 31 to February 28, 2025 counts as one month. Elapsed days start at zero on the birth date and are not months multiplied by 30.
-
-### What date range is supported?
-Dates from 0001-01-01 to 9999-12-31 use the proleptic Gregorian calendar. A next birthday in year 10000 is marked out of range. Today uses your device’s local date. Historical regional calendar conversion and official age determinations are not supported.
