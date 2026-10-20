@@ -22,7 +22,7 @@ faq:
   - q: How do I enter amounts and rates?
     a: Enter whole KRW from 1 to 1 quadrillion and whole years from 1 to 50. The annual rate must be a plain decimal from 0 to 100%. A blank rate is not zero; commas and exponent notation are not accepted.
   - q: What formulas and rounding rules are used?
-    a: A fixed annual rate divided by 12 and month-end payments are assumed. Amortized payment is P×r/(1−(1+r)^−n), or P/n at 0%. Equal-principal interest is P×r×(n+1)/2. Results round independently to whole KRW; positive values below 0.5 KRW show < 1 KRW. Fees, variable rates and daily interest are excluded.
+    a: A fixed annual rate divided by 12 and month-end payments are assumed. P is principal in KRW, r is the annual percentage rate divided by 100 and then 12, and n is years × 12. Amortized payment is P×r/(1−(1+r)^−n), or P/n at 0%. Equal-principal interest is P×r×(n+1)/2. Results round independently to whole KRW; positive values below 0.5 KRW show < 1 KRW. Fees, variable rates and daily interest are excluded.
   - q: What is the difference between amortized and equal-principal repayment?
     a: Amortized repayment keeps the monthly payment almost fixed, while equal-principal repayment pays the same principal each month so payments start higher and gradually fall.
   - q: Why can the result differ from a bank quote?
@@ -33,7 +33,7 @@ faq:
     a: Compare the amortized monthly payment, the equal-principal first and last payments, and the total interest difference. Confirm the final month-by-month schedule with your lender.
 ---
 
-## Check loan payments before you talk to a lender
+## Compare fixed-rate loan payments in Korean won (KRW)
 Before a loan consultation, the first questions are usually "How much will I pay each month?" and "How much interest will this cost overall?"
 
 Enter the **loan amount, annual interest rate, and repayment term** to estimate monthly payments instantly, then compare amortized repayment with equal-principal repayment in one view.
@@ -47,11 +47,18 @@ Enter the **loan amount, annual interest rate, and repayment term** to estimate 
 - **0% interest and edge-case handling**
 
 ## How to use
-1. Enter the loan amount, for example `100,000,000` KRW.
+1. Enter the loan amount, for example `100000000` KRW (without commas).
 2. Enter the annual interest rate, for example `4.2`.
 3. Enter the repayment term in years and choose a repayment type, for example `30 years` and `amortized repayment`.
 
 As you type, the result cards show monthly payment, total interest, and total repayment. The calculator accepts amounts from 1 KRW to 1 quadrillion KRW, rates from 0% to 100%, and whole-year terms from 1 to 50 years.
+
+## Empty fields, input errors, and copying results
+- Complete all three required numeric fields. To model an interest-free loan, enter `0` explicitly; leaving the rate blank does not mean 0%.
+- Use whole KRW and whole years, and enter the rate as an ordinary decimal such as `4.2`. Do not use commas or scientific notation such as `1e8`.
+- Missing or invalid inputs clear the previous results and disable result copying. Correct the indicated field to recalculate.
+- Load the 100M KRW sample to try both repayment plans. Copy a valid result to include the inputs, comparison, and calculation assumptions, or clear the form to start again.
+- If automatic copying fails, the page displays an error; copy the displayed figures manually instead.
 
 ## Example
 - Loan amount: 100M KRW
@@ -78,6 +85,11 @@ Compare the amortized monthly payment, the equal-principal first and final payme
 - Ratio math: [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
 - Net income planning: [Salary Calculator]({{ '/en/tools/salary-calculator/' | relative_url }})
 
+## Zero rates, tiny interest amounts, and rounding
+At 0%, both plans have zero interest and an unrounded monthly payment of principal divided by the number of months. Very small positive rates are also supported. A positive amount below 0.5 KRW is shown as **&lt; 1 KRW**, not as zero.
+
+Each displayed result is rounded independently to whole KRW. Multiplying the rounded monthly payment by the number of months can therefore differ from the displayed total repayment. All amounts remain in **KRW**; this page does not convert them to dollars or another currency.
+
 ## Summary
 This loan interest calculator helps you quickly estimate **monthly payment, total interest, and total repayment** before choosing or discussing a loan.
 
@@ -87,4 +99,4 @@ This loan interest calculator helps you quickly estimate **monthly payment, tota
 Enter whole KRW from 1 to 1 quadrillion and whole years from 1 to 50. The annual rate must be a plain decimal from 0 to 100%. A blank rate is not zero; commas and exponent notation are not accepted.
 
 ### What formulas and rounding rules are used?
-A fixed annual rate divided by 12 and month-end payments are assumed. Amortized payment is P×r/(1−(1+r)^−n), or P/n at 0%. Equal-principal interest is P×r×(n+1)/2. Results round independently to whole KRW; positive values below 0.5 KRW show < 1 KRW. Fees, variable rates and daily interest are excluded.
+A fixed annual rate divided by 12 and month-end payments are assumed. P is principal in KRW, r is the annual percentage rate divided by 100 and then 12, and n is years × 12. Amortized payment is P×r/(1−(1+r)^−n), or P/n at 0%. Equal-principal interest is P×r×(n+1)/2. Results round independently to whole KRW; positive values below 0.5 KRW show < 1 KRW. Fees, variable rates and daily interest are excluded.
