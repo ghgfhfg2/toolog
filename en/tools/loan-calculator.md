@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Loan Repayment Calculator | Monthly Payment, Total Interest, and Plan Comparison
-description: Estimate monthly payment, total interest, total repayment, and first-to-last payment differences for amortized and equal-principal loan repayment plans.
+title: Loan Calculator | Compare Fixed-Rate KRW Repayment Plans
+description: Compare monthly payments, total interest and total repayment in KRW for fixed-rate amortized and equal-principal loans, including zero and very small rates, input checks and rounding guidance.
 lang: en
 permalink: /en/tools/loan-calculator/
 canonical_url: /en/tools/loan-calculator/
@@ -19,6 +19,10 @@ alternate_urls:
   en: /en/tools/loan-calculator/
   ja: /ja/tools/loan-calculator/
 faq:
+  - q: How do I enter amounts and rates?
+    a: Enter whole KRW from 1 to 1 quadrillion and whole years from 1 to 50. The annual rate must be a plain decimal from 0 to 100%. A blank rate is not zero; commas and exponent notation are not accepted.
+  - q: What formulas and rounding rules are used?
+    a: A fixed annual rate divided by 12 and month-end payments are assumed. Amortized payment is P×r/(1−(1+r)^−n), or P/n at 0%. Equal-principal interest is P×r×(n+1)/2. Results round independently to whole KRW; positive values below 0.5 KRW show < 1 KRW. Fees, variable rates and daily interest are excluded.
   - q: What is the difference between amortized and equal-principal repayment?
     a: Amortized repayment keeps the monthly payment almost fixed, while equal-principal repayment pays the same principal each month so payments start higher and gradually fall.
   - q: Why can the result differ from a bank quote?
@@ -76,3 +80,11 @@ Compare the amortized monthly payment, the equal-principal first and final payme
 
 ## Summary
 This loan interest calculator helps you quickly estimate **monthly payment, total interest, and total repayment** before choosing or discussing a loan.
+
+## Input and calculation FAQ
+
+### How do I enter amounts and rates?
+Enter whole KRW from 1 to 1 quadrillion and whole years from 1 to 50. The annual rate must be a plain decimal from 0 to 100%. A blank rate is not zero; commas and exponent notation are not accepted.
+
+### What formulas and rounding rules are used?
+A fixed annual rate divided by 12 and month-end payments are assumed. Amortized payment is P×r/(1−(1+r)^−n), or P/n at 0%. Equal-principal interest is P×r×(n+1)/2. Results round independently to whole KRW; positive values below 0.5 KRW show < 1 KRW. Fees, variable rates and daily interest are excluded.

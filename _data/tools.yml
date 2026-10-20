@@ -1479,9 +1479,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 대출금액·연이율·상환기간으로 월 상환금, 총 이자, 원리금균등/원금균등 차이를 빠르게 비교해요.
-  description_en: Compare monthly payment, total interest, total repayment, and amortized vs equal-principal plans from amount, rate, and term.
-  description_ja: 借入額・年利・期間から、毎月返済額・総利息・総返済額、元利均等/元金均等の差を比較できます。
+  description: 대출금액·고정 연이율·기간으로 원리금균등과 원금균등의 월 상환금, 총 이자, 총 상환액을 원화로 비교하세요. 0%·극소 금리, 입력 오류와 반올림 기준도 확인합니다.
+  description_en: Compare monthly payments, total interest and total repayment in KRW for fixed-rate amortized and equal-principal loans, including zero and very small rates, input checks and rounding guidance.
+  description_ja: 借入額・固定年利・期間から、元利均等と元金均等の月々の返済額・総利息・総返済額をウォンで比較。0%や微小金利、入力エラーと丸め方も確認できます。
   url: /tools/loan-calculator/
   url_en: /en/tools/loan-calculator/
   url_ja: /ja/tools/loan-calculator/

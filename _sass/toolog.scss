@@ -3026,3 +3026,14 @@ a:hover { color: var(--primary-strong); }
   .age-ui .tool-row-grid { grid-template-columns: 1fr; }
   .age-ui .age-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* Loan calculator: scoped readability, focus and touch targets. */
+.loan-ui :is(input, select) { box-sizing: border-box; width: 100%; min-width: 0; min-height: 44px; font-size: 16px; }
+.loan-ui .tool-row-grid > div { min-width: 0; }
+.loan-ui button { min-height: 44px; white-space: normal; overflow-wrap: anywhere; }
+.loan-ui :is(input, select, button):focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+.loan-ui :is(.tool-result, .tool-stats strong) { overflow-wrap: anywhere; }
+@media (max-width: 480px) {
+  .loan-ui .tool-row-grid { grid-template-columns: 1fr; }
+  .loan-ui .loan-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

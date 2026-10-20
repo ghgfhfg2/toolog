@@ -5386,7 +5386,9 @@
       }
     };
     const loanText = loanI18n[pageLang] || loanI18n.ko;
+    let revision = 0;
     const fmtKRW = (v) => {
+      if (v > 0 && v < 0.5) return `< 1${loanText.currency}`;
       const rounded = Math.round(v);
       if (pageLang === 'en') return `${rounded.toLocaleString(numberLocale)}${loanText.currency}`;
       return `${rounded.toLocaleString(numberLocale)}${loanText.currency}`;
@@ -5403,43 +5405,31 @@
       ta.style.left = '-9999px';
       document.body.appendChild(ta);
       ta.select();
-      const ok = document.execCommand('copy');
-      ta.remove();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } finally { ta.remove(); }
       if (!ok) throw new Error('copy failed');
     };
 
     const calcPlan = ({ principal, n, r, mode }) => {
-      let firstMonthly = 0;
-      let lastMonthly = 0;
-      let total = 0;
-
+      // log1p/expm1 avoid cancellation when 1 + r rounds to 1.
+      const firstMonthly = mode === 'equal-principal'
+        ? principal / n + principal * r
+        : (r === 0 ? principal / n : principal * r / -Math.expm1(-n * Math.log1p(r)));
+      let interest = 0;
       if (mode === 'equal-principal') {
-        const principalPerMonth = principal / n;
-        let remaining = principal;
-        for (let i = 0; i < n; i++) {
-          const interest = remaining * r;
-          const pay = principalPerMonth + interest;
-          if (i === 0) firstMonthly = pay;
-          if (i === n - 1) lastMonthly = pay;
-          total += pay;
-          remaining -= principalPerMonth;
-        }
+        interest = principal * r * (n + 1) / 2;
       } else {
-        if (r === 0) {
-          firstMonthly = principal / n;
-          lastMonthly = firstMonthly;
-        } else {
-          firstMonthly = principal * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-          lastMonthly = firstMonthly;
-        }
-        total = firstMonthly * n;
+        // A short series avoids subtracting nearly equal totals for tiny rates.
+        // A balance recurrence is unstable over long high-rate terms.
+        interest = n * r < 0.00001
+          ? principal * ((n + 1) * r / 2 + (n * n - 1) * r * r / 12 - (n * n - 1) * r * r * r / 24)
+          : Math.max(0, firstMonthly * n - principal);
       }
-
       return {
         firstMonthly,
-        lastMonthly,
-        total,
-        interest: Math.max(0, total - principal)
+        lastMonthly: mode === 'equal-principal' ? principal / n * (1 + r) : firstMonthly,
+        total: principal + interest,
+        interest
       };
     };
 
@@ -5465,6 +5455,7 @@
     };
 
     const render = () => {
+      revision++;
       const amountRaw = amount.value.trim();
       const rateRaw = rate.value.trim();
       const yearsRaw = years.value.trim();
@@ -5480,15 +5471,15 @@
       const yearTerm = Number(yearsRaw);
       const n = Math.round(yearTerm * 12);
 
-      if (!Number.isFinite(principal) || principal < 1 || principal > 1000000000000000) {
+      if (amountRaw.length > 32 || !/^\d+$/.test(amountRaw) || !Number.isSafeInteger(principal) || principal < 1 || principal > 1000000000000000) {
         setInvalid(amount, loanText.invalidAmount);
         return;
       }
-      if (!Number.isFinite(annualRate) || annualRate < 0 || annualRate > 100) {
+      if (rateRaw.length > 32 || !/^(?:\d+(?:\.\d*)?|\.\d+)$/.test(rateRaw) || !Number.isFinite(annualRate) || annualRate < 0 || annualRate > 100) {
         setInvalid(rate, loanText.invalidRate);
         return;
       }
-      if (!Number.isInteger(yearTerm) || yearTerm < 1 || yearTerm > 50 || n <= 0) {
+      if (yearsRaw.length > 32 || !/^\d+$/.test(yearsRaw) || !Number.isInteger(yearTerm) || yearTerm < 1 || yearTerm > 50 || n <= 0) {
         setInvalid(years, loanText.invalidYears);
         return;
       }
@@ -5540,27 +5531,31 @@
       rate.value = '';
       years.value = '';
       type.value = 'equal-payment';
+      revision++;
+      [amount, rate, years].forEach(el => el.setAttribute('aria-invalid', 'false'));
       resetResult(loanText.cleared);
       amount.focus();
     });
 
     copyBtn?.addEventListener('click', async () => {
       if (copyBtn.disabled) return;
+      const snapshot = revision;
       const text = [
         loanText.copyTitle(type.options[type.selectedIndex].text),
+        `${amount.value} KRW | ${rate.value}% | ${years.value} × 12`,
         loanText.copyMonthly(monthly.textContent),
         loanText.copyInterest(totalInterest.textContent),
         loanText.copyTotal(totalPayment.textContent),
         comparePayment.textContent,
-        compareInterest.textContent
+        compareInterest.textContent,
+        loanText.estimateHelp(type.options[type.selectedIndex].text),
+        document.getElementById('loan-assumptions').textContent
       ].join(' | ');
       try {
         await copyText(text);
-        const old = copyBtn.textContent;
-        copyBtn.textContent = loanText.copied;
-        setTimeout(() => { copyBtn.textContent = old || loanText.copyDefault; }, 900);
+        if (snapshot === revision) setHelp(loanText.copied, 'success');
       } catch (_) {
-        setHelp(loanText.copyFail, 'error');
+        if (snapshot === revision) setHelp(loanText.copyFail, 'error');
       }
     });
 

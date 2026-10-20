@@ -2866,22 +2866,22 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
         <div class="tool-ui loan-ui">
           <div class="tool-row-grid loan-grid">
             <div>
-              <label for="loan-amount">{% if page.lang == 'en' %}Loan amount{% elsif page.lang == 'ja' %}借入額{% else %}대출금액(원){% endif %}</label>
-              <input id="loan-amount" type="number" min="1" max="1000000000000000" step="10000" placeholder="{% if page.lang == 'en' %}e.g. 100000000{% elsif page.lang == 'ja' %}例: 100000000{% else %}예: 100000000{% endif %}" inputmode="numeric" aria-describedby="loan-help" />
+              <label for="loan-amount">{% if page.lang == 'en' %}Loan amount (KRW){% elsif page.lang == 'ja' %}借入額（ウォン）{% else %}대출금액(원){% endif %}</label>
+              <input id="loan-amount" type="text" maxlength="32" autocomplete="off" spellcheck="false" placeholder="{% if page.lang == 'en' %}e.g. 100000000{% elsif page.lang == 'ja' %}例: 100000000{% else %}예: 100000000{% endif %}" inputmode="numeric" aria-describedby="loan-help loan-assumptions" />
             </div>
             <div>
               <label for="loan-rate">{% if page.lang == 'en' %}Annual interest rate (%) {% elsif page.lang == 'ja' %}年利(%) {% else %}연이율(%) {% endif %}</label>
-              <input id="loan-rate" type="number" min="0" max="100" step="0.01" placeholder="{% if page.lang == 'en' %}e.g. 4.2{% elsif page.lang == 'ja' %}例: 4.2{% else %}예: 4.2{% endif %}" inputmode="decimal" aria-describedby="loan-help" />
+              <input id="loan-rate" type="text" maxlength="32" autocomplete="off" spellcheck="false" placeholder="{% if page.lang == 'en' %}e.g. 4.2{% elsif page.lang == 'ja' %}例: 4.2{% else %}예: 4.2{% endif %}" inputmode="decimal" aria-describedby="loan-help loan-assumptions" />
             </div>
           </div>
           <div class="tool-row-grid loan-grid">
             <div>
               <label for="loan-years">{% if page.lang == 'en' %}Repayment term (years){% elsif page.lang == 'ja' %}返済期間(年){% else %}상환기간(년){% endif %}</label>
-              <input id="loan-years" type="number" min="1" max="50" step="1" placeholder="{% if page.lang == 'en' %}e.g. 30{% elsif page.lang == 'ja' %}例: 30{% else %}예: 30{% endif %}" inputmode="numeric" aria-describedby="loan-help" />
+              <input id="loan-years" type="text" maxlength="32" autocomplete="off" spellcheck="false" placeholder="{% if page.lang == 'en' %}e.g. 30{% elsif page.lang == 'ja' %}例: 30{% else %}예: 30{% endif %}" inputmode="numeric" aria-describedby="loan-help loan-assumptions" />
             </div>
             <div>
               <label for="loan-type">{% if page.lang == 'en' %}Repayment type{% elsif page.lang == 'ja' %}返済方式{% else %}상환방식{% endif %}</label>
-              <select id="loan-type" aria-describedby="loan-help">
+              <select id="loan-type" aria-describedby="loan-help loan-assumptions">
                 <option value="equal-payment">{% if page.lang == 'en' %}Amortized (equal payment){% elsif page.lang == 'ja' %}元利均等返済{% else %}원리금균등상환{% endif %}</option>
                 <option value="equal-principal">{% if page.lang == 'en' %}Equal principal{% elsif page.lang == 'ja' %}元金均等返済{% else %}원금균등상환{% endif %}</option>
               </select>
@@ -2904,6 +2904,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <p class="tool-result" id="loan-compare-interest">{% if page.lang == 'en' %}Interest difference: -{% elsif page.lang == 'ja' %}総利息差: -{% else %}총 이자 차이: -{% endif %}</p>
           </div>
           <p class="tool-result" id="loan-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter amount, rate, and term to calculate monthly payment and total interest. Amount is capped at 1 quadrillion KRW and term at 50 years.{% elsif page.lang == 'ja' %}借入額・年利・期間を入力すると毎月返済額と総利息を計算します。借入額は1,000兆ウォン、期間は50年までです。{% else %}금액·이율·기간을 입력하면 월 납입액과 총 이자를 계산합니다. 금액은 1,000조 원, 기간은 50년까지 지원합니다.{% endif %}</p>
+          <p class="tool-result" id="loan-assumptions">{% if page.lang == 'en' %}Whole KRW and whole years; rate is a plain decimal (no commas or exponent notation). Fixed annual rate ÷ 12, month-end payments, no fees. Results round independently to whole KRW; positive amounts below 0.5 KRW show &lt; 1. Large amounts remain estimates, not a bank repayment schedule.{% elsif page.lang == 'ja' %}金額（ウォン）と年数は整数、年利は通常の小数で入力（カンマ・指数表記不可）。固定年利÷12、月末払い、手数料なし。結果は各々1ウォン単位に丸め、0.5ウォン未満の正の値は &lt; 1 と表示。高額の結果も概算で、銀行の返済表ではありません。{% else %}금액(원)·기간(년)은 정수, 금리는 일반 소수로 입력하세요(쉼표·지수 표기 불가). 고정 연이율÷12, 매월 말 상환, 수수료 제외 기준입니다. 결과는 각각 원 단위로 반올림하며 0.5원 미만 양수는 &lt; 1로 표시합니다. 큰 금액도 추정치이며 은행 상환표가 아닙니다.{% endif %}</p>
         </div>
       {% when 'compound-interest-calculator' %}
         <div class="tool-ui ci-ui">
