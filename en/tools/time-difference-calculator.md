@@ -1,5 +1,11 @@
 ---
 layout: tool
+lang: en
+permalink: /en/tools/time-difference-calculator/
+alternate_urls:
+  ko: /tools/time-difference-calculator/
+  en: /en/tools/time-difference-calculator/
+  ja: /ja/tools/time-difference-calculator/
 title: Time Difference Calculator | Next Day, Breaks & Net Decimal Hours
 description: Calculate elapsed time and net working hours between two clock times. Add 24 hours for next-day endings, deduct breaks, and copy total minutes and net decimal hours.
 category: productivity

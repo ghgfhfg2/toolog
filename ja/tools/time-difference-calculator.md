@@ -1,5 +1,11 @@
 ---
 layout: tool
+lang: ja
+permalink: /ja/tools/time-difference-calculator/
+alternate_urls:
+  ko: /tools/time-difference-calculator/
+  en: /en/tools/time-difference-calculator/
+  ja: /ja/tools/time-difference-calculator/
 title: 時間差計算機 | 日付またぎ・休憩を除く勤務時間
 description: 開始と終了の時刻から経過時間と休憩を除いた実作業時間を計算。翌日は24時間を加算し、総分数・小数時間・実作業の小数時間を確認してコピーできます。
 category: productivity
