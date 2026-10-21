@@ -9,7 +9,7 @@ image:
   path: /assets/thumbs/en/time-difference-calculator.svg
   alt: Time Difference Calculator thumbnail
 tool_key: time-difference-calculator
-keywords: [time difference calculator, elapsed time calculator, time gap calculator, hours between times, work time calculator]
+keywords: [time difference calculator, elapsed time calculator, hours between times, work hours calculator with breaks, net decimal hours]
 related_tools: [work-end-time-calculator, d-day-calculator, pomodoro-timer]
 faq:
 - q: When does next-day mode add 24 hours?
@@ -17,7 +17,7 @@ faq:
 - q: What if the start and end times match?
   a: The same day gives 0 hours; next day gives 24 hours. The maximum span is 47 hours 59 minutes, from 00:00 to 23:59 tomorrow.
 - q: Can a break exceed elapsed time?
-  a: No. The tool shows an error and clears stale results instead of silently forcing net time to zero. A break equal to elapsed time gives zero net hours.
+  a: No. The tool shows an error and clears previous results and disables copying instead of silently forcing net time to zero. A break equal to elapsed time gives zero net hours.
 - q: Which decimal value excludes breaks?
   a: Use net decimal hours. For 9 elapsed hours and a 30-minute break, this is 8.5 hours. Elapsed decimal hours are shown separately.
 - q: What if automatic copying fails?
@@ -36,6 +36,12 @@ Enter two clock times to see elapsed time, total minutes, elapsed decimal hours,
 3. Enter whole break minutes from 0 to 1,440. Blank means zero; a break longer than elapsed time is an error.
 4. Copy the result, load a workday/overnight/meeting example, or use **Clear all** to empty the inputs and results.
 
+## Empty inputs and error messages
+
+Enter both times to get a result. Missing or invalid inputs clear previous results and disable **Copy result**, so you cannot accidentally copy an outdated calculation. **Clear all** returns the tool to this empty state.
+
+If the end time is earlier than the start, select **End time is on the next day** only when the interval really crosses midnight. Breaks must be whole minutes from 0 to 1,440 and cannot exceed elapsed time. Correct the input to calculate again; the tool does not silently shorten an excessive break.
+
 ## Examples
 
 09:00 → 18:00 with a 60-minute break: 9 elapsed hours, 8 net hours, 8 net decimal hours.
@@ -46,7 +52,7 @@ Enter two clock times to see elapsed time, total minutes, elapsed decimal hours,
 
 Elapsed minutes = end minutes − start minutes + 1,440 if next day is selected. Net minutes = elapsed minutes − break minutes. Each decimal-hours value is its minutes ÷ 60, rounded to 4 decimal places.
 
-This is clock-time arithmetic without dates, timezones, daylight saving, or payroll/overtime rules. For timezones use the [timezone converter](/en/tools/timezone-converter/).
+This tool calculates clock-time differences without selecting calendar dates. It does not account for time zones or daylight saving time and is not a legal payroll calculator for breaks, allowances, or overtime. For timezones use the [timezone converter](/en/tools/timezone-converter/).
 
 ## FAQ
 
@@ -60,7 +66,7 @@ The same day gives 0 hours; next day gives 24 hours. The maximum span is 47 hour
 
 ### Can a break exceed elapsed time?
 
-No. The tool shows an error and clears stale results instead of silently forcing net time to zero. A break equal to elapsed time gives zero net hours.
+No. The tool shows an error and clears previous results and disables copying instead of silently forcing net time to zero. A break equal to elapsed time gives zero net hours.
 
 ### Which decimal value excludes breaks?
 
