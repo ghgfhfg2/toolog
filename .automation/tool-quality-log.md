@@ -1,3 +1,11 @@
+## 2026-10-21 21:00 KST
+- Tool: `time-difference-calculator` (existing tool only; 98 tools preserved).
+- Selection: last reviewed August 22; recent improvements covered loan, age, electricity cost, stock average, and unit conversion. Highest concrete error risk: selecting next day added 24 hours only when end <= start, so 09:00 to 18:00 tomorrow incorrectly returned 9 rather than 33 hours. Excess breaks were silently capped and failed fallback copies could report success.
+- Scope: unconditional next-day offset; strict minute-format and break validation including bad input, fractions, exponents, and excess breaks; stale result clearing; net decimal hours, four-place decimal precision, true clear flow, clipboard fallback cleanup/failure/focus handling and stale async feedback protection; scoped mobile 44px controls/16px input/focus styling. Existing KO/EN/JA title, description, visible FAQ/schema content, formulas, related links, and catalog descriptions updated. No new tool files.
+- Validation: 204 ego-browser assertions across KO/EN/JA using deployed page shells with candidate UI/JS/CSS: same/next-day, 33-hour regression, 47h59 maximum, zero/equal/excess breaks, missing/seconds/negative/fractional/exponent/long inputs, clear, presets, clipboard success/failure/fallback/cleanup/race, labels, and 320/360/390px overflow/touch/font checks passed. All 98 catalog records and 294 front matters parsed; FAQ/related links, site integrity, JS syntax, and whitespace checks passed. Local build attempted but unavailable because system Ruby 2.6 lacks locked Bundler 4.0.9; GitHub Pages CI supplies the production build.
+- Environment: requested `/home/sooya/...` path absent; used `/Users/sooya/.openclaw/workspace/toolog`.
+- Follow-up: check native time-input ergonomics on physical iOS/Safari; timezone/DST and payroll rules remain explicitly out of scope.
+
 ## 2026-10-20 21:00 KST
 - Tool: `loan-calculator` (one existing tool; 98-tool catalog preserved; no new tool files).
 - Selection: last recorded improvement July 19; recent runs covered age, electricity, stock average, units, ratios, averages, speed, JSON, passwords, fractions and timezones. Reproduced blank annual rate silently becoming 0% and tiny positive rates producing infinite amortized payments. Correctness took priority over cosmetic candidates.

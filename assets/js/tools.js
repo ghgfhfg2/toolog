@@ -17154,16 +17154,17 @@
     const help = document.getElementById('td-help');
     const copyBtn = document.getElementById('td-copy');
     const resetBtn = document.getElementById('td-reset');
+    const netDecimalEl = document.getElementById('td-net-decimal');
     const presets = document.querySelectorAll('[data-td-start]');
 
-    if (!start || !end || !breakEl || !nextDay || !elapsedEl || !netEl || !totalMinEl || !decimalEl || !breakUsedEl || !dayShiftEl || !help) return;
+    if (!start || !end || !breakEl || !nextDay || !elapsedEl || !netEl || !totalMinEl || !decimalEl || !breakUsedEl || !dayShiftEl || !help || !netDecimalEl) return;
 
     const text = {
       ko: {
         idle: '시작 시각과 종료 시각을 입력하면 시간 차이를 즉시 계산합니다.',
         needInput: '시작 시각과 종료 시각을 모두 입력하세요.',
         invalidBreak: '휴게시간은 0분 이상 1,440분 이하의 정수로 입력해 주세요.',
-        breakTooLong: '휴게시간이 총 경과시간보다 길어 순수 시간을 0분으로 보정했습니다.',
+        breakTooLong: '휴게시간은 총 경과시간을 넘을 수 없습니다. 입력값을 확인해 주세요.',
         needsNextDay: '종료 시각이 시작 시각보다 빠릅니다. 자정 넘김이면 다음 날 옵션을 켜세요.',
         sameTime: '시작과 종료가 같습니다. 다음 날 옵션을 켜면 24시간으로 계산합니다.',
         summary: (elapsed, net, minutes, decimal, shift) => `총 ${elapsed} · 순수 ${net} · ${minutes} · ${decimal} · ${shift}`,
@@ -17177,14 +17178,14 @@
         copy: (elapsed, net, minutes, decimal, breakUsed, shift) => `시간 차이 계산 결과 | 총 경과시간 ${elapsed} | 순수 시간 ${net} | 총 분 ${minutes} | 소수 시간 ${decimal} | 휴게 ${breakUsed} | 날짜 ${shift}`,
         copied: '복사됨',
         copyFail: '자동 복사를 사용할 수 없습니다.',
-        reset: '예시 근무 시간으로 초기화했습니다.',
+        reset: '입력과 결과를 모두 비웠습니다.',
         copyDefault: '결과 복사'
       },
       en: {
         idle: 'Enter start and end times to calculate the difference instantly.',
         needInput: 'Enter both start time and end time.',
         invalidBreak: 'Enter break time as a whole number from 0 to 1,440 minutes.',
-        breakTooLong: 'Break time is longer than elapsed time, so net time was capped at 0 minutes.',
+        breakTooLong: 'Break time cannot exceed elapsed time. Check the break minutes.',
         needsNextDay: 'End time is earlier than start time. Turn on next-day mode if it passes midnight.',
         sameTime: 'Start and end are the same. Turn on next-day mode to calculate 24 hours.',
         summary: (elapsed, net, minutes, decimal, shift) => `Elapsed ${elapsed} · Net ${net} · ${minutes} · ${decimal} · ${shift}`,
@@ -17198,14 +17199,14 @@
         copy: (elapsed, net, minutes, decimal, breakUsed, shift) => `Time difference result | Elapsed ${elapsed} | Net ${net} | Total minutes ${minutes} | Decimal hours ${decimal} | Break ${breakUsed} | Date handling ${shift}`,
         copied: 'Copied',
         copyFail: 'Automatic copy is unavailable.',
-        reset: 'Reset to a sample workday.',
+        reset: 'Cleared all inputs and results.',
         copyDefault: 'Copy result'
       },
       ja: {
         idle: '開始時刻と終了時刻を入力すると差を即時計算します。',
         needInput: '開始時刻と終了時刻をどちらも入力してください。',
         invalidBreak: '休憩時間は0〜1,440分の整数で入力してください。',
-        breakTooLong: '休憩時間が経過時間より長いため、実作業時間を0分に補正しました。',
+        breakTooLong: '休憩時間は経過時間を超えられません。入力を確認してください。',
         needsNextDay: '終了時刻が開始時刻より早いです。日付をまたぐ場合は翌日オプションをオンにしてください。',
         sameTime: '開始と終了が同じです。翌日オプションをオンにすると24時間として計算します。',
         summary: (elapsed, net, minutes, decimal, shift) => `経過 ${elapsed} · 実作業 ${net} · ${minutes} · ${decimal} · ${shift}`,
@@ -17219,14 +17220,14 @@
         copy: (elapsed, net, minutes, decimal, breakUsed, shift) => `時間差計算結果 | 経過時間 ${elapsed} | 実作業時間 ${net} | 総分数 ${minutes} | 小数時間 ${decimal} | 休憩 ${breakUsed} | 日付処理 ${shift}`,
         copied: 'コピー完了',
         copyFail: '自動コピーを利用できません。',
-        reset: '勤務日の例にリセットしました。',
+        reset: '入力と結果をクリアしました。',
         copyDefault: '結果をコピー'
       }
     }[pageLang] || {
       idle: '시작 시각과 종료 시각을 입력하면 시간 차이를 즉시 계산합니다.',
       needInput: '시작 시각과 종료 시각을 모두 입력하세요.',
       invalidBreak: '휴게시간은 0분 이상 1,440분 이하의 정수로 입력해 주세요.',
-      breakTooLong: '휴게시간이 총 경과시간보다 길어 순수 시간을 0분으로 보정했습니다.',
+      breakTooLong: '휴게시간은 총 경과시간을 넘을 수 없습니다. 입력값을 확인해 주세요.',
       needsNextDay: '종료 시각이 시작 시각보다 빠릅니다. 자정 넘김이면 다음 날 옵션을 켜세요.',
       sameTime: '시작과 종료가 같습니다. 다음 날 옵션을 켜면 24시간으로 계산합니다.',
       summary: (elapsed, net, minutes, decimal, shift) => `총 ${elapsed} · 순수 ${net} · ${minutes} · ${decimal} · ${shift}`,
@@ -17240,16 +17241,21 @@
       copy: (elapsed, net, minutes, decimal, breakUsed, shift) => `시간 차이 계산 결과 | 총 경과시간 ${elapsed} | 순수 시간 ${net} | 총 분 ${minutes} | 소수 시간 ${decimal} | 휴게 ${breakUsed} | 날짜 ${shift}`,
       copied: '복사됨',
       copyFail: '자동 복사를 사용할 수 없습니다.',
-      reset: '예시 근무 시간으로 초기화했습니다.',
+      reset: '입력과 결과를 모두 비웠습니다.',
       copyDefault: '결과 복사'
     };
     let current = null;
+    let revision = 0;
+    const extra = {
+      ko: { invalidTime: '시각은 00:00~23:59 범위의 시간·분으로 입력하세요.', net: '순수 소수 시간', context: '시작 → 종료' },
+      en: { invalidTime: 'Enter hours and minutes from 00:00 to 23:59.', net: 'Net decimal hours', context: 'Start → end' },
+      ja: { invalidTime: '時刻は00:00〜23:59の時・分で入力してください。', net: '実作業の小数時間', context: '開始 → 終了' }
+    }[pageLang];
 
     const toMinutes = (value) => {
-      if (!value || !value.includes(':')) return null;
+      if (!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value)) return null;
       const [h, m] = value.split(':').map(Number);
-      if (!Number.isFinite(h) || !Number.isFinite(m)) return null;
-      return (h * 60) + m;
+      return h * 60 + m;
     };
 
     const formatDuration = (minutes) => {
@@ -17262,14 +17268,19 @@
     const copyText = async (value) => {
       try { await navigator.clipboard.writeText(value); }
       catch (_) {
+        const previousFocus = document.activeElement;
         const ta = document.createElement('textarea');
         ta.value = value;
         ta.style.position = 'fixed';
         ta.style.opacity = '0';
         document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        try {
+          ta.select();
+          if (!document.execCommand('copy')) throw new Error('Copy failed');
+        } finally {
+          ta.remove();
+          previousFocus?.focus({ preventScroll: true });
+        }
       }
     };
 
@@ -17279,28 +17290,37 @@
     };
 
     const setIdle = (msg, state = '') => {
-      [elapsedEl, netEl, totalMinEl, decimalEl, breakUsedEl, dayShiftEl].forEach((el) => { el.textContent = '-'; });
+      [elapsedEl, netEl, totalMinEl, decimalEl, breakUsedEl, dayShiftEl, netDecimalEl].forEach((el) => { el.textContent = '-'; });
       current = null;
       if (copyBtn) copyBtn.disabled = true;
       setHelp(msg, state);
     };
 
     const render = () => {
+      revision += 1;
       const s = toMinutes(start.value);
       const e = toMinutes(end.value);
       const rawBreak = breakEl.value.trim();
       const breakMinutes = rawBreak === '' ? 0 : Number(rawBreak);
-      const hasInvalidBreak = rawBreak !== '' && (!Number.isInteger(breakMinutes) || breakMinutes < 0 || breakMinutes > 1440);
+      const hasInvalidBreak = breakEl.validity.badInput || (rawBreak !== '' && (!/^\d{1,4}$/.test(rawBreak) || !Number.isInteger(breakMinutes) || breakMinutes < 0 || breakMinutes > 1440));
       breakEl.setAttribute('aria-invalid', hasInvalidBreak ? 'true' : 'false');
       start.setAttribute('aria-invalid', 'false');
       end.setAttribute('aria-invalid', 'false');
 
-      if (s === null || e === null) {
-        setIdle((start.value || end.value) ? text.needInput : text.idle);
-        return;
-      }
       if (hasInvalidBreak) {
         setIdle(text.invalidBreak, 'error');
+        return;
+      }
+      const invalidTimes = [start, end].filter(el => el.validity.badInput || (el.value !== '' && toMinutes(el.value) === null));
+      if (invalidTimes.length) {
+        invalidTimes.forEach(el => el.setAttribute('aria-invalid', 'true'));
+        setIdle(extra.invalidTime, 'error');
+        return;
+      }
+      if (s === null || e === null) {
+        const partial = !!(start.value || end.value);
+        if (partial) [start, end].filter(el => !el.value).forEach(el => el.setAttribute('aria-invalid', 'true'));
+        setIdle(partial ? text.needInput : text.idle, partial ? 'error' : '');
         return;
       }
       if (!nextDay.checked && e < s) {
@@ -17309,15 +17329,19 @@
         return;
       }
 
-      let diff = e - s;
-      if (nextDay.checked && diff <= 0) diff += 1440;
-
-      const net = Math.max(0, diff - breakMinutes);
+      const diff = e - s + (nextDay.checked ? 1440 : 0);
+      if (breakMinutes > diff) {
+        breakEl.setAttribute('aria-invalid', 'true');
+        setIdle(text.breakTooLong, 'error');
+        return;
+      }
+      const net = diff - breakMinutes;
       const dateLabel = nextDay.checked ? text.nextDay : text.sameDay;
       elapsedEl.textContent = formatDuration(diff);
       netEl.textContent = formatDuration(net);
       totalMinEl.textContent = `${diff.toLocaleString(numberLocale)} ${text.totalMin}`;
-      decimalEl.textContent = `${(diff / 60).toLocaleString(numberLocale, { maximumFractionDigits: 2 })} ${text.decimal}`;
+      decimalEl.textContent = `${(diff / 60).toLocaleString(numberLocale, { maximumFractionDigits: 4 })} ${text.decimal}`;
+      netDecimalEl.textContent = `${(net / 60).toLocaleString(numberLocale, { maximumFractionDigits: 4 })} ${text.decimal}`;
       breakUsedEl.textContent = breakMinutes ? formatDuration(breakMinutes) : text.none;
       dayShiftEl.textContent = dateLabel;
       current = {
@@ -17326,11 +17350,12 @@
         minutes: totalMinEl.textContent,
         decimal: decimalEl.textContent,
         breakUsed: breakUsedEl.textContent,
-        shift: dayShiftEl.textContent
+        shift: dayShiftEl.textContent,
+        context: `${start.value} → ${end.value} (${dateLabel})`,
+        netDecimal: netDecimalEl.textContent
       };
       if (copyBtn) copyBtn.disabled = false;
-      if (breakMinutes > diff) setHelp(text.breakTooLong, 'warn');
-      else if (!nextDay.checked && e === s) setHelp(text.sameTime, 'warn');
+      if (!nextDay.checked && e === s) setHelp(text.sameTime, 'warn');
       else setHelp(text.summary(current.elapsed, current.net, current.minutes, current.decimal, current.shift), 'success');
     };
 
@@ -17351,9 +17376,9 @@
     });
 
     resetBtn?.addEventListener('click', () => {
-      start.value = '09:00';
-      end.value = '18:00';
-      breakEl.value = 60;
+      start.value = '';
+      end.value = '';
+      breakEl.value = '';
       nextDay.checked = false;
       render();
       setHelp(text.reset, 'success');
@@ -17362,14 +17387,13 @@
 
     copyBtn?.addEventListener('click', async () => {
       if (!current) return;
+      const copyRevision = revision;
+      const result = current;
       try {
-        await copyText(text.copy(current.elapsed, current.net, current.minutes, current.decimal, current.breakUsed, current.shift));
-        const old = copyBtn.textContent;
-        copyBtn.textContent = text.copied;
-        setHelp(text.copied, 'success');
-        setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+        await copyText(`${extra.context}: ${result.context} | ${text.copy(result.elapsed, result.net, result.minutes, result.decimal, result.breakUsed, result.shift)} | ${extra.net}: ${result.netDecimal}`);
+        if (copyRevision === revision) setHelp(text.copied, 'success');
       } catch (_) {
-        setHelp(text.copyFail, 'error');
+        if (copyRevision === revision) setHelp(text.copyFail, 'error');
       }
     });
 

@@ -1222,9 +1222,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 시작·종료 시각, 휴게시간, 자정 넘김 여부를 넣으면 경과시간, 총 분, 소수 시간, 순수 시간과 날짜 처리까지 바로 계산해요.
-  description_en: Enter start/end times, break minutes, and next-day mode to calculate elapsed time, total minutes, decimal hours, net time, and date handling instantly.
-  description_ja: 開始・終了時刻、休憩時間、翌日モードを入力すると、経過時間・総分数・小数時間・実作業時間・日付処理をすぐ計算します。
+  description: 두 시각 사이 경과시간과 휴게시간 제외 순수 시간을 계산하세요. 자정 넘김과 다음 날 24시간 가산, 총 분, 순수 소수 시간, 예시 입력과 결과 복사를 지원합니다.
+  description_en: Calculate elapsed time and net working hours between two clock times. Add 24 hours for next-day endings, deduct breaks, and copy total minutes and net decimal hours.
+  description_ja: 開始と終了の時刻から経過時間と休憩を除いた実作業時間を計算。翌日は24時間を加算し、総分数・小数時間・実作業の小数時間を確認してコピーできます。
   url: /tools/time-difference-calculator/
   url_en: /en/tools/time-difference-calculator/
   url_ja: /ja/tools/time-difference-calculator/
