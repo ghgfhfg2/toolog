@@ -27,6 +27,8 @@ faq:
     a: Displayed length and scoring use Unicode code points, not grapheme clusters. Combined characters and emoji sequences may count as several characters. The input limit is 128 UTF-16 code units; overlong input is rejected as a whole and copying is disabled. It is never silently truncated.
   - q: Why is attack time not estimated?
     a: Length and character types cannot predict attack time for a password of unknown origin. The tool therefore shows Not estimated. A high score is not a security guarantee.
+  - q: Why is the copy button disabled?
+    a: There is no summary when the input is empty or exceeds 128 UTF-16 code units. Enter a candidate within the limit. If automatic copying fails for a valid result, select the summary and copy it manually.
 ---
 
 ## Why use a password strength checker?
@@ -52,7 +54,7 @@ This tool checks **length, character variety, repeated or sequential patterns, k
    - length
    - character type count
    - risk signal count
-   - attack time (not estimated)
+   - score limitations (attack time is not estimated)
 5. Read the warning list and improvement tips, then revise the password if needed.
 
 In other words, this is not an automatic password generator.
@@ -80,7 +82,12 @@ Use the visibility option only when needed, and note that copied summaries do no
 3. Toggle password visibility or space handling only when you need to.
 4. Review the score, grade, meter, score limitations, and warning list.
 5. Use the improvement tips to make the password harder to guess.
-6. Copy the check summary if you want to keep a security review note.
+6. Copy the check summary if you want to keep a security review note. It does not include the password itself.
+
+### Empty input, length errors, and copying
+An empty field has no check result to copy. Enter a candidate to start; Clear removes both the input and its summary. If the input exceeds 128 UTF-16 code units, the whole input is rejected, the previous summary is cleared, and copying is disabled. Shorten the input yourself: the checker never silently tests a truncated password.
+
+If automatic copying fails, select the summary and copy it manually. Turn off password visibility when you finish; the tool also hides the input when the page is hidden.
 
 ## Examples
 ### Example 1) Common season + year pattern
@@ -116,13 +123,11 @@ Not always. Adding one symbol to a short or predictable password is usually not 
 ### Can I use it with a password manager?
 Yes. A practical workflow is to store unique passwords in a password manager and use this checker to review a new candidate before saving it.
 
-
 ## Summary
 The Password Strength Checker is a **checker-style tool that reviews length, character mix, repeated/sequential and keyboard patterns, common words, space handling, and score limitations so you can improve a password before using it**.
 
-
 ## Limits and input rules
-This score is a simple rule-based indicator, not a security certification or attack-time prediction. No breached-password database is queried. Long repeated strings receive a low grade, even when several character types are mixed. A short block repeated three times triggers a warning.
+This score is a simple rule-based indicator, not a security certification or attack-time prediction. No breached-password database is queried. Long repeated strings receive a low grade, even when several character types are mixed. A block of up to 16 Unicode code points repeated consecutively three or more times triggers a warning, even when embedded in a longer password. For example, `Ab7!Ab7!Ab7!` remains in the lowest grade despite mixing several character types. These examples are public: do not reuse them as real passwords.
 
 ### How is length counted?
 Displayed length and scoring use Unicode code points, not grapheme clusters. Combined characters and emoji sequences may count as several characters. The input limit is 128 UTF-16 code units; overlong input is rejected as a whole and copying is disabled. It is never silently truncated.
