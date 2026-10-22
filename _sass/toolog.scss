@@ -3045,3 +3045,11 @@ a:hover { color: var(--primary-strong); }
 .td-ui :is(button, input):focus-visible { outline: 3px solid #93c5fd; outline-offset: 3px; }
 .td-ui .tool-stats > div { min-width: 0; }
 .td-ui .tool-result, .td-ui .tool-stats strong { overflow-wrap: anywhere; }
+
+/* Existing password-strength checker: accessible narrow-screen input/results. */
+.psc-ui input:not([type="checkbox"]), .psc-ui select, .psc-ui button { min-height: 44px; font-size: 16px; }
+.psc-ui .tool-row-grid > *, .psc-ui .psc-stats > div { min-width: 0; }
+.psc-ui .psc-stats strong, .psc-ui .bw-item { overflow-wrap: anywhere; }
+.psc-ui :is(input, select, button, textarea):focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+.psc-ui input[aria-invalid="true"] { border-color: #b91c1c; }
+@media (max-width: 600px) { .psc-ui .pct-grid, .psc-ui .pct-actions { grid-template-columns: 1fr; } }
