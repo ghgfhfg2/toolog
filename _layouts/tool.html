@@ -829,7 +829,7 @@ layout: default
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="psc-password">{% if page.lang == 'en' %}Password{% elsif page.lang == 'ja' %}パスワード{% else %}비밀번호 입력{% endif %}</label>
-              <input id="psc-password" type="password" maxlength="128" autocomplete="new-password" autocapitalize="off" spellcheck="false" inputmode="text" aria-describedby="psc-summary psc-help psc-output" placeholder="{% if page.lang == 'en' %}Enter a password to check.{% elsif page.lang == 'ja' %}点検するパスワードを入力してください。{% else %}점검할 비밀번호를 입력하세요.{% endif %}" />
+              <input id="psc-password" type="password" autocomplete="new-password" autocapitalize="off" spellcheck="false" inputmode="text" aria-describedby="psc-help psc-summary" placeholder="{% if page.lang == 'en' %}Enter a password to check.{% elsif page.lang == 'ja' %}点検するパスワードを入力してください。{% else %}점검할 비밀번호를 입력하세요.{% endif %}" />
             </div>
             <div>
               <label for="psc-purpose">{% if page.lang == 'en' %}Account type{% elsif page.lang == 'ja' %}用途{% else %}사용 목적{% endif %}</label>
@@ -845,7 +845,7 @@ layout: default
             <label class="tool-check"><input id="psc-show-password" type="checkbox" /> {% if page.lang == 'en' %}Show password{% elsif page.lang == 'ja' %}入力内容を表示{% else %}입력 내용 보기{% endif %}</label>
             <label class="tool-check"><input id="psc-allow-spaces" type="checkbox" checked /> {% if page.lang == 'en' %}Allow passwords with spaces{% elsif page.lang == 'ja' %}空白入りパスワードも許容{% else %}공백 포함 비밀번호도 허용{% endif %}</label>
           </div>
-          <p class="tool-result psc-help" id="psc-help">{% if page.lang == 'en' %}The password is checked locally only. The copied summary never includes the password itself.{% elsif page.lang == 'ja' %}パスワードはブラウザ内だけで点検します。コピーされるメモにパスワード本文は含めません。{% else %}비밀번호는 브라우저 안에서만 점검합니다. 복사되는 요약에는 비밀번호 원문을 넣지 않습니다.{% endif %}</p>
+          <p class="tool-result psc-help" id="psc-help">{% if page.lang == 'en' %}Local pattern check, not a security guarantee or breach lookup. Up to 128 UTF-16 code units (emoji may use two). No password text in the summary. Examples are public, not passwords to reuse.{% elsif page.lang == 'ja' %}ブラウザ内のパターン点検であり、安全保証・漏洩照合ではありません。UTF-16で128単位まで（絵文字は2単位の場合あり）。メモに入力本文は含めません。公開サンプルを実際のパスワードにしないでください。{% else %}브라우저 내 패턴 점검이며 안전 보장·유출 조회가 아닙니다. UTF-16 기준 128자까지(이모지는 2자일 수 있음) 입력하세요. 요약에 입력 원문은 넣지 않습니다. 공개 예시를 실제 비밀번호로 쓰지 마세요.{% endif %}</p>
 
           <div class="psc-meter" role="progressbar" aria-label="{% if page.lang == 'en' %}Password score meter{% elsif page.lang == 'ja' %}パスワードスコアメーター{% else %}비밀번호 점수 막대{% endif %}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
             <span id="psc-meter-bar"></span>
@@ -863,7 +863,7 @@ layout: default
             <div><strong id="psc-length">0</strong><span>{% if page.lang == 'en' %}Length{% elsif page.lang == 'ja' %}長さ{% else %}길이{% endif %}</span></div>
             <div><strong id="psc-variety">0</strong><span>{% if page.lang == 'en' %}Character types{% elsif page.lang == 'ja' %}文字種類{% else %}문자 종류{% endif %}</span></div>
             <div><strong id="psc-risk">0</strong><span>{% if page.lang == 'en' %}Risk signals{% elsif page.lang == 'ja' %}注意シグナル{% else %}위험 신호{% endif %}</span></div>
-            <div><strong id="psc-crack-time">-</strong><span>{% if page.lang == 'en' %}Guessing estimate{% elsif page.lang == 'ja' %}推測時間の目安{% else %}추측 시간 추정{% endif %}</span></div>
+            <div><strong id="psc-crack-time">-</strong><span>{% if page.lang == 'en' %}Attack time{% elsif page.lang == 'ja' %}攻撃時間{% else %}공격 소요 시간{% endif %}</span></div>
           </div>
 
           <p class="tool-result" id="psc-summary" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter a password to check length, character mix, repeated or sequential patterns, and guessability signals.{% elsif page.lang == 'ja' %}パスワードを入力すると、長さ、文字構成、繰り返し/連続パターン、推測されやすさをまとめて点検します。{% else %}비밀번호를 입력하면 길이, 문자 조합, 반복/연속 패턴, 쉬운 추측 가능성을 함께 점검합니다.{% endif %}</p>

@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Password Strength Checker | Repeats, keyboard patterns, and guessing hints
-description: Check short length, character mix, repeated or keyboard patterns, common words, year-like numbers, space handling, and guessing-time hints in your browser.
+title: Password Strength Checker | Repeated Patterns & Unicode Length
+description: Check password length, repeated blocks, common words and spaces locally. Review Unicode length, input limits and score limitations, and copy a summary without password text.
 lang: en
 permalink: /en/tools/password-strength-checker/
 canonical_url: /en/tools/password-strength-checker/
@@ -14,7 +14,7 @@ image:
 tool_key: password-strength-checker
 tool_type: checker
 topic_cluster: privacy
-keywords: [password strength checker, password security check, weak password test, password pattern checker, password guessing time, secure password tips]
+keywords: [password strength checker, password security check, weak password test, password pattern checker, password Unicode length, secure password tips]
 related_tools: [password-generator, privacy-exposure-checker, filename-sanitizer]
 faq:
   - q: Is my password sent to a server?
@@ -23,6 +23,10 @@ faq:
     a: No. It is a quick local check for obvious weaknesses. Unique passwords and 2FA still matter a lot.
   - q: What should I aim for on important accounts?
     a: Use a longer password, keep it unique per site, and add two-factor authentication for email, finance, and work accounts.
+  - q: How is length counted?
+    a: Displayed length and scoring use Unicode code points, not grapheme clusters. Combined characters and emoji sequences may count as several characters. The input limit is 128 UTF-16 code units; overlong input is rejected as a whole and copying is disabled. It is never silently truncated.
+  - q: Why is attack time not estimated?
+    a: Length and character types cannot predict attack time for a password of unknown origin. The tool therefore shows Not estimated. A high score is not a security guarantee.
 ---
 
 ## Why use a password strength checker?
@@ -36,7 +40,7 @@ In practice, passwords often become weak in familiar ways:
 - the same character repeats several times
 
 A password can look complex while still carrying one of these patterns.
-This tool checks **length, character variety, repeated or sequential patterns, keyboard-layout walks, space handling, common words, and a rough guessing-time hint** directly in your browser so you can see what to improve before using it.
+This tool checks **length, character variety, repeated or sequential patterns, keyboard-layout walks, space handling, common words, and score limitations** directly in your browser so you can see what to improve before using it.
 
 ## How it works
 1. Enter the password you want to review.
@@ -48,7 +52,7 @@ This tool checks **length, character variety, repeated or sequential patterns, k
    - length
    - character type count
    - risk signal count
-   - rough guessing-time hint
+   - attack time (not estimated)
 5. Read the warning list and improvement tips, then revise the password if needed.
 
 In other words, this is not an automatic password generator.
@@ -74,7 +78,7 @@ Use the visibility option only when needed, and note that copied summaries do no
 1. Enter the password you want to review.
 2. Pick whether it is for a general, important, or temporary account.
 3. Toggle password visibility or space handling only when you need to.
-4. Review the score, grade, meter, guessing hint, and warning list.
+4. Review the score, grade, meter, score limitations, and warning list.
 5. Use the improvement tips to make the password harder to guess.
 6. Copy the check summary if you want to keep a security review note.
 
@@ -112,8 +116,16 @@ Not always. Adding one symbol to a short or predictable password is usually not 
 ### Can I use it with a password manager?
 Yes. A practical workflow is to store unique passwords in a password manager and use this checker to review a new candidate before saving it.
 
-### Is the guessing-time estimate exact?
-No. It is a rough hint based on length and character pool. Real risk changes with password reuse, breach history, site security, attack method, and two-factor authentication.
 
 ## Summary
-The Password Strength Checker is a **checker-style tool that reviews length, character mix, repeated/sequential and keyboard patterns, common words, space handling, and a guessing-time hint so you can improve a password before using it**.
+The Password Strength Checker is a **checker-style tool that reviews length, character mix, repeated/sequential and keyboard patterns, common words, space handling, and score limitations so you can improve a password before using it**.
+
+
+## Limits and input rules
+This score is a simple rule-based indicator, not a security certification or attack-time prediction. No breached-password database is queried. Long repeated strings receive a low grade, even when several character types are mixed. A short block repeated three times triggers a warning.
+
+### How is length counted?
+Displayed length and scoring use Unicode code points, not grapheme clusters. Combined characters and emoji sequences may count as several characters. The input limit is 128 UTF-16 code units; overlong input is rejected as a whole and copying is disabled. It is never silently truncated.
+
+### Why is attack time not estimated?
+Length and character types cannot predict attack time for a password of unknown origin. The tool therefore shows Not estimated. A high score is not a security guarantee.

@@ -12309,7 +12309,7 @@
           lengthUnit: '자',
           variety: '문자 종류',
           varietyUnit: '종',
-          guess: '추측 시간 추정',
+          guess: '공격 소요 시간',
           riskCount: '위험 신호 수',
           riskUnit: '개',
           risks: '위험 신호',
@@ -12376,7 +12376,7 @@
           lengthUnit: ' chars',
           variety: 'Character types',
           varietyUnit: ' types',
-          guess: 'Guessing estimate',
+          guess: 'Attack time',
           riskCount: 'Risk signals',
           riskUnit: ' items',
           risks: 'Risk signals',
@@ -12443,7 +12443,7 @@
           lengthUnit: '文字',
           variety: '文字種類',
           varietyUnit: '種類',
-          guess: '推測時間の目安',
+          guess: '攻撃時間',
           riskCount: '注意シグナル数',
           riskUnit: '件',
           risks: '注意シグナル',
@@ -12456,17 +12456,26 @@
       idle: '비밀번호를 입력하면 길이, 문자 조합, 반복/연속 패턴, 쉬운 추측 가능성을 함께 점검합니다.', copied: '점검 요약을 복사했어요.', emptyCopy: '복사할 점검 결과가 아직 없어요.', sample: 'Spring2026!Seoul', grade: ['매우 약함', '약함', '보통', '강함', '매우 강함'], purposeLabel: { general: '일반 사이트 로그인', important: '금융/업무/메인 계정', temporary: '임시/1회성 계정' }, ok: '현재 기준에서 큰 위험 신호는 적습니다. 그래도 중요한 계정은 사이트별로 다른 비밀번호와 2단계 인증을 함께 쓰는 편이 안전합니다.', resultTitle: '점검 결과', noList: '점검 항목이 여기에 표시됩니다.', warnShort: '길이가 10자 미만이라 짧은 편입니다.', tipLength: '최소 12자 이상, 가능하면 16자 안팎으로 늘려보세요.', warnMoreLength: '조금 더 길게 만들면 방어력이 더 좋아집니다.', warnVariety: '문자 종류가 적어 패턴이 단순합니다.', tipVariety: '대문자, 숫자, 특수문자를 3종 이상 섞어보세요.', warnSpaces: '공백 포함 비밀번호를 허용하지 않는 환경에서는 실패할 수 있습니다.', tipSpaces: '공백 없이도 충분히 긴 패스프레이즈로 바꿔보세요.', warnRepeat: '같은 문자가 3번 이상 반복됩니다.', tipRepeat: '반복 구간 대신 다른 단어나 기호를 섞어보세요.', warnSeq: '연속된 숫자/알파벳/키보드 배열 패턴이 보입니다.', tipSeq: '123, abc, qwerty 같은 흐름은 피하는 편이 좋습니다.', warnCommon: (items) => `너무 흔한 단어/패턴이 포함됩니다: ${items}`, tipCommon: '잘 알려진 단어 대신 개인만 아는 조합이나 긴 문장형 구조를 쓰세요.', warnYear: '연도처럼 추측하기 쉬운 숫자 조합이 들어 있습니다.', tipYear: '생년, 기념일, 현재 연도처럼 유추 가능한 숫자는 피하세요.', warnImportant: '중요 계정용으로는 길이가 더 긴 편이 안전합니다.', summaryRisk: (count, important) => `${count}개의 위험 신호가 보여요. ${important ? '특히 중요한 계정이라면 더 강한 조합이 좋습니다.' : '아래 항목을 손보면 강도가 올라갑니다.'}`, danger: '위험 신호', tip: '개선 팁', good: '좋은 점', gradeLabel: (grade, purposeLabel, score) => `${purposeLabel} 기준 점검 점수는 ${score}점입니다.`, output: { purpose: '사용 목적', score: '보안 점수', grade: '강도 등급', length: '길이', lengthUnit: '자', variety: '문자 종류', varietyUnit: '종', riskCount: '위험 신호 수', riskUnit: '개', risks: '위험 신호', noRisk: '큰 경고 없음', tips: '개선 팁', defaultTip: '현재 조합 유지 + 2단계 인증 권장' }
     };
 
+    const safety = {
+      ko: { limit: '입력은 UTF-16 기준 128자까지입니다. 잘라서 점검하지 않습니다.', repeated: '같은 문자 또는 짧은 블록이 반복됩니다.', common: '흔한 단어 또는 숫자 패턴이 포함됩니다.', unknown: '산출하지 않음' },
+      en: { limit: 'Maximum 128 UTF-16 code units. Overlong input is not partially checked.', repeated: 'A character or short block is repeated.', common: 'Contains a common word or number pattern.', unknown: 'Not estimated' },
+      ja: { limit: 'UTF-16で128単位までです。超過入力を切り取って点検しません。', repeated: '同じ文字または短いブロックが繰り返されています。', common: '一般的な単語・数字パターンが含まれます。', unknown: '推定しません' }
+    }[pageLang] || { limit: 'Maximum 128 UTF-16 code units.', repeated: 'Repeated pattern.', common: 'Common pattern.', unknown: 'Not estimated' };
+    let revision = 0;
     const copyText = async (text) => {
       try { await navigator.clipboard.writeText(text); }
       catch (_) {
+        const active = document.activeElement;
         const ta = document.createElement('textarea');
         ta.value = text;
+        ta.setAttribute('readonly', '');
         ta.style.position = 'fixed';
         ta.style.opacity = '0';
         document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        try {
+          ta.select();
+          if (!document.execCommand('copy')) throw new Error('Copy unavailable');
+        } finally { ta.remove(); active?.focus({ preventScroll: true }); }
       }
     };
 
@@ -12476,6 +12485,7 @@
       .replace(/>/g, '&gt;');
 
     const runs = (text) => {
+      text = [...text];
       if (text.length < 3) return 0;
       let longest = 1;
       let current = 1;
@@ -12504,27 +12514,16 @@
       return patterns.some((pattern) => lower.includes(pattern));
     };
 
-    const estimatePoolSize = (classes) => {
-      let pool = 0;
-      if (classes.lower) pool += 26;
-      if (classes.upper) pool += 26;
-      if (classes.number) pool += 10;
-      if (classes.symbol) pool += 32;
-      if (classes.space) pool += 1;
-      return Math.max(pool, 1);
-    };
-
-    const estimateGuessLabel = (value, classes, warningsCount) => {
-      if (!value.length) return '-';
-      const entropyBits = Math.log2(estimatePoolSize(classes)) * value.length;
-      const adjustedBits = Math.max(0, entropyBits - (warningsCount * 7));
-      if (adjustedBits < 28) return t.crack.instant;
-      if (adjustedBits < 36) return t.crack.seconds;
-      if (adjustedBits < 44) return t.crack.minutes;
-      if (adjustedBits < 52) return t.crack.hours;
-      if (adjustedBits < 60) return t.crack.days;
-      if (adjustedBits < 72) return t.crack.months;
-      return t.crack.years;
+    // Short repeated blocks are predictable regardless of nominal length or variety.
+    const hasRepeatedBlock = (value) => {
+      const chars = [...value.toLowerCase()];
+      for (let size = 1; size <= Math.min(16, Math.floor(chars.length / 3)); size++) {
+        for (let i = 0; i <= chars.length - size * 3; i++) {
+          const block = chars.slice(i, i + size).join('');
+          if (chars.slice(i, i + size * 3).join('') === block.repeat(3)) return true;
+        }
+      }
+      return false;
     };
 
     const analyze = (raw) => {
@@ -12538,10 +12537,10 @@
       };
       const variety = [classes.lower, classes.upper, classes.number, classes.symbol, classes.space && allowSpaces.checked].filter(Boolean).length;
       const visibleLength = [...value].length;
-      let score = Math.min(40, value.length * 3);
+      let score = Math.min(40, visibleLength * 3);
       score += Math.min(24, variety * 6);
-      if (value.length >= 16) score += 10;
-      else if (value.length >= 12) score += 6;
+      if (visibleLength >= 16) score += 10;
+      else if (visibleLength >= 12) score += 6;
 
       const warnings = [];
       const tips = [];
@@ -12562,11 +12561,11 @@
         tips.push(t.tipEdge);
       }
 
-      if (value.length < 10) {
+      if (visibleLength < 10) {
         score -= 18;
         warnings.push(t.warnShort);
         tips.push(t.tipLength);
-      } else if (value.length < 12) {
+      } else if (visibleLength < 12) {
         warnings.push(t.warnMoreLength);
       }
 
@@ -12582,9 +12581,10 @@
         tips.push(t.tipSpaces);
       }
 
-      if (runs(value) >= 3) {
+      const repetitive = hasRepeatedBlock(value);
+      if (runs(value) >= 3 || repetitive) {
         score -= 10;
-        warnings.push(t.warnRepeat);
+        warnings.push(safety.repeated);
         tips.push(t.tipRepeat);
       }
 
@@ -12605,7 +12605,7 @@
       const hitCommon = commonWords.filter((word) => lowered.includes(word));
       if (hitCommon.length) {
         score -= 16;
-        warnings.push(t.warnCommon(hitCommon.slice(0, 3).join(', ')));
+        warnings.push(safety.common);
         tips.push(t.tipCommon);
       }
 
@@ -12616,23 +12616,38 @@
         tips.push(t.tipYear);
       }
 
-      if (purpose.value === 'important' && value.length < 14) {
+      if (purpose.value === 'important' && visibleLength < 14) {
         score -= 10;
         warnings.push(t.warnImportant);
       }
       if (purpose.value === 'important') {
         tips.push(t.warnReuse);
       }
-      if (purpose.value === 'temporary' && value.length >= 12 && variety >= 3) score += 4;
+      if (purpose.value === 'temporary' && visibleLength >= 12 && variety >= 3) score += 4;
 
+      if (repetitive) score = Math.min(score, 29);
+      if (hitCommon.length) score = Math.min(score, 49);
+      if (!value.trim()) score = 0;
       score = Math.max(0, Math.min(100, score));
       const gradeIndex = score >= 85 ? 4 : score >= 70 ? 3 : score >= 50 ? 2 : score >= 30 ? 1 : 0;
       const summary = warnings.length ? t.summaryRisk(warnings.length, purpose.value === 'important') : t.ok;
-      return { value, score, grade: t.grade[gradeIndex], visibleLength, variety, risks: warnings.length, warnings, tips: [...new Set(tips)].slice(0, 5), guessLabel: estimateGuessLabel(value, classes, warnings.length), summary };
+      return { value, score, grade: t.grade[gradeIndex], visibleLength, variety, risks: warnings.length, warnings, tips: [...new Set(tips)].slice(0, 5), guessLabel: safety.unknown, summary };
     };
 
     const render = () => {
+      revision += 1;
       input.type = showPassword.checked ? 'text' : 'password';
+      const tooLong = input.value.length > 128;
+      input.setAttribute('aria-invalid', String(tooLong));
+      if (tooLong) {
+        [scoreEl, gradeEl, lengthEl, varietyEl, riskEl, crackTimeEl].forEach(el => { el.textContent = '-'; });
+        summaryEl.textContent = safety.limit;
+        summaryEl.dataset.state = 'error';
+        meterBar.style.width = '0%'; meter.setAttribute('aria-valuenow', '0');
+        listEl.replaceChildren(); outputEl.value = ''; copyBtn.disabled = true;
+        return;
+      }
+      summaryEl.dataset.state = input.value ? 'success' : 'idle';
       const result = analyze(input.value || '');
       scoreEl.textContent = formatNum(result.score);
       gradeEl.textContent = result.grade;
@@ -12701,15 +12716,23 @@
         summaryEl.textContent = t.emptyCopy;
         return;
       }
+      const copyRevision = revision;
       try {
         await copyText(outputEl.value);
+        if (copyRevision !== revision) return;
+        summaryEl.dataset.state = 'success';
         summaryEl.textContent = t.copied;
       } catch (_) {
+        if (copyRevision !== revision) return;
+        summaryEl.dataset.state = 'error';
         outputEl.focus();
         outputEl.select();
         summaryEl.textContent = t.copyFail;
       }
     });
+    const conceal = () => { showPassword.checked = false; input.type = 'password'; };
+    document.addEventListener('visibilitychange', () => { if (document.hidden) conceal(); });
+    window.addEventListener('pagehide', conceal);
     render();
   }
 
