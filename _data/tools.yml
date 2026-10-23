@@ -1871,8 +1871,8 @@
 
 - id: bmi-calculator
   title: BMI 계산기
-  title_en: BMI Calculator
-  title_ja: BMI計算機
+  title_en: Adult BMI Calculator
+  title_ja: 成人BMI計算機
   category: data
   category_label: 건강/피트니스
   category_label_en: Health/Fitness
@@ -1881,8 +1881,8 @@
   badge_en: New
   badge_ja: 新着
   description: 성인 BMI와 반올림 전 기준의 비만도, BMI 18.5 이상 23 미만 체중 경계를 확인하고 나이·성별 입력 시 BMR을 추정해요.
-  description_en: Calculate adult BMI, unrounded reference categories, weight bounds for BMI ≥18.5 and <23, and optional BMR from age and sex.
-  description_ja: 成人BMIと丸め前の参考区分、BMI 18.5以上23未満の体重境界、年齢・性別によるBMR目安を確認できます。
+  description_en: Check adult BMI using Asian-reference cutoffs, approximate weight bounds for BMI 18.5 to below 23, and optional BMR, with input and rounding guidance.
+  description_ja: 成人BMIとアジア成人の参考区分、BMI 18.5以上23未満の概算体重範囲、任意のBMR目安を確認。入力条件と丸め表示も案内します。
   url: /tools/bmi-calculator/
   url_en: /en/tools/bmi-calculator/
   url_ja: /ja/tools/bmi-calculator/

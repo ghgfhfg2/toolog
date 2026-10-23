@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Adult BMI Calculator | Asian Cutoffs, Weight Range, and BMR
-description: Calculate adult BMI with Asian-reference categories, the weight range for BMI ≥18.5 and <23, and an optional Mifflin–St Jeor BMR estimate.
+description: Calculate adult BMI with Asian-reference categories, the approximate weight range for BMI 18.5 to below 23, and optional BMR. Includes input checks and rounding guidance.
 lang: en
 permalink: /en/tools/bmi-calculator/
 canonical_url: /en/tools/bmi-calculator/
@@ -27,6 +27,8 @@ faq:
     a: No. Growing children and teenagers require age- and sex-specific BMI percentiles rather than adult cutoffs.
   - q: Why can the displayed BMI look different from its category?
     a: Categories use unrounded BMI. BMI is displayed to two decimal places and weight bounds to one; do not reclassify rounded values at a boundary. The unrounded upper weight bound is excluded.
+  - q: Which inputs are supported, and what if no result appears?
+    a: Enter height from 100–250 cm and weight from 20–300 kg as plain decimal numbers of up to 32 characters, without scientific notation. Complete both required fields and correct any flagged values. BMR needs both sex and a whole-number age from 18–100; leaving them blank does not prevent BMI calculation.
 alternate_urls:
   ko: /tools/bmi-calculator/
   en: /en/tools/bmi-calculator/
@@ -45,12 +47,12 @@ Enter height and weight to see BMI, an Asian adult reference category, and the w
 - Empty, out-of-range, and incomplete optional-input feedback
 
 ## How to use
-1. Enter height (cm).
-2. Enter weight (kg).
+1. Enter height from 100–250 cm.
+2. Enter weight from 20–300 kg.
 3. Optionally enter both a whole-number age from 18–100 and sex for BMR.
 4. Review BMI, category, reference weight range, and BMR. You can also fill the sample values, copy a valid result, or clear all inputs.
 
-Blank required fields, values outside the supported ranges, fractional ages, and incomplete age/sex pairs are explained beside the results.
+Use plain decimal numbers, not scientific notation, with no more than 32 characters for height or weight. Blank required fields and invalid or out-of-range values leave the BMI results empty until corrected. Fractional or out-of-range ages and incomplete age/sex pairs leave BMR unavailable; BMI can still be calculated. If automatic copying fails, select and copy the displayed values manually.
 
 ## Example calculation
 - Height: 170 cm
@@ -65,7 +67,7 @@ The BMI is about **22.49**, which is in the **normal range** under this calculat
 
 ## Formula and category boundaries
 - BMI = weight (kg) ÷ height (m)².
-- Categories: under 18.5, 18.5 to below 23, 23 to below 25, 25 to below 30, 30 to below 35, and 35 or above.
+- Asian adult reference categories: underweight below 18.5; normal range from 18.5 to below 23; overweight from 23 to below 25; obesity class 1 from 25 to below 30; class 2 from 30 to below 35; class 3 at 35 or above.
 - BMR uses weight, height, whole-number age from 18–100, and sex in the Mifflin–St Jeor equation.
 
 ## Related tools
