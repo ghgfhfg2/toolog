@@ -4722,7 +4722,10 @@
       copyBtn.disabled = true;
     };
 
+    let revision = 0;
+    const plainDecimal = (raw) => raw.length <= 32 && /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(raw);
     const render = () => {
+      revision += 1;
       const heightRaw = height.value.trim();
       const weightRaw = weight.value.trim();
       const ageRaw = age?.value.trim() || '';
@@ -4732,13 +4735,19 @@
       const sx = sex?.value || '';
 
       [height, weight, age, sex].forEach((el) => el?.setAttribute('aria-invalid', 'false'));
+      if (height.validity.badInput || weight.validity.badInput) {
+        height.setAttribute('aria-invalid', String(height.validity.badInput));
+        weight.setAttribute('aria-invalid', String(weight.validity.badInput));
+        setIdle(bmiText.invalidNumber, 'error');
+        return false;
+      }
       if (!heightRaw || !weightRaw) {
         setIdle(bmiText.idleNeedInputs);
         return false;
       }
-      if (!Number.isFinite(h) || !Number.isFinite(w)) {
-        height.setAttribute('aria-invalid', String(!Number.isFinite(h)));
-        weight.setAttribute('aria-invalid', String(!Number.isFinite(w)));
+      if (!plainDecimal(heightRaw) || !plainDecimal(weightRaw) || !Number.isFinite(h) || !Number.isFinite(w)) {
+        height.setAttribute('aria-invalid', String(!plainDecimal(heightRaw) || !Number.isFinite(h)));
+        weight.setAttribute('aria-invalid', String(!plainDecimal(weightRaw) || !Number.isFinite(w)));
         setIdle(bmiText.invalidNumber, 'error');
         return false;
       }
@@ -4754,11 +4763,11 @@
       const m = h / 100;
       const bmi = w / (m * m);
       const normalMin = 18.5 * m * m;
-      const normalMax = 22.9 * m * m;
+      const normalMax = 23 * m * m;
       const category = classify(bmi);
-      const hasAge = Boolean(ageRaw);
+      const hasAge = Boolean(ageRaw) || Boolean(age?.validity.badInput);
       const hasSex = Boolean(sx);
-      const hasValidAge = !hasAge || (Number.isInteger(a) && a >= RANGE.age.min && a <= RANGE.age.max);
+      const hasValidAge = !hasAge || (/^\d{1,3}$/.test(ageRaw) && !age?.validity.badInput && Number.isInteger(a) && a >= RANGE.age.min && a <= RANGE.age.max);
       if (!hasValidAge) age.setAttribute('aria-invalid', 'true');
       const hasCompleteBmrInputs = hasAge && hasSex;
       if (hasAge !== hasSex) (hasAge ? sex : age).setAttribute('aria-invalid', 'true');
@@ -4766,11 +4775,11 @@
 
       bmiValue.textContent = bmi.toLocaleString(numberLocale, { maximumFractionDigits: 2 });
       bmiCategory.textContent = category;
-      bmiNormal.textContent = `${normalMin.toLocaleString(numberLocale, { maximumFractionDigits: 1 })}kg ~ ${normalMax.toLocaleString(numberLocale, { maximumFractionDigits: 1 })}kg`;
+      bmiNormal.textContent = `${normalMin.toLocaleString(numberLocale, { maximumFractionDigits: 1 })}kg – < ${normalMax.toLocaleString(numberLocale, { maximumFractionDigits: 1 })}kg`;
       bmiBmr.textContent = Number.isFinite(bmr)
         ? `${Math.round(bmr).toLocaleString(numberLocale)} kcal`
         : (!hasValidAge ? bmiText.bmrAgeRange(RANGE.age.min, RANGE.age.max) : ((hasAge || hasSex) ? bmiText.bmrPair : bmiText.bmrPending));
-      help.textContent = bmiText.help(bmi, category);
+      help.textContent = bmiText.help(bmi, category) + (!hasValidAge ? ` ${bmiText.bmrAgeRange(RANGE.age.min, RANGE.age.max)}` : (hasAge !== hasSex ? ` ${bmiText.bmrPair}` : ''));
       help.dataset.state = hasValidAge && hasAge === hasSex ? 'success' : 'warning';
       copyBtn.disabled = false;
       return true;
@@ -4802,8 +4811,11 @@
         return;
       }
 
-      const text = bmiText.copyText(bmiValue.textContent, bmiCategory.textContent, bmiNormal.textContent, bmiBmr.textContent);
+      const copyRevision = revision;
+      const context = `cm ${height.value} | kg ${weight.value}`;
+      const text = context + ' | ' + bmiText.copyText(bmiValue.textContent, bmiCategory.textContent, bmiNormal.textContent, bmiBmr.textContent);
       const copied = await copyText(text);
+      if (revision !== copyRevision) return;
       help.textContent = copied ? bmiText.copied : bmiText.copyFail;
       help.dataset.state = copied ? 'success' : 'error';
     });

@@ -1880,9 +1880,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 성인 키·몸무게로 BMI와 아시아 성인 기준 체중 범위를 계산하고, 나이·성별 입력 시 BMR 추정값까지 확인해요.
-  description_en: Calculate adult BMI and an Asian-reference weight range, with an optional BMR estimate when age and sex are both entered.
-  description_ja: 成人の身長・体重からBMIとアジア成人基準の体重範囲を計算し、年齢・性別入力時はBMR目安も確認できます。
+  description: 성인 BMI와 반올림 전 기준의 비만도, BMI 18.5 이상 23 미만 체중 경계를 확인하고 나이·성별 입력 시 BMR을 추정해요.
+  description_en: Calculate adult BMI, unrounded reference categories, weight bounds for BMI ≥18.5 and <23, and optional BMR from age and sex.
+  description_ja: 成人BMIと丸め前の参考区分、BMI 18.5以上23未満の体重境界、年齢・性別によるBMR目安を確認できます。
   url: /tools/bmi-calculator/
   url_en: /en/tools/bmi-calculator/
   url_ja: /ja/tools/bmi-calculator/

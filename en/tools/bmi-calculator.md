@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Adult BMI Calculator | Asian Cutoffs, Weight Range, and BMR
-description: Calculate adult BMI with Asian-reference categories, the weight range for BMI 18.5–22.9, and an optional Mifflin–St Jeor BMR estimate.
+description: Calculate adult BMI with Asian-reference categories, the weight range for BMI ≥18.5 and <23, and an optional Mifflin–St Jeor BMR estimate.
 lang: en
 permalink: /en/tools/bmi-calculator/
 canonical_url: /en/tools/bmi-calculator/
@@ -20,24 +20,27 @@ faq:
   - q: Can BMI alone determine whether I am healthy?
     a: No. BMI is a quick adult weight-status screening measure and does not account for muscle mass, body-fat percentage, or medical history. Consult a healthcare professional for an individual assessment.
   - q: Which BMI categories does this calculator use?
-    a: It uses Asian adult reference cutoffs—under 18.5, 18.5–22.9, 23–24.9, 25–29.9, 30–34.9, and 35 or above. The displayed reference weight range corresponds to BMI 18.5 or above and below 23.
+    a: It uses Asian adult reference cutoffs—under 18.5, 18.5 to below 23, 23 to below 25, 25 to below 30, 30 to below 35, and 35 or above. The displayed reference weight range corresponds to BMI 18.5 or above and below 23.
   - q: How is the BMR estimate calculated?
     a: When both age and sex are entered, the calculator applies the Mifflin–St Jeor equation. It is an estimate of resting daily energy use, not a calorie prescription.
   - q: Is this calculator suitable for children or teenagers?
     a: No. Growing children and teenagers require age- and sex-specific BMI percentiles rather than adult cutoffs.
+  - q: Why can the displayed BMI look different from its category?
+    a: Categories use unrounded BMI. BMI is displayed to two decimal places and weight bounds to one; do not reclassify rounded values at a boundary. The unrounded upper weight bound is excluded.
 alternate_urls:
   ko: /tools/bmi-calculator/
   en: /en/tools/bmi-calculator/
   ja: /ja/tools/bmi-calculator/
+
 ---
 
 ## Check adult BMI with clearly stated Asian cutoffs
-Enter height and weight to see BMI, an Asian adult reference category, and the weight range corresponding to BMI 18.5–22.9. Add both age and sex to estimate basal metabolic rate (BMR).
+Enter height and weight to see BMI, an Asian adult reference category, and the weight range corresponding to BMI ≥18.5 and <23. Add both age and sex to estimate basal metabolic rate (BMR).
 
 ## Key features
 - Real-time BMI calculation
 - Six clearly separated adult reference categories
-- Height-based BMI 18.5–22.9 weight range
+- Height-based BMI ≥18.5 and <23 weight range
 - Optional Mifflin–St Jeor BMR estimate
 - Empty, out-of-range, and incomplete optional-input feedback
 
@@ -53,7 +56,7 @@ Blank required fields, values outside the supported ranges, fractional ages, and
 - Height: 170 cm
 - Weight: 65 kg
 
-The BMI is about **22.49**, which is in the **normal range** under this calculator's Asian adult reference cutoffs. At the same height, the weight range corresponding to BMI 18.5–22.9 is approximately 53.5–66.2 kg.
+The BMI is about **22.49**, which is in the **normal range** under this calculator's Asian adult reference cutoffs. At the same height, the weight range corresponding to BMI ≥18.5 and <23 is approximately 53.5 kg to below 66.5 kg.
 
 ## Notes
 - BMI and BMR are adult screening estimates, not diagnoses or prescriptions.
@@ -62,7 +65,7 @@ The BMI is about **22.49**, which is in the **normal range** under this calculat
 
 ## Formula and category boundaries
 - BMI = weight (kg) ÷ height (m)².
-- Categories: under 18.5, 18.5–22.9, 23–24.9, 25–29.9, 30–34.9, and 35 or above.
+- Categories: under 18.5, 18.5 to below 23, 23 to below 25, 25 to below 30, 30 to below 35, and 35 or above.
 - BMR uses weight, height, whole-number age from 18–100, and sex in the Mifflin–St Jeor equation.
 
 ## Related tools
@@ -72,3 +75,6 @@ The BMI is about **22.49**, which is in the **normal range** under this calculat
 
 ## Summary
 This adult BMI calculator combines an Asian-reference weight category, a BMI-based weight range, and an optional BMR estimate. Use the result as a starting point for personal health planning, not as a diagnosis.
+
+## Why can the displayed BMI look different from its category?
+Categories use unrounded BMI. BMI is displayed to two decimal places and weight bounds to one; do not reclassify rounded values at a boundary. The unrounded upper weight bound is excluded.
