@@ -5,6 +5,7 @@
 - Validation: 309 ego-browser Chromium assertions across KO/EN/JA production shells with candidate layout/script/scoped CSS passed: blank/invalid/range/long/scientific-notation/decimal input, all category cutoffs, 23-boundary regression, BMR sex/age/min/max, copy/denial/stale success and failure, clear/sample/labels/live status, and 320/360/390px overflow/touch/font checks. Baseline reproduced stale clipboard feedback. Parsed all 98 catalog entries and 294 front matters; FAQ/related IDs/home locale paths, site integrity, JS syntax and whitespace passed. Candidate shell testing is not a full Jekyll build.
 - Local build: attempted `bundle exec jekyll build`; blocked by Ruby 2.6 missing locked Bundler 4.0.9. GitHub Pages build/deploy and production content are verified after push.
 - Environment: requested /home path absent; actual repo /Users/sooya/.openclaw/workspace/toolog.
+- Deployment follow-up: first Pages build/deploy succeeded, but live checks caught old browser-cached JS and main.css despite new HTML. Added asset query versions only for BMI pages (head stylesheet and tool script); re-deploy and repeat live checks.
 - Follow-up: physical iOS/Safari numeric keyboard and native bad-input ergonomics; rounded bounds are approximations, not exact eligibility cutoffs. Preserve explicit regional-reference and non-diagnostic limits.
 
 ## 2026-10-22 21:00 KST
