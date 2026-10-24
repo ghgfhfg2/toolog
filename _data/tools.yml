@@ -2102,9 +2102,9 @@
   topic_cluster: finance
 
 - id: gpa-calculator
-  title: 학점 계산기
-  title_en: GPA Calculator
-  title_ja: GPA計算機
+  title: 학점 계산기 · GPA·P/F 반영
+  title_en: GPA Calculator · Weighted GPA & P/F
+  title_ja: GPA計算機 · 加重平均とP/F
   category: calculator
   category_label: 교육/학업
   category_label_en: Education/Study
@@ -2112,9 +2112,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 과목별 학점과 등급을 넣으면 4.5·4.3·4.0 기준 가중 평균 GPA, 반영 학점, P/제외 학점을 빠르게 계산해요.
-  description_en: Calculate weighted GPA, graded credits, grade points, and pass/ignored credits from course credits and grades on 4.5, 4.3, or 4.0 scales.
-  description_ja: 科目ごとの単位数と成績から、4.5・4.3・4.0基準の加重平均GPA、評価対象単位、総評点、P/除外単位をすばやく計算します。
+  description: 최대 6과목의 학점과 등급으로 가중 평균 GPA를 계산하세요. 4.5·4.3·4.0 예시 등급표, P 제외·F 0점 처리, 미완성 입력 안내와 결과 복사를 지원합니다.
+  description_en: Calculate weighted GPA for up to 6 courses with example 4.5, 4.3 and 4.0 grade tables. Check P exclusion, zero-point F, incomplete rows and copy results.
+  description_ja: 最大6科目の単位と成績から加重平均GPAを計算。4.5・4.3・4.0の例示成績表、Pの除外、Fの0点処理、未入力チェックと結果コピーに対応。
   url: /tools/gpa-calculator/
   url_en: /en/tools/gpa-calculator/
   url_ja: /ja/tools/gpa-calculator/

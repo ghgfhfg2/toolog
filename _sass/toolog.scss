@@ -3063,3 +3063,14 @@ a:hover { color: var(--primary-strong); }
   .bmi-ui .bmi-grid, .bmi-ui .bmi-actions, .bmi-ui .bmi-stats { grid-template-columns: minmax(0, 1fr); }
   .bmi-ui .bmi-actions button { width: 100%; }
 }
+
+/* GPA: scoped mobile input and result readability. */
+.gpa-ui input, .gpa-ui select, .gpa-ui button { min-height: 44px; font-size: 16px; }
+.gpa-ui .gpa-row > *, .gpa-ui .gpa-stats > * { min-width: 0; }
+.gpa-ui .gpa-stats strong, .gpa-ui p { overflow-wrap: anywhere; }
+.gpa-ui :is(input, select, button):focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+@media (max-width: 600px) {
+  .gpa-ui .gpa-head { display: none; }
+  .gpa-ui .gpa-row { grid-template-columns: minmax(0, 1fr); padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; }
+  .gpa-ui .gpa-row label.sr-only { position: static; width: auto; height: auto; clip: auto; margin: 0; overflow: visible; }
+}

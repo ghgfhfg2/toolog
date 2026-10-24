@@ -16975,8 +16975,8 @@
     const text = {
       ko: {
         idle: '과목별 학점과 등급을 입력하면 가중 평균 GPA를 바로 계산합니다.',
-        incomplete: '학점이나 등급이 빠진 행이 있습니다. 계산에서 제외했으니 입력을 확인해 주세요.',
-        invalidCredit: '학점은 0 초과 30 이하 숫자로 입력해 주세요.',
+        incomplete: '학점이나 등급이 빠진 행이 있습니다. 모든 입력을 완성해야 결과를 계산하고 복사할 수 있습니다.',
+        invalidCredit: '학점은 0.01~30 사이의 소수 둘째 자리 이하 숫자로 입력해 주세요.',
         passOnly: (pass) => `P/제외 학점 ${pass}만 입력되어 GPA 계산 대상 학점이 없습니다.`,
         summary: (gpa, credits, pass) => `평가 반영 ${credits}학점 기준 GPA는 ${gpa}입니다. P 처리 학점은 ${pass}학점으로 따로 집계했습니다.`,
         copy: (gpa, credits, points, pass) => `학점 계산 결과 | GPA ${gpa} | 반영 학점 ${credits} | 총 평점 ${points} | P/제외 학점 ${pass}`,
@@ -16988,8 +16988,8 @@
       },
       en: {
         idle: 'Enter course credits and grades to calculate weighted GPA instantly.',
-        incomplete: 'Some rows are missing credits or grades. They were skipped, so check the inputs.',
-        invalidCredit: 'Enter credits as a number greater than 0 and no more than 30.',
+        incomplete: 'Some rows are missing credits or grades. Complete all started rows to calculate and copy the result.',
+        invalidCredit: 'Enter plain decimal credits from 0.01 to 30, with at most 2 decimal places.',
         passOnly: (pass) => `Only ${pass} pass/ignored credits are entered, so there are no graded credits to calculate GPA.`,
         summary: (gpa, credits, pass) => `Weighted GPA is ${gpa} across ${credits} graded credits. Pass/ignored credits total ${pass}.`,
         copy: (gpa, credits, points, pass) => `GPA result | GPA ${gpa} | Graded credits ${credits} | Grade points ${points} | Pass/ignored credits ${pass}`,
@@ -17001,8 +17001,8 @@
       },
       ja: {
         idle: '科目ごとの単位数と成績を入力すると、加重平均GPAをすぐ計算できます。',
-        incomplete: '単位数または成績が未入力の行があります。その行は計算から除外しました。',
-        invalidCredit: '単位数は0より大きく30以下の数値で入力してください。',
+        incomplete: '単位数または成績が未入力の行があります。入力を始めた行を完成させてから計算・コピーしてください。',
+        invalidCredit: '単位数は0.01〜30の小数第2位までの数値を入力してください。',
         passOnly: (pass) => `P/除外単位 ${pass} のみ入力されているため、GPA計算対象の単位がありません。`,
         summary: (gpa, credits, pass) => `評価反映 ${credits} を基準にした GPA は ${gpa} です。P扱いの単位は ${pass} として別集計しました。`,
         copy: (gpa, credits, points, pass) => `GPA計算結果 | GPA ${gpa} | 評価反映単位 ${credits} | 総評点 ${points} | P/除外単位 ${pass}`,
@@ -17014,8 +17014,8 @@
       }
     }[pageLang] || {
       idle: '과목별 학점과 등급을 입력하면 가중 평균 GPA를 바로 계산합니다.',
-      incomplete: '학점이나 등급이 빠진 행이 있습니다. 계산에서 제외했으니 입력을 확인해 주세요.',
-      invalidCredit: '학점은 0 초과 30 이하 숫자로 입력해 주세요.',
+      incomplete: '학점이나 등급이 빠진 행이 있습니다. 모든 입력을 완성해야 결과를 계산하고 복사할 수 있습니다.',
+      invalidCredit: '학점은 0.01~30 사이의 소수 둘째 자리 이하 숫자로 입력해 주세요.',
       passOnly: (pass) => `P/제외 학점 ${pass}만 입력되어 GPA 계산 대상 학점이 없습니다.`,
       summary: (gpa, credits, pass) => `평가 반영 ${credits}학점 기준 GPA는 ${gpa}입니다. P 처리 학점은 ${pass}학점으로 따로 집계했습니다.`,
       copy: (gpa, credits, points, pass) => `학점 계산 결과 | GPA ${gpa} | 반영 학점 ${credits} | 총 평점 ${points} | P/제외 학점 ${pass}`,
@@ -17039,17 +17039,22 @@
     }));
 
     const copyText = async (value) => {
-      try { await navigator.clipboard.writeText(value); }
+      try { await navigator.clipboard.writeText(value); return true; }
       catch (_) {
+        const active = document.activeElement;
         const ta = document.createElement('textarea');
         ta.value = value; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        document.body.appendChild(ta);
+        try { ta.select(); return document.execCommand('copy'); }
+        catch (_) { return false; }
+        finally { ta.remove(); active?.focus(); }
       }
     };
 
     const fmt = (n, digits = 2) => Number(n || 0).toLocaleString(numberLocale, { maximumFractionDigits: digits, minimumFractionDigits: digits });
-    const fmtCredit = (n) => `${Number(n || 0).toLocaleString(numberLocale, { maximumFractionDigits: 1 })}${text.creditUnit}`;
+    const fmtCredit = (n) => `${Number(n || 0).toLocaleString(numberLocale, { maximumFractionDigits: 2 })}${text.creditUnit}`;
     let current = null;
+    let revision = 0;
 
     const setHelp = (message, state = '') => {
       help.textContent = message;
@@ -17066,36 +17071,42 @@
     };
 
     const render = () => {
-      const map = gradeMaps[scale.value || '4.5'];
+      revision++;
+      const map = gradeMaps[scale.value] || gradeMaps['4.5'];
       let credits = 0;
       let points = 0;
       let passCredits = 0;
       let hasInvalid = false;
       let hasIncomplete = false;
 
-      rows.forEach(({ credit, grade }) => {
+      rows.forEach(({ course, credit, grade }) => {
         const rawCredit = credit?.value.trim() || '';
         const g = grade?.value || '';
         credit?.setAttribute('aria-invalid', 'false');
         grade?.setAttribute('aria-invalid', 'false');
-        if (!rawCredit && !g) return;
+        if (!rawCredit && !g && !course.value.trim()) return;
+        if (!rawCredit) {
+          hasIncomplete = true;
+          credit.setAttribute('aria-invalid', 'true');
+          return;
+        }
         const c = Number(rawCredit);
-        if (!Number.isFinite(c) || c <= 0 || c > 30) {
+        if (rawCredit.length > 32 || !/^(?:\d+(?:\.\d{1,2})?|\.\d{1,2})$/.test(rawCredit) || !Number.isFinite(c) || c < 0.01 || c > 30) {
           hasInvalid = true;
           credit?.setAttribute('aria-invalid', 'true');
           return;
         }
-        if (!g) {
+        if (!g || (g !== 'P' && !Object.hasOwn(map, g))) {
           hasIncomplete = true;
           grade?.setAttribute('aria-invalid', 'true');
           return;
         }
         if (g === 'P') {
-          passCredits += c;
+          passCredits += Math.round(c * 100);
           return;
         }
-        credits += c;
-        points += c * (map[g] ?? 0);
+        credits += Math.round(c * 100);
+        points += Math.round(c * 100) * Math.round(map[g] * 10);
       });
 
       if (hasInvalid) {
@@ -17103,6 +17114,15 @@
         setHelp(text.invalidCredit, 'error');
         return;
       }
+
+      if (hasIncomplete) {
+        resetOutputs();
+        setHelp(text.incomplete, 'warning');
+        return;
+      }
+      credits /= 100;
+      points /= 1000;
+      passCredits /= 100;
 
       if (!(credits > 0) && !(passCredits > 0)) {
         resetOutputs();
@@ -17144,7 +17164,7 @@
         { credit: '', grade: '' }
       ];
       rows.forEach((row, idx) => {
-        row.course.value = pageLang === 'en' ? `Course ${idx + 1}` : (pageLang === 'ja' ? `科目 ${idx + 1}` : `과목 ${idx + 1}`);
+        row.course.value = !sample[idx].credit ? '' : (pageLang === 'en' ? `Course ${idx + 1}` : (pageLang === 'ja' ? `科目 ${idx + 1}` : `과목 ${idx + 1}`));
         row.credit.value = sample[idx].credit;
         row.grade.value = sample[idx].grade;
       });
@@ -17159,18 +17179,18 @@
         row.grade?.setAttribute('aria-invalid', 'false');
       });
       scale.value = '4.5';
+      revision++;
       resetOutputs();
       setHelp(text.cleared);
       rows[0]?.credit?.focus();
     });
     copyBtn?.addEventListener('click', async () => {
       if (!current) return;
-      try {
-        await copyText(text.copy(current.gpa, current.credits, current.points, current.pass));
-        setHelp(text.copied, 'success');
-      } catch (_) {
-        setHelp(text.copyFail, 'error');
-      }
+      const snapshot = revision;
+      const value = `Scale ${scale.value} | ` + text.copy(current.gpa, current.credits, current.points, current.pass);
+      const copied = await copyText(value);
+      if (snapshot !== revision) return;
+      setHelp(copied ? text.copied : text.copyFail, copied ? 'success' : 'error');
     });
     render();
   }

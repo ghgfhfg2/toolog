@@ -4000,13 +4000,14 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <div class="tool-row-grid pct-grid">
             <div>
               <label for="gpa-scale">{% if page.lang == 'en' %}GPA scale{% elsif page.lang == 'ja' %}GPAスケール{% else %}학점 스케일{% endif %}</label>
-              <select id="gpa-scale" aria-describedby="gpa-help">
+              <select id="gpa-scale" aria-describedby="gpa-help gpa-guide">
                 <option value="4.5">4.5 {% if page.lang == 'en' %}scale{% elsif page.lang == 'ja' %}基準{% else %}기준{% endif %}</option>
                 <option value="4.3">4.3 {% if page.lang == 'en' %}scale{% elsif page.lang == 'ja' %}基準{% else %}기준{% endif %}</option>
                 <option value="4.0">4.0 {% if page.lang == 'en' %}scale{% elsif page.lang == 'ja' %}基準{% else %}기준{% endif %}</option>
               </select>
             </div>
           </div>
+          <p id="gpa-guide">{% if page.lang == 'en' %}Up to 6 courses. Credits: 0.01–30, up to 2 decimal places. P is excluded; F counts as zero. Complete every started row.{% elsif page.lang == 'ja' %}最大6科目。単位は0.01〜30、小数第2位まで。Pは除外、Fは0点。入力した行はすべて完成させてください。{% else %}최대 6과목, 학점은 0.01~30·소수 둘째 자리까지 입력하세요. P는 제외, F는 0점입니다. 입력을 시작한 행은 모두 완성해 주세요.{% endif %}</p>
           <div class="tool-row-grid pct-grid gpa-head" aria-hidden="true">
             <div><strong>{% if page.lang == 'en' %}Course{% elsif page.lang == 'ja' %}科目{% else %}과목{% endif %}</strong></div>
             <div><strong>{% if page.lang == 'en' %}Credits{% elsif page.lang == 'ja' %}単位{% else %}학점{% endif %}</strong></div>
@@ -4017,9 +4018,9 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <label class="sr-only" for="gpa-course-{{ i }}">{% if page.lang == 'en' %}Course {{ i }} name{% elsif page.lang == 'ja' %}科目 {{ i }} 名{% else %}과목 {{ i }} 이름{% endif %}</label>
             <input id="gpa-course-{{ i }}" type="text" maxlength="80" autocomplete="off" placeholder="{% if page.lang == 'en' %}Course {{ i }}{% elsif page.lang == 'ja' %}科目 {{ i }}{% else %}과목 {{ i }}{% endif %}" />
             <label class="sr-only" for="gpa-credit-{{ i }}">{% if page.lang == 'en' %}Course {{ i }} credits{% elsif page.lang == 'ja' %}科目 {{ i }} 単位{% else %}과목 {{ i }} 학점{% endif %}</label>
-            <input id="gpa-credit-{{ i }}" type="number" min="0" max="30" step="0.5" inputmode="decimal" placeholder="3" aria-describedby="gpa-help" />
+            <input id="gpa-credit-{{ i }}" type="text" maxlength="32" autocomplete="off" inputmode="decimal" placeholder="3" aria-describedby="gpa-help gpa-guide" />
             <label class="sr-only" for="gpa-grade-{{ i }}">{% if page.lang == 'en' %}Course {{ i }} grade{% elsif page.lang == 'ja' %}科目 {{ i }} 成績{% else %}과목 {{ i }} 등급{% endif %}</label>
-            <select id="gpa-grade-{{ i }}" aria-describedby="gpa-help">
+            <select id="gpa-grade-{{ i }}" aria-describedby="gpa-help gpa-guide">
               <option value="">{% if page.lang == 'en' %}Grade{% elsif page.lang == 'ja' %}成績{% else %}등급{% endif %}</option>
               <option value="A+">A+</option>
               <option value="A0">A0</option>
@@ -5337,7 +5338,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
 </article>
 
 <script src="{{ '/assets/js/ui.js' | relative_url }}" defer></script>
-<script src="{{ '/assets/js/tools.js' | relative_url }}{% if page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% endif %}" defer></script>
+<script src="{{ '/assets/js/tools.js' | relative_url }}{% if page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% elsif page.tool_key == 'gpa-calculator' %}?v=gpa-20261024{% endif %}" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

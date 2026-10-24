@@ -1,8 +1,8 @@
 ---
 layout: tool
 lang: en
-title: GPA Calculator | Fast weighted GPA for 4.5, 4.3, and 4.0 scales
-description: Enter course credits and grades to quickly calculate weighted GPA, graded credits, grade points, and pass/ignored credits on 4.5, 4.3, or 4.0 scales.
+title: GPA Calculator | Weighted GPA, P/F and Grade Scale Guide
+description: Calculate weighted GPA for up to 6 courses with example 4.5, 4.3 and 4.0 grade tables. Check P exclusion, zero-point F, incomplete rows and copy results.
 permalink: /en/tools/gpa-calculator/
 canonical_url: /en/tools/gpa-calculator/
 category: calculator
@@ -12,17 +12,25 @@ image:
   path: /assets/thumbs/en/gpa-calculator.svg
   alt: GPA calculator preview
 tool_key: gpa-calculator
-keywords: [gpa calculator, grade point average calculator, weighted GPA, college GPA, course grade calculator]
-related_tools: [required-gpa-calculator, average-calculator, percent-calculator]
+keywords:
+- gpa calculator
+- grade point average calculator
+- weighted GPA
+- college GPA
+- course grade calculator
+related_tools:
+- required-gpa-calculator
+- average-calculator
+- percent-calculator
 faq:
-  - q: Are pass courses included in GPA?
-    a: Usually P/Pass courses are excluded from GPA and counted separately. This tool also tracks pass credits separately.
-  - q: What is the difference between 4.5, 4.3, and 4.0 scales?
-    a: Schools assign different point values to grades such as A+ and B+, so total GPA can change. Choose the scale used by your school.
-  - q: How is an F handled?
-    a: In many grading systems, F counts as 0 points in GPA even though the course is not passed. This tool follows that common rule.
-  - q: What happens if I miss a credit or grade field?
-    a: Only complete rows are included in the GPA. The tool warns you when a row is incomplete or a credit value is outside the allowed range.
+- q: Are pass courses included in GPA?
+  a: Usually P/Pass courses are excluded from GPA and counted separately. This tool also tracks pass credits separately.
+- q: How is an F handled?
+  a: In many grading systems, F counts as 0 points in GPA even though the course is not passed. This tool follows that common rule.
+- q: How do P and F differ?
+  a: P is excluded from both GPA points and graded credits, and is counted separately. F contributes zero points but its credits stay in the denominator. Do not enter F as P merely because a course uses pass/fail grading.
+- q: Does selecting a scale match every school?
+  a: No. The table below is the example mapping used by this tool. Minus grades are not supported. Different grade points, retake rules or credit policies can produce a different official GPA.
 alternate_urls:
   ko: /tools/gpa-calculator/
   en: /en/tools/gpa-calculator/
@@ -49,7 +57,7 @@ You can switch between 4.5, 4.3, and 4.0 scales on the same page instead of usin
 1. Choose the GPA scale used by your school.
 2. Enter the credits for each course.
 3. Select the grade for each course.
-4. Select `P` for pass/fail courses that should not affect GPA.
+4. Select `P` only for a P grade; enter `F` as F so its zero points are counted.
 5. Check your GPA, total grade points, graded credits, and pass/ignored credits.
 6. Copy the result if you want to paste it into a grade plan or note.
 
@@ -70,7 +78,7 @@ the average is calculated as a **weighted average**, not a simple average.
 
 ## FAQ
 ### Why are pass courses excluded from GPA?
-At many schools, P/F courses only show whether you passed and are not included in GPA. That is why this tool shows them as separate credits.
+This tool excludes only P from GPA. F contributes zero points and its credits count in the denominator. Check your school’s own pass/fail policy.
 
 ### My school uses slightly different grade points. Is that okay?
 Yes. You can choose from 4.5, 4.3, and 4.0 scales. Still, your school’s official academic policy should be the final reference.
@@ -79,7 +87,28 @@ Yes. You can choose from 4.5, 4.3, and 4.0 scales. Still, your school’s offici
 In most cases, it is more accurate to enter only the grade that is officially recognized on your transcript. Policies for repeated courses vary by school.
 
 ### What credit range does the calculator accept?
-Each course must have credits greater than 0 and no more than 30. Invalid or incomplete rows are flagged so you can correct them before relying on the result.
+Each course accepts 0.01–30 credits with at most 2 decimal places. Invalid or incomplete rows block results and copying.
 
 ### Can I calculate what GPA I need for a target cumulative GPA?
 Use this calculator for course-by-course semester GPA. To reverse-calculate the average GPA needed in remaining credits, use the [Required GPA Calculator]({{ '/en/tools/required-gpa-calculator/' | relative_url }}).
+
+## Credit input and grade assumptions
+Enter 0.01–30 credits per course with up to 2 decimal places. Course names are optional, but a name-only row must be completed or cleared. Empty rows are ignored; unfinished rows block all results and copying. Up to 6 courses are supported. GPA and grade points round to 2 decimal places.
+
+| Grade | 4.5 | 4.3 | 4.0 |
+| --- | --- | --- | --- |
+| A+ | 4.5 | 4.3 | 4.0 |
+| A0 | 4.0 | 4.0 | 4.0 |
+| B+ | 3.5 | 3.3 | 3.3 |
+| B0 | 3.0 | 3.0 | 3.0 |
+| C+ | 2.5 | 2.3 | 2.3 |
+| C0 | 2.0 | 2.0 | 2.0 |
+| D+ | 1.5 | 1.3 | 1.3 |
+| D0 | 1.0 | 1.0 | 1.0 |
+| F | 0 | 0 | 0 |
+
+### How do P and F differ?
+P is excluded from both GPA points and graded credits, and is counted separately. F contributes zero points but its credits stay in the denominator. Do not enter F as P merely because a course uses pass/fail grading.
+
+### Does selecting a scale match every school?
+No. The table below is the example mapping used by this tool. Minus grades are not supported. Different grade points, retake rules or credit policies can produce a different official GPA.
