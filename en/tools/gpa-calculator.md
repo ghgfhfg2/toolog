@@ -1,8 +1,8 @@
 ---
 layout: tool
 lang: en
-title: GPA Calculator | Weighted GPA, P/F and Grade Scale Guide
-description: Calculate weighted GPA for up to 6 courses with example 4.5, 4.3 and 4.0 grade tables. Check P exclusion, zero-point F, incomplete rows and copy results.
+title: GPA Calculator | 4.5, 4.3 & 4.0 Scales, P/F Grades
+description: Calculate a credit-weighted GPA for up to 6 courses using example 4.5, 4.3 or 4.0 scales. Check how P and F affect GPA, fix incomplete entries and copy your results.
 permalink: /en/tools/gpa-calculator/
 canonical_url: /en/tools/gpa-calculator/
 category: calculator
@@ -18,6 +18,9 @@ keywords:
 - weighted GPA
 - college GPA
 - course grade calculator
+- 4.5 GPA calculator
+- 4.3 GPA calculator
+- 4.0 GPA calculator
 related_tools:
 - required-gpa-calculator
 - average-calculator
@@ -30,7 +33,7 @@ faq:
 - q: How do P and F differ?
   a: P is excluded from both GPA points and graded credits, and is counted separately. F contributes zero points but its credits stay in the denominator. Do not enter F as P merely because a course uses pass/fail grading.
 - q: Does selecting a scale match every school?
-  a: No. The table below is the example mapping used by this tool. Minus grades are not supported. Different grade points, retake rules or credit policies can produce a different official GPA.
+  a: No. The grade-point table on this page is an example mapping used by this tool. Minus grades are not supported. Different grade points, retake rules or credit policies can produce a different official GPA.
 alternate_urls:
   ko: /tools/gpa-calculator/
   en: /en/tools/gpa-calculator/
@@ -54,7 +57,7 @@ You can switch between 4.5, 4.3, and 4.0 scales on the same page instead of usin
 - Sample input, clear, and copy-result actions for faster checking
 
 ## How to use it
-1. Choose the GPA scale used by your school.
+1. Choose a GPA scale and check that the example grade-point table below matches your school’s rules.
 2. Enter the credits for each course.
 3. Select the grade for each course.
 4. Select `P` only for a P grade; enter `F` as F so its zero points are counted.
@@ -81,7 +84,7 @@ the average is calculated as a **weighted average**, not a simple average.
 This tool excludes only P from GPA. F contributes zero points and its credits count in the denominator. Check your school’s own pass/fail policy.
 
 ### My school uses slightly different grade points. Is that okay?
-Yes. You can choose from 4.5, 4.3, and 4.0 scales. Still, your school’s official academic policy should be the final reference.
+Check both the scale and every grade point in the example table below against your school’s rules. Selecting the same maximum scale does not guarantee the same grade mapping. Minus grades are not supported, so this tool cannot reproduce systems that require them.
 
 ### How should I enter a repeated course?
 In most cases, it is more accurate to enter only the grade that is officially recognized on your transcript. Policies for repeated courses vary by school.
@@ -92,7 +95,14 @@ Each course accepts 0.01–30 credits with at most 2 decimal places. Invalid or 
 ### Can I calculate what GPA I need for a target cumulative GPA?
 Use this calculator for course-by-course semester GPA. To reverse-calculate the average GPA needed in remaining credits, use the [Required GPA Calculator]({{ '/en/tools/required-gpa-calculator/' | relative_url }}).
 
-## Credit input and grade assumptions
+## Empty inputs, incomplete rows and copying
+- With no courses entered, no GPA is shown. Start with credits and a grade, or select **Fill sample** to try the calculator.
+- Leave unused rows entirely empty. A course name alone counts as a started row; complete its credits and grade or clear it.
+- Invalid credits or any unfinished row hide all calculated results and disable **Copy result** until corrected.
+- With only P courses, pass credits are shown separately, but GPA remains blank and copying is disabled because there are no graded credits. F-only courses produce a GPA of 0.00, not a blank result.
+- **Clear** removes every course and restores the 4.5 scale. If automatic copying is unavailable, select and copy the visible results manually.
+
+## Credit input and example grade-point tables
 Enter 0.01–30 credits per course with up to 2 decimal places. Course names are optional, but a name-only row must be completed or cleared. Empty rows are ignored; unfinished rows block all results and copying. Up to 6 courses are supported. GPA and grade points round to 2 decimal places.
 
 | Grade | 4.5 | 4.3 | 4.0 |
@@ -111,4 +121,4 @@ Enter 0.01–30 credits per course with up to 2 decimal places. Course names are
 P is excluded from both GPA points and graded credits, and is counted separately. F contributes zero points but its credits stay in the denominator. Do not enter F as P merely because a course uses pass/fail grading.
 
 ### Does selecting a scale match every school?
-No. The table below is the example mapping used by this tool. Minus grades are not supported. Different grade points, retake rules or credit policies can produce a different official GPA.
+No. The grade-point table on this page is an example mapping used by this tool. Minus grades are not supported. Different grade points, retake rules or credit policies can produce a different official GPA.

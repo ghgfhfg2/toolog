@@ -2113,8 +2113,8 @@
   badge_en: New
   badge_ja: 新着
   description: 최대 6과목의 학점과 등급으로 가중 평균 GPA를 계산하세요. 4.5·4.3·4.0 예시 등급표, P 제외·F 0점 처리, 미완성 입력 안내와 결과 복사를 지원합니다.
-  description_en: Calculate weighted GPA for up to 6 courses with example 4.5, 4.3 and 4.0 grade tables. Check P exclusion, zero-point F, incomplete rows and copy results.
-  description_ja: 最大6科目の単位と成績から加重平均GPAを計算。4.5・4.3・4.0の例示成績表、Pの除外、Fの0点処理、未入力チェックと結果コピーに対応。
+  description_en: Calculate a credit-weighted GPA for up to 6 courses using example 4.5, 4.3 or 4.0 scales. Check how P and F affect GPA, fix incomplete entries and copy your results.
+  description_ja: 最大6科目の単位数と成績から加重平均GPAを計算。4.5・4.3・4.0の評点例、Pの除外とFの0点処理を確認でき、入力漏れのチェックと結果コピーにも対応。
   url: /tools/gpa-calculator/
   url_en: /en/tools/gpa-calculator/
   url_ja: /ja/tools/gpa-calculator/
