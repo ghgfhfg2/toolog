@@ -1754,9 +1754,9 @@
   badge: Hot
   badge_en: Hot
   badge_ja: 注目
-  description: 공급가 또는 합계에서 기본 10%와 직접 입력한 세율의 부가세를 역산하고 원 단위 반올림·버림·올림 기준까지 선택해요.
-  description_en: Calculate or reverse-calculate VAT from net price or gross total with a custom 0–100% rate and selectable whole-unit rounding.
-  description_ja: 税抜価格・税込合計から0〜100%のVATを計算・逆算し、1円単位の四捨五入・切り捨て・切り上げを選べます。
+  description: 공급가 또는 합계에서 0~100% 부가세를 계산·역산하세요. 정수 기반 원 단위 반올림·버림·올림으로 VAT 경계값을 정확하게 처리하고 견적·정산 내역을 복사할 수 있습니다.
+  description_en: Calculate or reverse VAT at 0–100% with exact integer-based whole-unit rounding. Compare net price, VAT and gross total, then copy the breakdown and rounding method.
+  description_ja: 0〜100%のVATを税抜・税込から計算・逆算。整数演算で1円単位の端数境界を正確に処理し、計算基準と端数処理を含む内訳をコピーできます。
   url: /tools/vat-calculator/
   url_en: /en/tools/vat-calculator/
   url_ja: /ja/tools/vat-calculator/

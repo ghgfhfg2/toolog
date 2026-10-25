@@ -73,7 +73,7 @@ layout: default
             </div>
             <div>
               <label for="vat-amount">{% if page.lang == 'en' %}Amount{% elsif page.lang == 'ja' %}金額{% else %}금액 (원){% endif %}</label>
-              <input id="vat-amount" type="number" min="0" max="1000000000000000" step="1" inputmode="numeric" aria-describedby="vat-status vat-help" placeholder="{% if page.lang == 'en' %}e.g. 11000{% elsif page.lang == 'ja' %}例: 11000{% else %}예: 11000{% endif %}" />
+              <input id="vat-amount" type="text" maxlength="32" autocomplete="off" inputmode="numeric" aria-describedby="vat-status vat-help" placeholder="{% if page.lang == 'en' %}e.g. 11000{% elsif page.lang == 'ja' %}例: 11000{% else %}예: 11000{% endif %}" />
             </div>
             <div>
               <label for="vat-rate">{% if page.lang == 'en' %}VAT rate (%){% elsif page.lang == 'ja' %}VAT率 (%){% else %}부가세율 (%){% endif %}</label>
@@ -99,7 +99,7 @@ layout: default
             <div><strong id="vat-tax">-</strong><span id="vat-tax-label">{% if page.lang == 'en' %}VAT (10%){% elsif page.lang == 'ja' %}VAT (10%){% else %}부가세 (10%){% endif %}</span></div>
             <div><strong id="vat-total">-</strong><span>{% if page.lang == 'en' %}Gross total{% elsif page.lang == 'ja' %}税込合計{% else %}합계{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="vat-help">{% if page.lang == 'en' %}The default rate is 10%; enter 0–100% with up to three decimal places. For gross-total calculations, net price is rounded first and VAT is the remaining amount so the total always matches.{% elsif page.lang == 'ja' %}初期値は10%です。0〜100%の税率を小数第3位まで入力できます。税込合計から逆算するときは税抜価格を先に丸め、差額をVATにするため合計額が一致します。{% else %}기본 세율은 10%이며 0~100%를 소수점 셋째 자리까지 입력할 수 있습니다. 합계 기준 역산은 공급가를 먼저 원 단위 처리하고 차액을 부가세로 계산해 합계를 유지합니다.{% endif %}</p>
+          <p class="tool-result" id="vat-help">{% if page.lang == 'en' %}Enter whole-unit amounts from 0 to 1,000,000,000,000,000 without commas or exponent notation. The default rate is 10%; enter 0–100% with up to three decimal places. For gross-total calculations, net price is rounded first and VAT is the remaining amount so the total always matches.{% elsif page.lang == 'ja' %}金額は0〜1,000,000,000,000,000の整数で、カンマ・指数表記は使えません。初期値は10%です。0〜100%の税率を小数第3位まで入力できます。税込合計から逆算するときは税抜価格を先に丸め、差額をVATにするため合計額が一致します。{% else %}금액은 0~1,000,000,000,000,000원의 정수이며 쉼표·지수 표기는 지원하지 않습니다. 기본 세율은 10%이며 0~100%를 소수점 셋째 자리까지 입력할 수 있습니다. 합계 기준 역산은 공급가를 먼저 원 단위 처리하고 차액을 부가세로 계산해 합계를 유지합니다.{% endif %}</p>
         </div>
       {% when 'unit-converter' %}
         <div class="tool-ui uc-ui">
@@ -5338,7 +5338,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
 </article>
 
 <script src="{{ '/assets/js/ui.js' | relative_url }}" defer></script>
-<script src="{{ '/assets/js/tools.js' | relative_url }}{% if page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% elsif page.tool_key == 'gpa-calculator' %}?v=gpa-20261024{% endif %}" defer></script>
+<script src="{{ '/assets/js/tools.js' | relative_url }}{% if page.tool_key == 'vat-calculator' %}?v=vat-20261025{% elsif page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% elsif page.tool_key == 'gpa-calculator' %}?v=gpa-20261024{% endif %}" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

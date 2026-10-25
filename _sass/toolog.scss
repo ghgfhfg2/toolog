@@ -3074,3 +3074,14 @@ a:hover { color: var(--primary-strong); }
   .gpa-ui .gpa-row { grid-template-columns: minmax(0, 1fr); padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; }
   .gpa-ui .gpa-row label.sr-only { position: static; width: auto; height: auto; clip: auto; margin: 0; overflow: visible; }
 }
+
+/* VAT quality: scoped readable inputs and full-width large monetary results. */
+.vat-ui input, .vat-ui select, .vat-ui button { min-height: 44px; font-size: 16px; }
+.vat-ui input, .vat-ui select { width: 100%; min-width: 0; box-sizing: border-box; }
+.vat-ui :is(input, select, button):focus-visible { outline: 3px solid #60a5fa; outline-offset: 3px; }
+.vat-ui .vat-input-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.vat-ui .vat-stats > div { min-width: 0; }
+.vat-ui .vat-stats strong, .vat-ui .tool-result { overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  .vat-ui .vat-input-grid, .vat-ui .vat-actions, .vat-ui .vat-stats { grid-template-columns: minmax(0, 1fr); }
+}

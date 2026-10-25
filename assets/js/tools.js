@@ -299,6 +299,7 @@
       }
     }[pageLang];
     let current = null;
+    let revision = 0;
 
     const setStatus = (message, state = '') => {
       status.textContent = message;
@@ -311,13 +312,18 @@
       current = null;
     };
 
-    const roundAmount = (value) => {
-      if (rounding.value === 'floor') return Math.floor(value);
-      if (rounding.value === 'ceil') return Math.ceil(value);
-      return Math.round(value);
+    // All inputs are non-negative. Scale rates to thousandths of a percent
+    // and round integer quotients, avoiding binary floating-point VAT errors.
+    const roundRatio = (numerator, denominator) => {
+      const whole = numerator / denominator;
+      const remainder = numerator % denominator;
+      if (rounding.value === 'floor') return whole;
+      if (rounding.value === 'ceil') return whole + (remainder > 0n ? 1n : 0n);
+      return whole + (remainder * 2n >= denominator ? 1n : 0n);
     };
 
     const calc = () => {
+      revision += 1;
       const raw = amt.value.trim();
       const rawRate = rate.value.trim();
       const taxRate = Number(rawRate);
@@ -335,6 +341,12 @@
       }
       const rateLabel = String(Number(taxRate.toFixed(3)));
       taxLabel.textContent = vatText.taxLabel(rateLabel);
+      if (amt.validity.badInput) {
+        amt.setAttribute('aria-invalid', 'true');
+        resetResult();
+        setStatus(vatText.invalid, 'error');
+        return;
+      }
       if (!raw) {
         amt.setAttribute('aria-invalid', 'false');
         resetResult();
@@ -342,7 +354,7 @@
         return;
       }
       const v = Number(raw);
-      if (!Number.isFinite(v) || v < 0 || !Number.isInteger(v)) {
+      if (raw.length > 32 || !/^\d+$/.test(raw) || !Number.isSafeInteger(v) || v < 0) {
         amt.setAttribute('aria-invalid', 'true');
         resetResult();
         setStatus(vatText.invalid, 'error');
@@ -356,32 +368,42 @@
       }
 
       amt.setAttribute('aria-invalid', 'false');
-      let supply = 0, tax = 0, sum = 0;
-      if ((mode.value || 'supply') === 'supply') {
-        supply = v;
-        tax = roundAmount(v * taxRate / 100);
+      const amount = BigInt(raw);
+      const [wholeRate, decimalRate = ''] = rawRate.split('.');
+      const scaledRate = BigInt(wholeRate) * 1000n + BigInt(decimalRate.padEnd(3, '0'));
+      let supply, tax, sum;
+      if (mode.value === 'supply') {
+        supply = amount;
+        tax = roundRatio(amount * scaledRate, 100000n);
         sum = supply + tax;
       } else {
-        sum = v;
-        supply = roundAmount(v / (1 + taxRate / 100));
+        sum = amount;
+        supply = roundRatio(amount * 100000n, 100000n + scaledRate);
         tax = sum - supply;
       }
+      // Maximum total is 2 × 10^15, below Number.MAX_SAFE_INTEGER.
+      supply = Number(supply); tax = Number(tax); sum = Number(sum);
       s.textContent = formatNum(supply);
       t.textContent = formatNum(tax);
       total.textContent = formatNum(sum);
-      current = { supply: formatNum(supply), tax: formatNum(tax), total: formatNum(sum), rate: rateLabel };
+      current = { supply: formatNum(supply), tax: formatNum(tax), total: formatNum(sum), rate: rateLabel, context: `${mode.options[mode.selectedIndex].textContent.trim()} / ${rounding.options[rounding.selectedIndex].textContent.trim()}` };
       copy.disabled = false;
       setStatus(vatText.calculated(mode.value === 'supply' ? vatText.supplyBase : vatText.totalBase, rateLabel), 'success');
     };
     [mode, rounding].forEach(el => el.addEventListener('change', calc));
     [amt, rate].forEach(el => el.addEventListener('input', calc));
     example.addEventListener('click', () => {
+      mode.value = 'total';
+      rounding.value = 'round';
+      rate.value = '10';
       amt.value = '110000';
       calc();
       amt.focus();
     });
     clear.addEventListener('click', () => {
       amt.value = '';
+      mode.value = 'supply';
+      rounding.value = 'round';
       rate.value = '10';
       calc();
       setStatus(vatText.cleared);
@@ -389,8 +411,9 @@
     });
     copy.addEventListener('click', async () => {
       if (!current) return;
+      const copyRevision = revision;
       try {
-        const value = vatText.summary(current);
+        const value = `${current.context}\n${vatText.summary(current)}`;
         if (navigator.clipboard?.writeText) {
           await navigator.clipboard.writeText(value);
         } else {
@@ -400,14 +423,18 @@
           fallback.style.position = 'fixed';
           fallback.style.opacity = '0';
           document.body.appendChild(fallback);
-          fallback.select();
-          const copied = document.execCommand('copy');
-          fallback.remove();
-          if (!copied) throw new Error('copy failed');
+          const active = document.activeElement;
+          try {
+            fallback.select();
+            if (!document.execCommand('copy')) throw new Error('copy failed');
+          } finally {
+            fallback.remove();
+            active?.focus({ preventScroll: true });
+          }
         }
-        setStatus(vatText.copied, 'success');
+        if (revision === copyRevision) setStatus(vatText.copied, 'success');
       } catch (_) {
-        setStatus(vatText.copyFail, 'error');
+        if (revision === copyRevision) setStatus(vatText.copyFail, 'error');
       }
     });
     calc();
