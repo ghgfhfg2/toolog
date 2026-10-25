@@ -9,7 +9,7 @@ category: data
 category_label: Data/Finance
 thumbnail: /assets/thumbs/vat-calculator.svg
 tool_key: vat-calculator
-keywords: [vat calculator, net to gross, gross to net, tax calculator, invoice vat, custom vat rate]
+keywords: [vat calculator, net to gross, gross to net, tax calculator, invoice vat, custom vat rate, reverse vat calculator, vat rounding]
 related_tools: [percent-calculator, profit-margin-calculator, discount-calculator]
 alternate_urls:
   ko: /tools/vat-calculator/
@@ -24,6 +24,8 @@ faq:
     a: Choose round, floor, or ceil to match your settlement policy. In gross-based mode, the net price is rounded first and VAT is calculated as the remaining difference.
   - q: What amount limits and rounding rules apply?
     a: Use whole-unit amounts from 0 to 1,000,000,000,000,000 without commas, decimals or exponent notation. Rates allow three decimal places. Integer-based arithmetic handles rounding boundaries exactly; nearest rounding sends halves upward.
+  - q: Why are the results blank or the copy button disabled?
+    a: Enter a valid amount and rate first. Empty or invalid inputs clear the results and disable copying. Zero amounts and a 0% rate are valid. If automatic copying fails, copy the displayed breakdown manually.
 ---
 
 ## VAT calculator for net-to-gross and gross-to-net checks
@@ -41,10 +43,18 @@ This free **VAT calculator** calculates VAT and gross total from a net price, or
 Select net-based mode when you know the pre-tax amount, or gross-based mode when you know the VAT-inclusive total.
 
 ### 2. Enter the amount
-Enter a whole number of zero or more. Results update automatically.
+Enter a whole-unit amount from 0 to 1,000,000,000,000,000 without commas, decimal points, or exponent notation. In gross-based mode, enter the VAT-inclusive total. Results update automatically; an amount of 0 and a VAT rate of 0% are both supported.
 
 ### 3. Choose rounding and review the result
 Enter the applicable VAT rate, choose round, floor, or ceil to match your settlement policy, then review the net price, VAT, and gross total. In gross-based mode, the calculator handles the net price first and assigns the remaining difference to VAT so the entered total stays unchanged.
+
+### 4. Copy the breakdown or reset
+**Copy result** includes the calculation basis, rounding method, net price, VAT, and gross total. **Load 110,000 example** sets gross-based mode, 10%, and rounding to nearest. **Clear** empties the amount and restores net-based mode, 10%, and rounding to nearest.
+
+## Empty results and input errors
+- A blank amount shows dashes rather than a calculated zero; enter an amount to begin.
+- Invalid or out-of-range inputs clear the previous results and disable copying. Check the status message, remove commas or decimal points from the amount, and keep the rate within 0–100% with no more than three decimal places.
+- If automatic copying is unavailable, select and copy the displayed breakdown manually. Do not treat a failed copy as a saved result.
 
 ## Typical use cases
 - Invoice and quotation drafting
@@ -65,6 +75,9 @@ Yes. The default is 10%, and you can enter a rate from 0% to 100% with up to thr
 
 ### How are fractional amounts handled?
 Choose round, floor, or ceil to match your settlement policy. Before issuing an invoice or signing a contract, confirm the counterparty's rounding rule and final amount.
+
+### Why are the results blank or the copy button disabled?
+Empty or invalid inputs clear the result and disable copying until both amount and rate are valid. Zero is a valid amount, and 0% is a valid rate. Check the status message for the field to correct. If automatic copying fails, copy the displayed breakdown manually.
 
 ## Summary
 Use the VAT calculator to split net price, VAT, and gross total quickly, compare whole-unit rounding methods, and reduce amount errors in invoices and settlements.
