@@ -1348,8 +1348,8 @@
   badge_en: Improved
   badge_ja: 改善
   description: 출근·실근무·점심/휴게시간으로 퇴근 시각과 체류시간을 계산하고, 야간근무 다음 날 표시·분 단위 반올림 안내·결과 복사를 지원해요.
-  description_en: Calculate same-day or next-day clock-out time and total stay from start time, actual work hours, and breaks.
-  description_ja: 出勤時刻・実勤務時間・休憩時間から、当日または翌日の退勤予定時刻と総滞在時間を計算します。
+  description_en: Calculate clock-out time and total time on site from work hours and lunch breaks, with next-day shifts, nearest-minute rounding notes, and a copyable summary.
+  description_ja: 出勤・実勤務・昼休みから退勤時刻と総滞在時間を計算。夜勤の翌日表示、分単位への四捨五入の案内、結果コピーに対応しています。
   url: /tools/work-end-time-calculator/
   url_en: /en/tools/work-end-time-calculator/
   url_ja: /ja/tools/work-end-time-calculator/

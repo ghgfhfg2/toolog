@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Work End Time Calculator | Clock-out time from shifts and breaks
-description: Enter start time, actual work hours, and lunch or break minutes to calculate same-day or next-day clock-out time and total stay duration.
+title: Work End Time Calculator | Lunch breaks and overnight shifts
+description: Calculate clock-out time from start time, actual work hours, and lunch or break minutes. Includes nearest-minute rounding, next-day shifts, total time on site, and a copyable summary.
 lang: en
 permalink: /en/tools/work-end-time-calculator/
 canonical_url: /en/tools/work-end-time-calculator/
@@ -15,6 +15,10 @@ image:
 keywords: [work end time calculator, clock-out time calculator, work hours calculator, break time calculator]
 related_tools: [time-difference-calculator, appointment-departure-buffer-simulator, pomodoro-timer]
 faq:
+  - q: Can I leave break time blank?
+    a: No. Enter 0 if you take no unpaid break. For a 60-minute lunch and a 15-minute rest, enter 75. Blank or invalid inputs clear the previous result and disable copying.
+  - q: How are decimal work hours rounded?
+    a: Work hours are multiplied by 60 and rounded to the nearest minute. For example, 7.33 hours becomes 440 minutes (7 hours 20 minutes). A rounding note appears on screen and in the copyable summary.
   - q: How should I enter break time?
     a: Add your legal break and actual lunch/rest periods together, then enter the total in minutes.
   - q: Can it calculate next-day clock-out for night shifts?
@@ -70,3 +74,22 @@ Yes. It runs directly in your browser with no installation required.
 
 ### How do I enter 7 hours 30 minutes?
 Enter `7.5` in actual work hours. Total stay is displayed again in hours and minutes.
+
+## How to calculate clock-out time with a lunch break
+1. Enter your start time and actual work hours, excluding unpaid breaks.
+2. Add up unpaid lunch and rest periods in whole minutes; enter `0` if there are none.
+3. Read the clock-out time, total time on site, and same-day or next-day indicator. Copy the summary if needed.
+
+For example, starting at **09:00** with **7.5 hours** of work and a **45-minute** lunch gives **17:15**, with **8 hours 15 minutes** on site. Do not add paid breaks again if they are already counted as work time.
+
+### Can I leave break time blank?
+No. A blank field is not treated as zero. Enter `0` for no break. If any required field is empty or invalid, the previous result and summary are cleared and copying is disabled, so an outdated result is not reused.
+
+### How are decimal work hours rounded?
+`7.33` hours equals 439.8 minutes, rounded to **440 minutes (7 hours 20 minutes)**. When rounding is needed, the applied minutes appear both on screen and in the copyable result. Work hours must be **0.25–24**, breaks must be **0–600 whole minutes**, and rounded work time plus breaks must not exceed **24 hours**. Correct invalid entries to calculate again.
+
+### What happens at midnight or exactly 24 hours later?
+Starting at `22:00` with `1` hour of work and a `60`-minute break gives **00:00 the next day**. Starting at `09:00` with `24` work hours and `0` break minutes gives **09:00 the next day**. This is clock-time arithmetic; calendar dates, time zones, and daylight saving changes are not applied.
+
+### What if automatic copying is unavailable?
+Select the result summary field and copy it manually. Reset clears both the inputs and the summary.
