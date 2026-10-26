@@ -14635,17 +14635,19 @@
     const copyBtn = document.getElementById('we-copy');
     const resetBtn = document.getElementById('we-reset');
     const exampleBtn = document.getElementById('we-example');
+    const output = document.getElementById('we-output');
     const presetBtns = [...document.querySelectorAll('[data-wet-start]')];
 
     if (!startEl || !workEl || !breakEl || !endEl || !stayEl || !nextEl || !breakSummaryEl || !help || !copyBtn) return;
 
     const t = {
       ko: {
-        needInput: '출근 시각과 근무시간을 입력하세요.',
+        needInput: '출근 시각·실근무시간·휴게시간을 모두 입력하세요. 휴게가 없으면 0을 입력하세요.',
         invalidStart: '출근 시각을 올바르게 입력해 주세요.',
         invalidWork: '실근무시간은 0.25시간 이상 24시간 이하의 숫자로 입력해 주세요.',
         invalidBreak: '휴게시간은 0분 이상 600분 이하의 정수로 입력해 주세요.',
         tooLong: '실근무시간과 휴게시간의 합은 24시간 이하여야 합니다.',
+        rounded: (m) => ` 실근무시간은 가장 가까운 분으로 반올림해 ${m}분을 적용했습니다.`,
         nextSame: '당일',
         nextDay: (n) => `+${n}일`,
         breakSummary: (m) => `총 ${m}분`,
@@ -14657,11 +14659,12 @@
         cleared: '입력값을 비웠습니다.'
       },
       en: {
-        needInput: 'Enter start time and work hours.',
+        needInput: 'Enter start time, work hours, and break minutes. Enter 0 for no break.',
         invalidStart: 'Enter a valid start time.',
         invalidWork: 'Enter actual work time from 0.25 to 24 hours.',
         invalidBreak: 'Enter a whole-number break from 0 to 600 minutes.',
         tooLong: 'Actual work time plus breaks must not exceed 24 hours.',
+        rounded: (m) => ` Work time was rounded to the nearest minute (${m} min).`,
         nextSame: 'Same day',
         nextDay: (n) => `+${n} day(s)`,
         breakSummary: (m) => `${m} min total`,
@@ -14673,11 +14676,12 @@
         cleared: 'Cleared all inputs.'
       },
       ja: {
-        needInput: '出勤時刻と勤務時間を入力してください。',
+        needInput: '出勤時刻・実勤務時間・休憩時間を入力してください。休憩なしは0を入力してください。',
         invalidStart: '正しい出勤時刻を入力してください。',
         invalidWork: '実勤務時間は0.25〜24時間の数値で入力してください。',
         invalidBreak: '休憩時間は0〜600分の整数で入力してください。',
         tooLong: '実勤務時間と休憩時間の合計は24時間以内にしてください。',
+        rounded: (m) => ` 実勤務時間は最も近い分に四捨五入し、${m}分を適用しました。`,
         nextSame: '当日',
         nextDay: (n) => `+${n}日`,
         breakSummary: (m) => `合計 ${m}分`,
@@ -14707,14 +14711,16 @@
       const workRaw = workEl.value.trim();
       const breakRaw = breakEl.value.trim();
       const workHours = Number(workRaw);
-      const breakMinutes = breakRaw === '' ? 0 : Number(breakRaw);
+      const breakMinutes = Number(breakRaw);
       const resetResults = () => {
         endEl.textContent = '-'; stayEl.textContent = '-'; nextEl.textContent = '-'; breakSummaryEl.textContent = '-';
         copyBtn.disabled = true;
+        if (output) output.value = '';
       };
       [startEl, workEl, breakEl].forEach((el) => el.setAttribute('aria-invalid', 'false'));
 
-      if (!start || !workRaw) {
+      if (!start || !workRaw || !breakRaw) {
+        [[startEl, start], [workEl, workRaw], [breakEl, breakRaw]].forEach(([el, value]) => el.setAttribute('aria-invalid', String(Boolean(start || workRaw || breakRaw) && !value)));
         resetResults();
         setStatus(t.needInput);
         return;
@@ -14727,13 +14733,13 @@
         setStatus(t.invalidStart, 'error');
         return;
       }
-      if (!Number.isFinite(workHours) || workHours < 0.25 || workHours > 24) {
+      if (!/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(workRaw) || workRaw.length > 16 || !Number.isFinite(workHours) || workHours < 0.25 || workHours > 24) {
         workEl.setAttribute('aria-invalid', 'true');
         resetResults();
         setStatus(t.invalidWork, 'error');
         return;
       }
-      if (!Number.isInteger(breakMinutes) || breakMinutes < 0 || breakMinutes > 600) {
+      if (!/^\d+$/.test(breakRaw) || breakRaw.length > 3 || !Number.isInteger(breakMinutes) || breakMinutes < 0 || breakMinutes > 600) {
         breakEl.setAttribute('aria-invalid', 'true');
         resetResults();
         setStatus(t.invalidBreak, 'error');
@@ -14741,7 +14747,8 @@
       }
 
       const startMinutes = (h * 60) + m;
-      const totalMinutes = Math.round(workHours * 60) + breakMinutes;
+      const workMinutes = Math.round(workHours * 60);
+      const totalMinutes = workMinutes + breakMinutes;
       if (totalMinutes > 1440) {
         workEl.setAttribute('aria-invalid', 'true');
         breakEl.setAttribute('aria-invalid', 'true');
@@ -14758,7 +14765,9 @@
       nextEl.textContent = dayOffset > 0 ? t.nextDay(dayOffset) : t.nextSame;
       breakSummaryEl.textContent = t.breakSummary(breakMinutes);
       copyBtn.disabled = false;
-      setStatus(t.help(endTime, nextEl.textContent), 'success');
+      const roundingNote = Math.abs(workHours * 60 - workMinutes) > 1e-8 ? t.rounded(workMinutes) : '';
+      if (output) output.value = t.copy(endTime, stayEl.textContent, nextEl.textContent, breakSummaryEl.textContent) + roundingNote;
+      setStatus(t.help(endTime, nextEl.textContent) + roundingNote, 'success');
     };
 
     [startEl, workEl, breakEl].forEach((el) => el.addEventListener('input', render));
@@ -14787,11 +14796,15 @@
 
     copyBtn?.addEventListener('click', async () => {
       if (copyBtn.disabled || endEl.textContent === '-') return;
-      const summary = t.copy(endEl.textContent, stayEl.textContent, nextEl.textContent, breakSummaryEl.textContent);
+      const summary = output?.value || t.copy(endEl.textContent, stayEl.textContent, nextEl.textContent, breakSummaryEl.textContent);
       try {
         await navigator.clipboard.writeText(summary);
+        if (output && output.value !== summary) return;
         setStatus(t.copied, 'success');
       } catch (_) {
+        if (output && output.value !== summary) return;
+        output?.focus();
+        output?.select();
         setStatus(t.copyFail, 'error');
       }
     });

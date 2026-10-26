@@ -797,10 +797,15 @@ textarea:focus-visible {
 .wet-grid,
 .wet-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .wet-grid > div { display: grid; gap: .4rem; min-width: 0; }
+.wet-ui input, .wet-ui textarea { width: 100%; min-width: 0; box-sizing: border-box; }
+.wet-ui small { line-height: 1.6; overflow-wrap: anywhere; }
+.wet-ui button { min-height: 44px; white-space: normal; }
+.wet-ui #we-output { line-height: 1.6; resize: vertical; }
+.wet-ui :is(input, textarea, button):focus-visible { outline: 2px solid #60a5fa; outline-offset: 3px; }
 .wet-ui input[aria-invalid="true"] { border-color: #ef4444; }
 .wet-ui button:disabled { opacity: .55; cursor: not-allowed; }
-.wet-ui #we-help[data-state="error"] { color: #fca5a5; }
-.wet-ui #we-help[data-state="success"] { color: #86efac; }
+.wet-ui #we-help[data-state="error"] { color: #b91c1c; font-weight: 600; }
+.wet-ui #we-help[data-state="success"] { color: #166534; }
 .wet-stats strong,
 .wet-stats span { overflow-wrap: anywhere; }
 .prmc-grid,

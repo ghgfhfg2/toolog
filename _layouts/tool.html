@@ -3489,17 +3489,17 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <div class="tool-row-grid wet-grid">
             <div>
               <label for="we-start">{% if page.lang == 'en' %}Start time{% elsif page.lang == 'ja' %}出勤時刻{% else %}출근 시각{% endif %}</label>
-              <input id="we-start" type="time" aria-describedby="we-help we-assumption" />
+              <input id="we-start" type="time" required aria-describedby="we-help we-assumption" />
             </div>
             <div>
               <label for="we-work-hours">{% if page.lang == 'en' %}Actual work hours{% elsif page.lang == 'ja' %}実勤務時間（時間）{% else %}실근무시간(시간){% endif %}</label>
-              <input id="we-work-hours" type="number" min="0.25" max="24" step="0.25" inputmode="decimal" placeholder="8" aria-describedby="we-work-hint we-help" />
-              <small id="we-work-hint">{% if page.lang == 'en' %}Decimals are allowed: 7.5 = 7h 30m.{% elsif page.lang == 'ja' %}小数入力可: 7.5 = 7時間30分。{% else %}소수 입력 가능: 7.5 = 7시간 30분{% endif %}</small>
+              <input id="we-work-hours" type="number" min="0.25" max="24" step="any" required inputmode="decimal" placeholder="8" aria-describedby="we-work-hint we-help" />
+              <small id="we-work-hint">{% if page.lang == 'en' %}7.5 = 7h 30m. Rounded to the nearest minute.{% elsif page.lang == 'ja' %}7.5 = 7時間30分。最も近い分に四捨五入します。{% else %}7.5 = 7시간 30분. 가장 가까운 분으로 반올림합니다.{% endif %}</small>
             </div>
             <div>
               <label for="we-break-minutes">{% if page.lang == 'en' %}Break minutes{% elsif page.lang == 'ja' %}休憩時間(分){% else %}휴게시간(분){% endif %}</label>
-              <input id="we-break-minutes" type="number" min="0" max="600" step="1" inputmode="numeric" placeholder="60" aria-describedby="we-break-hint we-help" />
-              <small id="we-break-hint">{% if page.lang == 'en' %}Combined lunch and rest time (0–600).{% elsif page.lang == 'ja' %}昼休みと小休憩の合計（0〜600分）。{% else %}점심과 짧은 휴식을 합산해 입력(0~600분){% endif %}</small>
+              <input id="we-break-minutes" type="number" min="0" max="600" step="1" required inputmode="numeric" placeholder="0" aria-describedby="we-break-hint we-help" />
+              <small id="we-break-hint">{% if page.lang == 'en' %}Combined lunch and rest (0–600). Enter 0 for no break; do not leave blank.{% elsif page.lang == 'ja' %}昼休みと小休憩の合計（0〜600分）。休憩なしは空欄ではなく0。{% else %}점심과 짧은 휴식 합계(0~600분). 휴게가 없으면 빈칸 대신 0을 입력하세요.{% endif %}</small>
             </div>
           </div>
 
@@ -3517,6 +3517,8 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           </div>
 
           <p class="tool-result" id="we-help" role="status" aria-live="polite" aria-atomic="true">{% if page.lang == 'en' %}Enter start time and actual work hours. Break time may be 0.{% elsif page.lang == 'ja' %}出勤時刻と実勤務時間を入力してください。休憩は0分でも計算できます。{% else %}출근 시각과 실근무시간을 입력하세요. 휴게시간은 0분도 가능합니다.{% endif %}</p>
+          <label for="we-output">{% if page.lang == 'en' %}Calculation summary (select to copy){% elsif page.lang == 'ja' %}計算結果（選択してコピー可能）{% else %}계산 결과 요약(선택해 직접 복사 가능){% endif %}</label>
+          <textarea id="we-output" rows="4" readonly aria-describedby="we-help we-assumption" placeholder="{% if page.lang == 'en' %}Complete all three inputs to see your result.{% elsif page.lang == 'ja' %}3項目を入力すると結果が表示されます。{% else %}세 입력값을 모두 채우면 결과가 표시됩니다.{% endif %}"></textarea>
           <p class="tool-note" id="we-assumption">{% if page.lang == 'en' %}Calculation: start time + actual work time + unpaid break time. Overtime, paid breaks, and workplace rules are not applied automatically.{% elsif page.lang == 'ja' %}計算式: 出勤時刻 + 実勤務時間 + 無給休憩。残業、有給休憩、勤務先の規定は自動反映されません。{% else %}계산식: 출근 시각 + 실근무시간 + 무급 휴게시간. 연장근무, 유급 휴게, 회사 규정은 자동 반영되지 않습니다.{% endif %}</p>
         </div>
       {% when 'profit-margin-calculator' %}
@@ -5338,7 +5340,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
 </article>
 
 <script src="{{ '/assets/js/ui.js' | relative_url }}" defer></script>
-<script src="{{ '/assets/js/tools.js' | relative_url }}{% if page.tool_key == 'vat-calculator' %}?v=vat-20261025{% elsif page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% elsif page.tool_key == 'gpa-calculator' %}?v=gpa-20261024{% endif %}" defer></script>
+<script src="{{ '/assets/js/tools.js' | relative_url }}{% if page.tool_key == 'work-end-time-calculator' %}?v=wet-20261026{% elsif page.tool_key == 'vat-calculator' %}?v=vat-20261025{% elsif page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% elsif page.tool_key == 'gpa-calculator' %}?v=gpa-20261024{% endif %}" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
