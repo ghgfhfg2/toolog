@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Fuel Economy Calculator | km/L, L/100km, fuel cost, and cost per km
-description: Enter distance, fuel used, and optional price per liter to calculate km/L fuel economy, L/100km, total fuel cost, and cost per km.
+title: Fuel Economy Calculator | Real km/L, L/100km & KRW Costs
+description: Calculate real fuel economy in km/L and L/100km from distance and fuel consumed. Optional KRW/L pricing supports zero prices, exact whole-won rounding, and copied results.
 lang: en
 permalink: /en/tools/fuel-economy-calculator/
 canonical_url: /en/tools/fuel-economy-calculator/
@@ -25,6 +25,12 @@ faq:
     a: This tool is designed for liquid fuel and liters. It is not meant for EV efficiency in kWh.
   - q: What should I check if the result looks too low or too high?
     a: First confirm that distance is entered in km and fuel is entered in liters. The tool shows a warning for unusual results such as under 3km/L or over 40km/L.
+  - q: "Can I use any refill amount to measure real fuel economy?"
+    a: "Use the refill volume after driving between two comparable full-tank fills. A partial refill may not equal the fuel consumed over the measured distance."
+  - q: "What are the input limits and rounding rules?"
+    a: "Distance and fuel range from 0.001 to 1,000,000 with up to 3 decimals. Price ranges from 0 to 10,000,000 KRW/L with up to 2 decimals. Efficiency rounds to 2 decimals; costs round half up to whole KRW. Positive efficiency below 0.005 shows <0.01; positive costs below half a won show <1 KRW."
+  - q: "How does a zero price differ from a blank price?"
+    a: "Blank leaves cost results unavailable; zero means free fuel and displays zero costs. Every language uses KRW, without conversion to USD or JPY."
 ---
 
 ## Use this fuel economy calculator after a drive or refill
@@ -37,10 +43,6 @@ This tool lets you enter:
 
 Then it instantly shows **fuel economy in km/L**, **fuel used per 100km (L/100km)**, **total fuel cost**, and **fuel cost per km** on one screen.
 Use it to keep a real-world mileage log after refueling, or to estimate fuel cost before a longer drive.
-
-## Why this tool was selected today
-Recent quality work focused on tools such as `image-resizer`, `lucky-draw-picker`, `pomodoro-timer`, `readability-checker`, `time-difference-calculator`, `korean-name-romanizer`, `png-compressor`, `json-merge`, `link-list-cleaner`, and `average-speed-calculator`, so this pass avoids repeating the same tools.
-`fuel-economy-calculator` had little major work since its March 2026 launch, and auto cost calculators are especially sensitive to empty fields, zero or negative inputs, extreme values, and optional price handling.
 
 ## How it works
 1. `Distance ÷ Fuel used = km/L`
@@ -97,3 +99,16 @@ If fuel economy looks too low or too high, check whether distance and fuel were 
 ## Summary
 This fuel economy calculator quickly turns distance and fuel volume into a realistic driving-cost view.
 Enter the numbers from your latest refill to check both mileage and fuel cost in one place.
+
+
+## Real-world fuel measurement and input rules
+Distance and fuel consumed must cover the same trip interval. Fill the tank, record distance driven, then fill to the same level again and use that refill volume. A partial refill receipt may not reflect the fuel actually consumed. Future trip estimates require both estimated distance and estimated fuel consumed. The linked unit converter currently covers length, weight and temperature, not fuel volume.
+
+### Can I use any refill amount to measure real fuel economy?
+Use the refill volume after driving between two comparable full-tank fills. A partial refill may not equal the fuel consumed over the measured distance.
+
+### What are the input limits and rounding rules?
+Distance and fuel range from 0.001 to 1,000,000 with up to 3 decimals. Price ranges from 0 to 10,000,000 KRW/L with up to 2 decimals. Efficiency rounds to 2 decimals; costs round half up to whole KRW. Positive efficiency below 0.005 shows &lt;0.01; positive costs below half a won show &lt;1 KRW.
+
+### How does a zero price differ from a blank price?
+Blank leaves cost results unavailable; zero means free fuel and displays zero costs. Every language uses KRW, without conversion to USD or JPY.

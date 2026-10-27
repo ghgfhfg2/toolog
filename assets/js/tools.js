@@ -17515,8 +17515,8 @@
       ko: {
         currency: '원',
         needInput: '주행거리와 주유량을 입력하세요.',
-        invalid: '주행거리와 주유량은 0보다 큰 숫자로 입력해 주세요.',
-        invalidPrice: '리터당 단가는 비워두거나 0 이상의 숫자로 입력해 주세요.',
+        invalid: '주행거리와 주유량은 0.001 이상, 소수점 셋째 자리까지 입력하세요. 지수·쉼표 표기는 지원하지 않습니다.',
+        invalidPrice: '리터당 단가는 비워두거나 0 이상의 숫자를 소수점 둘째 자리까지 입력하세요.',
         tooLarge: '주행거리와 주유량은 1,000,000 이하, 단가는 10,000,000 이하로 입력해 주세요.',
         noPrice: '단가를 입력하면 총 주유비와 1km당 연료비도 함께 계산됩니다.',
         unusualLow: '연비가 매우 낮게 계산됐습니다. 주행거리와 주유량 단위를 다시 확인해 주세요.',
@@ -17530,8 +17530,8 @@
       en: {
         currency: ' KRW',
         needInput: 'Enter distance and fuel used.',
-        invalid: 'Distance and fuel used must be positive numbers.',
-        invalidPrice: 'Fuel price must be blank or a non-negative number.',
+        invalid: 'Enter distance and fuel from 0.001, with up to 3 decimal places. Exponents and commas are not supported.',
+        invalidPrice: 'Leave price blank or enter a non-negative number with up to 2 decimal places.',
         tooLarge: 'Distance and fuel must be 1,000,000 or less, and price must be 10,000,000 or less.',
         noPrice: 'Enter fuel price to calculate total cost and cost per km as well.',
         unusualLow: 'Fuel economy looks unusually low. Check that distance is in km and fuel is in liters.',
@@ -17545,8 +17545,8 @@
       ja: {
         currency: 'ウォン',
         needInput: '走行距離と給油量を入力してください。',
-        invalid: '走行距離と給油量は0より大きい数値で入力してください。',
-        invalidPrice: '単価は空欄、または0以上の数値で入力してください。',
+        invalid: '走行距離と給油量は0.001以上、小数第3位までで入力してください。指数・カンマ表記は使えません。',
+        invalidPrice: '単価は空欄、または0以上で小数第2位まで入力してください。',
         tooLarge: '走行距離と給油量は1,000,000以下、単価は10,000,000以下で入力してください。',
         noPrice: '単価を入力すると、総燃料費と1kmあたり燃料費も計算します。',
         unusualLow: '燃費がかなり低く計算されています。走行距離と給油量の単位を確認してください。',
@@ -17559,17 +17559,39 @@
       }
     };
     const t = i18n[pageLang] || i18n.ko;
-    const fmtMoney = (v) => {
-      const rounded = Math.round(v || 0).toLocaleString(numberLocale);
-      return pageLang === 'en' ? `${rounded}${t.currency}` : `${rounded}${t.currency}`;
+    let revision = 0;
+    const parseDecimal = (raw, places) => {
+      if (raw.length > 32 || !new RegExp(`^\\d+(?:\\.\\d{1,${places}})?$`).test(raw)) return null;
+      const [whole, fraction = ''] = raw.split('.');
+      return BigInt(whole) * (10n ** BigInt(places)) + BigInt(fraction.padEnd(places, '0'));
     };
+    // Round non-negative rational costs to whole KRW, without binary half-way errors.
+    const fmtMoney = (numerator, denominator) => {
+      const rounded = (numerator * 2n + denominator) / (2n * denominator);
+      const value = numerator > 0n && rounded === 0n ? '<1' : rounded.toLocaleString(numberLocale);
+      return `${value}${t.currency}`;
+    };
+    const fmtEfficiency = (value) => value < 0.005 ? '<0.01' : value.toLocaleString(numberLocale, { maximumFractionDigits: 2 });
+    const copyMessages = {
+      ko: ['계산 결과를 복사했습니다.', '자동 복사에 실패했습니다. 표시된 결과를 직접 선택해 복사해 주세요.'],
+      en: ['Copied the calculation result.', 'Copy failed. Select the displayed results and copy manually.'],
+      ja: ['計算結果をコピーしました。', 'コピーできませんでした。表示結果を選択してコピーしてください。']
+    }[pageLang] || [];
 
     const copyText = async (text) => {
       try { await navigator.clipboard.writeText(text); }
       catch (_) {
         const ta = document.createElement('textarea');
         ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        const focused = document.activeElement;
+        document.body.appendChild(ta);
+        try {
+          ta.select();
+          if (!document.execCommand('copy')) throw new Error('copy failed');
+        } finally {
+          ta.remove();
+          if (focused?.isConnected) focused.focus({ preventScroll: true });
+        }
       }
     };
 
@@ -17592,53 +17614,45 @@
     };
 
     const render = () => {
+      revision += 1;
       const rawDistance = distance.value.trim();
       const rawFuel = fuel.value.trim();
       const rawPrice = price.value.trim();
-      const d = Number(rawDistance || 0);
-      const f = Number(rawFuel || 0);
-      const p = Number(rawPrice || 0);
-
-      if (!rawDistance && !rawFuel) {
+      const ds = parseDecimal(rawDistance, 3);
+      const fs = parseDecimal(rawFuel, 3);
+      const ps = rawPrice ? parseDecimal(rawPrice, 2) : null;
+      if (!rawDistance && !rawFuel && !rawPrice) {
         setInvalid();
         setIdle(t.needInput);
         return;
       }
-      if (!Number.isFinite(d) || !Number.isFinite(f) || d <= 0 || f <= 0) {
-        setInvalid(...[distance, fuel].filter((el) => {
-          const v = Number(el.value.trim() || 0);
-          return !Number.isFinite(v) || v <= 0;
-        }));
+      if (ds === null || fs === null || ds <= 0n || fs <= 0n) {
+        setInvalid(...[ds === null || ds <= 0n ? distance : null, fs === null || fs <= 0n ? fuel : null].filter(Boolean));
         setIdle(t.invalid, 'error');
         return;
       }
-      if (d > 1000000 || f > 1000000 || p > 10000000) {
-        setInvalid(...[
-          d > 1000000 ? distance : null,
-          f > 1000000 ? fuel : null,
-          p > 10000000 ? price : null
-        ].filter(Boolean));
-        setIdle(t.tooLarge, 'error');
-        return;
-      }
-      if (rawPrice && (!Number.isFinite(p) || p < 0)) {
+      if (rawPrice && ps === null) {
         setInvalid(price);
         setIdle(t.invalidPrice, 'error');
         return;
       }
-
+      if (ds > 1000000000n || fs > 1000000000n || ps > 1000000000n) {
+        setInvalid(...[ds > 1000000000n ? distance : null, fs > 1000000000n ? fuel : null, ps > 1000000000n ? price : null].filter(Boolean));
+        setIdle(t.tooLarge, 'error');
+        return;
+      }
+      const d = Number(ds) / 1000;
+      const f = Number(fs) / 1000;
       setInvalid();
       const kml = d / f;
       const l100 = 100 / kml;
-      outKml.textContent = `${kml.toLocaleString(numberLocale, { maximumFractionDigits: 2 })} km/L`;
-      outL100.textContent = `${l100.toLocaleString(numberLocale, { maximumFractionDigits: 2 })} L/100km`;
+      outKml.textContent = `${fmtEfficiency(kml)} km/L`;
+      outL100.textContent = `${fmtEfficiency(l100)} L/100km`;
       copyBtn.disabled = false;
 
-      if (p > 0) {
-        const total = f * p;
-        const perKm = total / d;
-        outTotalCost.textContent = fmtMoney(total);
-        outCostPerKm.textContent = fmtMoney(perKm);
+      if (ps !== null) {
+        outTotalCost.textContent = fmtMoney(fs * ps, 100000n);
+        outCostPerKm.textContent = fmtMoney(fs * ps, ds * 100n);
         setHelp(t.summary(outKml.textContent, outL100.textContent, outTotalCost.textContent, outCostPerKm.textContent), 'success');
       } else {
         outTotalCost.textContent = '-';
@@ -17653,11 +17667,16 @@
 
     copyBtn?.addEventListener('click', async () => {
       if (outKml.textContent === '-') return;
-      const text = t.copy(outKml.textContent, outL100.textContent, outTotalCost.textContent, outCostPerKm.textContent);
-      await copyText(text);
-      const old = copyBtn.textContent;
-      copyBtn.textContent = t.copied;
-      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+      const captured = revision;
+      const labels = { ko: ['거리', '사용 연료', '단가'], en: ['Distance', 'Fuel', 'Price'], ja: ['距離', '消費燃料', '単価'] }[pageLang];
+      const inputs = `${labels[0]} ${distance.value} km | ${labels[1]} ${fuel.value} L | ${labels[2]} ${price.value || '—'} KRW/L`;
+      const text = `${inputs}\n${t.copy(outKml.textContent, outL100.textContent, outTotalCost.textContent, outCostPerKm.textContent)}`;
+      try {
+        await copyText(text);
+        if (captured === revision) setHelp(copyMessages[0], 'success');
+      } catch (_) {
+        if (captured === revision) setHelp(copyMessages[1], 'error');
+      }
     });
 
     resetBtn?.addEventListener('click', () => {
@@ -17668,6 +17687,7 @@
     });
 
     clearBtn?.addEventListener('click', () => {
+      revision += 1;
       distance.value = '';
       fuel.value = '';
       price.value = '';

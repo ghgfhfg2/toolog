@@ -4270,15 +4270,15 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <div class="tool-row-grid pct-grid fe-grid">
             <div>
               <label for="fe-distance">{% if page.lang == 'en' %}Distance (km){% elsif page.lang == 'ja' %}走行距離 (km){% else %}주행거리(km){% endif %}</label>
-              <input id="fe-distance" type="number" min="0" max="1000000" step="0.1" inputmode="decimal" autocomplete="off" aria-describedby="fe-help fe-limits" placeholder="420" />
+              <input id="fe-distance" type="text" maxlength="32" inputmode="decimal" autocomplete="off" aria-describedby="fe-help fe-limits" placeholder="420" />
             </div>
             <div>
-              <label for="fe-fuel">{% if page.lang == 'en' %}Fuel used (L){% elsif page.lang == 'ja' %}給油量 (L){% else %}주유량(L){% endif %}</label>
-              <input id="fe-fuel" type="number" min="0" max="1000000" step="0.01" inputmode="decimal" autocomplete="off" aria-describedby="fe-help fe-limits" placeholder="28" />
+              <label for="fe-fuel">{% if page.lang == 'en' %}Fuel used (L){% elsif page.lang == 'ja' %}消費燃料 (L){% else %}사용 연료량(L){% endif %}</label>
+              <input id="fe-fuel" type="text" maxlength="32" inputmode="decimal" autocomplete="off" aria-describedby="fe-help fe-limits" placeholder="28" />
             </div>
             <div>
-              <label for="fe-price">{% if page.lang == 'en' %}Fuel price per liter (optional){% elsif page.lang == 'ja' %}リッター単価（任意）{% else %}리터당 단가(선택){% endif %}</label>
-              <input id="fe-price" type="number" min="0" max="10000000" step="1" inputmode="numeric" autocomplete="off" aria-describedby="fe-help fe-limits" placeholder="1720" />
+              <label for="fe-price">{% if page.lang == 'en' %}Price (KRW/L, optional){% elsif page.lang == 'ja' %}単価（KRW/L・任意）{% else %}리터당 단가(원/L, 선택){% endif %}</label>
+              <input id="fe-price" type="text" maxlength="32" inputmode="decimal" autocomplete="off" aria-describedby="fe-help fe-limits" placeholder="1720" />
             </div>
           </div>
           <div class="tool-row-grid pct-actions fe-actions">
@@ -4293,7 +4293,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <div><strong id="fe-cost-per-km">-</strong><span>{% if page.lang == 'en' %}Fuel cost per km{% elsif page.lang == 'ja' %}1kmあたり燃料費{% else %}1km당 연료비{% endif %}</span></div>
           </div>
           <p class="tool-result" id="fe-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter distance and fuel used to calculate fuel economy instantly.{% elsif page.lang == 'ja' %}走行距離と給油量を入力すると燃費をすぐ計算します。{% else %}주행거리와 주유량을 입력하면 연비를 즉시 계산합니다.{% endif %}</p>
-          <p class="tool-result fe-limits" id="fe-limits">{% if page.lang == 'en' %}Use positive numbers only. Distance and fuel are capped at 1,000,000, and fuel price is capped at 10,000,000 per liter.{% elsif page.lang == 'ja' %}正の数だけ入力できます。走行距離と給油量は1,000,000まで、単価は1Lあたり10,000,000までです。{% else %}0보다 큰 숫자만 계산합니다. 주행거리와 주유량은 1,000,000까지, 리터당 단가는 10,000,000까지 입력할 수 있습니다.{% endif %}</p>
+          <p class="tool-result fe-limits" id="fe-limits">{% if page.lang == 'en' %}Distance and consumed fuel: 0.001–1,000,000 (up to 3 decimals). Optional price: 0–10,000,000 KRW/L (up to 2 decimals). Use plain numbers, no commas or exponents. Blank price hides costs; 0 means free. Efficiency is rounded to 2 decimals; positive values below 0.005 show &lt;0.01. Costs round half up to whole KRW; positive sub-half-won amounts show &lt;1 KRW.{% elsif page.lang == 'ja' %}距離・消費燃料は0.001〜1,000,000（小数第3位まで）、単価は任意で0〜10,000,000 KRW/L（小数第2位まで）。カンマ・指数は使えません。単価空欄は費用非表示、0は無料です。燃費は小数第2位、0.005未満の正数は&lt;0.01。費用はウォン単位で四捨五入し、0.5ウォン未満の正数は&lt;1ウォンと表示します。{% else %}거리·사용 연료는 0.001~1,000,000 (소수 셋째 자리), 단가는 선택이며 0~10,000,000원/L (소수 둘째 자리)까지입니다. 쉼표·지수 표기는 지원하지 않습니다. 단가 빈칸은 비용 미표시, 0은 무료입니다. 연비는 소수 둘째 자리까지 반올림하며 0.005 미만 양수는 &lt;0.01로 표시합니다. 비용은 원 단위 반올림하며 0.5원 미만 양수는 &lt;1원으로 표시합니다.{% endif %}</p>
         </div>
 
       {% when 'goal-savings-calculator' %}
@@ -5340,7 +5340,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
 </article>
 
 <script src="{{ '/assets/js/ui.js' | relative_url }}" defer></script>
-<script src="{{ '/assets/js/tools.js' | relative_url }}{% if page.tool_key == 'work-end-time-calculator' %}?v=wet-20261026{% elsif page.tool_key == 'vat-calculator' %}?v=vat-20261025{% elsif page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% elsif page.tool_key == 'gpa-calculator' %}?v=gpa-20261024{% endif %}" defer></script>
+<script src="{{ '/assets/js/tools.js' | relative_url }}{% if page.tool_key == 'fuel-economy-calculator' %}?v=fe-20261027{% elsif page.tool_key == 'work-end-time-calculator' %}?v=wet-20261026{% elsif page.tool_key == 'vat-calculator' %}?v=vat-20261025{% elsif page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% elsif page.tool_key == 'gpa-calculator' %}?v=gpa-20261024{% endif %}" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

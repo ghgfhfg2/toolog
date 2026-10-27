@@ -1178,9 +1178,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 주행거리와 주유량으로 km/L 연비를 계산하고, 100km당 연료소비량과 총 주유비, 1km당 연료비까지 함께 확인해요.
-  description_en: Calculate fuel economy in km/L, fuel use per 100km, total fuel cost, and cost per km from distance and fuel volume.
-  description_ja: 走行距離と給油量から km/L 燃費、100kmあたり燃料消費量、総燃料費、1kmあたり燃料費をまとめて計算します。
+  description: 주행거리와 실제 사용 연료량으로 km/L 실연비, L/100km 소비량을 계산하세요. 선택 단가는 원/L 기준이며 0원·빈칸 구분, 정확한 원 단위 반올림, 결과 복사를 지원합니다.
+  description_en: Calculate real fuel economy in km/L and L/100km from distance and fuel consumed. Optional KRW/L pricing supports zero prices, exact whole-won rounding, and copied results.
+  description_ja: 走行距離と消費燃料から実燃費km/LとL/100kmを計算。任意の単価はKRW/Lで、0と空欄の区別、正確なウォン単位の四捨五入、結果コピーに対応します。
   url: /tools/fuel-economy-calculator/
   url_en: /en/tools/fuel-economy-calculator/
   url_ja: /ja/tools/fuel-economy-calculator/
