@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Volumetric Weight Calculator | Box Size & Billing Rounding
-description: Compare actual and dimensional weight for one box using cm and kg. Choose divisor 4000, 5000, or 6000 and exact 0.5 kg or 1 kg billing increments.
+title: Volumetric Weight Calculator | Dimensional & Billing Weight
+description: Compare actual and dimensional weight for one box in cm and kg. Choose a 4000, 5000, or 6000 divisor and round billing weight up to 0.5 kg or 1 kg increments.
 category: calculator
 category_label: Logistics/Business
 thumbnail: /assets/thumbs/en/volumetric-weight-calculator.svg
@@ -22,7 +22,7 @@ faq:
   - q: Which divisor should I choose?
     a: The divisor depends on the carrier or forwarder policy. 6000, 5000, and 4000 are all used in practice.
   - q: How is chargeable weight decided?
-    a: In many cases, the larger value between actual weight and volumetric weight is used as the billable weight.
+    a: This tool uses the larger of actual and volumetric weight as chargeable weight before rounding. Billing weight then applies the selected upward rounding increment; confirm the carrier policy.
   - q: Why does the tool include 0.5kg or 1kg rounding?
     a: Some carriers round chargeable weight up before billing. Choose the rounding unit that matches the quote table you are using.
   - q: Can I use 0kg when I do not know the actual weight yet?
@@ -42,9 +42,16 @@ This tool helps you quickly check:
 - carrier divisor assumptions,
 - rounded billing weight for 0.5kg or 1kg carrier rules.
 
-## Why this tool was improved today
-Recent quality passes focused on other tools such as the list format converter, recycling sorting checker, movie seat choice simulator, fuel economy calculator, and image resizer.
-`volumetric-weight-calculator` was selected because shipping estimates are sensitive to decimal dimensions, zero actual weight, unrealistic values, carrier divisors, rounding rules, and mobile input guidance.
+## How to compare shipping weights
+1. Measure the outside length, width, and height of one packed box in **cm**, then enter its actual weight in **kg**. Use the Unit Converter below if your measurements are in inches or pounds.
+2. Select **4000, 5000, or 6000** from your carrier's rate sheet. Do not assume the divisor from the shipping method alone.
+3. Choose **No rounding**, **0.5 kg**, or **1 kg** to match the carrier's billing policy.
+4. Compare volumetric weight with actual weight: the larger value is the chargeable weight before rounding. Read the rounded billing weight separately, then use **Copy result** to save the inputs, settings, and results.
+
+## Empty fields, errors, and starting again
+All four measurement fields must be filled in. A blank actual-weight field is not treated as zero; enter `0` explicitly for an early size-only estimate. While fields are empty or invalid, results show dashes and copying is disabled, so an earlier result is not mistaken for the current estimate.
+
+Use plain numbers with a decimal point and up to **3 decimal places**. Dimensions must be **0.1–1000 cm** per side and actual weight **0–10,000 kg**. Remove commas, units, negative signs, and exponent notation if an error appears, then correct the highlighted fields. **Load example** fills a sample box; **Reset** clears the inputs and results. If automatic copying is blocked, select and copy the displayed results manually.
 
 ## Key features
 - Enter length, width, and height in centimeters
@@ -92,7 +99,7 @@ With 1kg rounding, the same value may be billed as **5 kg**.
 It is often applied to parcels that take up more space than their actual weight suggests. When volumetric weight is higher than actual weight, carriers may price the shipment from that larger value.
 
 ### Is the divisor always 6000?
-No. 6000 is common, but express and air cargo estimates may use 5000, 4000, or another carrier-specific divisor.
+No. Carriers and contracts may use 6000, 5000, 4000, or another divisor. Check the applicable rate sheet; the shipping method alone does not determine the divisor.
 
 ### Why does chargeable weight use the larger value?
 Carriers often price by whichever burden is greater: physical weight or space taken in the truck, aircraft, or warehouse. That is why checking both actual and volumetric weight matters.

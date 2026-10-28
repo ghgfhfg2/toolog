@@ -2047,8 +2047,8 @@
   badge_en: New
   badge_ja: 新着
   description: 박스 치수(cm)와 실제 무게(kg)로 부피무게와 적용무게를 비교하세요. 배수 4000·5000·6000과 0.5kg·1kg 올림을 선택해 한 박스의 운임무게를 계산합니다.
-  description_en: Compare actual and dimensional weight for one box using cm and kg. Choose divisor 4000, 5000, or 6000 and exact 0.5 kg or 1 kg billing increments.
-  description_ja: 箱の寸法cmと実重量kgから容積重量と適用重量を比較。係数4000・5000・6000と0.5kg・1kg切り上げを選び、1箱の請求重量を計算します。
+  description_en: Compare actual and dimensional weight for one box in cm and kg. Choose a 4000, 5000, or 6000 divisor and round billing weight up to 0.5 kg or 1 kg increments.
+  description_ja: 箱の寸法（cm）と実重量（kg）から容積重量・適用重量を比較。係数4000・5000・6000と0.5kg・1kg単位の切り上げで、1箱の請求重量を計算します。
   url: /tools/volumetric-weight-calculator/
   url_en: /en/tools/volumetric-weight-calculator/
   url_ja: /ja/tools/volumetric-weight-calculator/
