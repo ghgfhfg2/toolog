@@ -3816,36 +3816,36 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <div class="tool-row-grid vw-grid">
             <div>
               <label for="vw-length">{% if page.lang == 'en' %}Length (cm){% elsif page.lang == 'ja' %}縦（cm）{% else %}가로/길이(cm){% endif %}</label>
-              <input id="vw-length" type="number" min="0.1" max="1000" step="0.1" inputmode="decimal" placeholder="40" aria-describedby="vw-help vw-rules" />
+              <input id="vw-length" type="text" maxlength="32" autocomplete="off" spellcheck="false" inputmode="decimal" placeholder="40" aria-describedby="vw-help vw-rules" />
             </div>
             <div>
               <label for="vw-width">{% if page.lang == 'en' %}Width (cm){% elsif page.lang == 'ja' %}横（cm）{% else %}세로/너비(cm){% endif %}</label>
-              <input id="vw-width" type="number" min="0.1" max="1000" step="0.1" inputmode="decimal" placeholder="30" aria-describedby="vw-help vw-rules" />
+              <input id="vw-width" type="text" maxlength="32" autocomplete="off" spellcheck="false" inputmode="decimal" placeholder="30" aria-describedby="vw-help vw-rules" />
             </div>
           </div>
           <div class="tool-row-grid vw-grid">
             <div>
               <label for="vw-height">{% if page.lang == 'en' %}Height (cm){% elsif page.lang == 'ja' %}高さ（cm）{% else %}높이(cm){% endif %}</label>
-              <input id="vw-height" type="number" min="0.1" max="1000" step="0.1" inputmode="decimal" placeholder="20" aria-describedby="vw-help vw-rules" />
+              <input id="vw-height" type="text" maxlength="32" autocomplete="off" spellcheck="false" inputmode="decimal" placeholder="20" aria-describedby="vw-help vw-rules" />
             </div>
             <div>
               <label for="vw-actual">{% if page.lang == 'en' %}Actual weight (kg){% elsif page.lang == 'ja' %}実重量（kg）{% else %}실제 무게(kg){% endif %}</label>
-              <input id="vw-actual" type="number" min="0" max="10000" step="0.01" inputmode="decimal" placeholder="2.8" aria-describedby="vw-help vw-rules" />
+              <input id="vw-actual" type="text" maxlength="32" autocomplete="off" spellcheck="false" inputmode="decimal" placeholder="2.8" aria-describedby="vw-help vw-rules" />
             </div>
           </div>
           <div class="tool-row-grid vw-grid">
             <div>
               <label for="vw-divisor">{% if page.lang == 'en' %}Volumetric divisor{% elsif page.lang == 'ja' %}容積係数{% else %}부피배수{% endif %}</label>
               <select id="vw-divisor" aria-describedby="vw-help vw-rules">
-                <option value="6000">6000 - {% if page.lang == 'en' %}general courier{% elsif page.lang == 'ja' %}一般配送{% else %}일반 택배{% endif %}</option>
-                <option value="5000">5000 - {% if page.lang == 'en' %}express / air{% elsif page.lang == 'ja' %}特送・航空{% else %}특송·항공{% endif %}</option>
-                <option value="4000">4000 - {% if page.lang == 'en' %}stricter carrier{% elsif page.lang == 'ja' %}厳しめの基準{% else %}엄격 기준{% endif %}</option>
+                <option value="6000">6000 - {% if page.lang == 'en' %}carrier-specific{% elsif page.lang == 'ja' %}業者指定値{% else %}운송사별 확인{% endif %}</option>
+                <option value="5000">5000 - {% if page.lang == 'en' %}carrier-specific{% elsif page.lang == 'ja' %}業者指定値{% else %}운송사별 확인{% endif %}</option>
+                <option value="4000">4000 - {% if page.lang == 'en' %}higher dimensional weight{% elsif page.lang == 'ja' %}厳しめの基準{% else %}부피무게가 더 큼{% endif %}</option>
               </select>
             </div>
             <div>
-              <label for="vw-rounding">{% if page.lang == 'en' %}Billing rounding{% elsif page.lang == 'ja' %}請求重量の丸め{% else %}운임 무게 반올림{% endif %}</label>
+              <label for="vw-rounding">{% if page.lang == 'en' %}Billing rounding{% elsif page.lang == 'ja' %}請求重量の丸め{% else %}운임무게 올림{% endif %}</label>
               <select id="vw-rounding" aria-describedby="vw-help vw-rules">
-                <option value="0">{% if page.lang == 'en' %}No rounding{% elsif page.lang == 'ja' %}丸めなし{% else %}반올림 없음{% endif %}</option>
+                <option value="0">{% if page.lang == 'en' %}No rounding{% elsif page.lang == 'ja' %}丸めなし{% else %}올림 없음{% endif %}</option>
                 <option value="0.5">0.5kg {% if page.lang == 'en' %}up{% elsif page.lang == 'ja' %}単位切り上げ{% else %}단위 올림{% endif %}</option>
                 <option value="1">1kg {% if page.lang == 'en' %}up{% elsif page.lang == 'ja' %}単位切り上げ{% else %}단위 올림{% endif %}</option>
               </select>
@@ -3860,11 +3860,11 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <div><strong id="vw-volume">-</strong><span>{% if page.lang == 'en' %}Box volume (L){% elsif page.lang == 'ja' %}箱の容積（L）{% else %}박스 부피(L){% endif %}</span></div>
             <div><strong id="vw-volumetric">-</strong><span>{% if page.lang == 'en' %}Volumetric weight{% elsif page.lang == 'ja' %}容積重量{% else %}부피무게{% endif %}</span></div>
             <div><strong id="vw-chargeable">-</strong><span>{% if page.lang == 'en' %}Chargeable weight{% elsif page.lang == 'ja' %}適用重量{% else %}적용무게{% endif %}</span></div>
-            <div><strong id="vw-billed">-</strong><span>{% if page.lang == 'en' %}Rounded billing weight{% elsif page.lang == 'ja' %}丸め後の請求重量{% else %}반올림 운임무게{% endif %}</span></div>
+            <div><strong id="vw-billed">-</strong><span>{% if page.lang == 'en' %}Rounded billing weight{% elsif page.lang == 'ja' %}丸め後の請求重量{% else %}올림 적용 운임무게{% endif %}</span></div>
             <div><strong id="vw-basis">-</strong><span>{% if page.lang == 'en' %}Billing basis{% elsif page.lang == 'ja' %}請求基準{% else %}청구 기준{% endif %}</span></div>
           </div>
-          <p class="tool-result" id="vw-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter dimensions and weight to calculate volumetric, chargeable, and rounded billing weight.{% elsif page.lang == 'ja' %}サイズと重量を入力すると、容積重量・適用重量・丸め後の請求重量を計算します。{% else %}박스 규격과 실제 무게를 입력하면 부피무게, 적용무게, 반올림 운임무게를 계산합니다.{% endif %}</p>
-          <p class="tool-result" id="vw-rules">{% if page.lang == 'en' %}Formula: length × width × height ÷ divisor. Dimensions support 0.1-1000cm per side, actual weight supports 0-10,000kg, and all input stays in your browser.{% elsif page.lang == 'ja' %}計算式: 縦×横×高さ÷容積係数。サイズは各辺0.1〜1000cm、実重量は0〜10,000kgまで対応し、入力はブラウザ内だけで処理されます。{% else %}계산식: 가로×세로×높이÷부피배수. 각 변은 0.1~1000cm, 실제 무게는 0~10,000kg까지 지원하며 입력값은 브라우저 안에서만 처리됩니다.{% endif %}</p>
+          <p class="tool-result" id="vw-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter dimensions and weight to calculate volumetric, chargeable, and rounded billing weight.{% elsif page.lang == 'ja' %}サイズと重量を入力すると、容積重量・適用重量・丸め後の請求重量を計算します。{% else %}박스 규격과 실제 무게를 입력하면 부피무게, 적용무게, 올림 적용 운임무게를 계산합니다.{% endif %}</p>
+          <p class="tool-result" id="vw-rules">{% if page.lang == 'en' %}Formula: length × width × height ÷ divisor. Dimensions support 0.1-1000cm per side, actual weight supports 0-10,000kg, up to 3 decimal places. Results display up to 4 decimals; &lt;0.0001 means a positive value below display precision. Billing rounds up the unrounded weight. This is a single-box estimate; confirm carrier rules. Inputs stay in your browser.{% elsif page.lang == 'ja' %}計算式: 縦×横×高さ÷容積係数。サイズは各辺0.1〜1000cm、実重量は0〜10,000kgまで対応し、小数3桁まで対応します。結果は小数4桁まで表示し、&lt;0.0001は表示精度未満の正の値です。請求重量は丸め前の値から切り上げます。1箱の概算で、業者の規定を確認してください。入力はブラウザ内で処理します。{% else %}계산식: 가로×세로×높이÷부피배수. 각 변은 0.1~1000cm, 실제 무게는 0~10,000kg까지 소수점 이하 3자리까지 입력할 수 있습니다. 결과는 최대 소수 4자리로 표시하며 &lt;0.0001은 표시 정밀도보다 작은 양수입니다. 운임무게는 표시값이 아닌 원래 값에서 올림합니다. 1개 박스 견적용이며 운송사 규정을 확인하세요. 입력값은 브라우저 안에서만 처리됩니다.{% endif %}</p>
         </div>
       {% when 'split-bill-calculator' %}
         <div class="tool-ui sb-ui">
@@ -5340,7 +5340,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
 </article>
 
 <script src="{{ '/assets/js/ui.js' | relative_url }}" defer></script>
-<script src="{{ '/assets/js/tools.js' | relative_url }}{% if page.tool_key == 'fuel-economy-calculator' %}?v=fe-20261027{% elsif page.tool_key == 'work-end-time-calculator' %}?v=wet-20261026{% elsif page.tool_key == 'vat-calculator' %}?v=vat-20261025{% elsif page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% elsif page.tool_key == 'gpa-calculator' %}?v=gpa-20261024{% endif %}" defer></script>
+<script src="{{ '/assets/js/tools.js' | relative_url }}{% if page.tool_key == 'volumetric-weight-calculator' %}?v=vw-20261028{% elsif page.tool_key == 'fuel-economy-calculator' %}?v=fe-20261027{% elsif page.tool_key == 'work-end-time-calculator' %}?v=wet-20261026{% elsif page.tool_key == 'vat-calculator' %}?v=vat-20261025{% elsif page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% elsif page.tool_key == 'gpa-calculator' %}?v=gpa-20261024{% endif %}" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

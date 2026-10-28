@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Volumetric Weight Calculator | Dimensional & Billing Weight
-description: Enter box dimensions, actual weight, divisor, and optional 0.5kg or 1kg rounding to calculate volumetric weight, chargeable weight, billing weight, and box volume.
+title: Volumetric Weight Calculator | Box Size & Billing Rounding
+description: Compare actual and dimensional weight for one box using cm and kg. Choose divisor 4000, 5000, or 6000 and exact 0.5 kg or 1 kg billing increments.
 category: calculator
 category_label: Logistics/Business
 thumbnail: /assets/thumbs/en/volumetric-weight-calculator.svg
@@ -27,6 +27,8 @@ faq:
     a: Some carriers round chargeable weight up before billing. Choose the rounding unit that matches the quote table you are using.
   - q: Can I use 0kg when I do not know the actual weight yet?
     a: Yes for an early size-only estimate, but weigh the parcel and recalculate before shipping.
+  - q: How are decimal inputs and billing increments handled?
+    a: Enter each side from 0.1 to 1000 cm and actual weight from 0 to 10,000 kg, with up to 3 decimal places. Displays round to 4 decimals; billing increments round up the original, unrounded weight.
 ---
 
 ## Why use a volumetric weight calculator?
@@ -103,3 +105,15 @@ Yes, if you only need a size-based early estimate. Before shipping, weigh the pa
 
 ### Why is my result much higher than expected?
 Check that you entered centimeters rather than millimeters and selected the correct divisor. A 4000 divisor produces a higher volumetric weight than 6000 for the same box.
+
+## Decimal dimensions and billing boundaries
+Enter plain numbers with up to 3 decimal places, without commas, units, or exponent notation. Blank fields are not zero: enter `0` explicitly for a size-only estimate.
+
+- `0.1 × 48 × 625 cm ÷ 6000 = 0.5 kg`. With actual weight 0 kg and a 0.5 kg billing increment, billing weight stays **0.5 kg**, not 1 kg.
+- An actual weight of **0.501 kg** rounds up to **1 kg** at a 0.5 kg increment.
+- Results display up to 4 decimals. `<0.0001kg` is a positive value below display precision, not zero. Billing rounds up the unrounded result, not the displayed value.
+
+This is a **single-box estimate**, not a shipping quote. Multi-box aggregation, minimum billable weights, carrier dimension rounding, oversize charges, and prices are excluded. Confirm the divisor and billing policy with your carrier rather than assuming a divisor from the shipping method. Inputs are processed in your browser.
+
+### How are decimal inputs and billing increments handled?
+Enter each side from 0.1 to 1000 cm and actual weight from 0 to 10,000 kg, with up to 3 decimal places. Displays round to 4 decimals; billing increments round up the original, unrounded weight.

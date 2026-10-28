@@ -2046,9 +2046,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 가로·세로·높이, 실제 무게, 부피배수, 0.5kg/1kg 운임 올림 기준으로 부피무게·적용무게·청구무게를 빠르게 계산해요.
-  description_en: Calculate volumetric, chargeable, and rounded billing weight from box dimensions, actual weight, divisor, and 0.5kg/1kg rounding.
-  description_ja: 箱サイズ・実重量・容積係数・0.5kg/1kg切り上げ条件から、容積重量・適用重量・請求重量を計算します。
+  description: 박스 치수(cm)와 실제 무게(kg)로 부피무게와 적용무게를 비교하세요. 배수 4000·5000·6000과 0.5kg·1kg 올림을 선택해 한 박스의 운임무게를 계산합니다.
+  description_en: Compare actual and dimensional weight for one box using cm and kg. Choose divisor 4000, 5000, or 6000 and exact 0.5 kg or 1 kg billing increments.
+  description_ja: 箱の寸法cmと実重量kgから容積重量と適用重量を比較。係数4000・5000・6000と0.5kg・1kg切り上げを選び、1箱の請求重量を計算します。
   url: /tools/volumetric-weight-calculator/
   url_en: /en/tools/volumetric-weight-calculator/
   url_ja: /ja/tools/volumetric-weight-calculator/

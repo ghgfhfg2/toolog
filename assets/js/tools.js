@@ -15791,7 +15791,7 @@
     const text = {
       ko: {
         needInput: '가로·세로·높이와 실제 무게를 입력하세요.',
-        invalid: '각 변은 0.1~1000cm, 실제 무게는 0~10,000kg 범위의 숫자로 입력해 주세요.',
+        invalid: '각 변은 0.1~1000cm, 실제 무게는 0~10,000kg 범위에서 소수점 이하 3자리까지 입력하세요. 지수·쉼표·단위는 제외하세요.',
         basisActual: '실제 무게 기준',
         basisVolumetric: '부피무게 기준',
         roundingNone: '반올림 없음',
@@ -15804,7 +15804,7 @@
       },
       en: {
         needInput: 'Enter length, width, height, and actual weight.',
-        invalid: 'Enter numeric dimensions from 0.1 to 1000 cm per side and actual weight from 0 to 10,000 kg.',
+        invalid: 'Enter dimensions 0.1–1000 cm and weight 0–10,000 kg, with up to 3 decimal places. No exponents, commas, or units.',
         basisActual: 'Actual weight basis',
         basisVolumetric: 'Volumetric weight basis',
         roundingNone: 'No rounding',
@@ -15817,7 +15817,7 @@
       },
       ja: {
         needInput: '縦・横・高さと実重量を入力してください。',
-        invalid: '各辺0.1〜1000cm、実重量0〜10,000kgの範囲で数値を入力してください。',
+        invalid: '各辺0.1〜1000cm、実重量0〜10,000kg、小数3桁まで入力できます。指数・カンマ・単位は使えません。',
         basisActual: '実重量基準',
         basisVolumetric: '容積重量基準',
         roundingNone: '丸めなし',
@@ -15830,7 +15830,7 @@
       }
     }[pageLang] || {
       needInput: '가로·세로·높이와 실제 무게를 입력하세요.',
-      invalid: '각 변은 0.1~1000cm, 실제 무게는 0~10,000kg 범위의 숫자로 입력해 주세요.',
+      invalid: '각 변은 0.1~1000cm, 실제 무게는 0~10,000kg 범위에서 소수점 이하 3자리까지 입력하세요. 지수·쉼표·단위는 제외하세요.',
       basisActual: '실제 무게 기준',
       basisVolumetric: '부피무게 기준',
       roundingNone: '반올림 없음',
@@ -15842,15 +15842,31 @@
       copyDefault: '결과 복사'
     };
 
-    const fmtKg = (n) => `${Number(n || 0).toLocaleString(numberLocale, { maximumFractionDigits: 2 })}kg`;
-    const fmtL = (n) => `${Number(n || 0).toLocaleString(numberLocale, { maximumFractionDigits: 2 })}L`;
-
+    const feedback = {
+      ko: { copied: '계산 조건과 결과를 복사했습니다.', failed: '자동 복사가 차단되었습니다. 결과를 직접 선택해 복사하세요.' },
+      en: { copied: 'Copied the inputs, settings, and results.', failed: 'Automatic copy is blocked. Select and copy the results manually.' },
+      ja: { copied: '入力条件と結果をコピーしました。', failed: '自動コピーがブロックされました。結果を選択してコピーしてください。' }
+    }[pageLang];
+    // Keep decimal inputs as scaled integers until the final display conversion.
+    const scale = 1000n;
+    const fmt = (n, d, unit) => {
+      const rounded = (n * 10000n * 2n + d) / (d * 2n);
+      if (n > 0n && rounded === 0n) return `<0.0001${unit}`;
+      return `${(Number(rounded) / 10000).toLocaleString(numberLocale, { maximumFractionDigits: 4 })}${unit}`;
+    };
+    let revision = 0;
+    let snapshot = '';
     const copyText = async (value) => {
       try { await navigator.clipboard.writeText(value); }
       catch (_) {
+        const active = document.activeElement;
         const ta = document.createElement('textarea');
         ta.value = value; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        document.body.appendChild(ta);
+        try {
+          ta.select();
+          if (!document.execCommand('copy')) throw new Error('Copy unavailable');
+        } finally { ta.remove(); if (active && active.isConnected) active.focus({ preventScroll: true }); }
       }
     };
 
@@ -15868,24 +15884,26 @@
         el.setAttribute('aria-invalid', 'false');
         return null;
       }
-      const n = Number(raw);
-      const ok = Number.isFinite(n) && n >= min && n <= max;
+      const ok = raw.length <= 32 && /^(?:\d+(?:\.\d{1,3})?|\.\d{1,3})$/.test(raw) && Number(raw) >= min && Number(raw) <= max;
       el.setAttribute('aria-invalid', ok ? 'false' : 'true');
-      return ok ? n : NaN;
-    };
-
-    const roundBillingWeight = (value) => {
-      const unit = Number(roundingEl.value || 0);
-      if (!Number.isFinite(unit) || unit <= 0) return value;
-      return Math.ceil(value / unit) * unit;
+      if (!ok) return NaN;
+      const [whole, fraction = ''] = raw.split('.');
+      return BigInt(whole || '0') * scale + BigInt(fraction.padEnd(3, '0'));
     };
 
     const render = () => {
+      revision++; snapshot = '';
+      copyBtn.textContent = text.copyDefault;
       const l = parseField(lengthEl, 0.1, 1000);
       const w = parseField(widthEl, 0.1, 1000);
       const h = parseField(heightEl, 0.1, 1000);
       const actual = parseField(actualEl, 0, 10000);
-      const divisor = Number(divisorEl.value || 6000);
+      const divisorValid = ['4000', '5000', '6000'].includes(divisorEl.value);
+      const roundingValid = ['0', '0.5', '1'].includes(roundingEl.value);
+      divisorEl.setAttribute('aria-invalid', String(!divisorValid));
+      roundingEl.setAttribute('aria-invalid', String(!roundingValid));
+      if (!divisorValid || !roundingValid) return resetOutput(text.invalid, 'error');
+      const divisor = BigInt(divisorEl.value);
 
       if ([l, w, h, actual].some((value) => Number.isNaN(value))) {
         resetOutput(text.invalid, 'error');
@@ -15893,31 +15911,42 @@
       }
       if ([l, w, h, actual].some((value) => value === null)) return resetOutput(text.needInput);
 
-      const volumeLiter = (l * w * h) / 1000;
-      const volumetric = (l * w * h) / divisor;
-      const chargeable = Math.max(actual, volumetric);
-      const billed = roundBillingWeight(chargeable);
-      const basis = actual >= volumetric ? text.basisActual : text.basisVolumetric;
-
-      volumeEl.textContent = fmtL(volumeLiter);
-      volumetricEl.textContent = fmtKg(volumetric);
-      chargeableEl.textContent = fmtKg(chargeable);
-      billedEl.textContent = fmtKg(billed);
+      const product = l * w * h;
+      const denominator = scale ** 3n * divisor;
+      const actualNumerator = actual * denominator / scale;
+      const numerator = actualNumerator >= product ? actualNumerator : product;
+      const basis = actualNumerator >= product ? text.basisActual : text.basisVolumetric;
+      const step = roundingEl.value === '0.5' ? 500n : 1000n;
+      const units = (numerator * scale + denominator * step - 1n) / (denominator * step);
+      volumeEl.textContent = fmt(product, scale ** 3n * 1000n, 'L');
+      volumetricEl.textContent = fmt(product, denominator, 'kg');
+      chargeableEl.textContent = fmt(numerator, denominator, 'kg');
+      billedEl.textContent = roundingEl.value === '0'
+        ? fmt(numerator, denominator, 'kg') : fmt(units * step, scale, 'kg');
       basisEl.textContent = basis;
+      snapshot = `${lengthEl.value} × ${widthEl.value} × ${heightEl.value} cm | ${actualEl.value} kg | divisor ${divisorEl.value} | billing step ${roundingEl.value} kg\n` +
+        text.copy(volumeEl.textContent, volumetricEl.textContent, chargeableEl.textContent, billedEl.textContent, basis);
       copyBtn.disabled = false;
       help.dataset.state = 'success';
-      help.textContent = text.summary(fmtKg(volumetric), fmtKg(chargeable), fmtKg(billed));
+      help.textContent = text.summary(volumetricEl.textContent, chargeableEl.textContent, billedEl.textContent);
     };
 
     [...fields, divisorEl, roundingEl].forEach((el) => el.addEventListener('input', render));
     [divisorEl, roundingEl].forEach((el) => el.addEventListener('change', render));
 
     copyBtn.addEventListener('click', async () => {
-      if (chargeableEl.textContent === '-') return;
-      await copyText(text.copy(volumeEl.textContent, volumetricEl.textContent, chargeableEl.textContent, billedEl.textContent, basisEl.textContent));
-      const old = copyBtn.textContent;
-      copyBtn.textContent = text.copied;
-      setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+      if (copyBtn.disabled || !snapshot) return;
+      const version = revision;
+      try {
+        await copyText(snapshot);
+        if (version !== revision) return;
+        help.textContent = feedback.copied;
+        help.dataset.state = 'success';
+      } catch (_) {
+        if (version !== revision) return;
+        help.textContent = feedback.failed;
+        help.dataset.state = 'error';
+      }
     });
 
     exampleBtn.addEventListener('click', () => {
@@ -15934,6 +15963,9 @@
     });
 
     resetBtn.addEventListener('click', () => {
+      revision++; snapshot = '';
+      copyBtn.textContent = text.copyDefault;
+      [divisorEl, roundingEl].forEach(el => el.setAttribute('aria-invalid', 'false'));
       fields.forEach((el) => {
         el.value = '';
         el.setAttribute('aria-invalid', 'false');

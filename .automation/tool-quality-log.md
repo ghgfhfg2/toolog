@@ -1,3 +1,12 @@
+## 2026-10-28 21:00 KST
+- Tool: `volumetric-weight-calculator` (one existing tool; 98-tool catalog preserved; no new tool files).
+- Selection: recent runs covered fuel economy, work-end time, VAT, GPA and BMI. Reproduced an actual billing-boundary defect on production: 0.1 × 48 × 625 cm / 6000 is exactly 0.5 kg, but floating-point ceiling billed 1 kg at a 0.5 kg increment. Prioritized monetary correctness over cosmetic candidates.
+- Changes: scaled BigInt dimensions/weight and exact rational ceiling; strict plain-decimal inputs (up to 3 decimal places, 32-character guard); four-decimal display and positive subprecision marker; guarded divisor/rounding choices; honest clipboard failure, cleanup/focus restoration and stale-feedback suppression; copied input/settings context; scoped 44px controls, 16px fields, focus rings and single-column mobile results. KO/EN/JA titles/descriptions, home metadata and visible/structured FAQ explain precision, single-box scope and carrier-specific assumptions. Removed internal selection prose and unsupported feature claims from the public KO page. Asset versions limited to this tool.
+- Validation: 7,845 Chromium assertions passed across KO/EN/JA production shells with candidate markup/JS/CSS, including 513 independent Python Decimal oracle cases per locale (all divisors/increments, exact ceiling boundaries, tiny/min/max values), blank/invalid/long inputs, sample/reset, accessibility, copy context/denial/cleanup/stale completion and 320/360/390px overflow/touch/font checks. All 98 catalog records and 294 front matters parsed, related IDs checked; site integrity, JS syntax and whitespace checks passed. Candidate-shell tests do not replace a full Jekyll build.
+- Local build: `bundle exec jekyll build` blocked by system Ruby 2.6 lacking locked Bundler 4.0.9. GitHub Pages CI and live pages will be verified after push.
+- Environment: requested /home path absent; used /Users/sooya/.openclaw/workspace/toolog.
+- Follow-up: physical iOS decimal keyboard remains unverified. Multi-box aggregation, minimum billable weights, dimension rounding and carrier surcharges remain outside this single-box estimate.
+
 ## 2026-10-25 21:00 KST
 - Tool: `vat-calculator` (one existing tool; 98-tool catalog preserved; no new tool files).
 - Selection: recent work covered GPA, BMI, password strength, time difference, loan and age; VAT had a reproduced live monetary error: net 625 × 36.16% with floor produced 225 instead of exactly 226. Prioritized correctness over cosmetic candidates.
