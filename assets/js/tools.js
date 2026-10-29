@@ -5860,7 +5860,7 @@
         currency: '원',
         empty: '정가와 할인율을 입력하세요.',
         needPrice: '정가는 1원 이상 1조 원 이하의 정수로 입력하세요.',
-        invalidRate: '할인율은 0% 이상 100% 이하의 숫자로 입력하세요.',
+        invalidRate: '할인율은 0~100%, 소수점 아래 최대 4자리로 입력하세요. 지수 표기는 지원하지 않습니다.',
         invalidCoupon: '쿠폰은 0원 이상 1조 원 이하의 정수로 입력하세요.',
         invalidQuantity: '수량은 1개 이상 10,000개 이하의 정수로 입력하세요.',
         invalidShipping: '배송비는 0원 이상 1조 원 이하의 정수로 입력하세요.',
@@ -5879,7 +5879,7 @@
         currency: ' KRW',
         empty: 'Enter a list price and discount rate.',
         needPrice: 'Enter a whole-number list price from 1 to 1 trillion.',
-        invalidRate: 'Enter a discount rate from 0% to 100%.',
+        invalidRate: 'Enter a plain-decimal rate from 0% to 100%, with up to 4 decimal places.',
         invalidCoupon: 'Enter a whole-number coupon from 0 to 1 trillion.',
         invalidQuantity: 'Enter a whole-number quantity from 1 to 10,000.',
         invalidShipping: 'Enter a whole-number shipping fee from 0 to 1 trillion.',
@@ -5898,7 +5898,7 @@
         currency: 'ウォン',
         empty: '定価と割引率を入力してください。',
         needPrice: '定価は1以上1兆以下の整数で入力してください。',
-        invalidRate: '割引率は0%以上100%以下で入力してください。',
+        invalidRate: '割引率は0〜100%、小数点以下4桁までの十進数で入力してください。',
         invalidCoupon: 'クーポンは0以上1兆以下の整数で入力してください。',
         invalidQuantity: '数量は1以上10,000以下の整数で入力してください。',
         invalidShipping: '送料は0以上1兆以下の整数で入力してください。',
@@ -5923,13 +5923,30 @@
     const fmtPct = (v) => `${v.toLocaleString(numberLocale, { maximumFractionDigits: 2 })}%`;
     let current = null;
     const fields = [listPrice, discountRate, coupon, quantity, shipping, targetPrice];
-    const read = (el) => el.value.trim() === '' ? null : Number(el.value);
+    // Whole KRW inputs and rates are parsed strictly, before any arithmetic.
+    const read = (el) => {
+      const raw = el.value.trim();
+      if (el.validity.badInput || raw.length > 32) return NaN;
+      if (!raw) return null;
+      const pattern = el === discountRate ? /^(?:[0-9]+(?:\.[0-9]{1,4})?|\.[0-9]{1,4})$/ : /^[0-9]+$/;
+      return pattern.test(raw) ? Number(raw) : NaN;
+    };
+    const RATE_SCALE = 1000000n; // 100 percent, with 4 decimal places
+    const roundHalfUp = (numerator, denominator) => (2n * numerator + denominator) / (2n * denominator);
+    const rateUnits = () => {
+      const [whole, fraction = ''] = discountRate.value.trim().split('.');
+      return BigInt(whole || '0') * 10000n + BigInt(fraction.padEnd(4, '0'));
+    };
 
     const setModeUI = () => {
       const isForward = (mode.value || 'forward') === 'forward';
       if (forwardFields) forwardFields.hidden = !isForward;
       if (forwardFields2) forwardFields2.hidden = !isForward;
       if (reverseFields) reverseFields.hidden = isForward;
+      coupon.disabled = !isForward;
+      quantity.disabled = !isForward;
+      shipping.disabled = !isForward;
+      discountRate.parentElement.hidden = !isForward;
       discountRate.disabled = !isForward;
       targetPrice.disabled = isForward;
       discountRate.required = isForward;
@@ -5945,9 +5962,9 @@
         ta.style.position = 'fixed';
         ta.style.opacity = '0';
         document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
+        const active = document.activeElement;
+        try { ta.select(); if (!document.execCommand('copy')) throw new Error('copy denied'); }
+        finally { ta.remove(); active?.focus(); }
       }
     };
 
@@ -5958,6 +5975,7 @@
       effectiveRate.textContent = rate;
       status.textContent = message;
       status.dataset.state = state;
+      copyBtn.textContent = dcText.copyDefault;
       current = state === 'success' ? { discount, unit, total, rate } : null;
       copyBtn.disabled = !current;
     };
@@ -5991,10 +6009,13 @@
         const couponAmount = couponValue ?? 0;
         const q = quantityValue ?? 1;
         const ship = shippingValue ?? 0;
-        const discounted = price * (1 - rate / 100);
+        // Round the percentage-discounted unit price first; every displayed
+        // unit then reconciles exactly with quantity and the one-time shipping.
+        const discounted = Number(roundHalfUp(BigInt(price) * (RATE_SCALE - rateUnits()), RATE_SCALE));
         const unit = Math.max(0, discounted - couponAmount);
-        const total = unit * q + ship;
-        if (![discounted, unit, total].every(Number.isFinite) || total > Number.MAX_SAFE_INTEGER) return invalidate(quantity, dcText.tooLarge);
+        const totalBig = BigInt(unit) * BigInt(q) + BigInt(ship);
+        if (totalBig > BigInt(Number.MAX_SAFE_INTEGER)) return invalidate(quantity, dcText.tooLarge);
+        const total = Number(totalBig);
         const effRate = ((price - unit) / price) * 100;
         setOutput({
           discount: fmtKRW(price - discounted), unit: fmtKRW(unit), total: fmtKRW(total),
@@ -6022,12 +6043,17 @@
 
     copyBtn.addEventListener('click', async () => {
       if (!current) return;
+      const snapshot = current;
+      const labels = [mode, listPrice, ...(mode.value === 'forward' ? [discountRate, coupon, quantity, shipping] : [targetPrice])];
+      const context = labels.map((el) => `${document.querySelector(`label[for="${el.id}"]`).textContent.trim()}: ${el.tagName === 'SELECT' ? el.selectedOptions[0].textContent : (el.value || (el === quantity ? '1' : '0'))}`).join(' | ');
       try {
-        await copyText(dcText.copyText(current.discount, current.unit, current.total, current.rate));
-        const old = copyBtn.textContent;
+        await copyText(`${context} | ${dcText.copyText(snapshot.discount, snapshot.unit, snapshot.total, snapshot.rate)} | ${document.getElementById('dc-assumption').textContent.trim()}`);
+        if (current !== snapshot) return;
         copyBtn.textContent = dcText.copied;
-        setTimeout(() => { copyBtn.textContent = old || dcText.copyDefault; }, 900);
+        status.textContent = dcText.copied;
+        status.dataset.state = 'success';
       } catch (_) {
+        if (current !== snapshot) return;
         status.textContent = dcText.copyFail;
         status.dataset.state = 'error';
       }

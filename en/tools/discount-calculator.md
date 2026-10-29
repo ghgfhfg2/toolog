@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Discount Calculator | Sale Price, Coupon, Quantity & Total
-description: Calculate sale price, per-item coupon savings, quantity total, shipping, effective item discount, and the rate needed to reach a target price.
+title: Discount Calculator | Whole-KRW Rounding, Coupon & Quantity
+description: Calculate whole-KRW sale prices with explicit unit rounding, per-item coupons, quantity and one-time shipping. Check input errors, copy results and estimate target-price discount rates.
 lang: en
 permalink: /en/tools/discount-calculator/
 canonical_url: /en/tools/discount-calculator/
@@ -27,6 +27,12 @@ faq:
     a: Yes. Select target-price mode and enter the list price and desired per-item selling price.
   - q: Can the discounted price become negative?
     a: No. If the per-item coupon exceeds the price after the percentage discount, the discounted unit price is capped at zero. Any shipping charge is then added to the checkout total.
+  - q: How are whole-KRW unit prices and quantity totals rounded?
+    a: Round the percentage-discounted unit price to whole KRW first, with 0.5 rounded up. Then subtract the per-item coupon, cap at zero, multiply by quantity, and add shipping once. For a list price of 1 KRW at 50% off and quantity 2, the unit price is 1 KRW and the total is 2 KRW. The effective item discount uses the rounded price after coupon, excluding shipping. Percentage saving is per item before coupon. All currency amounts are KRW.
+  - q: Which input formats and limits are supported?
+    a: List price is 1–1 trillion KRW; coupon, shipping and target price are 0–1 trillion KRW; quantity is 1–10,000. Amounts and quantity must be plain integers. Rates accept 0–100% with up to 4 decimal places. Commas and exponent notation are unsupported; each field is limited to 32 characters. Totals must not exceed 9,007,199,254,740,991 KRW.
+  - q: Is the reverse-calculated rate exact?
+    a: The required rate is an approximation rounded to 2 decimal places. Re-entering it may not reproduce the target because of rate and whole-KRW rounding. Target mode compares one item only and ignores coupon, quantity and shipping.
 ---
 
 ## Discount calculator for sale price and checkout total
@@ -67,7 +73,7 @@ For two items with a list price of 59,000 each, a 20% discount, a 3,000 per-item
 To reduce an item from 120,000 to 99,000, choose target-price mode. The required discount rate is about `17.5%`.
 
 ## Formula and assumptions
-- Discounted unit price = `list price × (1 - discount rate) - per-item coupon`
+- Discounted unit price = `max(0, round(list price × (1 - discount rate)) - per-item coupon)`
 - Final checkout total = `discounted unit price × quantity + shipping`
 - Effective item discount = `(list price - discounted unit price) ÷ list price × 100`
 
@@ -93,3 +99,18 @@ No. The discounted unit price is capped at zero even when the coupon is larger t
 
 ## Summary
 This discount calculator goes beyond basic percentage-off math by combining a per-item coupon, quantity, and one-time shipping to estimate the actual checkout total and effective item discount.
+
+
+## Whole-KRW rounding and quantity totals
+
+### How are whole-KRW unit prices and quantity totals rounded?
+
+Round the percentage-discounted unit price to whole KRW first, with 0.5 rounded up. Then subtract the per-item coupon, cap at zero, multiply by quantity, and add shipping once. For a list price of 1 KRW at 50% off and quantity 2, the unit price is 1 KRW and the total is 2 KRW. The effective item discount uses the rounded price after coupon, excluding shipping. Percentage saving is per item before coupon. All currency amounts are KRW.
+
+### Which input formats and limits are supported?
+
+List price is 1–1 trillion KRW; coupon, shipping and target price are 0–1 trillion KRW; quantity is 1–10,000. Amounts and quantity must be plain integers. Rates accept 0–100% with up to 4 decimal places. Commas and exponent notation are unsupported; each field is limited to 32 characters. Totals must not exceed 9,007,199,254,740,991 KRW.
+
+### Is the reverse-calculated rate exact?
+
+The required rate is an approximation rounded to 2 decimal places. Re-entering it may not reproduce the target because of rate and whole-KRW rounding. Target mode compares one item only and ignores coupon, quantity and shipping.

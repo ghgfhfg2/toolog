@@ -1457,9 +1457,9 @@
   badge: Hot
   badge_en: Hot
   badge_ja: 注目
-  description: 정가와 할인율에 상품별 쿠폰, 수량, 배송비를 반영해 할인 후 가격·최종 결제금액·실질 할인율을 계산해요.
-  description_en: Calculate sale price, per-item coupon savings, final checkout total, and effective item discount with quantity and shipping.
-  description_ja: 定価と割引率に商品ごとのクーポン、数量、送料を反映し、割引後価格・最終支払額・実質割引率を計算します。
+  description: 할인율 적용 단가를 원 단위 반올림한 뒤 개당 쿠폰·수량·배송비를 반영해 결제금액을 계산하세요. 입력 오류 안내와 목표가 할인율 역산, 결과 복사를 지원합니다.
+  description_en: Calculate whole-KRW sale prices with explicit unit rounding, per-item coupons, quantity and one-time shipping. Check input errors, copy results and estimate target-price discount rates.
+  description_ja: 単価をウォン単位で四捨五入し、個別クーポン・数量・送料から支払額を計算。入力エラー案内、目標価格の割引率逆算、結果コピーに対応します。
   url: /tools/discount-calculator/
   url_en: /en/tools/discount-calculator/
   url_ja: /ja/tools/discount-calculator/

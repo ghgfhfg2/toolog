@@ -2657,3 +2657,14 @@ a:hover { color: #fff; text-decoration: none; }
 @media (max-width: 600px) {
   .vw-ui .vw-grid, .vw-ui .vw-actions, .vw-ui .vw-stats { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Discount calculator: readable amounts and touch-friendly inputs. */
+.dc-ui input, .dc-ui select, .dc-ui button { min-height: 44px; font-size: 16px; }
+.dc-ui .tool-row-grid > div, .dc-ui .dc-stats > div { min-width: 0; }
+.dc-ui .dc-stats strong, .dc-ui .dc-stats span, .dc-ui .tool-result { overflow-wrap: anywhere; }
+.dc-ui :is(input, select, button):focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+.dc-ui [hidden] { display: none !important; }
+@media (max-width: 600px) {
+  .dc-ui .pct-grid, .dc-ui .dc-actions, .dc-ui .dc-stats { grid-template-columns: minmax(0, 1fr); }
+  .dc-ui .dc-stats strong { font-size: 1.4rem; }
+}
