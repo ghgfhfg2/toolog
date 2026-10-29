@@ -60,19 +60,30 @@ It also reverse-calculates the discount rate required for a target selling price
 ### 2. Enter price details
 Enter the list price and percentage discount. Coupon, quantity, and shipping are optional.
 
-Blank optional fields use coupon 0, quantity 1, and shipping 0. The coupon is deducted from **each item** after the percentage discount.
+Blank optional fields use coupon 0, quantity 1, and shipping 0. Round the percentage-discounted unit price to whole KRW first, then deduct the coupon from **each item**. Enter amounts without commas. All amounts are Korean won (KRW), not dollars.
 
 ### 3. Review or copy the result
 Check the discount amount, discounted unit price, final checkout total, and effective item discount, then copy the summary if needed. Results stay blank until the required values are valid, and field-specific messages explain invalid or out-of-range entries.
 
+## Empty results and input errors
+- On first load or after **Clear**, result cards show dashes and **Copy result** is disabled. Enter a valid list price and discount rate, or a target price in target mode.
+- Only optional fields use blank defaults. A blank required discount rate is not 0%; enter **0** for no percentage discount.
+- Correct the indicated field if an error appears. Amounts and quantities must be whole numbers, without commas or exponent notation. Rates allow up to four decimal places. Results and copying remain unavailable until inputs are valid.
+- Reduce the amount or quantity if the total exceeds 9,007,199,254,740,991 KRW. A target above the list price requires a price increase, not a discount; no discount result is produced.
+- If automatic copying is unavailable, select and copy the displayed values manually.
+
 ## Examples
 ### Calculate a checkout total
-For two items with a list price of 59,000 each, a 20% discount, a 3,000 per-item coupon, and 2,500 shipping, the final checkout total is `90,900`.
+For two items with a list price of 59,000 KRW each, a 20% discount, a 3,000 KRW per-item coupon, and 2,500 KRW shipping, the final checkout total is **90,900 KRW**.
+
+The unit price before coupon is `59,000 × 0.8 = 47,200 KRW`. The checkout total is `(47,200 - 3,000) × 2 + 2,500 = 90,900 KRW`.
 
 ### Find the discount rate for a target price
-To reduce an item from 120,000 to 99,000, choose target-price mode. The required discount rate is about `17.5%`.
+To reduce an item from 120,000 KRW to 99,000 KRW, choose target-price mode. The required discount rate is about `17.5%`.
 
 ## Formula and assumptions
+For 20% off, enter **20** in the percentage field but use **0.20** as the rate below. Round half up to whole KRW **before** subtracting the coupon and multiplying by quantity.
+
 - Discounted unit price = `max(0, round(list price × (1 - discount rate)) - per-item coupon)`
 - Final checkout total = `discounted unit price × quantity + shipping`
 - Effective item discount = `(list price - discounted unit price) ÷ list price × 100`
