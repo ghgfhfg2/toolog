@@ -12,13 +12,13 @@ tool_key: parking-fee-calculator
 image:
   path: /assets/thumbs/parking-fee-calculator.svg
   alt: Parking fee calculator preview
-keywords: [parking fee calculator, parking cost estimator, public parking fee, daily max parking fee, parking discount calculator]
+keywords: [parking fee calculator, parking cost estimator, Korean parking fees KRW, 24 hour parking cap, parking discount calculator]
 related_tools: [work-end-time-calculator, percent-calculator, unit-price-calculator]
 faq:
   - q: Can it handle rates like 500 KRW per 10 minutes?
     a: Yes. Set additional unit to 10 minutes and additional fee to 500 KRW.
-  - q: How is daily max fee applied?
-    a: Elapsed time is split into 1,440-minute blocks. Base time, base fee, extra-unit rounding and the cap restart in every block. The discount is deducted once from the sum. Midnight resets are not supported.
+  - q: How is the maximum parking fee applied?
+    a: Choose a single cap for the whole stay or a separate cap for each elapsed 24-hour block. In 24-hour mode, base time, base fee and extra-unit rounding restart in each block, including a partial final block. The discount is deducted once after capping; this is not a midnight reset.
   - q: How do I include free parking time?
     a: Enter the free period as base time and set base fee to 0.
   - q: Can I include a coupon or partner discount?
@@ -31,7 +31,7 @@ alternate_urls:
   ja: /ja/tools/parking-fee-calculator/
 ---
 
-## When is this useful?
+## Parking fee calculator for Korean won (KRW)
 Parking lots often use different fee rules, so it’s hard to estimate the final cost in advance.
 
 This tool calculates the estimated parking fee, overtime minutes, charged units, whether the daily max applies, and the final amount after a coupon or validation discount.
@@ -44,8 +44,18 @@ This tool calculates the estimated parking fee, overtime minutes, charged units,
 - Daily max handling: cap once for the whole stay or cap each 24-hour block
 - Discount amount (optional)
 
+## How to use the parking cost estimator
+1. Read the parking lot’s rate table and enter the total stay in minutes, base period and fee, and additional interval and fee. All money fields use **KRW**, not dollars or yen.
+2. Choose a single cap for the whole stay or a cap for each elapsed 24-hour block. Leave the maximum fee blank or enter 0 if there is no cap. The 24-hour option restarts base charges even without a cap.
+3. Enter a fixed discount amount if applicable. Results update as you type. Use **Load example** to try the 135-minute example, **Copy result** to save the summary, or **Reset** to clear all fields.
+
+### Blank fields, invalid input and copying
+Required fields must be filled before an estimate appears. Enter 0 explicitly for a free base period or free additional charge; placeholders are examples, not defaults. Maximum fee and discount are optional.
+
+Use digits only, within the ranges below. Negative numbers, decimals and exponent notation are not supported. If an entry is invalid or out of range, correct it before using the result; the estimate is cleared and copying is disabled until the inputs are valid. If copying fails, check your browser’s clipboard permissions and try again.
+
 ## Calculation logic
-1. If parking time is within base time, base fee is applied.
+1. Zero parking time costs zero. For a positive duration within the base time, the base fee is applied.
 2. Overtime is charged by **ceil(overtime ÷ additional unit)**.
 3. If a daily max fee is set, the result is capped once for the whole stay or separately for each 24-hour block, depending on your selection.
 4. Optional discount is subtracted after cap handling, and the final estimate never goes below zero.
