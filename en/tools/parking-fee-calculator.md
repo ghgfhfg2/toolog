@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Parking Fee Calculator | Base, Extra, Daily Max, and Discount Estimator
-description: Enter parking time, base fee, extra unit fee, daily max handling, and optional discounts to estimate parking cost and cap status.
+title: Parking Fee Calculator | 24-Hour Caps & KRW Discounts
+description: Estimate parking fees in KRW with base and extra rates, independent 24-hour block caps, partial-day charges, and a one-time discount.
 lang: en
 permalink: /en/tools/parking-fee-calculator/
 canonical_url: /en/tools/parking-fee-calculator/
@@ -18,11 +18,13 @@ faq:
   - q: Can it handle rates like 500 KRW per 10 minutes?
     a: Yes. Set additional unit to 10 minutes and additional fee to 500 KRW.
   - q: How is daily max fee applied?
-    a: You can apply the cap once for the stay or across each 24-hour block for longer parking.
+    a: Elapsed time is split into 1,440-minute blocks. Base time, base fee, extra-unit rounding and the cap restart in every block. The discount is deducted once from the sum. Midnight resets are not supported.
   - q: How do I include free parking time?
     a: Enter the free period as base time and set base fee to 0.
   - q: Can I include a coupon or partner discount?
     a: Yes. Enter the discount amount to subtract it after cap handling, with the final fee floored at zero.
+  - q: How are 24-hour blocks calculated?
+    a: Elapsed time is split into 1,440-minute blocks. Base time, base fee, extra-unit rounding and the cap restart in every block. The discount is deducted once from the sum. Midnight resets are not supported.
 alternate_urls:
   ko: /tools/parking-fee-calculator/
   en: /en/tools/parking-fee-calculator/
@@ -82,3 +84,17 @@ Yes. Parking time supports up to 10,080 minutes, or 7 days. For multi-day parkin
 
 ### Why might the actual payment differ?
 Partner validation, night flat rates, weekday/weekend rules, entry-time rounding, and local fee tables can change the final payment.
+
+## 24-hour caps and a partial final block
+With zero base time/fee, 1,000 KRW per 60 minutes and a 5,000 KRW cap per 24 hours, a 1,500-minute stay costs 5,000 + 1,000 = **6,000 KRW**, not twice the cap.
+
+24-hour mode restarts base time, base fee and extra-unit rounding in each elapsed block, even when no cap is entered. It is not a calendar-day or midnight reset, nor a model for lots that charge the base fee only once per stay. Overtime and charged units show the block totals before capping. Check the actual rate table.
+
+### Input limits and zero fees
+Use whole numbers only. Parking time: 0–10,080 minutes; base time: 0–1,440; extra unit: 1–1,440. Base and extra fees: 0–1,000,000 KRW each; cap and discount: 0–10,000,000 KRW. A blank or zero cap means no limit; a blank discount means no discount. Zero parking time costs zero. The discount is deducted once after summing capped blocks, never below zero.
+
+### What currency is used?
+All fees use **Korean won (KRW)**. This is not a currency converter and does not automatically model night flat rates, weekend rates, midnight resets or percentage discounts.
+
+### How are 24-hour blocks calculated?
+Elapsed time is split into 1,440-minute blocks. Base time, base fee, extra-unit rounding and the cap restart in every block. The discount is deducted once from the sum. Midnight resets are not supported.

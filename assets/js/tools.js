@@ -15065,14 +15065,15 @@
         no: '미적용',
         none: '없음',
         needInput: '주차 시간과 요금 조건을 입력하세요.',
-        invalid: '시간은 0 이상, 추가단위는 1분 이상, 요금은 0원 이상으로 입력해 주세요.',
+        invalid: '숫자만 사용한 정수를 입력하세요. 시간은 0 이상, 추가단위는 1 이상입니다. 소수·지수 표기는 지원하지 않습니다.',
         tooLarge: '주차 시간은 10,080분(7일), 요금 입력은 허용 범위 안에서 계산해 주세요.',
         summary: (fee) => `예상 주차요금은 ${fee}입니다.`,
         cappedPerDay: (days) => `24시간 상한을 ${days}개 구간에 적용했습니다.`,
         discountApplied: (amount) => `${amount} 차감`,
         copy: (a, b, c, d, e) => `주차요금 계산 결과 | 요금 ${a} | 초과시간 ${b} | 과금단위 ${c} | 최대요금 ${d} | 할인 ${e}`,
         copied: '복사됨',
-        copyDefault: '결과 복사'
+        copyDefault: '결과 복사',
+        copyFail: '복사하지 못했습니다. 브라우저의 클립보드 권한을 확인하세요.'
       },
       en: {
         currency: ' KRW',
@@ -15082,14 +15083,15 @@
         no: 'Not applied',
         none: 'None',
         needInput: 'Enter parking time and pricing policy.',
-        invalid: 'Use non-negative time and fee values, and an additional unit of at least 1 minute.',
+        invalid: 'Use digit-only whole numbers: non-negative time and fees, and a unit of at least 1 minute. Decimals and exponents are not supported.',
         tooLarge: 'Parking time is limited to 10,080 minutes (7 days), and fee values must stay within range.',
         summary: (fee) => `Estimated parking fee: ${fee}.`,
         cappedPerDay: (days) => `Applied the 24-hour cap across ${days} block(s).`,
         discountApplied: (amount) => `${amount} deducted`,
         copy: (a, b, c, d, e) => `Parking fee result | Fee ${a} | Overtime ${b} | Charged units ${c} | Max fee ${d} | Discount ${e}`,
         copied: 'Copied',
-        copyDefault: 'Copy result'
+        copyDefault: 'Copy result',
+        copyFail: 'Copy failed. Check your browser clipboard permissions.'
       },
       ja: {
         currency: 'ウォン',
@@ -15099,14 +15101,15 @@
         no: '未適用',
         none: 'なし',
         needInput: '駐車時間と料金条件を入力してください。',
-        invalid: '時間と料金は0以上、追加単位は1分以上で入力してください。',
+        invalid: '数字のみの整数を入力してください。時間・料金は0以上、追加単位は1以上です。小数・指数表記は使えません。',
         tooLarge: '駐車時間は10,080分（7日）まで、料金は入力範囲内で計算してください。',
         summary: (fee) => `予想駐車料金は ${fee} です。`,
         cappedPerDay: (days) => `24時間上限を${days}区間に適用しました。`,
         discountApplied: (amount) => `${amount}差し引き`,
         copy: (a, b, c, d, e) => `駐車料金計算結果 | 料金 ${a} | 超過時間 ${b} | 課金単位 ${c} | 最大料金 ${d} | 割引 ${e}`,
         copied: 'コピー完了',
-        copyDefault: '結果をコピー'
+        copyDefault: '結果をコピー',
+        copyFail: 'コピーできませんでした。ブラウザのクリップボード権限を確認してください。'
       }
     };
     const t = i18n[pageLang] || i18n.ko;
@@ -15128,12 +15131,25 @@
       [discount, [0, 10000000]]
     ]);
 
+    let revision = 0;
     const copyText = async (text) => {
-      try { await navigator.clipboard.writeText(text); }
-      catch (_) {
-        const ta = document.createElement('textarea');
-        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+      const previousFocus = document.activeElement;
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      try {
+        ta.select();
+        if (!document.execCommand('copy')) throw new Error('copy failed');
+      } finally {
+        ta.remove();
+        previousFocus?.focus({ preventScroll: true });
       }
     };
 
@@ -15155,22 +15171,24 @@
 
     const readField = (el, optional = false) => {
       const raw = el.value.trim();
-      if (optional && !raw) {
+      if (optional && !raw && !el.validity.badInput) {
         el.setAttribute('aria-invalid', 'false');
         return { ok: true, value: 0 };
       }
-      if (!raw) {
+      if (!raw && !el.validity.badInput) {
         el.setAttribute('aria-invalid', 'false');
         return { ok: false, empty: true, value: 0 };
       }
       const value = Number(raw);
       const [min, max] = ranges.get(el) || [0, Number.MAX_SAFE_INTEGER];
-      const ok = Number.isFinite(value) && Number.isInteger(value) && value >= min && value <= max;
+      const ok = !el.validity.badInput && raw.length <= 16 && /^\d+$/.test(raw) && Number.isSafeInteger(value) && value >= min && value <= max;
       el.setAttribute('aria-invalid', ok ? 'false' : 'true');
       return { ok, value, tooLarge: Number.isFinite(value) && value > max };
     };
 
     const render = () => {
+      revision += 1;
+      copyBtn.textContent = t.copyDefault;
       const values = {
         minutes: readField(minutes),
         baseMinutes: readField(baseMinutes),
@@ -15182,12 +15200,13 @@
       };
 
       const required = [values.minutes, values.baseMinutes, values.baseFee, values.unitMinutes, values.unitFee];
-      if (required.some((item) => item.empty)) {
-        setIdle(t.needInput);
+      // Invalid values take priority over missing fields so errors are not hidden.
+      if (Object.values(values).some((item) => !item.ok && !item.empty) || !['single', 'per-day'].includes(capMode.value)) {
+        setError(Object.values(values).some((item) => item.tooLarge) ? t.tooLarge : t.invalid);
         return;
       }
-      if (Object.values(values).some((item) => !item.ok)) {
-        setError(Object.values(values).some((item) => item.tooLarge) ? t.tooLarge : t.invalid);
+      if (required.some((item) => item.empty)) {
+        setIdle(t.needInput);
         return;
       }
 
@@ -15199,20 +15218,34 @@
       const mf = values.maxFee.value;
       const dc = values.discount.value;
 
-      const over = Math.max(0, m - bm);
-      const units = over > 0 ? Math.ceil(over / um) : 0;
-      const rawFee = m === 0 ? 0 : bf + (units * uf);
-      const capBlocks = capMode.value === 'per-day' ? Math.max(1, Math.ceil(m / 1440)) : 1;
-      const capLimit = mf > 0 ? mf * capBlocks : 0;
-      const cappedFee = capLimit > 0 ? Math.min(rawFee, capLimit) : rawFee;
+      // Each elapsed 24-hour block restarts the base period and extra-unit rounding.
+      // Do not multiply a cap and apply it to the full stay: a partial last
+      // block must only contribute its own (possibly much smaller) fee.
+      const durations = [];
+      if (capMode.value === 'per-day') {
+        for (let remaining = m; remaining > 0; remaining -= 1440) durations.push(Math.min(remaining, 1440));
+      } else if (m > 0) durations.push(m);
+      let over = 0;
+      let units = 0;
+      let cappedFee = 0;
+      let cappedBlocks = 0;
+      durations.forEach((duration) => {
+        const extra = Math.max(0, duration - bm);
+        const count = Math.ceil(extra / um);
+        const raw = bf + count * uf;
+        over += extra;
+        units += count;
+        cappedFee += mf > 0 ? Math.min(raw, mf) : raw;
+        if (mf > 0 && raw > mf) cappedBlocks += 1;
+      });
       const finalFee = Math.max(0, cappedFee - dc);
-      const capApplied = capLimit > 0 && rawFee > capLimit;
+      const capApplied = cappedBlocks > 0;
       const discountApplied = dc > 0;
 
       outTotal.textContent = fmtMoney(finalFee);
       outOver.textContent = fmtMinute(over);
       outUnits.textContent = fmtUnit(units);
-      outCap.textContent = capApplied ? (capMode.value === 'per-day' ? t.cappedPerDay(capBlocks) : t.yes) : t.no;
+      outCap.textContent = capApplied ? (capMode.value === 'per-day' ? t.cappedPerDay(cappedBlocks) : t.yes) : t.no;
       outDiscount.textContent = discountApplied ? t.discountApplied(fmtMoney(Math.min(dc, cappedFee))) : t.none;
       help.textContent = t.summary(fmtMoney(finalFee));
       help.dataset.state = 'success';
@@ -15222,12 +15255,20 @@
     fields.forEach((el) => el?.addEventListener('input', render));
     capMode.addEventListener('change', render);
 
-    copyBtn?.addEventListener('click', async () => {
-      if (outTotal.textContent === '-') return;
-      await copyText(t.copy(outTotal.textContent, outOver.textContent, outUnits.textContent, outCap.textContent, outDiscount.textContent));
-      const old = copyBtn.textContent;
-      copyBtn.textContent = t.copied;
-      setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+    copyBtn.addEventListener('click', async () => {
+      if (copyBtn.disabled || outTotal.textContent === '-') return;
+      const copyRevision = revision;
+      const text = t.copy(outTotal.textContent, outOver.textContent, outUnits.textContent, outCap.textContent, outDiscount.textContent);
+      try {
+        await copyText(text);
+        if (copyRevision !== revision) return;
+        copyBtn.textContent = t.copied;
+        setTimeout(() => { if (copyRevision === revision) copyBtn.textContent = t.copyDefault; }, 900);
+      } catch (_) {
+        if (copyRevision !== revision) return;
+        help.textContent = t.copyFail;
+        help.dataset.state = 'error';
+      }
     });
 
     const loadExample = () => {
@@ -15248,6 +15289,8 @@
     });
 
     resetBtn?.addEventListener('click', () => {
+      revision += 1;
+      copyBtn.textContent = t.copyDefault;
       fields.forEach((el) => {
         el.value = '';
         el.setAttribute('aria-invalid', 'false');

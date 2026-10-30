@@ -3685,47 +3685,47 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           <div class="tool-row-grid pf-grid">
             <div>
               <label for="pf-minutes">{% if page.lang == 'en' %}Parking time (minutes){% elsif page.lang == 'ja' %}駐車時間（分）{% else %}주차 시간(분){% endif %}</label>
-              <input id="pf-minutes" type="number" min="0" max="10080" step="1" inputmode="numeric" placeholder="{% if page.lang == 'en' %}e.g. 135{% elsif page.lang == 'ja' %}例: 135{% else %}예: 135{% endif %}" aria-describedby="pf-help" />
+              <input id="pf-minutes" type="number" min="0" max="10080" step="1" inputmode="numeric" placeholder="{% if page.lang == 'en' %}e.g. 135{% elsif page.lang == 'ja' %}例: 135{% else %}예: 135{% endif %}" aria-describedby="pf-rules pf-help" />
             </div>
             <div>
               <label for="pf-base-minutes">{% if page.lang == 'en' %}Base time (minutes){% elsif page.lang == 'ja' %}基本時間（分）{% else %}기본시간(분){% endif %}</label>
-              <input id="pf-base-minutes" type="number" min="0" max="1440" step="1" inputmode="numeric" placeholder="60" aria-describedby="pf-help" />
+              <input id="pf-base-minutes" type="number" min="0" max="1440" step="1" inputmode="numeric" placeholder="60" aria-describedby="pf-rules pf-help" />
             </div>
           </div>
 
           <div class="tool-row-grid pf-grid">
             <div>
-              <label for="pf-base-fee">{% if page.lang == 'en' %}Base fee{% elsif page.lang == 'ja' %}基本料金{% else %}기본요금(원){% endif %}</label>
-              <input id="pf-base-fee" type="number" min="0" max="1000000" step="100" inputmode="numeric" placeholder="2000" aria-describedby="pf-help" />
+              <label for="pf-base-fee">{% if page.lang == 'en' %}Base fee (KRW){% elsif page.lang == 'ja' %}基本料金{% else %}기본요금(원){% endif %}</label>
+              <input id="pf-base-fee" type="number" min="0" max="1000000" step="1" inputmode="numeric" placeholder="2000" aria-describedby="pf-rules pf-help" />
             </div>
             <div>
               <label for="pf-unit-minutes">{% if page.lang == 'en' %}Additional unit (minutes){% elsif page.lang == 'ja' %}追加単位（分）{% else %}추가단위(분){% endif %}</label>
-              <input id="pf-unit-minutes" type="number" min="1" max="1440" step="1" inputmode="numeric" placeholder="10" aria-describedby="pf-help" />
+              <input id="pf-unit-minutes" type="number" min="1" max="1440" step="1" inputmode="numeric" placeholder="10" aria-describedby="pf-rules pf-help" />
             </div>
           </div>
 
           <div class="tool-row-grid pf-grid">
             <div>
-              <label for="pf-unit-fee">{% if page.lang == 'en' %}Fee per additional unit{% elsif page.lang == 'ja' %}追加単位あたり料金{% else %}추가요금(원){% endif %}</label>
-              <input id="pf-unit-fee" type="number" min="0" max="1000000" step="100" inputmode="numeric" placeholder="500" aria-describedby="pf-help" />
+              <label for="pf-unit-fee">{% if page.lang == 'en' %}Fee per additional unit (KRW){% elsif page.lang == 'ja' %}追加単位あたり料金{% else %}추가요금(원){% endif %}</label>
+              <input id="pf-unit-fee" type="number" min="0" max="1000000" step="1" inputmode="numeric" placeholder="500" aria-describedby="pf-rules pf-help" />
             </div>
             <div>
-              <label for="pf-max-fee">{% if page.lang == 'en' %}Daily max fee (optional){% elsif page.lang == 'ja' %}1日最大料金（任意）{% else %}일 최대요금(선택){% endif %}</label>
-              <input id="pf-max-fee" type="number" min="0" max="10000000" step="100" inputmode="numeric" placeholder="15000" aria-describedby="pf-help" />
+              <label for="pf-max-fee">{% if page.lang == 'en' %}Maximum fee (KRW, optional){% elsif page.lang == 'ja' %}最大料金（ウォン、任意）{% else %}최대요금(원, 선택){% endif %}</label>
+              <input id="pf-max-fee" type="number" min="0" max="10000000" step="1" inputmode="numeric" placeholder="15000" aria-describedby="pf-rules pf-help" />
             </div>
           </div>
 
           <div class="tool-row-grid pf-grid">
             <div>
               <label for="pf-cap-mode">{% if page.lang == 'en' %}Daily max handling{% elsif page.lang == 'ja' %}1日上限の扱い{% else %}일 최대요금 적용 방식{% endif %}</label>
-              <select id="pf-cap-mode" aria-describedby="pf-help">
+              <select id="pf-cap-mode" aria-describedby="pf-rules pf-help">
                 <option value="single">{% if page.lang == 'en' %}Cap once for this stay{% elsif page.lang == 'ja' %}今回の駐車全体に1回適用{% else %}전체 주차에 1회 상한{% endif %}</option>
-                <option value="per-day">{% if page.lang == 'en' %}Cap for each 24-hour block{% elsif page.lang == 'ja' %}24時間ごとに上限適用{% else %}24시간마다 상한 적용{% endif %}</option>
+                <option value="per-day">{% if page.lang == 'en' %}Restart rates and cap each 24 hours{% elsif page.lang == 'ja' %}24時間ごとに料金・上限をリセット{% else %}24시간마다 요금·상한 재적용{% endif %}</option>
               </select>
             </div>
             <div>
-              <label for="pf-discount">{% if page.lang == 'en' %}Discount amount (optional){% elsif page.lang == 'ja' %}割引額（任意）{% else %}할인 금액(선택){% endif %}</label>
-              <input id="pf-discount" type="number" min="0" max="10000000" step="100" inputmode="numeric" placeholder="{% if page.lang == 'en' %}e.g. 1000{% elsif page.lang == 'ja' %}例: 1000{% else %}예: 1000{% endif %}" aria-describedby="pf-help" />
+              <label for="pf-discount">{% if page.lang == 'en' %}Discount amount (KRW, optional){% elsif page.lang == 'ja' %}割引額（任意）{% else %}할인 금액(선택){% endif %}</label>
+              <input id="pf-discount" type="number" min="0" max="10000000" step="1" inputmode="numeric" placeholder="{% if page.lang == 'en' %}e.g. 1000{% elsif page.lang == 'ja' %}例: 1000{% else %}예: 1000{% endif %}" aria-describedby="pf-rules pf-help" />
             </div>
           </div>
 
@@ -3743,7 +3743,8 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
             <div><strong id="pf-discount-applied">-</strong><span>{% if page.lang == 'en' %}Discount{% elsif page.lang == 'ja' %}割引{% else %}할인 반영{% endif %}</span></div>
           </div>
 
-          <p class="tool-result" id="pf-help" role="status" aria-live="polite">{% if page.lang == 'en' %}Enter parking time and pricing policy to estimate your parking fee.{% elsif page.lang == 'ja' %}駐車時間と料金条件を入力すると、駐車料金を試算します。{% else %}주차시간과 요금 조건을 입력하면 주차요금을 계산합니다.{% endif %}</p>
+          <p class="tool-hint" id="pf-rules">{% if page.lang == 'en' %}Whole numbers only. Time: 0–10,080 min; base time: 0–1,440; extra unit: 1–1,440; base/extra fee: 0–1,000,000 KRW; cap/discount: 0–10,000,000 KRW. Blank or zero cap means no limit. In 24-hour mode, base time, base fee and extra-unit rounding restart in each elapsed block, even without a cap. This is not a midnight reset. Discount is deducted once after summing blocks.{% elsif page.lang == 'ja' %}整数のみ。駐車時間0〜10,080分、基本時間0〜1,440分、追加単位1〜1,440分、基本・追加料金0〜1,000,000ウォン、上限・割引0〜10,000,000ウォン。上限の空欄・0は制限なし。24時間モードは上限なしでも各区間で基本時間・基本料金・端数切り上げをリセットします。午前0時のリセットとは異なります。割引は区間合計から1回差し引きます。{% else %}정수만 입력하세요. 주차시간 0~10,080분, 기본시간 0~1,440분, 추가단위 1~1,440분, 기본·추가요금 0~100만원, 최대요금·할인 0~1,000만원입니다. 최대요금 빈칸·0은 상한 없음입니다. 24시간 모드는 상한이 없어도 각 구간에서 기본시간·기본요금·추가단위 올림을 다시 적용합니다. 자정 기준 정산과는 다르며, 할인은 구간 합계에서 한 번 차감합니다.{% endif %}</p>
+          <p class="tool-result" id="pf-help" role="status" aria-live="polite" aria-atomic="true">{% if page.lang == 'en' %}Enter parking time and pricing policy to estimate your parking fee.{% elsif page.lang == 'ja' %}駐車時間と料金条件を入力すると、駐車料金を試算します。{% else %}주차시간과 요금 조건을 입력하면 주차요금을 계산합니다.{% endif %}</p>
         </div>
       {% when 'lucky-draw-picker' %}
         <div class="tool-ui ldp-ui">
@@ -5340,7 +5341,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
 </article>
 
 <script src="{{ '/assets/js/ui.js' | relative_url }}" defer></script>
-<script src="{{ '/assets/js/tools.js' | relative_url }}{% if page.tool_key == 'discount-calculator' %}?v=dc-20261029{% elsif page.tool_key == 'volumetric-weight-calculator' %}?v=vw-20261028{% elsif page.tool_key == 'fuel-economy-calculator' %}?v=fe-20261027{% elsif page.tool_key == 'work-end-time-calculator' %}?v=wet-20261026{% elsif page.tool_key == 'vat-calculator' %}?v=vat-20261025{% elsif page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% elsif page.tool_key == 'gpa-calculator' %}?v=gpa-20261024{% endif %}" defer></script>
+<script src="{{ '/assets/js/tools.js' | relative_url }}{% if page.tool_key == 'parking-fee-calculator' %}?v=pf-20261030{% elsif page.tool_key == 'discount-calculator' %}?v=dc-20261029{% elsif page.tool_key == 'volumetric-weight-calculator' %}?v=vw-20261028{% elsif page.tool_key == 'fuel-economy-calculator' %}?v=fe-20261027{% elsif page.tool_key == 'work-end-time-calculator' %}?v=wet-20261026{% elsif page.tool_key == 'vat-calculator' %}?v=vat-20261025{% elsif page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% elsif page.tool_key == 'gpa-calculator' %}?v=gpa-20261024{% endif %}" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
