@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Compound Interest Calculator | Monthly Contributions & Future Value
-description: Calculate future value, contributed principal, investment gain, and inflation-adjusted value from an initial investment, month-end deposits, annual return, term, and compounding frequency.
+title: Compound Interest Calculator | Monthly vs Annual Compounding
+description: Compare monthly and annual compounding with month-end deposits in KRW. Check 0% returns, principal, interest, inflation-adjusted value, and copy the input assumptions with results.
 lang: en
 permalink: /en/tools/compound-interest-calculator/
 canonical_url: /en/tools/compound-interest-calculator/
@@ -15,6 +15,12 @@ tool_key: compound-interest-calculator
 keywords: [compound interest calculator, monthly contribution calculator, investment growth calculator, future value calculator, inflation adjusted value]
 related_tools: [loan-calculator, percent-calculator, discount-calculator]
 faq:
+  - q: What input limits and currency apply?
+    a: All amounts are whole KRW, not USD or JPY. Initial capital is 0–1 quadrillion KRW and monthly deposits 0–100 trillion KRW; at least one must be positive. Return is 0–100%, inflation 0–50%, both up to 4 decimal places. Use 1–100 whole years and plain numbers without commas or scientific notation.
+  - q: Is blank inflation the same as 0%?
+    a: Blank omits present value. Explicit 0% assumes no price changes and shows the same present value as the ending balance.
+  - q: How do monthly and annual compounding work?
+    a: For nominal annual return r and n compounding periods per year, the monthly-equivalent rate is (1 + r/n) to the power n/12, minus 1. Use r = 0.07 for 7%. Monthly deposits arrive after monthly growth. Floating-point estimates round to whole KRW; displayed profit equals rounded balance minus whole-KRW principal.
   - q: When is each monthly contribution added?
     a: Contributions are assumed to arrive at each month-end, using a monthly-equivalent rate derived from the selected nominal compounding frequency.
   - q: Can I calculate a 0% return?
@@ -90,3 +96,15 @@ No. It is a fixed-return planning estimate and excludes taxes, fees, and market 
 
 ## Summary
 Use this compound interest calculator to compare recurring investment plans by ending balance, contributed principal, estimated gain, and inflation-adjusted value under clearly stated assumptions.
+
+
+## Input limits, rounding and calculation method
+
+### What input limits and currency apply?
+All amounts are whole KRW, not USD or JPY. Initial capital is 0–1 quadrillion KRW and monthly deposits 0–100 trillion KRW; at least one must be positive. Return is 0–100%, inflation 0–50%, both up to 4 decimal places. Use 1–100 whole years and plain numbers without commas or scientific notation.
+
+### Is blank inflation the same as 0%?
+Blank omits present value. Explicit 0% assumes no price changes and shows the same present value as the ending balance.
+
+### How do monthly and annual compounding work?
+For nominal annual return r and n compounding periods per year, the monthly-equivalent rate is (1 + r/n) to the power n/12, minus 1. Use r = 0.07 for 7%. Monthly deposits arrive after monthly growth. Floating-point estimates round to whole KRW; displayed profit equals rounded balance minus whole-KRW principal.

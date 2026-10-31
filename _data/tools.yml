@@ -1500,9 +1500,9 @@
   badge: Popular
   badge_en: Popular
   badge_ja: 人気
-  description: 초기 투자금·월말 적립금·연 수익률·복리 주기로 만기 자산, 납입 원금, 예상 수익과 물가 반영 실질가치를 계산해요.
-  description_en: Estimate ending balance, contributions, investment gain, and inflation-adjusted value from monthly deposits and compounding frequency.
-  description_ja: 初期投資・月末積立・年利・複利周期から、満期資産・積立元本・予想利益・インフレ調整後価値を試算します。
+  description: 초기 투자금과 월말 적립금으로 월복리·연복리 만기 금액을 비교하세요. 0% 수익률 검산, 납입 원금·예상 이자·물가 반영 실질가치와 입력 조건 복사를 지원합니다.
+  description_en: Compare monthly and annual compounding with month-end deposits in KRW. Check 0% returns, principal, interest, inflation-adjusted value, and copy the input assumptions with results.
+  description_ja: ウォン建ての初期投資・月末積立で月複利と年複利を比較。年利0%の元本確認、予想利息、インフレ調整後価値、入力条件付きの結果コピーに対応します。
   url: /tools/compound-interest-calculator/
   url_en: /en/tools/compound-interest-calculator/
   url_ja: /ja/tools/compound-interest-calculator/

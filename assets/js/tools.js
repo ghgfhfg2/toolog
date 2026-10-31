@@ -5623,12 +5623,12 @@
       ko: {
         currency: '원',
         idle: '초기 투자금 또는 월 적립금과 수익률, 기간을 입력하세요.',
-        invalidInitial: '초기 투자금은 0원 이상 1,000조 원 이하로 입력하세요.',
-        invalidMonthly: '월 적립금은 0원 이상 100조 원 이하로 입력하세요.',
+        invalidInitial: '초기 투자금은 0원 이상 1,000조 원 이하의 정수로 입력하세요.',
+        invalidMonthly: '월 적립금은 0원 이상 100조 원 이하의 정수로 입력하세요.',
         needMoney: '초기 투자금과 월 적립금 중 하나는 0원보다 커야 합니다.',
-        invalidRate: '연 수익률은 0% 이상 100% 이하로 입력하세요.',
+        invalidRate: '연 수익률은 0~100%, 소수점 아래 최대 4자리로 입력하세요.',
         invalidYears: '투자 기간은 1년 이상 100년 이하의 정수로 입력하세요.',
-        invalidInflation: '인플레이션율은 0% 이상 50% 이하로 입력하세요.',
+        invalidInflation: '인플레이션율은 0~50%, 소수점 아래 최대 4자리로 입력하세요.',
         overflow: '계산 결과가 너무 큽니다. 투자금·수익률·기간을 줄여 주세요.',
         noInflation: '인플레이션 미입력',
         summary: (y, bal, gainRate) => `${y}년 후 예상 자산은 ${bal}이며, 총 납입 원금 대비 예상 수익은 약 ${gainRate}%입니다.`,
@@ -5641,12 +5641,12 @@
       en: {
         currency: ' KRW',
         idle: 'Enter an initial amount or monthly contribution, return, and term.',
-        invalidInitial: 'Enter an initial amount from 0 to 1 quadrillion KRW.',
-        invalidMonthly: 'Enter a monthly contribution from 0 to 100 trillion KRW.',
+        invalidInitial: 'Enter a whole-KRW initial amount from 0 to 1 quadrillion.',
+        invalidMonthly: 'Enter a whole-KRW monthly contribution from 0 to 100 trillion.',
         needMoney: 'Either the initial amount or monthly contribution must be greater than zero.',
-        invalidRate: 'Enter an annual return from 0% to 100%.',
+        invalidRate: 'Enter an annual return from 0% to 100%, up to 4 decimal places.',
         invalidYears: 'Enter a whole-number term from 1 to 100 years.',
-        invalidInflation: 'Enter an inflation rate from 0% to 50%.',
+        invalidInflation: 'Enter inflation from 0% to 50%, up to 4 decimal places.',
         overflow: 'The estimate is too large. Reduce the amount, return, or term.',
         noInflation: 'No inflation input',
         summary: (y, bal, gainRate) => `Estimated ending balance after ${y} years is ${bal}, with an estimated gain of ${gainRate}% versus total contributions.`,
@@ -5659,12 +5659,12 @@
       ja: {
         currency: 'ウォン',
         idle: '初期投資額または毎月積立額、利回り、期間を入力してください。',
-        invalidInitial: '初期投資額は0〜1,000兆ウォンで入力してください。',
-        invalidMonthly: '毎月積立額は0〜100兆ウォンで入力してください。',
+        invalidInitial: '初期投資額は0〜1,000兆ウォンの整数で入力してください。',
+        invalidMonthly: '毎月積立額は0〜100兆ウォンの整数で入力してください。',
         needMoney: '初期投資額または毎月積立額のどちらかを0より大きくしてください。',
-        invalidRate: '年利回りは0〜100%で入力してください。',
+        invalidRate: '年利回りは0〜100%、小数点以下4桁までで入力してください。',
         invalidYears: '運用期間は1〜100年の整数で入力してください。',
-        invalidInflation: 'インフレ率は0〜50%で入力してください。',
+        invalidInflation: 'インフレ率は0〜50%、小数点以下4桁までで入力してください。',
         overflow: '計算結果が大きすぎます。金額・利回り・期間を小さくしてください。',
         noInflation: 'インフレ率未入力',
         summary: (y, bal, gainRate) => `${y}年後の予想資産は ${bal}、積立元本に対する予想利益は約 ${gainRate}% です。`,
@@ -5692,14 +5692,27 @@
       ta.style.position = 'fixed';
       ta.style.opacity = '0';
       document.body.appendChild(ta);
-      ta.select();
-      const copied = document.execCommand('copy');
-      document.body.removeChild(ta);
-      if (!copied) throw new Error('copy failed');
+      const focused = document.activeElement;
+      try {
+        ta.select();
+        if (!document.execCommand('copy')) throw new Error('copy failed');
+      } finally {
+        ta.remove();
+        focused?.focus();
+      }
     };
 
     const fields = [initial, monthly, rate, years, inflation];
+    const allFields = [...fields, compound];
+    let revision = 0;
+    let copiedContext = '';
+    const validNumber = (field, raw, decimals = false) =>
+      !field.validity.badInput && raw.length <= 32 &&
+      (decimals ? /^\d+(?:\.\d{1,4})?$/ : /^\d+$/).test(raw);
     const resetResult = (msg = t.idle, state = '') => {
+      revision++;
+      copyBtn.textContent = t.copyDefault;
+      copiedContext = '';
       final.textContent = '-';
       contrib.textContent = '-';
       interest.textContent = '-';
@@ -5710,11 +5723,19 @@
     };
 
     const setInvalid = (field, message) => {
-      fields.forEach((el) => el.setAttribute('aria-invalid', el === field ? 'true' : 'false'));
+      allFields.forEach((el) => el.setAttribute('aria-invalid', el === field ? 'true' : 'false'));
       resetResult(message, 'error');
     };
 
     const render = () => {
+      revision++;
+      copyBtn.textContent = t.copyDefault;
+      // Check native number-input badInput before treating a sanitized empty value as optional.
+      const badField = fields.find(el => el.validity.badInput);
+      if (badField) {
+        setInvalid(badField, badField === initial ? t.invalidInitial : badField === monthly ? t.invalidMonthly : badField === rate ? t.invalidRate : badField === years ? t.invalidYears : t.invalidInflation);
+        return;
+      }
       const initialRaw = initial.value.trim();
       const monthlyRaw = monthly.value.trim();
       const rateRaw = rate.value.trim();
@@ -5734,11 +5755,11 @@
       const inf = inflationRaw === '' ? 0 : Number(inflationRaw);
       const n = Number(compound.value);
 
-      if (!Number.isFinite(p0) || p0 < 0 || p0 > 1000000000000000) {
+      if ((initialRaw !== '' && !validNumber(initial, initialRaw)) || !Number.isSafeInteger(p0) || p0 < 0 || p0 > 1000000000000000) {
         setInvalid(initial, t.invalidInitial);
         return;
       }
-      if (!Number.isFinite(mAdd) || mAdd < 0 || mAdd > 100000000000000) {
+      if ((monthlyRaw !== '' && !validNumber(monthly, monthlyRaw)) || !Number.isSafeInteger(mAdd) || mAdd < 0 || mAdd > 100000000000000) {
         setInvalid(monthly, t.invalidMonthly);
         return;
       }
@@ -5746,33 +5767,35 @@
         setInvalid(initialRaw ? monthly : initial, t.needMoney);
         return;
       }
-      if (!rateRaw || !Number.isFinite(rAnnual) || rAnnual < 0 || rAnnual > 100) {
+      if (!validNumber(rate, rateRaw, true) || !Number.isFinite(rAnnual) || rAnnual < 0 || rAnnual > 100) {
         setInvalid(rate, t.invalidRate);
         return;
       }
-      if (!yearsRaw || !Number.isInteger(y) || y < 1 || y > 100) {
+      if (!validNumber(years, yearsRaw) || !Number.isInteger(y) || y < 1 || y > 100) {
         setInvalid(years, t.invalidYears);
         return;
       }
-      if (!Number.isFinite(inf) || inf < 0 || inf > 50) {
+      if ((inflationRaw !== '' && !validNumber(inflation, inflationRaw, true)) || !Number.isFinite(inf) || inf < 0 || inf > 50) {
         setInvalid(inflation, t.invalidInflation);
         return;
       }
 
-      fields.forEach((el) => el.setAttribute('aria-invalid', 'false'));
-
-      let balance = p0;
-      const effectiveAnnualRate = Math.pow(1 + (rAnnual / 100 / n), n) - 1;
-      const effectiveMonthlyRate = Math.pow(1 + effectiveAnnualRate, 1 / 12) - 1;
-      const totalMonths = y * 12;
-
-      for (let month = 1; month <= totalMonths; month++) {
-        balance *= (1 + effectiveMonthlyRate);
-        balance += mAdd;
+      if (![1, 2, 4, 12].includes(n)) {
+        setInvalid(compound, t.overflow);
+        return;
       }
+      allFields.forEach((el) => el.setAttribute('aria-invalid', 'false'));
+
+      // log1p/expm1 retain small rates; deposits arrive at each month-end.
+      const monthlyLogGrowth = n * Math.log1p(rAnnual / 100 / n) / 12;
+      const monthlyRate = Math.expm1(monthlyLogGrowth);
+      const totalMonths = y * 12;
+      const growth = Math.expm1(monthlyLogGrowth * totalMonths);
+      const balance = p0 * (1 + growth) + mAdd * (monthlyRate === 0 ? totalMonths : growth / monthlyRate);
 
       const totalContrib = p0 + (mAdd * totalMonths);
-      const earned = balance - totalContrib;
+      const roundedBalance = Math.round(balance);
+      const earned = roundedBalance - totalContrib;
       const realValue = balance / Math.pow(1 + inf / 100, y);
 
       if (![balance, totalContrib, earned, realValue].every(Number.isFinite) || balance > Number.MAX_SAFE_INTEGER) {
@@ -5783,11 +5806,12 @@
       final.textContent = fmtCurrency(balance);
       contrib.textContent = fmtCurrency(totalContrib);
       interest.textContent = fmtCurrency(earned);
-      real.textContent = inf > 0 ? fmtCurrency(realValue) : t.noInflation;
+      real.textContent = inflationRaw !== '' ? fmtCurrency(realValue) : t.noInflation;
 
       const gainRate = ((balance / totalContrib - 1) * 100);
       help.textContent = t.summary(y, fmtCurrency(balance), gainRate.toLocaleString(numberLocale, { maximumFractionDigits: 2 }));
       help.dataset.state = 'success';
+      copiedContext = allFields.map(el => `${document.querySelector(`label[for="${el.id}"]`).textContent.trim()}: ${el === compound ? el.selectedOptions[0].textContent.trim() : (el.value || '—')}`).join(' | ');
       copyBtn.disabled = false;
     };
 
@@ -5798,12 +5822,15 @@
 
     copyBtn?.addEventListener('click', async () => {
       if (copyBtn.disabled) return;
+      const copyRevision = revision;
       try {
-        await copyText(t.copy(final.textContent, contrib.textContent, interest.textContent, real.textContent));
-        const old = copyBtn.textContent;
+        await copyText(copiedContext + '\n' + t.copy(final.textContent, contrib.textContent, interest.textContent, real.textContent));
+        if (revision !== copyRevision) return;
+        const old = t.copyDefault;
         copyBtn.textContent = t.copied;
-        setTimeout(() => { copyBtn.textContent = old || t.copyDefault; }, 900);
+        setTimeout(() => { if (revision === copyRevision) copyBtn.textContent = old; }, 900);
       } catch (_) {
+        if (revision !== copyRevision) return;
         help.textContent = t.copyFail;
         help.dataset.state = 'error';
       }
@@ -5821,7 +5848,8 @@
     });
 
     clearBtn?.addEventListener('click', () => {
-      fields.forEach((el) => { el.value = ''; el.setAttribute('aria-invalid', 'false'); });
+      fields.forEach((el) => { el.value = ''; });
+      allFields.forEach(el => el.setAttribute('aria-invalid', 'false'));
       compound.value = '12';
       resetResult(t.cleared);
       initial.focus();

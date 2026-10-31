@@ -1008,8 +1008,8 @@ a:hover { color: #fff; text-decoration: none; }
 .sa-stats strong,
 .sa-stats span { overflow-wrap: anywhere; }
 .ci-ui input[aria-invalid="true"] { border-color: #ef4444; }
-.ci-ui #ci-help[data-state="error"] { color: #fca5a5; }
-.ci-ui #ci-help[data-state="success"] { color: #86efac; }
+.ci-ui #ci-help[data-state="error"] { color: #b91c1c; }
+.ci-ui #ci-help[data-state="success"] { color: #047857; }
 .ci-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .ci-stats strong,
 .ci-stats span { overflow-wrap: anywhere; }
@@ -2681,3 +2681,15 @@ a:hover { color: #fff; text-decoration: none; }
 .pf-ui #pf-help[data-state="error"] { color: #b91c1c; }
 .pf-ui #pf-help[data-state="success"] { color: #166534; }
 .pf-ui input[aria-invalid="true"] { border-color: #b91c1c; }
+
+/* Compound interest: readable input and long KRW results on small screens. */
+.ci-ui input, .ci-ui select, .ci-ui button { min-height: 44px; font-size: 16px; }
+.ci-ui .tool-row-grid > div, .ci-ui .tool-stats > div { min-width: 0; }
+.ci-ui #ci-limits, .ci-ui .tool-stats strong, .ci-ui .tool-stats span { overflow-wrap: anywhere; }
+.ci-ui :is(input, select, button):focus-visible { outline: 2px solid #60a5fa; outline-offset: 3px; }
+.ci-ui button:disabled { opacity: .55; cursor: not-allowed; }
+@media (max-width: 600px) {
+  .ci-ui .tool-row-grid, .ci-ui .tool-stats { grid-template-columns: minmax(0, 1fr); }
+  .ci-ui input, .ci-ui select, .ci-ui button { width: 100%; box-sizing: border-box; }
+  .ci-ui .tool-stats strong { font-size: 1.35rem; }
+}
