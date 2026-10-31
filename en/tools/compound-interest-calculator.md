@@ -16,11 +16,11 @@ keywords: [compound interest calculator, monthly contribution calculator, invest
 related_tools: [loan-calculator, percent-calculator, discount-calculator]
 faq:
   - q: What input limits and currency apply?
-    a: All amounts are whole KRW, not USD or JPY. Initial capital is 0–1 quadrillion KRW and monthly deposits 0–100 trillion KRW; at least one must be positive. Return is 0–100%, inflation 0–50%, both up to 4 decimal places. Use 1–100 whole years and plain numbers without commas or scientific notation.
+    a: All amounts are whole KRW, not USD or JPY; no currency conversion is performed. Initial capital is 0–1 quadrillion KRW and monthly deposits 0–100 trillion KRW; a blank amount counts as 0, but at least one amount must be positive. Return is 0–100%, inflation 0–50%, both up to 4 decimal places. Use 1–100 whole years and plain numbers without commas or scientific notation.
   - q: Is blank inflation the same as 0%?
     a: Blank omits present value. Explicit 0% assumes no price changes and shows the same present value as the ending balance.
   - q: How do monthly and annual compounding work?
-    a: For nominal annual return r and n compounding periods per year, the monthly-equivalent rate is (1 + r/n) to the power n/12, minus 1. Use r = 0.07 for 7%. Monthly deposits arrive after monthly growth. Floating-point estimates round to whole KRW; displayed profit equals rounded balance minus whole-KRW principal.
+    a: For nominal annual return r and n compounding periods per year, the monthly-equivalent rate is (1 + r/n) to the power n/12, minus 1. Use r = 0.07 for 7%, with n = 12 for monthly, 4 for quarterly, 2 for semiannual, or 1 for annual compounding. Monthly deposits arrive after monthly growth. Floating-point estimates round to whole KRW; displayed profit equals rounded balance minus whole-KRW principal.
   - q: When is each monthly contribution added?
     a: Contributions are assumed to arrive at each month-end, using a monthly-equivalent rate derived from the selected nominal compounding frequency.
   - q: Can I calculate a 0% return?
@@ -54,10 +54,10 @@ This tool answers those with quick numbers.
 - **Explicit assumptions:** see the deposit timing, rate conversion, and excluded costs used by the estimate
 
 ## How to use
-1. Enter initial investment, monthly contribution, annual return, and term.
+1. Enter an initial investment or monthly contribution in whole KRW (an unused amount can be blank or 0), annual return, and a whole-number term. At least one amount must be positive; enter 0 explicitly for a 0% return.
 2. Choose compounding frequency.
-3. (Optional) Enter inflation rate to view real-value estimate.
-4. Review the ending balance, total contributions, estimated gain, and inflation-adjusted value. Use **Fill sample values** to test the flow or **Copy results** to share the summary.
+3. Optionally enter inflation to view present value. Leave it blank to omit this result, or enter 0 for no inflation; at 0%, present value equals the ending balance.
+4. Review the ending balance, total contributions, estimated gain, and inflation-adjusted value. Use **Fill sample values** to test the flow or **Copy results** to share both the input conditions and result summary.
 
 Monthly contributions are treated as month-end deposits, using a monthly-equivalent rate derived from the selected nominal compounding frequency. Taxes, fees, and return volatility are not included.
 
@@ -71,7 +71,7 @@ For an initial investment of KRW 1,000,000, monthly contributions of KRW 300,000
 Use the example to compare a 0% return or a different compounding frequency without changing the underlying month-end contribution assumption.
 
 ## Empty and error states
-The calculator waits until an initial investment or monthly contribution, annual return, and whole-number term are valid. Each field has its own range message, results remain blank after invalid input, and **Copy results** stays disabled until a valid estimate exists. **Clear** removes all entries and returns compounding to monthly. If the browser blocks clipboard access, the status area reports the copy failure.
+The calculator waits until an initial investment or monthly contribution, annual return, and whole-number term are valid. The status area identifies the invalid field; result cards show dashes after invalid input, and **Copy results** stays disabled until a valid estimate exists. **Clear** removes all entries and returns compounding to monthly. If the estimate is too large, reduce the amount, return, or term. If the browser blocks clipboard access, the status area reports the copy failure.
 
 ## Related tools
 - Repayment comparison: [Loan Calculator]({{ '/en/tools/loan-calculator/' | relative_url }})
@@ -98,13 +98,13 @@ No. It is a fixed-return planning estimate and excludes taxes, fees, and market 
 Use this compound interest calculator to compare recurring investment plans by ending balance, contributed principal, estimated gain, and inflation-adjusted value under clearly stated assumptions.
 
 
-## Input limits, rounding and calculation method
+## Input limits, KRW rounding, and the compound interest formula
 
 ### What input limits and currency apply?
-All amounts are whole KRW, not USD or JPY. Initial capital is 0–1 quadrillion KRW and monthly deposits 0–100 trillion KRW; at least one must be positive. Return is 0–100%, inflation 0–50%, both up to 4 decimal places. Use 1–100 whole years and plain numbers without commas or scientific notation.
+All amounts are whole KRW, not USD or JPY; no currency conversion is performed. Initial capital is 0–1 quadrillion KRW and monthly deposits 0–100 trillion KRW; a blank amount counts as 0, but at least one amount must be positive. Return is 0–100%, inflation 0–50%, both up to 4 decimal places. Use 1–100 whole years and plain numbers without commas or scientific notation.
 
 ### Is blank inflation the same as 0%?
 Blank omits present value. Explicit 0% assumes no price changes and shows the same present value as the ending balance.
 
 ### How do monthly and annual compounding work?
-For nominal annual return r and n compounding periods per year, the monthly-equivalent rate is (1 + r/n) to the power n/12, minus 1. Use r = 0.07 for 7%. Monthly deposits arrive after monthly growth. Floating-point estimates round to whole KRW; displayed profit equals rounded balance minus whole-KRW principal.
+For nominal annual return r and n compounding periods per year, the monthly-equivalent rate is (1 + r/n) to the power n/12, minus 1. Use r = 0.07 for 7%, with n = 12 for monthly, 4 for quarterly, 2 for semiannual, or 1 for annual compounding. Monthly deposits arrive after monthly growth. Floating-point estimates round to whole KRW; displayed profit equals rounded balance minus whole-KRW principal.
