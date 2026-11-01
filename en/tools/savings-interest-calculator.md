@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Savings Interest Calculator | Simple or Monthly Compound Returns
-description: Enter a deposit, annual rate, term, and tax mode to estimate pre-tax interest, tax, after-tax interest, and maturity amount with simple or monthly compounding.
+title: Savings Interest Calculator | After-Tax Deposit in KRW
+description: Calculate simple or monthly-compound lump-sum deposit interest, tax and maturity in KRW. Compare 15.4% or zero tax with clear limits and whole-KRW rounding.
 lang: en
 permalink: /en/tools/savings-interest-calculator/
 canonical_url: /en/tools/savings-interest-calculator/
@@ -23,6 +23,8 @@ faq:
     a: Yes. Select tax-exempt mode (0%) to compare after-tax outcomes.
   - q: Will the result exactly match my bank's maturity amount?
     a: This is an estimate assuming a fixed displayed annual rate and interest paid at maturity. Day-count rules, payment frequency, rounding, promotional-rate requirements, and product-specific tax rules can change the actual amount.
+  - q: What are the input limits and rounding rules?
+    a: "KRW only; no currency conversion. Deposit: whole units 1–1,000,000,000,000; annual rate: 0–50% (up to 4 decimals); term: 1–120 whole months. Plain numbers only, no commas or exponents. Gross interest rounds half up to whole KRW, then tax rounds half up; net interest = gross − tax. Monthly compounding is an estimate. This models one lump-sum deposit, not recurring savings."
 alternate_urls:
   ko: /tools/savings-interest-calculator/
   en: /en/tools/savings-interest-calculator/
@@ -55,3 +57,8 @@ When comparing fixed deposits, savings accounts, parking accounts, or short-term
 - [Compound Interest Calculator]({{ '/en/tools/compound-interest-calculator/' | relative_url }})
 - [Loan Repayment Calculator]({{ '/en/tools/loan-calculator/' | relative_url }})
 - [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
+
+
+## FAQ
+### What are the input limits and rounding rules?
+KRW only; no currency conversion. Deposit: whole units 1–1,000,000,000,000; annual rate: 0–50% (up to 4 decimals); term: 1–120 whole months. Plain numbers only, no commas or exponents. Gross interest rounds half up to whole KRW, then tax rounds half up; net interest = gross − tax. Monthly compounding is an estimate. This models one lump-sum deposit, not recurring savings.

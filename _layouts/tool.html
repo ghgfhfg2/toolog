@@ -3573,19 +3573,19 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
 
           <div class="tool-row-grid si-grid">
             <div>
-              <label for="si-principal">{% if page.lang == 'en' %}Deposit amount{% elsif page.lang == 'ja' %}預入額{% else %}예치금(원){% endif %}</label>
-              <input id="si-principal" type="number" min="1" max="1000000000000000" step="10000" inputmode="numeric" placeholder="10000000" aria-describedby="si-help si-assumption" />
+              <label for="si-principal">{% if page.lang == 'en' %}Deposit amount (KRW){% elsif page.lang == 'ja' %}預入額 (KRW){% else %}예치금(원){% endif %}</label>
+              <input id="si-principal" type="number" min="1" max="1000000000000" step="1" inputmode="numeric" placeholder="10000000" aria-describedby="si-help si-assumption si-limits" />
             </div>
             <div>
               <label for="si-rate">{% if page.lang == 'en' %}Annual interest rate (%) {% elsif page.lang == 'ja' %}年利(%) {% else %}연이율(%) {% endif %}</label>
-              <input id="si-rate" type="number" min="0" max="50" step="0.01" inputmode="decimal" placeholder="3.5" aria-describedby="si-help si-assumption" />
+              <input id="si-rate" type="number" min="0" max="50" step="0.0001" inputmode="decimal" placeholder="3.5" aria-describedby="si-help si-assumption si-limits" />
             </div>
           </div>
 
           <div class="tool-row-grid si-grid">
             <div>
               <label for="si-months">{% if page.lang == 'en' %}Term (months){% elsif page.lang == 'ja' %}期間(か月){% else %}예치기간(개월){% endif %}</label>
-              <input id="si-months" type="number" min="1" max="120" step="1" inputmode="numeric" placeholder="12" aria-describedby="si-help si-assumption" />
+              <input id="si-months" type="number" min="1" max="120" step="1" inputmode="numeric" placeholder="12" aria-describedby="si-help si-assumption si-limits" />
             </div>
             <div>
               <label for="si-method">{% if page.lang == 'en' %}Interest method{% elsif page.lang == 'ja' %}利息方式{% else %}이자 방식{% endif %}</label>
@@ -3607,6 +3607,8 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
           </div>
 
           <p class="tool-result" id="si-assumption">{% if page.lang == 'en' %}Estimate assumes the displayed annual rate stays fixed, interest is paid at maturity, and tax is applied once to total interest. Actual bank rounding and product rules may differ.{% elsif page.lang == 'ja' %}表示年利が一定で、利息は満期時に受け取り、利息合計に一度課税する概算です。銀行の端数処理や商品条件により実額は異なります。{% else %}표시 연이율이 유지되고 이자를 만기에 받으며 총이자에 한 번 과세한다고 가정한 예상치예요. 은행의 원 단위 처리와 상품 조건에 따라 실제 금액은 달라질 수 있습니다.{% endif %}</p>
+
+          <p class="tool-result" id="si-limits">{% if page.lang == 'en' %}KRW only; no currency conversion. Deposit: whole units 1–1,000,000,000,000; annual rate: 0–50% (up to 4 decimals); term: 1–120 whole months. Plain numbers only, no commas or exponents. Gross interest rounds half up to whole KRW, then tax rounds half up; net interest = gross − tax. Monthly compounding is an estimate. This models one lump-sum deposit, not recurring savings.{% elsif page.lang == 'ja' %}通貨はKRWのみ（換算なし）。元本は1〜1兆の整数、年利は0〜50%（小数点以下4桁）、期間は1〜120か月の整数です。カンマ・指数表記は使えません。利息を1ウォン単位で四捨五入してから税額を四捨五入し、税引後利息＝利息−税額とします。毎月複利は概算です。積立ではなく一括預入用です。{% else %}통화는 원(KRW)이며 환산하지 않습니다. 예치금 1~1조 원 정수, 연이율 0~50%(소수 넷째 자리까지), 기간 1~120개월 정수만 입력하세요. 쉼표·지수 표기는 지원하지 않습니다. 세전 이자를 원 단위 반올림한 뒤 세금을 반올림하며 세후 이자 = 세전 이자 − 세금입니다. 월복리는 예상치이며 매달 납입하는 적금이 아닌 목돈 일시 예치 기준입니다.{% endif %}</p>
 
           <div class="tool-row-grid si-actions">
             <button id="si-example" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
@@ -5342,7 +5344,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
 </article>
 
 <script src="{{ '/assets/js/ui.js' | relative_url }}" defer></script>
-<script src="{{ '/assets/js/tools.js' | relative_url }}{% if page.tool_key == 'compound-interest-calculator' %}?v=ci-20261031{% elsif page.tool_key == 'parking-fee-calculator' %}?v=pf-20261030{% elsif page.tool_key == 'discount-calculator' %}?v=dc-20261029{% elsif page.tool_key == 'volumetric-weight-calculator' %}?v=vw-20261028{% elsif page.tool_key == 'fuel-economy-calculator' %}?v=fe-20261027{% elsif page.tool_key == 'work-end-time-calculator' %}?v=wet-20261026{% elsif page.tool_key == 'vat-calculator' %}?v=vat-20261025{% elsif page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% elsif page.tool_key == 'gpa-calculator' %}?v=gpa-20261024{% endif %}" defer></script>
+<script src="{{ '/assets/js/tools.js' | relative_url }}{% if page.tool_key == 'savings-interest-calculator' %}?v=si-20261101{% elsif page.tool_key == 'compound-interest-calculator' %}?v=ci-20261031{% elsif page.tool_key == 'parking-fee-calculator' %}?v=pf-20261030{% elsif page.tool_key == 'discount-calculator' %}?v=dc-20261029{% elsif page.tool_key == 'volumetric-weight-calculator' %}?v=vw-20261028{% elsif page.tool_key == 'fuel-economy-calculator' %}?v=fe-20261027{% elsif page.tool_key == 'work-end-time-calculator' %}?v=wet-20261026{% elsif page.tool_key == 'vat-calculator' %}?v=vat-20261025{% elsif page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% elsif page.tool_key == 'gpa-calculator' %}?v=gpa-20261024{% endif %}" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

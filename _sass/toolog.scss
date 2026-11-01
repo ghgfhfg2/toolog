@@ -3148,3 +3148,14 @@ a:hover { color: var(--primary-strong); }
   .ci-ui input, .ci-ui select, .ci-ui button { width: 100%; box-sizing: border-box; }
   .ci-ui .tool-stats strong { font-size: 1.35rem; }
 }
+
+/* Savings interest: scoped quality pass, 2026-11-01. */
+.si-ui input, .si-ui select, .si-ui button { min-height: 44px; font-size: 16px; box-sizing: border-box; max-width: 100%; }
+.si-ui .tool-row-grid > *, .si-ui .tool-stats > * { min-width: 0; }
+.si-ui input:focus-visible, .si-ui select:focus-visible, .si-ui button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+.si-ui #si-help[data-state="error"] { color: #b91c1c; }
+.si-ui #si-help[data-state="success"] { color: #166534; }
+.si-ui .tool-result { overflow-wrap: anywhere; line-height: 1.7; }
+@media (max-width: 600px) {
+  .si-ui .si-grid, .si-ui .tool-stats.si-stats, .si-ui .si-actions { grid-template-columns: minmax(0, 1fr); }
+}

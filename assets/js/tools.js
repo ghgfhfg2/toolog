@@ -14887,8 +14887,8 @@
     const t = {
       ko: {
         needInput: '예치금·연이율·예치기간을 모두 입력해 주세요.',
-        invalidPrincipal: '예치금은 1원 이상 1,000조 원 이하의 정수로 입력해 주세요.',
-        invalidRate: '연이율은 0% 이상 50% 이하로 입력해 주세요.',
+        invalidPrincipal: '예치금은 1원 이상 1조 원 이하의 정수로 입력해 주세요.',
+        invalidRate: '연이율은 0~50%, 소수 넷째 자리까지 입력해 주세요.',
         invalidMonths: '예치기간은 1개월 이상 120개월 이하의 정수로 입력해 주세요.',
         summary: (methodLabel, gross, net) => `${methodLabel} 기준 세전 이자 ${gross}, 세후 이자 ${net}의 예상 결과입니다.`,
         simple: '단리',
@@ -14897,12 +14897,13 @@
         copied: '결과를 복사했습니다.',
         copyFail: '자동 복사를 사용할 수 없습니다.',
         cleared: '입력값을 지웠습니다.',
+        invalidOptions: '이자 방식과 과세 유형을 다시 선택해 주세요.',
         copyDefault: '결과 복사'
       },
       en: {
         needInput: 'Enter deposit amount, annual rate, and term.',
-        invalidPrincipal: 'Enter a whole-unit deposit from 1 to 1 quadrillion KRW.',
-        invalidRate: 'Enter an annual rate from 0% to 50%.',
+        invalidPrincipal: 'Enter a whole-unit deposit from 1 to 1 trillion KRW.',
+        invalidRate: 'Enter a rate from 0% to 50%, with up to 4 decimal places.',
         invalidMonths: 'Enter a whole-number term from 1 to 120 months.',
         summary: (methodLabel, gross, net) => `${methodLabel} estimate: ${gross} pre-tax interest and ${net} after-tax interest.`,
         simple: 'Simple interest',
@@ -14911,12 +14912,13 @@
         copied: 'Copied the result.',
         copyFail: 'Automatic copy is unavailable.',
         cleared: 'Cleared all inputs.',
+        invalidOptions: 'Select a valid interest method and tax mode.',
         copyDefault: 'Copy result'
       },
       ja: {
         needInput: '預入額・年利・期間をすべて入力してください。',
-        invalidPrincipal: '預入額は1ウォン以上1,000兆ウォン以下の整数で入力してください。',
-        invalidRate: '年利は0%以上50%以下で入力してください。',
+        invalidPrincipal: '預入額は1ウォン以上1兆ウォン以下の整数で入力してください。',
+        invalidRate: '年利は0〜50%、小数点以下4桁まで入力してください。',
         invalidMonths: '期間は1〜120か月の整数で入力してください。',
         summary: (methodLabel, gross, net) => `${methodLabel}で税引前利息${gross}、税引後利息${net}の概算です。`,
         simple: '単利',
@@ -14925,30 +14927,34 @@
         copied: '結果をコピーしました。',
         copyFail: '自動コピーを利用できません。',
         cleared: '入力をクリアしました。',
+        invalidOptions: '利息方式と課税区分を選び直してください。',
         copyDefault: '結果をコピー'
       }
     }[pageLang];
 
     const fmtMoney = (v) => `${Math.round(v || 0).toLocaleString(numberLocale)}${pageLang === 'en' ? ' KRW' : (pageLang === 'ja' ? 'ウォン' : '원')}`;
 
+    let revision = 0;
     const copyText = async (text) => {
       try {
         await navigator.clipboard.writeText(text);
         return true;
       } catch (_) {
+        let ta;
+        const active = document.activeElement;
         try {
-          const ta = document.createElement('textarea');
+          ta = document.createElement('textarea');
           ta.value = text;
           ta.style.position = 'fixed';
           ta.style.opacity = '0';
           document.body.appendChild(ta);
           ta.select();
-          const copied = document.execCommand('copy');
-          return copied;
+          return document.execCommand('copy') === true;
         } catch (_) {
           return false;
         } finally {
           ta?.remove();
+          active?.focus({ preventScroll: true });
         }
       }
     };
@@ -14964,47 +14970,48 @@
     };
 
     const render = () => {
+      revision++;
       const rawPrincipal = principal.value.trim();
       const rawRate = rate.value.trim();
       const rawMonths = months.value.trim();
       [principal, rate, months].forEach((el) => el.setAttribute('aria-invalid', 'false'));
       presetBtns.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.siMonths === rawMonths)));
 
+      // Validate non-empty fields before reporting missing fields; never turn badInput into zero.
+      const fields = [
+        [principal, rawPrincipal, /^\d+$/, 1, 1e12, t.invalidPrincipal],
+        [rate, rawRate, /^\d+(?:\.\d{1,4})?$/, 0, 50, t.invalidRate],
+        [months, rawMonths, /^\d+$/, 1, 120, t.invalidMonths]
+      ];
+      for (const [el, raw, syntax, min, max, message] of fields) {
+        if (el.validity.badInput || (raw && (raw.length > 32 || !syntax.test(raw) || Number(raw) < min || Number(raw) > max))) {
+          el.setAttribute('aria-invalid', 'true');
+          setIdle(message, 'error');
+          return;
+        }
+      }
+      if (!['simple', 'monthly-compound'].includes(method.value) || !['0', '15.4'].includes(tax.value)) {
+        setIdle(t.invalidOptions, 'error');
+        return;
+      }
       if (!rawPrincipal || !rawRate || !rawMonths) {
         setIdle(t.needInput);
         return;
       }
       const p = Number(rawPrincipal);
-      const r = Number(rawRate);
       const m = Number(rawMonths);
-      if (!Number.isSafeInteger(p) || p < 1 || p > 1000000000000000) {
-        principal.setAttribute('aria-invalid', 'true');
-        setIdle(t.invalidPrincipal, 'error');
-        return;
-      }
-      if (!Number.isFinite(r) || r < 0 || r > 50) {
-        rate.setAttribute('aria-invalid', 'true');
-        setIdle(t.invalidRate, 'error');
-        return;
-      }
-      if (!Number.isInteger(m) || m < 1 || m > 120) {
-        months.setAttribute('aria-invalid', 'true');
-        setIdle(t.invalidMonths, 'error');
-        return;
-      }
-      const taxRate = Number(tax.value) / 100;
-
-      const annualRate = r / 100;
-      let grossInterest = 0;
-      if ((method.value || 'simple') === 'monthly-compound') {
-        const monthlyRate = annualRate / 12;
-        grossInterest = p * (Math.pow(1 + monthlyRate, m) - 1);
-      } else {
-        grossInterest = p * annualRate * (m / 12);
-      }
-
-      grossInterest = Math.round(grossInterest);
-      const taxAmount = Math.round(grossInterest * taxRate);
+      // Rate is scaled to 4 decimal places. Simple interest and tax use exact half-up rounding.
+      const [wholeRate, fractionRate = ''] = rawRate.split('.');
+      const rateUnits = BigInt(wholeRate) * 10000n + BigInt(fractionRate.padEnd(4, '0'));
+      const roundRatio = (n, d) => Number((n * 2n + d) / (d * 2n));
+      // Exact rational exponentiation (at most 120 months) also avoids floating-point
+      // cancellation and one-KRW errors near a half-unit compound result.
+      const denominator = 12000000n;
+      const compoundBase = denominator ** BigInt(m);
+      const grossInterest = method.value === 'monthly-compound'
+        ? roundRatio(BigInt(rawPrincipal) * ((denominator + rateUnits) ** BigInt(m) - compoundBase), compoundBase)
+        : roundRatio(BigInt(rawPrincipal) * rateUnits * BigInt(rawMonths), denominator);
+      const taxAmount = tax.value === '0' ? 0 : roundRatio(BigInt(grossInterest) * 154n, 1000n);
       const netInterest = grossInterest - taxAmount;
       const maturity = p + netInterest;
 
@@ -15023,8 +15030,11 @@
     copyBtn?.addEventListener('click', async () => {
       if (maturityEl.textContent === '-') return;
       const methodLabel = method.value === 'monthly-compound' ? t.compound : t.simple;
-      const text = t.copy(methodLabel, grossInterestEl.textContent, taxAmountEl.textContent, netInterestEl.textContent, maturityEl.textContent);
-      if (await copyText(text)) {
+      const copyRevision = revision;
+      const text = `${principal.value} KRW | ${rate.value}% | ${months.value} months | ${tax.value}% tax | ` + t.copy(methodLabel, grossInterestEl.textContent, taxAmountEl.textContent, netInterestEl.textContent, maturityEl.textContent);
+      const copied = await copyText(text);
+      if (revision !== copyRevision) return;
+      if (copied) {
         help.textContent = t.copied;
         help.dataset.state = 'success';
       } else {
@@ -15034,6 +15044,8 @@
     });
 
     resetBtn?.addEventListener('click', () => {
+      revision++;
+      [principal, rate, months].forEach(el => el.setAttribute('aria-invalid', 'false'));
       principal.value = '';
       rate.value = '';
       months.value = '';

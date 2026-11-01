@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: 預金利息計算機 | 単利・毎月複利の税引後満期額
-description: 預入額、年利、期間、課税条件を入力し、単利・毎月複利の税引前利息、税額、税引後利息、満期見込額を計算します。
+title: 預金利息計算機 | KRWの単利・毎月複利・税引後満期額
+description: 一括預入の単利・毎月複利、税引前後の利息と満期額をKRWで計算。課税15.4%・非課税0%、年利0〜50%、1〜120か月に対応し端数処理も説明します。
 lang: ja
 permalink: /ja/tools/savings-interest-calculator/
 canonical_url: /ja/tools/savings-interest-calculator/
@@ -23,6 +23,8 @@ faq:
     a: はい。課税区分を非課税(0%)にすると比較できます。
   - q: 銀行の実際の満期金額と同じになりますか？
     a: 表示年利が一定で利息を満期時に受け取ると仮定した概算です。日数計算、利払い頻度、端数処理、優遇金利条件、商品ごとの税制により実額は異なります。
+  - q: 入力範囲と端数処理は？
+    a: "通貨はKRWのみ（換算なし）。元本は1〜1兆の整数、年利は0〜50%（小数点以下4桁）、期間は1〜120か月の整数です。カンマ・指数表記は使えません。利息を1ウォン単位で四捨五入してから税額を四捨五入し、税引後利息＝利息−税額とします。毎月複利は概算です。積立ではなく一括預入用です。"
 alternate_urls:
   ko: /tools/savings-interest-calculator/
   en: /en/tools/savings-interest-calculator/
@@ -55,3 +57,8 @@ alternate_urls:
 - [複利計算機]({{ '/ja/tools/compound-interest-calculator/' | relative_url }})
 - [ローン返済計算機]({{ '/ja/tools/loan-calculator/' | relative_url }})
 - [パーセント計算機]({{ '/ja/tools/percent-calculator/' | relative_url }})
+
+
+## FAQ
+### 入力範囲と端数処理は？
+通貨はKRWのみ（換算なし）。元本は1〜1兆の整数、年利は0〜50%（小数点以下4桁）、期間は1〜120か月の整数です。カンマ・指数表記は使えません。利息を1ウォン単位で四捨五入してから税額を四捨五入し、税引後利息＝利息−税額とします。毎月複利は概算です。積立ではなく一括預入用です。
