@@ -1359,8 +1359,8 @@
 
 - id: profit-margin-calculator
   title: 원가율 계산기
-  title_en: Profit Margin Calculator
-  title_ja: 原価率計算機
+  title_en: Profit Margin & Target Selling Price Calculator
+  title_ja: 原価率・利益率・目標販売価格計算機
   category: calculator
   category_label: 금융/비즈니스
   category_label_en: Finance/Business
