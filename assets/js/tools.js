@@ -8509,66 +8509,79 @@
       ko: {
         currency: '원',
         needInput: '매출과 원가를 모두 입력해 주세요.',
-        invalidSales: '매출은 0보다 크고 1,000조 이하인 숫자로 입력해 주세요.',
-        invalidCost: '원가는 0 이상 1,000조 이하인 숫자로 입력해 주세요.',
-        invalidTarget: '목표 마진율은 0% 이상 99.9% 이하로 입력해 주세요.',
-        targetTooLarge: '계산된 목표 판매가가 너무 큽니다. 원가나 목표 마진율을 낮춰 주세요.',
+        invalidSales: '매출은 0 초과~1,000조 KRW, 소수 둘째 자리까지 입력하세요. 쉼표·지수 표기는 지원하지 않습니다.',
+        invalidCost: '원가는 0~1,000조 KRW, 소수 둘째 자리까지 입력하세요. 쉼표·지수 표기는 지원하지 않습니다.',
+        invalidTarget: '목표 마진율은 0~99.9%, 소수 넷째 자리까지 입력하세요.',
         profit: (amount) => `현재 판매가는 ${amount}의 이익을 남깁니다.`,
         loss: (amount) => `현재 판매가는 ${amount}의 손실이 발생합니다. 원가와 가격을 다시 확인하세요.`,
         breakEven: '현재 판매가는 원가와 같아 이익이 없습니다.',
         targetAdded: (price, margin) => ` 목표 마진율 ${margin}를 위한 최소 판매가는 ${price}입니다.`,
         noMarkup: '계산 불가',
         copied: '계산 결과를 복사했습니다.',
-        copyFail: '자동 복사를 사용할 수 없습니다.',
+        copyFail: '자동 복사를 사용할 수 없습니다. 결과 텍스트를 직접 선택해 복사하세요.',
         cleared: '입력값을 모두 지웠습니다.',
-        exampleLoaded: '예시 값을 입력했습니다.',
         copy: (p, cr, mr, markup, tp) => `원가율 계산 결과 | 이익 ${p} | 원가율 ${cr} | 마진율 ${mr} | 원가 대비 마크업 ${markup} | 목표 판매가 ${tp}`
       },
       en: {
         currency: ' KRW',
         needInput: 'Enter both sales and cost.',
-        invalidSales: 'Enter sales greater than 0 and no more than 1 quadrillion.',
-        invalidCost: 'Enter cost from 0 to 1 quadrillion.',
-        invalidTarget: 'Enter a target margin from 0% to 99.9%.',
-        targetTooLarge: 'The calculated target price is too large. Lower the cost or target margin.',
+        invalidSales: 'Sales: above 0 up to 1 quadrillion KRW, max 2 decimals; no commas or exponents.',
+        invalidCost: 'Cost: 0 to 1 quadrillion KRW, max 2 decimals; no commas or exponents.',
+        invalidTarget: 'Target margin: 0–99.9%, max 4 decimals.',
         profit: (amount) => `The current selling price leaves a profit of ${amount}.`,
         loss: (amount) => `The current selling price produces a loss of ${amount}. Review cost and pricing.`,
         breakEven: 'The current selling price equals cost, so there is no profit.',
         targetAdded: (price, margin) => ` The minimum price for a ${margin} target margin is ${price}.`,
         noMarkup: 'N/A',
         copied: 'Copied the calculation result.',
-        copyFail: 'Automatic copy is unavailable.',
+        copyFail: 'Automatic copy is unavailable. Select and copy the result text manually.',
         cleared: 'Cleared all inputs.',
-        exampleLoaded: 'Loaded example values.',
         copy: (p, cr, mr, markup, tp) => `Profit margin result | Profit ${p} | Cost ratio ${cr} | Margin ratio ${mr} | Markup on cost ${markup} | Target price ${tp}`
       },
       ja: {
         currency: 'ウォン',
         needInput: '売上と原価を両方入力してください。',
-        invalidSales: '売上は0より大きく1,000兆以下の数値で入力してください。',
-        invalidCost: '原価は0以上1,000兆以下の数値で入力してください。',
-        invalidTarget: '目標利益率は0%以上99.9%以下で入力してください。',
-        targetTooLarge: '計算される目標販売価格が大きすぎます。原価または目標利益率を下げてください。',
+        invalidSales: '売上は0超〜1,000兆KRW、小数2桁まで。カンマ・指数表記は使えません。',
+        invalidCost: '原価は0〜1,000兆KRW、小数2桁まで。カンマ・指数表記は使えません。',
+        invalidTarget: '目標利益率は0〜99.9%、小数4桁まで入力してください。',
         profit: (amount) => `現在の販売価格では${amount}の利益が残ります。`,
         loss: (amount) => `現在の販売価格では${amount}の損失です。原価と価格を確認してください。`,
         breakEven: '現在の販売価格は原価と同じため、利益はありません。',
         targetAdded: (price, margin) => ` 目標利益率${margin}に必要な最低販売価格は${price}です。`,
         noMarkup: '計算不可',
         copied: '計算結果をコピーしました。',
-        copyFail: '自動コピーを利用できません。',
+        copyFail: '自動コピーを利用できません。結果のテキストを選択してコピーしてください。',
         cleared: '入力値をすべてクリアしました。',
-        exampleLoaded: '例の値を入力しました。',
         copy: (p, cr, mr, markup, tp) => `原価率計算結果 | 利益 ${p} | 原価率 ${cr} | 利益率 ${mr} | マークアップ率 ${markup} | 目標販売価格 ${tp}`
       }
     };
     const t = i18n[pageLang] || i18n.ko;
     let currentSummary = '';
+    let revision = 0;
 
-    const fmtMoney = (v) => {
-      const formatted = new Intl.NumberFormat(numberLocale, { maximumFractionDigits: 2 }).format(v);
-      return `${formatted}${t.currency}`;
+    // Scaled integer arithmetic preserves cents even at the maximum input.
+    const scaled = (raw, places) => {
+      const [whole, fraction = ''] = raw.split('.');
+      return BigInt(whole) * 10n ** BigInt(places) + BigInt(fraction.padEnd(places, '0'));
     };
-    const fmtPct = (v) => `${new Intl.NumberFormat(numberLocale, { maximumFractionDigits: 2 }).format(v)}%`;
+    const decimal = (v) => {
+      const abs = v < 0n ? -v : v;
+      const fraction = String(abs % 100n).padStart(2, '0').replace(/0+$/, '');
+      const separator = new Intl.NumberFormat(numberLocale).formatToParts(1.1).find(p => p.type === 'decimal').value;
+      return (v < 0n ? '-' : '') + new Intl.NumberFormat(numberLocale).format(abs / 100n) + (fraction ? separator + fraction : '');
+    };
+    const fmtMoney = (cents) => `${decimal(cents)}${t.currency}`;
+    const fmtRatio = (n, d) => {
+      const abs = n < 0n ? -n : n;
+      const rounded = (abs * 10000n * 2n + d) / (2n * d);
+      return `${decimal(n < 0n ? -rounded : rounded)}%`;
+    };
+    const valid = (el, places, limit, positive = false) => {
+      const raw = el.value.trim();
+      if (el.validity.badInput || raw.length > 32 || !new RegExp('^\\d+(?:\\.\\d{1,' + places + '})?$').test(raw)) return false;
+      const v = scaled(raw, places);
+      return v <= limit && (!positive || v > 0n);
+    };
 
     const setStatus = (msg, state = '') => {
       help.textContent = msg;
@@ -8587,65 +8600,52 @@
       const rawTarget = targetMargin.value.trim();
       [sales, cost, targetMargin].forEach((el) => el.setAttribute('aria-invalid', 'false'));
 
+      revision++;
+      const fields = [
+        [sales, 2, 100000000000000000n, true, t.invalidSales],
+        [cost, 2, 100000000000000000n, false, t.invalidCost],
+        [targetMargin, 4, 999000n, false, t.invalidTarget]
+      ];
+      for (const [el, places, limit, positive, message] of fields) {
+        if ((el.value.trim() || el.validity.badInput) && !valid(el, places, limit, positive)) {
+          el.setAttribute('aria-invalid', 'true');
+          resetResult();
+          setStatus(message, 'error');
+          return;
+        }
+      }
       if (!rawSales || !rawCost) {
         resetResult();
         setStatus(t.needInput);
         return;
       }
-
-      const s = Number(rawSales);
-      const c = Number(rawCost);
-      const tm = rawTarget ? Number(rawTarget) : null;
-      if (!Number.isFinite(s) || s <= 0 || s > 1000000000000000) {
-        sales.setAttribute('aria-invalid', 'true');
-        resetResult();
-        setStatus(t.invalidSales, 'error');
-        return;
-      }
-      if (!Number.isFinite(c) || c < 0 || c > 1000000000000000) {
-        cost.setAttribute('aria-invalid', 'true');
-        resetResult();
-        setStatus(t.invalidCost, 'error');
-        return;
-      }
-      if (rawTarget && (!Number.isFinite(tm) || tm < 0 || tm > 99.9)) {
-        targetMargin.setAttribute('aria-invalid', 'true');
-        resetResult();
-        setStatus(t.invalidTarget, 'error');
-        return;
-      }
-
+      const s = scaled(rawSales, 2);
+      const c = scaled(rawCost, 2);
+      const tm = rawTarget ? scaled(rawTarget, 4) : null;
       const profit = s - c;
-      const costRate = (c / s) * 100;
-      const marginRate = (profit / s) * 100;
-      const markupRate = c === 0 ? null : (profit / c) * 100;
       let suggested = null;
       if (tm !== null) {
-        const rawSuggested = c / (1 - (tm / 100));
-        if (!Number.isFinite(rawSuggested) || rawSuggested > Number.MAX_SAFE_INTEGER) {
-          targetMargin.setAttribute('aria-invalid', 'true');
-          resetResult();
-          setStatus(t.targetTooLarge, 'error');
-          return;
-        }
-        const floatingTolerance = Math.min(0.000001, Math.abs(rawSuggested) * 0.000000000001);
-        suggested = Math.ceil(rawSuggested - floatingTolerance);
+        // Price in whole KRW: exact ceiling of cost / (1 - margin).
+        const denominator = 100n * (1000000n - tm);
+        suggested = (c * 1000000n + denominator - 1n) / denominator;
+        // A zero selling price has undefined margin, even with zero cost.
+        if (suggested === 0n) suggested = 1n;
       }
 
       outProfit.textContent = fmtMoney(profit);
-      outCostRate.textContent = fmtPct(costRate);
-      outMarginRate.textContent = fmtPct(marginRate);
-      outMarkupRate.textContent = markupRate === null ? t.noMarkup : fmtPct(markupRate);
+      outCostRate.textContent = fmtRatio(c, s);
+      outMarginRate.textContent = fmtRatio(profit, s);
+      outMarkupRate.textContent = c === 0n ? t.noMarkup : fmtRatio(profit, c);
 
-      let statusMessage = profit > 0 ? t.profit(fmtMoney(profit)) : (profit < 0 ? t.loss(fmtMoney(Math.abs(profit))) : t.breakEven);
+      let statusMessage = profit > 0n ? t.profit(fmtMoney(profit)) : (profit < 0n ? t.loss(fmtMoney(-profit)) : t.breakEven);
       if (tm !== null) {
-        outTargetPrice.textContent = fmtMoney(suggested);
-        statusMessage += t.targetAdded(fmtMoney(suggested), fmtPct(tm));
+        outTargetPrice.textContent = fmtMoney(suggested * 100n);
+        statusMessage += t.targetAdded(fmtMoney(suggested * 100n), `${Number(tm) / 10000}%`);
       } else outTargetPrice.textContent = '-';
 
-      currentSummary = t.copy(outProfit.textContent, outCostRate.textContent, outMarginRate.textContent, outMarkupRate.textContent, outTargetPrice.textContent);
+      currentSummary = `${rawSales} KRW / ${rawCost} KRW / ${rawTarget || '-'}%\n` + t.copy(outProfit.textContent, outCostRate.textContent, outMarginRate.textContent, outMarkupRate.textContent, outTargetPrice.textContent);
       copyBtn.disabled = false;
-      setStatus(statusMessage, profit < 0 ? 'warning' : 'success');
+      setStatus(statusMessage, profit < 0n ? 'warning' : 'success');
     };
 
     [sales, cost, targetMargin].forEach((el) => el.addEventListener('input', render));
@@ -8664,16 +8664,17 @@
 
     exampleBtn.addEventListener('click', () => {
       loadValues('10000', '7000', '30');
-      setStatus(t.exampleLoaded, 'success');
     });
 
     copyBtn.addEventListener('click', async () => {
       if (!currentSummary) return;
+      const copyRevision = revision;
+      const summary = currentSummary;
       try {
-        await navigator.clipboard.writeText(currentSummary);
-        setStatus(t.copied, 'success');
+        await navigator.clipboard.writeText(summary);
+        if (copyRevision === revision) setStatus(t.copied, 'success');
       } catch (_) {
-        setStatus(t.copyFail, 'error');
+        if (copyRevision === revision) setStatus(t.copyFail, 'error');
       }
     });
 

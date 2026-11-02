@@ -3532,21 +3532,22 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
 
           <div class="tool-row-grid prmc-grid">
             <div>
-              <label for="pm-sales">{% if page.lang == 'en' %}Sales amount{% elsif page.lang == 'ja' %}売上金額{% else %}매출 금액{% endif %}</label>
-              <input id="pm-sales" type="number" min="0.01" max="1000000000000000" step="any" inputmode="decimal" placeholder="10000" aria-describedby="pm-help pm-assumption" />
+              <label for="pm-sales">{% if page.lang == 'en' %}Sales amount (KRW){% elsif page.lang == 'ja' %}売上金額 (KRW){% else %}매출 금액 (KRW){% endif %}</label>
+              <input id="pm-sales" type="number" min="0.01" max="1000000000000000" step="0.01" inputmode="decimal" placeholder="10000" aria-describedby="pm-help pm-assumption pm-limits" />
             </div>
             <div>
-              <label for="pm-cost">{% if page.lang == 'en' %}Cost amount{% elsif page.lang == 'ja' %}原価{% else %}원가{% endif %}</label>
-              <input id="pm-cost" type="number" min="0" max="1000000000000000" step="any" inputmode="decimal" placeholder="7000" aria-describedby="pm-help pm-assumption" />
+              <label for="pm-cost">{% if page.lang == 'en' %}Cost amount (KRW){% elsif page.lang == 'ja' %}原価 (KRW){% else %}원가 (KRW){% endif %}</label>
+              <input id="pm-cost" type="number" min="0" max="1000000000000000" step="0.01" inputmode="decimal" placeholder="7000" aria-describedby="pm-help pm-assumption pm-limits" />
             </div>
             <div>
               <label for="pm-target-margin">{% if page.lang == 'en' %}Target margin (%) (optional){% elsif page.lang == 'ja' %}目標利益率(%)（任意）{% else %}목표 마진율(%) (선택){% endif %}</label>
-              <input id="pm-target-margin" type="number" min="0" max="99.9" step="0.1" inputmode="decimal" placeholder="30" aria-describedby="pm-help pm-assumption" />
+              <input id="pm-target-margin" type="number" min="0" max="99.9" step="0.0001" inputmode="decimal" placeholder="30" aria-describedby="pm-help pm-assumption pm-limits" />
             </div>
           </div>
 
           <p class="tool-result" id="pm-assumption">{% if page.lang == 'en' %}Use the same tax basis for sales and cost. Target price is rounded up to the next whole currency unit so it does not fall below the selected margin.{% elsif page.lang == 'ja' %}売上と原価は税込・税抜の基準をそろえてください。目標販売価格は設定利益率を下回らないよう通貨の整数単位で切り上げます。{% else %}매출과 원가는 부가세 포함·제외 기준을 같게 입력하세요. 목표 판매가는 설정 마진율보다 낮아지지 않도록 통화의 1단위로 올림합니다.{% endif %}</p>
 
+          <p class="tool-result" id="pm-limits">{% if page.lang == 'en' %}Amounts: up to 1 quadrillion KRW, 2 decimal places. Sales must be positive; cost may be zero. Optional margin: 0–99.9%, 4 decimals. No commas or exponents. Percentages round to 2 decimals; the whole-KRW target price uses exact upward rounding (minimum 1 KRW). This is gross profit, not net income after all expenses.{% elsif page.lang == 'ja' %}金額は1,000兆KRW以下、小数2桁まで。売上は0超、原価は0可。任意の目標利益率は0〜99.9%、小数4桁まで。カンマ・指数表記不可。率は小数2桁に四捨五入、目標価格は正確に1KRW単位で切り上げ（最低1KRW）。すべての経費を引いた純利益ではありません。{% else %}금액은 1,000조 KRW 이하·소수 2자리, 매출은 0 초과·원가는 0 가능. 선택 목표율은 0~99.9%·소수 4자리입니다. 쉼표·지수 표기는 제외합니다. 비율은 소수 2자리 반올림, 목표가는 정확히 1원 단위 올림(최소 1원)합니다. 모든 경비를 차감한 순이익은 아닙니다.{% endif %}</p>
           <div class="tool-row-grid prmc-actions">
             <button id="pm-example" type="button">{% if page.lang == 'en' %}Load example{% elsif page.lang == 'ja' %}例を入力{% else %}예시 입력{% endif %}</button>
             <button id="pm-copy" type="button" disabled>{% if page.lang == 'en' %}Copy result{% elsif page.lang == 'ja' %}結果をコピー{% else %}결과 복사{% endif %}</button>
@@ -5344,7 +5345,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
 </article>
 
 <script src="{{ '/assets/js/ui.js' | relative_url }}" defer></script>
-<script src="{{ '/assets/js/tools.js' | relative_url }}{% if page.tool_key == 'savings-interest-calculator' %}?v=si-20261101{% elsif page.tool_key == 'compound-interest-calculator' %}?v=ci-20261031{% elsif page.tool_key == 'parking-fee-calculator' %}?v=pf-20261030{% elsif page.tool_key == 'discount-calculator' %}?v=dc-20261029{% elsif page.tool_key == 'volumetric-weight-calculator' %}?v=vw-20261028{% elsif page.tool_key == 'fuel-economy-calculator' %}?v=fe-20261027{% elsif page.tool_key == 'work-end-time-calculator' %}?v=wet-20261026{% elsif page.tool_key == 'vat-calculator' %}?v=vat-20261025{% elsif page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% elsif page.tool_key == 'gpa-calculator' %}?v=gpa-20261024{% endif %}" defer></script>
+<script src="{{ '/assets/js/tools.js' | relative_url }}{% if page.tool_key == 'profit-margin-calculator' %}?v=pm-20261102{% elsif page.tool_key == 'savings-interest-calculator' %}?v=si-20261101{% elsif page.tool_key == 'compound-interest-calculator' %}?v=ci-20261031{% elsif page.tool_key == 'parking-fee-calculator' %}?v=pf-20261030{% elsif page.tool_key == 'discount-calculator' %}?v=dc-20261029{% elsif page.tool_key == 'volumetric-weight-calculator' %}?v=vw-20261028{% elsif page.tool_key == 'fuel-economy-calculator' %}?v=fe-20261027{% elsif page.tool_key == 'work-end-time-calculator' %}?v=wet-20261026{% elsif page.tool_key == 'vat-calculator' %}?v=vat-20261025{% elsif page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% elsif page.tool_key == 'gpa-calculator' %}?v=gpa-20261024{% endif %}" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

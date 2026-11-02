@@ -3159,3 +3159,14 @@ a:hover { color: var(--primary-strong); }
 @media (max-width: 600px) {
   .si-ui .si-grid, .si-ui .tool-stats.si-stats, .si-ui .si-actions { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Profit margin: scoped quality pass, 2026-11-02. */
+.prmc-ui input, .prmc-ui button { min-height: 44px; font-size: 16px; }
+.prmc-ui :is(input, button):focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+.prmc-ui #pm-help[data-state="error"] { color: #b91c1c; }
+.prmc-ui #pm-help[data-state="warning"] { color: #92400e; }
+.prmc-ui #pm-help[data-state="success"] { color: #166534; }
+.prmc-ui .tool-stats > div { min-width: 0; }
+@media (max-width: 640px) {
+ .prmc-ui .prmc-grid, .prmc-ui .prmc-actions, .prmc-ui .prmc-presets, .prmc-ui .tool-stats.prmc-stats { grid-template-columns: 1fr; }
+}

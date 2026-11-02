@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Profit Margin Calculator | Cost Ratio, Markup & Target Price
-description: Calculate cost ratio, profit margin, profit, markup, and the minimum selling price for a target margin. Includes loss warnings, examples, and clear formulas.
+title: Profit Margin Calculator | Exact Target Price & Markup
+description: Calculate cost ratio, profit margin, profit and markup in KRW. Preserve decimal amount differences and round target selling prices upward exactly to whole KRW. Includes input limits, loss warnings and zero-cost handling.
 lang: en
 permalink: /en/tools/profit-margin-calculator/
 canonical_url: /en/tools/profit-margin-calculator/
@@ -12,17 +12,30 @@ image:
   path: /assets/thumbs/profit-margin-calculator.svg
   alt: Profit margin calculator thumbnail
 tool_key: profit-margin-calculator
-keywords: [profit margin calculator, cost ratio calculator, markup calculator, pricing calculator, target margin price, gross margin]
-related_tools: [percent-calculator, discount-calculator, vat-calculator]
+keywords:
+- profit margin calculator
+- cost ratio calculator
+- markup calculator
+- pricing calculator
+- target margin price
+- gross margin
+related_tools:
+- percent-calculator
+- discount-calculator
+- vat-calculator
 faq:
-  - q: What's the difference between cost ratio and margin ratio?
-    a: Cost ratio is cost divided by revenue, while margin ratio is profit divided by revenue. They add up to 100%.
-  - q: How do I calculate selling price for a 30% target margin?
-    a: Use selling price = cost ÷ (1 - target margin). If cost is 70 and target margin is 30%, suggested price is 100.
-  - q: Can I use VAT-included values?
-    a: Yes, as long as both revenue and cost use the same tax basis (both VAT-included or both VAT-excluded).
-  - q: Why are profit margin and markup different?
-    a: Margin divides profit by sales, while markup divides profit by cost. With sales of 100 and cost of 70, margin is 30% and markup is about 42.86%.
+- q: What's the difference between cost ratio and margin ratio?
+  a: Cost ratio is cost divided by revenue, while margin ratio is profit divided by revenue. They add up to 100%.
+- q: How do I calculate selling price for a 30% target margin?
+  a: Use selling price = cost ÷ (1 - target margin). If cost is 70 and target margin is 30%, suggested price is 100.
+- q: Can I use VAT-included values?
+  a: Yes, as long as both revenue and cost use the same tax basis (both VAT-included or both VAT-excluded).
+- q: Why are profit margin and markup different?
+  a: Margin divides profit by sales, while markup divides profit by cost. With sales of 100 and cost of 70, margin is 30% and markup is about 42.86%.
+- q: What are the input limits and target price rounding rules?
+  a: Sales must be positive; cost may be zero. Each amount supports up to 1 quadrillion KRW and 2 decimal places. Optional target margin supports 0–99.9% and 4 decimal places; leave it blank to skip the target price. Use plain numbers without commas or exponents. Integer-based arithmetic preserves amount differences and computes exact upward rounding even for large prices. Only displayed percentages round to 2 decimals.
+- q: What is the target price when cost is zero?
+  a: A zero selling price has undefined margin, so the minimum positive price of 1 KRW is suggested. The margin is then 100%; markup is not calculated because cost is zero. This estimate does not include platform minimum payments, fees, tax or labor unless you include them in cost.
 alternate_urls:
   ko: /tools/profit-margin-calculator/
   en: /en/tools/profit-margin-calculator/
@@ -69,3 +82,12 @@ Their denominators differ. With sales of 100 and cost of 70, profit is 30, margi
 
 ### Can I enter VAT-included prices?
 Yes. Use the same basis for both sales and cost—either both VAT-included or both VAT-excluded.
+
+
+## Input limits and exact target prices
+Sales must be positive; cost may be zero. Each amount supports up to 1 quadrillion KRW and 2 decimal places. Optional target margin supports 0–99.9% and 4 decimal places; leave it blank to skip the target price. Use plain numbers without commas or exponents. Integer-based arithmetic preserves amount differences and computes exact upward rounding even for large prices. Only displayed percentages round to 2 decimals.
+
+Sales of 1,000,000,000,000,000 KRW minus cost of 999,999,999,999,999.99 KRW leaves 0.01 KRW, not zero. Cost of 7,000 KRW and a 30% target margin gives a 10,000 KRW target; zero cost gives a minimum 1 KRW. All amounts use KRW, not currency conversion. This is gross profit, not net income after all fixed expenses.
+
+### What is the target price when cost is zero?
+A zero selling price has undefined margin, so the minimum positive price of 1 KRW is suggested. The margin is then 100%; markup is not calculated because cost is zero. This estimate does not include platform minimum payments, fees, tax or labor unless you include them in cost.
