@@ -1797,8 +1797,8 @@
   badge_en: New
   badge_ja: 新着
   description: 서울·뉴욕·런던·LA의 시차와 회의 시간을 변환하세요. DST 중복 시각을 선택하고, 시간대를 교환해도 같은 순간을 유지하며 양쪽 UTC 오프셋을 함께 복사합니다.
-  description_en: Convert Seoul, New York, London and LA meeting times. Select repeated DST times, preserve the instant when swapping zones, and copy both IANA zones and UTC offsets.
-  description_ja: ソウル・ニューヨーク・ロンドン・LAの会議時刻と時差を変換。DST重複時刻を選択し、入れ替えても同じ瞬間を保ち、両都市のIANA名とUTC差をコピーできます。
+  description_en: Convert Seoul, New York, London and LA meeting times. Choose the first or second occurrence of repeated DST times, preserve the instant when swapping zones, and copy both IANA zones and UTC offsets.
+  description_ja: ソウル・ニューヨーク・ロンドン・LAの会議時刻と時差を変換。サマータイム終了時の重複時刻を選択でき、入れ替えても同じ瞬間を維持。両都市のIANAタイムゾーン名とUTCオフセットをコピーできます。
   url: /tools/timezone-converter/
   url_en: /en/tools/timezone-converter/
   url_ja: /ja/tools/timezone-converter/

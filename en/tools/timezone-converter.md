@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Timezone Converter | DST Folds & Seoul–New York Meetings
-description: Convert Seoul, New York, London and LA meeting times. Select repeated DST times, preserve the instant when swapping zones, and copy both IANA zones and UTC offsets.
+title: Time Zone Converter | Repeated DST Times & Seoul–New York Meetings
+description: Convert Seoul, New York, London and LA meeting times. Choose the first or second occurrence of repeated DST times, preserve the instant when swapping zones, and copy both IANA zones and UTC offsets.
 lang: en
 permalink: /en/tools/timezone-converter/
 canonical_url: /en/tools/timezone-converter/
@@ -29,12 +29,12 @@ faq:
 - q: What does the source time zone mean?
   a: The date and time you enter are interpreted as local time in the selected source zone.
 - q: Can I copy the converted meeting time?
-  a: Yes. Use the copy result button to paste the converted time into a calendar invite, chat, or email.
+  a: Yes. Copy result includes both local dates and times, IANA time zone names and UTC offsets. Include the city or time zone when sharing an invitation to avoid ambiguity.
 - q: Can I quickly convert Seoul to New York meeting times?
   a: Yes. Use the Seoul to New York preset to convert a Seoul reference time into New York local time immediately.
 - q: Does swapping zones preserve a repeated DST time?
   a: Yes. On November 1, 2026, 06:30 UTC is the second 01:30 in New York (UTC-05:00). Swapping zones keeps that instant, rather than changing it to the first occurrence at 05:30 UTC. Copied results include both IANA zone names and UTC offsets.
-- q: Supported dates and precision?
+- q: What dates and time precision are supported?
   a: Enter dates from January 1, 1970 through December 31, 2100 with minute precision. Empty input waits for a date; invalid dates, out-of-range years and seconds produce an error. Times skipped when DST starts are rejected. Updated browser timezone data is needed to reflect recent rule changes.
 alternate_urls:
   ko: /tools/timezone-converter/
@@ -43,9 +43,9 @@ alternate_urls:
 ---
 
 ## Why use a timezone converter?
-This **timezone converter** is designed for search intents such as `Korea US time difference`, `meeting time converter`, `KST to PST`, and `Seoul to New York meeting time`.
+Plan cross-border calls with this **time zone converter**: check the Korea–US time difference, convert KST to Pacific Time, or find a Seoul–New York meeting time for a specific date.
 
-The tool uses browser timezone data for DST-aware conversion. The result shows both local times, the target UTC offset, the difference between the two zones, and whether the target date stays the same, moves to the previous day, or moves to the next day.
+The tool uses browser timezone data for DST-aware conversion. The result shows both local times, the target UTC offset (with both offsets in the copy-ready result), the difference between the two zones, and whether the target date stays the same, moves to the previous day, or moves to the next day.
 
 ## How to use
 1. Choose the source time zone or tap a common pair.
@@ -54,7 +54,7 @@ The tool uses browser timezone data for DST-aware conversion. The result shows b
 4. Check the converted local time and zone difference.
 5. Copy the result for a calendar invite, chat message, or release note.
 
-`Use current time` enters the current local time in the selected **source time zone**, not your device's time zone. The converter rejects local times skipped when DST starts. When a local time occurs twice as DST ends, you can choose the first or second occurrence. `Swap time zones` reverses the source and target while preserving the same instant shown in the current result.
+`Use current time` enters the current local time in the selected **source time zone**, not your device's time zone. The converter rejects local times skipped when DST starts. When a local time occurs twice as DST ends, you can choose the first or second occurrence. `Swap zones` reverses the source and target while preserving the same instant shown in the current result.
 
 ## Practical examples
 - Confirm a weekly meeting time between a Seoul headquarters and a North American branch
@@ -75,6 +75,12 @@ The tool uses browser timezone data for DST-aware conversion. The result shows b
 - Focus session planning: [Pomodoro Timer]({{ '/en/tools/pomodoro-timer/' | relative_url }})
 - Timezone data reference: [IANA Time Zone Database](https://www.iana.org/time-zones)
 
+## Supported dates and precision
+Enter dates from January 1, 1970 through December 31, 2100 with minute precision. Empty input waits for a date; invalid dates, out-of-range years and seconds produce an error. Times skipped when DST starts are rejected. Updated browser timezone data is needed to reflect recent rule changes.
+
+### Empty input or an error?
+Clear removes the previous result and disables copying until a valid time is entered. For an invalid date, enter a real date within 1970–2100 and omit seconds. If DST skips the source local time, choose another time; if it repeats, select the intended occurrence. Use current time fills the selected source zone, not your device zone.
+
 ## FAQ
 ### Does this timezone converter handle daylight saving time?
 Yes. It uses browser IANA timezone data. A nonexistent local time is rejected, while a repeated local time lets you choose its first or second occurrence.
@@ -83,17 +89,13 @@ Yes. It uses browser IANA timezone data. A nonexistent local time is rejected, w
 The date and time you enter are interpreted as local time in the selected source zone.
 
 ### Can I copy the converted meeting time?
-Yes. Use the copy result button to paste the converted time into a calendar invite, chat, or email.
+Yes. Copy result includes both local dates and times, IANA time zone names and UTC offsets. Include the city or time zone when sharing an invitation to avoid ambiguity.
 
 ### Can I quickly convert Seoul to New York meeting times?
 Yes. Use the Seoul to New York preset to convert a Seoul reference time into New York local time immediately.
 
-## Summary
-This timezone converter helps reduce one of the most common scheduling mistakes in global communication: mixing up time zones, DST, or date changes.
-
-
-## Supported dates and precision
-Enter dates from January 1, 1970 through December 31, 2100 with minute precision. Empty input waits for a date; invalid dates, out-of-range years and seconds produce an error. Times skipped when DST starts are rejected. Updated browser timezone data is needed to reflect recent rule changes.
-
 ### Does swapping zones preserve a repeated DST time?
 Yes. On November 1, 2026, 06:30 UTC is the second 01:30 in New York (UTC-05:00). Swapping zones keeps that instant, rather than changing it to the first occurrence at 05:30 UTC. Copied results include both IANA zone names and UTC offsets.
+
+## Summary
+This timezone converter helps reduce one of the most common scheduling mistakes in global communication: mixing up time zones, DST, or date changes.
