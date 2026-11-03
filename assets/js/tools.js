@@ -669,7 +669,7 @@
       ko: {
         locale: 'ko-KR',
         empty: '날짜와 시간을 입력하면 대상 지역의 현지 시간이 표시됩니다.',
-        invalid: '날짜나 시간 형식을 확인해 주세요.',
+        invalid: '1970~2100년 범위의 올바른 날짜와 분 단위 시간을 입력해 주세요.',
         nonexistent: '선택한 기준 시간대에서 DST 전환으로 존재하지 않는 현지 시각입니다. 다른 시각을 입력해 주세요.',
         ambiguous: (choice) => `DST 종료로 두 번 반복되는 현지 시각입니다. ${choice === 'later' ? '두 번째' : '첫 번째'} 시각 기준 결과입니다.`,
         copied: '변환 결과를 복사했습니다.',
@@ -685,7 +685,7 @@
       en: {
         locale: 'en-US',
         empty: 'Enter a date and time to see the converted local time.',
-        invalid: 'Check the date and time format.',
+        invalid: 'Enter a valid date from 1970 through 2100 with minute precision.',
         nonexistent: 'This local time does not exist in the source zone because of a DST transition. Choose another time.',
         ambiguous: (choice) => `This local time repeats when DST ends. Showing the ${choice === 'later' ? 'second' : 'first'} occurrence.`,
         copied: 'Copied the converted time.',
@@ -701,7 +701,7 @@
       ja: {
         locale: 'ja-JP',
         empty: '日付と時刻を入力すると、変換先の現地時刻を表示します。',
-        invalid: '日付または時刻の形式を確認してください。',
+        invalid: '1970〜2100年の有効な日付と分単位の時刻を入力してください。',
         nonexistent: 'DST切替により、基準タイムゾーンに存在しない現地時刻です。別の時刻を選んでください。',
         ambiguous: (choice) => `DST終了で2回繰り返される現地時刻です。${choice === 'later' ? '2回目' : '1回目'}の時刻を表示します。`,
         copied: '変換結果をコピーしました。',
@@ -718,6 +718,7 @@
     const tzText = tzI18n[pageLang] || tzI18n.ko;
     let currentSummary = '';
     let currentInstant = null;
+    let revision = 0;
     const zones = [
       ['Asia/Seoul', 'Seoul (KST)'],
       ['Asia/Tokyo', 'Tokyo (JST)'],
@@ -746,13 +747,15 @@
     fillZones(from, 'Asia/Seoul');
     fillZones(to, 'America/Los_Angeles');
 
+    const partsFormatters = new Map();
     const getParts = (date, timeZone) => {
-      const parts = new Intl.DateTimeFormat('en-US', {
+      if (!partsFormatters.has(timeZone)) partsFormatters.set(timeZone, new Intl.DateTimeFormat('en-US', {
         timeZone,
         year: 'numeric', month: '2-digit', day: '2-digit',
         hour: '2-digit', minute: '2-digit', second: '2-digit',
         hourCycle: 'h23'
-      }).formatToParts(date);
+      }));
+      const parts = partsFormatters.get(timeZone).formatToParts(date);
       const map = {};
       parts.forEach(p => { if (p.type !== 'literal') map[p.type] = p.value; });
       return map;
@@ -763,6 +766,7 @@
       if (!match) return null;
       const values = match.slice(1).map(Number);
       const [Y, M, D, h, m] = values;
+      if (Y < 1970 || Y > 2100) return null;
       const check = new Date(Date.UTC(Y, M - 1, D, h, m));
       if (
         check.getUTCFullYear() !== Y || check.getUTCMonth() !== M - 1 || check.getUTCDate() !== D ||
@@ -873,6 +877,13 @@
     };
 
     const run = () => {
+      revision++;
+      if (dt.validity.badInput || (dt.value && !parseLocalInput(dt.value)) ||
+          !zones.some(([zone]) => zone === from.value) || !zones.some(([zone]) => zone === to.value)) {
+        dt.setAttribute('aria-invalid', 'true');
+        resetResult(tzText.invalid, 'error');
+        return;
+      }
       if (!dt.value) {
         dt.setAttribute('aria-invalid', 'false');
         resetResult(tzText.empty);
@@ -897,7 +908,7 @@
       const offset = getOffsetLabel(utcDate, to.value);
       const difference = formatSignedMinutes(getOffsetMinutes(utcDate, to.value) - getOffsetMinutes(utcDate, from.value));
       const dayDiff = getDayDiffText(utcDate, from.value, to.value);
-      const result = tzText.result(from.options[from.selectedIndex].text, sourceText, to.options[to.selectedIndex].text, resultText, offset, dayDiff);
+      const result = `[${from.value} ${getOffsetLabel(utcDate, from.value)} → ${to.value} ${offset}] ${tzText.result(from.options[from.selectedIndex].text, sourceText, to.options[to.selectedIndex].text, resultText, offset, dayDiff)}`;
       currentSummary = result;
       currentInstant = utcDate;
       setStatus(conversion.ambiguous ? `${tzText.ambiguous(disambiguation?.value)} ${result}` : result, conversion.ambiguous ? 'warning' : 'success');
@@ -905,8 +916,16 @@
       copyBtn.disabled = false;
     };
 
+    // Select the occurrence that preserves the instant when entering a DST fold.
+    const setInstant = (instant) => {
+      dt.value = formatInputForZone(instant, from.value);
+      const first = zonedToUtc(dt.value, from.value, 'earlier');
+      if (disambiguation && first?.date) {
+        disambiguation.value = Math.abs(first.date.getTime() - instant.getTime()) < 60000 ? 'earlier' : 'later';
+      }
+    };
     const setNow = () => {
-      dt.value = formatInputForZone(new Date(), from.value);
+      setInstant(new Date());
       run();
       dt.focus();
     };
@@ -915,6 +934,7 @@
     [from, to, disambiguation].forEach(el => el?.addEventListener('change', run));
     nowBtn?.addEventListener('click', setNow);
     clearBtn?.addEventListener('click', () => {
+      revision++;
       dt.value = '';
       resetResult(tzText.cleared);
       dt.setAttribute('aria-invalid', 'false');
@@ -925,7 +945,7 @@
       const oldFrom = from.value;
       from.value = to.value;
       to.value = oldFrom;
-      if (instant) dt.value = formatInputForZone(instant, from.value);
+      if (instant) setInstant(instant);
       run();
     });
     copyBtn?.addEventListener('click', async () => {
@@ -933,24 +953,30 @@
         setStatus(tzText.copyFail, 'error');
         return;
       }
+      const copiedSummary = currentSummary;
+      const copiedRevision = revision;
       try {
         if (navigator.clipboard?.writeText) {
-          await navigator.clipboard.writeText(currentSummary);
+          await navigator.clipboard.writeText(copiedSummary);
         } else {
           const fallback = document.createElement('textarea');
-          fallback.value = currentSummary;
+          fallback.value = copiedSummary;
           fallback.setAttribute('readonly', '');
           fallback.style.position = 'fixed';
           fallback.style.opacity = '0';
           document.body.appendChild(fallback);
-          fallback.select();
-          const copied = document.execCommand('copy');
-          fallback.remove();
-          if (!copied) throw new Error('copy failed');
+          const previousFocus = document.activeElement;
+          try {
+            fallback.select();
+            if (!document.execCommand('copy')) throw new Error('copy failed');
+          } finally {
+            fallback.remove();
+            previousFocus?.focus({ preventScroll: true });
+          }
         }
-        setStatus(`${tzText.copied} ${currentSummary}`, 'success');
+        if (revision === copiedRevision) setStatus(`${tzText.copied} ${copiedSummary}`, 'success');
       } catch (_) {
-        setStatus(tzText.copyUnavailable, 'error');
+        if (revision === copiedRevision) setStatus(tzText.copyUnavailable, 'error');
       }
     });
     document.querySelectorAll('.tz-presets button').forEach(btn => btn.addEventListener('click', () => {

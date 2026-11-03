@@ -1796,9 +1796,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 서울, 뉴욕, 런던, LA 등 주요 시간대를 DST 전환 오류, UTC 오프셋, 날짜 변경까지 확인하며 회의 시간으로 변환해요.
-  description_en: Convert Seoul, New York, London, LA, and other major time zones with DST transition error checks, UTC offsets, and date-shift checks.
-  description_ja: ソウル、ニューヨーク、ロンドン、LAなど主要タイムゾーンをDST切替エラー、UTC差、日付差まで確認しながら変換できます。
+  description: 서울·뉴욕·런던·LA의 시차와 회의 시간을 변환하세요. DST 중복 시각을 선택하고, 시간대를 교환해도 같은 순간을 유지하며 양쪽 UTC 오프셋을 함께 복사합니다.
+  description_en: Convert Seoul, New York, London and LA meeting times. Select repeated DST times, preserve the instant when swapping zones, and copy both IANA zones and UTC offsets.
+  description_ja: ソウル・ニューヨーク・ロンドン・LAの会議時刻と時差を変換。DST重複時刻を選択し、入れ替えても同じ瞬間を保ち、両都市のIANA名とUTC差をコピーできます。
   url: /tools/timezone-converter/
   url_en: /en/tools/timezone-converter/
   url_ja: /ja/tools/timezone-converter/
