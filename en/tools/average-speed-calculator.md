@@ -12,7 +12,7 @@ image:
   path: /assets/thumbs/en/average-speed-calculator.svg
   alt: Average speed calculator preview
 tool_key: average-speed-calculator
-keywords: [average speed calculator, kmh calculator, pace calculator, running pace, distance time speed]
+keywords: [average speed calculator, kmh calculator, pace calculator, running pace, distance time speed, 400m pace calculator, km and meters pace calculator]
 related_tools: [unit-converter, average-calculator, work-end-time-calculator]
 faq:
   - q: What is the difference between km/h and pace?
@@ -25,9 +25,8 @@ faq:
     a: Distance must be from 0.000001 to 100,000 km. Hours, minutes and seconds must be non-negative whole numbers, and total time must be greater than 0 and no more than 9,999 hours.
   - q: Can I calculate a running record with seconds?
     a: Yes. Combine hours, minutes and seconds, or enter total minutes or seconds alone. Blank time fields count as zero. Total duration must be greater than zero and no more than 9,999 hours.
-
   - q: Can I enter distance in meters?
-    a: Yes. Select m and enter a distance such as 400. Kilometers support up to 6 decimal places and meters up to 3. Changing units reinterprets the entered number rather than converting it. Pace is always per kilometer.
+    a: Yes. Select m and enter a distance such as 400. Kilometers support up to 6 decimal places and meters up to 3. Changing units keeps the number unchanged and treats it as the newly selected unit rather than converting it. Pace is always per kilometer.
 alternate_urls:
   ko: /tools/average-speed-calculator/
   en: /en/tools/average-speed-calculator/
@@ -43,16 +42,16 @@ This tool converts distance and time into
 If you only know total minutes, you can enter 90 minutes directly without converting it to 1 hour 30 minutes first.
 
 ## Key features
-- Calculate average speed from distance and time
+- Calculate average speed from distance in kilometers or meters and time in hours, minutes and seconds
 - Automatically show pace per kilometer
-- Support total-minute entries greater than 59
+- Accept total minutes or total seconds greater than 59, without converting them first
 - Explain missing distance, negative or fractional time values, and zero-duration inputs
 - Estimate 5K and 10K times from the same speed
 - Load an example, clear inputs, and copy valid results
 - Useful for running, walking, cycling, and trip planning
 
 ## How to use it
-1. Enter the travel distance in kilometers.
+1. Choose **km** or **m**, then enter the distance. For a 400 m track lap, select **m** and enter `400`; for the same distance in km, select **km** and enter `0.4`. Changing the unit does not convert the number, so check both before reading the results.
 2. Enter hours, minutes and optional seconds. For 1 hour 30 minutes, enter `1` hour and `30` minutes. For 90 minutes, leave hours blank and enter `90` in minutes. You can also enter total seconds alone.
 3. Check average speed and pace.
 4. Use the projected 5K and 10K times as quick references, then copy the valid results. To try the seconds input, load the 10 km / 52 min 30 sec running example; use Clear to start again.
@@ -68,9 +67,9 @@ your average speed is **10 km/h** and your pace is **6:00 per km**.
 If you run 10 km in 52 minutes, the result is about **11.54 km/h** with a **5:12/km** pace. The 5K and 10K estimates are simple conversions from that same pace.
 
 ## Input checks
-- Distance is required and must be from 0.000001 to 100,000 km. Decimal distances such as 3.5 km and 42.195 km are supported.
+- Distance is required: **0.000001–100,000 km** or **0.001–100,000,000 m**. Use up to 6 decimal places for km or 3 for m. Enter plain numbers with a decimal point if needed, without commas, exponents (`1e3`) or unit suffixes.
 - Hours, minutes and seconds must be non-negative whole numbers. Blank time fields count as zero.
-- Minutes can be greater than 59, so `90` minutes is valid.
+- Minutes and seconds can both exceed 59. Enter `90` in minutes for 1 hour 30 minutes, or `90` in seconds for 1 minute 30 seconds.
 - Total time must be greater than 0 and no more than 9,999 hours. Zero duration or a duration above the limit shows an error.
 - With all fields empty, results show `-` and the tool prompts you to enter distance and time. Invalid inputs clear the results and disable copying; correct the highlighted fields to calculate again.
 
@@ -84,7 +83,7 @@ If you run 10 km in 52 minutes, the result is about **11.54 km/h** with a **5:12
 km/h is often easier for vehicles and general travel, while min/km is more intuitive for running and pace-based training.
 
 ### Can I enter decimal distances?
-Yes. Distances such as 3.5 km or 42.195 km work fine.
+Yes. Distances such as 3.5 km or 42.195 km work fine. Choose the matching unit first; km allows up to 6 decimal places and m up to 3.
 
 ### Does 90 minutes become 1 hour 30 minutes?
 Yes. Minute values are treated as total minutes, so 90 minutes is calculated as 1 hour 30 minutes.
@@ -110,4 +109,4 @@ Select **m**, enter distance `400` and seconds `90`. The result is **16 km/h**, 
 Use plain numbers without exponents (`1e3`), commas or unit suffixes. Kilometers allow 6 decimal places and meters 3. Hours, minutes and seconds accept non-negative digit-only whole numbers; blank time fields mean zero. Minutes and seconds may exceed 59. Invalid fields are marked individually; errors clear previous results and disable copying.
 
 ### Can I enter distance in meters?
-Yes. Select m and enter a distance such as 400. Kilometers support up to 6 decimal places and meters up to 3. Changing units reinterprets the entered number rather than converting it. Pace is always per kilometer.
+Yes. Select m and enter a distance such as 400. Kilometers support up to 6 decimal places and meters up to 3. Changing units keeps the number unchanged and treats it as the newly selected unit rather than converting it. Pace is always per kilometer.
