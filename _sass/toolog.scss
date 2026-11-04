@@ -3185,3 +3185,16 @@ a:hover { color: var(--primary-strong); }
  .tz-ui .tz-grid, .tz-ui .tz-stats { grid-template-columns:minmax(0,1fr); }
  .tz-ui .tz-actions, .tz-ui .tz-presets { grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
+
+/* Average speed: explicit units, readable validation, small-screen results. */
+.as-ui select { min-height: 44px; font-size: 16px; width: 100%; }
+.as-ui select:focus-visible { outline: 2px solid #60a5fa; outline-offset: 3px; }
+.as-ui #as-help[data-state="error"] { color: #b91c1c; }
+.as-ui #as-help[data-state="success"] { color: #166534; }
+.as-ui .as-stats > div { min-width: 0; }
+.as-ui #as-unit-note { overflow-wrap: anywhere; }
+@media (prefers-color-scheme: dark) {
+  .as-ui #as-help[data-state="error"] { color: #fca5a5; }
+  .as-ui #as-help[data-state="success"] { color: #86efac; }
+}
+@media (max-width: 480px) { .as-ui .as-stats { grid-template-columns: 1fr; } }

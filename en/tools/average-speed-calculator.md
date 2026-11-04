@@ -1,8 +1,8 @@
 ---
 layout: tool
 lang: en
-title: Average Speed & Running Pace Calculator | Hours, Minutes, Seconds
-description: Calculate km/h, running pace per kilometer and estimated 5K/10K times from distance and hours, minutes or seconds. Supports total minutes, decimal distances, input checks and result copying.
+title: Average Speed & Running Pace Calculator | km or m, Hours to Seconds
+description: Calculate km/h, pace per km and estimated 5K/10K times from km or meters and hours, minutes or seconds. Try a 400 m track lap, total minutes or seconds, and copy your results.
 permalink: /en/tools/average-speed-calculator/
 canonical_url: /en/tools/average-speed-calculator/
 category: calculator
@@ -25,6 +25,9 @@ faq:
     a: Distance must be from 0.000001 to 100,000 km. Hours, minutes and seconds must be non-negative whole numbers, and total time must be greater than 0 and no more than 9,999 hours.
   - q: Can I calculate a running record with seconds?
     a: Yes. Combine hours, minutes and seconds, or enter total minutes or seconds alone. Blank time fields count as zero. Total duration must be greater than zero and no more than 9,999 hours.
+
+  - q: Can I enter distance in meters?
+    a: Yes. Select m and enter a distance such as 400. Kilometers support up to 6 decimal places and meters up to 3. Changing units reinterprets the entered number rather than converting it. Pace is always per kilometer.
 alternate_urls:
   ko: /tools/average-speed-calculator/
   en: /en/tools/average-speed-calculator/
@@ -99,3 +102,12 @@ Include stops for overall trip speed, or exclude them for moving speed. Calculat
 
 ### Can I calculate a running record with seconds?
 Yes. Combine hours, minutes and seconds, or enter total minutes or seconds alone. Blank time fields count as zero. Total duration must be greater than zero and no more than 9,999 hours.
+
+
+## Meters and a 400 m track example
+Select **m**, enter distance `400` and seconds `90`. The result is **16 km/h**, **3:45/km**, and an estimated 5K of **18:45**. Selecting km and entering `0.4` gives the same result. Changing units leaves the number unchanged and recalculates it in the selected unit.
+
+Use plain numbers without exponents (`1e3`), commas or unit suffixes. Kilometers allow 6 decimal places and meters 3. Hours, minutes and seconds accept non-negative digit-only whole numbers; blank time fields mean zero. Minutes and seconds may exceed 59. Invalid fields are marked individually; errors clear previous results and disable copying.
+
+### Can I enter distance in meters?
+Yes. Select m and enter a distance such as 400. Kilometers support up to 6 decimal places and meters up to 3. Changing units reinterprets the entered number rather than converting it. Pace is always per kilometer.
