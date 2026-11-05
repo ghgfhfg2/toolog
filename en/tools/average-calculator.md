@@ -1,7 +1,7 @@
 ---
 layout: tool
 title: Average Calculator | Mean, Median, Standard Deviation & Comma Modes
-description: Calculate mean, median, sum, population standard deviation and quartiles. Choose comma or line separators, review ignored entries and validate number limits in your browser.
+description: Calculate mean, median, sum, population standard deviation and quartiles. Choose separators, preview excluded entries and catch tiny or out-of-range numbers before copying results.
 lang: en
 permalink: /en/tools/average-calculator/
 canonical_url: /en/tools/average-calculator/
@@ -15,6 +15,8 @@ tool_key: average-calculator
 keywords: [average calculator, mean calculator, median calculator, standard deviation calculator, quartile calculator, number list stats]
 related_tools: [percent-calculator, average-speed-calculator, unit-converter, text-counter]
 faq:
+  - q: What happens to tiny inputs such as 1e-999?
+    a: "Nonzero input magnitudes must be at least 1e-150 and all values must be within ±1 quadrillion. Out-of-range numbers stop the entire calculation instead of becoming zero or being ignored. Scientific notation such as 1e-10 works within these limits. Text entries are excluded, with up to 3 examples shown. Statistics are floating-point approximations, not exact accounting values."
   - q: Why are the results blank or unavailable to copy?
     a: Empty input leaves the results as dashes. If no valid numbers remain or an input limit is exceeded, results are cleared and copying is disabled. Check the status message, correct the list, or load an example.
   - q: How should I input numbers?
@@ -102,3 +104,7 @@ An empty list shows dashes rather than a zero average. If every entry is invalid
 
 ### Why are the results blank or unavailable to copy?
 Check the status message for empty input, an all-invalid list, or an exceeded limit. Remove invalid entries, reduce the list, or correct out-of-range values. If automatic copying fails, select and copy the displayed values manually.
+
+### What happens to tiny inputs such as 1e-999?
+
+Nonzero input magnitudes must be at least 1e-150 and all values must be within ±1 quadrillion. Out-of-range numbers stop the entire calculation instead of becoming zero or being ignored. Scientific notation such as 1e-10 works within these limits. Text entries are excluded, with up to 3 examples shown. Statistics are floating-point approximations, not exact accounting values.

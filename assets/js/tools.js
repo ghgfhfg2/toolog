@@ -16414,6 +16414,18 @@
       copyDefault: '결과 복사'
     };
 
+    const rangeError = {
+      ko: '계산을 중단했습니다. 각 숫자는 ±1,000조 이내이며, 0이 아니라면 절댓값이 1e-150 이상이어야 합니다. 지수 범위와 입력값을 확인하세요.',
+      en: 'Calculation stopped. Each number must be within ±1 quadrillion; nonzero magnitudes must be at least 1e-150. Check exponents and input values.',
+      ja: '計算を停止しました。各数値は±1,000兆以内、ゼロ以外の絶対値は1e-150以上にしてください。指数と入力値を確認してください。'
+    }[pageLang];
+    const excludedLabel = { ko: '제외 항목 예시', en: 'Excluded examples', ja: '除外項目の例' }[pageLang];
+    let revision = 0;
+    let copyRequest = 0;
+    const invalidateCopy = () => {
+      revision += 1;
+      if (copyBtn) copyBtn.textContent = text.copyDefault;
+    };
     const MAX_ITEMS = 5000;
     const MAX_ABS = 1000000000000000;
     const fmt = (n) => n !== 0 && Math.abs(n) < 0.00000001 ? n.toExponential(6) : Number(n).toLocaleString(numberLocale, { maximumFractionDigits: 8 });
@@ -16455,8 +16467,8 @@
       const grouped = /^[-+]?\d{1,3}(?:,\d{3})+(?:\.\d+)?(?:e[-+]?\d+)?$/i;
       const clean = (token) => token.trim().replace(/^([+-]?)[₩$¥€£]/, '$1');
       const chunks = mode === 'lines' ? source.split(/\r?\n|[;|]/) : source.split(/[\s;|]+/);
-      const nums = [];
-      let invalid = 0, tokenCount = 0;
+      const nums = [], excluded = [];
+      let invalid = 0, tokenCount = 0, outOfRange = false;
       for (const chunk of chunks) {
         let token = clean(chunk);
         if (mode === 'auto' && token.endsWith(',') && grouped.test(token.slice(0, -1))) token = token.slice(0, -1);
@@ -16467,10 +16479,18 @@
           tokenCount++;
           const normalized = mode !== 'comma' && grouped.test(valueToken) ? valueToken.replace(/,/g, '') : valueToken;
           const value = numeric.test(normalized) ? Number(normalized) : NaN;
-          if (Number.isFinite(value)) nums.push(value); else invalid++;
+          // Check the mantissa, not Number(value): underflow must not become a valid zero.
+          const nonzero = /[1-9]/.test(normalized.split(/e/i)[0]);
+          if (numeric.test(normalized) && (!Number.isFinite(value) || Math.abs(value) > MAX_ABS || (nonzero && Math.abs(value) < 1e-150))) {
+            outOfRange = true;
+          } else if (Number.isFinite(value)) nums.push(value);
+          else {
+            invalid++;
+            if (excluded.length < 3) excluded.push(valueToken.length > 40 ? valueToken.slice(0, 40) + '…' : valueToken);
+          }
         }
       }
-      return { nums, invalid, tokenCount };
+      return { nums, invalid, tokenCount, outOfRange, excluded };
     };
     // Neumaier summation preserves small values when positive/negative large values cancel.
     const stableSum = (values) => {
@@ -16490,6 +16510,7 @@
     };
 
     const render = () => {
+      invalidateCopy();
       if (input.value.length > 100000) { setIdle(lengthError, 'error'); return; }
       const parsed = parseNumbers(input.value);
       const nums = parsed.nums;
@@ -16497,8 +16518,8 @@
         setIdle(text.tooMany, 'error');
         return;
       }
-      if (nums.some((n) => Math.abs(n) > MAX_ABS)) {
-        setIdle(text.tooLarge, 'error');
+      if (parsed.outOfRange) {
+        setIdle(rangeError, 'error');
         return;
       }
       if (!nums.length) {
@@ -16534,7 +16555,7 @@
       ignoredEl.textContent = parsed.invalid ? parsed.invalid.toLocaleString(numberLocale) : '0';
       if (copyBtn) copyBtn.disabled = false;
       setStatus(parsed.invalid ? text.mixed(count.toLocaleString(numberLocale), parsed.invalid.toLocaleString(numberLocale)) : text.summary(count.toLocaleString(numberLocale), fmt(mean)), parsed.invalid ? 'warning' : 'success');
-      if (detail) detail.textContent = text.detail(fmt(min), fmt(max), fmt(range), fmt(q1), fmt(q3), fmt(stdDev));
+      if (detail) detail.textContent = text.detail(fmt(min), fmt(max), fmt(range), fmt(q1), fmt(q3), fmt(stdDev)) + (parsed.excluded.length ? ` · ${excludedLabel}: ${parsed.excluded.join(' / ')}` : '');
     };
 
     input.addEventListener('input', render);
@@ -16551,17 +16572,20 @@
         input.focus();
         return;
       }
+      const savedRevision = revision;
+      const request = ++copyRequest;
       try {
         await copyText(text.copy(countEl.textContent, sumEl.textContent, meanEl.textContent, medianEl.textContent, minEl.textContent, maxEl.textContent, rangeEl.textContent, q1El.textContent, q3El.textContent, stdDevEl.textContent, ignoredEl.textContent));
-        const old = copyBtn.textContent;
+        if (savedRevision !== revision || request !== copyRequest) return;
         copyBtn.textContent = text.copied;
         setStatus(text.copied, 'success');
-        setTimeout(() => { copyBtn.textContent = old || text.copyDefault; }, 900);
+        setTimeout(() => { if (savedRevision === revision && request === copyRequest) copyBtn.textContent = text.copyDefault; }, 900);
       } catch (_) {
-        setStatus(text.copyFail, 'error');
+        if (savedRevision === revision && request === copyRequest) setStatus(text.copyFail, 'error');
       }
     });
     resetBtn?.addEventListener('click', () => {
+      invalidateCopy();
       input.value = '';
       if (separator) separator.value = 'auto';
       setIdle(text.idle);

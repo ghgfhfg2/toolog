@@ -2743,3 +2743,12 @@ a:hover { color: #fff; text-decoration: none; }
   .as-ui #as-help[data-state="success"] { color: #86efac; }
 }
 @media (max-width: 480px) { .as-ui .as-stats { grid-template-columns: 1fr; } }
+
+/* Average calculator: readable validation and mobile input flow. */
+.avg-ui #avg-detail { white-space: pre-wrap; overflow-wrap: anywhere; }
+.avg-ui #avg-input { line-height: 1.65; }
+.avg-ui #avg-input:focus-visible { outline: 3px solid #60a5fa; outline-offset: 3px; }
+@media (max-width: 600px) {
+  .avg-ui .avg-actions { grid-template-columns: 1fr; }
+  .avg-ui .avg-stats { grid-template-columns: 1fr; }
+}
