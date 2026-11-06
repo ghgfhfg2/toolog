@@ -1,7 +1,7 @@
 ---
 layout: tool
-title: Tip Calculator | Restaurant Gratuity and Split Per Person
-description: Calculate a restaurant tip, total bill, and per-person split from subtotal, tax, service fee, and a percentage or fixed gratuity.
+title: Tip Calculator | Restaurant Tips, Bill Split & Exact Settlement
+description: Calculate restaurant tips and totals with cent-accurate rounding. Compare the per-person average with an exact-total settlement split, include fees, and copy results.
 lang: en
 permalink: /en/tools/tip-calculator/
 canonical_url: /en/tools/tip-calculator/
@@ -12,17 +12,25 @@ image:
   path: /assets/thumbs/tip-calculator.svg
   alt: Tip calculator preview
 tool_key: tip-calculator
-keywords: [tip calculator, gratuity calculator, split bill, per person bill, restaurant tip]
-related_tools: [percent-calculator, discount-calculator, vat-calculator]
+keywords:
+- tip calculator
+- gratuity calculator
+- split bill
+- per person bill
+- restaurant tip
+related_tools:
+- percent-calculator
+- discount-calculator
+- vat-calculator
 faq:
-  - q: Should I use percentage mode or fixed-tip mode?
-    a: Use percentage mode when the tip rate is known, and fixed mode when you already decided an exact tip amount.
-  - q: Can I include tax and service fee in the tip base?
-    a: Yes. You can choose whether tip is calculated from subtotal only or from subtotal+tax+service.
-  - q: How is per-person amount shown when decimals occur?
-    a: The tool shows up to two decimal places. You can round according to your payment method.
-  - q: What tip percentage should I use?
-    a: Practices vary by place and service. Check the receipt for an included service charge and confirm local expectations; preset rates are conveniences, not recommendations.
+- q: Should I use percentage mode or fixed-tip mode?
+  a: Use percentage mode when the tip rate is known, and fixed mode when you already decided an exact tip amount.
+- q: Can I include tax and service fee in the tip base?
+  a: Yes. You can choose whether tip is calculated from subtotal only or from subtotal+tax+service.
+- q: What tip percentage should I use?
+  a: Practices vary by place and service. Check the receipt for an included service charge and confirm local expectations; preset rates are conveniences, not recommendations.
+- q: How can I split a bill without a rounding mismatch?
+  a: 'Round the tip half up to 2 decimal places before adding it to the bill. The rounded per-person average may not sum to the bill. Settlement distributes the remaining 0.01 units among some people: 126.25 split between 2 people is 63.12 and 63.13. Amounts and rates allow 2 decimal places, without commas or exponents. No currency conversion or currency-specific payment increments are applied.'
 alternate_urls:
   ko: /tools/tip-calculator/
   en: /en/tools/tip-calculator/
@@ -72,3 +80,7 @@ Local customs and service-charge rules differ. The quick presets make common cal
 - Percent math: [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
 - Discounted totals: [Discount Calculator]({{ '/en/tools/discount-calculator/' | relative_url }})
 - VAT math: [VAT Calculator]({{ '/en/tools/vat-calculator/' | relative_url }})
+
+## How can I split a bill without a rounding mismatch?
+
+Round the tip half up to 2 decimal places before adding it to the bill. The rounded per-person average may not sum to the bill. Settlement distributes the remaining 0.01 units among some people: 126.25 split between 2 people is 63.12 and 63.13. Amounts and rates allow 2 decimal places, without commas or exponents. No currency conversion or currency-specific payment increments are applied.

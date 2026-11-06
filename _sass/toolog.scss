@@ -3207,3 +3207,15 @@ a:hover { color: var(--primary-strong); }
   .avg-ui .avg-actions { grid-template-columns: 1fr; }
   .avg-ui .avg-stats { grid-template-columns: 1fr; }
 }
+
+/* Focused tip calculator quality pass: 2026-11-06. */
+.tip-ui input, .tip-ui select, .tip-ui button { min-height: 44px; font-size: 16px; box-sizing: border-box; }
+.tip-ui .tool-row-grid > *, .tip-ui .tool-stats > * { min-width: 0; }
+.tip-ui input, .tip-ui select { width: 100%; }
+.tip-ui .tool-stats strong, .tip-ui .tool-result, .tip-ui .tool-hint { overflow-wrap: anywhere; }
+.tip-ui :is(input, select, button):focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+.tip-ui [aria-invalid="true"] { border: 2px solid #b91c1c; }
+.tip-ui #tip-help[data-state="error"] { color: #b91c1c; }
+.tip-ui #tip-help[data-state="success"] { color: #166534; }
+.tip-ui [hidden] { display: none !important; }
+@media (max-width: 600px) { .tip-ui .tool-stats.tip-stats { grid-template-columns: 1fr; } }
