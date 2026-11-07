@@ -4272,12 +4272,19 @@
     };
     const pyText = pyI18n[pageLang] || pyI18n.ko;
 
+    const extra = {
+      ko: { area: '면적은 0.000001~1,000,000,000 범위, 소수 6자리까지 입력하세요. 쉼표·지수·단위 표기는 사용할 수 없습니다.', overflow: '평당가가 안전한 표시 범위를 넘습니다. 면적과 원 단위 총액을 확인하세요.', context: '총액', note: '환산 기준: 1평 ≈ 3.305785㎡; 면적은 근삿값, 평당가는 원 단위 반올림' },
+      en: { area: 'Enter an area from 0.000001 to 1,000,000,000 with up to 6 decimal places. No commas, exponents or units.', overflow: 'Price per pyeong exceeds the safe display range. Check the area and total KRW price.', context: 'Total price', note: 'Conversion: 1 pyeong ≈ 3.305785 m²; areas approximate, unit price rounded to whole KRW' },
+      ja: { area: '面積は0.000001〜1,000,000,000、小数6桁まで。カンマ・指数・単位は入力できません。', overflow: '坪単価が安全な表示範囲を超えています。面積とウォン単位の総額を確認してください。', context: '総額', note: '換算基準: 1坪 ≈ 3.305785㎡。面積は概算、坪単価は1ウォン単位に四捨五入' }
+    }[pageLang];
+    let revision = 0;
     let lock = false;
     let lastSource = 'm2';
     let currentSummary = '';
 
     const fmt = (v, max = 4) => Number(v).toLocaleString(numberLocale, { maximumFractionDigits: max });
-    const fmtKRW = (v) => `${Math.round(v).toLocaleString(numberLocale)} ${pyText.currency}`;
+    const fmtKRW = (v) => `${v > 0 && v < 1 ? '< 1' : Math.round(v).toLocaleString(numberLocale)} ${pyText.currency}`;
+    const fmtArea = (v) => v < 0.0001 ? '< 0.0001' : fmt(v, 4);
     const fmtEok = (v) => `${fmt(v / 100000000, 2)} ${pyText.unitEok}`;
 
     const setStatus = (msg, state = '') => {
@@ -4295,29 +4302,33 @@
       setStatus(msg, state);
     };
 
-    const copyText = async (text) => {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-        return;
+    const copyText = async (value) => {
+      try { await navigator.clipboard.writeText(value); }
+      catch (_) {
+        const previous = document.activeElement;
+        const ta = document.createElement('textarea');
+        ta.value = value;
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        try { ta.select(); if (!document.execCommand('copy')) throw new Error('Copy failed'); }
+        finally { ta.remove(); previous?.focus({ preventScroll: true }); }
       }
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      const copied = document.execCommand('copy');
-      document.body.removeChild(ta);
-      if (!copied) throw new Error('copy failed');
     };
 
     const render = (source = 'm2') => {
+      revision += 1;
       lastSource = source;
       const sourceInput = source === 'pyeong' ? pyeongInput : m2Input;
       const targetInput = source === 'pyeong' ? m2Input : pyeongInput;
       const rawArea = sourceInput.value.trim();
       [m2Input, pyeongInput, priceInput].forEach((input) => input.setAttribute('aria-invalid', 'false'));
 
+      if (sourceInput.validity.badInput || (rawArea && (rawArea.length > 32 || !/^(?:\d+(?:\.\d{1,6})?|\.\d{1,6})$/.test(rawArea) || Number(rawArea) < 0.000001))) {
+        sourceInput.setAttribute('aria-invalid', 'true');
+        targetInput.value = '';
+        clearResults(extra.area, 'error');
+        return;
+      }
       if (!rawArea) {
         lock = true;
         targetInput.value = '';
@@ -4338,6 +4349,7 @@
       }
       if (area > MAX_AREA) {
         sourceInput.setAttribute('aria-invalid', 'true');
+        targetInput.value = '';
         clearResults(pyText.areaTooLarge, 'error');
         return;
       }
@@ -4352,16 +4364,16 @@
       }
 
       lock = true;
-      targetInput.value = (source === 'pyeong' ? m2 : p).toFixed(4).replace(/\.?0+$/, '');
+      targetInput.value = (source === 'pyeong' ? m2 : p).toFixed(10).replace(/\.?0+$/, '');
       lock = false;
 
-      outM2.textContent = `${fmt(m2, 2)}㎡`;
-      outPyeong.textContent = `${fmt(p, 2)} ${pyText.unitPyeong}`;
+      outM2.textContent = `${fmtArea(m2)}㎡`;
+      outPyeong.textContent = `${fmtArea(p)} ${pyText.unitPyeong}`;
 
       const rawPrice = priceInput.value.trim();
-      if (rawPrice) {
+      if (rawPrice || priceInput.validity.badInput) {
         const price = Number(rawPrice);
-        if (!Number.isFinite(price) || price < 0 || !Number.isInteger(price)) {
+        if (priceInput.validity.badInput || rawPrice.length > 32 || !/^\d+$/.test(rawPrice) || !Number.isFinite(price) || price < 0 || !Number.isInteger(price)) {
           priceInput.setAttribute('aria-invalid', 'true');
           outPricePer.textContent = '-';
           outPricePer10k.textContent = '-';
@@ -4379,27 +4391,32 @@
           setStatus(pyText.priceTooLarge, 'error');
           return;
         }
+        if (price / p > Number.MAX_SAFE_INTEGER) {
+          priceInput.setAttribute('aria-invalid', 'true');
+          clearResults(extra.overflow, 'error');
+          return;
+        }
         if (price === 0) {
-          outPricePer.textContent = '-';
-          outPricePer10k.textContent = '-';
-          setStatus(pyText.summaryArea(fmt(m2, 2), fmt(p, 2)), 'success');
+          outPricePer.textContent = fmtKRW(0);
+          outPricePer10k.textContent = `0 ${pyText.unitManwon}`;
+          setStatus(pyText.summaryArea(fmtArea(m2), fmtArea(p)), 'success');
         } else {
           const per = price / p;
           const per10k = per / 10000;
           const eokText = per >= 100000000 ? fmtEok(per) : '';
           outPricePer.textContent = fmtKRW(per);
           outPricePer10k.textContent = eokText
-            ? `${fmt(per10k, 1)} ${pyText.unitManwon} (${eokText})`
-            : `${fmt(per10k, 1)} ${pyText.unitManwon}`;
-          setStatus(pyText.summaryPrice(fmt(m2, 2), fmt(p, 2), fmt(per10k, 1), eokText), 'success');
+            ? `${(per10k < 0.1 ? '< 0.1' : fmt(per10k, 1))} ${pyText.unitManwon} (${eokText})`
+            : `${(per10k < 0.1 ? '< 0.1' : fmt(per10k, 1))} ${pyText.unitManwon}`;
+          setStatus(pyText.summaryPrice(fmtArea(m2), fmtArea(p), (per10k < 0.1 ? '< 0.1' : fmt(per10k, 1)), eokText), 'success');
         }
       } else {
         outPricePer.textContent = '-';
         outPricePer10k.textContent = '-';
-        setStatus(pyText.summaryArea(fmt(m2, 2), fmt(p, 2)), 'success');
+        setStatus(pyText.summaryArea(fmtArea(m2), fmtArea(p)), 'success');
       }
 
-      currentSummary = pyText.copyText(outM2.textContent, outPyeong.textContent, outPricePer.textContent, outPricePer10k.textContent);
+      currentSummary = pyText.copyText(outM2.textContent, outPyeong.textContent, outPricePer.textContent, outPricePer10k.textContent) + ` | ${source}: ${rawArea} | ${extra.context}: ${rawPrice || '-'} KRW | ${extra.note}`;
       if (copyBtn) copyBtn.disabled = false;
     };
 
@@ -4408,15 +4425,18 @@
     priceInput.addEventListener('input', () => {
       const activeArea = lastSource === 'pyeong' ? pyeongInput : m2Input;
       if (activeArea.value.trim()) render(lastSource);
-      else clearResults(pyText.needAreaFirst, 'error');
+      else { revision += 1; clearResults(pyText.needAreaFirst, 'error'); }
     });
 
     copyBtn?.addEventListener('click', async () => {
       if (!currentSummary) return;
+      const copiedRevision = revision;
       try {
         await copyText(currentSummary);
+        if (copiedRevision !== revision) return;
         setStatus(pyText.copied, 'success');
       } catch (_) {
+        if (copiedRevision !== revision) return;
         setStatus(pyText.copyFail, 'error');
       }
     });
@@ -4430,6 +4450,8 @@
     });
 
     resetBtn?.addEventListener('click', () => {
+      revision += 1;
+      lastSource = 'm2';
       m2Input.value = '';
       pyeongInput.value = '';
       priceInput.value = '';

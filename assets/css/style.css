@@ -2764,3 +2764,14 @@ a:hover { color: #fff; text-decoration: none; }
 .tip-ui #tip-help[data-state="success"] { color: #166534; }
 .tip-ui [hidden] { display: none !important; }
 @media (max-width: 600px) { .tip-ui .tool-stats.tip-stats { grid-template-columns: 1fr; } }
+
+/* Pyeong calculator quality: 2026-11-07. */
+.pyeong-ui :is(input, button) { min-height: 44px; font-size: 16px; box-sizing: border-box; }
+.pyeong-ui input { width: 100%; }
+.pyeong-ui .tool-row-grid > *, .pyeong-ui .tool-stats > * { min-width: 0; }
+.pyeong-ui :is(.tool-stats strong, .tool-result, .tool-hint) { overflow-wrap: anywhere; }
+.pyeong-ui :is(input, button):focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+.pyeong-ui [aria-invalid="true"] { border: 2px solid #b91c1c; }
+.pyeong-ui #py-help[data-state="error"] { color: #b91c1c; }
+.pyeong-ui #py-help[data-state="success"] { color: #166534; }
+@media (max-width: 600px) { .pyeong-ui .tool-stats, .pyeong-ui .tool-row-grid { grid-template-columns: 1fr; } }

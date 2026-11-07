@@ -1837,9 +1837,9 @@
   badge: New
   badge_en: New
   badge_ja: 新着
-  description: 제곱미터(㎡)와 평을 양방향 변환하고 총액 기준 평당가를 계산해요. 84㎡·9억원 예시와 빈값·음수·과대 입력 오류 안내도 제공합니다.
-  description_en: Convert m² and pyeong both ways, estimate price per pyeong, and check a practical 84m² example with clear input validation.
-  description_ja: ㎡と坪を相互変換し、総額から坪単価を計算。84㎡の例と空欄・負数・過大入力の案内も確認できます。
+  description: 제곱미터(㎡)와 평을 양방향 변환하고 원 단위 총액으로 평당가를 추정하세요. 작은 면적 표시, 입력 오류 안내, 84㎡ 예시와 결과 복사를 지원합니다.
+  description_en: Convert m² and Korean pyeong both ways, estimate price per pyeong in KRW, and check tiny areas and invalid inputs. Includes an 84m² example and copyable results.
+  description_ja: ㎡と韓国の坪を相互換算し、ウォン建て総額から坪単価を概算。小さな面積表示、入力エラー案内、84㎡の例と結果コピーに対応します。
   url: /tools/pyeong-calculator/
   url_en: /en/tools/pyeong-calculator/
   url_ja: /ja/tools/pyeong-calculator/
