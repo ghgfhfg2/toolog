@@ -26,8 +26,8 @@ related_tools:
 faq:
 - q: How many square meters are in one pyeong?
   a: This tool uses the approximate conversion factor 1 pyeong ≈ 3.305785 m².
-- q: Should I enter exclusive-use area or gross floor area?
-  a: It depends on the comparison. Exclusive-use area is generally better for comparing usable space, while gross floor area is often used for presale information and maintenance-fee comparisons.
+- q: Should I enter exclusive-use area or supply area?
+  a: It depends on the comparison. Exclusive-use area is generally better for comparing usable space, while supply area (exclusive-use area plus shared residential space) is often used for presale information and maintenance-fee comparisons.
 - q: How is price per pyeong calculated?
   a: The total price in KRW is divided by the area in pyeong. The result also includes 10k KRW and 100M KRW units for easier reading.
 - q: What input limits and tiny-area rules apply?
@@ -58,11 +58,16 @@ Enter either `m²` or `pyeong`. The other unit updates automatically.
 ### 2) Enter the total price (optional)
 Enter the property price as a **whole KRW amount** to see price per pyeong. For example, enter `900000000` for KRW 900 million.
 
+Leave the price blank for area conversion only; enter `0` for an actual zero-KRW price. All prices are in Korean won, not your local currency.
+
 ### 3) Read the result
 Compare listings using:
 - converted area in m² and pyeong
 - price per pyeong based on the total price
 - supporting units in 10k KRW and 100M KRW
+
+### 4) Try the example, copy, or clear
+Load the 84 m² / KRW 900 million example to check the workflow. Copy a valid result to keep the original area input, total price, and conversion basis together. Clear resets the fields and results; enter either area to start again. An empty area has no result, and copying is disabled until a valid result is available.
 
 ## Practical examples
 ### Compare apartment sizes
@@ -72,10 +77,10 @@ Compare listings using:
 For a property priced at KRW 900 million with an 84m² exclusive-use area (about 25.41 pyeong), the price is approximately KRW 35.41 million per pyeong.
 
 ### Catch invalid input
-The calculator does not run for an area of 0 or less, an area over 1 billion m², a negative or decimal price, or a price over KRW 1 quadrillion. It highlights the affected field and explains the issue in the status message.
+Enter an area from `0.000001` to `1000000000`, with no more than six decimal places. Both converted areas must remain at or below 1 billion, so the maximum allowed pyeong input is lower than 1 billion. Enter a whole-KRW price from `0` to `1000000000000000`. Do not include commas, exponents, currency symbols, or unit labels. Invalid inputs highlight the affected field and show a status message; invalid prices leave area conversion visible but disable result copying. A price-per-pyeong result outside the safe display range also produces an error.
 
 ### Interpret presale information
-Convert the gross floor area in a presale notice from m² to pyeong to understand the size more intuitively.
+Convert the supply area in a presale notice from m² to pyeong to understand the size more intuitively.
 
 ## Related tools
 - [Loan Calculator]({{ '/en/tools/loan-calculator/' | relative_url }})
@@ -86,19 +91,18 @@ Convert the gross floor area in a presale notice from m² to pyeong to understan
 ### How many square meters are in one pyeong?
 The calculator uses **1 pyeong ≈ 3.305785m²**.
 
-### Should I enter exclusive-use area or gross floor area?
-Use exclusive-use area to compare usable space. Gross floor area is more commonly used for presale information or official comparison contexts.
+### Should I enter exclusive-use area or supply area?
+Use exclusive-use area to compare usable space. Supply area is more commonly used for presale information or official comparison contexts.
 
-### How do I calculate price per pyeong?
+### How is price per pyeong calculated?
 Divide the total price in KRW by the area in pyeong.
 
-## Summary
-This pyeong calculator goes beyond unit conversion. It is a practical Korean real-estate tool for **comparing property area and checking price per pyeong at the same time**.
+### What input limits and tiny-area rules apply?
+Edited area: 0.000001–1 billion, up to 6 decimal places; both converted areas must be at most 1 billion. Total price: whole KRW, 0–1 quadrillion. No commas, exponents or units. Positive areas below 0.0001 display as < 0.0001. Blank price means not entered, while zero means 0 KRW. An unsafe price-per-pyeong result produces an error.
 
 ## Conversion basis and price interpretation
 
-Approximate conversion uses 1 pyeong ≈ 3.305785 m². The converted input shows up to 10 decimal places; area results show up to 4. Calculations retain the original edited area when the price changes, rather than reusing the rounded converted input. Unit price is total KRW divided by pyeong and rounded to whole KRW; positive prices below 1 KRW show < 1 KRW. Compare exclusive-use area with exclusive-use area, not gross floor area. This estimate does not replace official contract areas or property valuation. Copied results include input context, total price and conversion basis.
+Approximate conversion uses 1 pyeong ≈ 3.305785 m². The converted input shows up to 10 decimal places; area results show up to 4. Calculations retain the original edited area when the price changes, rather than reusing the rounded converted input. Unit price is total KRW divided by pyeong and rounded to whole KRW; positive prices below 1 KRW show < 1 KRW. Compare exclusive-use area with exclusive-use area, not supply area. This estimate does not replace official contract areas or property valuation. Copied results include input context, total price and conversion basis.
 
-### What input limits and tiny-area rules apply?
-
-Edited area: 0.000001–1 billion, up to 6 decimal places; both converted areas must be at most 1 billion. Total price: whole KRW, 0–1 quadrillion. No commas, exponents or units. Positive areas below 0.0001 display as < 0.0001. Blank price means not entered, while zero means 0 KRW. An unsafe price-per-pyeong result produces an error.
+## Summary
+Convert square meters to Korean pyeong, or pyeong to square meters, and estimate KRW price per pyeong using the same area basis across listings. This is an approximate comparison tool, not a property valuation.
