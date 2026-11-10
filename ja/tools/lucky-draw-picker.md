@@ -37,10 +37,6 @@ alternate_urls:
 
 名簿を貼り付けて当選人数を設定するだけで、すぐ結果が出ます。
 
-## 今日の改善対象に選んだ理由
-最近の品質改善は `pomodoro-timer`、`readability-checker`、`time-difference-calculator`、`korean-name-romanizer`、`png-compressor`、`json-merge`、`link-list-cleaner` などに集中していたため、同じツールの繰り返しを避けました。
-`lucky-draw-picker` はイベントや集まりでそのまま共有する結果を作る picker型ツールなので、空欄・重複名・当選人数超過・モバイルでのコピー導線・公平性の説明を強化する価値が高いと判断しました。
-
 ## 使い方
 1. 参加者名を1行に1名ずつ、またはカンマ区切りで貼り付けます。
 2. 当選人数を `1名以上` で入力します。
