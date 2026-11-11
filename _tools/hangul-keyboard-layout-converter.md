@@ -36,10 +36,6 @@ faq:
 이 도구는 그런 순간을 줄이기 위해 만들었습니다.
 **현재 입력이 영어→한글 복원 쪽인지, 한글→영어 복원 쪽인지 빠르게 판단하고 결과를 바로 복사할 수 있는 converter형 도구**입니다.
 
-## 오늘 개선 대상으로 고른 이유
-최근 자동 개선 커밋이 `date-format-normalizer`, `font-change`, `subscription-cleanup-simulator`, `message-tone-checker`, `password-generator`, `youtube-image-kit`, `image-resizer`에 집중되어 있어 같은 툴 반복을 피했습니다.
-이 툴은 **복사해 온 입력이 줄마다 다른 방향으로 잘못 입력될 수 있고, 숫자·기호만 있는 입력에서는 결과 변화가 없어 사용자가 헷갈릴 수 있는 기존 converter형 도구**라 오늘 품질 개선 대상으로 골랐습니다.
-
 ## 어떻게 동작하나요?
 사용 방식은 간단합니다.
 
@@ -106,4 +102,3 @@ faq:
 
 ## 요약
 한영 키 입력 복원기는 **한/영 전환을 놓쳐 잘못 입력된 텍스트를 빠르게 원래 의도에 가깝게 되돌리는 converter형 도구**입니다.
-최근 5개 발행이 generator·checker·learning·utility·planner로 흘러와서, 이번 발행은 **실사용성 높은 입력 복원형 converter 포맷**을 보강하는 데 의미가 있습니다.
