@@ -3526,9 +3526,9 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
       {% when 'profit-margin-calculator' %}
         <div class="tool-ui prmc-ui">
           <div class="tool-row-grid prmc-presets" role="group" aria-label="{% if page.lang == 'en' %}Quick calculation examples{% elsif page.lang == 'ja' %}計算例のクイック入力{% else %}계산 예시 빠른 입력{% endif %}">
-            <button type="button" data-prmc-sales="10000" data-prmc-cost="6000" data-prmc-margin="30">{% if page.lang == 'en' %}40% margin example{% elsif page.lang == 'ja' %}利益率40%の例{% else %}마진율 40% 예시{% endif %}</button>
-            <button type="button" data-prmc-sales="50000" data-prmc-cost="35000" data-prmc-margin="35">{% if page.lang == 'en' %}Retail example{% elsif page.lang == 'ja' %}小売の例{% else %}소매 예시{% endif %}</button>
-            <button type="button" data-prmc-sales="10000" data-prmc-cost="12000" data-prmc-margin="20">{% if page.lang == 'en' %}Loss example{% elsif page.lang == 'ja' %}赤字の例{% else %}적자 예시{% endif %}</button>
+            <button type="button" data-prmc-sales="10000" data-prmc-cost="7000" data-prmc-margin="30">{% if page.lang == 'en' %}Retail · 30% margin{% elsif page.lang == 'ja' %}小売 · 利益率30%{% else %}소매 · 마진율 30%{% endif %}</button>
+            <button type="button" data-prmc-sales="10000" data-prmc-cost="3000" data-prmc-margin="60">{% if page.lang == 'en' %}Menu · ingredient cost{% elsif page.lang == 'ja' %}メニュー · 材料費{% else %}메뉴 · 재료비 비교{% endif %}</button>
+            <button type="button" data-prmc-sales="8000" data-prmc-cost="10000" data-prmc-margin="20">{% if page.lang == 'en' %}Loss · below cost{% elsif page.lang == 'ja' %}赤字 · 原価以下{% else %}적자 · 원가 이하{% endif %}</button>
           </div>
 
           <div class="tool-row-grid prmc-grid">
