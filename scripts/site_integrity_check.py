@@ -103,7 +103,9 @@ def main() -> int:
 
         canonical = fm.get("canonical_url")
         expected = expected_canonical(page)
-        if canonical and expected and canonical != expected:
+        if canonical and expected and canonical.strip('"\'') not in (
+            expected, "https://toolog.sooyadev.com" + expected
+        ):
             front_matter_issues.append(f"{rel_page} -> canonical_url {canonical} should be {expected}")
 
         thumb = fm.get("thumbnail")
