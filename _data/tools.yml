@@ -1290,7 +1290,7 @@
   badge_ja: 新着
   description: 참여자 목록과 당첨 인원을 입력하면 빈 항목과 중복 이름을 정리한 뒤 브라우저에서 공정하게 랜덤 당첨자를 뽑고 결과를 복사해요.
   description_en: Paste participants, remove blank and duplicate entries, draw random winners in your browser, and copy the numbered result.
-  description_ja: 参加者リストの空欄と重複名を整理し、ブラウザ内でランダム当選者を抽選して番号付き結果をコピーできます。
+  description_ja: 名簿から重複なしで当選者を抽選し、全員の発表順もワンクリックで決められます。ブラウザ内処理・結果コピー対応。
   url: /tools/lucky-draw-picker/
   url_en: /en/tools/lucky-draw-picker/
   url_ja: /ja/tools/lucky-draw-picker/

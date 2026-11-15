@@ -22,7 +22,7 @@ faq:
   - q: What if winner count is larger than participant count?
     a: The winner count is automatically capped at the number of participants.
   - q: Is each draw result different?
-    a: Yes. It uses browser crypto randomness, so each draw is random.
+    a: It prefers browser crypto randomness and falls back to pseudorandom numbers when unavailable. Repeated draws can produce the same result.
 alternate_urls:
   ko: /tools/lucky-draw-picker/
   en: /en/tools/lucky-draw-picker/
@@ -32,7 +32,6 @@ alternate_urls:
 ## Try the Lucky Draw Picker in these situations
 - **Pick giveaway winners** from comments or applicants
 - **Randomize speaking order** in study groups or meetings
-- **Assign teams randomly** for projects or activities
 - Run a quick **raffle or yes/no-style draw** from a short candidate list
 
 Just paste names and set winner count. You get results instantly.
@@ -88,3 +87,6 @@ Yes. The tool splits both line breaks and commas. If a participant name itself c
 
 ### What if I enter too many winners?
 The count is capped at the number of unique participants, and the status message tells you that it was adjusted.
+
+## Set the whole presentation order in one click
+Enter 1–1,000 unique participants and select **Shuffle everyone’s order** to include each person once in a numbered result. This does not split teams or exclude previous winners automatically. Distinguish different people with the same name using IDs such as `001 Alex` and `002 Alex`. Duplicate matching normalizes spaces and letter case. A blank winner count is an error, not an automatic request for one winner.

@@ -15412,6 +15412,7 @@
     const input = document.getElementById('ldp-input');
     const count = document.getElementById('ldp-count');
     const runBtn = document.getElementById('ldp-run');
+    const orderBtn = document.getElementById('ldp-order');
     const sampleBtn = document.getElementById('ldp-sample');
     const copyBtn = document.getElementById('ldp-copy');
     const clearBtn = document.getElementById('ldp-clear');
@@ -15542,8 +15543,8 @@
         setStatus(t.needInput, 'error');
         return;
       }
-      const wantedRaw = Number(count.value || 1);
-      if (!Number.isFinite(wantedRaw) || !Number.isInteger(wantedRaw) || wantedRaw < 1 || wantedRaw > 1000) {
+      const wantedRaw = Number(count.value);
+      if (!count.value.trim() || !Number.isFinite(wantedRaw) || !Number.isInteger(wantedRaw) || wantedRaw < 1 || wantedRaw > 1000) {
         input.setAttribute('aria-invalid', 'false');
         count.setAttribute('aria-invalid', 'true');
         resetResult();
@@ -15579,6 +15580,22 @@
     };
 
     runBtn.addEventListener('click', run);
+    orderBtn?.addEventListener('click', () => {
+      const { names } = updateCounts();
+      if (names.length > 1000) {
+        resetResult();
+        count.setAttribute('aria-invalid', 'true');
+        const messages = {
+          ko: '전체 순서 정하기는 중복 제외 후 1,000명까지 지원합니다. 목록을 줄이거나 당첨 인원을 지정해 추첨하세요.',
+          en: 'Full ordering supports up to 1,000 unique participants. Use a smaller list or draw a specified number of winners.',
+          ja: '全員の順番決めは重複除外後1,000名までです。名簿を減らすか、当選人数を指定して抽選してください。'
+        };
+        setStatus(messages[pageLang] || messages.ko, 'error');
+        return;
+      }
+      count.value = String(names.length || 1);
+      run();
+    });
     sampleBtn.addEventListener('click', () => {
       input.value = t.sample;
       count.value = '2';
