@@ -4661,6 +4661,17 @@
     [start, end, businessOnly].forEach((el) => el?.addEventListener('input', render));
     todayBtn?.addEventListener('click', () => setTodayRange(7));
     monthBtn?.addEventListener('click', () => setTodayRange(30));
+    document.getElementById('dday-same-day')?.addEventListener('click', () => setTodayRange(0));
+    document.getElementById('dday-christmas')?.addEventListener('click', () => {
+      const base = new Date();
+      const target = new Date(base);
+      target.setMonth(11, 25);
+      if (dayNumber(target) < dayNumber(base)) target.setFullYear(target.getFullYear() + 1);
+      start.value = toISO(base);
+      end.value = toISO(target);
+      if (businessOnly) businessOnly.checked = false;
+      render();
+    });
 
     swapBtn?.addEventListener('click', () => {
       const temp = start.value;
@@ -4672,7 +4683,7 @@
     copyBtn?.addEventListener('click', async () => {
       if (copyBtn.disabled) return;
       const metricLabel = daysLabel?.textContent || ddayText.copyMetric;
-      const text = ddayText.copyText(label.textContent, metricLabel, days.textContent, inclusive.textContent, business.textContent);
+      const text = `${start.value} → ${end.value}\n` + ddayText.copyText(label.textContent, metricLabel, days.textContent, inclusive.textContent, business.textContent);
       try {
         await copyText(text);
         const old = copyBtn.textContent;

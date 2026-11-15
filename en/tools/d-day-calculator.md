@@ -29,53 +29,32 @@ alternate_urls:
   ja: /ja/tools/d-day-calculator/
 ---
 
-## D-Day calculator for days between two dates
-Deadlines, exams, trips, renewals, and anniversaries often need more than a simple countdown. This calculator shows the **calendar-day difference, inclusive day count, weekday count, and D-day status** together.
+## Count days until a deadline or anniversary
+Select a start and target date. Future targets show **D-**, past targets **D+**, and the same date **D-day**. Use calendar days for trips and anniversaries, or the weekend-excluding mode for a weekday deadline. This tool compares dates, not times of day or time zones.
 
-## Key features
-- **Automatic D-day status**: future dates appear as D-, past dates as D+
-- **Date difference and inclusive count**: compare the elapsed interval with a count that includes both dates
-- **Weekend-excluded business days**: estimate weekday-based schedules
-- **Quick date ranges**: set today through 7 or 30 days from now in one click
-- **Copy result**: copy a concise summary for reports or messages
-- **Mobile-friendly result cards**: review every metric clearly on smaller screens
+## Choose the right count
+- **Calendar-day difference:** distance between dates; zero on the same date.
+- **Inclusive day count:** both dates count, so the calendar difference plus one. Useful when the first date is day one.
+- **Business-day difference:** weekdays after the earlier date through the later date. Saturdays and Sundays are excluded.
+- **Business days card:** weekdays including both endpoints. It can differ from the business-day difference.
 
-## How to use it
-### 1. Choose the start and target dates
-Select both dates to calculate the result instantly. If either field is empty or contains an invalid date, the calculator clears the result and shows what needs attention.
+Public holidays, substitute holidays and personal days off are not removed. Swapping dates preserves the interval counts but changes D- to D+.
 
-### 2. Choose the counting mode
-Turn on **Exclude weekends (business days)** to use the number of weekdays between the dates. This mode excludes Saturdays and Sundays only—not public holidays. The difference excludes the start date and includes the target date.
+## Three worked examples
+| Start → target | Calendar result | Inclusive days | Business difference / inclusive weekdays |
+| --- | --- | --- | --- |
+| Fri 2026-11-13 → Mon 11-16 | D-3, 3 days | 4 | 1 / 2 |
+| Mon 2026-11-16 → same date | D-day, 0 days | 1 | 0 / 1 |
+| Mon 2026-11-16 → Fri 11-13 | D+3, 3 days | 4 | 1 / 2 |
 
-### 3. Read or copy the result
-Review the D-day status, calendar- or business-day difference, inclusive days, and total weekdays in the range. Use **Copy result** to share the summary. If browser clipboard permission is unavailable, an error message explains why copying failed.
+For the first row, enabling business mode changes the D-day label to **D-1**, while inclusive days remain 4 and inclusive weekdays remain 2. Saturday November 14 through Monday November 16 gives 2 calendar days, 3 inclusive days and 1 for each weekday count.
 
-## Practical examples
-### Countdown to an exam
-With March 2 as the start date and April 20 as the exam date, the calendar-day result is `D-49`.
+## How many days until Christmas or another event?
+**Until next December 25** sets today as the start and the next occurrence of December 25 as the target, in calendar mode. December 25 itself shows D-day; after that date the shortcut chooses the following year. Enter another target for birthdays, exams or trips.
 
-### Check time elapsed since a renewal date
-When the target date is in the past, the result changes to `D+` so you can prioritize overdue follow-up work.
+Use Today + 7 days, Today + 30 days, Same-day example and Swap dates to check the counting rules. Empty or invalid inputs disable copying the old result.
 
-### Estimate project workdays
-Enable weekend exclusion to see how many weekdays remain. Deduct public holidays and planned closure days separately for an operational schedule.
+## Calculation and sharing
+Calendar date numbers are compared, so 23-hour or 25-hour daylight-saving days do not change the date count. This is not an elapsed-hours calculation. Copied results include both dates, the selected calendar/business metric, inclusive days and inclusive weekdays.
 
-## Related tools
-- Time zone planning: [Timezone Converter]({{ '/en/tools/timezone-converter/' | relative_url }})
-- Goal progress checks: [Percent Calculator]({{ '/en/tools/percent-calculator/' | relative_url }})
-
-## Frequently asked questions
-### What happens if the start and target dates are the same?
-The calendar-day difference is 0, while the inclusive day count is 1.
-
-### When should I exclude weekends?
-Use the option when you need the number of weekdays before a deadline. It excludes Saturdays and Sundays only, so subtract public holidays and company closure days separately.
-
-### Why are business-day difference and business days (weekdays) different?
-The business-day difference excludes the start date and counts through the target date. The business-days card counts weekdays across the inclusive range, including both endpoints when they are weekdays.
-
-### Can I use a target date that has already passed?
-Yes. The calculator shows the elapsed interval as `D+` without treating it as an error.
-
-## Summary
-Use this D-Day calculator to compare **calendar days, business days, and inclusive days** between two dates for practical schedule planning.
+For hours use the [time difference calculator]({{ '/en/tools/time-difference-calculator/' | relative_url }}), for a shift finish use the [work end time calculator]({{ '/en/tools/work-end-time-calculator/' | relative_url }}), and for overseas local times use the [time zone converter]({{ '/en/tools/timezone-converter/' | relative_url }}).
