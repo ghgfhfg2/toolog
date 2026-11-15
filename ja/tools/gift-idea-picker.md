@@ -4,7 +4,7 @@ title: ギフトアイデア推薦ツール | 相手・予算・シーンに合�
 description: 贈る相手、シーン、予算、雰囲気、準備の余裕を選ぶと、今の条件に合うギフト候補5件と理由をすぐ確認できます。
 lang: ja
 permalink: /ja/tools/gift-idea-picker/
-canonical_url: /ja/tools/gift-idea-picker/
+canonical_url: https://toolog.sooyadev.com/ja/tools/gift-idea-picker/
 alternate_urls:
   ko: /tools/gift-idea-picker/
   en: /en/tools/gift-idea-picker/

@@ -4,7 +4,7 @@ title: 状況別敬語練習ツール | 業務チャットとメールの丁寧�
 description: 業務メッセージやメールで自然な敬語表現を二択クイズで練習し、すぐに解説を確認できます。
 lang: ja
 permalink: /ja/tools/workplace-honorific-practice/
-canonical_url: /ja/tools/workplace-honorific-practice/
+canonical_url: https://toolog.sooyadev.com/ja/tools/workplace-honorific-practice/
 alternate_urls:
   ko: /tools/workplace-honorific-practice/
   en: /en/tools/workplace-honorific-practice/

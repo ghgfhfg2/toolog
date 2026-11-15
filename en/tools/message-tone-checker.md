@@ -4,7 +4,7 @@ title: Message Tone Checker | Check Work Emails and Chat Drafts Before Sending
 description: Check work email, Slack, Teams, and chat drafts before sending. Review blunt wording, repeated apologies, request clarity, timing cues, punctuation pressure, long lines, and length burden in your browser.
 lang: en
 permalink: /en/tools/message-tone-checker/
-canonical_url: /en/tools/message-tone-checker/
+canonical_url: https://toolog.sooyadev.com/en/tools/message-tone-checker/
 category: productivity
 category_label: Work/Communication
 thumbnail: /assets/thumbs/en/message-tone-checker.svg

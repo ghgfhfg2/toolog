@@ -4,7 +4,7 @@ title: Pyeong Calculator | m² Conversion & KRW Price per Pyeong
 description: Convert m² and Korean pyeong both ways, estimate price per pyeong in KRW, and check tiny areas and invalid inputs. Includes an 84m² example and copyable results.
 lang: en
 permalink: /en/tools/pyeong-calculator/
-canonical_url: /en/tools/pyeong-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/pyeong-calculator/
 category: data
 category_label: Real Estate
 thumbnail: /assets/thumbs/pyeong-calculator.svg

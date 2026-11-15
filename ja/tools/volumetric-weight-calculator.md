@@ -13,7 +13,7 @@ tool_type: calculator
 topic_cluster: logistics
 lang: ja
 permalink: /ja/tools/volumetric-weight-calculator/
-canonical_url: /ja/tools/volumetric-weight-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/volumetric-weight-calculator/
 keywords: [容積重量計算機, 適用重量, 請求重量 計算, 配送料計算, 箱サイズ, dimensional weight, 物流]
 related_tools: [unit-converter, discount-calculator, percent-calculator]
 faq:

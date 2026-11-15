@@ -4,7 +4,7 @@ title: Korean Severance Pay Calculator | 3-Month Average Wage Estimate
 description: Estimate Korean severance pay from service dates, prior 3-month wages and calendar days, regular bonus, leave allowance, ordinary daily wage, and weekly hours.
 lang: en
 permalink: /en/tools/severance-pay-calculator/
-canonical_url: /en/tools/severance-pay-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/severance-pay-calculator/
 category: calculator
 category_label: Finance
 thumbnail: /assets/thumbs/severance-pay-calculator.svg

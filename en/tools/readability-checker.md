@@ -4,7 +4,7 @@ title: Readability Checker | Spot long sentences, dense paragraphs, and repeated
 description: Paste text to check sentence length, paragraph density, repeated wording, line-break density, and mobile readability signals in your browser.
 lang: en
 permalink: /en/tools/readability-checker/
-canonical_url: /en/tools/readability-checker/
+canonical_url: https://toolog.sooyadev.com/en/tools/readability-checker/
 alternate_urls:
   ko: /tools/readability-checker/
   en: /en/tools/readability-checker/

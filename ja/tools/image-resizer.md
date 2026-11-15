@@ -4,7 +4,7 @@ title: 画像リサイズツール | サイズ変更・切り抜き・WebP変換
 description: 画像を指定ピクセルへリサイズし、WebP/PNG/JPEG保存、品質調整、切り抜き・余白、Instagram・ブログ・OG用プリセット、モバイル向け安全制限、ダウンロード状態案内までブラウザ内で処理します。
 lang: ja
 permalink: /ja/tools/image-resizer/
-canonical_url: /ja/tools/image-resizer/
+canonical_url: https://toolog.sooyadev.com/ja/tools/image-resizer/
 category: image
 category_label: 画像・グラフィック
 thumbnail: /assets/thumbs/image-resizer.svg

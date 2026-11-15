@@ -4,7 +4,7 @@ title: Korea Weekly Holiday Pay Calculator 2026 | Eligibility & Amount
 description: Check Korea's paid weekly holiday rules with hourly wage and 4-week average scheduled hours. Review the 15-hour threshold, attendance, full-week employment, holiday hours, and weekly/monthly estimates.
 lang: en
 permalink: /en/tools/weekly-holiday-pay-calculator/
-canonical_url: /en/tools/weekly-holiday-pay-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/weekly-holiday-pay-calculator/
 category: calculator
 category_label: Finance/Business
 thumbnail: /assets/thumbs/en/weekly-holiday-pay-calculator.svg

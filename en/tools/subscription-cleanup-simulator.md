@@ -4,7 +4,7 @@ title: Subscription Cleanup Priority Simulator | Sort what to keep, pause, or ca
 description: Use the Subscription Cleanup Priority Simulator to review streaming, music, AI, cloud, and productivity subscriptions by price, usage, replacement options, and billing urgency, then sort keep, pause, and cancel candidates.
 lang: en
 permalink: /en/tools/subscription-cleanup-simulator/
-canonical_url: /en/tools/subscription-cleanup-simulator/
+canonical_url: https://toolog.sooyadev.com/en/tools/subscription-cleanup-simulator/
 category: finance
 category_label: Budget/Subscriptions
 thumbnail: /assets/thumbs/en/subscription-cleanup-simulator.svg

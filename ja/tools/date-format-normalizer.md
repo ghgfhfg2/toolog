@@ -4,7 +4,7 @@ title: 日付フォーマット変換ツール | 文書・メモ・お知らせ�
 description: 日付フォーマット変換ツールで、yyyy-mm-dd、韓国語の日付、May 4th, 2026、20260504、05/10/2026 など混在した日付を1つの形式に統一し、不正な日付、迷いやすい月/日表記、変換前後の例も確認できます。
 lang: ja
 permalink: /ja/tools/date-format-normalizer/
-canonical_url: /ja/tools/date-format-normalizer/
+canonical_url: https://toolog.sooyadev.com/ja/tools/date-format-normalizer/
 alternate_urls:
   ko: /tools/date-format-normalizer/
   en: /en/tools/date-format-normalizer/

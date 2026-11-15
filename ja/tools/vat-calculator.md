@@ -4,7 +4,7 @@ title: VAT計算機 | 税率設定・税抜・税込合計を逆算
 description: 0〜100%のVATを税抜・税込から計算・逆算。整数演算で1円単位の端数境界を正確に処理し、計算基準と端数処理を含む内訳をコピーできます。
 lang: ja
 permalink: /ja/tools/vat-calculator/
-canonical_url: /ja/tools/vat-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/vat-calculator/
 category: data
 category_label: データ/計算
 thumbnail: /assets/thumbs/vat-calculator.svg

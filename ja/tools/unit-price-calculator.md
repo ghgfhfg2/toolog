@@ -26,7 +26,7 @@ faq:
     a: はい。商品Aだけを入力し、商品Bは空欄にできます。比較するときは商品Bの価格と数量を両方入力してください。
   - q: 500gと1kgはどう比較しますか？
     a: 両方をg、または両方をkgのように同じ単位へそろえて入力します。
-canonical_url: /ja/tools/unit-price-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/unit-price-calculator/
 alternate_urls:
   ko: /tools/unit-price-calculator/
   en: /en/tools/unit-price-calculator/

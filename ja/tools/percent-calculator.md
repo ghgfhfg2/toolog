@@ -4,7 +4,7 @@ title: パーセント計算機 | 割合・比率・増減率を計算
 description: 数値の何%、全体に対する割合、前の値からの増加率・減少率を、計算式・入力例・エラー案内付きですぐ計算できます。
 lang: ja
 permalink: /ja/tools/percent-calculator/
-canonical_url: /ja/tools/percent-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/percent-calculator/
 category: calculator
 category_label: 計算/パーセント
 thumbnail: /assets/thumbs/percent-calculator.svg

@@ -4,7 +4,7 @@ title: Grocery Budget Checker | Track budget usage and trim your shopping list
 description: Paste a grocery list with estimated prices and a budget to review must-buy items, optional items, budget usage, after-must-buy balance, missing prices, duplicates, and cut candidates in your browser.
 lang: en
 permalink: /en/tools/grocery-budget-checker/
-canonical_url: /en/tools/grocery-budget-checker/
+canonical_url: https://toolog.sooyadev.com/en/tools/grocery-budget-checker/
 alternate_urls:
   ko: /tools/grocery-budget-checker/
   en: /en/tools/grocery-budget-checker/

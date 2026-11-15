@@ -13,7 +13,7 @@ tool_type: calculator
 topic_cluster: finance
 lang: en
 permalink: /en/tools/split-bill-calculator/
-canonical_url: /en/tools/split-bill-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/split-bill-calculator/
 keywords: [split bill calculator, dutch pay calculator, bill split, expense sharing, per person amount]
 related_tools: [tip-calculator, unit-price-calculator, percent-calculator]
 faq:

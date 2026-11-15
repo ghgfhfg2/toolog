@@ -4,7 +4,7 @@ title: Unit Converter | Inches to CM, LB to KG & Tiny Values
 description: Convert inches to cm, lb to kg and Fahrenheit to Celsius. Keep tiny values visible with scientific notation, check absolute-zero limits and copy results.
 lang: en
 permalink: /en/tools/unit-converter/
-canonical_url: /en/tools/unit-converter/
+canonical_url: https://toolog.sooyadev.com/en/tools/unit-converter/
 category: data
 category_label: Data/Utilities
 thumbnail: /assets/thumbs/unit-converter.svg

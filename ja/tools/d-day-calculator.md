@@ -4,7 +4,7 @@ title: D-Day計算機 | 日付差・残り日数・営業日を計算
 description: 2つの日付のD-Day、残り日数、経過日数、両端を含む日数、土日を除く営業日差を計算し、結果をコピーできます。
 lang: ja
 permalink: /ja/tools/d-day-calculator/
-canonical_url: /ja/tools/d-day-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/d-day-calculator/
 category: calculator
 category_label: 予定/生産性
 thumbnail: /assets/thumbs/d-day-calculator.svg

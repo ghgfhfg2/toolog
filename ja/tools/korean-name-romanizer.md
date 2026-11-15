@@ -4,7 +4,7 @@ title: ハングル名前ローマ字変換ツール | パスポート名・地�
 description: ハングルの名前、地名、ブランド名、短い韓国語テキストをローマ字表記の下書きに変換し、空白・ハイフン・英字スタイル、姓の候補、登録済み表記との比較も確認できます。
 lang: ja
 permalink: /ja/tools/korean-name-romanizer/
-canonical_url: /ja/tools/korean-name-romanizer/
+canonical_url: https://toolog.sooyadev.com/ja/tools/korean-name-romanizer/
 alternate_urls:
   ko: /tools/korean-name-romanizer/
   en: /en/tools/korean-name-romanizer/

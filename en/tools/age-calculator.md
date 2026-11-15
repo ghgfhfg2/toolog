@@ -4,7 +4,7 @@ title: Age Calculator | Age on Any Date & Month-End Rules
 description: Calculate age, Korean counting age, elapsed months and days, and birthday countdown from dates in years 0001–9999. Check leap-day and month-end rules and copy results with the reference date.
 lang: en
 permalink: /en/tools/age-calculator/
-canonical_url: /en/tools/age-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/age-calculator/
 category: calculator
 category_label: Lifestyle/Date
 thumbnail: /assets/thumbs/age-calculator.svg

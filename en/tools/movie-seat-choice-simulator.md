@@ -4,7 +4,7 @@ title: Movie Theater Seat Choice Simulator | Compare center, aisle, and front/ba
 description: Compare movie seat candidates before booking by screen distance, center position, aisle access, screen size, group size, and viewing preference to get a ranked recommendation with reasons.
 lang: en
 permalink: /en/tools/movie-seat-choice-simulator/
-canonical_url: /en/tools/movie-seat-choice-simulator/
+canonical_url: https://toolog.sooyadev.com/en/tools/movie-seat-choice-simulator/
 alternate_urls:
   ko: /tools/movie-seat-choice-simulator/
   en: /en/tools/movie-seat-choice-simulator/

@@ -4,7 +4,7 @@ title: Korea Hourly to Monthly Salary Calculator | 2026 Minimum Wage
 description: Convert a Korean hourly wage to gross weekly, monthly, and annual pay with prorated weekly holiday pay, attendance eligibility, and a 2026 minimum-wage warning.
 lang: en
 permalink: /en/tools/hourly-monthly-salary-calculator/
-canonical_url: /en/tools/hourly-monthly-salary-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/hourly-monthly-salary-calculator/
 category: calculator
 category_label: Finance/Business
 thumbnail: /assets/thumbs/en/hourly-monthly-salary-calculator.svg

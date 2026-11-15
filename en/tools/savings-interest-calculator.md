@@ -4,7 +4,7 @@ title: Savings Interest Calculator | Simple & Monthly Compound in KRW
 description: Estimate pre-tax interest, tax and after-tax maturity for a lump-sum deposit in KRW. Compare simple or monthly compound interest, 0–50% annual rates and 1–120 months with whole-won rounding.
 lang: en
 permalink: /en/tools/savings-interest-calculator/
-canonical_url: /en/tools/savings-interest-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/savings-interest-calculator/
 category: calculator
 category_label: Finance/Business
 thumbnail: /assets/thumbs/savings-interest-calculator.svg

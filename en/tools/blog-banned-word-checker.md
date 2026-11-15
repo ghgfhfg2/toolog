@@ -4,7 +4,7 @@ title: Banned Word Checker | Scan Blog Spam, Overclaims, Links, and Repetition
 description: Use this banned word checker before publishing to scan blog drafts for spam or promo keywords, medical/legal/finance overclaims, short URLs, contact IDs, hashtag stuffing, repeated keywords, and detection density in your browser.
 lang: en
 permalink: /en/tools/blog-banned-word-checker/
-canonical_url: /en/tools/blog-banned-word-checker/
+canonical_url: https://toolog.sooyadev.com/en/tools/blog-banned-word-checker/
 category: text
 category_label: Text/Editing
 thumbnail: /assets/thumbs/blog-banned-word-checker.svg

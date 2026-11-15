@@ -4,7 +4,7 @@ title: Image Resizer | Resize, Crop, WebP Converter
 description: Resize photos to exact pixels in your browser with WebP/PNG/JPEG output, quality control, crop or padding modes, Instagram, blog, OG presets, mobile-safe limits, and clear download states.
 lang: en
 permalink: /en/tools/image-resizer/
-canonical_url: /en/tools/image-resizer/
+canonical_url: https://toolog.sooyadev.com/en/tools/image-resizer/
 category: image
 category_label: Image & Graphics
 thumbnail: /assets/thumbs/image-resizer.svg

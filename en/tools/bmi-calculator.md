@@ -4,7 +4,7 @@ title: Adult BMI Calculator | Asian Cutoffs, Weight Range, and BMR
 description: Calculate adult BMI with Asian-reference categories, the approximate weight range for BMI 18.5 to below 23, and optional BMR. Includes input checks and rounding guidance.
 lang: en
 permalink: /en/tools/bmi-calculator/
-canonical_url: /en/tools/bmi-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/bmi-calculator/
 category: calculator
 category_label: Health/Fitness
 thumbnail: /assets/thumbs/bmi-calculator.svg

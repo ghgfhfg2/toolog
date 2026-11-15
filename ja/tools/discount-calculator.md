@@ -4,7 +4,7 @@ title: 割引計算機 | ウォン単位の端数処理・クーポン・数量�
 description: 単価をウォン単位で四捨五入し、個別クーポン・数量・送料から支払額を計算。入力エラー案内、目標価格の割引率逆算、結果コピーに対応します。
 lang: ja
 permalink: /ja/tools/discount-calculator/
-canonical_url: /ja/tools/discount-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/discount-calculator/
 category: calculator
 category_label: 計算/ショッピング
 thumbnail: /assets/thumbs/discount-calculator.svg

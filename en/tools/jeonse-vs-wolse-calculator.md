@@ -4,7 +4,7 @@ title: Jeonse vs Wolse Calculator | Compare Korea Rental Costs
 description: Compare jeonse and wolse deposits, rent, opportunity cost, stay length, and one-time costs to estimate total cost, monthly-equivalent cost, and break-even rent.
 lang: en
 permalink: /en/tools/jeonse-vs-wolse-calculator/
-canonical_url: /en/tools/jeonse-vs-wolse-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/jeonse-vs-wolse-calculator/
 category: calculator
 category_label: Real Estate
 thumbnail: /assets/thumbs/en/jeonse-vs-wolse-calculator.svg

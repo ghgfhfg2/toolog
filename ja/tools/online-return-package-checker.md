@@ -13,7 +13,7 @@ tool_key: online-return-package-checker
 tool_type: checker
 topic_cluster: shopping
 permalink: /ja/tools/online-return-package-checker/
-canonical_url: /ja/tools/online-return-package-checker/
+canonical_url: https://toolog.sooyadev.com/ja/tools/online-return-package-checker/
 alternate_urls:
   ko: /tools/online-return-package-checker/
   en: /en/tools/online-return-package-checker/

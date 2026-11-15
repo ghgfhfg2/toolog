@@ -4,7 +4,7 @@ title: Deadline Backward Planner | Latest Start Date & Daily Work Plan
 description: Calculate the latest safe start and dated work blocks from a deadline, total hours, daily capacity, review buffer, and optional weekend exclusion.
 lang: en
 permalink: /en/tools/deadline-backward-planner/
-canonical_url: /en/tools/deadline-backward-planner/
+canonical_url: https://toolog.sooyadev.com/en/tools/deadline-backward-planner/
 alternate_urls:
   ko: /tools/deadline-backward-planner/
   en: /en/tools/deadline-backward-planner/

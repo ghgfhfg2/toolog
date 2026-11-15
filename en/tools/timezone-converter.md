@@ -4,7 +4,7 @@ title: Time Zone Converter | Repeated DST Times & Seoul–New York Meetings
 description: Convert Seoul, New York, London and LA meeting times. Choose the first or second occurrence of repeated DST times, preserve the instant when swapping zones, and copy both IANA zones and UTC offsets.
 lang: en
 permalink: /en/tools/timezone-converter/
-canonical_url: /en/tools/timezone-converter/
+canonical_url: https://toolog.sooyadev.com/en/tools/timezone-converter/
 category: data
 category_label: Data/Utilities
 thumbnail: /assets/thumbs/timezone-converter.svg

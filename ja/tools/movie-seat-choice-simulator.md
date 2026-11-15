@@ -4,7 +4,7 @@ title: 映画館座席選びシミュレーター | 中央・通路・前後席�
 description: 映画の予約前に、座席候補をスクリーン距離・中央位置・通路アクセス・スクリーン規模・同行人数・好みで比較し、おすすめ順と理由を整理します。
 lang: ja
 permalink: /ja/tools/movie-seat-choice-simulator/
-canonical_url: /ja/tools/movie-seat-choice-simulator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/movie-seat-choice-simulator/
 alternate_urls:
   ko: /tools/movie-seat-choice-simulator/
   en: /en/tools/movie-seat-choice-simulator/

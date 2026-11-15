@@ -4,7 +4,7 @@ title: 燃費計算機 | 実燃費km/L・L/100km・KRW燃料費
 description: 走行距離と消費燃料から実燃費km/LとL/100kmを計算。任意の単価はKRW/Lで、0と空欄の区別、正確なウォン単位の四捨五入、結果コピーに対応します。
 lang: ja
 permalink: /ja/tools/fuel-economy-calculator/
-canonical_url: /ja/tools/fuel-economy-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/fuel-economy-calculator/
 category: calculator
 category_label: 自動車/費用
 thumbnail: /assets/thumbs/ja/fuel-economy-calculator.svg

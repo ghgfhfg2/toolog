@@ -4,7 +4,7 @@ title: 韓国の週休手当計算機 2026 | 対象条件・金額を試算
 description: 時給と4週平均の週所定労働時間から、韓国の週15時間・欠勤・7日間の労働関係条件、週休時間、週/月の見込み額を確認できます。
 lang: ja
 permalink: /ja/tools/weekly-holiday-pay-calculator/
-canonical_url: /ja/tools/weekly-holiday-pay-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/weekly-holiday-pay-calculator/
 category: calculator
 category_label: 金融・ビジネス
 thumbnail: /assets/thumbs/ja/weekly-holiday-pay-calculator.svg

@@ -4,7 +4,7 @@ title: パスワード強度チェッカー | 繰り返し・空白・文字数�
 description: パスワードの長さ、繰り返しブロック、一般的な単語や空白をブラウザ内で点検。Unicode文字数・入力上限・点数の限界を確認し、入力本文なしの結果をコピーできます。
 lang: ja
 permalink: /ja/tools/password-strength-checker/
-canonical_url: /ja/tools/password-strength-checker/
+canonical_url: https://toolog.sooyadev.com/ja/tools/password-strength-checker/
 category: text
 category_label: テキスト/セキュリティ点検
 thumbnail: /assets/thumbs/ja/password-strength-checker.svg

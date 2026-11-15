@@ -4,7 +4,7 @@ title: 面接フォローアップ質問ジェネレーター | 回答のあと�
 description: 職種、経験段階、面接タイプ、回答の要点をもとに、実際に続きやすいフォローアップ質問と回答ポイントをすばやく整理します。
 lang: ja
 permalink: /ja/tools/interview-followup-question-generator/
-canonical_url: /ja/tools/interview-followup-question-generator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/interview-followup-question-generator/
 alternate_urls:
   ko: /tools/interview-followup-question-generator/
   en: /en/tools/interview-followup-question-generator/

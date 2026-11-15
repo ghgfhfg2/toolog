@@ -4,7 +4,7 @@ lang: ja
 title: 目標GPA逆算計算機 | 残り単位に必要なGPAを計算
 description: 現在GPA・取得済み単位・目標GPA・残り単位を入力し、今後必要な平均GPA、目標の達成可能性、到達可能な最大最終GPAを計算できます。
 permalink: /ja/tools/required-gpa-calculator/
-canonical_url: /ja/tools/required-gpa-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/required-gpa-calculator/
 category: calculator
 category_label: 教育/学業
 thumbnail: /assets/thumbs/ja/required-gpa-calculator.svg

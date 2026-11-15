@@ -4,7 +4,7 @@ title: Lucky Draw Picker | Random Winner, Raffle, and Order Generator
 description: Paste a participant list, remove blank and duplicate entries, validate winner-count limits, draw random winners in your browser, and copy the numbered result.
 lang: en
 permalink: /en/tools/lucky-draw-picker/
-canonical_url: /en/tools/lucky-draw-picker/
+canonical_url: https://toolog.sooyadev.com/en/tools/lucky-draw-picker/
 category: productivity
 category_label: Schedule/Productivity
 thumbnail: /assets/thumbs/lucky-draw-picker.svg

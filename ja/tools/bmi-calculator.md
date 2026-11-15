@@ -4,7 +4,7 @@ title: 成人BMI計算機 | アジア基準・体重範囲・BMR目安
 description: 成人の身長と体重からBMIとアジア成人の参考区分、BMI 18.5以上23未満の概算体重範囲、任意でBMR目安を計算。入力条件と丸め表示の見方も確認できます。
 lang: ja
 permalink: /ja/tools/bmi-calculator/
-canonical_url: /ja/tools/bmi-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/bmi-calculator/
 category: calculator
 category_label: 健康/フィットネス
 thumbnail: /assets/thumbs/bmi-calculator.svg

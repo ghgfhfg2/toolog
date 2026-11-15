@@ -4,7 +4,7 @@ title: Priority Decision Matrix Planner | Sort urgent and important work in one 
 description: Compare up to five tasks by urgency, impact, effort, and confidence, then rank what to do now, this week, or review later with clear rationale.
 lang: en
 permalink: /en/tools/priority-decision-matrix-planner/
-canonical_url: /en/tools/priority-decision-matrix-planner/
+canonical_url: https://toolog.sooyadev.com/en/tools/priority-decision-matrix-planner/
 alternate_urls:
   ko: /tools/priority-decision-matrix-planner/
   en: /en/tools/priority-decision-matrix-planner/

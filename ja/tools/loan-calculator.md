@@ -4,7 +4,7 @@ title: ローン計算機 | 固定金利・ウォンの元利均等と元金均�
 description: 借入額・固定年利・期間から、元利均等と元金均等の月々の返済額・総利息・総返済額をウォンで比較。0%や微小金利、入力エラーと丸め方も確認できます。
 lang: ja
 permalink: /ja/tools/loan-calculator/
-canonical_url: /ja/tools/loan-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/loan-calculator/
 category: calculator
 category_label: 金融
 thumbnail: /assets/thumbs/loan-calculator.svg

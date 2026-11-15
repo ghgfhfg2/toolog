@@ -4,7 +4,7 @@ title: JSON Merge | Combine Files, JSONL, Arrays & Objects
 description: Combine JSON files, pasted API responses, and JSONL logs locally in your browser. Merge arrays and object keys, remove duplicates, check conflicts and shallow-merge rules, choose pretty or minified output, and copy or download the full result.
 lang: en
 permalink: /en/tools/json-merge/
-canonical_url: /en/tools/json-merge/
+canonical_url: https://toolog.sooyadev.com/en/tools/json-merge/
 category: data
 category_label: Data/Utility
 thumbnail: /assets/thumbs/json-merge.svg

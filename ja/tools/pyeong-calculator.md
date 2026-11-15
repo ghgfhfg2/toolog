@@ -4,7 +4,7 @@ title: 坪数計算機 | ㎡・韓国坪の換算とウォン建て坪単価
 description: ㎡と韓国の坪を相互換算し、ウォン建て総額から坪単価を概算。小さな面積表示、入力エラー案内、84㎡の例と結果コピーに対応します。
 lang: ja
 permalink: /ja/tools/pyeong-calculator/
-canonical_url: /ja/tools/pyeong-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/pyeong-calculator/
 category: data
 category_label: 不動産
 thumbnail: /assets/thumbs/pyeong-calculator.svg

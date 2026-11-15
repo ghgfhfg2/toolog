@@ -4,7 +4,7 @@ title: 日程調整メッセージ作成ツール | 会議・約束・面談の�
 description: 会議、約束、面談、インタビューの日時候補を伝えるメッセージを、トーンと候補時間に合わせてそのまま使える形で作成できます。
 lang: ja
 permalink: /ja/tools/schedule-coordination-message-generator/
-canonical_url: /ja/tools/schedule-coordination-message-generator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/schedule-coordination-message-generator/
 alternate_urls:
   ko: /tools/schedule-coordination-message-generator/
   en: /en/tools/schedule-coordination-message-generator/

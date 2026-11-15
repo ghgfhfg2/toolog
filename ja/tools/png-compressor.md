@@ -4,7 +4,7 @@ title: PNG圧縮ツール | WebP・JPEG変換で画像を軽量化
 description: ブラウザ内でPNG/JPEG/WebP画像を圧縮し、出力形式、品質、プレビュー、削減率、透過背景の注意、大きすぎる画像の案内まで確認できます。
 lang: ja
 permalink: /ja/tools/png-compressor/
-canonical_url: /ja/tools/png-compressor/
+canonical_url: https://toolog.sooyadev.com/ja/tools/png-compressor/
 category: image
 category_label: 画像・グラフィック
 thumbnail: /assets/thumbs/png-compressor.svg

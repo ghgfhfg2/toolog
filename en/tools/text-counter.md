@@ -4,7 +4,7 @@ title: Text Counter | UTF-8 Bytes, Emoji, and Safe Limit Trimming
 description: Count user-perceived characters, joined emoji, words, lines, and UTF-8 bytes, then safely trim an essay, post, or manuscript to a selected limit.
 lang: en
 permalink: /en/tools/text-counter/
-canonical_url: /en/tools/text-counter/
+canonical_url: https://toolog.sooyadev.com/en/tools/text-counter/
 category: text
 category_label: Text/Editing
 thumbnail: /assets/thumbs/text-counter.svg

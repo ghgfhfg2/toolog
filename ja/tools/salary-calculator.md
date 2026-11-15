@@ -4,7 +4,7 @@ title: 2026年韓国の年収手取り計算機 | 税金・4大保険を試算
 description: 2026年の韓国の額面年収、非課税月額、扶養情報から、月・年の手取り、所得税、労働者負担の社会保険料を試算します。
 lang: ja
 permalink: /ja/tools/salary-calculator/
-canonical_url: /ja/tools/salary-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/salary-calculator/
 category: calculator
 category_label: 金融
 thumbnail: /assets/thumbs/salary-calculator.svg

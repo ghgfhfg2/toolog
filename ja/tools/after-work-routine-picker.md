@@ -4,7 +4,7 @@ title: 退勤後の夜ルーティンピッカー | 今夜やることを選ぶ
 description: 残り時間、元気度、必須タスク、気分をもとに、休息・運動・家事・勉強・趣味から今夜のルーティンを選べます。
 lang: ja
 permalink: /ja/tools/after-work-routine-picker/
-canonical_url: /ja/tools/after-work-routine-picker/
+canonical_url: https://toolog.sooyadev.com/ja/tools/after-work-routine-picker/
 alternate_urls:
   ko: /tools/after-work-routine-picker/
   en: /en/tools/after-work-routine-picker/

@@ -4,7 +4,7 @@ title: 目標貯蓄期間計算機 | 毎月の積立額から目標達成まで�
 description: 現在の貯蓄額・目標金額・毎月の積立額・年利から、目標達成までの月数、今後の積立総額、月複利の想定利息を計算できます。
 lang: ja
 permalink: /ja/tools/goal-savings-calculator/
-canonical_url: /ja/tools/goal-savings-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/goal-savings-calculator/
 category: calculator
 category_label: 金融/ビジネス
 thumbnail: /assets/thumbs/ja/goal-savings-calculator.svg

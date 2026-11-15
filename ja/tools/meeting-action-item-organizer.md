@@ -4,7 +4,7 @@ title: 会議アクションアイテム整理ツール | 会議メモをその�
 description: 会議アクションアイテム整理ツールで、会議メモ、依頼事項、決定事項を実行項目、確認項目、共有メモに分けてすぐ使える形にまとめましょう。
 lang: ja
 permalink: /ja/tools/meeting-action-item-organizer/
-canonical_url: /ja/tools/meeting-action-item-organizer/
+canonical_url: https://toolog.sooyadev.com/ja/tools/meeting-action-item-organizer/
 category: productivity
 category_label: 仕事/会議フォローアップ
 thumbnail: /assets/thumbs/ja/meeting-action-item-organizer.svg

@@ -4,7 +4,7 @@ lang: en
 title: GPA Calculator | 4.5, 4.3 & 4.0 Scales, P/F Grades
 description: Calculate a credit-weighted GPA for up to 6 courses using example 4.5, 4.3 or 4.0 scales. Check how P and F affect GPA, fix incomplete entries and copy your results.
 permalink: /en/tools/gpa-calculator/
-canonical_url: /en/tools/gpa-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/gpa-calculator/
 category: calculator
 category_label: Education/Study
 thumbnail: /assets/thumbs/en/gpa-calculator.svg

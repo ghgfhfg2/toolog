@@ -4,7 +4,7 @@ title: Privacy Exposure Checker | Find phones, emails, accounts, and IDs before 
 description: Scan messages, notices, support notes, and document drafts for phone numbers, emails, ID-like patterns, card/account-style number strings, links, and messenger IDs, then review a masked version before sharing.
 lang: en
 permalink: /en/tools/privacy-exposure-checker/
-canonical_url: /en/tools/privacy-exposure-checker/
+canonical_url: https://toolog.sooyadev.com/en/tools/privacy-exposure-checker/
 alternate_urls:
   ko: /tools/privacy-exposure-checker/
   en: /en/tools/privacy-exposure-checker/

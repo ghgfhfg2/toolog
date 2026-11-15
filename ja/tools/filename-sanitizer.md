@@ -4,7 +4,7 @@ title: ファイル名整理ツール | 記号削除・拡張子保持・長い�
 description: タイトルやファイル名一覧を貼り付けると、空白・記号・連続区切り・拡張子・日付・連番・長い名前・重複候補を整理して、コピーしやすい安全なファイル名へまとめます。
 lang: ja
 permalink: /ja/tools/filename-sanitizer/
-canonical_url: /ja/tools/filename-sanitizer/
+canonical_url: https://toolog.sooyadev.com/ja/tools/filename-sanitizer/
 category: text
 category_label: テキスト/ファイル整理
 thumbnail: /assets/thumbs/ja/filename-sanitizer.svg

@@ -4,7 +4,7 @@ title: "VAT Calculator | Custom Rate, Net-to-Gross & Reverse VAT"
 description: Calculate or reverse VAT at 0–100% with exact integer-based whole-unit rounding. Compare net price, VAT and gross total, then copy the breakdown and rounding method.
 lang: en
 permalink: /en/tools/vat-calculator/
-canonical_url: /en/tools/vat-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/vat-calculator/
 category: data
 category_label: Data/Finance
 thumbnail: /assets/thumbs/vat-calculator.svg

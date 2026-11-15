@@ -1,4 +1,5 @@
 {%- assign header_lang = page.lang | default: 'ko' -%}
+{%- include tool-language-urls.html -%}
 <header class="site-header" role="banner">
   <div class="wrapper site-header__inner">
     <a class="site-title" rel="author" href="{% if header_lang == 'en' %}{{ '/en/' | relative_url }}{% elsif header_lang == 'ja' %}{{ '/ja/' | relative_url }}{% else %}{{ '/' | relative_url }}{% endif %}" aria-label="Toolog home">
@@ -11,9 +12,9 @@
         <a class="page-link page-link--about" href="{{ '/about/' | relative_url }}">{% if header_lang == 'en' %}About{% elsif header_lang == 'ja' %}紹介{% else %}소개{% endif %}</a>
       </div>
       <div class="language-nav" aria-label="Language">
-        <a href="{{ '/' | relative_url }}"{% if header_lang == 'ko' %} aria-current="page"{% endif %}>KO</a>
-        <a href="{{ '/en/' | relative_url }}"{% if header_lang == 'en' %} aria-current="page"{% endif %}>EN</a>
-        <a href="{{ '/ja/' | relative_url }}"{% if header_lang == 'ja' %} aria-current="page"{% endif %}>JA</a>
+        <a href="{{ language_ko_url | relative_url }}"{% if header_lang == 'ko' %} aria-current="page"{% endif %}>KO</a>
+        <a href="{{ language_en_url | relative_url }}"{% if header_lang == 'en' %} aria-current="page"{% endif %}>EN</a>
+        <a href="{{ language_ja_url | relative_url }}"{% if header_lang == 'ja' %} aria-current="page"{% endif %}>JA</a>
       </div>
     </nav>
   </div>

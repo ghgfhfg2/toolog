@@ -4,7 +4,7 @@ title: ナンピン計算機 | 平均取得単価・目標までの必要株数
 description: 保有株数・平均単価と追加購入計画から、新しい平均取得単価、総購入金額、目標までにさらに必要な最小株数を計算。小数価格を正確に処理し、手数料・税金は除外します。
 lang: ja
 permalink: /ja/tools/stock-average-calculator/
-canonical_url: /ja/tools/stock-average-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/stock-average-calculator/
 category: calculator
 category_label: 投資
 thumbnail: /assets/thumbs/stock-average-calculator.svg

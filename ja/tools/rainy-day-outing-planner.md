@@ -13,7 +13,7 @@ tool_key: rainy-day-outing-planner
 tool_type: planner
 topic_cluster: lifestyle
 permalink: /ja/tools/rainy-day-outing-planner/
-canonical_url: /ja/tools/rainy-day-outing-planner/
+canonical_url: https://toolog.sooyadev.com/ja/tools/rainy-day-outing-planner/
 alternate_urls:
   ko: /tools/rainy-day-outing-planner/
   en: /en/tools/rainy-day-outing-planner/

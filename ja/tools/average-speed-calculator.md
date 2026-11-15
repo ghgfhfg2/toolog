@@ -4,7 +4,7 @@ lang: ja
 title: 平均速度・ランニングペース計算機 | km・mと時・分・秒
 description: km・mの距離と時・分・秒から平均速度(km/h)、1kmペース、予想5K・10Kを計算。400mトラック、総分・総秒の入力と結果コピーに対応します。
 permalink: /ja/tools/average-speed-calculator/
-canonical_url: /ja/tools/average-speed-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/average-speed-calculator/
 category: calculator
 category_label: 移動/生活
 thumbnail: /assets/thumbs/ja/average-speed-calculator.svg

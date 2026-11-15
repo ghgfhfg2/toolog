@@ -4,7 +4,7 @@ title: Gift Idea Picker | Quickly narrow gift ideas by relationship, budget, and
 description: Choose the recipient, occasion, budget, vibe, and prep speed to get 5 practical gift ideas with quick reasons.
 lang: en
 permalink: /en/tools/gift-idea-picker/
-canonical_url: /en/tools/gift-idea-picker/
+canonical_url: https://toolog.sooyadev.com/en/tools/gift-idea-picker/
 alternate_urls:
   ko: /tools/gift-idea-picker/
   en: /en/tools/gift-idea-picker/

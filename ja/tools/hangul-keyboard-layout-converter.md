@@ -4,7 +4,7 @@ title: 韓英キー入力復元ツール | 英語配列で打ったハングル�
 description: 韓/英キー切替を間違えて入力した文字列を、行ごとの自動判定・手動方向選択・ブラウザ内変換で元の意図に近い形へすばやく復元します。
 lang: ja
 permalink: /ja/tools/hangul-keyboard-layout-converter/
-canonical_url: /ja/tools/hangul-keyboard-layout-converter/
+canonical_url: https://toolog.sooyadev.com/ja/tools/hangul-keyboard-layout-converter/
 category: text
 category_label: テキスト/変換
 thumbnail: /assets/thumbs/ja/hangul-keyboard-layout-converter.svg

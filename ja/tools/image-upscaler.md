@@ -4,7 +4,7 @@ title: 画像アップスケーラー | 低解像度写真の拡大・鮮明化
 description: 低解像度のPNG・JPEG・WebP画像を1x補正または2x・3x・4xに拡大し、シャープ補正、ノイズ低減、WebP/PNG/JPEG保存、品質調整、容量警告、解像度制限までブラウザ内で処理します。
 lang: ja
 permalink: /ja/tools/image-upscaler/
-canonical_url: /ja/tools/image-upscaler/
+canonical_url: https://toolog.sooyadev.com/ja/tools/image-upscaler/
 category: image
 category_label: 画像
 thumbnail: /assets/thumbs/image-upscaler.svg

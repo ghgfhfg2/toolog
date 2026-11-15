@@ -4,7 +4,7 @@ lang: ja
 title: GPA計算機 | 4.5・4.3・4.0対応、P/Fの扱いを確認
 description: 最大6科目の単位数と成績から加重平均GPAを計算。4.5・4.3・4.0の評点例、Pの除外とFの0点処理を確認でき、入力漏れのチェックと結果コピーにも対応。
 permalink: /ja/tools/gpa-calculator/
-canonical_url: /ja/tools/gpa-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/gpa-calculator/
 category: calculator
 category_label: 教育/学業
 thumbnail: /assets/thumbs/ja/gpa-calculator.svg

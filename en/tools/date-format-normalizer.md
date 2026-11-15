@@ -4,7 +4,7 @@ title: Date Format Normalizer | Standardize dates in documents and announcements
 description: Use Date Format Normalizer to convert mixed yyyy-mm-dd, Korean date text, May 4th, 2026, 20260504, and 05/10/2026 date styles into one format, with invalid dates, ambiguous month/day dates, and before/after examples flagged for review.
 lang: en
 permalink: /en/tools/date-format-normalizer/
-canonical_url: /en/tools/date-format-normalizer/
+canonical_url: https://toolog.sooyadev.com/en/tools/date-format-normalizer/
 alternate_urls:
   ko: /tools/date-format-normalizer/
   en: /en/tools/date-format-normalizer/

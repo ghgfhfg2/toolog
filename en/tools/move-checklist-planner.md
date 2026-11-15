@@ -4,7 +4,7 @@ title: Moving Checklist Planner | Dated Prep and Move-Day Tasks
 description: Enter your move date, home, packing, elevator, and transfer needs to build a dated moving checklist for two weeks before, three days before, and move day.
 lang: en
 permalink: /en/tools/move-checklist-planner/
-canonical_url: /en/tools/move-checklist-planner/
+canonical_url: https://toolog.sooyadev.com/en/tools/move-checklist-planner/
 category: lifestyle
 category_label: Lifestyle/Preparation
 thumbnail: /assets/thumbs/en/move-checklist-planner.svg

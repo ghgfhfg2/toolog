@@ -4,7 +4,7 @@ title: 韓国の退職金計算機 | 退職前3か月の平均賃金で試算
 description: 入社日・退職日、退職前3か月の賃金総額と暦日数、定期賞与・年休手当・通常賃金・週所定労働時間から韓国の退職金見込みを計算します。
 lang: ja
 permalink: /ja/tools/severance-pay-calculator/
-canonical_url: /ja/tools/severance-pay-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/severance-pay-calculator/
 category: calculator
 category_label: 金融
 thumbnail: /assets/thumbs/severance-pay-calculator.svg

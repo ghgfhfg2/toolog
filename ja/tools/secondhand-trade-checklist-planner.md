@@ -4,7 +4,7 @@ title: 中古取引準備チェックリストプランナー | 出品前確認�
 description: 中古取引準備チェックリストプランナーで、商品種類、取引方法、梱包の必要性、動作確認可否をもとに、出品前確認と当日準備項目をすばやく整理できます。
 lang: ja
 permalink: /ja/tools/secondhand-trade-checklist-planner/
-canonical_url: /ja/tools/secondhand-trade-checklist-planner/
+canonical_url: https://toolog.sooyadev.com/ja/tools/secondhand-trade-checklist-planner/
 category: lifestyle
 category_label: 生活/取引準備
 thumbnail: /assets/thumbs/ja/secondhand-trade-checklist-planner.svg

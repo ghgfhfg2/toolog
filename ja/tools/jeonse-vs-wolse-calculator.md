@@ -4,7 +4,7 @@ title: チョンセ vs ウォルセ計算機 | 韓国賃貸費用を比較
 description: 保証金、家賃、期待利回り、居住期間、一時費用から、チョンセとウォルセの総費用・月額換算・損益分岐家賃を比較します。
 lang: ja
 permalink: /ja/tools/jeonse-vs-wolse-calculator/
-canonical_url: /ja/tools/jeonse-vs-wolse-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/jeonse-vs-wolse-calculator/
 category: calculator
 category_label: 不動産
 thumbnail: /assets/thumbs/ja/jeonse-vs-wolse-calculator.svg

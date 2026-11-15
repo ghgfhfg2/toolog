@@ -4,7 +4,7 @@ title: Profit Margin Calculator | Exact Target Price & Markup
 description: Calculate cost ratio, profit margin, profit and markup in KRW. Preserve decimal amount differences and round target selling prices upward exactly to whole KRW. Includes input limits, loss warnings and zero-cost handling.
 lang: en
 permalink: /en/tools/profit-margin-calculator/
-canonical_url: /en/tools/profit-margin-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/profit-margin-calculator/
 category: calculator
 category_label: Finance/Business
 thumbnail: /assets/thumbs/profit-margin-calculator.svg

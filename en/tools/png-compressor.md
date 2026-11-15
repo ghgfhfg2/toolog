@@ -4,7 +4,7 @@ title: PNG Compressor | Reduce Image Size with WebP/JPEG Conversion
 description: Compress images in your browser with WebP/JPEG/PNG output, quality control, preview, savings stats, transparent-background notes, and safer oversized-file guidance.
 lang: en
 permalink: /en/tools/png-compressor/
-canonical_url: /en/tools/png-compressor/
+canonical_url: https://toolog.sooyadev.com/en/tools/png-compressor/
 category: image
 category_label: Image & Graphics
 thumbnail: /assets/thumbs/png-compressor.svg

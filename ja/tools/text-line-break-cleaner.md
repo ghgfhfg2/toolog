@@ -4,7 +4,7 @@ title: テキスト改行クリーナー | PDFコピーの改行・空白・箇�
 description: PDF・チャット・文書からコピーした文章の強制改行、余分な空行、混在する箇条書き、重複スペースをブラウザ内で整理します。
 lang: ja
 permalink: /ja/tools/text-line-break-cleaner/
-canonical_url: /ja/tools/text-line-break-cleaner/
+canonical_url: https://toolog.sooyadev.com/ja/tools/text-line-break-cleaner/
 alternate_urls:
   ko: /tools/text-line-break-cleaner/
   en: /en/tools/text-line-break-cleaner/

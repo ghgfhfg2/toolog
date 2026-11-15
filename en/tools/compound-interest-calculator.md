@@ -4,7 +4,7 @@ title: Compound Interest Calculator | Monthly vs Annual Compounding
 description: Compare monthly and annual compounding with month-end deposits in KRW. Check 0% returns, principal, interest, inflation-adjusted value, and copy the input assumptions with results.
 lang: en
 permalink: /en/tools/compound-interest-calculator/
-canonical_url: /en/tools/compound-interest-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/compound-interest-calculator/
 category: calculator
 category_label: Finance
 thumbnail: /assets/thumbs/en/compound-interest-calculator.svg

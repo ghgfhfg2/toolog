@@ -4,7 +4,7 @@ title: タイムゾーン変換 | サマータイムの重複時刻・ソウル�
 description: ソウル・ニューヨーク・ロンドン・LAの会議時刻と時差を変換。サマータイム終了時の重複時刻を選択でき、入れ替えても同じ瞬間を維持。両都市のIANAタイムゾーン名とUTCオフセットをコピーできます。
 lang: ja
 permalink: /ja/tools/timezone-converter/
-canonical_url: /ja/tools/timezone-converter/
+canonical_url: https://toolog.sooyadev.com/ja/tools/timezone-converter/
 category: data
 category_label: データ/計算
 thumbnail: /assets/thumbs/timezone-converter.svg

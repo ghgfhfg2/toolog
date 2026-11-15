@@ -4,7 +4,7 @@ title: Household Chore Picker | Split dishes, cleaning, and laundry fairly
 description: Enter people and chores to quickly split dishes, cleaning, laundry, and other household tasks by random or balanced rules.
 lang: en
 permalink: /en/tools/household-chore-picker/
-canonical_url: /en/tools/household-chore-picker/
+canonical_url: https://toolog.sooyadev.com/en/tools/household-chore-picker/
 alternate_urls:
   ko: /tools/household-chore-picker/
   en: /en/tools/household-chore-picker/

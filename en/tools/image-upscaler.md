@@ -4,7 +4,7 @@ title: Image Upscaler | Enlarge and Sharpen Low-Resolution Photos
 description: Upscale low-resolution PNG, JPEG, or WebP images with 1x enhancement or 2x, 3x, and 4x enlargement, sharpening, denoise, WebP/PNG/JPEG output, quality control, file-size warnings, and safer browser limits.
 lang: en
 permalink: /en/tools/image-upscaler/
-canonical_url: /en/tools/image-upscaler/
+canonical_url: https://toolog.sooyadev.com/en/tools/image-upscaler/
 category: image
 category_label: Image
 thumbnail: /assets/thumbs/image-upscaler.svg

@@ -4,7 +4,7 @@ title: List Format Converter | Turn line, comma, or tab lists into CSV, Markdown
 description: Paste line, comma, or tab-separated items, auto-detect the separator, and convert them into CSV, a Markdown table, a JSON array, or a numbered list with blank, space, and duplicate cleanup.
 lang: en
 permalink: /en/tools/list-format-converter/
-canonical_url: /en/tools/list-format-converter/
+canonical_url: https://toolog.sooyadev.com/en/tools/list-format-converter/
 alternate_urls:
   ko: /tools/list-format-converter/
   en: /en/tools/list-format-converter/

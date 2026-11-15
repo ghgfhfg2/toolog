@@ -4,7 +4,7 @@ title: Recycling Quiz | Practice Household Waste Sorting Rules
 description: Practice household waste sorting with no-repeat quiz rounds, instant explanations, missed-item review, accuracy, and streak tracking.
 lang: en
 permalink: /en/tools/recycling-sorting-practice/
-canonical_url: /en/tools/recycling-sorting-practice/
+canonical_url: https://toolog.sooyadev.com/en/tools/recycling-sorting-practice/
 alternate_urls:
   ko: /tools/recycling-sorting-practice/
   en: /en/tools/recycling-sorting-practice/

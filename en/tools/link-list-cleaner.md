@@ -4,7 +4,7 @@ title: Link List Cleaner | Extract URLs, Strip UTM, Export CSV Link Lists
 description: Extract http, https, www, and Markdown links from text in your browser, remove duplicates, strip UTM and click tracking parameters, remove page anchors, sort by domain, and copy as plain, Markdown, HTML, or CSV.
 lang: en
 permalink: /en/tools/link-list-cleaner/
-canonical_url: /en/tools/link-list-cleaner/
+canonical_url: https://toolog.sooyadev.com/en/tools/link-list-cleaner/
 alternate_urls:
   ko: /tools/link-list-cleaner/
   en: /en/tools/link-list-cleaner/

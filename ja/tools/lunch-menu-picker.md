@@ -4,7 +4,7 @@ title: ランチメニューピッカー | 今日何を食べるかをすばや�
 description: 食事時間・予算・人数・気分を選ぶと、条件に合う候補3つとコピーしやすい提案文を表示します。
 lang: ja
 permalink: /ja/tools/lunch-menu-picker/
-canonical_url: /ja/tools/lunch-menu-picker/
+canonical_url: https://toolog.sooyadev.com/ja/tools/lunch-menu-picker/
 category: lifestyle
 category_label: 生活/選択
 thumbnail: /assets/thumbs/ja/lunch-menu-picker.svg

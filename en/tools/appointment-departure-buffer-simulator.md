@@ -4,7 +4,7 @@ title: Appointment Departure Buffer Simulator | Avoid being late by calculating 
 description: Use the Appointment Departure Buffer Simulator to calculate when to start getting ready, when to leave home, and what arrival target to use from appointment time, travel time, prep time, transfers, rain, unfamiliar routes, and packing needs.
 lang: en
 permalink: /en/tools/appointment-departure-buffer-simulator/
-canonical_url: /en/tools/appointment-departure-buffer-simulator/
+canonical_url: https://toolog.sooyadev.com/en/tools/appointment-departure-buffer-simulator/
 category: lifestyle
 category_label: Lifestyle/Trip Prep
 thumbnail: /assets/thumbs/en/appointment-departure-buffer-simulator.svg

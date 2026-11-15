@@ -4,7 +4,7 @@ title: Password Generator | Random Passwords, Hidden Results & Bulk Copy
 description: Generate 1–20 random passwords of 4–128 characters in your browser. Every selected character type is included, results are hidden by default, and individual or bulk copy and entropy estimates reflect your settings.
 lang: en
 permalink: /en/tools/password-generator/
-canonical_url: /en/tools/password-generator/
+canonical_url: https://toolog.sooyadev.com/en/tools/password-generator/
 category: security
 category_label: Security & Accounts
 thumbnail: /assets/thumbs/password-generator.svg

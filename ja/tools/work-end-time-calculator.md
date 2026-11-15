@@ -4,7 +4,7 @@ title: 退勤時刻計算機 | 昼休み・休憩込み、夜勤の翌日退勤�
 description: 出勤時刻に実勤務時間と昼休み・休憩時間を足して退勤予定時刻を計算。小数時間の分単位への四捨五入、夜勤の翌日表示、総滞在時間、結果コピーに対応しています。
 lang: ja
 permalink: /ja/tools/work-end-time-calculator/
-canonical_url: /ja/tools/work-end-time-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/work-end-time-calculator/
 category: productivity
 category_label: 予定/生産性
 thumbnail: /assets/thumbs/work-end-time-calculator.svg

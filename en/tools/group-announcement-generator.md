@@ -4,7 +4,7 @@ title: Group Announcement Generator | Make ready-to-send notices for group chats
 description: Enter the gathering type, date, place, things to bring, and tone to create a clean announcement you can send in a group chat or text message.
 lang: en
 permalink: /en/tools/group-announcement-generator/
-canonical_url: /en/tools/group-announcement-generator/
+canonical_url: https://toolog.sooyadev.com/en/tools/group-announcement-generator/
 alternate_urls:
   ko: /tools/group-announcement-generator/
   en: /en/tools/group-announcement-generator/

@@ -4,7 +4,7 @@ title: リンク抽出整理ツール | URL抽出・UTM削除・CSVリンク一�
 description: テキスト内の http、https、www、Markdownリンクをブラウザ内で抽出し、重複削除、UTM・クリック追跡パラメータ削除、ページ内アンカー削除、ドメイン別整理、Markdown・HTML・CSV出力まで行います。
 lang: ja
 permalink: /ja/tools/link-list-cleaner/
-canonical_url: /ja/tools/link-list-cleaner/
+canonical_url: https://toolog.sooyadev.com/ja/tools/link-list-cleaner/
 alternate_urls:
   ko: /tools/link-list-cleaner/
   en: /en/tools/link-list-cleaner/

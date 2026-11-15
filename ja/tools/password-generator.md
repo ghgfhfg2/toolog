@@ -4,7 +4,7 @@ title: パスワード生成ツール | ランダム生成・非表示・一括�
 description: 4〜128文字のランダムパスワードを最大20件生成。選択した文字種をすべて含むよう暗号学的乱数で均等に生成し、結果は初期設定で非表示。個別・一括コピーと生成条件を反映したエントロピーの目安に対応。
 lang: ja
 permalink: /ja/tools/password-generator/
-canonical_url: /ja/tools/password-generator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/password-generator/
 category: security
 category_label: セキュリティ
 thumbnail: /assets/thumbs/password-generator.svg

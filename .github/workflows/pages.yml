@@ -36,6 +36,9 @@ jobs:
         env:
           JEKYLL_ENV: production
 
+      - name: Verify rendered tool language links
+        run: python3 scripts/check_rendered_tool_languages.py _site
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 

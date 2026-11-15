@@ -28,7 +28,7 @@ faq:
   a: Use net decimal hours. For 9 elapsed hours and a 30-minute break, this is 8.5 hours. Elapsed decimal hours are shown separately.
 - q: What if automatic copying fails?
   a: A copy error is shown. Select the results and copy manually. The summary includes start/end times, date handling, breaks, and both decimal-hours values.
-canonical_url: /en/tools/time-difference-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/time-difference-calculator/
 ---
 
 ## Calculate hours between times, minus breaks

@@ -4,7 +4,7 @@ title: YouTubeサムネイル・バナー作成ツール | チャンネル画像
 description: 画像1枚から、YouTubeサムネイル1280×720、ショートカバー、チャンネルバナー、アイコン、透かしをWebP・PNG・JPEGで生成し、元画像サイズ、GIF先頭フレーム処理、大容量制限、合計容量まで確認できます。
 lang: ja
 permalink: /ja/tools/youtube-image-kit/
-canonical_url: /ja/tools/youtube-image-kit/
+canonical_url: https://toolog.sooyadev.com/ja/tools/youtube-image-kit/
 category: image
 category_label: 画像・グラフィック
 thumbnail: /assets/thumbs/youtube-image-kit.svg

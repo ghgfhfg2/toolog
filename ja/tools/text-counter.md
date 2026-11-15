@@ -4,7 +4,7 @@ title: 文字数カウンター | 絵文字・UTF-8バイト・上限切り詰�
 description: 結合絵文字を含む見た目の文字数、空白除外、単語、行、UTF-8バイトを集計し、応募書類や投稿文を指定上限まで安全に切り詰めます。
 lang: ja
 permalink: /ja/tools/text-counter/
-canonical_url: /ja/tools/text-counter/
+canonical_url: https://toolog.sooyadev.com/ja/tools/text-counter/
 category: text
 category_label: テキスト/編集
 thumbnail: /assets/thumbs/text-counter.svg

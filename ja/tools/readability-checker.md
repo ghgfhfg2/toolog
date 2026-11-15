@@ -4,7 +4,7 @@ title: 文章の読みやすさチェッカー | 長い文・詰まった段落�
 description: テキストを貼り付けると、文の長さ、段落の密度、表現の繰り返し、改行密度、スマホで読みづらい塊をブラウザ内で確認できます。
 lang: ja
 permalink: /ja/tools/readability-checker/
-canonical_url: /ja/tools/readability-checker/
+canonical_url: https://toolog.sooyadev.com/ja/tools/readability-checker/
 alternate_urls:
   ko: /tools/readability-checker/
   en: /en/tools/readability-checker/

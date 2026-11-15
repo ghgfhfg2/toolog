@@ -1,0 +1,12 @@
+{%- assign language_tool = nil -%}
+{%- if page.tool_key -%}
+  {%- assign language_tool = site.data.tools | where: 'id', page.tool_key | first -%}
+{%- endif -%}
+{%- assign language_ko_url = '/' -%}
+{%- assign language_en_url = '/en/' -%}
+{%- assign language_ja_url = '/ja/' -%}
+{%- if language_tool -%}
+  {%- assign language_ko_url = language_tool.url -%}
+  {%- assign language_en_url = language_tool.url_en -%}
+  {%- assign language_ja_url = language_tool.url_ja -%}
+{%- endif -%}

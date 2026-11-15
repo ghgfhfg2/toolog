@@ -4,7 +4,7 @@ title: Hangul Keyboard Layout Converter | Convert Korean typed in English layout
 description: Paste mistyped text to recover Korean typed on an English keyboard layout or English typed on a Korean layout with line-by-line auto detect, manual direction, and browser-only conversion.
 lang: en
 permalink: /en/tools/hangul-keyboard-layout-converter/
-canonical_url: /en/tools/hangul-keyboard-layout-converter/
+canonical_url: https://toolog.sooyadev.com/en/tools/hangul-keyboard-layout-converter/
 category: text
 category_label: Text/Converter
 thumbnail: /assets/thumbs/en/hangul-keyboard-layout-converter.svg

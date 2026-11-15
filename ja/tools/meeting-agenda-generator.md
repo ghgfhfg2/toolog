@@ -4,7 +4,7 @@ title: 会議アジェンダ生成ツール | 時間配分付きの進行表を�
 description: 所要時間、目的、トピックを入力すると、開始・各議題・終了の合計が正確に一致する会議アジェンダを作成。15・30・45・60分の進行表をコピーできます。
 lang: ja
 permalink: /ja/tools/meeting-agenda-generator/
-canonical_url: /ja/tools/meeting-agenda-generator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/meeting-agenda-generator/
 category: productivity
 category_label: 仕事/生産性
 thumbnail: /assets/thumbs/ja/meeting-agenda-generator.svg

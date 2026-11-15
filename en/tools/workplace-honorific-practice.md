@@ -4,7 +4,7 @@ title: Workplace Honorific Practice | Train polite phrasing for work chat and em
 description: Practice workplace honorific phrasing with short two-choice scenarios and instant explanations.
 lang: en
 permalink: /en/tools/workplace-honorific-practice/
-canonical_url: /en/tools/workplace-honorific-practice/
+canonical_url: https://toolog.sooyadev.com/en/tools/workplace-honorific-practice/
 alternate_urls:
   ko: /tools/workplace-honorific-practice/
   en: /en/tools/workplace-honorific-practice/

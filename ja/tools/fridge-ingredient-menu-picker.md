@@ -4,7 +4,7 @@ title: 冷蔵庫食材メニューピッカー | いまある材料から作り�
 description: 家にある食材、食事シーン、調理時間、使える道具を入力すると、いま無理なく作れそうなメニュー候補をすばやく提案します。
 lang: ja
 permalink: /ja/tools/fridge-ingredient-menu-picker/
-canonical_url: /ja/tools/fridge-ingredient-menu-picker/
+canonical_url: https://toolog.sooyadev.com/ja/tools/fridge-ingredient-menu-picker/
 alternate_urls:
   ko: /tools/fridge-ingredient-menu-picker/
   en: /en/tools/fridge-ingredient-menu-picker/

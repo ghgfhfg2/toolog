@@ -4,7 +4,7 @@ title: 家事ランダム分担ツール | 皿洗い・掃除・洗濯を公平�
 description: メンバーと家事を入力すると、皿洗い・掃除・洗濯などをランダムまたはバランス重視で素早く分担できます。
 lang: ja
 permalink: /ja/tools/household-chore-picker/
-canonical_url: /ja/tools/household-chore-picker/
+canonical_url: https://toolog.sooyadev.com/ja/tools/household-chore-picker/
 alternate_urls:
   ko: /tools/household-chore-picker/
   en: /en/tools/household-chore-picker/

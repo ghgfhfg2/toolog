@@ -4,7 +4,7 @@ title: 食材消費期限優先度チェッカー | 先に使う食材を決め�
 description: 冷蔵庫の食材の残り日数と保存状態を比較し、今日確認する物、1〜2日以内に使う物、今週使う順番と保存のヒントを整理します。
 lang: ja
 permalink: /ja/tools/ingredient-expiry-priority-checker/
-canonical_url: /ja/tools/ingredient-expiry-priority-checker/
+canonical_url: https://toolog.sooyadev.com/ja/tools/ingredient-expiry-priority-checker/
 alternate_urls:
   ko: /tools/ingredient-expiry-priority-checker/
   en: /en/tools/ingredient-expiry-priority-checker/

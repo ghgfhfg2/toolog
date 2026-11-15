@@ -26,7 +26,7 @@ faq:
     a: Yes. Complete product A and leave product B blank. Add both price and quantity for product B when you want a comparison.
   - q: How do I compare 500g with 1kg?
     a: Use one shared unit for both products, such as entering both quantities in grams or both in kilograms.
-canonical_url: /en/tools/unit-price-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/unit-price-calculator/
 alternate_urls:
   ko: /tools/unit-price-calculator/
   en: /en/tools/unit-price-calculator/

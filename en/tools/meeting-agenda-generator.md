@@ -4,7 +4,7 @@ title: Meeting Agenda Generator | Build a timed meeting agenda
 description: Enter a duration, goal, and topics to build a timed meeting agenda whose opening, discussion blocks, and closing add up exactly. Copy a 15, 30, 45, or 60-minute agenda.
 lang: en
 permalink: /en/tools/meeting-agenda-generator/
-canonical_url: /en/tools/meeting-agenda-generator/
+canonical_url: https://toolog.sooyadev.com/en/tools/meeting-agenda-generator/
 category: productivity
 category_label: Work/Productivity
 thumbnail: /assets/thumbs/en/meeting-agenda-generator.svg

@@ -13,7 +13,7 @@ tool_type: calculator
 topic_cluster: finance
 lang: ja
 permalink: /ja/tools/split-bill-calculator/
-canonical_url: /ja/tools/split-bill-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/split-bill-calculator/
 keywords: [割り勘計算機, 1人あたり計算, 精算ツール, 会計分割, 端数調整]
 related_tools: [tip-calculator, unit-price-calculator, percent-calculator]
 faq:

@@ -4,7 +4,7 @@ title: 暗記クイズ生成ツール | ノートをセルフテストカード�
 description: 最大200件の質問と答えをランダム暗記カードに変換し、答え表示・自己採点・スキップ・間違いカードの再挑戦・復習リストのコピーまでブラウザ内で行えます。
 lang: ja
 permalink: /ja/tools/memory-quiz-generator/
-canonical_url: /ja/tools/memory-quiz-generator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/memory-quiz-generator/
 category: study
 category_label: 学習/暗記
 thumbnail: /assets/thumbs/memory-quiz-generator.svg

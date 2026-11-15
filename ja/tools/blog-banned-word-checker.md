@@ -4,7 +4,7 @@ title: 禁止語チェック | ブログのスパム語・誇大表現・リン�
 description: ブログ公開前に、スパム/宣伝キーワード、医療・法律・金融の誇大表現、短縮URL、連絡先ID、ハッシュタグ過多、キーワード反復、検出密度をブラウザ内で確認できます。
 lang: ja
 permalink: /ja/tools/blog-banned-word-checker/
-canonical_url: /ja/tools/blog-banned-word-checker/
+canonical_url: https://toolog.sooyadev.com/ja/tools/blog-banned-word-checker/
 category: text
 category_label: テキスト/編集
 thumbnail: /assets/thumbs/blog-banned-word-checker.svg

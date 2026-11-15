@@ -4,7 +4,7 @@ title: YouTube Thumbnail and Banner Maker | Create Channel Image Sizes
 description: "Upload one image to create YouTube thumbnail 1280×720, Shorts cover, channel banner, icon, and watermark files as WebP, PNG, or JPEG while checking source size, GIF first-frame handling, large-file limits, and total output size."
 lang: en
 permalink: /en/tools/youtube-image-kit/
-canonical_url: /en/tools/youtube-image-kit/
+canonical_url: https://toolog.sooyadev.com/en/tools/youtube-image-kit/
 category: image
 category_label: Image & Graphics
 thumbnail: /assets/thumbs/youtube-image-kit.svg

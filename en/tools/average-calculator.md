@@ -4,7 +4,7 @@ title: Average Calculator | Mean, Median, Standard Deviation & Comma Modes
 description: Calculate mean, median, sum, population standard deviation and quartiles. Choose separators, preview excluded entries and catch tiny or out-of-range numbers before copying results.
 lang: en
 permalink: /en/tools/average-calculator/
-canonical_url: /en/tools/average-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/average-calculator/
 category: data
 category_label: Data/Math
 thumbnail: /assets/thumbs/en/average-calculator.svg

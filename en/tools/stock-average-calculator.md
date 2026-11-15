@@ -4,7 +4,7 @@ title: Stock Average Calculator | Average Down & Target Shares
 description: Calculate a new stock average, total cost, and the minimum extra whole shares for a target after your planned buy. Exact decimal-price arithmetic; excludes fees and taxes.
 lang: en
 permalink: /en/tools/stock-average-calculator/
-canonical_url: /en/tools/stock-average-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/stock-average-calculator/
 category: calculator
 category_label: Finance
 thumbnail: /assets/thumbs/stock-average-calculator.svg

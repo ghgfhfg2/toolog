@@ -4,7 +4,7 @@ title: カスタマーサポート問い合わせ文ジェネレーター | 返�
 description: 商品・サービス名、問題、希望する対応、注文情報を入力して、返金依頼、交換問い合わせ、配送遅延、請求トラブル、アプリ不具合の丁寧な問い合わせ文を作成します。
 lang: ja
 permalink: /ja/tools/customer-support-message-generator/
-canonical_url: /ja/tools/customer-support-message-generator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/customer-support-message-generator/
 alternate_urls:
   ko: /tools/customer-support-message-generator/
   en: /en/tools/customer-support-message-generator/

@@ -4,7 +4,7 @@ title: 体脂肪率計算機 | U.S. Navy方式で体脂肪率・脂肪量を推�
 description: 身長・首・腹囲・体重、女性はヒップを入力して、U.S. Navy方式の体脂肪率・脂肪量・除脂肪体重を範囲チェック付きで推定します。
 lang: ja
 permalink: /ja/tools/body-fat-calculator/
-canonical_url: /ja/tools/body-fat-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/body-fat-calculator/
 category: calculator
 category_label: 健康/フィットネス
 thumbnail: /assets/thumbs/ja/body-fat-calculator.svg

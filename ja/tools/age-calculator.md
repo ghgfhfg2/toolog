@@ -4,7 +4,7 @@ title: 年齢計算機 | 基準日の満年齢・月末補正・誕生日まで
 description: 0001～9999年の生年月日と基準日から満年齢、韓国式年齢、総月数・日数、誕生日までの日数を計算。うるう日・月末補正の規約を確認し、基準日付きで結果をコピーできます。
 lang: ja
 permalink: /ja/tools/age-calculator/
-canonical_url: /ja/tools/age-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/age-calculator/
 category: calculator
 category_label: 生活/日付
 thumbnail: /assets/thumbs/age-calculator.svg

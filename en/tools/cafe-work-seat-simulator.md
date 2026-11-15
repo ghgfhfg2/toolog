@@ -4,7 +4,7 @@ title: Cafe Work Seat Simulator | Compare outlet, noise, lighting, and traffic
 description: Compare cafe seat candidates for laptop work or study by outlet access, noise, lighting, traffic flow, and stay length.
 lang: en
 permalink: /en/tools/cafe-work-seat-simulator/
-canonical_url: /en/tools/cafe-work-seat-simulator/
+canonical_url: https://toolog.sooyadev.com/en/tools/cafe-work-seat-simulator/
 alternate_urls:
   ko: /tools/cafe-work-seat-simulator/
   en: /en/tools/cafe-work-seat-simulator/

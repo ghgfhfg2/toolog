@@ -4,7 +4,7 @@ title: 集まりのお知らせ文ジェネレーター | グループチャッ�
 description: 集まりの種類、日時、場所、持ち物、トーンを入力して、グループチャットやメッセージにそのまま送れる案内文を作れます。
 lang: ja
 permalink: /ja/tools/group-announcement-generator/
-canonical_url: /ja/tools/group-announcement-generator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/group-announcement-generator/
 alternate_urls:
   ko: /tools/group-announcement-generator/
   en: /en/tools/group-announcement-generator/

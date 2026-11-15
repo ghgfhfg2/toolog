@@ -4,7 +4,7 @@ title: メッセージトーンチェッカー | 業務メール・チャット�
 description: 業務メール、Slack、Teams、チャットの下書きを送信前にチェック。強い言い回し、謝罪の重なり、依頼の明確さ、期限言及、句読点の圧、長い行、文字数負担をブラウザ内で点検できます。
 lang: ja
 permalink: /ja/tools/message-tone-checker/
-canonical_url: /ja/tools/message-tone-checker/
+canonical_url: https://toolog.sooyadev.com/ja/tools/message-tone-checker/
 category: productivity
 category_label: 仕事/コミュニケーション
 thumbnail: /assets/thumbs/ja/message-tone-checker.svg

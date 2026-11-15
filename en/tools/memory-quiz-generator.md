@@ -4,7 +4,7 @@ title: Memory Quiz Generator | Turn notes into self-test flashcards
 description: Turn up to 200 prompt-answer pairs into shuffled self-test cards, reveal and self-grade each answer, skip uncertain cards, retry missed items, and copy a review list in your browser.
 lang: en
 permalink: /en/tools/memory-quiz-generator/
-canonical_url: /en/tools/memory-quiz-generator/
+canonical_url: https://toolog.sooyadev.com/en/tools/memory-quiz-generator/
 category: study
 category_label: Study/Learning
 thumbnail: /assets/thumbs/memory-quiz-generator.svg

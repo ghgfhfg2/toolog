@@ -4,7 +4,7 @@ title: サブスク整理優先度シミュレーター | 維持・保留・解�
 description: サブスク整理優先度シミュレーターで、動画、音楽、AI、クラウド、仕事ツールの月額サービスを料金・利用頻度・代替可否・決済の近さで見直し、維持・保留・解約候補を整理できます。
 lang: ja
 permalink: /ja/tools/subscription-cleanup-simulator/
-canonical_url: /ja/tools/subscription-cleanup-simulator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/subscription-cleanup-simulator/
 category: finance
 category_label: 家計/サブスク管理
 thumbnail: /assets/thumbs/ja/subscription-cleanup-simulator.svg

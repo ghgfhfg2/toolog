@@ -4,7 +4,7 @@ title: カフェ作業席選びシミュレーター | 電源・騒音・照明�
 description: カフェでノートPC作業や勉強をするとき、電源・騒音・照明・人の動線・滞在時間で席候補を比較できます。
 lang: ja
 permalink: /ja/tools/cafe-work-seat-simulator/
-canonical_url: /ja/tools/cafe-work-seat-simulator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/cafe-work-seat-simulator/
 alternate_urls:
   ko: /tools/cafe-work-seat-simulator/
   en: /en/tools/cafe-work-seat-simulator/

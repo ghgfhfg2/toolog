@@ -13,7 +13,7 @@ tool_key: recycling-sorting-checker
 tool_type: checker
 topic_cluster: household
 permalink: /ja/tools/recycling-sorting-checker/
-canonical_url: /ja/tools/recycling-sorting-checker/
+canonical_url: https://toolog.sooyadev.com/ja/tools/recycling-sorting-checker/
 alternate_urls:
   ko: /tools/recycling-sorting-checker/
   en: /en/tools/recycling-sorting-checker/

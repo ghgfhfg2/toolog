@@ -4,7 +4,7 @@ title: ごみ分別クイズ | 家庭ごみ・資源ごみの分別練習
 description: 迷いやすい家庭ごみの分別を、重複しないクイズ、すぐ読める解説、間違い復習、正答率、連続正解で練習できます。
 lang: ja
 permalink: /ja/tools/recycling-sorting-practice/
-canonical_url: /ja/tools/recycling-sorting-practice/
+canonical_url: https://toolog.sooyadev.com/ja/tools/recycling-sorting-practice/
 alternate_urls:
   ko: /tools/recycling-sorting-practice/
   en: /en/tools/recycling-sorting-practice/

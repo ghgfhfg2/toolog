@@ -4,7 +4,7 @@ title: 在宅勤務 vs 通勤コスト計算ツール | ハイブリッド勤務
 description: 勤務日数・出社日数、交通費、食費、在宅追加費、通勤時間を入力し、現在のハイブリッド勤務と全日出社・全日在宅の月間費用を比較します。
 lang: ja
 permalink: /ja/tools/remote-work-cost-simulator/
-canonical_url: /ja/tools/remote-work-cost-simulator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/remote-work-cost-simulator/
 category: productivity
 category_label: 仕事/生産性
 thumbnail: /assets/thumbs/ja/remote-work-cost-simulator.svg

@@ -4,7 +4,7 @@ title: 優先順位決定マトリクス整理ツール | 急ぎと重要度を�
 description: 最大5件の作業を緊急度・影響度・手間・確信度で比較し、「今やる・今週・保留」の順番と判断理由を整理できます。
 lang: ja
 permalink: /ja/tools/priority-decision-matrix-planner/
-canonical_url: /ja/tools/priority-decision-matrix-planner/
+canonical_url: https://toolog.sooyadev.com/ja/tools/priority-decision-matrix-planner/
 alternate_urls:
   ko: /tools/priority-decision-matrix-planner/
   en: /en/tools/priority-decision-matrix-planner/

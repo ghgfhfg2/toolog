@@ -4,7 +4,7 @@ title: 2026 Korea Salary Calculator | Net Pay After Tax
 description: Estimate 2026 monthly and yearly take-home pay in Korea from gross salary, non-taxable pay, dependents, income tax, and employee social insurance.
 lang: en
 permalink: /en/tools/salary-calculator/
-canonical_url: /en/tools/salary-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/salary-calculator/
 category: calculator
 category_label: Finance
 thumbnail: /assets/thumbs/salary-calculator.svg

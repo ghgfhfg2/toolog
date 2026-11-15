@@ -4,7 +4,7 @@ lang: en
 title: Required GPA Calculator | Reverse-calculate your target GPA
 description: Enter your current GPA, completed credits, target GPA, and remaining credits to calculate the average GPA you need, target feasibility, and your maximum possible final GPA.
 permalink: /en/tools/required-gpa-calculator/
-canonical_url: /en/tools/required-gpa-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/required-gpa-calculator/
 category: calculator
 category_label: Education/Study
 thumbnail: /assets/thumbs/en/required-gpa-calculator.svg

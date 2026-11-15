@@ -4,7 +4,7 @@ lang: en
 title: Average Speed & Running Pace Calculator | km or m, Hours to Seconds
 description: Calculate km/h, pace per km and estimated 5K/10K times from km or meters and hours, minutes or seconds. Try a 400 m track lap, total minutes or seconds, and copy your results.
 permalink: /en/tools/average-speed-calculator/
-canonical_url: /en/tools/average-speed-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/average-speed-calculator/
 category: calculator
 category_label: Travel/Lifestyle
 thumbnail: /assets/thumbs/en/average-speed-calculator.svg

@@ -4,7 +4,7 @@ title: 締切逆算プランナー | 着手期限と日別作業量を計算
 description: 締切、総作業時間、1日の集中可能時間、見直しバッファから着手期限と日別作業量を計算し、週末を除く計画も作成できます。
 lang: ja
 permalink: /ja/tools/deadline-backward-planner/
-canonical_url: /ja/tools/deadline-backward-planner/
+canonical_url: https://toolog.sooyadev.com/ja/tools/deadline-backward-planner/
 alternate_urls:
   ko: /tools/deadline-backward-planner/
   en: /en/tools/deadline-backward-planner/

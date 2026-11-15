@@ -4,7 +4,7 @@ title: Fridge Ingredient Menu Picker | Turn what you already have into easy meal
 description: Enter ingredients you already have at home, meal timing, cooking time, and available tools to get quick menu ideas you can realistically make now.
 lang: en
 permalink: /en/tools/fridge-ingredient-menu-picker/
-canonical_url: /en/tools/fridge-ingredient-menu-picker/
+canonical_url: https://toolog.sooyadev.com/en/tools/fridge-ingredient-menu-picker/
 alternate_urls:
   ko: /tools/fridge-ingredient-menu-picker/
   en: /en/tools/fridge-ingredient-menu-picker/

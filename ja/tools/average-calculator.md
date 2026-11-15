@@ -4,7 +4,7 @@ title: 平均計算機 | 平均・中央値・標準偏差とカンマ区切り
 description: 数値リストの平均・中央値・合計・母標準偏差・四分位数を計算。区切りの選択、除外項目のプレビュー、極小値・範囲外のエラー確認と結果コピーに対応します。
 lang: ja
 permalink: /ja/tools/average-calculator/
-canonical_url: /ja/tools/average-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/average-calculator/
 category: data
 category_label: データ/計算
 thumbnail: /assets/thumbs/ja/average-calculator.svg

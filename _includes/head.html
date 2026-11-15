@@ -5,7 +5,13 @@
   {%- seo -%}
   <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}{% if page.tool_key == 'pyeong-calculator' %}?v=py-20261107{% elsif page.tool_key == 'tip-calculator' %}?v=tip-20261106{% elsif page.tool_key == 'average-calculator' %}?v=avg-20261105{% elsif page.tool_key == 'average-speed-calculator' %}?v=as-20261104{% elsif page.tool_key == 'timezone-converter' %}?v=tz-20261103{% elsif page.tool_key == 'profit-margin-calculator' %}?v=pm-20261102{% elsif page.tool_key == 'savings-interest-calculator' %}?v=si-20261101{% elsif page.tool_key == 'compound-interest-calculator' %}?v=ci-20261031{% elsif page.tool_key == 'parking-fee-calculator' %}?v=pf-20261030{% elsif page.tool_key == 'discount-calculator' %}?v=dc-20261029{% elsif page.tool_key == 'volumetric-weight-calculator' %}?v=vw-20261028{% elsif page.tool_key == 'fuel-economy-calculator' %}?v=fe-20261027{% elsif page.tool_key == 'work-end-time-calculator' %}?v=wet-20261026{% elsif page.tool_key == 'vat-calculator' %}?v=vat-20261025{% elsif page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% elsif page.tool_key == 'gpa-calculator' %}?v=gpa-20261024{% endif %}">
   {%- feed_meta -%}
-  {%- if page.alternate_urls -%}
+  {%- include tool-language-urls.html -%}
+  {%- if language_tool -%}
+    <link rel="alternate" hreflang="ko" href="{{ language_ko_url | absolute_url }}">
+    <link rel="alternate" hreflang="en" href="{{ language_en_url | absolute_url }}">
+    <link rel="alternate" hreflang="ja" href="{{ language_ja_url | absolute_url }}">
+    <link rel="alternate" hreflang="x-default" href="{{ language_ko_url | absolute_url }}">
+  {%- elsif page.alternate_urls -%}
     {%- assign alt = page.alternate_urls -%}
     {%- if alt.ko %}<link rel="alternate" hreflang="ko" href="{{ alt.ko | absolute_url }}">{% endif -%}
     {%- if alt.en %}<link rel="alternate" hreflang="en" href="{{ alt.en | absolute_url }}">{% endif -%}

@@ -4,7 +4,7 @@ title: Tip Calculator | Restaurant Tips, Bill Split & Exact Settlement
 description: Calculate restaurant tips and totals with cent-accurate rounding. Compare the per-person average with an exact-total settlement split, include fees, and copy results.
 lang: en
 permalink: /en/tools/tip-calculator/
-canonical_url: /en/tools/tip-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/tip-calculator/
 category: calculator
 category_label: Calculator/Lifestyle
 thumbnail: /assets/thumbs/tip-calculator.svg

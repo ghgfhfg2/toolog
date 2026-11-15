@@ -4,7 +4,7 @@ title: Business Trip Checklist Planner | Build a practical packing list by trip 
 description: Enter your business trip length, transport, baggage style, climate, and meeting needs to generate a copy-ready packing checklist.
 lang: en
 permalink: /en/tools/business-trip-checklist-planner/
-canonical_url: /en/tools/business-trip-checklist-planner/
+canonical_url: https://toolog.sooyadev.com/en/tools/business-trip-checklist-planner/
 alternate_urls:
   ko: /tools/business-trip-checklist-planner/
   en: /en/tools/business-trip-checklist-planner/

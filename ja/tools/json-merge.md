@@ -4,7 +4,7 @@ title: JSON結合・JSONマージ | ファイル・JSONL・配列・オブジェ
 description: JSONファイル・APIレスポンス・JSONLログをブラウザ内で結合。配列連結、キー統合、重複削除、キー競合と浅い結合ルールの確認、整形・圧縮出力に対応し、結果全体をコピー・保存できます。
 lang: ja
 permalink: /ja/tools/json-merge/
-canonical_url: /ja/tools/json-merge/
+canonical_url: https://toolog.sooyadev.com/ja/tools/json-merge/
 category: data
 category_label: データ・ユーティリティ
 thumbnail: /assets/thumbs/json-merge.svg

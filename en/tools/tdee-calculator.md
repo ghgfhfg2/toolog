@@ -4,7 +4,7 @@ title: TDEE Calculator | Maintenance, Cutting, and Bulking Calories
 description: Calculate BMR, TDEE, and daily starting calories for cutting, maintenance, or bulking from an adult's sex, age, height, weight, and activity level.
 lang: en
 permalink: /en/tools/tdee-calculator/
-canonical_url: /en/tools/tdee-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/tdee-calculator/
 category: data
 category_label: Health
 thumbnail: /assets/thumbs/tdee-calculator.svg

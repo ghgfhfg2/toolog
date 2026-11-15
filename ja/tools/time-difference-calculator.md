@@ -28,7 +28,7 @@ faq:
   a: 実作業の小数時間を使います。経過9時間、休憩30分なら8.5時間です。経過の小数時間は別に表示します。
 - q: コピーできない場合は？
   a: 自動コピーのエラーを表示します。画面の結果を選択して手動でコピーしてください。要約には開始・終了、日付処理、休憩、両方の小数時間が含まれます。
-canonical_url: /ja/tools/time-difference-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/time-difference-calculator/
 ---
 
 ## 2つの時刻の差と休憩を除いた作業時間を計算

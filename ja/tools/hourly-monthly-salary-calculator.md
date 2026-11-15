@@ -4,7 +4,7 @@ title: 韓国の時給・月給計算機 | 2026年最低賃金・週休手当
 description: 韓国の時給と週の所定労働時間から、週休手当を含む週給・月給・年収を計算。皆勤条件、月換算週数、2026年最低賃金の警告にも対応します。
 lang: ja
 permalink: /ja/tools/hourly-monthly-salary-calculator/
-canonical_url: /ja/tools/hourly-monthly-salary-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/hourly-monthly-salary-calculator/
 category: calculator
 category_label: 金融/ビジネス
 thumbnail: /assets/thumbs/ja/hourly-monthly-salary-calculator.svg

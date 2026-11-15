@@ -4,7 +4,7 @@ title: Interview Follow-up Question Generator | Rehearse the next questions like
 description: Use your role, seniority, interview type, and core answer to quickly map likely follow-up interview questions and answer points.
 lang: en
 permalink: /en/tools/interview-followup-question-generator/
-canonical_url: /en/tools/interview-followup-question-generator/
+canonical_url: https://toolog.sooyadev.com/en/tools/interview-followup-question-generator/
 alternate_urls:
   ko: /tools/interview-followup-question-generator/
   en: /en/tools/interview-followup-question-generator/

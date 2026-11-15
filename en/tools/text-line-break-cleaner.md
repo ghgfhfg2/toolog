@@ -4,7 +4,7 @@ title: Text Line Break Cleaner | Fix PDF line breaks, spacing, and bullets
 description: Clean forced line breaks, extra blank lines, mixed bullets, and repeated spaces in text copied from PDFs, chats, or documents, entirely in your browser.
 lang: en
 permalink: /en/tools/text-line-break-cleaner/
-canonical_url: /en/tools/text-line-break-cleaner/
+canonical_url: https://toolog.sooyadev.com/en/tools/text-line-break-cleaner/
 alternate_urls:
   ko: /tools/text-line-break-cleaner/
   en: /en/tools/text-line-break-cleaner/

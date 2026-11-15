@@ -4,7 +4,7 @@ title: Password Strength Checker | Repeated Patterns & Unicode Length
 description: Check password length, repeated blocks, common words and spaces locally. Review Unicode length, input limits and score limitations, and copy a summary without password text.
 lang: en
 permalink: /en/tools/password-strength-checker/
-canonical_url: /en/tools/password-strength-checker/
+canonical_url: https://toolog.sooyadev.com/en/tools/password-strength-checker/
 category: text
 category_label: Text/Security Check
 thumbnail: /assets/thumbs/en/password-strength-checker.svg

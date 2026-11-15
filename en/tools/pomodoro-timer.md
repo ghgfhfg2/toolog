@@ -4,7 +4,7 @@ title: Pomodoro Timer | Focus, Break, Task Label, and Alert Timer
 description: Run a browser Pomodoro timer with a task label, focus time, short breaks, long breaks, 25/5 and 50/10 presets, optional alert sound, and automatic phase switching.
 lang: en
 permalink: /en/tools/pomodoro-timer/
-canonical_url: /en/tools/pomodoro-timer/
+canonical_url: https://toolog.sooyadev.com/en/tools/pomodoro-timer/
 category: productivity
 category_label: Schedule/Productivity
 thumbnail: /assets/thumbs/en/pomodoro-timer.svg

@@ -4,7 +4,7 @@ title: Secondhand Trade Checklist Planner | Organize listing prep, meetup prep, 
 description: Use the Secondhand Trade Checklist Planner to quickly organize pre-sale checks and same-day prep tasks based on item type, trade method, packaging needs, and testability.
 lang: en
 permalink: /en/tools/secondhand-trade-checklist-planner/
-canonical_url: /en/tools/secondhand-trade-checklist-planner/
+canonical_url: https://toolog.sooyadev.com/en/tools/secondhand-trade-checklist-planner/
 category: lifestyle
 category_label: Lifestyle/Trade Prep
 thumbnail: /assets/thumbs/en/secondhand-trade-checklist-planner.svg

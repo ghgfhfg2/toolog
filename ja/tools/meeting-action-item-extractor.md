@@ -4,7 +4,7 @@ title: 会議メモアクションアイテム整理ツール | 担当者・期�
 description: 会議メモやチャットログを貼り付けると、担当者候補、期限ヒント、決定事項、未解決の質問、確認ポイントをブラウザ内でチェックリスト・共有メモ・Markdown表に整理します。
 lang: ja
 permalink: /ja/tools/meeting-action-item-extractor/
-canonical_url: /ja/tools/meeting-action-item-extractor/
+canonical_url: https://toolog.sooyadev.com/ja/tools/meeting-action-item-extractor/
 alternate_urls:
   ko: /tools/meeting-action-item-extractor/
   en: /en/tools/meeting-action-item-extractor/

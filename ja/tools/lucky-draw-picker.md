@@ -4,7 +4,7 @@ title: ランダム抽選ツール | 当選者・くじ引き・発表順を決�
 description: 参加者リストを貼り付けると、空欄と重複名を整理し、当選人数の上限を確認したうえでブラウザ内でランダム抽選できます。
 lang: ja
 permalink: /ja/tools/lucky-draw-picker/
-canonical_url: /ja/tools/lucky-draw-picker/
+canonical_url: https://toolog.sooyadev.com/ja/tools/lucky-draw-picker/
 category: productivity
 category_label: 予定/生産性
 thumbnail: /assets/thumbs/lucky-draw-picker.svg

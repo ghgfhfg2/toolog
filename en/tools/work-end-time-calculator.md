@@ -4,7 +4,7 @@ title: Work End Time Calculator | Lunch breaks and overnight shifts
 description: Calculate clock-out time from start time, actual work hours, and lunch or break minutes. Includes nearest-minute rounding, next-day shifts, total time on site, and a copyable summary.
 lang: en
 permalink: /en/tools/work-end-time-calculator/
-canonical_url: /en/tools/work-end-time-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/work-end-time-calculator/
 category: productivity
 category_label: Schedule/Productivity
 thumbnail: /assets/thumbs/work-end-time-calculator.svg

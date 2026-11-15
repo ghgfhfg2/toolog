@@ -13,7 +13,7 @@ tool_key: shortcut-key-practice
 tool_type: learning
 topic_cluster: work
 permalink: /ja/tools/shortcut-key-practice/
-canonical_url: /ja/tools/shortcut-key-practice/
+canonical_url: https://toolog.sooyadev.com/ja/tools/shortcut-key-practice/
 alternate_urls:
   ko: /tools/shortcut-key-practice/
   en: /en/tools/shortcut-key-practice/

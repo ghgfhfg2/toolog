@@ -4,7 +4,7 @@ title: 原価率・利益率計算機 | 正確な目標価格・マークアッ�
 description: 売上と原価から原価率・利益率・利益・マークアップをKRWで計算。小数金額の差を保持し、目標販売価格を正確に1KRW単位で切り上げます。入力範囲・赤字・原価ゼロの扱いも確認できます。
 lang: ja
 permalink: /ja/tools/profit-margin-calculator/
-canonical_url: /ja/tools/profit-margin-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/profit-margin-calculator/
 category: calculator
 category_label: 金融/ビジネス
 thumbnail: /assets/thumbs/profit-margin-calculator.svg

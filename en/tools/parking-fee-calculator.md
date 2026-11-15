@@ -4,7 +4,7 @@ title: Parking Fee Calculator | 24-Hour Caps & KRW Discounts
 description: Estimate parking fees in KRW with base and extra rates, independent 24-hour block caps, partial-day charges, and a one-time discount.
 lang: en
 permalink: /en/tools/parking-fee-calculator/
-canonical_url: /en/tools/parking-fee-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/parking-fee-calculator/
 category: calculator
 category_label: Lifestyle/Fees
 thumbnail: /assets/thumbs/parking-fee-calculator.svg

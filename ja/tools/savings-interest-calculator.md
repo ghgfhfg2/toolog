@@ -4,7 +4,7 @@ title: 預金利息計算機 | KRWの単利・毎月複利・税引後満期額
 description: 一括預入の単利・毎月複利、税引前後の利息と満期額をKRWで計算。課税15.4%・非課税0%、年利0〜50%、1〜120か月に対応し端数処理も説明します。
 lang: ja
 permalink: /ja/tools/savings-interest-calculator/
-canonical_url: /ja/tools/savings-interest-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/savings-interest-calculator/
 category: calculator
 category_label: 金融/ビジネス
 thumbnail: /assets/thumbs/savings-interest-calculator.svg

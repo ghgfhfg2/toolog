@@ -4,7 +4,7 @@ title: 複利計算機 | 月複利・年複利と毎月積立を比較
 description: ウォン建ての初期投資・月末積立で月複利と年複利を比較。年利0%の元本確認、予想利息、インフレ調整後価値、入力条件付きの結果コピーに対応します。
 lang: ja
 permalink: /ja/tools/compound-interest-calculator/
-canonical_url: /ja/tools/compound-interest-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/compound-interest-calculator/
 category: calculator
 category_label: 金融
 thumbnail: /assets/thumbs/ja/compound-interest-calculator.svg

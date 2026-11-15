@@ -4,7 +4,7 @@ title: 出張準備チェックリスト作成ツール | 日程・移動手段�
 description: 出張日数、移動手段、荷物の持ち方、気候、会議予定を入力すると、そのまま使える出張準備チェックリストを作成できます。
 lang: ja
 permalink: /ja/tools/business-trip-checklist-planner/
-canonical_url: /ja/tools/business-trip-checklist-planner/
+canonical_url: https://toolog.sooyadev.com/ja/tools/business-trip-checklist-planner/
 alternate_urls:
   ko: /tools/business-trip-checklist-planner/
   en: /en/tools/business-trip-checklist-planner/

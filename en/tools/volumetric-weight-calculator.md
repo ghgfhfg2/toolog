@@ -13,7 +13,7 @@ tool_type: calculator
 topic_cluster: logistics
 lang: en
 permalink: /en/tools/volumetric-weight-calculator/
-canonical_url: /en/tools/volumetric-weight-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/volumetric-weight-calculator/
 keywords: [volumetric weight calculator, dimensional weight, chargeable weight, billing weight calculator, shipping calculator, box volume]
 related_tools: [unit-converter, discount-calculator, percent-calculator]
 faq:

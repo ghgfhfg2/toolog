@@ -4,7 +4,7 @@ title: Schedule Coordination Message Generator | Draft time proposal messages fo
 description: Create copy-ready schedule coordination messages for meetings, appointments, interviews, and consultations by choosing your tone and time options.
 lang: en
 permalink: /en/tools/schedule-coordination-message-generator/
-canonical_url: /en/tools/schedule-coordination-message-generator/
+canonical_url: https://toolog.sooyadev.com/en/tools/schedule-coordination-message-generator/
 alternate_urls:
   ko: /tools/schedule-coordination-message-generator/
   en: /en/tools/schedule-coordination-message-generator/

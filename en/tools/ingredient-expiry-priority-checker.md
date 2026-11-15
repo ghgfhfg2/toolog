@@ -4,7 +4,7 @@ title: Ingredient Expiry Priority Checker | Decide what to use first
 description: Compare remaining days and storage conditions to organize what to check today, use within 1–2 days, or use this week, with practical storage tips.
 lang: en
 permalink: /en/tools/ingredient-expiry-priority-checker/
-canonical_url: /en/tools/ingredient-expiry-priority-checker/
+canonical_url: https://toolog.sooyadev.com/en/tools/ingredient-expiry-priority-checker/
 alternate_urls:
   ko: /tools/ingredient-expiry-priority-checker/
   en: /en/tools/ingredient-expiry-priority-checker/

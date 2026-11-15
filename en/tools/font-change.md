@@ -4,7 +4,7 @@ title: Font Style Converter | Copy Unicode Text for Instagram & Social Media
 description: Convert letters and numbers into Unicode font styles in real time, hide unchanged results, search and favorite styles, then copy candidates for Instagram bios, nicknames, profiles, and captions.
 lang: en
 permalink: /en/tools/font-change/
-canonical_url: /en/tools/font-change/
+canonical_url: https://toolog.sooyadev.com/en/tools/font-change/
 category: text
 category_label: Text
 thumbnail: /assets/thumbs/font-change.svg

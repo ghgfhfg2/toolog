@@ -4,7 +4,7 @@ title: リスト形式変換ツール | 行・カンマ・タブ区切りをCSV�
 description: 行ごとのリストやカンマ・タブ区切りの項目を自動判定し、CSV、Markdown表、JSON配列、番号付きリストへ変換し、空行・空白・重複も整理できます。
 lang: ja
 permalink: /ja/tools/list-format-converter/
-canonical_url: /ja/tools/list-format-converter/
+canonical_url: https://toolog.sooyadev.com/ja/tools/list-format-converter/
 alternate_urls:
   ko: /tools/list-format-converter/
   en: /en/tools/list-format-converter/

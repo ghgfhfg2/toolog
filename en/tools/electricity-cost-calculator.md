@@ -11,7 +11,7 @@ image:
 tool_key: electricity-cost-calculator
 lang: en
 permalink: /en/tools/electricity-cost-calculator/
-canonical_url: /en/tools/electricity-cost-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/electricity-cost-calculator/
 keywords: [electricity cost calculator, energy cost estimate, kWh calculator, wattage calculator, appliance electricity cost, standby power cost, KRW electricity cost]
 related_tools: [unit-converter, percent-calculator, average-calculator]
 faq:

@@ -4,7 +4,7 @@ title: 比率配分計算機 | 小数比率・予算按分と四捨五入
 description: 予算や共同利益を相対比率・小数比率で按分。項目別の金額と割合、四捨五入、最後の残額補正を確認して結果をコピーできます。
 lang: ja
 permalink: /ja/tools/ratio-split-calculator/
-canonical_url: /ja/tools/ratio-split-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/ratio-split-calculator/
 category: calculator
 category_label: 生活/精算
 thumbnail: /assets/thumbs/ja/ratio-split-calculator.svg

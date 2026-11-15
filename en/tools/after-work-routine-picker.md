@@ -4,7 +4,7 @@ title: After-Work Evening Routine Picker | Choose what to do tonight
 description: Pick an evening routine after work based on remaining time, energy, must-do tasks, mood, and your preferred goal for tonight.
 lang: en
 permalink: /en/tools/after-work-routine-picker/
-canonical_url: /en/tools/after-work-routine-picker/
+canonical_url: https://toolog.sooyadev.com/en/tools/after-work-routine-picker/
 alternate_urls:
   ko: /tools/after-work-routine-picker/
   en: /en/tools/after-work-routine-picker/

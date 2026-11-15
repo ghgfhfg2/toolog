@@ -11,7 +11,7 @@ image:
 tool_key: electricity-cost-calculator
 lang: ja
 permalink: /ja/tools/electricity-cost-calculator/
-canonical_url: /ja/tools/electricity-cost-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/electricity-cost-calculator/
 keywords: [電気料金計算機, 電気代計算, kWh計算, 消費電力計算, 家電の電気代, 待機電力の電気代, 韓国ウォンの電気料金]
 related_tools: [unit-converter, percent-calculator, average-calculator]
 faq:

@@ -4,7 +4,7 @@ title: フォント変換ツール | インスタ・SNS向けUnicode文字をコ
 description: 英字と数字を多彩なUnicodeフォントにリアルタイム変換し、変化のない候補を除外。検索、お気に入り、個別・一括コピーでインスタプロフィールやSNS文言を比較できます。
 lang: ja
 permalink: /ja/tools/font-change/
-canonical_url: /ja/tools/font-change/
+canonical_url: https://toolog.sooyadev.com/ja/tools/font-change/
 category: text
 category_label: テキスト
 thumbnail: /assets/thumbs/font-change.svg

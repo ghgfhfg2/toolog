@@ -4,7 +4,7 @@ title: Ratio Split Calculator | Decimal Ratios, Budgets & Rounding
 description: Split budgets or shared revenue by relative or decimal ratios. Check amounts, percentage shares, half-up rounding and the final balance adjustment, then copy the result.
 lang: en
 permalink: /en/tools/ratio-split-calculator/
-canonical_url: /en/tools/ratio-split-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/ratio-split-calculator/
 category: calculator
 category_label: Life/Settlement
 thumbnail: /assets/thumbs/en/ratio-split-calculator.svg

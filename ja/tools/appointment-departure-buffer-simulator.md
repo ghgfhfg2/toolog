@@ -4,7 +4,7 @@ title: 約束出発バッファシミュレーター | 遅刻防止の支度開�
 description: 約束出発バッファシミュレーターで、約束時刻、移動時間、支度時間、乗り換え、雨、初めての場所、持ち物の多さをもとに、支度開始時刻・家を出る時刻・到着目標を計算できます。
 lang: ja
 permalink: /ja/tools/appointment-departure-buffer-simulator/
-canonical_url: /ja/tools/appointment-departure-buffer-simulator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/appointment-departure-buffer-simulator/
 category: lifestyle
 category_label: 生活/移動準備
 thumbnail: /assets/thumbs/ja/appointment-departure-buffer-simulator.svg

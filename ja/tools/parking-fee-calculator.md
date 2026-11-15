@@ -4,7 +4,7 @@ title: 駐車料金計算機 | 24時間ごとの上限・追加料金・割引
 description: 基本・追加料金から韓国ウォンの駐車料金を試算。24時間ごとの上限、最後の短い区間の料金、合計後の割引を確認できます。
 lang: ja
 permalink: /ja/tools/parking-fee-calculator/
-canonical_url: /ja/tools/parking-fee-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/parking-fee-calculator/
 category: calculator
 category_label: 生活/料金
 thumbnail: /assets/thumbs/parking-fee-calculator.svg

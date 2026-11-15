@@ -4,7 +4,7 @@ lang: ja
 title: 分数計算機 | 四則演算・約分・帯分数・小数変換
 description: 1/2 + 1/3 のような式を入力するか、分子・分母を直接入れて、分数の加減乗除、約分結果、帯分数、小数、百分率を確認できます。
 permalink: /ja/tools/fraction-calculator/
-canonical_url: /ja/tools/fraction-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/fraction-calculator/
 category: data
 category_label: データ/数学
 thumbnail: /assets/thumbs/ja/fraction-calculator.svg

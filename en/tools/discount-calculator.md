@@ -4,7 +4,7 @@ title: Discount Calculator | Whole-KRW Rounding, Coupon & Quantity
 description: Calculate whole-KRW sale prices with explicit unit rounding, per-item coupons, quantity and one-time shipping. Check input errors, copy results and estimate target-price discount rates.
 lang: en
 permalink: /en/tools/discount-calculator/
-canonical_url: /en/tools/discount-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/discount-calculator/
 category: calculator
 category_label: Shopping/Finance
 thumbnail: /assets/thumbs/discount-calculator.svg

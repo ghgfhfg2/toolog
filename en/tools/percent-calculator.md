@@ -4,7 +4,7 @@ title: Percent Calculator | Percentage, Ratio & Change Rate
 description: Calculate a percentage of a number, what percent one value is of another, and percentage increase or decrease with formulas, examples, and input checks.
 lang: en
 permalink: /en/tools/percent-calculator/
-canonical_url: /en/tools/percent-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/percent-calculator/
 category: calculator
 category_label: Math/Percentages
 thumbnail: /assets/thumbs/percent-calculator.svg

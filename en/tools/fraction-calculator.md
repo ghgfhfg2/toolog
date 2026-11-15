@@ -4,7 +4,7 @@ lang: en
 title: Fraction Calculator | Arithmetic, Simplification, Mixed Numbers & Decimals
 description: Enter a quick expression like 1/2 + 1/3 or fill numerator and denominator fields to add, subtract, multiply, or divide fractions and see simplified, mixed-number, decimal, and percent results.
 permalink: /en/tools/fraction-calculator/
-canonical_url: /en/tools/fraction-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/fraction-calculator/
 category: data
 category_label: Data/Math
 thumbnail: /assets/thumbs/en/fraction-calculator.svg

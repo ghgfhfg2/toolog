@@ -4,7 +4,7 @@ title: Remote Work vs Commute Cost Calculator | Monthly Hybrid Work Comparison
 description: Compare your current hybrid schedule with full-office and full-remote monthly costs using workdays, office days, meals, home expenses, and optional commute-time value.
 lang: en
 permalink: /en/tools/remote-work-cost-simulator/
-canonical_url: /en/tools/remote-work-cost-simulator/
+canonical_url: https://toolog.sooyadev.com/en/tools/remote-work-cost-simulator/
 category: productivity
 category_label: Work/Productivity
 thumbnail: /assets/thumbs/en/remote-work-cost-simulator.svg

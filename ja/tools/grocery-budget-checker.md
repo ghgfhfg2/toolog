@@ -4,7 +4,7 @@ title: 買い物予算チェッカー | 予算使用率と削減候補を整理
 description: 買い物リスト、予想価格、予算を入力すると、必須品目、任意品目、予算使用率、必須品目後の残額、価格未入力、重複候補、削減候補をブラウザ内で確認できます。
 lang: ja
 permalink: /ja/tools/grocery-budget-checker/
-canonical_url: /ja/tools/grocery-budget-checker/
+canonical_url: https://toolog.sooyadev.com/ja/tools/grocery-budget-checker/
 alternate_urls:
   ko: /tools/grocery-budget-checker/
   en: /en/tools/grocery-budget-checker/

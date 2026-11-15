@@ -4,7 +4,7 @@ title: Lunch Menu Picker | Quickly choose what to eat today
 description: Pick meal time, budget, group size, and mood to get three fitting menu ideas plus a copy-ready suggestion summary.
 lang: en
 permalink: /en/tools/lunch-menu-picker/
-canonical_url: /en/tools/lunch-menu-picker/
+canonical_url: https://toolog.sooyadev.com/en/tools/lunch-menu-picker/
 category: lifestyle
 category_label: Lifestyle/Choice
 thumbnail: /assets/thumbs/en/lunch-menu-picker.svg

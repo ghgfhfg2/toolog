@@ -4,7 +4,7 @@ title: Secondhand Scam Signal Checker | Check prepayment, payment refusal, and p
 description: Check secondhand scam warning signs before paying, including unrealistic pricing, full prepayment demands, protected payment refusal, off-platform chat, new accounts, and verification avoidance.
 lang: en
 permalink: /en/tools/secondhand-scam-signal-checker/
-canonical_url: /en/tools/secondhand-scam-signal-checker/
+canonical_url: https://toolog.sooyadev.com/en/tools/secondhand-scam-signal-checker/
 alternate_urls:
   ko: /tools/secondhand-scam-signal-checker/
   en: /en/tools/secondhand-scam-signal-checker/

@@ -4,7 +4,7 @@ title: Filename Sanitizer | Remove symbols, keep extensions, trim long names, an
 description: Paste titles or file names to normalize spaces, special characters, repeated separators, extensions, date prefixes, sequence numbers, long names, and duplicate candidates into safer copy-ready file names.
 lang: en
 permalink: /en/tools/filename-sanitizer/
-canonical_url: /en/tools/filename-sanitizer/
+canonical_url: https://toolog.sooyadev.com/en/tools/filename-sanitizer/
 category: text
 category_label: Text/File Naming
 thumbnail: /assets/thumbs/en/filename-sanitizer.svg

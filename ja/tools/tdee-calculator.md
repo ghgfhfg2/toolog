@@ -4,7 +4,7 @@ title: TDEE計算機 | 維持・減量・増量の1日摂取カロリー
 description: 18歳以上の性別・年齢・身長・体重・活動量からBMR・TDEEと、維持・減量・増量を始めるための1日摂取カロリーを計算します。
 lang: ja
 permalink: /ja/tools/tdee-calculator/
-canonical_url: /ja/tools/tdee-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/tdee-calculator/
 category: data
 category_label: 健康
 thumbnail: /assets/thumbs/tdee-calculator.svg

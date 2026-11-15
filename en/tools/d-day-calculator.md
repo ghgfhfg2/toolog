@@ -4,7 +4,7 @@ title: D-Day Calculator | Date Difference, Days Left & Business Days
 description: Calculate D-day, elapsed days, days remaining, inclusive days, and weekend-excluded business days between two dates, then copy the result.
 lang: en
 permalink: /en/tools/d-day-calculator/
-canonical_url: /en/tools/d-day-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/d-day-calculator/
 category: calculator
 category_label: Schedule/Productivity
 thumbnail: /assets/thumbs/d-day-calculator.svg

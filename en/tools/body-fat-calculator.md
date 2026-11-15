@@ -4,7 +4,7 @@ title: Body Fat Calculator | Calculate Body Fat, Fat Mass, and Lean Mass
 description: Use this body fat calculator with height, neck, waist, weight, and female hip measurement to estimate body fat percentage, fat mass, and lean mass with the U.S. Navy formula and safer range checks.
 lang: en
 permalink: /en/tools/body-fat-calculator/
-canonical_url: /en/tools/body-fat-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/body-fat-calculator/
 category: calculator
 category_label: Health/Fitness
 thumbnail: /assets/thumbs/en/body-fat-calculator.svg

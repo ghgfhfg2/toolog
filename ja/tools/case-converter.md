@@ -4,7 +4,7 @@ title: 大文字/小文字変換ツール | ケース変換
 description: UPPERCASE、lowercase、Title Case、camelCase、PascalCase、snake_case、CONSTANT_CASE、kebab-caseへ行ごとに変換し、結果をコピーできます。
 lang: ja
 permalink: /ja/tools/case-converter/
-canonical_url: /ja/tools/case-converter/
+canonical_url: https://toolog.sooyadev.com/ja/tools/case-converter/
 category: text
 category_label: テキスト/編集
 thumbnail: /assets/thumbs/case-converter.svg

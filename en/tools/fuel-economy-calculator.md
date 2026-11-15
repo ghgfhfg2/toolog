@@ -4,7 +4,7 @@ title: Fuel Economy Calculator | Real km/L, L/100km & KRW Costs
 description: Calculate real fuel economy in km/L and L/100km from distance and fuel consumed. Optional KRW/L pricing supports zero prices, exact whole-won rounding, and copied results.
 lang: en
 permalink: /en/tools/fuel-economy-calculator/
-canonical_url: /en/tools/fuel-economy-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/fuel-economy-calculator/
 category: calculator
 category_label: Auto/Cost
 thumbnail: /assets/thumbs/en/fuel-economy-calculator.svg

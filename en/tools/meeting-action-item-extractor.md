@@ -4,7 +4,7 @@ title: Meeting Action Item Extractor | Pull owners, due dates, decisions, and qu
 description: Paste meeting notes or chat logs to extract owner hints, due-date hints, decisions, open questions, and review points into a checklist, compact share note, or Markdown table in your browser.
 lang: en
 permalink: /en/tools/meeting-action-item-extractor/
-canonical_url: /en/tools/meeting-action-item-extractor/
+canonical_url: https://toolog.sooyadev.com/en/tools/meeting-action-item-extractor/
 alternate_urls:
   ko: /tools/meeting-action-item-extractor/
   en: /en/tools/meeting-action-item-extractor/

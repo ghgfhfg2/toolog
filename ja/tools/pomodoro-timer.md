@@ -4,7 +4,7 @@ title: ポモドーロタイマー | 集中・休憩・作業ラベル・通知�
 description: 作業ラベル、集中時間、短い休憩、長い休憩、25/5・50/10プリセット、任意の通知音を設定し、自動でフェーズ切替できるブラウザ用ポモドーロタイマーです。
 lang: ja
 permalink: /ja/tools/pomodoro-timer/
-canonical_url: /ja/tools/pomodoro-timer/
+canonical_url: https://toolog.sooyadev.com/ja/tools/pomodoro-timer/
 category: productivity
 category_label: 予定/生産性
 thumbnail: /assets/thumbs/ja/pomodoro-timer.svg

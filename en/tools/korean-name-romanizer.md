@@ -4,7 +4,7 @@ title: Korean Name Romanizer | Draft passport names, place names, and brand spel
 description: Convert Korean names, place names, brand names, and short Hangul text into Romanized spelling drafts, then compare registered spellings, common surname variants, spaces, hyphens, and letter case before copying.
 lang: en
 permalink: /en/tools/korean-name-romanizer/
-canonical_url: /en/tools/korean-name-romanizer/
+canonical_url: https://toolog.sooyadev.com/en/tools/korean-name-romanizer/
 alternate_urls:
   ko: /tools/korean-name-romanizer/
   en: /en/tools/korean-name-romanizer/

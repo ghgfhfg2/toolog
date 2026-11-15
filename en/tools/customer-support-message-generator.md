@@ -4,7 +4,7 @@ title: Customer Support Message Generator | Write polite refund, exchange, deliv
 description: Enter a product or service, issue, desired resolution, and order details to generate polite customer support messages for refunds, exchanges, delivery delays, billing problems, and app errors.
 lang: en
 permalink: /en/tools/customer-support-message-generator/
-canonical_url: /en/tools/customer-support-message-generator/
+canonical_url: https://toolog.sooyadev.com/en/tools/customer-support-message-generator/
 alternate_urls:
   ko: /tools/customer-support-message-generator/
   en: /en/tools/customer-support-message-generator/

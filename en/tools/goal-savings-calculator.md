@@ -4,7 +4,7 @@ title: Goal Savings Timeline Calculator | Months to Reach Your Target
 description: Enter current savings, a target, monthly deposits, and an annual rate to calculate the months to your goal, future contributions, and monthly-compounded interest.
 lang: en
 permalink: /en/tools/goal-savings-calculator/
-canonical_url: /en/tools/goal-savings-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/goal-savings-calculator/
 category: calculator
 category_label: Finance/Business
 thumbnail: /assets/thumbs/en/goal-savings-calculator.svg

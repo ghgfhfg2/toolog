@@ -4,7 +4,7 @@ title: 韓国の不動産仲介手数料計算機｜売買・チョンセ・ウ�
 description: 韓国の住宅売買金額または保証金・月家賃を入力すると、5,000万ウォン未満の×70例外と料率の境界を反映し、適用取引金額・仲介手数料上限・VAT参考額を試算します。
 lang: ja
 permalink: /ja/tools/brokerage-fee-calculator/
-canonical_url: /ja/tools/brokerage-fee-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/brokerage-fee-calculator/
 category: calculator
 category_label: 不動産
 thumbnail: /assets/thumbs/brokerage-fee-calculator.svg

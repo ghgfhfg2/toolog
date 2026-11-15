@@ -4,7 +4,7 @@ title: Korea Real Estate Brokerage Fee Calculator | Sale, Jeonse & Wolse Cap
 description: Enter a home sale price or deposit and monthly rent to estimate Korea's brokerage-fee cap, including the under-KRW-50-million ×70 rule, exact rate thresholds, transaction value used, and VAT reference.
 lang: en
 permalink: /en/tools/brokerage-fee-calculator/
-canonical_url: /en/tools/brokerage-fee-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/brokerage-fee-calculator/
 category: calculator
 category_label: Real Estate
 thumbnail: /assets/thumbs/brokerage-fee-calculator.svg

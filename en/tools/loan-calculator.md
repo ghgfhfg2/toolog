@@ -4,7 +4,7 @@ title: Loan Calculator | Compare Fixed-Rate KRW Repayment Plans
 description: Compare monthly payments, total interest and total repayment in KRW for fixed-rate amortized and equal-principal loans, including zero and very small rates, input checks and rounding guidance.
 lang: en
 permalink: /en/tools/loan-calculator/
-canonical_url: /en/tools/loan-calculator/
+canonical_url: https://toolog.sooyadev.com/en/tools/loan-calculator/
 category: calculator
 category_label: Finance
 thumbnail: /assets/thumbs/loan-calculator.svg

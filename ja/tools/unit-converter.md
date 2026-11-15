@@ -4,7 +4,7 @@ title: 単位変換ツール | インチ・cm、ポンド・kg、華氏・摂氏
 description: インチからcm、ポンドからkg、華氏から摂氏へ変換。微小な値も指数表記で確認でき、絶対零度の入力チェック、例の入力、結果コピーに対応します。
 lang: ja
 permalink: /ja/tools/unit-converter/
-canonical_url: /ja/tools/unit-converter/
+canonical_url: https://toolog.sooyadev.com/ja/tools/unit-converter/
 category: data
 category_label: データ/計算
 thumbnail: /assets/thumbs/unit-converter.svg

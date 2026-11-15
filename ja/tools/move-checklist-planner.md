@@ -4,7 +4,7 @@ title: 引っ越しチェックリスト | 日付入り準備・当日タスク�
 description: 引っ越し日、住居、梱包、エレベーター、移転条件を入力し、実際の日付入りの2週間前・3日前・当日チェックリストを作成できます。
 lang: ja
 permalink: /ja/tools/move-checklist-planner/
-canonical_url: /ja/tools/move-checklist-planner/
+canonical_url: https://toolog.sooyadev.com/ja/tools/move-checklist-planner/
 category: lifestyle
 category_label: 生活/準備
 thumbnail: /assets/thumbs/ja/move-checklist-planner.svg

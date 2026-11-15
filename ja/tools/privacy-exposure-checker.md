@@ -4,7 +4,7 @@ title: 個人情報露出チェックツール | 電話番号・メール・口�
 description: メッセージ、お知らせ、サポートメモ、文書下書きの電話番号、メール、個人番号風パターン、カード/口座番号風の数字列、リンクやメッセンジャーIDを見つけ、共有前にマスキング結果を確認できます。
 lang: ja
 permalink: /ja/tools/privacy-exposure-checker/
-canonical_url: /ja/tools/privacy-exposure-checker/
+canonical_url: https://toolog.sooyadev.com/ja/tools/privacy-exposure-checker/
 alternate_urls:
   ko: /tools/privacy-exposure-checker/
   en: /en/tools/privacy-exposure-checker/

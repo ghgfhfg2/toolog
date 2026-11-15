@@ -4,7 +4,7 @@ title: チップ計算機 | レストランのチップ・割り勘・端数精�
 description: 食事代・税金・サービス料からチップと合計を正確に計算。小数点以下2桁の四捨五入、1人あたり平均と合計が一致する精算配分、コピーに対応。
 lang: ja
 permalink: /ja/tools/tip-calculator/
-canonical_url: /ja/tools/tip-calculator/
+canonical_url: https://toolog.sooyadev.com/ja/tools/tip-calculator/
 category: calculator
 category_label: 計算/ライフスタイル
 thumbnail: /assets/thumbs/tip-calculator.svg

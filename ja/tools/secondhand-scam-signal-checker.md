@@ -4,7 +4,7 @@ title: 中古取引詐欺シグナルチェッカー | 先払い・安全決済�
 description: 中古取引前に、極端に安い価格、全額先払い要求、安全決済拒否、外部連絡誘導、新規アカウント、実物確認回避などの危険サインを確認できます。
 lang: ja
 permalink: /ja/tools/secondhand-scam-signal-checker/
-canonical_url: /ja/tools/secondhand-scam-signal-checker/
+canonical_url: https://toolog.sooyadev.com/ja/tools/secondhand-scam-signal-checker/
 alternate_urls:
   ko: /tools/secondhand-scam-signal-checker/
   en: /en/tools/secondhand-scam-signal-checker/

@@ -4,7 +4,7 @@ title: Meeting Action Item Organizer | Turn raw meeting notes into copy-ready fo
 description: Use the Meeting Action Item Organizer to turn meeting notes, requests, and decisions into clear action items, follow-up checks, and share notes you can copy right away.
 lang: en
 permalink: /en/tools/meeting-action-item-organizer/
-canonical_url: /en/tools/meeting-action-item-organizer/
+canonical_url: https://toolog.sooyadev.com/en/tools/meeting-action-item-organizer/
 category: productivity
 category_label: Work/Meeting Follow-up
 thumbnail: /assets/thumbs/en/meeting-action-item-organizer.svg

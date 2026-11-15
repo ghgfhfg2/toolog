@@ -4,7 +4,7 @@ title: 非常用持ち出し袋チェックリストプランナー | 24〜72時
 description: 家族構成、ペット、服薬、避難時間、季節、準備済みの物から、24〜72時間向けの非常用持ち出し袋チェックリストを整理します。
 lang: ja
 permalink: /ja/tools/emergency-bag-checklist-planner/
-canonical_url: /ja/tools/emergency-bag-checklist-planner/
+canonical_url: https://toolog.sooyadev.com/ja/tools/emergency-bag-checklist-planner/
 alternate_urls:
   ko: /tools/emergency-bag-checklist-planner/
   en: /en/tools/emergency-bag-checklist-planner/

@@ -4,7 +4,7 @@ title: Emergency Bag Checklist Planner | 24-72 Hour Go-Bag Supply Check
 description: Build a 24-72 hour emergency bag checklist from household size, pets, medicine needs, evacuation duration, season, and items already prepared.
 lang: en
 permalink: /en/tools/emergency-bag-checklist-planner/
-canonical_url: /en/tools/emergency-bag-checklist-planner/
+canonical_url: https://toolog.sooyadev.com/en/tools/emergency-bag-checklist-planner/
 alternate_urls:
   ko: /tools/emergency-bag-checklist-planner/
   en: /en/tools/emergency-bag-checklist-planner/

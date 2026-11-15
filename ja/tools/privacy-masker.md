@@ -13,7 +13,7 @@ tool_key: privacy-masker
 tool_type: utility
 topic_cluster: privacy
 permalink: /ja/tools/privacy-masker/
-canonical_url: /ja/tools/privacy-masker/
+canonical_url: https://toolog.sooyadev.com/ja/tools/privacy-masker/
 alternate_urls:
   ko: /tools/privacy-masker/
   en: /en/tools/privacy-masker/
