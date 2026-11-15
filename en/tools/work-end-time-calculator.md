@@ -31,65 +31,33 @@ alternate_urls:
   ja: /ja/tools/work-end-time-calculator/
 ---
 
-## When is a work end time calculator useful?
-You started work, but it’s often unclear **what time you can actually leave**.
-It gets harder to estimate by feel when flexible schedules, shifts, and off-site work are mixed.
+## Find your finish time from your start time
+**Start time + actual work duration + breaks not included in that duration = estimated finish time.** Starting at 09:00 with 8 actual work hours and a separate 60-minute lunch gives an 18:00 finish.
 
-Enter **start time + actual work hours + unpaid break time** to see the estimated clock-out time and total stay. You can enter 7 hours 30 minutes as `7.5`, and overnight shifts show a next-day indicator.
+## Avoid counting lunch twice
+If your target is 8 hours of actual work plus a 60-minute lunch, enter 8 hours and 60 minutes. Total time on site is 9 hours. If an 8-hour start-to-finish shift already includes that lunch, enter 7 actual work hours and 60 break minutes instead. Do not add a paid break again if it is already part of your target duration. Check the rules applying to your workplace; this tool does not assess legal compliance or overtime pay.
 
-## Key features
-- Enter start time (HH:MM)
-- Combined calculation of target work hours (hours) + break time (minutes)
-- Automatic estimated clock-out time
-- Displays total stay time (work + break) and next-day indicator
-- Quick examples for daytime and night shifts, plus result copy
-- Clear errors for negative breaks, fractional break minutes, and stays over 24 hours
+## Enter your schedule
+1. Enter your actual start time.
+2. Enter work duration excluding the separate break. Use `7.5` or the **7h 30m** button for seven and a half hours. Duration buttons preserve your existing start and break values.
+3. Add separate lunch and rest periods in minutes: 45 + 15 means `60`. Enter `0` for no break; blank is not zero.
+4. Read finish time, same/next day and total stay, then copy the summary.
 
-## Example
-- Start time: 09:00
-- Work hours: 8
-- Break time: 60 minutes
+## Three schedules to try
+| Start | Actual work | Break | Finish | Total stay |
+| --- | --- | --- | --- | --- |
+| 09:00 | 8h | 60m | Same day 18:00 | 9h |
+| 08:30 | 7h 30m | 60m | Same day 17:00 | 8h 30m |
+| 22:00 | 8h | 60m | Next day 07:00 | 9h |
 
-→ Estimated clock-out time: **18:00**
+The schedule buttons load these cases. They are arithmetic examples, not recommended or legally prescribed shifts.
 
-For an overnight example, start at `22:00`, work `8` hours, and enter a `60`-minute break. The result is **07:00 the next day**.
+## Midnight and decimal hours
+22:00 plus one work hour and a 60-minute break gives **next day 00:00**. `7.33` hours becomes 439.8 minutes, rounded to 440 minutes with a note in the result and copied text. `7.30` hours means 7h 18m, not 7h 30m.
 
-## Calculation assumptions
-The formula is `start time + actual work time + unpaid break time`. Do not add a paid break again if it is already included in work hours. Overtime, early leave, local labor rules, and workplace policies are not applied automatically; confirm the result against your attendance record.
+Actual work supports 0.25–24 hours, breaks 0–600 whole minutes, and combined duration up to 24 hours. Exactly 24 hours later is the same time next day. Incomplete inputs clear the previous copyable result.
 
-## Good tools to use together
-- Check a worked interval: [Time Difference Calculator]({{ '/en/tools/time-difference-calculator/' | relative_url }})
-- Plan when to leave: [Appointment Departure Buffer Simulator]({{ '/en/tools/appointment-departure-buffer-simulator/' | relative_url }})
-- Focus block routine: [Pomodoro Timer]({{ '/en/tools/pomodoro-timer/' | relative_url }})
+## What this does not calculate
+This is clock-time addition without dates, holidays, time zones, daylight-saving transitions or workplace-specific credited hours. It does not calculate weekly totals or pay. If automatic copy is blocked, select the summary field and copy manually.
 
-## FAQ
-### What if I take multiple breaks?
-Even if breaks are split (like lunch + short rests), enter the total number of minutes.
-
-### Why can my actual end time differ?
-Overtime, delayed meetings, or extra breaks can make real clock-out time different from the estimate.
-
-### Can I use it on mobile?
-Yes. It runs directly in your browser with no installation required.
-
-### How do I enter 7 hours 30 minutes?
-Enter `7.5` in actual work hours. Total stay is displayed again in hours and minutes.
-
-## How to calculate clock-out time with a lunch break
-1. Enter your start time and actual work hours, excluding unpaid breaks.
-2. Add up unpaid lunch and rest periods in whole minutes; enter `0` if there are none.
-3. Read the clock-out time, total time on site, and same-day or next-day indicator. Copy the summary if needed.
-
-For example, starting at **09:00** with **7.5 hours** of work and a **45-minute** lunch gives **17:15**, with **8 hours 15 minutes** on site. Do not add paid breaks again if they are already counted as work time.
-
-### Can I leave break time blank?
-No. A blank field is not treated as zero. Enter `0` for no break. If any required field is empty or invalid, the previous result and summary are cleared and copying is disabled, so an outdated result is not reused.
-
-### How are decimal work hours rounded?
-`7.33` hours equals 439.8 minutes, rounded to **440 minutes (7 hours 20 minutes)**. When rounding is needed, the applied minutes appear both on screen and in the copyable result. Work hours must be **0.25–24**, breaks must be **0–600 whole minutes**, and rounded work time plus breaks must not exceed **24 hours**. Correct invalid entries to calculate again.
-
-### What happens at midnight or exactly 24 hours later?
-Starting at `22:00` with `1` hour of work and a `60`-minute break gives **00:00 the next day**. Starting at `09:00` with `24` work hours and `0` break minutes gives **09:00 the next day**. This is clock-time arithmetic; calendar dates, time zones, and daylight saving changes are not applied.
-
-### What if automatic copying is unavailable?
-Select the result summary field and copy it manually. Reset clears both the inputs and the summary.
+For elapsed time from actual records, use the [time difference calculator]({{ '/en/tools/time-difference-calculator/' | relative_url }}). For days until a deadline, use the [D-Day calculator]({{ '/en/tools/d-day-calculator/' | relative_url }}); for focused work blocks, use the [Pomodoro timer]({{ '/en/tools/pomodoro-timer/' | relative_url }}).

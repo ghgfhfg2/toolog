@@ -14901,6 +14901,12 @@
     presetBtns.forEach((button) => button.addEventListener('click', () => {
       fillExample(button.dataset.wetStart, button.dataset.wetWork, button.dataset.wetBreak);
     }));
+    document.querySelectorAll('[data-wet-duration]').forEach((button) => {
+      button.addEventListener('click', () => {
+        workEl.value = button.dataset.wetDuration;
+        render();
+      });
+    });
     exampleBtn?.addEventListener('click', () => fillExample());
 
     resetBtn?.addEventListener('click', () => {
