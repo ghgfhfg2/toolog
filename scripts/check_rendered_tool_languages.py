@@ -11,7 +11,7 @@ from pathlib import Path
 from urllib.parse import urljoin
 from xml.etree import ElementTree
 
-from site_integrity_check import ROOT, parse_tool_ids
+from site_integrity_check import ROOT, parse_front_matter, parse_tool_ids
 
 
 ORIGIN = "https://toolog.sooyadev.com"
@@ -25,6 +25,8 @@ class Metadata(HTMLParser):
         self.navigation = []
         self.robots = []
         self.schemas = []
+        self.publication_times = []
+        self.og_types = []
         self.nav_depth = 0
         self.schema = None
 
@@ -43,6 +45,10 @@ class Metadata(HTMLParser):
             self.navigation.append((a.get("href", ""), a.get("aria-current")))
         if tag == "meta" and a.get("name", "").lower() in ("robots", "googlebot"):
             self.robots.append(a.get("content", "").lower())
+        if tag == "meta" and a.get("property") == "article:published_time":
+            self.publication_times.append(a.get("content", ""))
+        if tag == "meta" and a.get("property") == "og:type":
+            self.og_types.append(a.get("content", ""))
         if tag == "script" and a.get("type") == "application/ld+json":
             self.schema = ""
 
@@ -86,6 +92,14 @@ def main():
         for lang in ("ko", "en", "ja"):
             path = f"/{lang + '/' if lang != 'ko' else ''}tools/{slug}/"
             check_tool((build / path.lstrip("/") / "index.html").read_text(), slug, lang)
+            if lang == "ko" and "date" not in parse_front_matter(ROOT / "_tools" / f"{slug}.md"):
+                meta = Metadata()
+                meta.feed((build / path.lstrip("/") / "index.html").read_text())
+                assert not meta.publication_times, f"invented tool publication time: {path}"
+                assert meta.og_types == ["website"], f"undated utility is not an article: {path}"
+                assert any(schema.get("@type") == "WebPage" for schema in meta.schemas), path
+                assert not any(schema.get("@type") == "BlogPosting" or "datePublished" in schema
+                               or "dateModified" in schema for schema in meta.schemas), path
             assert ORIGIN + path in urls, f"missing sitemap entry: {path}"
             checked += 1
     for path in ("", "en", "ja", "about"):
@@ -93,7 +107,8 @@ def main():
         meta.feed((build / path / "index.html").read_text())
         assert [href for href, _ in meta.navigation] == ["/", "/en/", "/ja/"], path
     print(f"PASS: {checked} tool pages: reciprocal hreflang, same-tool navigation, "
-          "self canonical, indexability, JSON-LD, sitemap; non-tool navigation preserved")
+          "self canonical, indexability, JSON-LD, sitemap; no invented undated-tool dates; "
+          "non-tool navigation preserved")
 
 
 if __name__ == "__main__":

@@ -2,7 +2,21 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  {%- seo -%}
+  {%- capture seo_markup -%}{%- seo -%}{%- endcapture -%}
+  {%- comment -%}
+    Undated collection documents inherit site.time in Jekyll. That is a build
+    timestamp, not a tool's publication date. Keep explicitly authored dates
+    and ordinary articles unchanged; tools already provide SoftwareApplication.
+  {%- endcomment -%}
+  {%- if page.collection == 'tools' and page.date == site.time -%}
+    {%- assign generated_date = page.date | date_to_xmlschema -%}
+    {%- capture generated_publication -%}<meta property="article:published_time" content="{{ generated_date }}" />{%- endcapture -%}
+    {%- capture generated_published_json -%}"datePublished":"{{ generated_date }}",{%- endcapture -%}
+    {%- capture generated_modified_json -%}"dateModified":"{{ generated_date }}",{%- endcapture -%}
+    {{- seo_markup | remove: generated_publication | remove: generated_published_json | remove: generated_modified_json | replace: '"@type":"BlogPosting"', '"@type":"WebPage"' | replace: '<meta property="og:type" content="article" />', '<meta property="og:type" content="website" />' -}}
+  {%- else -%}
+    {{- seo_markup -}}
+  {%- endif -%}
   <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}{% if page.tool_key == 'pyeong-calculator' %}?v=py-20261107{% elsif page.tool_key == 'tip-calculator' %}?v=tip-20261106{% elsif page.tool_key == 'average-calculator' %}?v=avg-20261105{% elsif page.tool_key == 'average-speed-calculator' %}?v=as-20261104{% elsif page.tool_key == 'timezone-converter' %}?v=tz-20261103{% elsif page.tool_key == 'profit-margin-calculator' %}?v=pm-20261102{% elsif page.tool_key == 'savings-interest-calculator' %}?v=si-20261101{% elsif page.tool_key == 'compound-interest-calculator' %}?v=ci-20261031{% elsif page.tool_key == 'parking-fee-calculator' %}?v=pf-20261030{% elsif page.tool_key == 'discount-calculator' %}?v=dc-20261029{% elsif page.tool_key == 'volumetric-weight-calculator' %}?v=vw-20261028{% elsif page.tool_key == 'fuel-economy-calculator' %}?v=fe-20261027{% elsif page.tool_key == 'work-end-time-calculator' %}?v=wet-20261026{% elsif page.tool_key == 'vat-calculator' %}?v=vat-20261025{% elsif page.tool_key == 'bmi-calculator' %}?v=bmi-20261023{% elsif page.tool_key == 'gpa-calculator' %}?v=gpa-20261024{% endif %}">
   {%- feed_meta -%}
   {%- include tool-language-urls.html -%}
