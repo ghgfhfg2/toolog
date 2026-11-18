@@ -99,5 +99,5 @@ function validateLoanInput({ principal, annualRate, months }) {
 
 ## 내부 링크 후보
 
-- [JavaScript 부동소수점 반올림 가이드]({{ '/2026/03/05/javascript-floating-point-rounding-guide.html' | relative_url }})
-- [JavaScript debounce/throttle 가이드]({{ '/2026/03/06/javascript-debounce-throttle-guide.html' | relative_url }})
+- [JavaScript 부동소수점 반올림 가이드]({{ site.baseurl }}{% post_url 2026-03-05-javascript-floating-point-rounding-guide %})
+- [JavaScript debounce/throttle 가이드]({{ site.baseurl }}{% post_url 2026-03-06-javascript-debounce-throttle-guide %})

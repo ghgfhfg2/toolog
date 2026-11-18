@@ -85,7 +85,7 @@ const needRate = price === 0 ? 0 : ((price - targetPrice) / price) * 100;
 - [퍼센트 계산기]({{ '/tools/percent-calculator/' | relative_url }})
 - [부가세 계산기]({{ '/tools/vat-calculator/' | relative_url }})
 - [대출 계산기]({{ '/tools/loan-calculator/' | relative_url }})
-- [쇼핑 계산기 카테고리]({{ '/categories/shopping/' | relative_url }})
+- [전체 도구 모음]({{ '/' | relative_url }}#toolGrid)
 
 ## 요약
 

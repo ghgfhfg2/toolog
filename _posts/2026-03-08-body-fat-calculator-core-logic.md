@@ -125,7 +125,7 @@ const toggleHipField = () => {
 - [체지방률 계산기]({{ '/tools/body-fat-calculator/' | relative_url }})
 - [BMI 계산기]({{ '/tools/bmi-calculator/' | relative_url }})
 - [칼로리 계산기(TDEE)]({{ '/tools/tdee-calculator/' | relative_url }})
-- [건강/피트니스 카테고리]({{ '/categories/health/' | relative_url }})
+- [전체 도구 모음]({{ '/' | relative_url }}#toolGrid)
 
 ## 요약
 

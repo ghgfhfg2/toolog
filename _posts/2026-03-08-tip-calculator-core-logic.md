@@ -99,7 +99,7 @@ const people = clamp(Math.floor(peopleRaw), 1, 1000);
 - [팁 계산기]({{ '/tools/tip-calculator/' | relative_url }})
 - [퍼센트 계산기]({{ '/tools/percent-calculator/' | relative_url }})
 - [할인율 계산기]({{ '/tools/discount-calculator/' | relative_url }})
-- [금융 계산기 모음]({{ '/categories/finance/' | relative_url }})
+- [전체 도구 모음]({{ '/' | relative_url }}#toolGrid)
 
 ## 요약
 

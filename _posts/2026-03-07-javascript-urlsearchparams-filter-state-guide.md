@@ -104,5 +104,5 @@ window.addEventListener('popstate', render);
 
 ## 내부 링크 후보
 
-- [JavaScript debounce/throttle 가이드]({{ '/2026/03/06/javascript-debounce-throttle-guide.html' | relative_url }})
-- [JavaScript 입력값 검증 체크리스트]({{ '/2026/03/07/javascript-input-validation-checklist.html' | relative_url }})
+- [JavaScript debounce/throttle 가이드]({{ site.baseurl }}{% post_url 2026-03-06-javascript-debounce-throttle-guide %})
+- [JavaScript 입력값 검증 체크리스트]({{ site.baseurl }}{% post_url 2026-03-07-javascript-input-validation-checklist %})
