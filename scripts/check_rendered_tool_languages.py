@@ -86,13 +86,19 @@ def main():
     ids = parse_tool_ids(ROOT / "_data/tools.yml")
     assert len(ids) == len(set(ids)) > 0, "empty or duplicate tool catalog"
     sitemap = ElementTree.parse(build / "sitemap.xml")
-    urls = {node.text for node in sitemap.findall(".//{*}loc")}
+    entries = {node.findtext("{*}loc"): node for node in sitemap.findall("{*}url")}
+    urls = set(entries)
+    assert len(entries) == len(sitemap.findall("{*}url")), "duplicate sitemap URLs"
     checked = 0
     for slug in ids:
         for lang in ("ko", "en", "ja"):
             path = f"/{lang + '/' if lang != 'ko' else ''}tools/{slug}/"
             check_tool((build / path.lstrip("/") / "index.html").read_text(), slug, lang)
             if lang == "ko" and "date" not in parse_front_matter(ROOT / "_tools" / f"{slug}.md"):
+                front = parse_front_matter(ROOT / "_tools" / f"{slug}.md")
+                if "last_modified_at" not in front:
+                    assert entries[ORIGIN + path].find("{*}lastmod") is None, (
+                        f"invented undated-tool sitemap modification date: {path}")
                 meta = Metadata()
                 meta.feed((build / path.lstrip("/") / "index.html").read_text())
                 assert not meta.publication_times, f"invented tool publication time: {path}"
@@ -108,7 +114,7 @@ def main():
         assert [href for href, _ in meta.navigation] == ["/", "/en/", "/ja/"], path
     print(f"PASS: {checked} tool pages: reciprocal hreflang, same-tool navigation, "
           "self canonical, indexability, JSON-LD, sitemap; no invented undated-tool dates; "
-          "non-tool navigation preserved")
+          "non-tool navigation preserved; no invented sitemap modification dates")
 
 
 if __name__ == "__main__":
