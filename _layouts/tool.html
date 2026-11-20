@@ -5380,7 +5380,7 @@ Same link again https://example.com/a?utm_medium=dm{% elsif page.lang == 'ja' %}
       "@type": "ListItem",
       "position": 1,
       "name": "Toolog",
-      "item": {{ '/' | absolute_url | jsonify }}
+      "item": {% if page.lang == 'en' %}{{ '/en/' | absolute_url | jsonify }}{% elsif page.lang == 'ja' %}{{ '/ja/' | absolute_url | jsonify }}{% else %}{{ '/' | absolute_url | jsonify }}{% endif %}
     },
     {
       "@type": "ListItem",

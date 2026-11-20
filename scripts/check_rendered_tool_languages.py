@@ -79,6 +79,13 @@ def check_tool(html, slug, language):
     assert [urljoin(ORIGIN, href) for href, current in meta.navigation if current == "page"] == [
         expected[language]], "wrong current language"
     assert not any("noindex" in value or "none" in value for value in meta.robots), "noindex"
+    breadcrumbs = [schema for schema in meta.schemas if schema.get("@type") == "BreadcrumbList"]
+    assert len(breadcrumbs) <= 1, "duplicate breadcrumb schema"
+    if breadcrumbs:
+        items = breadcrumbs[0]["itemListElement"]
+        home = ORIGIN + (f"/{language}/" if language != "ko" else "/")
+        assert [(item["position"], item["item"]) for item in items] == [
+            (1, home), (2, expected[language])], "breadcrumb must follow localized home and current tool"
 
 
 def main():
