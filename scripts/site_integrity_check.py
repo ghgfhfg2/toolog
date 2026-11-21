@@ -101,6 +101,12 @@ def main() -> int:
             front_matter_issues.append(f"{rel_page} -> malformed or missing front matter")
             continue
 
+        # Translations are standalone pages, not members of the tools collection:
+        # they do not inherit its default layout (and therefore its tool UI).
+        if rel_page.parts[:2] in (("en", "tools"), ("ja", "tools")):
+            if fm.get("layout", "").strip('"\'') != "tool":
+                front_matter_issues.append(f"{rel_page} -> translated tool requires layout: tool")
+
         canonical = fm.get("canonical_url")
         expected = expected_canonical(page)
         if canonical and expected and canonical.strip('"\'') not in (

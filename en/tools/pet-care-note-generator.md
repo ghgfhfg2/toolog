@@ -1,4 +1,5 @@
 ---
+layout: tool
 lang: en
 title: Pet Care Note Generator | Meals, Walks, Medicine, and Cautions
 description: Create a clear handoff note for family or pet sitters with meals, walks, medicine, cautions, and contacts.
