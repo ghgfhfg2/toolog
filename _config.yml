@@ -20,6 +20,10 @@ permalink: /:categories/:title/
 future: false
 show_drafts: false
 
+exclude:
+  - CRON_RUNBOOK.md
+  - TOOL_SELECTION_POLICY.md
+
 collections:
   tools:
     output: true

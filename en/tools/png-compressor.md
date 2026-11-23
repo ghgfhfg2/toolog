@@ -78,10 +78,8 @@ For very large photos, resize first with [Image Resizer]({{ '/en/tools/image-res
 - If the result is larger than the original, the source may already be optimized. Try another format or keep the original.
 - On mobile, choose the file first, set the output format and quality, then press Compress. The result, warning, preview, and download link update in the same screen flow.
 
-## SEO impact
-Image optimization improves page speed and user experience, which helps overall search performance.
+## Prepare images for upload
 
-- Reference: [Google PageSpeed Insights](https://pagespeed.web.dev/)
 - Resize before compressing: [Image Resizer]({{ '/en/tools/image-resizer/' | relative_url }})
 - Prepare YouTube thumbnails and banners: [YouTube Image Kit Maker]({{ '/en/tools/youtube-image-kit/' | relative_url }})
 - Check caption length together: [Text Counter]({{ '/en/tools/text-counter/' | relative_url }})

@@ -78,10 +78,8 @@ PNG、JPEG、WebPファイルを読み込み、出力形式と品質を選んで
 - 結果が元画像より大きい場合、元画像がすでに最適化済みの可能性があります。別形式を試すか元画像を使ってください。
 - モバイルでは、先にファイルを選び、出力形式と品質を決めてから圧縮実行を押すと、結果・警告・プレビュー・ダウンロードリンクが同じ画面の流れで更新されます。
 
-## SEO観点
-画像最適化はページ速度とUX改善に直結し、検索評価にも良い影響があります。
+## アップロード前の画像準備
 
-- 参考: [Google PageSpeed Insights](https://pagespeed.web.dev/)
 - 先にサイズ調整: [画像リサイズツール]({{ '/ja/tools/image-resizer/' | relative_url }})
 - YouTube用画像の作成: [YouTube画像セットメーカー]({{ '/ja/tools/youtube-image-kit/' | relative_url }})
 - キャプション確認: [文字数カウンター]({{ '/ja/tools/text-counter/' | relative_url }})
