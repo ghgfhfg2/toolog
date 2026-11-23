@@ -31,10 +31,6 @@ alternate_urls:
   ja: /ja/tools/image-upscaler/
 ---
 
-## 今日の改善対象に選んだ理由
-最近の品質改善は `grocery-budget-checker`、`unit-converter`、`privacy-exposure-checker`、`json-merge`、`image-resizer`、`youtube-image-kit` などに集中していたため、同じツールの繰り返しを避けました。
-`image-upscaler` は、未対応ファイル、大容量画像、4x拡大時の画素上限、PNG品質設定、JPEG透過背景など、失敗しやすい条件が多いため、今日の既存ツール改善対象にしました。
-
 ## 画像アップスケーラーが必要な理由
 低解像度の画像をそのまま拡大すると、輪郭がぼやけたり文字が読みにくくなったりしやすいです。  
 このツールは1x補正または **2倍・3倍・4倍** 拡大にシャープ補正やノイズ低減を組み合わせ、画質劣化を抑えながら使いやすいサイズに整えます。

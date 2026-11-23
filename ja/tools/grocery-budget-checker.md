@@ -33,10 +33,6 @@ faq:
     a: いいえ。すべて現在のブラウザ内だけで処理され、サーバーへ送信・保存されません。
 ---
 
-## 今日の改善対象に選んだ理由
-最近の品質改善は `hangul-keyboard-layout-converter`、`date-format-normalizer`、`font-change`、`subscription-cleanup-simulator`、`message-tone-checker`、`password-generator`、`youtube-image-kit`、`image-resizer`、`json-merge` に集中していたため、同じツールの繰り返しを避けました。
-`grocery-budget-checker` は、カート内容の貼り付け、価格未入力、価格形式の誤り、長いリスト、重複品目、モバイルでの結果確認など、実用上のミスや読みづらさが出やすいチェック系ツールなので今日の改善対象にしました。
-
 ## なぜ買い物予算チェッカーが必要ですか？
 スーパーやオンラインで買い物をしていると、小さな品目が少しずつ増えて予算を超えやすくなります。特に食材、お菓子、日用品、セール品が混ざると、「必ず買うもの」と「次回でもよいもの」をすぐに分けるのが難しくなります。
 

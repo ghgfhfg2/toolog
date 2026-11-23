@@ -36,10 +36,6 @@ faq:
 このツールは、共有前の最後の確認をしやすくするためのものです。
 文章を貼り付けると、疑わしいパターンを見つけて、必要ならマスキング例も確認できます。
 
-## 今日の改善対象に選んだ理由
-最近の品質改善は `meeting-action-item-extractor`、`password-strength-checker`、`customer-support-message-generator`、`secondhand-scam-signal-checker`、`filename-sanitizer`、`online-return-package-checker` に集中していたため、同じツールの繰り返しを避けました。
-`privacy-exposure-checker` は共有前の安全確認ツールで、検出漏れ、誤検出、マスキング、モバイル確認の品質が信頼に直結するため今回の対象にしました。
-
 ## こんな場面で役立ちます
 ### 1) お知らせ送信前の確認
 案内文や顧客向けメッセージに連絡先やリンクが混ざっていないかを見直せます。
